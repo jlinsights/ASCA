@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/jaehong/Library/CloudStorage/GoogleDrive-jhlim725@gmail.com/My Drive/패밀리오피스/FamilyOffice/app/layout\":[\"static/media/a15f2fce4b98b461-s.p.woff2\",\"static/media/dcc209c0b1ab30af-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
