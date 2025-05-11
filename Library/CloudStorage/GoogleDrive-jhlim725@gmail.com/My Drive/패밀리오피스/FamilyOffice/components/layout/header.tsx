@@ -19,7 +19,7 @@ export function Header() {
             </span>
           </Link>
 
-          <div className="flex items-center gap-12">
+          <div className="flex items-center gap-16">
             {/* ThemeToggle과 햄버거 버튼 사이에 gap-4 추가 (모바일에서만) */}
             <div className="flex items-center gap-4 md:gap-0">
               <ThemeToggle />
@@ -64,10 +64,10 @@ export function Header() {
                 {/* BI 가이드라인 메뉴 */}
                 BI
               </Link>
-              {/* '상담 신청' 버튼을 클릭하면 /contact로 이동 */}
-              <Link href="/contact" passHref legacyBehavior>
-                <Button variant="primary" className="ml-2">상담 신청</Button>
-              </Link>
+              {/* '상담 신청' 버튼을 asChild+Link로 구현하여 /contact로 확실히 이동 */}
+              <Button asChild variant="primary" className="ml-2">
+                <Link href="/contact">상담 신청</Link>
+              </Button>
             </nav>
           </div>
         </div>
@@ -104,10 +104,10 @@ export function Header() {
               {/* BI 가이드라인 메뉴 (모바일) */}
               BI
             </Link>
-            {/* '상담 신청' 버튼을 클릭하면 /contact로 이동 */}
-            <Link href="/contact" passHref legacyBehavior>
-              <Button variant="primary" className="w-full py-3 text-base font-semibold mt-4">상담 신청</Button>
-            </Link>
+            {/* '상담 신청' 버튼을 asChild+Link로 구현하여 /contact로 확실히 이동 */}
+            <Button asChild variant="primary" className="w-full py-3 text-base font-semibold mt-4">
+              <Link href="/contact" onClick={() => setIsMenuOpen(false)}>상담 신청</Link>
+            </Button>
           </nav>
         )}
       </div>
