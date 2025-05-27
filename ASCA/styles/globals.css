@@ -1,0 +1,372 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* 브랜드 가이드라인 스타일 */
+@layer components {
+  .brand-guidelines {
+    @apply min-h-screen bg-background text-foreground;
+  }
+
+  .guidelines-nav {
+    @apply sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border;
+  }
+
+  .nav-container {
+    @apply container mx-auto px-4 py-4 flex items-center justify-between;
+  }
+
+  .nav-logo {
+    @apply flex items-center;
+  }
+
+  .nav-menu {
+    @apply hidden md:flex items-center space-x-6;
+  }
+
+  .nav-link {
+    @apply text-sm uppercase tracking-wider hover:text-foreground/80 transition-colors py-2 border-b-2 border-transparent;
+  }
+
+  .nav-link.active {
+    @apply text-foreground border-foreground;
+  }
+
+  .guidelines-header {
+    @apply text-center py-16 md:py-24 space-y-4 border-b border-border;
+  }
+
+  .guidelines-header h1 {
+    @apply text-4xl md:text-5xl font-calligraphy text-multilingual;
+  }
+
+  .guidelines-header p {
+    @apply text-lg md:text-xl text-muted-foreground;
+  }
+
+  .guidelines-header .tagline {
+    @apply text-sm md:text-base font-traditional text-multilingual italic;
+  }
+
+  .guidelines-container {
+    @apply container mx-auto px-4 py-16 space-y-24;
+  }
+
+  .guidelines-section {
+    @apply space-y-8;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-normal uppercase mb-6;
+  }
+
+  .section-subtitle {
+    @apply text-xl md:text-2xl font-normal uppercase mb-4;
+  }
+
+  .section-description {
+    @apply text-base md:text-lg leading-relaxed text-muted-foreground mb-8;
+  }
+
+  .identity-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .identity-item {
+    @apply p-6 border border-border rounded-lg space-y-3;
+  }
+
+  .identity-item h3 {
+    @apply text-lg font-medium;
+  }
+
+  .identity-item p {
+    @apply text-sm leading-relaxed text-muted-foreground;
+  }
+
+  .logo-container {
+    @apply flex justify-center py-12 border border-border rounded-lg mb-8;
+  }
+
+  .logo-section {
+    @apply space-y-4 mb-8;
+  }
+
+  .logo-usage-item {
+    @apply p-6 border border-border rounded-lg;
+  }
+
+  .usage-list {
+    @apply space-y-3 text-sm leading-relaxed;
+  }
+
+  .usage-list li {
+    @apply flex items-start space-x-2;
+  }
+
+  .usage-list strong {
+    @apply font-medium text-foreground;
+  }
+
+  .logo-guidelines {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+  }
+
+  .guidelines-item {
+    @apply p-6 border border-border rounded-lg space-y-4;
+  }
+
+  .guidelines-item h3 {
+    @apply text-lg font-medium;
+  }
+
+  .color-palette {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8;
+  }
+
+  .color-swatch {
+    @apply p-6 rounded-lg text-center space-y-2 border border-border;
+  }
+
+  .color-swatch.ink-black {
+    @apply bg-[#1a1a1a] text-[#f5f5f0];
+  }
+
+  .color-swatch.rice-paper {
+    @apply bg-[#f5f5f0] text-[#1a1a1a] border-[#1a1a1a]/20;
+  }
+
+  .color-swatch.celadon {
+    @apply bg-[#88A891] text-white;
+  }
+
+  .color-swatch.terra-red {
+    @apply bg-[#9B4444] text-white;
+  }
+
+  .color-swatch.stone-gray {
+    @apply bg-[#707070] text-white;
+  }
+
+  .color-swatch.sage-green {
+    @apply bg-[#B7C4B7] text-[#1a1a1a];
+  }
+
+  .color-info {
+    @apply text-xs opacity-80 mt-2;
+  }
+
+  .usage-container {
+    @apply space-y-6;
+  }
+
+  .usage-title {
+    @apply text-xl font-medium mb-4;
+  }
+
+  .usage-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .usage-item {
+    @apply p-6 border border-border rounded-lg space-y-4;
+  }
+
+  .usage-item h3 {
+    @apply text-lg font-medium;
+  }
+
+  .font-sample {
+    @apply leading-relaxed;
+  }
+
+  .font-calligraphy {
+    font-family: 'ASCA-Calligraphy', 'Noto Serif KR', 'Noto Serif SC', 'Noto Serif TC', 'Noto Serif JP', serif;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 500;
+  }
+
+  .font-traditional {
+    font-family: 'Noto Serif KR', 'Noto Serif SC', 'Noto Serif TC', 'Noto Serif JP', serif;
+  }
+
+  .font-modern {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-artwork {
+    font-family: 'Noto Serif CJK KR', serif;
+    line-height: 1.8;
+  }
+
+  .text-multilingual {
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .text-korean {
+    line-height: 1.7;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  .text-chinese {
+    line-height: 1.8;
+    font-family: 'Noto Serif SC', 'Noto Serif TC', serif;
+  }
+
+  .text-japanese {
+    line-height: 1.8;
+    font-family: 'Noto Serif JP', serif;
+  }
+
+  /* 서예 제목용 언어별 최적화 */
+  .font-calligraphy.text-korean {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+  }
+
+  .font-calligraphy.text-chinese {
+    font-family: 'Noto Serif SC', 'Noto Serif TC', serif;
+    font-weight: 600;
+  }
+
+  .font-calligraphy.text-japanese {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600;
+  }
+
+  /* 한자 문자 범위별 폰트 지정 */
+  @supports (font-feature-settings: "kern") {
+    .font-calligraphy {
+      font-variant-ligatures: common-ligatures;
+      font-kerning: normal;
+    }
+  }
+
+  /* Unicode 범위별 폰트 최적화 - Noto CJK 통합 */
+  @font-face {
+    font-family: 'CJK-Calligraphy';
+    src: local('Noto Serif KR'), local('NotoSerifKR');
+    unicode-range: U+AC00-D7AF, U+1100-11FF, U+3130-318F, U+4E00-9FFF; /* 한글 + CJK 한자 */
+  }
+
+  @font-face {
+    font-family: 'CJK-Calligraphy';
+    src: local('Noto Serif SC'), local('NotoSerifSC');
+    unicode-range: U+4E00-9FFF, U+3400-4DBF; /* CJK 기본 한자 */
+  }
+
+  @font-face {
+    font-family: 'CJK-Calligraphy';
+    src: local('Noto Serif JP'), local('NotoSerifJP');
+    unicode-range: U+3040-309F, U+30A0-30FF, U+4E00-9FFF; /* 히라가나, 가타카나, 한자 */
+  }
+
+  /* 폰트 로딩 최적화 */
+  .font-calligraphy {
+    font-display: swap;
+    font-synthesis: none;
+  }
+
+  /* 특정 한자에 대한 강제 폰트 적용 */
+  .font-calligraphy .cjk-char {
+    font-family: 'Noto Serif KR', 'Noto Serif SC', serif !important;
+    font-weight: 500;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

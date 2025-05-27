@@ -1,0 +1,50 @@
+/* Noto CJK 서예 폰트 정의 */
+
+/* 한국어 한자를 위한 Noto Serif KR */
+@font-face {
+  font-family: 'Noto Serif KR';
+  src: url('https://fonts.gstatic.com/s/notoserifkr/v20/3JnmSDn90Gmq2mr0bCAaQhAEbDLdlgXGAA.woff2') format('woff2');
+  unicode-range: U+AC00-D7AF, U+1100-11FF, U+3130-318F, U+4E00-9FFF;
+  font-display: swap;
+}
+
+/* 중국어 간체를 위한 Noto Serif SC */
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: url('https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mm-0koGVDYM.woff2') format('woff2');
+  unicode-range: U+4E00-9FFF, U+3400-4DBF;
+  font-display: swap;
+}
+
+/* 중국어 번체를 위한 Noto Serif TC */
+@font-face {
+  font-family: 'Noto Serif TC';
+  src: url('https://fonts.gstatic.com/s/notoseriftc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mm-0koGVDYM.woff2') format('woff2');
+  unicode-range: U+4E00-9FFF, U+3400-4DBF;
+  font-display: swap;
+}
+
+/* 일본어를 위한 Noto Serif JP */
+@font-face {
+  font-family: 'Noto Serif JP';
+  src: url('https://fonts.gstatic.com/s/notoserifjp/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mm-0koGVDYM.woff2') format('woff2');
+  unicode-range: U+3040-309F, U+30A0-30FF, U+4E00-9FFF;
+  font-display: swap;
+}
+
+/* 서예 스타일 조합 폰트 - Noto CJK 통합 */
+@font-face {
+  font-family: 'ASCA-Calligraphy';
+  src: local('Noto Serif KR'), local('NotoSerifKR'),
+       url('https://fonts.gstatic.com/s/notoserifkr/v20/3JnmSDn90Gmq2mr0bCAaQhAEbDLdlgXGAA.woff2') format('woff2');
+  unicode-range: U+AC00-D7AF, U+1100-11FF, U+3130-318F, U+4E00-9FFF;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ASCA-Calligraphy';
+  src: local('Noto Serif SC'), local('NotoSerifSC'),
+       url('https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mm-0koGVDYM.woff2') format('woff2');
+  unicode-range: U+4E00-9FFF, U+3400-4DBF;
+  font-display: swap;
+} 
