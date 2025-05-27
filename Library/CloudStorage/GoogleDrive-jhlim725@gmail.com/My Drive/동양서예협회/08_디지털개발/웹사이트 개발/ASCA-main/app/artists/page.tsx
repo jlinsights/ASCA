@@ -485,10 +485,10 @@ export default function ArtistsPage() {
                           {artist.name}
                         </h3>
                         {artist.birth_year && (
-                          <div className="flex items-center gap-2 text-muted-foreground flex-shrink-0">
-                            <Calendar className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-muted-foreground flex-shrink-0">
+                          <Calendar className="h-4 w-4" />
                             <span className="font-mono text-sm">b. {artist.birth_year}</span>
-                          </div>
+                        </div>
                         )}
                       </div>
                     </div>
@@ -519,17 +519,17 @@ export default function ArtistsPage() {
 
                     {/* 전문분야 */}
                     {artist.specialties && artist.specialties.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {sortSpecialties(artist.specialties).map((specialty, index) => (
-                          <Badge 
-                            key={index} 
-                            variant="outline" 
-                            className={`text-xs px-3 py-1 font-medium border transition-all duration-200 ${getSpecialtyBadgeStyle(specialty)}`}
-                          >
-                            {specialty}
-                          </Badge>
-                        ))}
-                      </div>
+                    <div className="flex flex-wrap gap-1">
+                      {sortSpecialties(artist.specialties).map((specialty, index) => (
+                        <Badge 
+                          key={index} 
+                          variant="outline" 
+                          className={`text-xs px-3 py-1 font-medium border transition-all duration-200 ${getSpecialtyBadgeStyle(specialty)}`}
+                        >
+                          {specialty}
+                        </Badge>
+                      ))}
+                    </div>
                     )}
 
                     {/* 요약 정보 */}
@@ -619,10 +619,10 @@ export default function ArtistsPage() {
                           {artist.name}
                         </h3>
                         {artist.birth_year && (
-                          <div className="flex items-center gap-2 text-muted-foreground flex-shrink-0">
-                            <Calendar className="h-3 w-3" />
+                        <div className="flex items-center gap-2 text-muted-foreground flex-shrink-0">
+                          <Calendar className="h-3 w-3" />
                             <span className="font-mono text-xs">b. {artist.birth_year}</span>
-                          </div>
+                        </div>
                         )}
                       </div>
                     </div>
@@ -643,26 +643,26 @@ export default function ArtistsPage() {
 
                     {/* 전문분야 - 모바일용 */}
                     {artist.specialties && artist.specialties.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {sortSpecialties(artist.specialties).map((specialty, index) => (
-                          <Badge 
-                            key={index} 
-                            variant="outline" 
-                            className={`text-xs px-3 py-1 font-medium border transition-all duration-200 ${getSpecialtyBadgeStyle(specialty)}`}
-                          >
-                            {specialty}
-                          </Badge>
-                        ))}
-                      </div>
+                    <div className="flex flex-wrap gap-1">
+                      {sortSpecialties(artist.specialties).map((specialty, index) => (
+                        <Badge 
+                          key={index} 
+                          variant="outline" 
+                          className={`text-xs px-3 py-1 font-medium border transition-all duration-200 ${getSpecialtyBadgeStyle(specialty)}`}
+                        >
+                          {specialty}
+                        </Badge>
+                      ))}
+                    </div>
                     )}
 
                     {/* 요약 정보 - 모바일용 */}
                     {artist.awards && artist.awards.length > 0 && (
                       <div className="flex items-center justify-center text-xs text-muted-foreground pt-2 border-t border-border/30 dark:border-border/20">
-                        <div className="flex items-center gap-1">
-                          <Award className="h-3 w-3" />
-                          <span>수상 <span className="font-medium text-foreground">{artist.awards.length}</span>개</span>
-                        </div>
+                            <div className="flex items-center gap-1">
+                              <Award className="h-3 w-3" />
+                              <span>수상 <span className="font-medium text-foreground">{artist.awards.length}</span>개</span>
+                            </div>
                       </div>
                     )}
 

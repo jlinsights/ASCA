@@ -102,7 +102,7 @@ export default function NewArtworkPage() {
 
   const handleImageUpload = async (files: File[]): Promise<string[]> => {
     const uploadPromises = files.map(file => uploadImage(file, 'artworks'))
-    const uploadedUrls = await Promise.all(uploadPromises)
+      const uploadedUrls = await Promise.all(uploadPromises)
     return uploadedUrls
   }
 
@@ -606,7 +606,7 @@ export default function NewArtworkPage() {
                     value={images}
                     onChange={setImages}
                     onUpload={handleImageUpload}
-                    disabled={loading}
+                      disabled={loading}
                     maxSize={10}
                     maxFiles={5}
                     acceptedTypes={['image/jpeg', 'image/png', 'image/webp']}

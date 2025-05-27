@@ -339,12 +339,12 @@ export default function GalleryPage() {
                 <CardContent className="p-0">
                   {/* 작품 이미지 */}
                   <div className="relative aspect-[3/4] bg-muted overflow-hidden">
-                    <Image
+                <Image
                       src={artwork.imageUrl}
                       alt={artwork.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
                     
                     {/* 오버레이 */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300" />
@@ -462,7 +462,7 @@ export default function GalleryPage() {
                           {artwork.isForSale && (
                             <Badge variant="secondary">
                               {language === 'ko' ? '판매중' : 'For Sale'}
-                            </Badge>
+                  </Badge>
                           )}
                         </div>
                       </div>
@@ -603,7 +603,7 @@ export default function GalleryPage() {
                         {tag}
                       </Badge>
                     ))}
-                  </div>
+              </div>
                   
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">

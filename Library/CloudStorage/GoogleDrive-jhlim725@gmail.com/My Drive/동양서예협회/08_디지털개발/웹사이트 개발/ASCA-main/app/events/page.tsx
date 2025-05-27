@@ -163,7 +163,7 @@ export default function EventsPage() {
           <div className="absolute top-3 left-3">
             <Badge className={statusColors[event.status as keyof typeof statusColors]}>
               <div className="flex items-center gap-1">
-                {getStatusIcon(event.status)}
+              {getStatusIcon(event.status)}
                 <span className="text-xs font-medium">
                   {statusOptions.find(s => s.value === event.status)?.label || event.status}
                 </span>
@@ -188,7 +188,7 @@ export default function EventsPage() {
               <span className="font-medium">{event.views}</span>
             </div>
           </div>
-        </div>
+          </div>
 
         <CardContent className="p-6">
           {/* 카테고리 */}
@@ -218,7 +218,7 @@ export default function EventsPage() {
                 {event.end_date && event.end_date !== event.event_date && (
                   <span> ~ {formatDate(event.end_date)}</span>
                 )}
-              </span>
+                </span>
             </div>
 
             {/* 장소 */}
@@ -245,16 +245,16 @@ export default function EventsPage() {
                   <div className="flex items-center gap-1 text-muted-foreground">
                     <Users className="h-4 w-4" />
                     <span className="text-xs">{event.max_participants}명</span>
-                  </div>
+            </div>
                 )}
-              </div>
-              
+        </div>
+
               {/* 참가비 */}
               {event.registration_fee && (
                 <div className="flex items-center gap-1 text-primary font-bold">
                   <Gift className="h-4 w-4" />
                   <span className="text-sm">{event.registration_fee.toLocaleString()}원</span>
-                </div>
+          </div>
               )}
             </div>
           </div>
@@ -265,19 +265,19 @@ export default function EventsPage() {
               <Button variant="outline" size="sm" className="border-border/50 hover:bg-primary/5">
                 {language === 'ko' ? '자세히 보기' : 'View Details'}
                 <ExternalLink className="h-3 w-3 ml-1" />
-              </Button>
+            </Button>
             </Link>
 
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <Heart className="h-4 w-4" />
-              </Button>
+              <Heart className="h-4 w-4" />
+            </Button>
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <Share2 className="h-4 w-4" />
-              </Button>
-            </div>
+              <Share2 className="h-4 w-4" />
+            </Button>
           </div>
-        </CardContent>
+        </div>
+      </CardContent>
       </div>
     </Card>
   )
@@ -291,7 +291,7 @@ export default function EventsPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-foreground mb-4 tracking-tight">
             {language === 'ko' ? '행사 안내' : 'Events'}
-          </h1>
+            </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
             {language === 'ko' 
               ? '동양서예협회에서 주최하는 다양한 행사와 프로그램을 확인하세요.'
@@ -307,25 +307,25 @@ export default function EventsPage() {
               {/* 검색 */}
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
+            <Input
                   placeholder={language === 'ko' ? '행사 검색...' : 'Search events...'}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                   className="pl-10 border-border/50 focus:border-primary"
-                />
-              </div>
+            />
+          </div>
               <Button onClick={handleSearch} className="md:w-auto font-medium">
                 {language === 'ko' ? '검색' : 'Search'}
               </Button>
-              <Button
+                  <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
                 className="md:w-auto border-border/50"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 {language === 'ko' ? '필터' : 'Filter'}
-              </Button>
+                  </Button>
             </div>
 
             {showFilters && (
@@ -348,10 +348,10 @@ export default function EventsPage() {
                         ))}
                       </SelectContent>
                     </Select>
-                  </div>
+            </div>
 
-                  {/* 상태 필터 */}
-                  <div>
+            {/* 상태 필터 */}
+            <div>
                     <label className="text-sm font-medium mb-2 block text-foreground">
                       {language === 'ko' ? '상태' : 'Status'}
                     </label>
@@ -360,7 +360,7 @@ export default function EventsPage() {
                         <SelectValue placeholder={language === 'ko' ? '상태 선택' : 'Select status'} />
                       </SelectTrigger>
                       <SelectContent>
-                        {statusOptions.map((status) => (
+                {statusOptions.map((status) => (
                           <SelectItem key={status.value} value={status.value}>
                             {status.label}
                           </SelectItem>
@@ -390,7 +390,7 @@ export default function EventsPage() {
             <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
               <AlertCircle className="h-8 w-8 text-red-500 mx-auto mb-4" />
               <p className="text-red-700 dark:text-red-300 font-medium">{error}</p>
-              <Button 
+              <Button
                 onClick={fetchEvents} 
                 variant="outline" 
                 className="mt-4"
@@ -449,8 +449,8 @@ export default function EventsPage() {
                         .filter(event => !event.is_featured)
                         .map((event) => (
                           <EventCard key={event.id} event={event} />
-                        ))}
-                    </div>
+            ))}
+          </div>
                   </div>
                 )}
 
@@ -494,9 +494,9 @@ export default function EventsPage() {
                       >
                         {language === 'ko' ? '다음' : 'Next'}
                         <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
+            </Button>
+          </div>
+        </div>
                 )}
               </>
             )}

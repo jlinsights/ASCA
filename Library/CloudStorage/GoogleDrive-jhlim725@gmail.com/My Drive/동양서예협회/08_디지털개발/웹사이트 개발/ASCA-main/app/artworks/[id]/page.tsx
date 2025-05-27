@@ -427,8 +427,8 @@ export default function ArtworkDetailPage() {
         setLoading(true)
         setError(null)
         
-        // 실제로는 API 호출
-        const foundArtwork = sampleArtworks.find(art => art.id === params.id)
+    // 실제로는 API 호출
+    const foundArtwork = sampleArtworks.find(art => art.id === params.id)
         if (!foundArtwork) {
           notFound()
           return
@@ -539,7 +539,7 @@ export default function ArtworkDetailPage() {
   return (
     <main className="min-h-screen">
       <Header />
-
+      
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-8">
         <Link 
@@ -549,7 +549,7 @@ export default function ArtworkDetailPage() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           작품 목록으로 돌아가기
         </Link>
-      </div>
+        </div>
 
       {/* Artwork Detail */}
       <section className="container mx-auto px-4 py-8">
@@ -739,16 +739,16 @@ export default function ArtworkDetailPage() {
               <Card className="p-4">
                 <div className="flex items-center gap-3">
                   <Palette className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">재료</p>
-                    <p className="text-sm font-medium">{artwork.medium}</p>
-                  </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">재료</p>
+                  <p className="text-sm font-medium">{artwork.medium}</p>
                 </div>
+              </div>
               </Card>
               <Card className="p-4">
                 <div className="flex items-center gap-3">
                   <Info className="h-5 w-5 text-green-600" />
-                  <div>
+                <div>
                     <p className="text-xs text-muted-foreground">상태</p>
                     <p className="text-sm font-medium">{artwork.condition || '우수'}</p>
                   </div>
@@ -780,7 +780,7 @@ export default function ArtworkDetailPage() {
                     <div className="mt-4 p-4 bg-muted/50 rounded-lg">
                       <h4 className="font-medium mb-2">작품의 의미</h4>
                       <p className="text-sm text-muted-foreground">{artwork.significance}</p>
-                    </div>
+                </div>
                   )}
                 </div>
               </TabsContent>
@@ -875,29 +875,29 @@ export default function ArtworkDetailPage() {
         </div>
       </section>
 
-      {/* Related Artworks */}
-      {relatedArtworks.length > 0 && (
+        {/* Related Artworks */}
+        {relatedArtworks.length > 0 && (
         <section className="container mx-auto px-4 py-8 border-t">
           <h2 className="text-3xl font-normal uppercase mb-8">관련 작품</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {relatedArtworks.map((relatedArtwork) => (
-              <Card key={relatedArtwork.id} className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300">
-                <Link href={`/artworks/${relatedArtwork.id}`}>
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <Image
-                      src={relatedArtwork.imageUrl}
-                      alt={relatedArtwork.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
+              {relatedArtworks.map((relatedArtwork) => (
+                <Card key={relatedArtwork.id} className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300">
+                  <Link href={`/artworks/${relatedArtwork.id}`}>
+                    <div className="relative aspect-[3/4] overflow-hidden">
+                      <Image
+                        src={relatedArtwork.imageUrl}
+                        alt={relatedArtwork.title}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
                     {relatedArtwork.isFeatured && (
                       <div className="absolute top-2 right-2">
                         <Badge className="bg-red-600 text-white">추천</Badge>
                       </div>
                     )}
-                  </div>
-                </Link>
-                <CardContent className="p-4">
+                    </div>
+                  </Link>
+                  <CardContent className="p-4">
                   <h3 className="font-medium text-sm line-clamp-1 mb-1">{relatedArtwork.title}</h3>
                   <p className="text-xs text-muted-foreground mb-2">{relatedArtwork.artist}</p>
                   <div className="flex items-center justify-between">
@@ -909,12 +909,12 @@ export default function ArtworkDetailPage() {
                       {relatedArtwork.views}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-      )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
 
       <Footer />
     </main>

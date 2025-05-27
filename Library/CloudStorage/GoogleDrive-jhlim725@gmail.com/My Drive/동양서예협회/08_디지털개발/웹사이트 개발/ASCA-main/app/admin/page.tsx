@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { 
   BarChart3,
-  Users,
+  Users, 
   FileText,
   Calendar,
   Eye,
@@ -88,7 +88,7 @@ export default function AdminDashboard() {
   const { language } = useLanguage()
   const [stats, setStats] = useState(mockStats)
   const [loading, setLoading] = useState(false)
-
+  
   const getActionIcon = (action: string) => {
     switch (action) {
       case 'created': return <Plus className="h-4 w-4 text-emerald-500" />
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
         })
   }
 
-  return (
+    return (
     <AdminProtectedRoute>
       <div className="min-h-screen bg-background">
         <Header />
@@ -243,7 +243,7 @@ export default function AdminDashboard() {
           <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
-                <div>
+                          <div>
                   <p className="text-sm font-medium text-muted-foreground">
                     {language === 'ko' ? '작품' : 'Artworks'}
                   </p>
@@ -251,8 +251,8 @@ export default function AdminDashboard() {
                 </div>
                 <div className="h-12 w-12 bg-pink-50 dark:bg-pink-950/50 rounded-lg flex items-center justify-center">
                   <Palette className="h-6 w-6 text-pink-600 dark:text-pink-400" />
-                </div>
-              </div>
+                          </div>
+                        </div>
               <div className="mt-4 flex items-center text-sm">
                 <TrendingUp className="h-4 w-4 text-emerald-500 mr-1" />
                 <span className="text-emerald-600 dark:text-emerald-400 font-medium">+18%</span>
@@ -274,17 +274,17 @@ export default function AdminDashboard() {
                 </div>
                 <div className="h-12 w-12 bg-indigo-50 dark:bg-indigo-950/50 rounded-lg flex items-center justify-center">
                   <Image className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-                </div>
-              </div>
+                        </div>
+                      </div>
               <div className="mt-4 flex items-center text-sm">
                 <TrendingUp className="h-4 w-4 text-emerald-500 mr-1" />
                 <span className="text-emerald-600 dark:text-emerald-400 font-medium">+25%</span>
                 <span className="text-muted-foreground ml-1">
                   {language === 'ko' ? '지난 달 대비' : 'vs last month'}
                 </span>
-              </div>
-            </CardContent>
-          </Card>
+                  </div>
+                </CardContent>
+              </Card>
 
           <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow">
             <CardContent className="p-6">
@@ -294,21 +294,21 @@ export default function AdminDashboard() {
                     {language === 'ko' ? '총 조회수' : 'Total Views'}
                   </p>
                   <p className="text-2xl font-bold text-foreground">{stats.totalViews.toLocaleString()}</p>
-                </div>
+                        </div>
                 <div className="h-12 w-12 bg-orange-50 dark:bg-orange-950/50 rounded-lg flex items-center justify-center">
                   <Eye className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-                </div>
-              </div>
+                        </div>
+                      </div>
               <div className="mt-4 flex items-center text-sm">
                 <TrendingUp className="h-4 w-4 text-emerald-500 mr-1" />
                 <span className="text-emerald-600 dark:text-emerald-400 font-medium">+23%</span>
                 <span className="text-muted-foreground ml-1">
                   {language === 'ko' ? '지난 달 대비' : 'vs last month'}
                 </span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 빠른 액션 */}
@@ -339,7 +339,7 @@ export default function AdminDashboard() {
                     {language === 'ko' ? '새 행사' : 'New Event'}
                   </Button>
                 </Link>
-                <Link href="/admin/artists/new">
+                    <Link href="/admin/artists/new">
                   <Button className="w-full justify-start bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950/50 dark:hover:bg-purple-950/70 dark:text-purple-300 dark:border-purple-800" variant="outline">
                     <Users className="h-4 w-4 mr-2" />
                     {language === 'ko' ? '새 작가' : 'New Artist'}
@@ -350,7 +350,7 @@ export default function AdminDashboard() {
                     <Palette className="h-4 w-4 mr-2" />
                     {language === 'ko' ? '새 작품' : 'New Artwork'}
                   </Button>
-                </Link>
+                    </Link>
                 <div className="border-t border-border pt-3">
                   <Button className="w-full justify-start" variant="outline">
                     <Download className="h-4 w-4 mr-2" />
@@ -412,13 +412,13 @@ export default function AdminDashboard() {
                       <Users className="h-4 w-4 mr-2" />
                       {language === 'ko' ? '작가 관리' : 'Manage Artists'}
                     </Button>
-                  </Link>
+                                </Link>
                   <Link href="/admin/artworks">
                     <Button className="w-full justify-start hover:bg-accent/50" variant="ghost">
                       <Palette className="h-4 w-4 mr-2" />
                       {language === 'ko' ? '작품 관리' : 'Manage Artworks'}
-                    </Button>
-                  </Link>
+                              </Button>
+                                </Link>
                 </div>
 
                 <div className="border-t border-border/30 pt-3 space-y-1">
@@ -429,13 +429,13 @@ export default function AdminDashboard() {
                     <Button className="w-full justify-start hover:bg-accent/50" variant="ghost">
                       <Shield className="h-4 w-4 mr-2" />
                       {language === 'ko' ? '사용자 관리' : 'Manage Users'}
-                    </Button>
+                              </Button>
                   </Link>
                   <Link href="/admin/analytics">
                     <Button className="w-full justify-start hover:bg-accent/50" variant="ghost">
                       <BarChart3 className="h-4 w-4 mr-2" />
                       {language === 'ko' ? '분석 리포트' : 'Analytics'}
-                    </Button>
+                              </Button>
                   </Link>
                 </div>
               </CardContent>
@@ -489,25 +489,25 @@ export default function AdminDashboard() {
                           <span>{activity.user}</span>
                         </div>
                       </div>
-                    </div>
+                  </div>
                   ))}
                 </div>
                 <div className="mt-6 text-center">
                   <Button variant="outline" size="sm" className="border-border/50">
                     {language === 'ko' ? '모든 활동 보기' : 'View All Activity'}
-                  </Button>
+                              </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* 시스템 상태 */}
             <Card className="mt-6 border-border/50 shadow-sm">
-              <CardHeader>
+                <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-foreground">
                   <Shield className="h-5 w-5 text-slate-600" />
                   {language === 'ko' ? '시스템 상태' : 'System Status'}
-                </CardTitle>
-              </CardHeader>
+                  </CardTitle>
+                </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="text-center p-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-200 dark:border-emerald-800">
@@ -538,10 +538,10 @@ export default function AdminDashboard() {
                     </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+                </CardContent>
+              </Card>
+            </div>
+      </div>
       </main>
 
       <Footer />

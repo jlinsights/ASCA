@@ -715,7 +715,7 @@ export default function NewsPage() {
                         {language === 'ko' ? '속보' : 'Breaking'}
                       </Badge>
                     )}
-                  </div>
+                    </div>
                 </div>
                 
                 {/* 메타 정보 */}
@@ -749,14 +749,14 @@ export default function NewsPage() {
                       {selectedNews.comments}
                     </span>
                   </div>
-                </div>
+                    </div>
                 
                 {/* 요약 */}
                 <div className="bg-muted/30 rounded-lg p-4">
                   <p className="text-muted-foreground leading-relaxed">
                     {language === 'ko' ? selectedNews.summary : selectedNews.summaryEn}
                   </p>
-                </div>
+                        </div>
                 
                 {/* 수상자 명단 이미지 (ID가 5인 뉴스에만 표시) */}
                 {selectedNews.id === '5' && (
@@ -796,7 +796,7 @@ export default function NewsPage() {
                   <div className="whitespace-pre-line leading-relaxed">
                     {language === 'ko' ? selectedNews.content : selectedNews.contentEn}
                   </div>
-                </div>
+              </div>
                 
                 {/* 태그 */}
                 <div>
@@ -807,8 +807,8 @@ export default function NewsPage() {
                         <Tag className="h-3 w-3 mr-1" />
                         {tag}
                       </Badge>
-                    ))}
-                  </div>
+          ))}
+        </div>
                 </div>
                 
                 {/* 액션 버튼 */}
