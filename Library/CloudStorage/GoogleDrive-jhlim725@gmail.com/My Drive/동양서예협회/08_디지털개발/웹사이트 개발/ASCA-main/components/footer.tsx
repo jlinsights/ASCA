@@ -1,6 +1,54 @@
+'use client'
+
 import Link from "next/link"
 import { TranslatedContent } from "./translated-content"
 import Image from "next/image"
+import { useState } from "react"
+
+// 스폰서 로고 컴포넌트
+function SponsorLogo({ src, alt, width, height, className, fallbackSrc, fallbackClassName }: {
+  src: string
+  alt: string
+  width: number
+  height: number
+  className?: string
+  fallbackSrc?: string
+  fallbackClassName?: string
+}) {
+  const [imageError, setImageError] = useState(false)
+  const [currentSrc, setCurrentSrc] = useState(src)
+  const [usingFallback, setUsingFallback] = useState(false)
+
+  const handleImageError = () => {
+    if (fallbackSrc && currentSrc === src) {
+      setCurrentSrc(fallbackSrc)
+      setUsingFallback(true)
+    } else {
+      setImageError(true)
+    }
+  }
+
+  if (imageError) {
+    return (
+      <div className={`flex items-center justify-center text-xs text-[#fcfcfc]/40 ${className}`}>
+        {alt}
+      </div>
+    )
+  }
+
+  const imageClassName = usingFallback && fallbackClassName ? fallbackClassName : className
+
+  return (
+    <Image
+      src={currentSrc}
+      alt={alt}
+      width={width}
+      height={height}
+      className={imageClassName}
+      onError={handleImageError}
+    />
+  )
+}
 
 export function Footer() {
   return (
@@ -14,9 +62,9 @@ export function Footer() {
               <Image
                 src="/logo/Logo & Tagline_black BG.png"
                 alt="동양서예협회 | Oriental Calligraphy Association"
-                width={150}
-                height={60}
-                className="h-12 w-auto object-contain"
+                width={200}
+                height={80}
+                className="h-16 w-auto object-contain"
                 priority
               />
             </Link>
@@ -325,62 +373,57 @@ export function Footer() {
 
         {/* 저작권 및 파트너 로고 */}
         <div className="border-t border-[#fcfcfc]/10 dark:border-[#fcfcfc]/10 pt-6 mt-6">
-          {/* 파트너 로고 */}
+          {/* 파트너 */}
           <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8 opacity-60 mb-6">
             {/* 삼성금융네트웍스 */}
-            <div className="flex items-center justify-center h-8 md:h-10">
-              <Image
-                src="/api/placeholder/120/40"
-                alt="삼성금융네트웍스"
-                width={120}
-                height={40}
-                className="h-6 md:h-8 w-auto object-contain filter brightness-0 invert"
-              />
-            </div>
+            <Link 
+              href="https://familyoffices.vip/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
+            >
+              삼성금융네트웍스
+            </Link>
 
             {/* 예술의전당 */}
-            <div className="flex items-center justify-center h-8 md:h-10">
-              <Image
-                src="/api/placeholder/100/40"
-                alt="예술의전당"
-                width={100}
-                height={40}
-                className="h-6 md:h-8 w-auto object-contain filter brightness-0 invert"
-              />
-            </div>
+            <Link 
+              href="https://www.sac.or.kr/site/main/home" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
+            >
+              예술의전당
+            </Link>
 
             {/* 대한검정회 */}
-            <div className="flex items-center justify-center h-8 md:h-10">
-              <Image
-                src="/api/placeholder/80/40"
-                alt="대한검정회"
-                width={80}
-                height={40}
-                className="h-6 md:h-8 w-auto object-contain filter brightness-0 invert"
-              />
-            </div>
+            <Link 
+              href="https://www.hanja.ne.kr/index_original.asp" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
+            >
+              대한검정회
+            </Link>
 
             {/* 서울특별시 */}
-            <div className="flex items-center justify-center h-8 md:h-10">
-              <Image
-                src="/api/placeholder/90/40"
-                alt="서울특별시"
-                width={90}
-                height={40}
-                className="h-6 md:h-8 w-auto object-contain filter brightness-0 invert"
-              />
-            </div>
+            <Link 
+              href="https://www.seoul.go.kr/main/index.jsp" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
+            >
+              서울특별시
+            </Link>
 
             {/* 문화체육관광부 */}
-            <div className="flex items-center justify-center h-8 md:h-10">
-              <Image
-                src="/api/placeholder/110/40"
-                alt="문화체육관광부"
-                width={110}
-                height={40}
-                className="h-6 md:h-8 w-auto object-contain filter brightness-0 invert"
-              />
-            </div>
+            <Link 
+              href="https://www.mcst.go.kr/kor/main.jsp" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
+            >
+              문화체육관광부
+            </Link>
           </div>
 
           {/* 저작권 표시 */}
