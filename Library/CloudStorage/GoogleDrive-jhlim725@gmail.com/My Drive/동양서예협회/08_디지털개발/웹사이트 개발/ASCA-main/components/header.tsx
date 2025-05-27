@@ -111,17 +111,12 @@ export function Header() {
       href: "/notice",
       subItems: [
         { title: t("notices"), href: "/notice" },
+        { title: t("news"), href: "/news" },
         { title: t("calligraphyLessons"), href: "/lessons" },
         { title: t("gallery"), href: "/gallery" },
         { title: t("fundraising"), href: "/fundraising" },
         { title: t("shop"), href: "/shop" }
       ]
-    },
-    {
-      title: t("news"),
-      key: "news",
-      href: "/news",
-      subItems: []
     }
   ]
 
