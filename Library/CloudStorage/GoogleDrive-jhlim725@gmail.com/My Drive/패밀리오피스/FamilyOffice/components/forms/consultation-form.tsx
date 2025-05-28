@@ -5,7 +5,6 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { createClient } from "@/lib/supabase/client"
 
@@ -81,19 +80,19 @@ export function ConsultationForm() {
         <label htmlFor="service" className="block text-light-text-secondary dark:text-dark-text-secondary mb-2 text-sm">
           관심 서비스
         </label>
-        <Select name="service">
-          <SelectTrigger id="service">
-            <SelectValue placeholder="관심 있는 서비스를 선택해주세요" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="wealth-management">통합 자산관리</SelectItem>
-            <SelectItem value="inheritance">상속·증여 설계</SelectItem>
-            <SelectItem value="tax-legal">세무·법률 자문</SelectItem>
-            <SelectItem value="real-estate">부동산 포트폴리오</SelectItem>
-            <SelectItem value="business-succession">가업승계</SelectItem>
-            <SelectItem value="global-assets">해외 자산 관리</SelectItem>
-          </SelectContent>
-        </Select>
+        <select 
+          id="service" 
+          name="service"
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <option value="">관심 있는 서비스를 선택해주세요</option>
+          <option value="wealth-management">통합 자산관리</option>
+          <option value="inheritance">상속·증여 설계</option>
+          <option value="tax-legal">세무·법률 자문</option>
+          <option value="real-estate">부동산 포트폴리오</option>
+          <option value="business-succession">가업승계</option>
+          <option value="global-assets">해외 자산 관리</option>
+        </select>
       </div>
       <div>
         <label htmlFor="message" className="block text-light-text-secondary dark:text-dark-text-secondary mb-2 text-sm">

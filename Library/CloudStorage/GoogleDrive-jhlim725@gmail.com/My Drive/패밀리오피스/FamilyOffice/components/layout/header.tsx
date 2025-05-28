@@ -10,12 +10,12 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <header className="bg-white dark:bg-dark-bg-primary border-b border-light-border dark:border-dark-border sticky top-0 z-50 transition-fo">
+    <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50 transition-fo">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-heading font-bold text-navy-primary dark:text-dark-text-primary">
-              패밀리오피스<span className="text-gold-primary">VIP</span>
+            <span className="text-2xl font-heading font-bold text-navy-primary dark:text-white">
+              FamilyOffice<span className="text-bronze-primary"> S</span>
             </span>
           </Link>
 
@@ -41,33 +41,29 @@ export function Header() {
             <nav className="hidden md:flex items-center space-x-6">
               <Link
                 href="/services"
-                className="text-light-text-primary dark:text-dark-text-primary hover:text-burgundy-primary dark:hover:text-burgundy-primary transition-fo"
+                className="text-slate-700 dark:text-white hover:text-bronze-primary dark:hover:text-bronze-primary transition-fo"
               >
                 서비스
               </Link>
               <Link
                 href="/about"
-                className="text-light-text-primary dark:text-dark-text-primary hover:text-burgundy-primary dark:hover:text-burgundy-primary transition-fo"
+                className="text-slate-700 dark:text-white hover:text-bronze-primary dark:hover:text-bronze-primary transition-fo"
               >
                 소개
               </Link>
               <Link
-                href="/case-studies"
-                className="text-light-text-primary dark:text-dark-text-primary hover:text-burgundy-primary dark:hover:text-burgundy-primary transition-fo"
+                href="/brand-guidelines"
+                className="text-slate-700 dark:text-white hover:text-forest-primary dark:hover:text-forest-primary transition-fo"
               >
-                사례
+                브랜드 가이드라인
               </Link>
+              {/* 상담 신청 버튼: asChild+Button 대신 Link에 직접 스타일 적용, ml-8로 간격 확보 */}
               <Link
-                href="/bi"
-                className="text-light-text-primary dark:text-dark-text-primary hover:text-gold-primary dark:hover:text-gold-primary transition-fo"
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-md bg-bronze-primary px-6 py-2 text-base font-semibold text-white shadow-sm hover:bg-bronze-primary/80 transition ml-8"
               >
-                {/* BI 가이드라인 메뉴 */}
-                BI
+                상담 신청
               </Link>
-              {/* '상담 신청' 버튼을 asChild+Link로 구현하여 /contact로 확실히 이동 */}
-              <Button asChild variant="primary" className="ml-2">
-                <Link href="/contact">상담 신청</Link>
-              </Button>
             </nav>
           </div>
         </div>
@@ -77,37 +73,33 @@ export function Header() {
           <nav id="mobile-menu" className="md:hidden mt-4 pb-4 space-y-2 animate-fade-in">
             <Link
               href="/services"
-              className="block py-3 text-base font-semibold text-light-text-primary dark:text-dark-text-primary hover:text-burgundy-primary dark:hover:text-burgundy-primary transition-fo"
+              className="block py-3 text-base font-semibold text-slate-700 dark:text-white hover:text-bronze-primary dark:hover:text-bronze-primary transition-fo"
               onClick={() => setIsMenuOpen(false)}
             >
               서비스
             </Link>
             <Link
               href="/about"
-              className="block py-3 text-base font-semibold text-light-text-primary dark:text-dark-text-primary hover:text-burgundy-primary dark:hover:text-burgundy-primary transition-fo"
+              className="block py-3 text-base font-semibold text-slate-700 dark:text-white hover:text-bronze-primary dark:hover:text-bronze-primary transition-fo"
               onClick={() => setIsMenuOpen(false)}
             >
               소개
             </Link>
             <Link
-              href="/case-studies"
-              className="block py-3 text-base font-semibold text-light-text-primary dark:text-dark-text-primary hover:text-burgundy-primary dark:hover:text-burgundy-primary transition-fo"
+              href="/brand-guidelines"
+              className="block py-3 text-base font-semibold text-slate-700 dark:text-white hover:text-forest-primary dark:hover:text-forest-primary transition-fo"
               onClick={() => setIsMenuOpen(false)}
             >
-              사례
+              브랜드 가이드라인
             </Link>
+            {/* 상담 신청 버튼: asChild+Button 대신 Link에 직접 스타일 적용, mt-4로 간격 확보 */}
             <Link
-              href="/bi"
-              className="block py-3 text-base font-semibold text-light-text-primary dark:text-dark-text-primary hover:text-gold-primary dark:hover:text-gold-primary transition-fo"
+              href="/contact"
+              className="block w-full text-center rounded-md bg-bronze-primary py-3 text-base font-semibold text-white shadow-sm hover:bg-bronze-primary/80 transition mt-4"
               onClick={() => setIsMenuOpen(false)}
             >
-              {/* BI 가이드라인 메뉴 (모바일) */}
-              BI
+              상담 신청
             </Link>
-            {/* '상담 신청' 버튼을 asChild+Link로 구현하여 /contact로 확실히 이동 */}
-            <Button asChild variant="primary" className="w-full py-3 text-base font-semibold mt-4">
-              <Link href="/contact" onClick={() => setIsMenuOpen(false)}>상담 신청</Link>
-            </Button>
           </nav>
         )}
       </div>

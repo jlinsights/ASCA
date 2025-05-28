@@ -56,20 +56,236 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* 스크롤바 스타일링 */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-bronze-primary/50 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-bronze-primary;
+  }
 }
 
-/* 커스텀 유틸리티 클래스 */
+/* 글래스모피즘 및 현대적 효과 유틸리티 */
 @layer utilities {
-  /* 대신 직접 트랜지션 속성을 사용 */
+  /* 글래스모피즘 효과 */
+  .glass {
+    @apply backdrop-blur-md bg-white/30 dark:bg-gray-900/60 border border-white/20 shadow-glass;
+  }
+  
+  .glass-dark {
+    @apply backdrop-blur-md bg-gray-900/60 dark:bg-gray-800/60 border border-white/10 shadow-glass-dark;
+  }
+  
+  .glass-card {
+    @apply backdrop-blur-lg bg-white/20 dark:bg-gray-900/40 border border-white/20 dark:border-white/10 rounded-2xl shadow-glass dark:shadow-glass-dark;
+  }
+  
+  /* 그라데이션 텍스트 - 가독성 개선을 위해 더 미묘하게 */
+  .text-gradient-brand {
+    @apply text-navy-primary dark:text-white;
+  }
+  
+  .text-gradient-bronze {
+    @apply text-bronze-primary;
+  }
+  
+  .text-gradient-forest {
+    @apply text-forest-primary;
+  }
+  
+  /* 모바일 터치 최적화 */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+  
+  .touch-button {
+    @apply min-h-[48px] px-6 py-3 rounded-xl font-semibold transition-fo active:scale-95;
+  }
+  
+  .touch-button-sm {
+    @apply min-h-[40px] px-4 py-2 rounded-lg font-medium transition-fo active:scale-95;
+  }
+  
+  /* 호버 효과 */
+  .hover-lift {
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+  .hover-lift:hover {
+    transform: scale(1.02) translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 모바일에서 호버 효과 비활성화 */
+  @media (hover: none) {
+    .hover-lift:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+  
+  .hover-glow {
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+  .hover-glow:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 40px rgba(30, 58, 138, 0.3), 0 4px 12px rgba(6, 95, 70, 0.2);
+  }
+  
+  /* 모바일에서 호버 효과 비활성화 */
+  @media (hover: none) {
+    .hover-glow:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+  
+  .hover-glass-shine {
+    @apply relative overflow-hidden;
+  }
+  
+  .hover-glass-shine::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -translate-x-full;
+    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+  .hover-glass-shine:hover::before {
+    @apply translate-x-full;
+  }
+  
+  /* 애니메이션 그라데이션 배경 유틸리티 - 새로운 브랜드 색상으로 업데이트 */
+  .animated-gradient-bg {
+    background: linear-gradient(270deg, #1E3A8A, #2563EB, #3B82F6, #1E3A8A);
+    background-size: 400% 400%;
+    animation: gradient-move 8s ease infinite;
+  }
+  
+  /* 부드러운 트랜지션 */
   .transition-fo {
-    @apply transition-all duration-300 ease-in-out;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .transition-fo-fast {
-    @apply transition-all duration-200 ease-in-out;
+    transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .transition-fo-slow {
-    @apply transition-all duration-500 ease-in-out;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+  /* 모바일 최적화 스크롤 스냅 */
+  .scroll-snap-x {
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+  
+  .scroll-snap-start {
+    scroll-snap-align: start;
+  }
+  
+  .scroll-snap-center {
+    scroll-snap-align: center;
+  }
+  
+  /* 고급 보더 */
+  .border-gradient {
+    @apply relative;
+  }
+  
+  .border-gradient::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg bg-gradient-brand p-0.5 -z-10;
+  }
+  
+  .border-gradient > * {
+    @apply relative bg-white dark:bg-gray-900 rounded-lg;
+  }
+  
+  /* 펄스 효과 */
+  .pulse-glow {
+    @apply animate-pulse-soft;
+  }
+  
+  /* 부드러운 그림자 */
+  .shadow-soft {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.12);
+  }
+  
+  .shadow-soft-lg {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* 브랜드별 그림자 */
+  .shadow-brand-hover {
+    @apply transition-shadow duration-300 hover:shadow-brand;
+  }
+  
+  .shadow-bronze-hover {
+    @apply transition-shadow duration-300 hover:shadow-bronze;
+  }
+  
+  .shadow-forest-hover {
+    @apply transition-shadow duration-300 hover:shadow-forest;
+  }
+  
+  .shadow-navy-hover {
+    @apply transition-shadow duration-300 hover:shadow-navy;
+  }
+  
+  /* 반응형 글래스 효과 */
+  @media (prefers-reduced-motion: no-preference) {
+    .glass-interactive {
+      @apply hover-lift glass-card hover-glass-shine;
+    }
+  }
+  
+  /* 접근성 - 모션 줄이기 선호 시 */
+  @media (prefers-reduced-motion: reduce) {
+    .glass-interactive {
+      @apply glass-card;
+    }
+    
+    .hover-lift {
+      @apply transition-none;
+    }
+    
+    .animate-gradient-move {
+      @apply animate-none;
+    }
+    
+    .animated-gradient-bg {
+      animation: none;
+      background: linear-gradient(135deg, #1A1A2E 0%, #800020 50%, #C9B037 100%);
+    }
+    
+    /* 모든 애니메이션 비활성화 */
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* 고대비 모드 지원 */
+  @media (prefers-contrast: high) {
+    .glass-card {
+      @apply bg-white/90 dark:bg-gray-900/90 border-2 border-gray-800 dark:border-gray-200;
+    }
+    
+    .text-gradient-brand {
+      @apply text-navy-primary dark:text-white bg-none;
+    }
   }
 }

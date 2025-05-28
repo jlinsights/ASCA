@@ -78,9 +78,9 @@ export default function ContactPage() {
                             strokeLinejoin="round"
                           />
                         </svg>
-                        서울특별시 강남구 테헤란로 123
+                        서울 중구 세종대로 73(태평로2가 310)
                         <br />
-                        패밀리오피스 타워 15층
+                        태평로빌딩 10층
                       </p>
                       <p className="flex items-center">
                         <svg

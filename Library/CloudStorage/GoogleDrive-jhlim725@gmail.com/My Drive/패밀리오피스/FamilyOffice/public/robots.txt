@@ -1,0 +1,31 @@
+# Robots.txt for FamilyOffice S
+# 모든 검색엔진 허용
+User-agent: *
+Allow: /
+
+# 크롤링 제외 경로
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /private/
+Disallow: /.well-known/
+
+# 특정 검색엔진 설정
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: NaverBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: DaumBot
+Allow: /
+Crawl-delay: 1
+
+# Sitemap 위치
+Sitemap: https://familyoffices.vip/sitemap.xml
+Sitemap: https://familyoffices.vip/sitemap-index.xml
+
+# 호스트 명시 (Naver 최적화)
+Host: familyoffices.vip 
