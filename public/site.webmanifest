@@ -1,0 +1,25 @@
+{
+  "name": "ASCA | The Asian Society of Calligraphic Arts",
+  "short_name": "ASCA",
+  "description": "사단법인 동양서예협회 - 正法의 계승, 創新의 조화",
+  "icons": [
+    {
+      "src": "/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/",
+  "lang": "ko",
+  "dir": "ltr"
+} 
