@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1748303470867,
+      "tag": "0000_confused_mercury",
+      "breakpoints": true
+    }
+  ]
+}
