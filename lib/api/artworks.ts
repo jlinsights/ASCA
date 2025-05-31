@@ -1,4 +1,4 @@
-import { supabase, type Database } from '@/lib/supabase'
+import { ensureSupabase, type Database } from '../supabase'
 
 type Artwork = Database['public']['Tables']['artworks']['Row']
 type ArtworkInsert = Database['public']['Tables']['artworks']['Insert']
@@ -51,6 +51,7 @@ export async function getArtworks(
   page: number = 1,
   limit: number = 12
 ): Promise<{ artworks: ArtworkWithArtist[]; total: number }> {
+  const supabase = ensureSupabase()
   let query = supabase
     .from('artworks')
     .select(`
@@ -68,7 +69,7 @@ export async function getArtworks(
         profile_image,
         nationality
       )
-    `)
+    `, { count: 'exact' })
 
   // 필터 적용
   if (filters) {
@@ -124,6 +125,7 @@ export async function getArtworks(
  * 특정 작품 조회
  */
 export async function getArtwork(id: string): Promise<ArtworkWithArtist | null> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -160,6 +162,7 @@ export async function getArtwork(id: string): Promise<ArtworkWithArtist | null> 
  * 작품 생성
  */
 export async function createArtwork(artwork: ArtworkInsert): Promise<Artwork> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .insert([artwork])
@@ -178,6 +181,7 @@ export async function createArtwork(artwork: ArtworkInsert): Promise<Artwork> {
  * 작품 정보 업데이트
  */
 export async function updateArtwork(id: string, updates: ArtworkUpdate): Promise<Artwork> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .update({ ...updates, updated_at: new Date().toISOString() })
@@ -197,6 +201,7 @@ export async function updateArtwork(id: string, updates: ArtworkUpdate): Promise
  * 작품 삭제
  */
 export async function deleteArtwork(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   const { error } = await supabase
     .from('artworks')
     .delete()
@@ -215,6 +220,7 @@ export async function searchArtworks(
   query: string,
   limit: number = 20
 ): Promise<ArtworkWithArtist[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -248,6 +254,7 @@ export async function searchArtworks(
  * 추천 작품 조회
  */
 export async function getFeaturedArtworks(limit: number = 6): Promise<ArtworkWithArtist[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -286,6 +293,7 @@ export async function getRelatedArtworks(
   category: string,
   limit: number = 4
 ): Promise<ArtworkWithArtist[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -320,8 +328,9 @@ export async function getRelatedArtworks(
  * 작품 조회수 증가
  */
 export async function incrementArtworkViews(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   const { error } = await supabase.rpc('increment_artwork_views', {
-    artwork_id: id
+    artwork_uuid: id
   })
 
   if (error) {
@@ -332,14 +341,16 @@ export async function incrementArtworkViews(id: string): Promise<void> {
 /**
  * 작품 좋아요 토글
  */
-export async function toggleArtworkLike(id: string, increment: boolean): Promise<void> {
+export async function toggleArtworkLike(id: string, userId?: string): Promise<boolean> {
+  const supabase = ensureSupabase()
   const { error } = await supabase.rpc('toggle_artwork_like', {
-    artwork_id: id,
-    increment_likes: increment
+    artwork_uuid: id,
+    user_uuid: userId
   })
 
   if (error) {
     console.error('Error toggling artwork like:', error)
-    throw new Error('좋아요 처리에 실패했습니다.')
+    return false
   }
+  return true
 } 

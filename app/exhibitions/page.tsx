@@ -504,7 +504,9 @@ export default function ExhibitionsPage() {
                               <div className="text-muted-foreground">
                                 {selectedExhibition.is_free 
                                   ? t("free")
-                                  : formatPrice(selectedExhibition.ticket_price, selectedExhibition.currency)
+                                  : selectedExhibition.ticket_price 
+                                    ? formatPrice(selectedExhibition.ticket_price, selectedExhibition.currency || 'KRW')
+                                    : t("contactForPrice")
                                 }
                               </div>
                             </div>
@@ -553,83 +555,102 @@ export default function ExhibitionsPage() {
                     {/* 통계 */}
                     <div>
                       <h3 className="font-semibold mb-3">{t("statistics")}</h3>
-                      <div className="grid grid-cols-4 gap-4 text-center">
-                        <div className="p-3 bg-muted rounded-lg">
-                          <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.total_artworks}</div>
-                          <div className="text-sm text-muted-foreground">{t("artworks")}</div>
+                      {selectedExhibition.stats ? (
+                        <div className="grid grid-cols-4 gap-4 text-center">
+                          <div className="p-3 bg-muted rounded-lg">
+                            <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.total_artworks}</div>
+                            <div className="text-sm text-muted-foreground">{t("artworks")}</div>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg">
+                            <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.total_artists}</div>
+                            <div className="text-sm text-muted-foreground">{t("artists")}</div>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg">
+                            <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.view_count}</div>
+                            <div className="text-sm text-muted-foreground">{t("views")}</div>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg">
+                            <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.likes}</div>
+                            <div className="text-sm text-muted-foreground">{t("likes")}</div>
+                          </div>
                         </div>
-                        <div className="p-3 bg-muted rounded-lg">
-                          <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.total_artists}</div>
-                          <div className="text-sm text-muted-foreground">{t("artists")}</div>
-                        </div>
-                        <div className="p-3 bg-muted rounded-lg">
-                          <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.view_count}</div>
-                          <div className="text-sm text-muted-foreground">{t("views")}</div>
-                        </div>
-                        <div className="p-3 bg-muted rounded-lg">
-                          <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.likes}</div>
-                          <div className="text-sm text-muted-foreground">{t("likes")}</div>
-                        </div>
-                      </div>
+                      ) : (
+                        <p className="text-muted-foreground">{t("statisticsNotAvailable")}</p>
+                      )}
                     </div>
                   </TabsContent>
                   
                   <TabsContent value="artists">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {selectedExhibition.participating_artists.map((artist) => (
-                        <Card key={artist.id}>
-                          <CardContent className="p-4">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <h4 className="font-medium">{artist.name}</h4>
-                                <p className="text-sm text-muted-foreground">{artist.name_en}</p>
+                    {selectedExhibition.participating_artists && selectedExhibition.participating_artists.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {selectedExhibition.participating_artists.map((artist) => (
+                          <Card key={artist.id}>
+                            <CardContent className="p-4">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <h4 className="font-medium">{artist.name}</h4>
+                                  <p className="text-sm text-muted-foreground">{artist.specialty || ''}</p>
+                                </div>
+                                <Badge variant="outline" className="text-xs">
+                                  {t("artist")}
+                                </Badge>
                               </div>
-                              <Badge variant="outline" className="text-xs">
-                                {artist.artworks_count} {t("works")}
-                              </Badge>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground text-center py-8">{t("noArtistsAvailable")}</p>
+                    )}
                   </TabsContent>
                   
                   <TabsContent value="artworks">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {selectedExhibition.featured_artworks.map((artwork) => (
-                        <Card key={artwork.id} className="overflow-hidden">
-                          <CardContent className="p-0">
-                            <div className="relative aspect-[3/4] bg-muted">
-                              <Image
-                                src={artwork.image_url}
-                                alt={artwork.title}
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                            <div className="p-3">
-                              <h4 className="font-medium mb-1">{artwork.title}</h4>
-                              <p className="text-sm text-muted-foreground">{artwork.artist}</p>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
+                    {selectedExhibition.featured_artworks && selectedExhibition.featured_artworks.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {selectedExhibition.featured_artworks.map((artwork) => (
+                          <Card key={artwork.id} className="overflow-hidden">
+                            <CardContent className="p-0">
+                              <div className="relative aspect-[3/4] bg-muted">
+                                <Image
+                                  src={artwork.image_url}
+                                  alt={artwork.title}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="p-3">
+                                <h4 className="font-medium mb-1">{artwork.title}</h4>
+                                <p className="text-sm text-muted-foreground">{artwork.artist_name}</p>
+                                {artwork.year && (
+                                  <p className="text-xs text-muted-foreground">{artwork.year}</p>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground text-center py-8">{t("noArtworksAvailable")}</p>
+                    )}
                   </TabsContent>
                   
                   <TabsContent value="gallery">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {selectedExhibition.gallery_images.map((image, index) => (
-                        <div key={index} className="relative aspect-[4/3] bg-muted rounded-lg overflow-hidden">
-                          <Image
-                            src={image}
-                            alt={`Gallery ${index + 1}`}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
+                    {selectedExhibition.gallery_images && selectedExhibition.gallery_images.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {selectedExhibition.gallery_images.map((image, index) => (
+                          <div key={index} className="relative aspect-[4/3] bg-muted rounded-lg overflow-hidden">
+                            <Image
+                              src={image}
+                              alt={`Gallery ${index + 1}`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground text-center py-8">{t("noGalleryImagesAvailable")}</p>
+                    )}
                   </TabsContent>
                 </Tabs>
                 

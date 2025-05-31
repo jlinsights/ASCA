@@ -54,8 +54,8 @@ export default function ArtistsPage() {
       try {
         setLoading(true)
         const artistsData = await getArtists()
-        setArtists(artistsData)
-        setFilteredArtists(artistsData)
+        setArtists(artistsData.artists)
+        setFilteredArtists(artistsData.artists)
       } catch (error) {
         console.error('Failed to load artists:', error)
         setArtists([])

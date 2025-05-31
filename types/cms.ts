@@ -179,7 +179,7 @@ export interface ExhibitionFormData {
   is_published: boolean
   max_capacity?: number
   ticket_price?: number
-  admission_fee?: number
+  admission_fee?: number | string
   currency?: string
   is_free?: boolean
   opening_hours?: string

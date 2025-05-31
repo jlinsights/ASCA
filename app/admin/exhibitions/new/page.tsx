@@ -89,15 +89,26 @@ export default function NewExhibitionPage() {
         title: formData.title || '',
         subtitle: formData.subtitle || '',
         description: formData.description || '',
+        content: '',
         start_date: formData.start_date || '',
         end_date: formData.end_date || '',
         location: formData.location || '',
         venue: formData.venue || '',
+        address: '',
         curator: formData.curator || '',
         featured_image_url: formData.featured_image_url || '',
+        gallery_images: [],
+        status: 'upcoming',
         is_featured: formData.is_featured || false,
         is_published: isDraft ? false : (formData.is_published || false),
-        admission_fee: formData.admission_fee || ''
+        max_capacity: undefined,
+        ticket_price: undefined,
+        admission_fee: formData.admission_fee ? (typeof formData.admission_fee === 'string' ? parseFloat(formData.admission_fee) : formData.admission_fee) : undefined,
+        currency: undefined,
+        is_free: undefined,
+        opening_hours: undefined,
+        contact: undefined,
+        website: undefined
       }
 
       await createExhibition(submitData)

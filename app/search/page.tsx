@@ -36,8 +36,17 @@ function SearchContent() {
     setQuery(searchQuery);
 
     try {
-      const { data } = await searchAllContent(searchQuery);
-      setResults(data);
+      const searchResults = await searchAllContent(searchQuery);
+      const convertedResults: SearchResult[] = searchResults.map((item, index) => ({
+        id: item.id,
+        title: item.title,
+        contentType: item.content_type,
+        excerpt: item.description,
+        url: item.url,
+        createdAt: item.published_at || new Date().toISOString(),
+        rank: item.relevance_score || index + 1
+      }));
+      setResults(convertedResults);
     } catch (error) {
       console.error('Search error:', error);
     } finally {

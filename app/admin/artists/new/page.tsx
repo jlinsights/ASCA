@@ -104,7 +104,8 @@ export default function NewArtistPage() {
   }
 
   const handleImageUpload = async (file: File): Promise<string> => {
-    const imageUrl = await uploadImage(file, 'artists')
+    const imageResult = await uploadImage(file, 'artists')
+    const imageUrl = imageResult.url
     setFormData(prev => ({ ...prev, profile_image: imageUrl }))
     return imageUrl
   }

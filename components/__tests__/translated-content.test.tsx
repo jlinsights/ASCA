@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import { TranslatedContent } from '../translated-content'
 import { LanguageProvider } from '@/contexts/language-context'
 

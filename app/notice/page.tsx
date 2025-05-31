@@ -68,15 +68,14 @@ export default function NoticePage() {
     try {
       setLoading(true)
       
-      if (searchQuery) {
-        // 검색어가 있을 때는 향상된 검색 사용
-        const searchFilters: AdvancedSearchFilters = {
-          query: searchQuery,
+      if (searchQuery.trim()) {
+        // 검색어가 있는 경우
+        const searchFilters = {
           category: selectedCategory !== "all" ? selectedCategory : undefined,
           status: 'published'
         }
         
-        const response = await searchNotices(searchFilters)
+        const response = await searchNotices(searchQuery.trim(), searchFilters)
         setNotices(response.data)
         setTotalPages(Math.ceil(response.data.length / 10))
       } else {

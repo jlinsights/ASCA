@@ -1,4 +1,4 @@
-import { supabase, type Database } from './supabase'
+import { ensureSupabase, type Database } from './supabase'
 
 type Artist = Database['public']['Tables']['artists']['Row']
 type ArtistInsert = Database['public']['Tables']['artists']['Insert']
@@ -12,6 +12,7 @@ type ArtworkUpdate = Database['public']['Tables']['artworks']['Update']
 
 // 모든 작가 조회
 export async function getAllArtists() {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artists')
     .select('*')
@@ -27,6 +28,7 @@ export async function getAllArtists() {
 
 // 작가 단일 조회
 export async function getArtistById(id: string) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artists')
     .select('*')
@@ -43,6 +45,7 @@ export async function getArtistById(id: string) {
 
 // 작가 생성
 export async function createArtist(artistData: ArtistInsert) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artists')
     .insert([{
@@ -63,6 +66,7 @@ export async function createArtist(artistData: ArtistInsert) {
 
 // 작가 업데이트
 export async function updateArtist(id: string, artistData: ArtistUpdate) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artists')
     .update({
@@ -83,6 +87,7 @@ export async function updateArtist(id: string, artistData: ArtistUpdate) {
 
 // 작가 삭제
 export async function deleteArtist(id: string) {
+  const supabase = ensureSupabase()
   const { error } = await supabase
     .from('artists')
     .delete()
@@ -98,6 +103,7 @@ export async function deleteArtist(id: string) {
 
 // 작가 검색
 export async function searchArtists(query: string) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artists')
     .select('*')
@@ -116,6 +122,7 @@ export async function searchArtists(query: string) {
 
 // 모든 작품 조회 (작가 정보 포함)
 export async function getAllArtworks() {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -138,6 +145,7 @@ export async function getAllArtworks() {
 
 // 작품 단일 조회
 export async function getArtworkById(id: string) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -161,6 +169,7 @@ export async function getArtworkById(id: string) {
 
 // 작품 생성
 export async function createArtwork(artworkData: ArtworkInsert) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .insert([{
@@ -183,6 +192,7 @@ export async function createArtwork(artworkData: ArtworkInsert) {
 
 // 작품 업데이트
 export async function updateArtwork(id: string, artworkData: ArtworkUpdate) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .update({
@@ -203,6 +213,7 @@ export async function updateArtwork(id: string, artworkData: ArtworkUpdate) {
 
 // 작품 삭제
 export async function deleteArtwork(id: string) {
+  const supabase = ensureSupabase()
   const { error } = await supabase
     .from('artworks')
     .delete()
@@ -218,6 +229,7 @@ export async function deleteArtwork(id: string) {
 
 // 작품 검색
 export async function searchArtworks(query: string) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -241,6 +253,7 @@ export async function searchArtworks(query: string) {
 
 // 특정 작가의 작품들 조회
 export async function getArtworksByArtist(artistId: string) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select('*')
@@ -259,6 +272,7 @@ export async function getArtworksByArtist(artistId: string) {
 
 // 대시보드 통계 조회
 export async function getDashboardStats() {
+  const supabase = ensureSupabase()
   try {
     // 총 작가 수
     const { count: artistCount } = await supabase
@@ -300,6 +314,7 @@ export async function getDashboardStats() {
 
 // 최근 작가들 조회
 export async function getRecentArtists(limit: number = 5) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artists')
     .select('*')
@@ -316,6 +331,7 @@ export async function getRecentArtists(limit: number = 5) {
 
 // 최근 작품들 조회
 export async function getRecentArtworks(limit: number = 5) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -341,6 +357,7 @@ export async function getRecentArtworks(limit: number = 5) {
 
 // 이미지 업로드 (Supabase Storage 사용)
 export async function uploadImage(file: File, bucket: 'artists' | 'artworks' = 'artworks') {
+  const supabase = ensureSupabase()
   const fileExt = file.name.split('.').pop()
   const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`
   const filePath = `${bucket}/${fileName}`
@@ -359,11 +376,15 @@ export async function uploadImage(file: File, bucket: 'artists' | 'artworks' = '
     .from('images')
     .getPublicUrl(filePath)
 
-  return urlData.publicUrl
+  return {
+    filePath,
+    url: urlData.publicUrl
+  }
 }
 
 // 이미지 삭제
 export async function deleteImage(filePath: string) {
+  const supabase = ensureSupabase()
   const { error } = await supabase.storage
     .from('images')
     .remove([filePath])

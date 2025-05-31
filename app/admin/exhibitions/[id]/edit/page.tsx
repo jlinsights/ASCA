@@ -150,7 +150,7 @@ export default function EditExhibitionPage() {
         featured_image_url: formData.featured_image_url || '',
         is_featured: formData.is_featured || false,
         is_published: isDraft ? false : (formData.is_published || false),
-        admission_fee: formData.admission_fee || ''
+        admission_fee: formData.admission_fee ? (typeof formData.admission_fee === 'string' ? parseFloat(formData.admission_fee) : formData.admission_fee) : undefined
       }
 
       await updateExhibition(exhibitionId, submitData)
