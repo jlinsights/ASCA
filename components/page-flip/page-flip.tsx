@@ -110,6 +110,18 @@ export const PageFlip: React.FC<PageFlipProps> = ({ pages, width = 500, height =
           ref={book}
           onFlip={onPageChange}
           startPage={0}
+          style={{}}
+          drawShadow={true}
+          usePortrait={false}
+          startZIndex={0}
+          autoSize={false}
+          maxShadowOpacity={1}
+          showPageCorners={true}
+          disableFlipByClick={false}
+          mobileScrollSupport={true}
+          clickEventForward={true}
+          useMouseEvents={true}
+          swipeDistance={30}
         >
           {pages.map((pageContent, index) => (
             <Page key={index} pageNumber={index + 1}>

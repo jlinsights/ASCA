@@ -1,4 +1,4 @@
-import { supabase } from '../supabase'
+import { ensureSupabase } from '../supabase'
 import type { 
   Notice, 
   Exhibition, 
@@ -17,6 +17,7 @@ export async function getNotices(
   filters: SearchFilters = {},
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<PaginatedResponse<Notice>> {
+  const supabase = ensureSupabase()
   let query = supabase
     .from('notices')
     .select('*', { count: 'exact' })
@@ -63,6 +64,7 @@ export async function getNotices(
 }
 
 export async function getNoticeById(id: string): Promise<Notice | null> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('notices')
     .select('*')
@@ -82,6 +84,7 @@ export async function getNoticeById(id: string): Promise<Notice | null> {
 }
 
 export async function createNotice(data: NoticeFormData): Promise<Notice> {
+  const supabase = ensureSupabase()
   const { data: notice, error } = await supabase
     .from('notices')
     .insert([data])
@@ -93,6 +96,7 @@ export async function createNotice(data: NoticeFormData): Promise<Notice> {
 }
 
 export async function updateNotice(id: string, data: Partial<NoticeFormData>): Promise<Notice> {
+  const supabase = ensureSupabase()
   const { data: notice, error } = await supabase
     .from('notices')
     .update(data)
@@ -105,6 +109,7 @@ export async function updateNotice(id: string, data: Partial<NoticeFormData>): P
 }
 
 export async function deleteNotice(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   const { error } = await supabase
     .from('notices')
     .delete()
@@ -118,6 +123,7 @@ export async function getExhibitions(
   filters: SearchFilters = {},
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<PaginatedResponse<Exhibition>> {
+  const supabase = ensureSupabase()
   let query = supabase
     .from('exhibitions')
     .select('*', { count: 'exact' })
@@ -164,6 +170,7 @@ export async function getExhibitions(
 }
 
 export async function getExhibitionById(id: string): Promise<Exhibition | null> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('exhibitions')
     .select('*')
@@ -183,6 +190,7 @@ export async function getExhibitionById(id: string): Promise<Exhibition | null> 
 }
 
 export async function createExhibition(data: ExhibitionFormData): Promise<Exhibition> {
+  const supabase = ensureSupabase()
   const { data: exhibition, error } = await supabase
     .from('exhibitions')
     .insert([data])
@@ -194,6 +202,7 @@ export async function createExhibition(data: ExhibitionFormData): Promise<Exhibi
 }
 
 export async function updateExhibition(id: string, data: Partial<ExhibitionFormData>): Promise<Exhibition> {
+  const supabase = ensureSupabase()
   const { data: exhibition, error } = await supabase
     .from('exhibitions')
     .update(data)
@@ -206,6 +215,7 @@ export async function updateExhibition(id: string, data: Partial<ExhibitionFormD
 }
 
 export async function deleteExhibition(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   const { error } = await supabase
     .from('exhibitions')
     .delete()
@@ -219,6 +229,7 @@ export async function getEvents(
   filters: SearchFilters = {},
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<PaginatedResponse<Event>> {
+  const supabase = ensureSupabase()
   let query = supabase
     .from('events')
     .select('*', { count: 'exact' })
@@ -268,6 +279,7 @@ export async function getEvents(
 }
 
 export async function getEventById(id: string): Promise<Event | null> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('events')
     .select('*')
@@ -287,6 +299,7 @@ export async function getEventById(id: string): Promise<Event | null> {
 }
 
 export async function createEvent(data: EventFormData): Promise<Event> {
+  const supabase = ensureSupabase()
   const { data: event, error } = await supabase
     .from('events')
     .insert([data])
@@ -298,6 +311,7 @@ export async function createEvent(data: EventFormData): Promise<Event> {
 }
 
 export async function updateEvent(id: string, data: Partial<EventFormData>): Promise<Event> {
+  const supabase = ensureSupabase()
   const { data: event, error } = await supabase
     .from('events')
     .update(data)
@@ -310,6 +324,7 @@ export async function updateEvent(id: string, data: Partial<EventFormData>): Pro
 }
 
 export async function deleteEvent(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   const { error } = await supabase
     .from('events')
     .delete()
@@ -320,6 +335,7 @@ export async function deleteEvent(id: string): Promise<void> {
 
 // Comment functions
 export async function getNoticeComments(noticeId: string): Promise<NoticeComment[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('notice_comments')
     .select('*')
@@ -337,9 +353,13 @@ export async function createNoticeComment(data: {
   author_email?: string
   content: string
 }): Promise<NoticeComment> {
+  const supabase = ensureSupabase()
   const { data: comment, error } = await supabase
     .from('notice_comments')
-    .insert([data])
+    .insert([{
+      ...data,
+      is_approved: false // 댓글은 관리자 승인 후 공개
+    }])
     .select()
     .single()
 
@@ -349,7 +369,15 @@ export async function createNoticeComment(data: {
 
 // Utility functions
 export async function getFeaturedContent() {
-  const [exhibitions, events] = await Promise.all([
+  const supabase = ensureSupabase()
+  const [notices, exhibitions, events] = await Promise.all([
+    supabase
+      .from('notices')
+      .select('*')
+      .eq('is_published', true)
+      .eq('is_pinned', true)
+      .order('published_at', { ascending: false })
+      .limit(3),
     supabase
       .from('exhibitions')
       .select('*')
@@ -362,18 +390,19 @@ export async function getFeaturedContent() {
       .select('*')
       .eq('is_published', true)
       .eq('is_featured', true)
-      .order('event_date', { ascending: true })
+      .order('start_date', { ascending: false })
       .limit(3)
   ])
 
   return {
+    notices: notices.data || [],
     exhibitions: exhibitions.data || [],
     events: events.data || []
   }
 }
 
 export async function updateContentStatus() {
-  // Update exhibition and event statuses based on dates
+  const supabase = ensureSupabase()
   await Promise.all([
     supabase.rpc('update_exhibition_status'),
     supabase.rpc('update_event_status')
@@ -382,18 +411,22 @@ export async function updateContentStatus() {
 
 // Additional utility functions for detail pages
 export async function incrementNoticeViews(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   await supabase.rpc('increment_notice_views', { notice_uuid: id })
 }
 
 export async function incrementExhibitionViews(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   await supabase.rpc('increment_exhibition_views', { exhibition_uuid: id })
 }
 
 export async function incrementEventViews(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   await supabase.rpc('increment_event_views', { event_uuid: id })
 }
 
 export async function getRelatedNotices(noticeId: string, category: string, limit: number = 5): Promise<Notice[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('notices')
     .select('*')
@@ -408,6 +441,7 @@ export async function getRelatedNotices(noticeId: string, category: string, limi
 }
 
 export async function getRelatedExhibitions(exhibitionId: string, limit: number = 5): Promise<Exhibition[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('exhibitions')
     .select('*')
@@ -421,13 +455,14 @@ export async function getRelatedExhibitions(exhibitionId: string, limit: number 
 }
 
 export async function getRelatedEvents(eventId: string, eventType: string, limit: number = 5): Promise<Event[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('events')
     .select('*')
     .eq('is_published', true)
     .eq('event_type', eventType)
     .neq('id', eventId)
-    .order('event_date', { ascending: false })
+    .order('start_date', { ascending: false })
     .limit(limit)
 
   if (error) throw error

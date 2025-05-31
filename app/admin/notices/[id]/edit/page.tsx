@@ -68,7 +68,8 @@ export default function EditNoticePage() {
         setError(null)
 
         // 관리자용으로 직접 supabase에서 가져오기 (published 체크 없이)
-        const { supabase } = await import('@/lib/supabase')
+        const { ensureSupabase } = await import('@/lib/supabase')
+        const supabase = ensureSupabase()
         const { data, error } = await supabase
           .from('notices')
           .select('*')

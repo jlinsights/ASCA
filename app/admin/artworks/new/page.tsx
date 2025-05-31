@@ -102,11 +102,10 @@ export default function NewArtworkPage() {
 
   const handleImageUpload = async (files: File[]): Promise<string[]> => {
     const uploadPromises = files.map(file => uploadImage(file, 'artworks'))
-      const uploadedUrls = await Promise.all(uploadPromises)
+    const uploadResults = await Promise.all(uploadPromises)
+    const uploadedUrls = uploadResults.map(result => result.url)
     return uploadedUrls
   }
-
-
 
   const addTag = () => {
     if (newTag.trim() && !tags.includes(newTag.trim())) {

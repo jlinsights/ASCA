@@ -1,8 +1,9 @@
-import { supabase } from '../supabase'
+import { ensureSupabase } from '../supabase'
 import type { AdminUser, AdminRole, AdminActivityLog, AdminUserFormData, AdminRoleFormData } from '@/types/auth'
 
 // 인증 관련 함수들
 export async function signInWithEmail(email: string, password: string) {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) throw error
 
@@ -18,12 +19,14 @@ export async function signInWithEmail(email: string, password: string) {
 }
 
 export async function signOut() {
+  const supabase = ensureSupabase()
   await logAdminActivity('logout')
   const { error } = await supabase.auth.signOut()
   if (error) throw error
 }
 
 export async function getCurrentUser() {
+  const supabase = ensureSupabase()
   const { data: { user }, error } = await supabase.auth.getUser()
   if (error) throw error
   if (!user) return null
@@ -31,6 +34,7 @@ export async function getCurrentUser() {
 }
 
 export async function getAdminUserByAuthId(authId: string): Promise<AdminUser | null> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('admin_users')
     .select(`*,role:admin_roles(*)`)
@@ -46,14 +50,18 @@ export async function getAdminUserByAuthId(authId: string): Promise<AdminUser | 
 }
 
 export async function getAdminUsers(): Promise<AdminUser[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('admin_users')
     .select(`*,role:admin_roles(*)`)
     .order('created_at', { ascending: false })
   if (error) throw error
   return data || []
-}// 나머지 관리자 관련 함수들
+}
+
+// 나머지 관리자 관련 함수들
 export async function createAdminUser(userData: AdminUserFormData, password: string): Promise<AdminUser> {
+  const supabase = ensureSupabase()
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email: userData.email,
     password,
@@ -89,6 +97,7 @@ export async function createAdminUser(userData: AdminUserFormData, password: str
 }
 
 export async function updateAdminUser(id: string, userData: AdminUserFormData): Promise<AdminUser> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('admin_users')
     .update({
@@ -108,6 +117,7 @@ export async function updateAdminUser(id: string, userData: AdminUserFormData): 
 }
 
 export async function deleteAdminUser(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   const { error } = await supabase
     .from('admin_users')
     .delete()
@@ -115,8 +125,11 @@ export async function deleteAdminUser(id: string): Promise<void> {
 
   if (error) throw error
   await logAdminActivity('delete_admin_user', 'admin_user', id)
-}// 역할 관련 함수들
+}
+
+// 역할 관련 함수들
 export async function getAdminRoles(): Promise<AdminRole[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('admin_roles')
     .select('*')
@@ -127,6 +140,7 @@ export async function getAdminRoles(): Promise<AdminRole[]> {
 }
 
 export async function createAdminRole(roleData: AdminRoleFormData): Promise<AdminRole> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('admin_roles')
     .insert([roleData])
@@ -139,6 +153,7 @@ export async function createAdminRole(roleData: AdminRoleFormData): Promise<Admi
 }
 
 export async function updateAdminRole(id: string, roleData: AdminRoleFormData): Promise<AdminRole> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('admin_roles')
     .update(roleData)
@@ -152,6 +167,7 @@ export async function updateAdminRole(id: string, roleData: AdminRoleFormData): 
 }
 
 export async function deleteAdminRole(id: string): Promise<void> {
+  const supabase = ensureSupabase()
   const { error } = await supabase
     .from('admin_roles')
     .delete()
@@ -163,6 +179,7 @@ export async function deleteAdminRole(id: string): Promise<void> {
 
 // 권한 확인 함수
 export async function hasPermission(resource: string, action: string): Promise<boolean> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase.rpc('check_admin_permission', {
     permission_path: resource,
     action_name: action
@@ -179,14 +196,18 @@ export async function logAdminActivity(
   resourceId?: string,
   details?: Record<string, any>
 ): Promise<void> {
+  const supabase = ensureSupabase()
   await supabase.rpc('log_admin_activity', {
     action_name: action,
     resource_type_param: resourceType,
     resource_id_param: resourceId,
     details_param: details
   })
-}// 활동 로그 조회 함수들
+}
+
+// 활동 로그 조회 함수들
 export async function getAdminActivityLogs(limit = 50): Promise<AdminActivityLog[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('admin_activity_logs')
     .select(`
@@ -201,13 +222,14 @@ export async function getAdminActivityLogs(limit = 50): Promise<AdminActivityLog
 }
 
 export async function getAdminActivityLogsByUser(userId: string, limit = 20): Promise<AdminActivityLog[]> {
+  const supabase = ensureSupabase()
   const { data, error } = await supabase
     .from('admin_activity_logs')
     .select(`
       *,
       admin_user:admin_users(name, email)
     `)
-    .eq('admin_user_id', userId)
+    .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit)
 

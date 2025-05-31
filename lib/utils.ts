@@ -54,7 +54,7 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean
 
-  return function executedFunction(...args: Parameters<T>) {
+  return function executedFunction(this: unknown, ...args: Parameters<T>) {
     if (!inThrottle) {
       func.apply(this, args)
       inThrottle = true
@@ -81,10 +81,14 @@ export function deepEqual(a: unknown, b: unknown): boolean {
     return false
   }
 
-  if (a.prototype !== b.prototype) return false
+  // 타입 안전성을 위한 체크
+  if (typeof a === 'object' && typeof b === 'object' && 
+      Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) {
+    return false
+  }
 
-  const keys = Object.keys(a)
-  if (keys.length !== Object.keys(b).length) {
+  const keys = Object.keys(a as Record<string, unknown>)
+  if (keys.length !== Object.keys(b as Record<string, unknown>).length) {
     return false
   }
 
@@ -211,7 +215,7 @@ export function chunk<T>(array: T[], size: number): T[][] {
 /**
  * 객체에서 특정 키들만 선택
  */
-export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+export function pick<T extends object, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>
   keys.forEach(key => {
     if (key in obj) {
@@ -224,7 +228,7 @@ export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
 /**
  * 객체에서 특정 키들을 제외
  */
-export function omit<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
+export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
   const result = { ...obj }
   keys.forEach(key => {
     delete result[key]

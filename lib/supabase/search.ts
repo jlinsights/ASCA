@@ -1,4 +1,11 @@
-import { supabase } from '../supabase';
+import { ensureSupabase } from '../supabase'
+import type { 
+  Notice, 
+  Exhibition, 
+  Event,
+  SearchFilters,
+  PaginationParams
+} from '@/types/cms'
 
 // 통합 검색 결과 타입 (작가와 작품 포함)
 export interface SearchResult {
@@ -40,125 +47,150 @@ export interface ArtworkSearchFilters {
   yearTo?: number;
 }
 
-// 공지사항 고급 검색
-export async function searchNotices(filters: AdvancedSearchFilters) {
-  try {
-    const { data, error } = await supabase.rpc('search_notices', {
-      search_query: filters.query || null,
-      category_filter: filters.category || null,
-      status_filter: filters.status || null,
-      date_from: filters.dateFrom?.toISOString().split('T')[0] || null,
-      date_to: filters.dateTo?.toISOString().split('T')[0] || null,
-      limit_count: 20,
-      offset_count: 0,
-    });
-
-    if (error) throw error;
-    return { data: data || [], error: null };
-  } catch (error) {
-    console.error('Error searching notices:', error);
-    return { data: [], error };
+export interface GlobalSearchParams {
+  query: string
+  categories?: string[]
+  contentTypes?: ('notices' | 'exhibitions' | 'events' | 'artists' | 'artworks')[]
+  dateRange?: {
+    from?: string
+    to?: string
   }
+  limit?: number
 }
 
-// 전시회 고급 검색
-export async function searchExhibitions(filters: AdvancedSearchFilters) {
-  try {
-    const { data, error } = await supabase.rpc('search_exhibitions', {
-      search_query: filters.query || null,
-      status_filter: filters.status || null,
-      date_from: filters.dateFrom?.toISOString().split('T')[0] || null,
-      date_to: filters.dateTo?.toISOString().split('T')[0] || null,
-      limit_count: 20,
-      offset_count: 0,
-    });
-
-    if (error) throw error;
-    return { data: data || [], error: null };
-  } catch (error) {
-    console.error('Error searching exhibitions:', error);
-    return { data: [], error };
-  }
+export interface SearchResultItem {
+  id: string
+  title: string
+  description: string
+  content_type: 'notice' | 'exhibition' | 'event' | 'artist' | 'artwork'
+  url: string
+  thumbnail?: string
+  published_at?: string
+  relevance_score?: number
 }
 
-// 행사 고급 검색
-export async function searchEvents(filters: AdvancedSearchFilters) {
-  try {
-    const { data, error } = await supabase.rpc('search_events', {
-      search_query: filters.query || null,
-      category_filter: filters.category || null,
-      status_filter: filters.status || null,
-      date_from: filters.dateFrom?.toISOString().split('T')[0] || null,
-      date_to: filters.dateTo?.toISOString().split('T')[0] || null,
-      limit_count: 20,
-      offset_count: 0,
-    });
-
-    if (error) throw error;
-    return { data: data || [], error: null };
-  } catch (error) {
-    console.error('Error searching events:', error);
-    return { data: [], error };
-  }
+export interface SearchResults {
+  results: SearchResultItem[]
+  total: number
+  query: string
+  facets: any
 }
 
-// 작가 검색
-export async function searchArtists(filters: ArtistSearchFilters) {
-  try {
-    const { data, error } = await supabase.rpc('search_artists', {
-      search_query: filters.query || null,
-      nationality_filter: filters.nationality || null,
-      artist_type_filter: filters.artistType || null,
-      membership_type_filter: filters.membershipType || null,
-      limit_count: 20,
-      offset_count: 0,
-    });
+// Notice 검색
+export async function searchNotices(
+  query: string,
+  filters: SearchFilters = {},
+  pagination: PaginationParams = { page: 1, limit: 10 }
+): Promise<{ data: Notice[]; total: number }> {
+  const supabase = ensureSupabase()
+  const { data, error } = await supabase.rpc('search_notices', {
+    search_query: query,
+    category_filter: filters.category,
+    date_from: filters.dateFrom,
+    date_to: filters.dateTo,
+    page_num: pagination.page,
+    page_size: pagination.limit
+  })
 
-    if (error) throw error;
-    return { data: data || [], error: null };
-  } catch (error) {
-    console.error('Error searching artists:', error);
-    return { data: [], error };
-  }
+  if (error) throw error
+  return data
 }
 
-// 작품 검색
-export async function searchArtworks(filters: ArtworkSearchFilters) {
-  try {
-    const { data, error } = await supabase.rpc('search_artworks', {
-      search_query: filters.query || null,
-      category_filter: filters.category || null,
-      style_filter: filters.style || null,
-      availability_filter: filters.availability || null,
-      artist_id_filter: filters.artistId || null,
-      year_from: filters.yearFrom || null,
-      year_to: filters.yearTo || null,
-      limit_count: 20,
-      offset_count: 0,
-    });
+// Exhibition 검색
+export async function searchExhibitions(
+  query: string,
+  filters: SearchFilters = {},
+  pagination: PaginationParams = { page: 1, limit: 10 }
+): Promise<{ data: Exhibition[]; total: number }> {
+  const supabase = ensureSupabase()
+  const { data, error } = await supabase.rpc('search_exhibitions', {
+    search_query: query,
+    status_filter: filters.status,
+    date_from: filters.dateFrom,
+    date_to: filters.dateTo,
+    page_num: pagination.page,
+    page_size: pagination.limit
+  })
 
-    if (error) throw error;
-    return { data: data || [], error: null };
-  } catch (error) {
-    console.error('Error searching artworks:', error);
-    return { data: [], error };
-  }
+  if (error) throw error
+  return data
 }
 
-// 통합 검색 (모든 콘텐츠 타입 - 작가와 작품 포함)
-export async function searchAllContent(query: string, limit = 20) {
-  try {
-    const { data, error } = await supabase.rpc('search_all_content', {
-      search_query: query,
-      limit_count: limit,
-    });
+// Event 검색  
+export async function searchEvents(
+  query: string,
+  filters: any = {},
+  pagination: PaginationParams = { page: 1, limit: 10 }
+): Promise<{ data: Event[]; total: number }> {
+  const supabase = ensureSupabase()
+  const { data, error } = await supabase.rpc('search_events', {
+    search_query: query,
+    event_type_filter: filters.eventType,
+    date_from: filters.dateFrom,
+    date_to: filters.dateTo,
+    page_num: pagination.page,
+    page_size: pagination.limit
+  })
 
-    if (error) throw error;
-    return { data: data || [], error: null };
-  } catch (error) {
-    console.error('Error searching all content:', error);
-    return { data: [], error };
-  }
+  if (error) throw error
+  return data
+}
+
+// Artist 검색
+export async function searchArtists(
+  query: string,
+  filters: any = {},
+  pagination: PaginationParams = { page: 1, limit: 10 }
+): Promise<{ data: any[]; total: number }> {
+  const supabase = ensureSupabase()
+  const { data, error } = await supabase.rpc('search_artists', {
+    search_query: query,
+    nationality_filter: filters.nationality,
+    specialty_filter: filters.specialty,
+    page_num: pagination.page,
+    page_size: pagination.limit
+  })
+
+  if (error) throw error
+  return data
+}
+
+// Artwork 검색
+export async function searchArtworks(
+  query: string,
+  filters: any = {},
+  pagination: PaginationParams = { page: 1, limit: 10 }
+): Promise<{ data: any[]; total: number }> {
+  const supabase = ensureSupabase()
+  const { data, error } = await supabase.rpc('search_artworks', {
+    search_query: query,
+    category_filter: filters.category,
+    style_filter: filters.style,
+    artist_filter: filters.artist_id,
+    page_num: pagination.page,
+    page_size: pagination.limit
+  })
+
+  if (error) throw error
+  return data
+}
+
+// 전체 콘텐츠 통합 검색
+export async function searchAllContent(
+  query: string,
+  params: GlobalSearchParams = { query }
+): Promise<SearchResultItem[]> {
+  const supabase = ensureSupabase()
+  const { data, error } = await supabase.rpc('search_all_content', {
+    search_query: query,
+    content_types: params.contentTypes || ['notices', 'exhibitions', 'events', 'artists', 'artworks'],
+    date_from: params.dateRange?.from,
+    date_to: params.dateRange?.to,
+    result_limit: params.limit || 20
+  })
+
+  if (error) throw error
+  return data || []
 }
 
 // 간단한 텍스트 검색 (기존 방식과 호환)
@@ -168,7 +200,7 @@ export async function simpleSearch(
   limit = 20
 ) {
   try {
-    let searchQuery = supabase
+    let searchQuery = ensureSupabase()
       .from(table)
       .select('*')
       .limit(limit);
@@ -199,12 +231,11 @@ export async function simpleSearch(
 // 작가별 작품 검색
 export async function searchArtworksByArtist(artistId: string, query?: string, limit = 20) {
   try {
-    const filters: ArtworkSearchFilters = {
-      artistId,
-      query,
+    const filters = {
+      artist_id: artistId,
     };
     
-    return await searchArtworks(filters);
+    return await searchArtworks(query || '', filters);
   } catch (error) {
     console.error('Error searching artworks by artist:', error);
     return { data: [], error };
@@ -221,4 +252,45 @@ export async function getPopularSearchTerms(limit = 10) {
 export async function getSearchSuggestions(query: string, limit = 5) {
   // TODO: 자동완성 기능 구현
   return { data: [], error: null };
+}
+
+// 고급 검색 (다중 테이블 조인)
+export async function advancedSearch(params: GlobalSearchParams): Promise<SearchResults> {
+  const supabase = ensureSupabase()
+  let searchQuery = supabase
+    .from('search_view') // 가상의 통합 검색 뷰
+    .select('*')
+
+  if (params.query) {
+    searchQuery = searchQuery.textSearch('search_vector', params.query)
+  }
+
+  if (params.categories && params.categories.length > 0) {
+    searchQuery = searchQuery.in('category', params.categories)
+  }
+
+  if (params.contentTypes && params.contentTypes.length > 0) {
+    searchQuery = searchQuery.in('content_type', params.contentTypes)
+  }
+
+  if (params.dateRange?.from) {
+    searchQuery = searchQuery.gte('created_at', params.dateRange.from)
+  }
+
+  if (params.dateRange?.to) {
+    searchQuery = searchQuery.lte('created_at', params.dateRange.to)
+  }
+
+  const { data, error } = await searchQuery
+    .order('relevance_score', { ascending: false })
+    .limit(params.limit || 20)
+
+  if (error) throw error
+
+  return {
+    results: data || [],
+    total: data?.length || 0,
+    query: params.query,
+    facets: {} // 추후 구현
+  }
 }

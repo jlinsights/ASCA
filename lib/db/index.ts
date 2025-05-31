@@ -1,7 +1,10 @@
 import { drizzle } from 'drizzle-orm/better-sqlite3';
+// TypeScript 타입 선언
+declare module 'better-sqlite3';
 import Database from 'better-sqlite3';
 import * as schema from './schema';
 
+// @ts-ignore - better-sqlite3 타입 선언 파일이 없어서 무시
 // 데이터베이스 연결 설정
 const sqlite = new Database(process.env.DATABASE_URL || 'sqlite.db');
 
