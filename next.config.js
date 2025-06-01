@@ -31,8 +31,25 @@ const nextConfig = {
 
   // 웹팩 최적화
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // self is not defined 에러 해결
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+    }
+
+    // 서버사이드에서 self 정의
+    if (isServer) {
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          'self': 'globalThis',
+        })
+      )
+    }
+
     // 프로덕션 빌드에서만 적용
-    if (!dev) {
+    if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
         cacheGroups: {
@@ -120,9 +137,7 @@ const nextConfig = {
   // output: 'export',
   // 리다이렉트 설정
   async redirects() {
-    return [
-      // 필요한 리다이렉트 규칙 추가
-    ]
+    return []
   },
   // 리라이트 설정 - SPA처럼 동작하도록
   async rewrites() {
