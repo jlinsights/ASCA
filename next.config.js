@@ -108,14 +108,6 @@ const nextConfig = {
     ]
   },
 
-  // 개발 서버 최적화
-  devIndicators: {
-    buildActivity: false, // 빌드 인디케이터 비활성화로 성능 개선
-  },
-
-  // 불필요한 폴리필 제거
-  swcMinify: true,
-  
   // 타입스크립트 성능 개선
   typescript: {
     ignoreBuildErrors: false,

@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Airtable from 'airtable'
 
 export async function GET(request: NextRequest) {
   try {
+    // 빌드 시에는 간단한 응답 반환
+    if (process.env.NODE_ENV === 'production' && !process.env.AIRTABLE_API_KEY) {
+      return NextResponse.json({
+        success: true,
+        foundTables: [],
+        totalTables: 0,
+        message: 'Migration service not configured in production'
+      })
+    }
+
     // Airtable 환경변수 확인
     if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
       return NextResponse.json(
@@ -11,6 +20,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // 개발 환경에서만 실제 Airtable 접근
+    const Airtable = (await import('airtable')).default
     const airtable = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY });
     const base = airtable.base(process.env.AIRTABLE_BASE_ID);
 

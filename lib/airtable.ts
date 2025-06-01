@@ -4,13 +4,22 @@ import Airtable from 'airtable';
 const airtableApiKey = process.env.AIRTABLE_API_KEY;
 const airtableBaseId = process.env.AIRTABLE_BASE_ID;
 
-if (!airtableApiKey || !airtableBaseId) {
-  console.warn('Airtable credentials not configured');
-}
+// Airtable 클라이언트 초기화 - 빌드 시에는 초기화하지 않음
+let airtable: Airtable | null = null;
+let base: any = null;
 
-// Airtable 클라이언트 초기화
-const airtable = new Airtable({ apiKey: airtableApiKey });
-const base = airtable.base(airtableBaseId!);
+function initializeAirtable() {
+  if (!airtableApiKey || !airtableBaseId) {
+    throw new Error('Airtable credentials not configured');
+  }
+  
+  if (!airtable) {
+    airtable = new Airtable({ apiKey: airtableApiKey });
+    base = airtable.base(airtableBaseId);
+  }
+  
+  return base;
+}
 
 // Airtable 테이블 정의
 export const TABLES = {
@@ -124,17 +133,15 @@ export interface AirtableExhibition {
 export class AirtableService {
   // Artists 조회
   static async getAllArtists(): Promise<AirtableArtist[]> {
-    if (!airtableApiKey || !airtableBaseId) {
-      throw new Error('Airtable credentials not configured');
-    }
+    const currentBase = initializeAirtable();
 
     try {
-      const records = await base(TABLES.ARTISTS).select({
+      const records = await currentBase(TABLES.ARTISTS).select({
         maxRecords: 1000,
         sort: [{ field: 'Name (Korean)', direction: 'asc' }]
       }).all();
 
-      return records.map(record => ({
+      return records.map((record: any) => ({
         id: record.id,
         fields: record.fields as unknown as AirtableArtist['fields']
       }));
@@ -146,17 +153,15 @@ export class AirtableService {
 
   // Artworks 조회
   static async getAllArtworks(): Promise<AirtableArtwork[]> {
-    if (!airtableApiKey || !airtableBaseId) {
-      throw new Error('Airtable credentials not configured');
-    }
+    const currentBase = initializeAirtable();
 
     try {
-      const records = await base(TABLES.ARTWORKS).select({
+      const records = await currentBase(TABLES.ARTWORKS).select({
         maxRecords: 1000,
         sort: [{ field: 'Title (Korean)', direction: 'asc' }]
       }).all();
 
-      return records.map(record => ({
+      return records.map((record: any) => ({
         id: record.id,
         fields: record.fields as unknown as AirtableArtwork['fields']
       }));
@@ -168,17 +173,15 @@ export class AirtableService {
 
   // Exhibitions 조회
   static async getAllExhibitions(): Promise<AirtableExhibition[]> {
-    if (!airtableApiKey || !airtableBaseId) {
-      throw new Error('Airtable credentials not configured');
-    }
+    const currentBase = initializeAirtable();
 
     try {
-      const records = await base(TABLES.EXHIBITIONS).select({
+      const records = await currentBase(TABLES.EXHIBITIONS).select({
         maxRecords: 1000,
         sort: [{ field: 'Start Date', direction: 'desc' }]
       }).all();
 
-      return records.map(record => ({
+      return records.map((record: any) => ({
         id: record.id,
         fields: record.fields as unknown as AirtableExhibition['fields']
       }));
@@ -190,12 +193,10 @@ export class AirtableService {
 
   // 특정 아티스트 조회
   static async getArtistById(id: string): Promise<AirtableArtist | null> {
-    if (!airtableApiKey || !airtableBaseId) {
-      throw new Error('Airtable credentials not configured');
-    }
+    const currentBase = initializeAirtable();
 
     try {
-      const record = await base(TABLES.ARTISTS).find(id);
+      const record = await currentBase(TABLES.ARTISTS).find(id);
       return {
         id: record.id,
         fields: record.fields as unknown as AirtableArtist['fields']
