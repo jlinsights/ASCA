@@ -1,8 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { AirtableService } from '@/lib/airtable'
 
 export async function GET(request: NextRequest) {
   try {
+    // 빌드 시에는 간단한 응답 반환
+    if (process.env.NODE_ENV === 'production' && !process.env.AIRTABLE_API_KEY) {
+      return NextResponse.json({
+        message: 'Migration service not configured in production',
+        airtable: {
+          artists: 0,
+          artworks: 0,
+          exhibitions: 0
+        },
+        estimated_time: '알 수 없음'
+      })
+    }
+
     // Airtable 환경변수 확인
     if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
       return NextResponse.json(
@@ -11,7 +23,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Airtable 데이터 개수 확인
+    // 개발 환경에서만 실제 Airtable 데이터 확인
+    const { AirtableService } = await import('@/lib/airtable')
+    
     const [artists, artworks, exhibitions] = await Promise.all([
       AirtableService.getAllArtists(),
       AirtableService.getAllArtworks(),
