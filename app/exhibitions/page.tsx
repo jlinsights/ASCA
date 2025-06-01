@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar, MapPin, Clock, Users, Eye, Heart, Search, Filter, ChevronLeft, ChevronRight, Star, Ticket, User } from "lucide-react"
+import { Calendar, MapPin, Clock, Users, Eye, Heart, Search, Filter, ChevronLeft, ChevronRight, Star, Ticket, User, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import { getExhibitions } from "@/lib/supabase/cms"
 import type { Exhibition, SearchFilters, PaginationParams } from "@/types/cms"
@@ -153,46 +153,50 @@ export default function ExhibitionsPage() {
         : 'border-border/50 hover:border-border'
     }`}>
       <div className="relative">
-        <div className="aspect-[4/3] relative overflow-hidden">
-          <Image
-            src={exhibition.featured_image_url || '/api/placeholder/400/300'}
-            alt={exhibition.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-          
-          {/* 상태 배지 */}
-          <div className="absolute top-3 right-3">
-            <Badge className={statusColors[exhibition.status as keyof typeof statusColors]}>
-              {statusLabels[exhibition.status as keyof typeof statusLabels]}
-            </Badge>
-          </div>
-          
-          {/* 주요 전시회 표시 */}
-          {exhibition.is_featured && (
-            <div className="absolute top-3 left-3">
-              <Badge className="bg-amber-500 text-white border-0 shadow-md">
-                <Star className="h-3 w-3 mr-1" />
-                주요
+        <Link href={`/exhibitions/${exhibition.id}`}>
+          <div className="aspect-[4/3] relative overflow-hidden cursor-pointer">
+            <Image
+              src={exhibition.featured_image_url || '/api/placeholder/400/300'}
+              alt={exhibition.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            
+            {/* 상태 배지 */}
+            <div className="absolute top-3 right-3">
+              <Badge className={statusColors[exhibition.status as keyof typeof statusColors]}>
+                {statusLabels[exhibition.status as keyof typeof statusLabels]}
               </Badge>
             </div>
-          )}
-          
-          {/* 조회수 */}
-          <div className="absolute bottom-3 right-3 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
-            <div className="flex items-center gap-1 text-white text-sm">
-              <Eye className="h-3 w-3" />
-              <span className="font-medium">{exhibition.views}</span>
+            
+            {/* 주요 전시회 표시 */}
+            {exhibition.is_featured && (
+              <div className="absolute top-3 left-3">
+                <Badge className="bg-amber-500 text-white border-0 shadow-md">
+                  <Star className="h-3 w-3 mr-1" />
+                  주요
+                </Badge>
+              </div>
+            )}
+            
+            {/* 조회수 */}
+            <div className="absolute bottom-3 right-3 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
+              <div className="flex items-center gap-1 text-white text-sm">
+                <Eye className="h-3 w-3" />
+                <span className="font-medium">{exhibition.views}</span>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
         
         <CardContent className="p-6">
           <div className="mb-3">
-            <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary cursor-pointer transition-colors line-clamp-2">
-              {exhibition.title}
-            </h3>
+            <Link href={`/exhibitions/${exhibition.id}`}>
+              <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary cursor-pointer transition-colors line-clamp-2">
+                {exhibition.title}
+              </h3>
+            </Link>
             
             {exhibition.subtitle && (
               <p className="text-sm text-muted-foreground font-medium mb-2">{exhibition.subtitle}</p>
@@ -233,6 +237,12 @@ export default function ExhibitionsPage() {
                     <span className="text-xs">{exhibition.max_capacity}명</span>
                   </div>
                 )}
+                <Link href={`/exhibitions/${exhibition.id}`}>
+                  <Button variant="outline" size="sm" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors">
+                    <ExternalLink className="h-3 w-3 mr-1" />
+                    상세보기
+                  </Button>
+                </Link>
               </div>
               
               {exhibition.ticket_price && (
