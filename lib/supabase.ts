@@ -231,6 +231,68 @@ export type Database = {
           updated_at?: string
         }
       }
+      files: {
+        Row: {
+          id: string
+          title: string
+          title_en: string | null
+          title_ja: string | null
+          title_zh: string | null
+          description: string | null
+          description_en: string | null
+          description_ja: string | null
+          description_zh: string | null
+          category: 'form' | 'rule' | 'document' | 'notice' | 'other'
+          file_type: 'pdf' | 'doc' | 'docx' | 'hwp' | 'xlsx' | 'pptx' | 'zip' | 'other'
+          file_url: string
+          file_size: number
+          download_count: number
+          is_public: boolean
+          tags: string[]
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          title_en?: string | null
+          title_ja?: string | null
+          title_zh?: string | null
+          description?: string | null
+          description_en?: string | null
+          description_ja?: string | null
+          description_zh?: string | null
+          category: 'form' | 'rule' | 'document' | 'notice' | 'other'
+          file_type: 'pdf' | 'doc' | 'docx' | 'hwp' | 'xlsx' | 'pptx' | 'zip' | 'other'
+          file_url: string
+          file_size: number
+          download_count?: number
+          is_public?: boolean
+          tags?: string[]
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          title_en?: string | null
+          title_ja?: string | null
+          title_zh?: string | null
+          description?: string | null
+          description_en?: string | null
+          description_ja?: string | null
+          description_zh?: string | null
+          category?: 'form' | 'rule' | 'document' | 'notice' | 'other'
+          file_type?: 'pdf' | 'doc' | 'docx' | 'hwp' | 'xlsx' | 'pptx' | 'zip' | 'other'
+          file_url?: string
+          file_size?: number
+          download_count?: number
+          is_public?: boolean
+          tags?: string[]
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
   }
 } 

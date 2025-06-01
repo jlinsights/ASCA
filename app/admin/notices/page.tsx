@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { AdminNavigation } from '@/components/AdminNavigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -166,6 +167,7 @@ export default function NoticesAdminPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <AdminNavigation currentPage="notices" />
       
       <main className="container mx-auto px-4 py-8">
         {/* 헤더 */}
