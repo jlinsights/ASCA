@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { AdminNavigation } from '@/components/AdminNavigation'
 import AdminProtectedRoute from '@/components/AdminProtectedRoute'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -170,6 +171,7 @@ export default function ArtworksManagement() {
     <AdminProtectedRoute>
       <div className="min-h-screen bg-background">
         <Header />
+        <AdminNavigation currentPage="artworks" />
         
         <main className="container mx-auto px-4 py-8">
           {/* 헤더 */}
