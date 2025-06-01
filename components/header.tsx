@@ -8,14 +8,14 @@ import {
   SignUpButton, 
   UserButton, 
   SignedIn, 
-  SignedOut 
+  SignedOut,
+  useUser
 } from "@clerk/nextjs"
 import { ThemeToggle } from "./theme-toggle"
 import { ThemeTransition } from "./theme-transition"
 import { LanguageSelector } from "./language-selector"
 import { Logo } from "./logo"
 import { useLanguage } from "@/contexts/language-context"
-import { useAuth } from "@/contexts/AuthContext"
 
 // 메뉴 구조 정의
 
@@ -27,11 +27,11 @@ export function Header() {
   const [mobileDropdowns, setMobileDropdowns] = useState<Record<string, boolean>>({})
   const headerRef = useRef<HTMLElement>(null)
   const { t } = useLanguage()
-  const { user } = useAuth()
+  const { user } = useUser()
   
-  // 관리자 계정 확인
-  const isAdmin = user?.email === 'info@orientalcalligraphy.org' || 
-                  ['admin@asca.kr', 'content@asca.kr', 'editor@asca.kr'].includes(user?.email || '')
+  // Clerk 사용자 정보를 통한 관리자 계정 확인
+  const isAdmin = user?.emailAddresses?.[0]?.emailAddress === 'info@orientalcalligraphy.org' || 
+                  ['admin@asca.kr', 'content@asca.kr', 'editor@asca.kr'].includes(user?.emailAddresses?.[0]?.emailAddress || '')
 
   const menuStructure = [
     {
