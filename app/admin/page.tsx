@@ -193,6 +193,12 @@ export default function AdminDashboard() {
       icon: Palette,
       title: language === 'ko' ? '새 작품' : 'New Artwork',
       color: 'bg-pink-50 hover:bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-950/50 dark:hover:bg-pink-950/70 dark:text-pink-300 dark:border-pink-800'
+    },
+    {
+      href: '/admin/migration',
+      icon: RefreshCw,
+      title: language === 'ko' ? 'Airtable 마이그레이션' : 'Airtable Migration',
+      color: 'bg-cyan-50 hover:bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-950/50 dark:hover:bg-cyan-950/70 dark:text-cyan-300 dark:border-cyan-800'
     }
   ], [language])
 
@@ -235,7 +241,7 @@ export default function AdminDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {quickActions.map((action, index) => (
               <QuickActionButton
                 key={index}
@@ -255,6 +261,53 @@ export default function AdminDashboard() {
               color="bg-indigo-50/50 hover:bg-indigo-50/50 text-indigo-700/50 border-indigo-200/50 dark:bg-indigo-950/30 dark:hover:bg-indigo-950/30 dark:text-indigo-300/50 dark:border-indigo-800/50"
               disabled={true}
             />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 마이그레이션 상태 카드 */}
+      <Card className="mb-8 border-cyan-200 bg-cyan-50/50 dark:border-cyan-800 dark:bg-cyan-950/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <RefreshCw className="h-5 w-5 text-cyan-600" />
+            {language === 'ko' ? 'Airtable 마이그레이션' : 'Airtable Migration'}
+            <Badge variant="outline" className="ml-2 text-cyan-700 border-cyan-300">
+              {language === 'ko' ? '사용 가능' : 'Available'}
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <p className="text-sm text-muted-foreground mb-4">
+                {language === 'ko' 
+                  ? 'Airtable의 Artists, Artworks, Exhibitions 데이터를 Supabase로 안전하게 마이그레이션할 수 있습니다.' 
+                  : 'Safely migrate Artists, Artworks, and Exhibitions data from Airtable to Supabase.'
+                }
+              </p>
+              <div className="flex gap-2">
+                <Link href="/admin/migration">
+                  <Button className="bg-cyan-600 hover:bg-cyan-700 text-white">
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    {language === 'ko' ? '마이그레이션 시작' : 'Start Migration'}
+                  </Button>
+                </Link>
+                <Link href="/admin/migration">
+                  <Button variant="outline" className="border-cyan-300 text-cyan-700 hover:bg-cyan-50">
+                    <Database className="h-4 w-4 mr-2" />
+                    {language === 'ko' ? '상태 확인' : 'Check Status'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-cyan-600 mb-1">
+                {language === 'ko' ? '직접 API 연동' : 'Direct API Integration'}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {language === 'ko' ? '무료 마이그레이션' : 'Free Migration'}
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>

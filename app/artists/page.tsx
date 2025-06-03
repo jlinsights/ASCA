@@ -18,6 +18,7 @@ import type { Database } from "@/lib/supabase"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useLanguage } from "@/contexts/language-context"
+import { ArtistShareButton } from "@/components/kakao/kakao-share-button"
 
 // 데이터베이스 타입 사용
 type Artist = Database['public']['Tables']['artists']['Row']
@@ -89,7 +90,9 @@ export default function ArtistsPage() {
 
     // 작가 타입 필터
     if (artistTypeFilter !== 'all') {
-      filtered = filtered.filter(artist => artist.artist_type === artistTypeFilter)
+      filtered = filtered.filter(artist => 
+        artist.artist_type && artist.artist_type.includes(artistTypeFilter)
+      )
     }
 
     // 전문분야 필터
@@ -113,8 +116,9 @@ export default function ArtistsPage() {
       '공모작가': 'bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700',
       '청년작가': 'bg-green-100 text-green-800 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700',
       '일반작가': 'bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-600',
-      '추천작가': 'bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-700',
-      '초대작가': 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700'
+      '추천작가': 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700',
+      '초대작가': 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-700',
+      '전문작가': 'bg-indigo-100 text-indigo-800 border-indigo-300 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-700',
     }
     return colors[type as keyof typeof colors] || 'bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-300'
   }
@@ -243,11 +247,11 @@ export default function ArtistsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">전체</SelectItem>
-                  <SelectItem value="초대작가">초대작가</SelectItem>
-                  <SelectItem value="추천작가">추천작가</SelectItem>
-                  <SelectItem value="일반작가">일반작가</SelectItem>
-                  <SelectItem value="청년작가">청년작가</SelectItem>
                   <SelectItem value="공모작가">공모작가</SelectItem>
+                  <SelectItem value="청년작가">청년작가</SelectItem>
+                  <SelectItem value="일반작가">일반작가</SelectItem>
+                  <SelectItem value="추천작가">추천작가</SelectItem>
+                  <SelectItem value="초대작가">초대작가</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -346,11 +350,11 @@ export default function ArtistsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">전체</SelectItem>
-                  <SelectItem value="초대작가">초대작가</SelectItem>
-                  <SelectItem value="추천작가">추천작가</SelectItem>
-                  <SelectItem value="일반작가">일반작가</SelectItem>
-                  <SelectItem value="청년작가">청년작가</SelectItem>
                   <SelectItem value="공모작가">공모작가</SelectItem>
+                  <SelectItem value="청년작가">청년작가</SelectItem>
+                  <SelectItem value="일반작가">일반작가</SelectItem>
+                  <SelectItem value="추천작가">추천작가</SelectItem>
+                  <SelectItem value="초대작가">초대작가</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -553,14 +557,30 @@ export default function ArtistsPage() {
 
                     {/* 액션 버튼 */}
                     <div className="pt-4 border-t border-border dark:border-border/30">
-                      <Link href={`/artists/${artist.id}`} className="w-full">
-                        <Button 
-                          variant="outline" 
-                          className="w-full hover:bg-scholar-red hover:text-white hover:border-scholar-red dark:hover:bg-scholar-red dark:hover:text-white dark:hover:border-scholar-red transition-all duration-200"
-                        >
-                          작가 상세보기
-                        </Button>
-                      </Link>
+                      <div className="flex gap-2">
+                        <Link href={`/artists/${artist.id}`} className="flex-1">
+                          <Button 
+                            variant="outline" 
+                            className="w-full hover:bg-scholar-red hover:text-white hover:border-scholar-red dark:hover:bg-scholar-red dark:hover:text-white dark:hover:border-scholar-red transition-all duration-200"
+                          >
+                            작가 상세보기
+                          </Button>
+                        </Link>
+                        <ArtistShareButton
+                          title={`${artist.name} 작가`}
+                          description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
+                          imageUrl={artist.profile_image || "/placeholder-profile.jpg"}
+                          webUrl={`/artists/${artist.id}`}
+                          variant="outline"
+                          isIconOnly={true}
+                          size="md"
+                          className="flex-shrink-0"
+                          onShareSuccess={() => {
+                            // 공유 성공 시 통계 업데이트 등
+                            console.log(`Artist ${artist.name} shared successfully`)
+                          }}
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -676,15 +696,31 @@ export default function ArtistsPage() {
 
                     {/* 액션 버튼 - 모바일용 */}
                     <div className="pt-3 border-t border-border/50 dark:border-border/30">
-                      <Link href={`/artists/${artist.id}`} className="w-full">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="w-full text-xs h-8 hover:bg-scholar-red hover:text-white hover:border-scholar-red dark:hover:bg-scholar-red dark:hover:text-white dark:hover:border-scholar-red transition-all duration-200"
-                        >
-                          상세보기
-                        </Button>
-                      </Link>
+                      <div className="flex gap-2">
+                        <Link href={`/artists/${artist.id}`} className="flex-1">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="w-full text-xs h-8 hover:bg-scholar-red hover:text-white hover:border-scholar-red dark:hover:bg-scholar-red dark:hover:text-white dark:hover:border-scholar-red transition-all duration-200"
+                          >
+                            상세보기
+                          </Button>
+                        </Link>
+                        <ArtistShareButton
+                          title={`${artist.name} 작가`}
+                          description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
+                          imageUrl={artist.profile_image || "/placeholder-profile.jpg"}
+                          webUrl={`/artists/${artist.id}`}
+                          variant="outline"
+                          isIconOnly={true}
+                          size="md"
+                          className="flex-shrink-0"
+                          onShareSuccess={() => {
+                            // 공유 성공 시 통계 업데이트 등
+                            console.log(`Artist ${artist.name} shared successfully`)
+                          }}
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

@@ -131,15 +131,17 @@ export interface AirtableExhibition {
 
 // Airtable 데이터 조회 함수들
 export class AirtableService {
-  // Artists 조회
+  // Artists 조회 - 모든 레코드를 가져오기 위해 페이지네이션 사용
   static async getAllArtists(): Promise<AirtableArtist[]> {
     const currentBase = initializeAirtable();
 
     try {
+      // maxRecords를 제거하고 .all()을 사용하면 자동으로 페이지네이션 처리됨
       const records = await currentBase(TABLES.ARTISTS).select({
-        maxRecords: 1000,
         sort: [{ field: 'Name (Korean)', direction: 'asc' }]
       }).all();
+
+      console.log(`Fetched ${records.length} artists from Airtable`);
 
       return records.map((record: any) => ({
         id: record.id,
@@ -151,15 +153,16 @@ export class AirtableService {
     }
   }
 
-  // Artworks 조회
+  // Artworks 조회 - 모든 레코드 가져오기
   static async getAllArtworks(): Promise<AirtableArtwork[]> {
     const currentBase = initializeAirtable();
 
     try {
       const records = await currentBase(TABLES.ARTWORKS).select({
-        maxRecords: 1000,
         sort: [{ field: 'Title (Korean)', direction: 'asc' }]
       }).all();
+
+      console.log(`Fetched ${records.length} artworks from Airtable`);
 
       return records.map((record: any) => ({
         id: record.id,
@@ -171,15 +174,16 @@ export class AirtableService {
     }
   }
 
-  // Exhibitions 조회
+  // Exhibitions 조회 - 모든 레코드 가져오기
   static async getAllExhibitions(): Promise<AirtableExhibition[]> {
     const currentBase = initializeAirtable();
 
     try {
       const records = await currentBase(TABLES.EXHIBITIONS).select({
-        maxRecords: 1000,
         sort: [{ field: 'Start Date', direction: 'desc' }]
       }).all();
+
+      console.log(`Fetched ${records.length} exhibitions from Airtable`);
 
       return records.map((record: any) => ({
         id: record.id,
@@ -204,6 +208,98 @@ export class AirtableService {
     } catch (error) {
       console.error('Error fetching artist from Airtable:', error);
       return null;
+    }
+  }
+
+  // 배치 처리를 위한 작가 데이터 가져오기 (페이지별)
+  static async getArtistsBatch(offset: number = 0, limit: number = 100): Promise<{
+    artists: AirtableArtist[];
+    hasMore: boolean;
+    total: number;
+  }> {
+    const currentBase = initializeAirtable();
+
+    try {
+      // 먼저 전체 개수 확인
+      const allRecords = await currentBase(TABLES.ARTISTS).select({
+        fields: ['Name (Korean)'], // 최소한의 필드만 가져와서 성능 향상
+        sort: [{ field: 'Name (Korean)', direction: 'asc' }]
+      }).all();
+
+      const total = allRecords.length;
+
+      // 실제 데이터 가져오기 (배치)
+      const records = await currentBase(TABLES.ARTISTS).select({
+        sort: [{ field: 'Name (Korean)', direction: 'asc' }]
+      }).eachPage(async (records: any, fetchNextPage: any) => {
+        // 현재 페이지의 레코드 수를 확인하고 필요한 범위만 처리
+        const startIndex = offset;
+        const endIndex = offset + limit;
+        
+        // 현재 배치에 해당하는 레코드만 반환
+        if (records.length > startIndex) {
+          return records.slice(startIndex, endIndex);
+        }
+        
+        fetchNextPage();
+      });
+
+      const artists = records.map((record: any) => ({
+        id: record.id,
+        fields: record.fields as unknown as AirtableArtist['fields']
+      }));
+
+      return {
+        artists,
+        hasMore: offset + limit < total,
+        total
+      };
+    } catch (error) {
+      console.error('Error fetching artists batch from Airtable:', error);
+      throw error;
+    }
+  }
+
+  // 대용량 데이터 스트리밍 처리
+  static async processAllArtistsInBatches(
+    processor: (batch: AirtableArtist[]) => Promise<void>,
+    batchSize: number = 50
+  ): Promise<{ processed: number; errors: number }> {
+    const currentBase = initializeAirtable();
+    let processed = 0;
+    let errors = 0;
+
+    try {
+      await currentBase(TABLES.ARTISTS).select({
+        sort: [{ field: 'Name (Korean)', direction: 'asc' }]
+      }).eachPage(async (records: any, fetchNextPage: any) => {
+        try {
+          // 레코드들을 배치 크기로 나누어 처리
+          for (let i = 0; i < records.length; i += batchSize) {
+            const batch = records.slice(i, i + batchSize).map((record: any) => ({
+              id: record.id,
+              fields: record.fields as unknown as AirtableArtist['fields']
+            }));
+
+            await processor(batch);
+            processed += batch.length;
+            
+            console.log(`Processed ${processed} artists...`);
+          }
+
+          fetchNextPage();
+        } catch (error) {
+          console.error('Error processing batch:', error);
+          errors += records.length;
+          fetchNextPage();
+        }
+      });
+
+      console.log(`Batch processing completed: ${processed} processed, ${errors} errors`);
+      return { processed, errors };
+    } catch (error) {
+      console.error('Error in batch processing:', error);
+      throw error;
     }
   }
 } 
