@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getArtist } from '@/lib/api/artists'
 
+type RouteParams = {
+  params: Promise<{ id: string }>
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
-    const artist = await getArtist(params.id)
+    const resolvedParams = await params
+    const artist = await getArtist(resolvedParams.id)
 
     if (!artist) {
       return NextResponse.json(
