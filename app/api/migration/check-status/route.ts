@@ -27,9 +27,9 @@ export async function GET(request: NextRequest) {
     const { AirtableService } = await import('@/lib/airtable')
     
     const [artists, artworks, exhibitions] = await Promise.all([
-      AirtableService.getAllArtists(),
-      AirtableService.getAllArtworks(),
-      AirtableService.getAllExhibitions()
+      AirtableService.getAllArtists().catch(() => []),
+      AirtableService.getAllArtworks().catch(() => []),
+      AirtableService.getAllExhibitions().catch(() => [])
     ])
 
     const totalRecords = artists.length + artworks.length + exhibitions.length
@@ -41,13 +41,26 @@ export async function GET(request: NextRequest) {
         artworks: artworks.length,
         exhibitions: exhibitions.length
       },
-      estimated_time: `약 ${estimatedMinutes}분`
+      details: {
+        artists_status: artists.length > 0 ? 'data_available' : 'empty',
+        artworks_status: artworks.length > 0 ? 'data_available' : 'empty',
+        exhibitions_status: exhibitions.length > 0 ? 'data_available' : 'empty'
+      },
+      estimated_time: totalRecords > 0 ? `약 ${estimatedMinutes}분` : '즉시 완료',
+      notes: {
+        artists: artists.length > 0 ? `${artists.length}개 레코드 확인됨` : '테이블이 비어있음',
+        artworks: artworks.length > 0 ? `${artworks.length}개 레코드 확인됨` : '테이블이 비어있음 (작품 데이터 없음)',
+        exhibitions: exhibitions.length > 0 ? `${exhibitions.length}개 레코드 확인됨` : '테이블이 비어있음 (전시회 데이터 없음)'
+      }
     })
 
   } catch (error) {
     console.error('Error checking Airtable status:', error)
     return NextResponse.json(
-      { error: 'Failed to connect to Airtable' },
+      { 
+        error: 'Failed to connect to Airtable',
+        details: error instanceof Error ? error.message : String(error)
+      },
       { status: 500 }
     )
   }

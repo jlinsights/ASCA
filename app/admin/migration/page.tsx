@@ -16,6 +16,16 @@ import AdminProtectedRoute from '@/components/AdminProtectedRoute'
 interface MigrationStatus {
   airtable: { artists: number; artworks: number; exhibitions: number };
   estimated_time: string;
+  details?: {
+    artists_status: 'data_available' | 'empty';
+    artworks_status: 'data_available' | 'empty';
+    exhibitions_status: 'data_available' | 'empty';
+  };
+  notes?: {
+    artists: string;
+    artworks: string;
+    exhibitions: string;
+  };
 }
 
 interface MigrationResult {
