@@ -9,16 +9,16 @@ import {
   UserButton, 
   SignedIn, 
   SignedOut,
-  useUser
+  useUser 
 } from "@clerk/nextjs"
 import { ThemeToggle } from "./theme-toggle"
 import { ThemeTransition } from "./theme-transition"
 import { LanguageSelector } from "./language-selector"
 import { Logo } from "./logo"
 import { useLanguage } from "@/contexts/language-context"
+import { KakaoLoginButton } from "./kakao/kakao-login-button"
 
 // 메뉴 구조 정의
-
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -29,7 +29,7 @@ export function Header() {
   const { t } = useLanguage()
   const { user } = useUser()
   
-  // Clerk 사용자 정보를 통한 관리자 계정 확인
+  // 관리자 계정 확인
   const isAdmin = user?.emailAddresses?.[0]?.emailAddress === 'info@orientalcalligraphy.org' || 
                   ['admin@asca.kr', 'content@asca.kr', 'editor@asca.kr'].includes(user?.emailAddresses?.[0]?.emailAddress || '')
 
@@ -206,15 +206,28 @@ export function Header() {
                         : 'opacity-0 invisible -translate-y-2'
                     }`}>
                       <div className="py-2">
-                        {menu.subItems.map((subItem, index) => (
-                          <Link
-                            key={index}
-                            href={subItem.href}
-                            className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-                          >
-                            {subItem.title}
-                          </Link>
-                        ))}
+                        {menu.subItems.map((subItem, index) => {
+                          const isExternalLink = subItem.href.startsWith('http')
+                          return isExternalLink ? (
+                            <a
+                              key={index}
+                              href={subItem.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                            >
+                              {subItem.title}
+                            </a>
+                          ) : (
+                            <Link
+                              key={index}
+                              href={subItem.href}
+                              className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                            >
+                              {subItem.title}
+                            </Link>
+                          )
+                        })}
                       </div>
                     </div>
                   )}
@@ -230,16 +243,27 @@ export function Header() {
             {/* Desktop Auth & Controls */}
             <div className="hidden lg:flex items-center space-x-3">
               <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="text-xs uppercase tracking-wider px-3 py-2 border border-current rounded hover:bg-foreground hover:text-background transition-colors">
-                    {t("signIn")}
-                  </button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <button className="text-xs uppercase tracking-wider px-3 py-2 bg-foreground text-background rounded hover:bg-foreground/90 transition-colors">
-                    {t("signUp")}
-                  </button>
-                </SignUpButton>
+                <div className="flex items-center space-x-2">
+                  <KakaoLoginButton 
+                    variant="outline"
+                    size="sm"
+                    loginText="카카오 로그인"
+                    onLoginSuccess={(userInfo) => {
+                      console.log('Kakao login success:', userInfo)
+                    }}
+                  />
+                  <div className="h-4 w-px bg-border"></div>
+                  <SignInButton mode="modal">
+                    <button className="text-xs uppercase tracking-wider px-3 py-2 border border-current rounded hover:bg-foreground hover:text-background transition-colors">
+                      {t("signIn")}
+                    </button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <button className="text-xs uppercase tracking-wider px-3 py-2 bg-foreground text-background rounded hover:bg-foreground/90 transition-colors">
+                      {t("signUp")}
+                    </button>
+                  </SignUpButton>
+                </div>
               </SignedOut>
               <SignedIn>
                 {isAdmin && (
@@ -263,34 +287,25 @@ export function Header() {
               <LanguageSelector />
             </div>
 
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="lg:hidden flex items-center justify-center w-8 h-8 rounded text-foreground hover:bg-foreground/10 transition-colors"
+              aria-label="메뉴 열기"
+            >
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+
             {/* Mobile Controls */}
             <div className="lg:hidden flex items-center gap-2">
-              <SignedIn>
-                {isAdmin && (
-                  <Link 
-                    href="/admin" 
-                    className="p-2 hover:bg-foreground/10 rounded transition-colors"
-                    title="관리자 대시보드"
-                  >
-                    <Settings className="w-4 h-4" />
-                  </Link>
-                )}
-                <UserButton 
-                  appearance={{
-                    elements: {
-                      avatarBox: "w-7 h-7"
-                    }
-                  }}
-                />
-              </SignedIn>
               <ThemeToggle onToggle={handleThemeToggle} />
               <LanguageSelector />
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 hover:bg-foreground/10 rounded transition-colors"
-                aria-label={t("menu")}
+                className="flex items-center justify-center w-8 h-8 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2"
+                aria-label="메뉴 열기"
               >
-                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
             </div>
           </div>
@@ -326,16 +341,30 @@ export function Header() {
                     <div className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
                       mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                     }`}>
-                      {menu.subItems.map((subItem, index) => (
-                        <Link
-                          key={index}
-                          href={subItem.href}
-                          className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {subItem.title}
-                        </Link>
-                      ))}
+                      {menu.subItems.map((subItem, index) => {
+                        const isExternalLink = subItem.href.startsWith('http')
+                        return isExternalLink ? (
+                          <a
+                            key={index}
+                            href={subItem.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {subItem.title}
+                          </a>
+                        ) : (
+                          <Link
+                            key={index}
+                            href={subItem.href}
+                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {subItem.title}
+                          </Link>
+                        )
+                      })}
                     </div>
                   )}
                 </div>
@@ -364,12 +393,30 @@ export function Header() {
               <div className="border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 pt-4 mt-4">
                 <SignedOut>
                   <div className="space-y-3">
+                    <KakaoLoginButton 
+                      variant="outline"
+                      size="md"
+                      className="w-full justify-start"
+                      loginText="카카오 로그인"
+                      onLoginSuccess={(userInfo) => {
+                        console.log('Mobile Kakao login success:', userInfo)
+                        setIsMenuOpen(false)
+                      }}
+                    />
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-border/50" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-2 text-muted-foreground">또는</span>
+                      </div>
+                    </div>
                     <SignInButton mode="modal">
                       <button 
                         className="w-full text-sm uppercase tracking-wider py-3 px-4 border border-current rounded hover:bg-foreground hover:text-background transition-colors text-left"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        로그인
+                        {t("signIn")}
                       </button>
                     </SignInButton>
                     <SignUpButton mode="modal">
@@ -377,11 +424,35 @@ export function Header() {
                         className="w-full text-sm uppercase tracking-wider py-3 px-4 bg-foreground text-background rounded hover:bg-foreground/90 transition-colors text-left"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        회원가입
+                        {t("signUp")}
                       </button>
                     </SignUpButton>
                   </div>
                 </SignedOut>
+                <SignedIn>
+                  <div className="space-y-3">
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        className="flex items-center gap-2 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Settings className="w-4 h-4" />
+                        {t("adminDashboard")}
+                      </Link>
+                    )}
+                    <div className="flex items-center gap-3 py-3 px-2">
+                      <UserButton 
+                        appearance={{
+                          elements: {
+                            avatarBox: "w-8 h-8"
+                          }
+                        }}
+                      />
+                      <span className="text-sm">{user?.emailAddresses?.[0]?.emailAddress}</span>
+                    </div>
+                  </div>
+                </SignedIn>
               </div>
             </nav>
           </div>

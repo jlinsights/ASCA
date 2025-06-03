@@ -24,84 +24,104 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
+import { getArtists } from '@/lib/api/artists'
+import type { Database } from '@/lib/supabase'
 
-// 임시 작가 데이터
-const mockArtists = [
-  {
-    id: '1',
-    name: '김서예',
-    nameEn: 'Kim Seoye',
-    email: 'kim.seoye@example.com',
-    birthYear: 1975,
-    nationality: '대한민국',
-    specialties: ['행서', '초서', '현대서예'],
-    bio: '전통 서예의 현대적 해석을 통해 새로운 예술 언어를 창조하는 작가입니다.',
-    profileImage: '/images/artists/kim-seoye.jpg',
-    website: 'https://kimseoye.art',
-    isActive: true,
-    artworksCount: 24,
-    exhibitionsCount: 8,
-    createdAt: '2024-01-10',
-    updatedAt: '2024-01-15'
-  },
-  {
-    id: '2',
-    name: '이묵향',
-    nameEn: 'Lee Mukhyang',
-    email: 'lee.mukhyang@example.com',
-    birthYear: 1968,
-    nationality: '대한민국',
-    specialties: ['해서', '예서', '전서'],
-    bio: '한중일 서예 교류의 가교 역할을 하며 동아시아 서예 문화 발전에 기여하고 있습니다.',
-    profileImage: '/images/artists/lee-mukhyang.jpg',
-    website: null,
-    isActive: true,
-    artworksCount: 18,
-    exhibitionsCount: 12,
-    createdAt: '2024-01-08',
-    updatedAt: '2024-01-14'
-  },
-  {
-    id: '3',
-    name: '박문인',
-    nameEn: 'Park Munin',
-    email: 'park.munin@example.com',
-    birthYear: 1982,
-    nationality: '대한민국',
-    specialties: ['현대서예', '캘리그래피'],
-    bio: '젊은 감각으로 서예의 새로운 가능성을 탐구하는 신진 작가입니다.',
-    profileImage: '/images/artists/park-munin.jpg',
-    website: 'https://parkmunin.com',
-    isActive: false,
-    artworksCount: 12,
-    exhibitionsCount: 3,
-    createdAt: '2024-01-05',
-    updatedAt: '2024-01-12'
-  }
-]
+// Supabase 작가 타입
+type Artist = Database['public']['Tables']['artists']['Row']
 
 export default function ArtistsManagement() {
   const { language } = useLanguage()
-  const [artists, setArtists] = useState(mockArtists)
+  const [artists, setArtists] = useState<Artist[]>([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [membershipFilter, setMembershipFilter] = useState<string>('all')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const filteredArtists = artists.filter(artist =>
-    artist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    artist.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    artist.email.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // Supabase에서 작가 데이터 로드
+  useEffect(() => {
+    const loadArtists = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const { artists: artistsData } = await getArtists()
+        setArtists(artistsData)
+      } catch (err) {
+        console.error('작가 데이터 로딩 실패:', err)
+        setError('작가 데이터를 불러오는데 실패했습니다.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadArtists()
+  }, [])
+
+  // 검색어와 회원구분 필터 모두 적용
+  const filteredArtists = artists.filter(artist => {
+    // 검색어 필터링
+    const matchesSearch = artist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (artist.name_en && artist.name_en.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (artist.nationality && artist.nationality.toLowerCase().includes(searchTerm.toLowerCase()))
+
+    // 회원구분 필터링
+    const matchesMembership = membershipFilter === 'all' || 
+      artist.membership_type === membershipFilter
+
+    return matchesSearch && matchesMembership
+  })
 
   const handleDeleteArtist = (id: string) => {
     if (confirm(language === 'ko' ? '정말 삭제하시겠습니까?' : 'Are you sure you want to delete?')) {
+      // TODO: 실제 삭제 API 호출
       setArtists(artists.filter(artist => artist.id !== id))
     }
   }
 
-  const toggleArtistStatus = (id: string) => {
-    setArtists(artists.map(artist =>
-      artist.id === id ? { ...artist, isActive: !artist.isActive } : artist
-    ))
+  // 회원구분별 통계
+  const getMembershipCount = (type: string) => {
+    return artists.filter(a => a.membership_type === type).length
+  }
+
+  // 필터 버튼 스타일 결정
+  const getFilterButtonVariant = (filterType: string) => {
+    return membershipFilter === filterType ? "default" : "outline"
+  }
+
+  if (loading) {
+    return (
+      <AdminProtectedRoute>
+        <div className="min-h-screen bg-background">
+          <Header />
+          <AdminNavigation currentPage="artists" />
+          <main className="container mx-auto px-4 py-8">
+            <div className="text-center py-16">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto mb-4"></div>
+              <p>작가 데이터를 불러오는 중...</p>
+            </div>
+          </main>
+        </div>
+      </AdminProtectedRoute>
+    )
+  }
+
+  if (error) {
+    return (
+      <AdminProtectedRoute>
+        <div className="min-h-screen bg-background">
+          <Header />
+          <AdminNavigation currentPage="artists" />
+          <main className="container mx-auto px-4 py-8">
+            <div className="text-center py-16">
+              <p className="text-red-500 mb-4">{error}</p>
+              <Button onClick={() => window.location.reload()}>
+                다시 시도
+              </Button>
+            </div>
+          </main>
+        </div>
+      </AdminProtectedRoute>
+    )
   }
 
   return (
@@ -119,21 +139,23 @@ export default function ArtistsManagement() {
               </h1>
               <p className="text-muted-foreground">
                 {language === 'ko' 
-                  ? '작가 프로필을 관리하고 작품을 연결하세요.'
-                  : 'Manage artist profiles and connect artworks.'
+                  ? `작가 프로필을 관리하고 작품을 연결하세요. (총 ${artists.length}명 중 ${filteredArtists.length}명 표시)`
+                  : `Manage artist profiles and connect artworks. (Showing ${filteredArtists.length} of ${artists.length})`
                 }
               </p>
             </div>
-            <Button className="bg-celadon hover:bg-celadon/90">
-              <Plus className="h-4 w-4 mr-2" />
-              {language === 'ko' ? '새 작가 추가' : 'Add New Artist'}
-            </Button>
+            <Link href="/admin/artists/new">
+              <Button className="bg-celadon hover:bg-celadon/90">
+                <Plus className="h-4 w-4 mr-2" />
+                {language === 'ko' ? '새 작가 추가' : 'Add New Artist'}
+              </Button>
+            </Link>
           </div>
 
           {/* 검색 및 필터 */}
           <Card className="mb-6">
             <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -143,17 +165,69 @@ export default function ArtistsManagement() {
                     className="pl-10"
                   />
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                
+                {/* 필터 버튼들 */}
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    variant={getFilterButtonVariant('all')} 
+                    size="sm"
+                    onClick={() => setMembershipFilter('all')}
+                  >
                     {language === 'ko' ? '전체' : 'All'} ({artists.length})
                   </Button>
-                  <Button variant="outline" size="sm">
-                    {language === 'ko' ? '활성' : 'Active'} ({artists.filter(a => a.isActive).length})
+                  <Button 
+                    variant={getFilterButtonVariant('초대작가')} 
+                    size="sm"
+                    onClick={() => setMembershipFilter('초대작가')}
+                  >
+                    {language === 'ko' ? '초대작가' : 'Invited'} ({getMembershipCount('초대작가')})
                   </Button>
-                  <Button variant="outline" size="sm">
-                    {language === 'ko' ? '비활성' : 'Inactive'} ({artists.filter(a => !a.isActive).length})
+                  <Button 
+                    variant={getFilterButtonVariant('정회원')} 
+                    size="sm"
+                    onClick={() => setMembershipFilter('정회원')}
+                  >
+                    {language === 'ko' ? '정회원' : 'Full Member'} ({getMembershipCount('정회원')})
+                  </Button>
+                  <Button 
+                    variant={getFilterButtonVariant('준회원')} 
+                    size="sm"
+                    onClick={() => setMembershipFilter('준회원')}
+                  >
+                    {language === 'ko' ? '준회원' : 'Associate'} ({getMembershipCount('준회원')})
+                  </Button>
+                  <Button 
+                    variant={getFilterButtonVariant('특별회원')} 
+                    size="sm"
+                    onClick={() => setMembershipFilter('특별회원')}
+                  >
+                    {language === 'ko' ? '특별회원' : 'Special'} ({getMembershipCount('특별회원')})
+                  </Button>
+                  <Button 
+                    variant={getFilterButtonVariant('명예회원')} 
+                    size="sm"
+                    onClick={() => setMembershipFilter('명예회원')}
+                  >
+                    {language === 'ko' ? '명예회원' : 'Honorary'} ({getMembershipCount('명예회원')})
                   </Button>
                 </div>
+
+                {/* 현재 필터 상태 표시 */}
+                {membershipFilter !== 'all' && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>현재 필터:</span>
+                    <Badge variant="secondary">{membershipFilter}</Badge>
+                    <span>({filteredArtists.length}명)</span>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => setMembershipFilter('all')}
+                      className="text-xs"
+                    >
+                      필터 해제
+                    </Button>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -167,9 +241,9 @@ export default function ArtistsManagement() {
                     {/* 프로필 이미지 */}
                     <div className="flex-shrink-0">
                       <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center">
-                        {artist.profileImage ? (
+                        {artist.profile_image ? (
                           <img 
-                            src={artist.profileImage} 
+                            src={artist.profile_image} 
                             alt={artist.name}
                             className="w-full h-full object-cover rounded-lg"
                           />
@@ -187,39 +261,28 @@ export default function ArtistsManagement() {
                             <h3 className="text-xl font-semibold text-foreground">
                               {artist.name}
                             </h3>
-                            <Badge variant={artist.isActive ? "default" : "secondary"}>
-                              {artist.isActive 
-                                ? (language === 'ko' ? '활성' : 'Active')
-                                : (language === 'ko' ? '비활성' : 'Inactive')
-                              }
+                            <Badge variant="default">
+                              {artist.membership_type || '회원'}
                             </Badge>
                           </div>
                           <p className="text-sm text-muted-foreground mb-1">
-                            {artist.nameEn} • {artist.email}
+                            {artist.name_en || '영문명 없음'} • {artist.artist_type || '일반작가'}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {artist.birthYear}년생 • {artist.nationality}
+                            {artist.birth_year ? `${artist.birth_year}년생` : '출생년도 미상'} • {artist.nationality || '국적 미상'}
                           </p>
                         </div>
                         
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-1" />
-                            {language === 'ko' ? '보기' : 'View'}
+                          <Button variant="outline" size="sm" asChild>
+                            <Link href={`/artists/${artist.id}`}>
+                              <Eye className="h-4 w-4 mr-1" />
+                              {language === 'ko' ? '보기' : 'View'}
+                            </Link>
                           </Button>
                           <Button variant="outline" size="sm">
                             <Edit className="h-4 w-4 mr-1" />
                             {language === 'ko' ? '편집' : 'Edit'}
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => toggleArtistStatus(artist.id)}
-                          >
-                            {artist.isActive 
-                              ? (language === 'ko' ? '비활성화' : 'Deactivate')
-                              : (language === 'ko' ? '활성화' : 'Activate')
-                            }
                           </Button>
                           <Button 
                             variant="outline" 
@@ -235,50 +298,47 @@ export default function ArtistsManagement() {
                       {/* 전문 분야 */}
                       <div className="mb-4">
                         <div className="flex flex-wrap gap-2">
-                          {artist.specialties.map((specialty, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {specialty}
+                          {artist.specialties && artist.specialties.length > 0 ? (
+                            artist.specialties.map((specialty, index) => (
+                              <Badge key={index} variant="outline" className="text-xs">
+                                {specialty}
+                              </Badge>
+                            ))
+                          ) : (
+                            <Badge variant="outline" className="text-xs">
+                              전문분야 미설정
                             </Badge>
-                          ))}
+                          )}
                         </div>
                       </div>
 
                       {/* 소개 */}
                       <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                        {artist.bio}
+                        {artist.bio || '소개 정보가 없습니다.'}
                       </p>
 
                       {/* 통계 및 링크 */}
                       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div className="flex gap-6 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
+                            <Award className="h-4 w-4" />
                             <span>
-                              {language === 'ko' ? '작품' : 'Artworks'}: {artist.artworksCount}
+                              {language === 'ko' ? '수상' : 'Awards'}: {artist.awards?.length || 0}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Award className="h-4 w-4" />
+                            <Calendar className="h-4 w-4" />
                             <span>
-                              {language === 'ko' ? '전시' : 'Exhibitions'}: {artist.exhibitionsCount}
+                              {language === 'ko' ? '전시' : 'Exhibitions'}: {artist.exhibitions?.length || 0}
                             </span>
                           </div>
                         </div>
-                        
-                        {artist.website && (
-                          <Button variant="ghost" size="sm" asChild>
-                            <a href={artist.website} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="h-4 w-4 mr-1" />
-                              {language === 'ko' ? '웹사이트' : 'Website'}
-                            </a>
-                          </Button>
-                        )}
                       </div>
 
                       {/* 메타 정보 */}
                       <div className="mt-4 pt-4 border-t border-border/50 text-xs text-muted-foreground">
-                        {language === 'ko' ? '생성' : 'Created'}: {artist.createdAt} • 
-                        {language === 'ko' ? '수정' : 'Updated'}: {artist.updatedAt}
+                        {language === 'ko' ? '생성' : 'Created'}: {new Date(artist.created_at).toLocaleDateString()} • 
+                        {language === 'ko' ? '수정' : 'Updated'}: {new Date(artist.updated_at).toLocaleDateString()}
                       </div>
                     </div>
                   </div>

@@ -179,35 +179,110 @@ export class AirtableMigration {
     return { success, failed };
   }
 
-  // 전체 마이그레이션 orchestration
+  // 전체 마이그레이션 실행
   static async migrateAll(): Promise<{
-    artists: { success: number; failed: number };
-    artworks: { success: number; failed: number };
-    exhibitions: { success: number; failed: number };
+    artists: { success: number; failed: number; total: number };
+    artworks: { success: number; failed: number; total: number };
+    exhibitions: { success: number; failed: number; total: number };
   }> {
-    console.log('Starting migration...');
+    console.log('Starting full migration...');
     
-    // 1. Artists 먼저 마이그레이션 (다른 테이블의 외래키 참조)
-    console.log('Migrating artists...');
-    const artistResult = await this.migrateArtists();
-    console.log(`Artists: ${artistResult.success} success, ${artistResult.failed} failed`);
+    // 1. Artists 마이그레이션 (배치 처리)
+    console.log('Migrating artists in batches...');
+    const artistResults = await this.migrateArtistsInBatches();
+    console.log(`Artists migration completed: ${artistResults.success} success, ${artistResults.failed} failed`);
     
-    // 2. Artworks 마이그레이션 (artist_id 필요)
+    // 아티스트 ID 매핑 생성
+    const artistIdMap = await this.createArtistIdMap();
+    
+    // 2. Artworks 마이그레이션
     console.log('Migrating artworks...');
-    const artworkResult = await this.migrateArtworks(artistResult.artistIdMap);
-    console.log(`Artworks: ${artworkResult.success} success, ${artworkResult.failed} failed`);
+    const artworkResults = await this.migrateArtworks(artistIdMap);
+    console.log(`Artworks migration completed: ${artworkResults.success} success, ${artworkResults.failed} failed`);
     
     // 3. Exhibitions 마이그레이션
     console.log('Migrating exhibitions...');
-    const exhibitionResult = await this.migrateExhibitions();
-    console.log(`Exhibitions: ${exhibitionResult.success} success, ${exhibitionResult.failed} failed`);
-    
-    console.log('Migration completed!');
+    const exhibitionResults = await this.migrateExhibitions();
+    console.log(`Exhibitions migration completed: ${exhibitionResults.success} success, ${exhibitionResults.failed} failed`);
     
     return {
-      artists: { success: artistResult.success, failed: artistResult.failed },
-      artworks: artworkResult,
-      exhibitions: exhibitionResult
+      artists: { ...artistResults, total: artistResults.success + artistResults.failed },
+      artworks: { ...artworkResults, total: artworkResults.success + artworkResults.failed },
+      exhibitions: { ...exhibitionResults, total: exhibitionResults.success + exhibitionResults.failed }
     };
+  }
+
+  // 배치 처리를 통한 Artists 마이그레이션
+  static async migrateArtistsInBatches(batchSize: number = 50): Promise<{ success: number; failed: number }> {
+    let totalSuccess = 0;
+    let totalFailed = 0;
+
+    try {
+      const result = await AirtableService.processAllArtistsInBatches(
+        async (batch) => {
+          for (const airtableArtist of batch) {
+            try {
+              const artistData = this.transformAirtableArtist(airtableArtist);
+              await createArtist(artistData);
+              totalSuccess++;
+            } catch (error) {
+              console.error(`Artist migration failed for ${airtableArtist.fields['Name (Korean)']}:`, error);
+              totalFailed++;
+            }
+          }
+        },
+        batchSize
+      );
+
+      return {
+        success: totalSuccess,
+        failed: totalFailed
+      };
+    } catch (error) {
+      console.error('Batch migration failed:', error);
+      throw error;
+    }
+  }
+
+  // Airtable ID → Supabase ID 매핑 생성
+  static async createArtistIdMap(): Promise<Map<string, string>> {
+    const supabase = ensureSupabase();
+    const map = new Map<string, string>();
+
+    try {
+      // Supabase에서 모든 작가 조회 (이름 기준으로 매핑)
+      const { data: supabaseArtists, error } = await supabase
+        .from('artists')
+        .select('id, name, name_en');
+
+      if (error) {
+        console.error('Error fetching Supabase artists:', error);
+        throw error;
+      }
+
+      // Airtable에서 모든 작가 조회
+      const airtableArtists = await AirtableService.getAllArtists();
+
+      // 이름 기준으로 매핑 생성
+      for (const airtableArtist of airtableArtists) {
+        const airtableName = airtableArtist.fields['Name (Korean)'];
+        const airtableNameEn = airtableArtist.fields['Name (English)'];
+
+        const matchedSupabaseArtist = supabaseArtists?.find(sa => 
+          sa.name === airtableName || 
+          (airtableNameEn && sa.name_en === airtableNameEn)
+        );
+
+        if (matchedSupabaseArtist) {
+          map.set(airtableArtist.id, matchedSupabaseArtist.id);
+        }
+      }
+
+      console.log(`Created artist ID mapping: ${map.size} matches found`);
+      return map;
+    } catch (error) {
+      console.error('Error creating artist ID map:', error);
+      throw error;
+    }
   }
 } 

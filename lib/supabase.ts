@@ -2,14 +2,26 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key'
 
-// 환경 변수가 설정되지 않은 경우 null을 반환하여 오류 방지
+// 일반 클라이언트 (Anon Key 사용)
 export const supabase = (supabaseUrl.includes('placeholder') || supabaseAnonKey.includes('placeholder')) 
   ? null 
   : createClient(supabaseUrl, supabaseAnonKey)
 
+// 관리용 클라이언트 (Service Role Key 사용)
+export const supabaseAdmin = (supabaseUrl.includes('placeholder') || supabaseServiceRoleKey.includes('placeholder')) 
+  ? null 
+  : createClient(supabaseUrl, supabaseServiceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
+
 // Supabase가 설정되지 않았을 때 사용할 더미 함수들
 export const isSupabaseConfigured = () => supabase !== null
+export const isSupabaseAdminConfigured = () => supabaseAdmin !== null
 
 export const getSupabaseClient = () => {
   if (!supabase) {
@@ -19,12 +31,28 @@ export const getSupabaseClient = () => {
   return supabase
 }
 
-// 안전한 Supabase 사용을 위한 헬퍼 함수
+export const getSupabaseAdminClient = () => {
+  if (!supabaseAdmin) {
+    console.warn('Supabase Admin is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.')
+    return null
+  }
+  return supabaseAdmin
+}
+
+// 안전한 Supabase 사용을 위한 헬퍼 함수 (일반 클라이언트)
 export const ensureSupabase = () => {
   if (!supabase) {
     throw new Error('Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.')
   }
   return supabase
+}
+
+// 안전한 Supabase Admin 사용을 위한 헬퍼 함수 (Service Role)
+export const ensureSupabaseAdmin = () => {
+  if (!supabaseAdmin) {
+    throw new Error('Supabase Admin is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.')
+  }
+  return supabaseAdmin
 }
 
 // 안전한 타입 체크를 위한 함수
@@ -36,6 +64,19 @@ export const safeSupabaseCall = async <T>(
     return await operation(client)
   } catch (error) {
     console.error('Supabase operation failed:', error)
+    return null
+  }
+}
+
+// 관리자 권한이 필요한 작업용
+export const safeSupabaseAdminCall = async <T>(
+  operation: (client: NonNullable<typeof supabaseAdmin>) => Promise<T>
+): Promise<T | null> => {
+  try {
+    const client = ensureSupabaseAdmin()
+    return await operation(client)
+  } catch (error) {
+    console.error('Supabase Admin operation failed:', error)
     return null
   }
 }

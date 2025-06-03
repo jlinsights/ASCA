@@ -91,20 +91,20 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="ko" suppressHydrationWarning className={`${inter.variable} ${notoSerif.variable} font-sans bg-background text-foreground transition-none`}>
-        <head>
-          <meta name="google-adsense-account" content="ca-pub-3536211002609340" />
-          {/* CJK 폰트 로드 */}
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-          <link 
-            href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" 
-            rel="stylesheet" 
-          />
-          <link rel="stylesheet" href="/fonts/font-face.css" />
-        </head>
-        <body>
+    <html lang="ko" suppressHydrationWarning className={`${inter.variable} ${notoSerif.variable} font-sans bg-background text-foreground transition-none`}>
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-3536211002609340" />
+        {/* CJK 폰트 로드 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" 
+          rel="stylesheet" 
+        />
+        <link rel="stylesheet" href="/fonts/font-face.css" />
+      </head>
+      <body>
+        <ClerkProvider>
           <SWRProvider>
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
               <LanguageProvider>
@@ -114,30 +114,30 @@ export default function RootLayout({
               </LanguageProvider>
             </ThemeProvider>
           </SWRProvider>
+        </ClerkProvider>
 
-          {/* ChannelIO Chat Widget */}
-          <Script id="channel-io" strategy="afterInteractive">
-            {`
-              (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+        {/* ChannelIO Chat Widget */}
+        <Script id="channel-io" strategy="afterInteractive">
+          {`
+            (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
 
-              ChannelIO('boot', {
-                "pluginKey": "c5a02de1-1bef-4577-9bf4-8f3e9d113058"
-              });
-            `}
-          </Script>
+            ChannelIO('boot', {
+              "pluginKey": "c5a02de1-1bef-4577-9bf4-8f3e9d113058"
+            });
+          `}
+        </Script>
 
-          {/* Cal.com Meeting Scheduler */}
-          <Script id="cal-com" strategy="afterInteractive">
-            {`
-              (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-              Cal("init", "meeting", {origin:"https://cal.com"});
+        {/* Cal.com Meeting Scheduler */}
+        <Script id="cal-com" strategy="afterInteractive">
+          {`
+            (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+            Cal("init", "meeting", {origin:"https://cal.com"});
 
-              Cal.ns.meeting("floatingButton", {"calLink":"orientalcalligraphy","config":{"layout":"month_view","theme":"dark"},"buttonPosition":"bottom-left"}); 
-              Cal.ns.meeting("ui", {"theme":"dark","hideEventTypeDetails":false,"layout":"month_view"});
-            `}
-          </Script>
-        </body>
-      </html>
-    </ClerkProvider>
+            Cal.ns.meeting("floatingButton", {"calLink":"orientalcalligraphy","config":{"layout":"month_view","theme":"dark"},"buttonPosition":"bottom-left"}); 
+            Cal.ns.meeting("ui", {"theme":"dark","hideEventTypeDetails":false,"layout":"month_view"});
+          `}
+        </Script>
+      </body>
+    </html>
   )
 }
