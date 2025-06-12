@@ -101,14 +101,14 @@ export default function NewExhibitionPage() {
         status: 'upcoming',
         is_featured: formData.is_featured || false,
         is_published: isDraft ? false : (formData.is_published || false),
-        max_capacity: undefined,
-        ticket_price: undefined,
+        max_capacity: 0,
+        ticket_price: 0,
         admission_fee: formData.admission_fee ? (typeof formData.admission_fee === 'string' ? parseFloat(formData.admission_fee) : formData.admission_fee) : 0,
-        currency: undefined,
-        is_free: undefined,
-        opening_hours: undefined,
-        contact: undefined,
-        website: undefined
+        currency: 'KRW',
+        is_free: false,
+        opening_hours: '',
+        contact: '',
+        website: ''
       }
 
       await createExhibition(submitData)

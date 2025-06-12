@@ -237,8 +237,8 @@ export default function FilesPage() {
 
       const newFiles = uploadedFiles.map((file, index) => ({
         id: `new-${Date.now()}-${index}`,
-        title: file.name.split('.')[0],
-        title_en: file.name.split('.')[0],
+        title: file.name.split('.')[0] || file.name,
+        title_en: file.name.split('.')[0] || file.name,
         filename: file.name,
         file_format: file.name.split('.').pop()?.toLowerCase() || 'other',
         file_size: file.size,
