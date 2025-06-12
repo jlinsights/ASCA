@@ -313,7 +313,7 @@ export default function NoticesAdminPage() {
                     <label className="text-sm font-medium mb-2 block">정렬</label>
                     <Select value={`${sortBy}-${sortOrder}`} onValueChange={(value) => {
                       const [field, order] = value.split('-')
-                      setSortBy(field)
+                      setSortBy(field || 'title')
                       setSortOrder(order as 'asc' | 'desc')
                     }}>
                       <SelectTrigger>

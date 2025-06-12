@@ -1,16 +1,19 @@
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 const nextConfig = {
   // 성능 최적화
   experimental: {
     optimizeCss: true,
     optimizeServerReact: true,
-    // React 19 호환성을 위한 설정 추가
-    serverComponentsExternalPackages: ['swr'],
     // 트리 쉐이킹 개선
     serverMinification: true,
-    // 페이지 로딩 성능 개선
-    nextScriptWorkers: true,
   },
+  
+  // Next.js 15에서 변경된 설정
+  serverExternalPackages: ['swr'],
   
   // 이미지 최적화
   images: {
@@ -127,10 +130,7 @@ const nextConfig = {
     ignoreDuringBuilds: false,
   },
 
-  // 번들 분석 (필요시 활성화)
-  bundleAnalyzer: {
-    enabled: process.env.ANALYZE === 'true',
-  },
+  // 번들 분석은 webpack 설정 내에서 처리됨
 
   // 트레일링 슬래시 설정 - URL 일관성 보장
   trailingSlash: false,
@@ -152,4 +152,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig 
+module.exports = withBundleAnalyzer(nextConfig) 
