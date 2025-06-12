@@ -435,7 +435,7 @@ export default function ArtworkDetailPage() {
         }
         setArtwork(foundArtwork)
       } catch (err) {
-        console.error('Failed to load artwork:', err)
+        
         setError('작품 정보를 불러오는데 실패했습니다.')
       } finally {
         setLoading(false)

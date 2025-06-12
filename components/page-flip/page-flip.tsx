@@ -66,7 +66,7 @@ export const PageFlip: React.FC<PageFlipProps> = ({ pages, width = 500, height =
         book.current.pageFlip().flipNext()
       }
     } catch (error) {
-      console.error("Error flipping to next page:", error)
+      
     }
   }
 
@@ -76,7 +76,7 @@ export const PageFlip: React.FC<PageFlipProps> = ({ pages, width = 500, height =
         book.current.pageFlip().flipPrev()
       }
     } catch (error) {
-      console.error("Error flipping to previous page:", error)
+      
     }
   }
 

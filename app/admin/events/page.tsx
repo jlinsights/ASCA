@@ -143,7 +143,7 @@ export default function EventsAdminPage() {
       setTotalCount(response.total)
     } catch (err) {
       setError('행사 정보를 불러오는데 실패했습니다.')
-      console.error('Error fetching events:', err)
+      
     } finally {
       setLoading(false)
     }
@@ -339,7 +339,7 @@ export default function EventsAdminPage() {
                     <label className="text-sm font-medium mb-2 block">정렬</label>
                     <Select value={`${sortBy}-${sortOrder}`} onValueChange={(value) => {
                       const [field, order] = value.split('-')
-                      setSortBy(field)
+                      setSortBy(field || 'title')
                       setSortOrder(order as 'asc' | 'desc')
                     }}>
                       <SelectTrigger>

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
+    "dev:clean": "NODE_ENV=development npm run build && npm run dev",
     "build": "next build",
     "build:debug": "NEXT_DEBUG=1 next build",
     "build:analyze": "ANALYZE=true next build",
@@ -15,6 +16,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
+    "type-check:strict": "tsc --noEmit --strict",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -23,6 +25,8 @@
     "format:check": "prettier --check .",
     "analyze": "ANALYZE=true npm run build",
     "clean": "rimraf .next out coverage",
+    "clean:logs": "find . -name '*.tsx' -o -name '*.ts' -not -path './node_modules/*' | xargs grep -l 'console\\.log' | wc -l",
+    "perf:audit": "npm run build && npx @next/bundle-analyzer .next/static/chunks/*.js",
     "pre-commit": "npm run type-check && npm run lint && npm run format:check && npm run test:ci",
     "postinstall": "husky install || exit 0",
     "db:generate": "drizzle-kit generate",
@@ -101,6 +105,7 @@
     "tailwindcss-animate": "^1.0.7",
     "unsplash-js": "^7.0.19",
     "vaul": "^0.9.6",
+    "web-vitals": "^5.0.3",
     "zod": "^3.24.1",
     "zustand": "^4.5.0"
   },

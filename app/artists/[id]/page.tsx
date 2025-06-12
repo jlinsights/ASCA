@@ -34,15 +34,15 @@ export default function ArtistPage() {
         setLoading(true)
         setError(null)
 
-        console.log('작가 ID:', id)
+        
 
         // 작가 정보 로드
-        console.log('작가 정보 로딩 시작...')
+        
         const artistData = await getArtist(id)
-        console.log('작가 정보 로딩 결과:', artistData)
+        
         
         if (!artistData) {
-          console.log('작가를 찾을 수 없음')
+          
           notFound()
           return
         }
@@ -50,18 +50,18 @@ export default function ArtistPage() {
 
         // 작가의 작품 목록 로드 (임시 비활성화)
         /*
-        console.log('작품 정보 로딩 시작...')
+        
         const { artworks: artistArtworks } = await getArtworks({
           artistId: id
         })
-        console.log('작품 정보 로딩 결과:', artistArtworks)
+        
         setArtworks(artistArtworks)
         */
         setArtworks([]) // 임시로 빈 배열 설정
         
       } catch (err) {
-        console.error('Failed to load artist data:', err)
-        console.error('Error details:', JSON.stringify(err, null, 2))
+        
+        
         setError(`작가 정보를 불러오는데 실패했습니다. 오류: ${err instanceof Error ? err.message : String(err)}`)
       } finally {
         setLoading(false)

@@ -19,7 +19,7 @@ export async function getAllArtists() {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching artists:', error)
+    
     throw error
   }
 
@@ -36,7 +36,7 @@ export async function getArtistById(id: string) {
     .single()
 
   if (error) {
-    console.error('Error fetching artist:', error)
+    
     throw error
   }
 
@@ -57,7 +57,7 @@ export async function createArtist(artistData: ArtistInsert) {
     .single()
 
   if (error) {
-    console.error('Error creating artist:', error)
+    
     throw error
   }
 
@@ -78,7 +78,7 @@ export async function updateArtist(id: string, artistData: ArtistUpdate) {
     .single()
 
   if (error) {
-    console.error('Error updating artist:', error)
+    
     throw error
   }
 
@@ -94,7 +94,7 @@ export async function deleteArtist(id: string) {
     .eq('id', id)
 
   if (error) {
-    console.error('Error deleting artist:', error)
+    
     throw error
   }
 
@@ -111,7 +111,7 @@ export async function searchArtists(query: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error searching artists:', error)
+    
     throw error
   }
 
@@ -136,7 +136,7 @@ export async function getAllArtworks() {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching artworks:', error)
+    
     throw error
   }
 
@@ -160,7 +160,7 @@ export async function getArtworkById(id: string) {
     .single()
 
   if (error) {
-    console.error('Error fetching artwork:', error)
+    
     throw error
   }
 
@@ -183,7 +183,7 @@ export async function createArtwork(artworkData: ArtworkInsert) {
     .single()
 
   if (error) {
-    console.error('Error creating artwork:', error)
+    
     throw error
   }
 
@@ -204,7 +204,7 @@ export async function updateArtwork(id: string, artworkData: ArtworkUpdate) {
     .single()
 
   if (error) {
-    console.error('Error updating artwork:', error)
+    
     throw error
   }
 
@@ -220,7 +220,7 @@ export async function deleteArtwork(id: string) {
     .eq('id', id)
 
   if (error) {
-    console.error('Error deleting artwork:', error)
+    
     throw error
   }
 
@@ -244,7 +244,7 @@ export async function searchArtworks(query: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error searching artworks:', error)
+    
     throw error
   }
 
@@ -261,7 +261,7 @@ export async function getArtworksByArtist(artistId: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching artworks by artist:', error)
+    
     throw error
   }
 
@@ -307,7 +307,7 @@ export async function getDashboardStats() {
       monthlyArtworks: monthlyCount || 0
     }
   } catch (error) {
-    console.error('Error fetching dashboard stats:', error)
+    
     throw error
   }
 }
@@ -322,7 +322,7 @@ export async function getRecentArtists(limit: number = 5) {
     .limit(limit)
 
   if (error) {
-    console.error('Error fetching recent artists:', error)
+    
     throw error
   }
 
@@ -346,7 +346,7 @@ export async function getRecentArtworks(limit: number = 5) {
     .limit(limit)
 
   if (error) {
-    console.error('Error fetching recent artworks:', error)
+    
     throw error
   }
 
@@ -367,7 +367,7 @@ export async function uploadImage(file: File, bucket: 'artists' | 'artworks' = '
     .upload(filePath, file)
 
   if (error) {
-    console.error('Error uploading image:', error)
+    
     throw error
   }
 
@@ -390,7 +390,7 @@ export async function deleteImage(filePath: string) {
     .remove([filePath])
 
   if (error) {
-    console.error('Error deleting image:', error)
+    
     throw error
   }
 

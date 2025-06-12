@@ -98,7 +98,7 @@ export default function NoticeDetailPage() {
 
       } catch (err) {
         setError('공지사항을 불러오는데 실패했습니다.')
-        console.error('Error loading notice:', err)
+        
       } finally {
         setLoading(false)
       }
@@ -142,7 +142,7 @@ export default function NoticeDetailPage() {
       alert('댓글이 등록되었습니다.')
     } catch (err) {
       alert('댓글 등록에 실패했습니다.')
-      console.error('Error creating comment:', err)
+      
     } finally {
       setCommentLoading(false)
     }

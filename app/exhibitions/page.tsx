@@ -72,7 +72,7 @@ export default function ExhibitionsPage() {
       setTotalPages(response.totalPages)
     } catch (err) {
       setError('전시회 정보를 불러오는데 실패했습니다.')
-      console.error('Error fetching exhibitions:', err)
+      
     } finally {
       setLoading(false)
     }

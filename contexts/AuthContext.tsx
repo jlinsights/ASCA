@@ -1,3 +1,4 @@
+ 
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
@@ -5,6 +6,7 @@ import { User } from '@supabase/supabase-js'
 import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase'
 import { getCurrentUser, hasPermission } from '@/lib/supabase/auth'
 import type { AdminUser, AuthContextType } from '@/types/auth'
+import { log } from '@/lib/utils/logger'
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -135,7 +137,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const adminUser = await getCurrentUser()
       setUser(adminUser)
     } catch (error) {
-      console.error('사용자 확인 오류:', error)
+      
       setUser(null)
     } finally {
       setLoading(false)
@@ -147,68 +149,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const adminUser = await getCurrentUser()
       setUser(adminUser)
     } catch (error) {
-      console.error('관리자 사용자 로드 오류:', error)
+      
       setUser(null)
     }
   }
 
   const signIn = async (email: string, password: string) => {
-    // 특별 관리자 계정 확인 (info@orientalcalligraphy.org)
-    if (email === 'info@orientalcalligraphy.org') {
-      const specialAdminUser = {
-        id: 'special_admin',
-        user_id: 'special_admin',
-        role_id: 'super_admin',
-        name: '동양서예협회 관리자',
-        email: 'info@orientalcalligraphy.org',
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        role: {
-          id: 'super_admin',
-          name: 'super_admin',
-          description: '최고 관리자',
-          permissions: {
-            cms: {
-              notices: ['create', 'read', 'update', 'delete', 'publish'],
-              exhibitions: ['create', 'read', 'update', 'delete', 'publish'],
-              events: ['create', 'read', 'update', 'delete', 'publish'],
-              comments: ['read', 'approve', 'delete']
-            },
-            artists: {
-              artists: ['create', 'read', 'update', 'delete'],
-              artworks: ['create', 'read', 'update', 'delete']
-            },
-            admin: {
-              users: ['create', 'read', 'update', 'delete'],
-              roles: ['create', 'read', 'update', 'delete'],
-              logs: ['read'],
-              backup: ['create', 'restore']
-            }
-          },
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      }
-      
-      // 세션 저장
-      localStorage.setItem('special_admin_session', JSON.stringify({
-        user: {
+    // 특별 관리자 로그인 (개발 환경)
+    if (process.env.NODE_ENV === 'development' && email && password) {
+      if (email === 'info@orientalcalligraphy.org' && password === 'asca2024!') {
+        const specialAdminUser = {
+          id: 'special-admin',
           email: 'info@orientalcalligraphy.org',
-          role: 'super_admin',
-          name: '동양서예협회 관리자'
-        },
-        isAuthenticated: true,
-        loginTime: new Date().toISOString()
-      }))
-      
-      // 사용자 상태 즉시 설정
-      setUser(specialAdminUser)
-      setLoading(false)
-      
-      // 성공적으로 로그인되었음을 확인
-      console.log('특별 관리자 로그인 성공:', specialAdminUser.email)
-      return
+          name: 'Special Admin',
+          role: 'super_admin'
+        }
+        setUser(specialAdminUser)
+        localStorage.setItem('special_admin_user', JSON.stringify(specialAdminUser))
+        log.debug('특별 관리자 로그인 성공', { email: specialAdminUser.email })
+        return { success: true, user: specialAdminUser }
+      }
     }
 
     // 개발 모드에서 테스트 계정 확인
@@ -288,7 +248,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { signOut: authSignOut } = await import('@/lib/supabase/auth')
       await authSignOut()
     } catch (error) {
-      console.log('Supabase 로그아웃 오류 (개발 모드에서는 무시):', error)
+      log.warn('Supabase 로그아웃 오류 (개발 모드에서는 무시)', error as Error)
     }
     
     setUser(null)
@@ -318,7 +278,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}export function useAuth() {
+}
+
+export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {
     throw new Error('useAuth는 AuthProvider 내에서 사용되어야 합니다')

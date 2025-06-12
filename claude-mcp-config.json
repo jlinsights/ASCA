@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "supabase-mcp",
+      "env": {
+        "SUPABASE_URL": "YOUR_SUPABASE_URL",
+        "SUPABASE_KEY": "YOUR_SUPABASE_SERVICE_ROLE_KEY"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["@upstash/context7-mcp"]
+    }
+  }
+} 

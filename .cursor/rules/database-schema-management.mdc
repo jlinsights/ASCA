@@ -1,0 +1,60 @@
+# 데이터베이스 스키마 관리
+
+## Supabase 스키마
+
+### 메인 테이블
+- **artists**: 작가 정보 (UUID, 다국어 지원)
+- **artworks**: 작품 정보 (작가 연결, JSON 메타데이터)  
+- **exhibitions**: 전시 정보
+
+### Artists 테이블 구조
+```sql
+CREATE TABLE artists (
+  id UUID PRIMARY KEY,
+  name TEXT,
+  name_zh TEXT,
+  phone TEXT,
+  email TEXT,
+  date_of_birth DATE,
+  address TEXT,
+  bio_korean TEXT,
+  artist_group TEXT,
+  airtable_id TEXT UNIQUE,
+  created_at TIMESTAMPTZ,
+  updated_at TIMESTAMPTZ
+);
+```
+
+## 스키마 관리 스크립트
+
+### 테이블 생성
+- [scripts/create-artworks-table.sql](mdc:scripts/create-artworks-table.sql): Artists 테이블 생성 스크립트
+- UUID, 인덱스, RLS 정책 포함
+
+### 스키마 검증
+- [scripts/check-artworks-schema.js](mdc:scripts/check-artworks-schema.js): 스키마 검증 도구
+- [scripts/test-supabase-artworks.js](mdc:scripts/test-supabase-artworks.js): 연결 테스트
+
+### 데이터 정리
+- [scripts/check-supabase-schema.js](mdc:scripts/check-supabase-schema.js): 스키마 구조 확인
+- [scripts/safe-remove-duplicates.js](mdc:scripts/safe-remove-duplicates.js): 안전한 중복 제거
+- [scripts/remove-duplicate-artists.js](mdc:scripts/remove-duplicate-artists.js): 중복 데이터 제거
+
+## PostgreSQL 확장 함수
+- [scripts/create-supabase-functions.sql](mdc:scripts/create-supabase-functions.sql): 
+  - 스키마 비교 함수
+  - 동기화 로그 관리
+  - 중복 데이터 감지
+
+## 인덱스 및 성능
+- name, email 필드 인덱스
+- airtable_id 유니크 인덱스
+- 복합 인덱스 (name + date_of_birth)
+
+## RLS (Row Level Security)
+- 관리자 권한 기반 접근 제어
+- API 키 기반 서비스 접근
+
+## 백업 및 복구
+- 자동 백업 정책
+- 포인트-인-타임 복구 지원

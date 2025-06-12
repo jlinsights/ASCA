@@ -48,7 +48,7 @@ function SearchContent() {
       }));
       setResults(convertedResults);
     } catch (error) {
-      console.error('Search error:', error);
+      
     } finally {
       setLoading(false);
     }

@@ -143,8 +143,6 @@ const generateGalleryItems = (): GalleryItem[] => {
 // 갤러리 데이터
 const galleryItems: GalleryItem[] = generateGalleryItems()
 
-
-
 const categories = [
   { value: 'all', label: { ko: '전체', en: 'All' }, icon: Grid },
   { value: 'competition', label: { ko: '현장휘호 심사대회', en: 'Calligraphy Competition' }, icon: Star },

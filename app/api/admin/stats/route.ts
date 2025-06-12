@@ -115,7 +115,7 @@ export async function GET() {
 
     return NextResponse.json(stats)
   } catch (error) {
-    console.error('통계 조회 오류:', error)
+    
     return NextResponse.json(
       { error: '통계 데이터를 불러오는 중 오류가 발생했습니다.' },
       { status: 500 }

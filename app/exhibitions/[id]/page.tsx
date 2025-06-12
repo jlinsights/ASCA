@@ -81,7 +81,7 @@ export default function ExhibitionDetailPage() {
 
       } catch (err) {
         setError('전시회를 불러오는데 실패했습니다.')
-        console.error('Error loading exhibition:', err)
+        
       } finally {
         setLoading(false)
       }

@@ -30,7 +30,7 @@ export async function generatePDF(elementId: string, filename = "catalog.pdf"): 
     pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight)
     pdf.save(filename)
   } catch (error) {
-    console.error("PDF 생성 중 오류 발생:", error)
+    
     alert("PDF 생성 중 오류가 발생했습니다.")
   } finally {
     // 로딩 상태 제거
@@ -74,7 +74,7 @@ export async function generateMultiPagePDF(pages: string[], filename = "catalog.
 
     pdf.save(filename)
   } catch (error) {
-    console.error("PDF 생성 중 오류 발생:", error)
+    
     alert("PDF 생성 중 오류가 발생했습니다.")
   } finally {
     // 로딩 상태 제거

@@ -15,10 +15,10 @@ export const db = drizzle(sqlite, { schema });
 export async function testConnection() {
   try {
     const result = sqlite.prepare('SELECT 1 as test').get();
-    console.log('✅ 데이터베이스 연결 성공:', result);
+    
     return true;
   } catch (error) {
-    console.error('❌ 데이터베이스 연결 실패:', error);
+    
     return false;
   }
 }
@@ -31,7 +31,7 @@ export function closeConnection() {
 // 개발 환경에서 프로세스 종료 시 연결 정리
 if (process.env.NODE_ENV === 'development') {
   process.on('SIGINT', () => {
-    console.log('\n데이터베이스 연결을 종료합니다...');
+    
     closeConnection();
     process.exit(0);
   });

@@ -256,7 +256,7 @@ export default function FilesPage() {
       setUploadedFiles([])
       setShowUploadDialog(false)
     } catch (error) {
-      console.error('Upload failed:', error)
+      
     } finally {
       setIsUploading(false)
     }

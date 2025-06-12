@@ -80,7 +80,7 @@ class KakaoSDK {
   // Kakao SDK 초기화
   async initialize(): Promise<boolean> {
     if (typeof window === 'undefined') {
-      console.warn('Kakao SDK can only be initialized in browser environment');
+      
       return false;
     }
 
@@ -97,13 +97,13 @@ class KakaoSDK {
       // JavaScript 키로 초기화
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(this.config.javascriptKey);
-        console.log('✅ Kakao SDK initialized successfully');
+        
       }
 
       this.isInitialized = true;
       return true;
     } catch (error) {
-      console.error('❌ Failed to initialize Kakao SDK:', error);
+      
       return false;
     }
   }
@@ -141,17 +141,17 @@ class KakaoSDK {
         window.Kakao.Share.sendDefault({
           ...template,
           success: (response: any) => {
-            console.log('✅ Kakao share success:', response);
+            
             resolve(true);
           },
           fail: (error: any) => {
-            console.error('❌ Kakao share failed:', error);
+            
             reject(error);
           },
         });
       });
     } catch (error) {
-      console.error('❌ Kakao share error:', error);
+      
       return false;
     }
   }
@@ -167,17 +167,17 @@ class KakaoSDK {
       return new Promise((resolve, reject) => {
         window.Kakao.Auth.login({
           success: (authObj: KakaoLoginResponse) => {
-            console.log('✅ Kakao login success:', authObj);
+            
             resolve(authObj);
           },
           fail: (error: any) => {
-            console.error('❌ Kakao login failed:', error);
+            
             reject(error);
           },
         });
       });
     } catch (error) {
-      console.error('❌ Kakao login error:', error);
+      
       return null;
     }
   }
@@ -192,12 +192,12 @@ class KakaoSDK {
 
       return new Promise((resolve) => {
         window.Kakao.Auth.logout(() => {
-          console.log('✅ Kakao logout success');
+          
           resolve(true);
         });
       });
     } catch (error) {
-      console.error('❌ Kakao logout error:', error);
+      
       return false;
     }
   }
@@ -214,17 +214,17 @@ class KakaoSDK {
         window.Kakao.API.request({
           url: '/v2/user/me',
           success: (response: KakaoUserInfo) => {
-            console.log('✅ Kakao user info:', response);
+            
             resolve(response);
           },
           fail: (error: any) => {
-            console.error('❌ Failed to get Kakao user info:', error);
+            
             reject(error);
           },
         });
       });
     } catch (error) {
-      console.error('❌ Kakao getUserInfo error:', error);
+      
       return null;
     }
   }
@@ -249,14 +249,14 @@ class KakaoSDK {
       const result = await response.json();
       
       if (response.ok) {
-        console.log('✅ Push notification sent successfully:', result);
+        
         return true;
       } else {
-        console.error('❌ Push notification failed:', result);
+        
         return false;
       }
     } catch (error) {
-      console.error('❌ Push notification error:', error);
+      
       return false;
     }
   }
@@ -273,14 +273,14 @@ class KakaoSDK {
       const result = await response.json();
       
       if (response.ok) {
-        console.log('✅ Location search success:', result);
+        
         return result;
       } else {
-        console.error('❌ Location search failed:', result);
+        
         return null;
       }
     } catch (error) {
-      console.error('❌ Location search error:', error);
+      
       return null;
     }
   }

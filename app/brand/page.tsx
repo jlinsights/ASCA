@@ -49,7 +49,7 @@ export default function BrandGuidelinesPage() {
         fileName = 'ASCA_Logo_Primary.png'
         break
       default:
-        console.log(`Downloading ${assetName}`)
+        
         return
     }
     

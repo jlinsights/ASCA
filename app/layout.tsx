@@ -3,11 +3,9 @@ import type { Metadata } from "next"
 import { Inter, Noto_Serif } from "next/font/google"
 import "./globals.css"
 import Script from "next/script"
-import { ClerkProvider } from "@clerk/nextjs"
-import { ThemeProvider } from "@/components/theme-provider"
-import { LanguageProvider } from "@/contexts/language-context"
-import { AuthProvider } from "@/contexts/AuthContext"
-import { SWRProvider } from '@/providers/SWRProvider'
+import { ClientProviders } from "@/components/client-providers"
+import { PerformanceMonitor } from "@/components/performance-monitor"
+import { Toaster } from '@/components/ui/toaster'
 
 // 다국어 지원을 위한 폰트 설정
 const inter = Inter({ 
@@ -104,22 +102,16 @@ export default function RootLayout({
         <link rel="stylesheet" href="/fonts/font-face.css" />
       </head>
       <body>
-        <ClerkProvider>
-          <SWRProvider>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-              <LanguageProvider>
-                <AuthProvider>
-                  {children}
-                </AuthProvider>
-              </LanguageProvider>
-            </ThemeProvider>
-          </SWRProvider>
-        </ClerkProvider>
+        <ClientProviders>
+          {children}
+          <Toaster />
+          <PerformanceMonitor />
+        </ClientProviders>
 
         {/* ChannelIO Chat Widget */}
         <Script id="channel-io" strategy="afterInteractive">
           {`
-            (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+            (function(){var w=window;if(w.ChannelIO){return w.}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
 
             ChannelIO('boot', {
               "pluginKey": "c5a02de1-1bef-4577-9bf4-8f3e9d113058"
@@ -137,6 +129,8 @@ export default function RootLayout({
             Cal.ns.meeting("ui", {"theme":"dark","hideEventTypeDetails":false,"layout":"month_view"});
           `}
         </Script>
+
+
       </body>
     </html>
   )

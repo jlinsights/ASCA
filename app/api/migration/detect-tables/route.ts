@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error detecting Airtable tables:', error);
+    
     return NextResponse.json(
       { error: 'Failed to detect tables' },
       { status: 500 }

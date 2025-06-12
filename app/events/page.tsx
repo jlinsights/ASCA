@@ -145,8 +145,7 @@ export default function EventsPage() {
 
   const EventCard = ({ event }: { event: Event }) => {
     const handleLike = () => {
-      // 좋아요 기능 구현
-      console.log('Like event:', event.id);
+      // 좋아요 기능 구현 (로깅 제거)
     };
 
     const handleShare = () => {

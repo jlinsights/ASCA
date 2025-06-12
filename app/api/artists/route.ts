@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error fetching artists:', error)
+    
     
     return NextResponse.json(
       {

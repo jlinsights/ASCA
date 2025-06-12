@@ -47,7 +47,7 @@ export default function ArtistsManagement() {
         const { artists: artistsData } = await getArtists()
         setArtists(artistsData)
       } catch (err) {
-        console.error('작가 데이터 로딩 실패:', err)
+        
         setError('작가 데이터를 불러오는데 실패했습니다.')
       } finally {
         setLoading(false)

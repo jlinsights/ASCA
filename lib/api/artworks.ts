@@ -111,7 +111,7 @@ export async function getArtworks(
   const { data, error, count } = await query
 
   if (error) {
-    console.error('Error fetching artworks:', error)
+    
     throw new Error('작품 목록을 불러오는데 실패했습니다.')
   }
 
@@ -151,7 +151,7 @@ export async function getArtwork(id: string): Promise<ArtworkWithArtist | null> 
     if (error.code === 'PGRST116') {
       return null
     }
-    console.error('Error fetching artwork:', error)
+    
     throw new Error('작품 정보를 불러오는데 실패했습니다.')
   }
 
@@ -170,7 +170,7 @@ export async function createArtwork(artwork: ArtworkInsert): Promise<Artwork> {
     .single()
 
   if (error) {
-    console.error('Error creating artwork:', error)
+    
     throw new Error('작품 생성에 실패했습니다.')
   }
 
@@ -190,7 +190,7 @@ export async function updateArtwork(id: string, updates: ArtworkUpdate): Promise
     .single()
 
   if (error) {
-    console.error('Error updating artwork:', error)
+    
     throw new Error('작품 정보 업데이트에 실패했습니다.')
   }
 
@@ -208,7 +208,7 @@ export async function deleteArtwork(id: string): Promise<void> {
     .eq('id', id)
 
   if (error) {
-    console.error('Error deleting artwork:', error)
+    
     throw new Error('작품 삭제에 실패했습니다.')
   }
 }
@@ -243,7 +243,7 @@ export async function searchArtworks(
     .limit(limit)
 
   if (error) {
-    console.error('Error searching artworks:', error)
+    
     throw new Error('작품 검색에 실패했습니다.')
   }
 
@@ -277,7 +277,7 @@ export async function getFeaturedArtworks(limit: number = 6): Promise<ArtworkWit
     .limit(limit)
 
   if (error) {
-    console.error('Error fetching featured artworks:', error)
+    
     throw new Error('추천 작품을 불러오는데 실패했습니다.')
   }
 
@@ -317,7 +317,7 @@ export async function getRelatedArtworks(
     .limit(limit)
 
   if (error) {
-    console.error('Error fetching related artworks:', error)
+    
     throw new Error('관련 작품을 불러오는데 실패했습니다.')
   }
 
@@ -334,7 +334,7 @@ export async function incrementArtworkViews(id: string): Promise<void> {
   })
 
   if (error) {
-    console.error('Error incrementing artwork views:', error)
+    
   }
 }
 
@@ -349,7 +349,7 @@ export async function toggleArtworkLike(id: string, userId?: string): Promise<bo
   })
 
   if (error) {
-    console.error('Error toggling artwork like:', error)
+    
     return false
   }
   return true

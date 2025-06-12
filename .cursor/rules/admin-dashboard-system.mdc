@@ -1,0 +1,50 @@
+# 관리자 대시보드 시스템
+
+## 메인 대시보드
+- [app/admin/page.tsx](mdc:app/admin/page.tsx): 중앙 관리자 대시보드
+- 통합 관리 인터페이스, 빠른 액션, 시스템 상태 표시
+
+## 주요 기능 페이지
+
+### 마이그레이션 관리
+- [app/admin/migration/page.tsx](mdc:app/admin/migration/page.tsx): Airtable → Supabase 마이그레이션
+- 상태 확인, 배치 마이그레이션, 진행상황 추적
+
+### 동기화 관리  
+- [app/admin/sync/page.tsx](mdc:app/admin/sync/page.tsx): 실시간 양방향 동기화
+- 자동/수동 동기화 제어, 로그 모니터링
+
+### 사용자 관리
+- [app/admin/users/page.tsx](mdc:app/admin/users/page.tsx): 사용자 계정 관리
+- [app/admin/users/[id]/page.tsx](mdc:app/admin/users/[id]/page.tsx): 개별 사용자 상세
+
+### 콘텐츠 관리
+- [app/admin/exhibitions/page.tsx](mdc:app/admin/exhibitions/page.tsx): 전시 관리
+- [app/admin/artists/page.tsx](mdc:app/admin/artists/page.tsx): 작가 관리
+
+## 공통 컴포넌트
+
+### 레이아웃
+- [app/admin/layout.tsx](mdc:app/admin/layout.tsx): 관리자 페이지 공통 레이아웃
+- 네비게이션, 권한 체크, 스타일링
+
+### UI 컴포넌트
+- 통계 카드, 빠른 액션 버튼
+- 데이터 테이블, 상태 인디케이터
+- 로딩 및 오류 처리
+
+## 보안 및 권한
+- 관리자 권한 체크
+- API 키 보안 관리
+- 세션 관리
+
+## 네비게이션 구조
+```
+/admin
+├── 대시보드 (/)
+├── 마이그레이션 (/migration)  
+├── 동기화 (/sync)
+├── 사용자 관리 (/users)
+├── 작가 관리 (/artists)
+└── 전시 관리 (/exhibitions)
+```

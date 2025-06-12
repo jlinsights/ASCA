@@ -207,9 +207,9 @@ export default function AdminDashboard() {
     mutate()
   }, [mutate])
 
-  return (
+    return (
     <AdminLayout currentPage="migration">
-      {/* 헤더 */}
+        {/* 헤더 */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -230,7 +230,7 @@ export default function AdminDashboard() {
           <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
           {language === 'ko' ? '새로고침' : 'Refresh'}
         </Button>
-      </div>
+                </div>
 
       {/* 빠른 액션 */}
       <Card className="mb-8 border-border/50">
@@ -251,7 +251,7 @@ export default function AdminDashboard() {
                 color={action.color}
               />
             ))}
-          </div>
+                </div>
           
           <div className="mt-4 pt-4 border-t border-border/20">
             <QuickActionButton
@@ -261,9 +261,9 @@ export default function AdminDashboard() {
               color="bg-indigo-50/50 hover:bg-indigo-50/50 text-indigo-700/50 border-indigo-200/50 dark:bg-indigo-950/30 dark:hover:bg-indigo-950/30 dark:text-indigo-300/50 dark:border-indigo-800/50"
               disabled={true}
             />
-          </div>
-        </CardContent>
-      </Card>
+              </div>
+            </CardContent>
+          </Card>
 
       {/* 마이그레이션 상태 카드 */}
       <Card className="mb-8 border-cyan-200 bg-cyan-50/50 dark:border-cyan-800 dark:bg-cyan-950/20">
@@ -308,9 +308,9 @@ export default function AdminDashboard() {
                 {language === 'ko' ? '무료 마이그레이션' : 'Free Migration'}
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+              </div>
+            </CardContent>
+          </Card>
 
       {/* 통계 대시보드 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -324,15 +324,15 @@ export default function AdminDashboard() {
             isLoading={isLoading}
           />
         ))}
-      </div>
+              </div>
 
       {/* 에러 표시 */}
       {error && (
         <Card className="mb-8 border-red-200 bg-red-50/50">
-          <CardContent className="p-6">
+            <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <AlertCircle className="h-5 w-5 text-red-600" />
-              <div>
+                          <div>
                 <h3 className="font-medium text-red-900">
                   {language === 'ko' ? '데이터 로드 오류' : 'Data Load Error'}
                 </h3>
@@ -341,46 +341,46 @@ export default function AdminDashboard() {
               <Button onClick={handleRefresh} variant="outline" size="sm">
                 {language === 'ko' ? '다시 시도' : 'Retry'}
               </Button>
-            </div>
-          </CardContent>
-        </Card>
+                  </div>
+                </CardContent>
+              </Card>
       )}
 
       {/* 관리 메뉴 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* 콘텐츠 관리 */}
         <Card className="border-border/50">
-          <CardHeader>
+              <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-blue-600" />
               {language === 'ko' ? '콘텐츠 관리' : 'Content Management'}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
             <Link href="/admin/notices" prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
-                <FileText className="h-4 w-4 mr-2" />
-                {language === 'ko' ? '공지사항 관리' : 'Manage Notices'}
-              </Button>
-            </Link>
+                      <FileText className="h-4 w-4 mr-2" />
+                      {language === 'ko' ? '공지사항 관리' : 'Manage Notices'}
+                    </Button>
+                  </Link>
             <Link href="/admin/exhibitions" prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
-                <Star className="h-4 w-4 mr-2" />
-                {language === 'ko' ? '전시회 관리' : 'Manage Exhibitions'}
-              </Button>
-            </Link>
+                      <Star className="h-4 w-4 mr-2" />
+                      {language === 'ko' ? '전시회 관리' : 'Manage Exhibitions'}
+                    </Button>
+                  </Link>
             <Link href="/admin/events" prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
-                <Calendar className="h-4 w-4 mr-2" />
-                {language === 'ko' ? '행사 관리' : 'Manage Events'}
-              </Button>
-            </Link>
+                      <Calendar className="h-4 w-4 mr-2" />
+                      {language === 'ko' ? '행사 관리' : 'Manage Events'}
+                    </Button>
+                  </Link>
             <Link href="/admin/files" prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
                 <Folder className="h-4 w-4 mr-2" />
                 {language === 'ko' ? '파일 관리' : 'Manage Files'}
-              </Button>
-            </Link>
+                    </Button>
+                  </Link>
           </CardContent>
         </Card>
 
@@ -395,22 +395,22 @@ export default function AdminDashboard() {
           <CardContent className="space-y-3">
             <Link href="/admin/artists" prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
-                <Users className="h-4 w-4 mr-2" />
-                {language === 'ko' ? '작가 관리' : 'Manage Artists'}
-              </Button>
-            </Link>
+                      <Users className="h-4 w-4 mr-2" />
+                      {language === 'ko' ? '작가 관리' : 'Manage Artists'}
+                    </Button>
+                                </Link>
             <Link href="/admin/artworks" prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
-                <Palette className="h-4 w-4 mr-2" />
-                {language === 'ko' ? '작품 관리' : 'Manage Artworks'}
-              </Button>
-            </Link>
+                      <Palette className="h-4 w-4 mr-2" />
+                      {language === 'ko' ? '작품 관리' : 'Manage Artworks'}
+                              </Button>
+                                </Link>
             <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost" disabled>
-              <Shield className="h-4 w-4 mr-2" />
+                      <Shield className="h-4 w-4 mr-2" />
               {language === 'ko' ? '사용자 관리 (준비중)' : 'Manage Users (Coming Soon)'}
-            </Button>
+                              </Button>
             <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost" disabled>
-              <BarChart3 className="h-4 w-4 mr-2" />
+                      <BarChart3 className="h-4 w-4 mr-2" />
               {language === 'ko' ? '분석 (준비중)' : 'Analytics (Coming Soon)'}
             </Button>
           </CardContent>
@@ -429,8 +429,8 @@ export default function AdminDashboard() {
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 {language === 'ko' ? 'Airtable 마이그레이션' : 'Airtable Migration'}
-              </Button>
-            </Link>
+                              </Button>
+                  </Link>
             <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost" disabled>
               <Database className="h-4 w-4 mr-2" />
               {language === 'ko' ? '데이터베이스 관리 (준비중)' : 'Database Management (Coming Soon)'}
@@ -443,18 +443,18 @@ export default function AdminDashboard() {
               <Shield className="h-4 w-4 mr-2" />
               {language === 'ko' ? '보안 설정 (준비중)' : 'Security Settings (Coming Soon)'}
             </Button>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* 최근 활동 */}
+          {/* 최근 활동 */}
         <Card className="border-border/50">
-          <CardHeader>
+              <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5 text-orange-600" />
-              {language === 'ko' ? '최근 활동' : 'Recent Activity'}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+                  {language === 'ko' ? '최근 활동' : 'Recent Activity'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
             {isLoading ? (
               <div className="space-y-3">
                 {Array.from({ length: 3 }).map((_, i) => (
@@ -463,10 +463,10 @@ export default function AdminDashboard() {
                     <div className="flex-1 space-y-1">
                       <div className="h-4 bg-muted rounded w-3/4 animate-pulse" />
                       <div className="h-3 bg-muted rounded w-1/2 animate-pulse" />
-                    </div>
+                      </div>
                   </div>
-                ))}
-              </div>
+                  ))}
+                </div>
             ) : stats?.recentActivity && stats.recentActivity.length > 0 ? (
               <div className="space-y-3">
                 {stats.recentActivity.slice(0, 5).map((activity, index) => (
@@ -477,8 +477,8 @@ export default function AdminDashboard() {
                       <p className="text-muted-foreground text-xs">
                         {activity.type} • {activity.date}
                         {activity.author && ` • ${activity.author}`}
-                      </p>
-                    </div>
+                    </p>
+                  </div>
                   </div>
                 ))}
               </div>
@@ -487,8 +487,8 @@ export default function AdminDashboard() {
                 {language === 'ko' ? '최근 활동이 없습니다.' : 'No recent activity.'}
               </p>
             )}
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
       </div>
     </AdminLayout>
   )

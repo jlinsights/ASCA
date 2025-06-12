@@ -95,7 +95,7 @@ export default function EventDetailPage() {
 
       } catch (err) {
         setError('행사를 불러오는데 실패했습니다.')
-        console.error('Error loading event:', err)
+        
       } finally {
         setLoading(false)
       }

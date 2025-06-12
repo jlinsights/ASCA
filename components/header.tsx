@@ -17,6 +17,7 @@ import { LanguageSelector } from "./language-selector"
 import { Logo } from "./logo"
 import { useLanguage } from "@/contexts/language-context"
 import { KakaoLoginButton } from "./kakao/kakao-login-button"
+import { log } from "@/lib/utils/logger"
 
 // 메뉴 구조 정의
 
@@ -249,7 +250,7 @@ export function Header() {
                     size="sm"
                     loginText="카카오 로그인"
                     onLoginSuccess={(userInfo) => {
-                      console.log('Kakao login success:', userInfo)
+                      log.debug('Kakao login success', { userInfo })
                     }}
                   />
                   <div className="h-4 w-px bg-border"></div>
@@ -399,8 +400,8 @@ export function Header() {
                       className="w-full justify-start"
                       loginText="카카오 로그인"
                       onLoginSuccess={(userInfo) => {
-                        console.log('Mobile Kakao login success:', userInfo)
-                        setIsMenuOpen(false)
+                        log.debug('Mobile Kakao login success', { userInfo })
+                        // 모바일 카카오 로그인 성공 처리
                       }}
                     />
                     <div className="relative">

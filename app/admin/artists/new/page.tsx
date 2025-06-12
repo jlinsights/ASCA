@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -45,8 +45,6 @@ export default function NewArtistPage() {
     artist_type: '일반작가' as '공모작가' | '청년작가' | '일반작가' | '추천작가' | '초대작가',
     title: null as '이사' | '상임이사' | '감사' | '고문' | '상임고문' | '자문위원' | '운영위원' | '심사위원' | '운영위원장' | '심사위원장' | '이사장' | '명예이사장' | '부회장' | '회장' | null
   })
-
-
   const [skills, setSkills] = useState<string[]>([])
   const [newSkill, setNewSkill] = useState('')
   const [awards, setAwards] = useState<string[]>([])
@@ -55,7 +53,7 @@ export default function NewArtistPage() {
   const [newExhibition, setNewExhibition] = useState('')
 
   // 폼 진행률 계산
-  const calculateProgress = () => {
+  const calculateProgress = useCallback(() => {
     const requiredFields = ['name', 'bio', 'membership_type', 'artist_type']
     const optionalFields = ['name_en', 'birth_year', 'nationality', 'profile_image']
     
@@ -84,12 +82,12 @@ export default function NewArtistPage() {
     if (exhibitions.length > 0) completed++
     
     return Math.round((completed / total) * 100)
-  }
+  }, [formData, skills, awards, exhibitions])
 
   // 초기 진행률 설정
   useEffect(() => {
     setSaveProgress(calculateProgress())
-  }, [])
+  }, [calculateProgress])
 
   const handleInputChange = (field: string, value: string | null) => {
     setFormData(prev => ({
@@ -219,7 +217,7 @@ export default function NewArtistPage() {
       
       router.push('/admin')
     } catch (error) {
-      console.error('Error creating artist:', error)
+      
       toast({
         title: "등록 실패",
         description: "작가 등록 중 오류가 발생했습니다. 다시 시도해주세요.",

@@ -103,7 +103,7 @@ export default function NewExhibitionPage() {
         is_published: isDraft ? false : (formData.is_published || false),
         max_capacity: undefined,
         ticket_price: undefined,
-        admission_fee: formData.admission_fee ? (typeof formData.admission_fee === 'string' ? parseFloat(formData.admission_fee) : formData.admission_fee) : undefined,
+        admission_fee: formData.admission_fee ? (typeof formData.admission_fee === 'string' ? parseFloat(formData.admission_fee) : formData.admission_fee) : 0,
         currency: undefined,
         is_free: undefined,
         opening_hours: undefined,
@@ -116,7 +116,7 @@ export default function NewExhibitionPage() {
       router.push('/admin/exhibitions')
     } catch (err) {
       setError('전시회 저장에 실패했습니다.')
-      console.error('Error creating exhibition:', err)
+      
     } finally {
       setLoading(false)
     }

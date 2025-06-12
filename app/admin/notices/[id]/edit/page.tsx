@@ -91,7 +91,7 @@ export default function EditNoticePage() {
         })
       } catch (err) {
         setError('공지사항을 불러오는데 실패했습니다.')
-        console.error('Error loading notice:', err)
+        
       } finally {
         setInitialLoading(false)
       }
@@ -144,7 +144,7 @@ export default function EditNoticePage() {
       router.push('/admin/notices')
     } catch (err) {
       setError('공지사항 수정에 실패했습니다.')
-      console.error('Error updating notice:', err)
+      
     } finally {
       setLoading(false)
     }
