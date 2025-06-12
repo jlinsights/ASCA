@@ -79,7 +79,7 @@ export function KakaoLoginButton({
         onLoginSuccess?.(info)
       }
     } catch (error) {
-      console.error('❌ Kakao login error:', error)
+      
       toast.error("로그인 중 오류가 발생했습니다. 다시 시도해주세요.")
       onLoginError?.(error)
     } finally {
@@ -99,7 +99,7 @@ export function KakaoLoginButton({
         onLogout?.()
       }
     } catch (error) {
-      console.error('❌ Kakao logout error:', error)
+      
       toast.error("로그아웃 중 오류가 발생했습니다.")
     } finally {
       setIsLoading(false)
@@ -237,7 +237,7 @@ export function useKakaoAuth() {
       }
       return null
     } catch (error) {
-      console.error('Login error:', error)
+      
       throw error
     } finally {
       setIsLoading(false)
@@ -254,7 +254,7 @@ export function useKakaoAuth() {
       }
       return success
     } catch (error) {
-      console.error('Logout error:', error)
+      
       throw error
     } finally {
       setIsLoading(false)

@@ -81,7 +81,7 @@ export function ImageUpload({
         description: "프로필 이미지가 성공적으로 업로드되었습니다.",
       })
     } catch (error) {
-      console.error('Error uploading image:', error)
+      
       toast({
         title: "이미지 업로드 실패",
         description: "이미지 업로드 중 오류가 발생했습니다.",

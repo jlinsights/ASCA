@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
 
   // 개발 환경에서 라우팅 디버깅
   if (process.env.NODE_ENV === 'development') {
-    console.log(`[Middleware] Processing: ${pathname}`)
+    
   }
 
   // 정적 파일들은 바로 통과

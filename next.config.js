@@ -3,7 +3,13 @@ const nextConfig = {
   // 성능 최적화
   experimental: {
     optimizeCss: true,
-    optimizeServerReact: true
+    optimizeServerReact: true,
+    // React 19 호환성을 위한 설정 추가
+    serverComponentsExternalPackages: ['swr'],
+    // 트리 쉐이킹 개선
+    serverMinification: true,
+    // 페이지 로딩 성능 개선
+    nextScriptWorkers: true,
   },
   
   // 이미지 최적화
@@ -46,6 +52,9 @@ const nextConfig = {
           'self': 'globalThis',
         })
       )
+      
+      // SWR을 서버 사이드에서 제외
+      config.externals = [...(config.externals || []), 'swr']
     }
 
     // 프로덕션 빌드에서만 적용
@@ -119,9 +128,9 @@ const nextConfig = {
   },
 
   // 번들 분석 (필요시 활성화)
-  // bundleAnalyzer: {
-  //   enabled: process.env.ANALYZE === 'true',
-  // },
+  bundleAnalyzer: {
+    enabled: process.env.ANALYZE === 'true',
+  },
 
   // 트레일링 슬래시 설정 - URL 일관성 보장
   trailingSlash: false,

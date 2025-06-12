@@ -223,7 +223,7 @@ export async function simpleSearch(
     if (error) throw error;
     return { data: data || [], error: null };
   } catch (error) {
-    console.error(`Error searching ${table}:`, error);
+    
     return { data: [], error };
   }
 }
@@ -237,7 +237,7 @@ export async function searchArtworksByArtist(artistId: string, query?: string, l
     
     return await searchArtworks(query || '', filters);
   } catch (error) {
-    console.error('Error searching artworks by artist:', error);
+    
     return { data: [], error };
   }
 }

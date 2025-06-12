@@ -37,7 +37,7 @@ export async function getArtists(
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching artists:', error)
+    
     throw new Error('작가 목록을 불러오는데 실패했습니다.')
   }
 
@@ -62,7 +62,7 @@ export async function getArtist(id: string): Promise<Artist | null> {
     if (error.code === 'PGRST116') {
       return null // 작가를 찾을 수 없음
     }
-    console.error('Error fetching artist:', error)
+    
     throw new Error('작가 정보를 불러오는데 실패했습니다.')
   }
 
@@ -79,7 +79,7 @@ export async function createArtist(artist: ArtistInsert): Promise<Artist> {
     .insert([artist])
 
   if (error) {
-    console.error('Error creating artist:', error)
+    
     throw new Error('작가 생성에 실패했습니다.')
   }
 
@@ -99,7 +99,7 @@ export async function updateArtist(id: string, updates: ArtistUpdate): Promise<A
     .single()
 
   if (error) {
-    console.error('Error updating artist:', error)
+    
     throw new Error('작가 정보 업데이트에 실패했습니다.')
   }
 
@@ -118,7 +118,7 @@ export async function deleteArtist(id: string): Promise<void> {
     .single()
 
   if (error) {
-    console.error('Error deleting artist:', error)
+    
     throw new Error('작가 삭제에 실패했습니다.')
   }
 }
@@ -135,7 +135,7 @@ export async function searchArtists(query: string, limit: number = 20): Promise<
     .limit(limit)
 
   if (error) {
-    console.error('Error searching artists:', error)
+    
     throw new Error('작가 검색에 실패했습니다.')
   }
 
@@ -153,7 +153,7 @@ export async function getArtistsByNationality(nationality: string): Promise<Arti
     .order('name')
 
   if (error) {
-    console.error('Error fetching artists by nationality:', error)
+    
     throw new Error('국적별 작가 조회에 실패했습니다.')
   }
 
@@ -169,7 +169,7 @@ export async function getFeaturedArtists(limit: number = 6): Promise<Artist[]> {
     .limit(limit)
 
   if (error) {
-    console.error('Error fetching featured artists:', error)
+    
     throw new Error('추천 작가를 불러오는데 실패했습니다.')
   }
 

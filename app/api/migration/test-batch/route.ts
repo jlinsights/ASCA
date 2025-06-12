@@ -4,7 +4,7 @@ import { createArtist } from '@/lib/admin-api'
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Starting test batch migration (10 artists)...')
+    
 
     // 환경변수 확인
     if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     // 작은 배치로 테스트
     const result = await AirtableMigration.migrateArtistsInBatches(10)
 
-    console.log('Test batch migration completed:', result)
+    
 
     return NextResponse.json({
       success: true,
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Test batch migration failed:', error)
+    
     
     return NextResponse.json(
       {

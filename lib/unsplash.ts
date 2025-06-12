@@ -45,7 +45,7 @@ export async function searchUnsplashImages(
     })
     
     if (result.errors) {
-      console.error('Unsplash API errors:', result.errors)
+      
       return { images: [], total: 0, totalPages: 0 }
     }
     
@@ -55,7 +55,7 @@ export async function searchUnsplashImages(
       totalPages: result.response?.total_pages || 0
     }
   } catch (error) {
-    console.error('Error searching Unsplash images:', error)
+    
     return { images: [], total: 0, totalPages: 0 }
   }
 }
@@ -65,7 +65,7 @@ export async function triggerUnsplashDownload(downloadUrl: string) {
   try {
     await fetch(downloadUrl)
   } catch (error) {
-    console.error('Error triggering Unsplash download:', error)
+    
   }
 }
 
@@ -78,7 +78,7 @@ export async function downloadImageAsBlob(imageUrl: string): Promise<Blob | null
     }
     return await response.blob()
   } catch (error) {
-    console.error('Error downloading image:', error)
+    
     return null
   }
 } 

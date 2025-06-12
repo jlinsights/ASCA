@@ -1,0 +1,46 @@
+# Airtable-Supabase 마이그레이션 시스템
+
+## 핵심 컴포넌트
+
+### Airtable 클라이언트
+- [lib/airtable.ts](mdc:lib/airtable.ts): Airtable API 클라이언트, Artists/Artworks/Exhibitions 지원
+- 환경변수: `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID` 필요
+
+### 마이그레이션 엔진
+- [lib/airtable-migration.ts](mdc:lib/airtable-migration.ts): 데이터 변환 및 마이그레이션 로직
+- 필드 매핑: Airtable → Supabase 스키마 변환
+- 배치 처리 및 오류 복구 지원
+
+### 관리자 인터페이스
+- [app/admin/migration/page.tsx](mdc:app/admin/migration/page.tsx): 웹 기반 마이그레이션 UI
+- [app/admin/page.tsx](mdc:app/admin/page.tsx): 메인 관리자 대시보드 (마이그레이션 버튼 포함)
+
+### API 엔드포인트
+- [app/api/migration/status/route.ts](mdc:app/api/migration/status/route.ts): 마이그레이션 상태 확인
+- [app/api/migration/start/route.ts](mdc:app/api/migration/start/route.ts): 마이그레이션 시작
+- [app/api/migration/artists/route.ts](mdc:app/api/migration/artists/route.ts): Artists 테이블 전용
+
+### 스크립트
+- [scripts/direct-migration.js](mdc:scripts/direct-migration.js): 직접 실행 마이그레이션
+- [scripts/debug-airtable-tables.js](mdc:scripts/debug-airtable-tables.js): Airtable 테이블 구조 분석
+
+## 데이터 매핑
+
+### Artists 테이블 매핑
+```
+Airtable → Supabase
+Name → name
+Name (Zh) → name_zh  
+Phone → phone
+Email → email
+DOB → date_of_birth
+Address → address
+Bio (Korean) → bio_korean
+Group → artist_group
+```
+
+## 사용법
+1. 환경변수 설정 (.env.local)
+2. `/admin/migration` 접속
+3. 상태 확인 후 마이그레이션 실행
+4. 진행상황 실시간 모니터링

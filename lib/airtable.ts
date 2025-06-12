@@ -129,6 +129,91 @@ export interface AirtableExhibition {
   };
 }
 
+export interface AirtableEvent {
+  id: string;
+  fields: {
+    'Title (Korean)': string;
+    'Title (English)'?: string;
+    'Title (Chinese)'?: string;
+    'Description (Korean)': string;
+    'Description (English)'?: string;
+    'Description (Chinese)'?: string;
+    'Start Date': string;
+    'End Date'?: string;
+    'Registration Start'?: string;
+    'Registration End'?: string;
+    'Location'?: string;
+    'Venue'?: string;
+    'Address'?: string;
+    'Max Participants'?: number;
+    'Registration Fee'?: number;
+    'Currency'?: string;
+    'Is Free'?: boolean;
+    'Featured Image'?: Array<{
+      id: string;
+      url: string;
+      filename: string;
+    }>;
+    'Gallery Images'?: Array<{
+      id: string;
+      url: string;
+      filename: string;
+    }>;
+    'Organizer'?: string;
+    'Contact Email'?: string;
+    'Contact Phone'?: string;
+    'Website'?: string;
+    'Status': 'draft' | 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
+    'Event Type': 'workshop' | 'exhibition' | 'seminar' | 'competition' | 'ceremony' | 'other';
+    'Is Featured'?: boolean;
+    'Is Published'?: boolean;
+    'Tags'?: string[];
+    'Requirements'?: string;
+    'Notes'?: string;
+    'Created'?: string;
+    'Last Modified'?: string;
+  };
+}
+
+export interface AirtableNotice {
+  id: string;
+  fields: {
+    'Title (Korean)': string;
+    'Title (English)'?: string;
+    'Title (Chinese)'?: string;
+    'Content (Korean)': string;
+    'Content (English)'?: string;
+    'Content (Chinese)'?: string;
+    'Summary'?: string;
+    'Author'?: string;
+    'Category': 'announcement' | 'news' | 'event' | 'regulation' | 'general';
+    'Priority': 'low' | 'normal' | 'high' | 'urgent';
+    'Status': 'draft' | 'published' | 'archived';
+    'Is Pinned'?: boolean;
+    'Is Featured'?: boolean;
+    'Show on Homepage'?: boolean;
+    'Published At'?: string;
+    'Expires At'?: string;
+    'Effective Date'?: string;
+    'Attachments'?: Array<{
+      id: string;
+      url: string;
+      filename: string;
+    }>;
+    'Featured Image'?: Array<{
+      id: string;
+      url: string;
+      filename: string;
+    }>;
+    'Target Audience'?: string[];
+    'Tags'?: string[];
+    'External Link'?: string;
+    'Download URL'?: string;
+    'Created'?: string;
+    'Last Modified'?: string;
+  };
+}
+
 // Airtable 데이터 조회 함수들
 export class AirtableService {
   // Artists 조회 - 모든 레코드를 가져오기 위해 페이지네이션 사용
@@ -141,14 +226,14 @@ export class AirtableService {
         sort: [{ field: 'Name (Korean)', direction: 'asc' }]
       }).all();
 
-      console.log(`Fetched ${records.length} artists from Airtable`);
+      
 
       return records.map((record: any) => ({
         id: record.id,
         fields: record.fields as unknown as AirtableArtist['fields']
       }));
     } catch (error) {
-      console.error('Error fetching artists from Airtable:', error);
+      
       throw error;
     }
   }
@@ -162,14 +247,14 @@ export class AirtableService {
         sort: [{ field: 'Title (Korean)', direction: 'asc' }]
       }).all();
 
-      console.log(`Fetched ${records.length} artworks from Airtable`);
+      
 
       return records.map((record: any) => ({
         id: record.id,
         fields: record.fields as unknown as AirtableArtwork['fields']
       }));
     } catch (error) {
-      console.error('Error fetching artworks from Airtable:', error);
+      
       throw error;
     }
   }
@@ -183,14 +268,14 @@ export class AirtableService {
         sort: [{ field: 'Start Date', direction: 'desc' }]
       }).all();
 
-      console.log(`Fetched ${records.length} exhibitions from Airtable`);
+      
 
       return records.map((record: any) => ({
         id: record.id,
         fields: record.fields as unknown as AirtableExhibition['fields']
       }));
     } catch (error) {
-      console.error('Error fetching exhibitions from Airtable:', error);
+      
       throw error;
     }
   }
@@ -206,7 +291,7 @@ export class AirtableService {
         fields: record.fields as unknown as AirtableArtist['fields']
       };
     } catch (error) {
-      console.error('Error fetching artist from Airtable:', error);
+      
       return null;
     }
   }
@@ -255,7 +340,7 @@ export class AirtableService {
         total
       };
     } catch (error) {
-      console.error('Error fetching artists batch from Airtable:', error);
+      
       throw error;
     }
   }
@@ -284,21 +369,63 @@ export class AirtableService {
             await processor(batch);
             processed += batch.length;
             
-            console.log(`Processed ${processed} artists...`);
+            
           }
 
           fetchNextPage();
         } catch (error) {
-          console.error('Error processing batch:', error);
+          
           errors += records.length;
           fetchNextPage();
         }
       });
 
-      console.log(`Batch processing completed: ${processed} processed, ${errors} errors`);
+      
       return { processed, errors };
     } catch (error) {
-      console.error('Error in batch processing:', error);
+      
+      throw error;
+    }
+  }
+
+  // Events 조회 - 모든 레코드 가져오기
+  static async getAllEvents(): Promise<AirtableEvent[]> {
+    const currentBase = initializeAirtable();
+
+    try {
+      const records = await currentBase(TABLES.EVENTS).select({
+        sort: [{ field: 'Start Date', direction: 'desc' }]
+      }).all();
+
+      
+
+      return records.map((record: any) => ({
+        id: record.id,
+        fields: record.fields as unknown as AirtableEvent['fields']
+      }));
+    } catch (error) {
+      
+      throw error;
+    }
+  }
+
+  // Notices 조회 - 모든 레코드 가져오기
+  static async getAllNotices(): Promise<AirtableNotice[]> {
+    const currentBase = initializeAirtable();
+
+    try {
+      const records = await currentBase(TABLES.NOTICES).select({
+        sort: [{ field: 'Created', direction: 'desc' }]
+      }).all();
+
+      
+
+      return records.map((record: any) => ({
+        id: record.id,
+        fields: record.fields as unknown as AirtableNotice['fields']
+      }));
+    } catch (error) {
+      
       throw error;
     }
   }

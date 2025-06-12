@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Supabase 테이블 스키마 확인 스크립트
+ * Supabase 스키마 확인 스크립트
  */
 
 require('dotenv').config({ path: '.env.local' });
@@ -13,116 +13,119 @@ async function checkSupabaseSchema() {
     const { createClient } = require('@supabase/supabase-js');
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    // 1. 테이블 목록 확인
-    console.log('1️⃣ 테이블 목록 확인...');
-    
-    // PostgreSQL 시스템 테이블에서 테이블 목록 조회
-    const { data: tables, error: tablesError } = await supabase
-      .rpc('get_table_list');
-
-    if (tablesError) {
-      console.log('   RPC 함수가 없으므로 직접 테이블 접근을 시도합니다...');
-      
-      // artists 테이블에 직접 접근 시도
-      const { data: artistsTest, error: artistsError } = await supabase
-        .from('artists')
-        .select('*')
-        .limit(1);
-
-      if (artistsError) {
-        console.error('   ❌ artists 테이블 접근 오류:', artistsError);
-        
-        // 테이블이 존재하지 않는 경우
-        if (artistsError.code === '42P01') {
-          console.log('\n🚨 artists 테이블이 존재하지 않습니다!');
-          console.log('Supabase 대시보드에서 테이블을 생성해야 합니다.');
-          
-          console.log('\n📋 필요한 테이블 스키마:');
-          console.log(`
-CREATE TABLE public.artists (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  name_en TEXT,
-  name_ja TEXT,
-  name_zh TEXT,
-  bio TEXT DEFAULT '',
-  bio_en TEXT,
-  bio_ja TEXT,
-  bio_zh TEXT,
-  birth_year INTEGER,
-  nationality TEXT,
-  specialties TEXT[] DEFAULT '{}',
-  awards TEXT[] DEFAULT '{}',
-  exhibitions TEXT[] DEFAULT '{}',
-  profile_image TEXT,
-  membership_type TEXT DEFAULT '준회원',
-  artist_type TEXT DEFAULT '일반작가',
-  title TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- RLS 정책 설정
-ALTER TABLE public.artists ENABLE ROW LEVEL SECURITY;
-
--- 읽기 권한 (모든 사용자)
-CREATE POLICY "Artists are viewable by everyone" ON public.artists
-  FOR SELECT USING (true);
-
--- 쓰기 권한 (인증된 사용자)
-CREATE POLICY "Artists are insertable by authenticated users" ON public.artists
-  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-
-CREATE POLICY "Artists are updatable by authenticated users" ON public.artists
-  FOR UPDATE USING (auth.role() = 'authenticated');
-
-CREATE POLICY "Artists are deletable by authenticated users" ON public.artists
-  FOR DELETE USING (auth.role() = 'authenticated');
-          `);
-          
-          return;
-        }
-      } else {
-        console.log('   ✅ artists 테이블 접근 성공');
-        console.log(`   현재 레코드 수: ${artistsTest?.length || 0}`);
-      }
-    }
-
-    // 2. 간단한 삽입 테스트
-    console.log('\n2️⃣ 간단한 삽입 테스트...');
-    
-    const testData = {
-      name: 'TEST_ARTIST_' + Date.now(),
-      bio: 'Test bio',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-
-    const { data: insertResult, error: insertError } = await supabase
+    // 1. Artists 테이블 샘플 데이터로 스키마 확인
+    console.log('📊 1. Artists 테이블 스키마 확인...');
+    const { data: sampleArtists, error } = await supabase
       .from('artists')
-      .insert([testData])
-      .select();
+      .select('*')
+      .limit(1);
 
-    if (insertError) {
-      console.error('   ❌ 테스트 삽입 실패:', insertError);
-    } else {
-      console.log('   ✅ 테스트 삽입 성공:', insertResult[0]?.id);
-      
-      // 테스트 데이터 삭제
-      await supabase
-        .from('artists')
-        .delete()
-        .eq('id', insertResult[0].id);
-      
-      console.log('   ✅ 테스트 데이터 정리 완료');
+    if (error) {
+      console.error('샘플 데이터 조회 실패:', error);
+      return;
     }
+
+    if (sampleArtists && sampleArtists.length > 0) {
+      const artist = sampleArtists[0];
+      console.log('   실제 컬럼들:');
+      Object.keys(artist).forEach(key => {
+        const value = artist[key];
+        const type = typeof value;
+        console.log(`     - ${key}: ${type} (${value === null ? 'null' : String(value).substring(0, 50)})`);
+      });
+    }
+
+    // 2. 전체 데이터 개수 확인
+    console.log('\n📊 2. 데이터 개수 확인...');
+    const { count: artistCount } = await supabase
+      .from('artists')
+      .select('*', { count: 'exact', head: true });
+    
+    const { count: artworkCount } = await supabase
+      .from('artworks')
+      .select('*', { count: 'exact', head: true });
+
+    console.log(`   Artists: ${artistCount}개`);
+    console.log(`   Artworks: ${artworkCount}개`);
+
+    // 3. name 필드 기준 중복 검사 (airtable_id 없이)
+    console.log('\n🔍 3. name 기준 중복 분석...');
+    
+    // name이 같은 레코드들 찾기
+    const { data: nameGroups, error: nameError } = await supabase
+      .from('artists')
+      .select('name')
+      .not('name', 'is', null)
+      .neq('name', '');
+
+    if (nameError) {
+      console.error('name 분석 실패:', nameError);
+    } else if (nameGroups) {
+      const nameCount = new Map();
+      nameGroups.forEach(artist => {
+        const name = artist.name;
+        nameCount.set(name, (nameCount.get(name) || 0) + 1);
+      });
+
+      const duplicates = Array.from(nameCount.entries())
+        .filter(([name, count]) => count > 1)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10); // 상위 10개만
+
+      console.log(`   중복된 이름: ${duplicates.length}개`);
+      console.log('   상위 중복들:');
+      duplicates.forEach(([name, count]) => {
+        console.log(`     "${name}": ${count}개`);
+      });
+    }
+
+    // 4. 간단한 중복 제거 (name 기준)
+    console.log('\n🧹 4. 간단한 중복 제거 (name 기준)...');
+    
+    // 중복된 이름 중 하나만 처리해보기
+    const testName = '김동철'; // 일반적인 한국 이름으로 테스트
+    
+    const { data: duplicateRecords, error: dupError } = await supabase
+      .from('artists')
+      .select('id, name, created_at')
+      .eq('name', testName)
+      .order('created_at', { ascending: true });
+
+    if (dupError) {
+      console.error('중복 레코드 조회 실패:', dupError);
+    } else if (duplicateRecords && duplicateRecords.length > 1) {
+      console.log(`   "${testName}" 중복 레코드: ${duplicateRecords.length}개`);
+      
+      // 가장 오래된 것을 제외하고 삭제
+      const toKeep = duplicateRecords[0];
+      const toDelete = duplicateRecords.slice(1);
+      
+      console.log(`   보존: ${toKeep.id} (${toKeep.created_at})`);
+      console.log(`   삭제할 것: ${toDelete.length}개`);
+
+      // 실제 삭제는 주석 처리 (안전을 위해)
+      // for (const record of toDelete) {
+      //   const { error: deleteError } = await supabase
+      //     .from('artists')
+      //     .delete()
+      //     .eq('id', record.id);
+      //   if (!deleteError) {
+      //     console.log(`   삭제됨: ${record.id}`);
+      //   }
+      // }
+      
+      console.log('   (실제 삭제는 안전을 위해 주석 처리됨)');
+    } else {
+      console.log(`   "${testName}" 중복 없음`);
+    }
+
+    console.log('\n✅ 스키마 확인 완료!');
 
   } catch (error) {
     console.error('\n❌ 스키마 확인 실패:', error.message);
-    console.error('상세 오류:', error);
   }
 }
 

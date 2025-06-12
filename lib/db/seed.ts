@@ -14,11 +14,11 @@ import {
 
 // 시드 데이터 생성 함수
 export async function seedDatabase() {
-  console.log('🌱 데이터베이스 시드 데이터 생성을 시작합니다...');
+  
 
   try {
     // 1. 사용자 데이터 생성
-    console.log('👥 사용자 데이터 생성 중...');
+    
     const sampleUsers = [
       {
         id: 'user-admin-001',
@@ -53,7 +53,7 @@ export async function seedDatabase() {
     await db.insert(users).values(sampleUsers);
 
     // 2. 작가 데이터 생성
-    console.log('🎨 작가 데이터 생성 중...');
+    
     const sampleArtists = [
       {
         id: 'artist-001',
@@ -111,7 +111,7 @@ export async function seedDatabase() {
     await db.insert(artists).values(sampleArtists);
 
     // 3. 작품 데이터 생성
-    console.log('🖼️ 작품 데이터 생성 중...');
+    
     const sampleArtworks = [
       {
         id: 'artwork-001',
@@ -178,7 +178,7 @@ export async function seedDatabase() {
     await db.insert(artworks).values(sampleArtworks);
 
     // 4. 전시회 데이터 생성
-    console.log('🏛️ 전시회 데이터 생성 중...');
+    
     const sampleExhibitions = [
       {
         id: 'exhibition-001',
@@ -231,7 +231,7 @@ export async function seedDatabase() {
     await db.insert(exhibitions).values(sampleExhibitions);
 
     // 5. 뉴스 데이터 생성
-    console.log('📰 뉴스 데이터 생성 중...');
+    
     const sampleNews = [
       {
         id: 'news-001',
@@ -274,7 +274,7 @@ export async function seedDatabase() {
     await db.insert(news).values(sampleNews);
 
     // 6. 이벤트 데이터 생성
-    console.log('📅 이벤트 데이터 생성 중...');
+    
     const sampleEvents = [
       {
         id: 'event-001',
@@ -330,7 +330,7 @@ export async function seedDatabase() {
     await db.insert(events).values(sampleEvents);
 
     // 7. 갤러리 데이터 생성
-    console.log('🖼️ 갤러리 데이터 생성 중...');
+    
     const sampleGalleries = [
       {
         id: 'gallery-001',
@@ -365,7 +365,7 @@ export async function seedDatabase() {
     await db.insert(galleries).values(sampleGalleries);
 
     // 8. 관계 테이블 데이터 생성
-    console.log('🔗 관계 데이터 생성 중...');
+    
     
     // 전시회-작품 관계
     await db.insert(exhibitionArtworks).values([
@@ -411,7 +411,7 @@ export async function seedDatabase() {
     ]);
 
     // 9. 관리자 권한 설정
-    console.log('🔐 관리자 권한 설정 중...');
+    
     await db.insert(adminPermissions).values({
       id: 'admin-perm-001',
       userId: 'user-admin-001',
@@ -428,25 +428,25 @@ export async function seedDatabase() {
       grantedBy: 'user-admin-001',
     });
 
-    console.log('✅ 데이터베이스 시드 데이터 생성이 완료되었습니다!');
-    console.log('📊 생성된 데이터:');
-    console.log('  - 사용자: 4명');
-    console.log('  - 작가: 2명');
-    console.log('  - 작품: 3점');
-    console.log('  - 전시회: 2개');
-    console.log('  - 뉴스: 2개');
-    console.log('  - 이벤트: 2개');
-    console.log('  - 갤러리: 2개');
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
   } catch (error) {
-    console.error('❌ 시드 데이터 생성 중 오류 발생:', error);
+    
     throw error;
   }
 }
 
 // 시드 데이터 삭제 함수 (개발용)
 export async function clearDatabase() {
-  console.log('🗑️ 데이터베이스 초기화 중...');
+  
   
   try {
     // 관계 테이블부터 삭제 (외래키 제약 조건 때문)
@@ -463,9 +463,9 @@ export async function clearDatabase() {
     await db.delete(galleries);
     await db.delete(users);
     
-    console.log('✅ 데이터베이스가 초기화되었습니다.');
+    
   } catch (error) {
-    console.error('❌ 데이터베이스 초기화 중 오류 발생:', error);
+    
     throw error;
   }
 }
@@ -474,11 +474,11 @@ export async function clearDatabase() {
 if (require.main === module) {
   seedDatabase()
     .then(() => {
-      console.log('시드 데이터 생성 완료');
+      
       process.exit(0);
     })
     .catch((error) => {
-      console.error('시드 데이터 생성 실패:', error);
+      
       process.exit(1);
     });
 } 

@@ -1,0 +1,44 @@
+# 실시간 양방향 동기화 시스템
+
+## 핵심 아키텍처
+
+### 동기화 엔진
+- [lib/sync-engine.ts](mdc:lib/sync-engine.ts): 완전한 실시간 동기화 엔진
+- 스키마 동기화, 데이터 동기화, 충돌 해결 지원
+- 배치 처리 및 성능 최적화
+
+### 관리 대시보드
+- [app/admin/sync/page.tsx](mdc:app/admin/sync/page.tsx): 실시간 동기화 관리 UI
+- 동기화 상태 모니터링, 수동/자동 제어
+- 로그 및 통계 표시
+
+### API 엔드포인트
+- [app/api/sync/start/route.ts](mdc:app/api/sync/start/route.ts): 동기화 시작
+- [app/api/sync/stop/route.ts](mdc:app/api/sync/stop/route.ts): 동기화 중지
+- [app/api/sync/status/route.ts](mdc:app/api/sync/status/route.ts): 동기화 상태
+
+### PostgreSQL 함수
+- [scripts/create-supabase-functions.sql](mdc:scripts/create-supabase-functions.sql): 동기화 지원 함수들
+- 스키마 비교, 로그 관리, 충돌 해결
+
+## 동기화 전략
+
+### 스키마 동기화
+1. Airtable 필드 변화 감지
+2. Supabase 스키마 자동 업데이트
+3. 데이터 타입 매핑 및 변환
+
+### 데이터 동기화
+1. 변경 감지 (타임스탬프 기반)
+2. 양방향 동기화 (Airtable ↔ Supabase)
+3. 충돌 해결 (최신 데이터 우선)
+
+### 성능 최적화
+- 배치 처리 (1000개 단위)
+- 변경된 데이터만 동기화
+- 병렬 처리 지원
+
+## 모니터링
+- 실시간 상태 대시보드
+- 동기화 로그 및 오류 추적
+- 성능 메트릭스

@@ -32,14 +32,14 @@ function transformAirtableArtist(record: any): ArtistInsert {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Starting single artist migration test...')
+    
 
     // 환경변수 확인
-    console.log('Checking environment variables...')
-    console.log('SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? '✅' : '❌')
-    console.log('SUPABASE_SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? '✅' : '❌')
-    console.log('AIRTABLE_API_KEY:', process.env.AIRTABLE_API_KEY ? '✅' : '❌')
-    console.log('AIRTABLE_BASE_ID:', process.env.AIRTABLE_BASE_ID ? '✅' : '❌')
+    
+    
+    
+    
+    
 
     if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
       return NextResponse.json({
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Airtable에서 첫 번째 작가 1명만 가져오기
-    console.log('Fetching first artist from Airtable...')
+    
     const artists = await AirtableService.getAllArtists()
     
     if (artists.length === 0) {
@@ -67,18 +67,18 @@ export async function POST(request: NextRequest) {
     }
 
     const firstArtist = artists[0]
-    console.log('First artist:', firstArtist.fields['Name (Korean)'])
+    
 
     // 데이터 변환
     const artistData = transformAirtableArtist(firstArtist)
     
-    console.log('Transformed artist data:', JSON.stringify(artistData, null, 2))
+    
 
     // Supabase에 저장
-    console.log('Creating artist in Supabase...')
+    
     const result = await createArtist(artistData)
     
-    console.log('Artist created successfully:', result.id)
+    
 
     return NextResponse.json({
       success: true,
@@ -91,10 +91,10 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Single artist migration failed:', error)
+    
     
     // 더 자세한 오류 정보 출력
-    let errorDetails = {
+    const errorDetails = {
       message: 'Unknown error',
       code: null as string | null,
       details: null as any,
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
       errorDetails.message = String(error)
     }
     
-    console.error('Error details:', JSON.stringify(errorDetails, null, 2))
+    
     
     return NextResponse.json(
       {

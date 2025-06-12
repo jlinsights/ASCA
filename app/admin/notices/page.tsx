@@ -116,7 +116,7 @@ export default function NoticesAdminPage() {
       setTotalCount(response.total)
     } catch (err) {
       setError('공지사항을 불러오는데 실패했습니다.')
-      console.error('Error fetching notices:', err)
+      
     } finally {
       setLoading(false)
     }

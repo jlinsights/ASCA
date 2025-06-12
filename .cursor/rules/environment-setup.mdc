@@ -1,0 +1,71 @@
+# 환경 설정 가이드
+
+## 필수 환경변수 (.env.local)
+
+### Supabase 설정
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
+
+### Airtable 설정  
+```
+AIRTABLE_API_KEY=your_airtable_api_key
+AIRTABLE_BASE_ID=your_base_id
+```
+
+### NextAuth 설정
+```  
+NEXTAUTH_SECRET=your_secret
+NEXTAUTH_URL=http://localhost:3000
+```
+
+## 개발 환경 설정
+
+### 패키지 설치
+```bash
+npm install
+# 또는
+yarn install
+```
+
+### 개발 서버 실행
+```bash
+npm run dev
+# 또는  
+yarn dev
+```
+
+## 배포 환경
+
+### Vercel 배포
+- [next.config.js](mdc:next.config.js): Next.js 설정
+- [package.json](mdc:package.json): 의존성 및 스크립트
+
+### 환경변수 설정
+- Vercel 대시보드에서 환경변수 추가
+- Production/Preview/Development 별도 설정
+
+## 데이터베이스 초기화
+
+### Supabase 스키마 생성
+```bash
+node scripts/create-artworks-table.sql
+```
+
+### 연결 테스트
+```bash
+node scripts/test-supabase-artworks.js
+```
+
+## 문제 해결
+
+### 일반적인 오류
+- API 키 인증 실패
+- 네트워크 연결 문제  
+- 스키마 불일치
+
+### 디버깅 도구
+- [scripts/debug-airtable-tables.js](mdc:scripts/debug-airtable-tables.js)
+- 브라우저 개발자 도구
+- Supabase 대시보드 로그

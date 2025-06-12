@@ -9,6 +9,7 @@ import { Loader2, Search, Download, Heart, User, X } from 'lucide-react'
 import { searchUnsplashImages, triggerUnsplashDownload, downloadImageAsBlob, type UnsplashImage } from '@/lib/unsplash'
 import { useLanguage } from '@/contexts/language-context'
 import Image from 'next/image'
+import { log } from '@/lib/utils/logger'
 
 interface UnsplashImagePickerProps {
   onImageSelect: (file: File, imageData: UnsplashImage) => void
@@ -44,8 +45,7 @@ export default function UnsplashImagePicker({ onImageSelect, trigger }: Unsplash
       setTotalPages(result.totalPages)
       setPage(1)
     } catch (error) {
-      console.error('Error searching images:', error)
-    } finally {
+      log.error('Error searching images', error as Error)
       setLoading(false)
     }
   }
@@ -59,7 +59,7 @@ export default function UnsplashImagePicker({ onImageSelect, trigger }: Unsplash
       setImages(prev => [...prev, ...result.images])
       setPage(prev => prev + 1)
     } catch (error) {
-      console.error('Error loading more images:', error)
+      log.error('Error loading more images', error as Error)
     } finally {
       setLoading(false)
     }
@@ -90,7 +90,7 @@ export default function UnsplashImagePicker({ onImageSelect, trigger }: Unsplash
       setIsOpen(false)
       setSelectedImage(null)
     } catch (error) {
-      console.error('Error selecting image:', error)
+      log.error('Error selecting image', error as Error)
       alert('이미지 선택 중 오류가 발생했습니다.')
     } finally {
       setDownloading(false)

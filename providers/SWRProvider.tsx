@@ -44,24 +44,25 @@ export function SWRProvider({ children }: SWRProviderProps) {
         focusThrottleInterval: 5000, // 포커스 스로틀링
         loadingTimeout: 30000, // 30초 로딩 타임아웃
         
-        // 전역 에러 처리
+        // 전역 에러 처리 (개발 환경에서만 로깅)
         onError: (error: ExtendedError, key: string) => {
           if (error.status !== 403 && error.status !== 404) {
-            console.error('SWR Error:', error, 'Key:', key)
+            if (process.env.NODE_ENV === 'development') {
+              
+            }
           }
         },
         
-        // 전역 성공 처리
+        // 전역 성공 처리 (로깅 제거)
         onSuccess: (data: any, key: string, config: any) => {
-          // 성공 시 로그 (개발 환경에서만)
-          if (process.env.NODE_ENV === 'development') {
-            console.log('SWR Success:', key, data)
-          }
+          // 개발 환경에서도 성공 로그는 제거 (너무 verbose)
         },
         
-        // 전역 로딩 시작
+        // 전역 로딩 시작 (개발 환경에서만)
         onLoadingSlow: (key: string, config: any) => {
-          console.warn('SWR Slow Loading:', key)
+          if (process.env.NODE_ENV === 'development') {
+            
+          }
         },
         
         // 캐시 크기 제한

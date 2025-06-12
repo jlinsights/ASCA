@@ -108,7 +108,7 @@ export const storage = {
       const item = window.localStorage.getItem(key)
       return item ? JSON.parse(item) : defaultValue
     } catch (error) {
-      console.error(`Error reading localStorage key "${key}":`, error)
+      
       return defaultValue
     }
   },
@@ -119,7 +119,7 @@ export const storage = {
     try {
       window.localStorage.setItem(key, JSON.stringify(value))
     } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error)
+      
     }
   },
 
@@ -129,7 +129,7 @@ export const storage = {
     try {
       window.localStorage.removeItem(key)
     } catch (error) {
-      console.error(`Error removing localStorage key "${key}":`, error)
+      
     }
   },
 
@@ -139,7 +139,7 @@ export const storage = {
     try {
       window.localStorage.clear()
     } catch (error) {
-      console.error('Error clearing localStorage:', error)
+      
     }
   }
 }

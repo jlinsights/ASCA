@@ -108,7 +108,7 @@ export default function EditEventPage() {
         })
       } catch (err) {
         setError('행사를 불러오는데 실패했습니다.')
-        console.error('Error loading event:', err)
+        
       } finally {
         setInitialLoading(false)
       }
@@ -169,8 +169,8 @@ export default function EditEventPage() {
         event_type: formData.event_type as any || 'workshop',
         is_featured: formData.is_featured || false,
         is_published: isDraft ? false : (formData.is_published || false),
-        registration_fee: formData.registration_fee ? parseFloat(formData.registration_fee) : undefined,
-        max_participants: formData.max_participants ? parseInt(formData.max_participants) : undefined,
+        registration_fee: formData.registration_fee ? parseFloat(formData.registration_fee) : 0,
+        max_participants: formData.max_participants ? parseInt(formData.max_participants) : 0,
         registration_deadline: formData.registration_deadline || undefined,
         registration_required: !!formData.registration_fee || !!formData.max_participants
       }
@@ -180,7 +180,7 @@ export default function EditEventPage() {
       router.push('/admin/events')
     } catch (err) {
       setError('행사 수정에 실패했습니다.')
-      console.error('Error updating event:', err)
+      
     } finally {
       setLoading(false)
     }

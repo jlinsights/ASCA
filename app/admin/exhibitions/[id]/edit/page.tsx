@@ -94,7 +94,7 @@ export default function EditExhibitionPage() {
         })
       } catch (err) {
         setError('전시회를 불러오는데 실패했습니다.')
-        console.error('Error loading exhibition:', err)
+        
       } finally {
         setInitialLoading(false)
       }
@@ -150,7 +150,7 @@ export default function EditExhibitionPage() {
         featured_image_url: formData.featured_image_url || '',
         is_featured: formData.is_featured || false,
         is_published: isDraft ? false : (formData.is_published || false),
-        admission_fee: formData.admission_fee ? (typeof formData.admission_fee === 'string' ? parseFloat(formData.admission_fee) : formData.admission_fee) : undefined
+        admission_fee: formData.admission_fee ? (typeof formData.admission_fee === 'string' ? parseFloat(formData.admission_fee) : formData.admission_fee) : 0
       }
 
       await updateExhibition(exhibitionId, submitData)
@@ -158,7 +158,7 @@ export default function EditExhibitionPage() {
       router.push('/admin/exhibitions')
     } catch (err) {
       setError('전시회 수정에 실패했습니다.')
-      console.error('Error updating exhibition:', err)
+      
     } finally {
       setLoading(false)
     }

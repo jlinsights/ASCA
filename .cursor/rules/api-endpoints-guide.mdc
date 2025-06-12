@@ -1,0 +1,42 @@
+# API 엔드포인트 가이드
+
+## 마이그레이션 API
+
+### 상태 확인
+- [app/api/migration/status/route.ts](mdc:app/api/migration/status/route.ts): 마이그레이션 상태
+- 응답: Airtable/Supabase 레코드 수, 동기화 상태
+
+### 마이그레이션 실행
+- [app/api/migration/start/route.ts](mdc:app/api/migration/start/route.ts): 마이그레이션 시작
+- [app/api/migration/artists/route.ts](mdc:app/api/migration/artists/route.ts): Artists 전용
+
+## 동기화 API
+
+### 동기화 제어
+- [app/api/sync/start/route.ts](mdc:app/api/sync/start/route.ts): 실시간 동기화 시작
+- [app/api/sync/stop/route.ts](mdc:app/api/sync/stop/route.ts): 동기화 중지  
+- [app/api/sync/status/route.ts](mdc:app/api/sync/status/route.ts): 동기화 상태
+
+## 데이터 API
+
+### Artists 관리
+- [app/api/artists/route.ts](mdc:app/api/artists/route.ts): Artists CRUD
+- [app/api/artists/[id]/route.ts](mdc:app/api/artists/[id]/route.ts): 개별 Artist
+
+### Artworks 관리  
+- [app/api/artworks/route.ts](mdc:app/api/artworks/route.ts): Artworks CRUD
+
+## API 사용법
+```javascript
+// 마이그레이션 상태 확인
+const response = await fetch('/api/migration/status');
+const status = await response.json();
+
+// 동기화 시작
+await fetch('/api/sync/start', { method: 'POST' });
+```
+
+## 인증 및 보안
+- API 키 헤더 검증  
+- 관리자 권한 체크
+- 요청 속도 제한

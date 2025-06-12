@@ -14,17 +14,21 @@ import { AdminNavigation } from '@/components/AdminNavigation'
 import AdminProtectedRoute from '@/components/AdminProtectedRoute'
 
 interface MigrationStatus {
-  airtable: { artists: number; artworks: number; exhibitions: number };
+  airtable: { artists: number; artworks: number; exhibitions: number; events: number; notices: number };
   estimated_time: string;
   details?: {
     artists_status: 'data_available' | 'empty';
     artworks_status: 'data_available' | 'empty';
     exhibitions_status: 'data_available' | 'empty';
+    events_status: 'data_available' | 'empty';
+    notices_status: 'data_available' | 'empty';
   };
   notes?: {
     artists: string;
     artworks: string;
     exhibitions: string;
+    events: string;
+    notices: string;
   };
 }
 
@@ -35,6 +39,8 @@ interface MigrationResult {
     artists: { migrated: number; total: number };
     artworks: { migrated: number; total: number };
     exhibitions: { migrated: number; total: number };
+    events: { migrated: number; total: number };
+    notices: { migrated: number; total: number };
   };
 }
 
@@ -113,7 +119,7 @@ export default function MigrationPage() {
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-2">Airtable → Supabase 마이그레이션</h1>
             <p className="text-muted-foreground">
-              Airtable의 Artists, Artworks, Exhibitions 데이터를 Supabase로 안전하게 이전합니다.
+              Airtable의 Artists, Artworks, Exhibitions, Events, Notices 데이터를 Supabase로 안전하게 이전합니다.
             </p>
           </div>
 
@@ -171,18 +177,81 @@ export default function MigrationPage() {
                     </AlertDescription>
                   </Alert>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <div className="text-center p-4 bg-muted rounded-lg">
-                      <div className="text-2xl font-bold text-blue-600">{migrationStatus.airtable.artists}</div>
+                      <div className={`text-2xl font-bold ${migrationStatus.airtable.artists > 0 ? 'text-blue-600' : 'text-gray-400'}`}>
+                        {migrationStatus.airtable.artists}
+                      </div>
                       <div className="text-sm text-muted-foreground">Artists</div>
+                      {migrationStatus.notes && (
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {migrationStatus.notes.artists}
+                        </div>
+                      )}
                     </div>
                     <div className="text-center p-4 bg-muted rounded-lg">
-                      <div className="text-2xl font-bold text-green-600">{migrationStatus.airtable.artworks}</div>
+                      <div className={`text-2xl font-bold ${migrationStatus.airtable.artworks > 0 ? 'text-green-600' : 'text-gray-400'}`}>
+                        {migrationStatus.airtable.artworks}
+                      </div>
                       <div className="text-sm text-muted-foreground">Artworks</div>
+                      {migrationStatus.notes && (
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {migrationStatus.notes.artworks}
+                        </div>
+                      )}
+                      {migrationStatus.airtable.artworks === 0 && (
+                        <Badge variant="secondary" className="mt-2 text-xs">
+                          테이블 비어있음
+                        </Badge>
+                      )}
                     </div>
                     <div className="text-center p-4 bg-muted rounded-lg">
-                      <div className="text-2xl font-bold text-purple-600">{migrationStatus.airtable.exhibitions}</div>
+                      <div className={`text-2xl font-bold ${migrationStatus.airtable.exhibitions > 0 ? 'text-purple-600' : 'text-gray-400'}`}>
+                        {migrationStatus.airtable.exhibitions}
+                      </div>
                       <div className="text-sm text-muted-foreground">Exhibitions</div>
+                      {migrationStatus.notes && (
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {migrationStatus.notes.exhibitions}
+                        </div>
+                      )}
+                      {migrationStatus.airtable.exhibitions === 0 && (
+                        <Badge variant="secondary" className="mt-2 text-xs">
+                          테이블 비어있음
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="text-center p-4 bg-muted rounded-lg">
+                      <div className={`text-2xl font-bold ${migrationStatus.airtable.events > 0 ? 'text-orange-600' : 'text-gray-400'}`}>
+                        {migrationStatus.airtable.events}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Events</div>
+                      {migrationStatus.notes && (
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {migrationStatus.notes.events}
+                        </div>
+                      )}
+                      {migrationStatus.airtable.events === 0 && (
+                        <Badge variant="secondary" className="mt-2 text-xs">
+                          테이블 비어있음
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="text-center p-4 bg-muted rounded-lg">
+                      <div className={`text-2xl font-bold ${migrationStatus.airtable.notices > 0 ? 'text-cyan-600' : 'text-gray-400'}`}>
+                        {migrationStatus.airtable.notices}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Notices</div>
+                      {migrationStatus.notes && (
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {migrationStatus.notes.notices}
+                        </div>
+                      )}
+                      {migrationStatus.airtable.notices === 0 && (
+                        <Badge variant="secondary" className="mt-2 text-xs">
+                          테이블 비어있음
+                        </Badge>
+                      )}
                     </div>
                   </div>
                   

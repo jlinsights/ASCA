@@ -27,6 +27,7 @@ import {
   Upload
 } from 'lucide-react'
 import Link from 'next/link'
+import NextImage from 'next/image'
 import { useLanguage } from '@/contexts/language-context'
 
 // 임시 작품 데이터
@@ -271,9 +272,11 @@ export default function ArtworksManagement() {
                     {/* 작품 이미지 */}
                     <div className="relative aspect-[3/4] bg-muted rounded-t-lg overflow-hidden">
                       {artwork.imageUrl ? (
-                        <img 
+                        <NextImage 
                           src={artwork.imageUrl} 
                           alt={artwork.title}
+                          width={300}
+                          height={400}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
@@ -368,9 +371,11 @@ export default function ArtworksManagement() {
                       <div className="flex-shrink-0">
                         <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden">
                           {artwork.imageUrl ? (
-                            <img 
+                            <NextImage 
                               src={artwork.imageUrl} 
                               alt={artwork.title}
+                              width={80}
+                              height={80}
                               className="w-full h-full object-cover"
                             />
                           ) : (

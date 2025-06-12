@@ -114,8 +114,8 @@ export default function NewEventPage() {
         event_type: formData.event_type as any || 'workshop',
         is_featured: formData.is_featured || false,
         is_published: isDraft ? false : (formData.is_published || false),
-        registration_fee: formData.registration_fee ? parseFloat(formData.registration_fee) : undefined,
-        max_participants: formData.max_participants ? parseInt(formData.max_participants) : undefined,
+        registration_fee: formData.registration_fee ? parseFloat(formData.registration_fee) : 0,
+        max_participants: formData.max_participants ? parseInt(formData.max_participants) : 0,
         registration_deadline: formData.registration_deadline || undefined,
         registration_required: !!formData.registration_fee || !!formData.max_participants
       }
@@ -125,7 +125,7 @@ export default function NewEventPage() {
       router.push('/admin/events')
     } catch (err) {
       setError('행사 저장에 실패했습니다.')
-      console.error('Error creating event:', err)
+      
     } finally {
       setLoading(false)
     }

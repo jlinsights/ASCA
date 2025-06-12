@@ -105,12 +105,12 @@ class KakaoNotificationService {
       )
 
       if (success) {
-        console.log(`✅ Contest deadline notification sent to ${subscribers.length} users`)
+        
       }
 
       return success
     } catch (error) {
-      console.error('❌ Failed to send contest deadline notification:', error)
+      
       return false
     }
   }
@@ -143,12 +143,12 @@ class KakaoNotificationService {
       )
 
       if (success) {
-        console.log(`✅ Exhibition open notification sent to ${subscribers.length} users`)
+        
       }
 
       return success
     } catch (error) {
-      console.error('❌ Failed to send exhibition open notification:', error)
+      
       return false
     }
   }
@@ -187,12 +187,12 @@ class KakaoNotificationService {
       )
 
       if (success) {
-        console.log(`✅ Artist update notification sent to ${subscribers.length} users`)
+        
       }
 
       return success
     } catch (error) {
-      console.error('❌ Failed to send artist update notification:', error)
+      
       return false
     }
   }
@@ -223,12 +223,12 @@ class KakaoNotificationService {
       )
 
       if (success) {
-        console.log(`✅ General notification sent to ${subscribers.length} users`)
+        
       }
 
       return success
     } catch (error) {
-      console.error('❌ Failed to send general notification:', error)
+      
       return false
     }
   }
@@ -281,7 +281,7 @@ class KakaoNotificationService {
 
       return true
     } catch (error) {
-      console.error('❌ Failed to schedule contest reminders:', error)
+      
       return false
     }
   }
@@ -301,10 +301,10 @@ class KakaoNotificationService {
       }
 
       // Supabase나 다른 DB에 저장하는 로직
-      console.log('✅ User subscribed to notifications:', subscriber)
+      
       return true
     } catch (error) {
-      console.error('❌ Failed to subscribe user to notifications:', error)
+      
       return false
     }
   }
@@ -312,10 +312,10 @@ class KakaoNotificationService {
   async unsubscribeFromNotifications(userId: string): Promise<boolean> {
     try {
       // 실제 구현에서는 데이터베이스에서 제거
-      console.log('✅ User unsubscribed from notifications:', userId)
+      
       return true
     } catch (error) {
-      console.error('❌ Failed to unsubscribe user from notifications:', error)
+      
       return false
     }
   }
@@ -327,10 +327,10 @@ class KakaoNotificationService {
   ): Promise<boolean> {
     try {
       // 실제 구현에서는 데이터베이스 업데이트
-      console.log('✅ Notification preferences updated:', { userId, preferences })
+      
       return true
     } catch (error) {
-      console.error('❌ Failed to update notification preferences:', error)
+      
       return false
     }
   }

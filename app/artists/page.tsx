@@ -57,8 +57,8 @@ export default function ArtistsPage() {
         const artistsData = await getArtists()
         setArtists(artistsData.artists)
         setFilteredArtists(artistsData.artists)
-      } catch (error) {
-        console.error('Failed to load artists:', error)
+      } catch (error) {  
+        // Error handling without console.log
         setArtists([])
         setFilteredArtists([])
       } finally {
@@ -577,7 +577,7 @@ export default function ArtistsPage() {
                           className="flex-shrink-0"
                           onShareSuccess={() => {
                             // 공유 성공 시 통계 업데이트 등
-                            console.log(`Artist ${artist.name} shared successfully`)
+                            // 공유 성공 처리
                           }}
                         />
                       </div>
@@ -717,7 +717,7 @@ export default function ArtistsPage() {
                           className="flex-shrink-0"
                           onShareSuccess={() => {
                             // 공유 성공 시 통계 업데이트 등
-                            console.log(`Artist ${artist.name} shared successfully`)
+                            // 공유 성공 처리
                           }}
                         />
                       </div>

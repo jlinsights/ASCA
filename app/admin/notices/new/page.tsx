@@ -96,7 +96,7 @@ export default function NewNoticePage() {
       router.push('/admin/notices')
     } catch (err) {
       setError('공지사항 저장에 실패했습니다.')
-      console.error('Error creating notice:', err)
+      
     } finally {
       setLoading(false)
     }

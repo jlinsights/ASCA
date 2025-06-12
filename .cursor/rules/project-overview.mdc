@@ -1,0 +1,48 @@
+# ASCA 프로젝트 개요
+
+## 프로젝트 목적
+ASCA (한중서예교류협회) 웹사이트 및 데이터 관리 시스템
+
+## 핵심 기능
+
+### 1. Airtable-Supabase 마이그레이션
+- 완전 무료 마이그레이션 시스템
+- 직접 API 연동으로 서드파티 도구 불필요
+- 배치 처리 및 오류 복구
+
+### 2. 실시간 양방향 동기화  
+- Airtable ↔ Supabase 자동 동기화
+- 스키마 변화 자동 감지 및 적용
+- 충돌 해결 및 데이터 무결성 보장
+
+### 3. 관리자 대시보드
+- 통합 관리 인터페이스
+- 마이그레이션/동기화 모니터링
+- 사용자/작가/전시 관리
+
+## 기술 스택
+- **Frontend**: Next.js 15, React, Tailwind CSS
+- **Backend**: Next.js API Routes  
+- **Database**: Supabase (PostgreSQL)
+- **External**: Airtable API
+- **Deploy**: Vercel
+
+## 주요 디렉토리 구조
+```
+app/
+├── admin/          # 관리자 대시보드
+├── api/            # API 엔드포인트
+└── (public pages)  # 공개 페이지
+
+lib/
+├── airtable.ts           # Airtable 클라이언트
+├── airtable-migration.ts # 마이그레이션 엔진  
+└── sync-engine.ts        # 동기화 엔진
+
+scripts/
+├── *.sql           # 데이터베이스 스크립트
+└── *.js            # 유틸리티 스크립트
+```
+
+## 데이터 흐름
+Airtable → 마이그레이션/동기화 → Supabase → Next.js 앱

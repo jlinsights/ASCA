@@ -120,7 +120,7 @@ export function KakaoMap({
       
       document.head.appendChild(script)
     } catch (error) {
-      console.error('❌ Failed to load Kakao Map:', error)
+      
       setError('카카오맵 로드 중 오류가 발생했습니다')
       setIsLoading(false)
     }
@@ -163,9 +163,9 @@ export function KakaoMap({
       setIsLoading(false)
       onMapLoad?.(map)
 
-      console.log('✅ Kakao Map initialized successfully')
+      
     } catch (error) {
-      console.error('❌ Failed to initialize map:', error)
+      
       setError('지도 초기화에 실패했습니다')
       setIsLoading(false)
     }
@@ -204,7 +204,7 @@ export function KakaoMap({
         setError('검색 결과를 찾을 수 없습니다')
       }
     } catch (error) {
-      console.error('❌ Location search error:', error)
+      
       setError('위치 검색 중 오류가 발생했습니다')
     } finally {
       setIsLoading(false)

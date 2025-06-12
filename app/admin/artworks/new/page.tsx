@@ -71,7 +71,7 @@ export default function NewArtworkPage() {
         const artistsData = await getAllArtists()
         setArtists(artistsData)
       } catch (error) {
-        console.error('Error loading artists:', error)
+        
         toast({
           title: "작가 목록 로드 실패",
           description: "작가 목록을 불러오는데 실패했습니다.",
@@ -87,9 +87,9 @@ export default function NewArtworkPage() {
       const [parent, child] = field.split('.')
       setFormData(prev => ({
         ...prev,
-        [parent]: {
-          ...(prev as any)[parent],
-          [child]: value
+        [parent as string]: {
+          ...(prev as any)[parent as string],
+          [child as string]: value
         }
       }))
     } else {
@@ -186,7 +186,7 @@ export default function NewArtworkPage() {
         dimensions: {
           width: parseFloat(formData.dimensions.width) || 0,
           height: parseFloat(formData.dimensions.height) || 0,
-          depth: formData.dimensions.depth ? parseFloat(formData.dimensions.depth) : undefined,
+          depth: formData.dimensions.depth ? parseFloat(formData.dimensions.depth) : 0,
           unit: formData.dimensions.unit
         },
         price: formData.price.amount ? {
@@ -197,7 +197,7 @@ export default function NewArtworkPage() {
         featured: formData.featured,
         tags: tags.length > 0 ? tags : [],
         images: images,
-        thumbnail: images[0], // 첫 번째 이미지를 썸네일로 사용
+        thumbnail: images[0] || '', // 첫 번째 이미지를 썸네일로 사용, 없으면 빈 문자열
         condition: formData.condition || null,
         technique: formData.technique || null,
         authenticity_certificate: formData.authenticity_certificate
@@ -212,7 +212,7 @@ export default function NewArtworkPage() {
       
       router.push('/admin')
     } catch (error) {
-      console.error('Error creating artwork:', error)
+      
       toast({
         title: "등록 실패",
         description: "작품 등록 중 오류가 발생했습니다.",
@@ -230,7 +230,7 @@ export default function NewArtworkPage() {
       materials: materials,
       images: images
     }
-    console.log('미리보기:', previewData)
+    
     alert('미리보기 기능은 개발 중입니다.')
   }
 

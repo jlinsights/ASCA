@@ -10,12 +10,13 @@ import {
   Palette, 
   Folder, 
   RefreshCw,
-  Settings 
+  Settings,
+  ArrowLeftRight
 } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 
 interface AdminNavigationProps {
-  currentPage: 'notices' | 'exhibitions' | 'events' | 'files' | 'artists' | 'artworks' | 'migration'
+  currentPage: 'notices' | 'exhibitions' | 'events' | 'files' | 'artists' | 'artworks' | 'migration' | 'sync'
 }
 
 export const AdminNavigation = React.memo(({ currentPage }: AdminNavigationProps) => {
@@ -63,6 +64,12 @@ export const AdminNavigation = React.memo(({ currentPage }: AdminNavigationProps
       href: '/admin/migration',
       icon: RefreshCw,
       label: language === 'ko' ? '마이그레이션' : 'Migration'
+    },
+    {
+      key: 'sync',
+      href: '/admin/sync',
+      icon: ArrowLeftRight,
+      label: language === 'ko' ? '실시간 동기화' : 'Real-time Sync'
     }
   ], [language])
 

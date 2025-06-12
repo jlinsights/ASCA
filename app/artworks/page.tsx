@@ -42,7 +42,7 @@ function ArtworksContent() {
         const { artworks: artworksList } = await getArtworks()
         setArtworks(artworksList)
       } catch (err) {
-        console.error('Failed to load artworks:', err)
+        
         setError('작품 목록을 불러오는데 실패했습니다.')
       } finally {
         setLoading(false)
@@ -54,7 +54,7 @@ function ArtworksContent() {
 
   // 필터링 및 정렬 로직
   const filteredArtworks = useMemo(() => {
-    let filtered = artworks.filter(artwork => {
+    const filtered = artworks.filter(artwork => {
       let matchesSearch = true
       let matchesCategory = true
       let matchesStyle = true
@@ -121,18 +121,18 @@ function ArtworksContent() {
   const getCollectionStatusInfo = (artwork: Artwork) => {
     // 구매 가능한 작품
     if (artwork.availability === 'available') {
-      return {
+        return {
         text: '구매 가능',
-        subText: '문의하기',
-        className: 'text-emerald-600 dark:text-emerald-400',
-        bgClassName: 'bg-emerald-50 dark:bg-emerald-950/30'
+          subText: '문의하기',
+          className: 'text-emerald-600 dark:text-emerald-400',
+          bgClassName: 'bg-emerald-50 dark:bg-emerald-950/30'
       }
     }
 
     // 기타 상태
     switch (artwork.availability) {
       case 'sold':
-        return {
+          return {
           text: '판매완료',
           subText: '소장됨',
           className: 'text-red-600 dark:text-red-400',
@@ -289,21 +289,21 @@ function ArtworksContent() {
                 <Card key={artwork.id} className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300">
                   <div className={`relative overflow-hidden ${getImageAspectRatio(artwork)}`}>
                     <Link href={`/artworks/${artwork.id}`}>
-                      <ImageViewer
-                        images={artwork.images}
-                        title={artwork.title}
+                    <ImageViewer
+                      images={artwork.images}
+                      title={artwork.title}
                         artist={artwork.artist.name}
-                        description={artwork.description}
-                        allowDownload={artwork.category === 'calligraphy'} // 서예 작품만 다운로드 허용
-                      >
-                        <ArtworkImage
+                      description={artwork.description}
+                      allowDownload={artwork.category === 'calligraphy'} // 서예 작품만 다운로드 허용
+                    >
+                      <ArtworkImage
                           src={artwork.thumbnail}
-                          alt={artwork.title}
-                          variant="card"
-                          className="cursor-pointer transition-transform duration-300 group-hover:scale-105"
-                          fill
-                        />
-                      </ImageViewer>
+                        alt={artwork.title}
+                        variant="card"
+                        className="cursor-pointer transition-transform duration-300 group-hover:scale-105"
+                        fill
+                      />
+                    </ImageViewer>
                     </Link>
                     
                     {/* Badges */}
@@ -338,8 +338,8 @@ function ArtworksContent() {
                       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                         <Link href={`/artworks/${artwork.id}`}>
                           <h3 className="font-bold text-xl leading-tight text-foreground group-hover:text-scholar-red transition-colors duration-200 flex-grow min-w-0 cursor-pointer">
-                            {artwork.title}
-                          </h3>
+                          {artwork.title}
+                        </h3>
                         </Link>
                         <Link href={`/artists/${artwork.artist.id}`}>
                           <p className="text-base text-muted-foreground font-medium text-right whitespace-nowrap ml-auto hover:text-foreground transition-colors cursor-pointer">
@@ -543,21 +543,21 @@ function ArtworksContent() {
                 <Card key={artwork.id} className="group overflow-hidden border-0 shadow-md">
                   <div className={`relative overflow-hidden ${getImageAspectRatio(artwork)}`}>
                     <Link href={`/artworks/${artwork.id}`}>
-                      <ImageViewer
-                        images={artwork.images}
-                        title={artwork.title}
+                    <ImageViewer
+                      images={artwork.images}
+                      title={artwork.title}
                         artist={artwork.artist.name}
-                        description={artwork.description}
-                        allowDownload={artwork.category === 'calligraphy'}
-                      >
-                        <ArtworkImage
+                      description={artwork.description}
+                      allowDownload={artwork.category === 'calligraphy'}
+                    >
+                      <ArtworkImage
                           src={artwork.thumbnail}
-                          alt={artwork.title}
-                          variant="card"
-                          className="cursor-pointer"
-                          fill
-                        />
-                      </ImageViewer>
+                        alt={artwork.title}
+                        variant="card"
+                        className="cursor-pointer"
+                        fill
+                      />
+                    </ImageViewer>
                     </Link>
                     
                     {/* Mobile Badges */}
@@ -592,8 +592,8 @@ function ArtworksContent() {
                       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                         <Link href={`/artworks/${artwork.id}`}>
                           <h3 className="font-bold text-base leading-tight text-foreground group-hover:text-scholar-red transition-colors duration-200 flex-grow min-w-0 cursor-pointer">
-                            {artwork.title}
-                          </h3>
+                          {artwork.title}
+                        </h3>
                         </Link>
                         <Link href={`/artists/${artwork.artist.id}`}>
                           <p className="text-sm text-muted-foreground font-medium text-right whitespace-nowrap ml-auto hover:text-foreground transition-colors cursor-pointer">

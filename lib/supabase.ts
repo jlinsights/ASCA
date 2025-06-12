@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
+// SSR imports removed - not needed for this file
+import { log } from '@/lib/utils/logger'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
@@ -25,7 +27,10 @@ export const isSupabaseAdminConfigured = () => supabaseAdmin !== null
 
 export const getSupabaseClient = () => {
   if (!supabase) {
-    console.warn('Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.')
+    log.warn('Supabase is not configured', { 
+      hasUrl: !!supabaseUrl, 
+      hasKey: !!supabaseAnonKey 
+    })
     return null
   }
   return supabase
@@ -33,7 +38,10 @@ export const getSupabaseClient = () => {
 
 export const getSupabaseAdminClient = () => {
   if (!supabaseAdmin) {
-    console.warn('Supabase Admin is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.')
+    log.warn('Supabase Admin configuration missing', {
+      hasUrl: !!supabaseUrl,
+      hasServiceKey: !!supabaseServiceRoleKey
+    })
     return null
   }
   return supabaseAdmin
@@ -63,7 +71,7 @@ export const safeSupabaseCall = async <T>(
     const client = ensureSupabase()
     return await operation(client)
   } catch (error) {
-    console.error('Supabase operation failed:', error)
+    log.error('Supabase operation failed', error as Error)
     return null
   }
 }
@@ -76,7 +84,7 @@ export const safeSupabaseAdminCall = async <T>(
     const client = ensureSupabaseAdmin()
     return await operation(client)
   } catch (error) {
-    console.error('Supabase Admin operation failed:', error)
+    log.error('Supabase Admin operation failed', error as Error)
     return null
   }
 }
