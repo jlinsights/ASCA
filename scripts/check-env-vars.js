@@ -1,167 +1,195 @@
 #!/usr/bin/env node
 
 /**
- * 환경변수 설정 확인 스크립트
- * 동기화에 필요한 모든 환경변수가 올바르게 설정되어 있는지 확인합니다.
+ * 환경 변수 검증 스크립트
+ * 개발 환경에 필요한 환경 변수들이 올바르게 설정되었는지 확인합니다.
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
+const dotenv = require('dotenv')
 
-console.log('🔍 환경변수 설정 확인...\n');
+// .env.local 파일 로드
+const envPath = path.join(process.cwd(), '.env.local')
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath })
+}
 
-// 필수 환경변수 목록
-const requiredEnvVars = [
-  'AIRTABLE_API_KEY',
-  'AIRTABLE_BASE_ID', 
-  'NEXT_PUBLIC_SUPABASE_URL',
-  'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-  'SUPABASE_SERVICE_ROLE_KEY'
-];
+// 필수 환경 변수 정의
+const requiredEnvVars = {
+  // 기본 설정
+  NODE_ENV: {
+    required: true,
+    description: '실행 환경 (development/production)',
+    default: 'development'
+  },
+  NEXT_PUBLIC_SITE_URL: {
+    required: true,
+    description: '사이트 URL',
+    default: 'http://localhost:3000'
+  },
+  
+  // 데이터베이스 (Supabase)
+  NEXT_PUBLIC_SUPABASE_URL: {
+    required: true,
+    description: 'Supabase 프로젝트 URL',
+    validation: (value) => value.includes('supabase.co') || '올바른 Supabase URL이 아닙니다'
+  },
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: {
+    required: true,
+    description: 'Supabase 익명 키',
+    validation: (value) => value.startsWith('eyJ') || '올바른 Supabase 키 형식이 아닙니다'
+  },
+  SUPABASE_SERVICE_ROLE_KEY: {
+    required: false,
+    description: 'Supabase 서비스 역할 키 (관리자 기능용)',
+    validation: (value) => !value || value.startsWith('eyJ') || '올바른 Supabase 키 형식이 아닙니다'
+  },
+  
+  // 인증 (Clerk)
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: {
+    required: true,
+    description: 'Clerk 공개 키',
+    validation: (value) => value.startsWith('pk_') || '올바른 Clerk 공개 키 형식이 아닙니다'
+  },
+  CLERK_SECRET_KEY: {
+    required: true,
+    description: 'Clerk 비밀 키',
+    validation: (value) => value.startsWith('sk_') || '올바른 Clerk 비밀 키 형식이 아닙니다'
+  },
+  
+  // 관리자 권한
+  SUPER_ADMIN_EMAILS: {
+    required: false,
+    description: '최고 관리자 이메일 목록 (쉼표로 구분)',
+    validation: (value) => !value || value.includes('@') || '유효한 이메일 주소를 입력하세요'
+  },
+  ADMIN_EMAILS: {
+    required: false,
+    description: '관리자 이메일 목록 (쉼표로 구분)',
+    validation: (value) => !value || value.includes('@') || '유효한 이메일 주소를 입력하세요'
+  },
+}
 
-// 선택적 환경변수
-const optionalEnvVars = [
-  'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
-  'CLERK_SECRET_KEY',
-  'V0_API_KEY'
-];
+// 선택적 환경 변수 정의
+const optionalEnvVars = {
+  // 외부 API
+  AIRTABLE_API_KEY: 'Airtable API 키',
+  AIRTABLE_BASE_ID: 'Airtable 베이스 ID',
+  V0_API_KEY: 'V0 API 키',
+  UNSPLASH_ACCESS_KEY: 'Unsplash API 키',
+  
+  // 한국 시장 특화
+  NEXT_PUBLIC_CHANNEL_IO_KEY: 'Channel.io 키',
+  NEXT_PUBLIC_CAL_COM_USERNAME: 'Cal.com 사용자명',
+  NEXT_PUBLIC_KAKAO_APP_KEY: 'Kakao API 키',
+  KAKAO_ADMIN_KEY: 'Kakao 관리자 키',
+  
+  // 모니터링
+  NEXT_PUBLIC_SENTRY_DSN: 'Sentry DSN',
+  SENTRY_AUTH_TOKEN: 'Sentry 인증 토큰',
+  
+  // 개발 설정
+  DEV_ADMIN_MODE: '개발 관리자 모드',
+  USE_MOCK_DATA: '모의 데이터 사용',
+  LOG_LEVEL: '로그 레벨',
+  ENABLE_CONSOLE_LOGS: '콘솔 로그 활성화',
+}
 
-async function checkEnvironment() {
-  console.log('📁 환경변수 파일 확인...');
+function checkEnvVars() {
+  console.log('🔍 환경 변수 검증 시작...\n')
   
-  // .env.local 파일 존재 확인
-  const envLocalPath = path.join(process.cwd(), '.env.local');
-  const envLocalExists = fs.existsSync(envLocalPath);
+  let hasErrors = false
+  let hasWarnings = false
   
-  console.log(`   .env.local: ${envLocalExists ? '✅ 존재함' : '❌ 없음'}`);
-  
-  if (!envLocalExists) {
-    console.log('\n⚠️ .env.local 파일이 없습니다.');
-    console.log('💡 env.example 파일을 복사하여 .env.local을 만들고 실제 값으로 채워주세요:');
-    console.log('   cp env.example .env.local');
-    return;
-  }
-
-  console.log('\n🔑 필수 환경변수 확인...');
-  
-  let missingVars = [];
-  let setVars = [];
-  
-  requiredEnvVars.forEach(varName => {
-    const value = process.env[varName];
+  // 필수 환경 변수 검증
+  console.log('📋 필수 환경 변수 검사:')
+  for (const [key, config] of Object.entries(requiredEnvVars)) {
+    const value = process.env[key]
     
-    if (!value || value.includes('your_') || value.includes('_here')) {
-      missingVars.push(varName);
-      console.log(`   ${varName}: ❌ 미설정 또는 기본값`);
+    if (!value) {
+      if (config.required) {
+        console.error(`❌ ${key}: 누락됨 - ${config.description}`)
+        if (config.default) {
+          console.log(`   기본값 사용 가능: ${config.default}`)
+        }
+        hasErrors = true
+      } else {
+        console.warn(`⚠️  ${key}: 선택사항 - ${config.description}`)
+        hasWarnings = true
+      }
     } else {
-      setVars.push(varName);
-      // 민감한 정보는 마스킹해서 표시
-      const maskedValue = value.length > 8 ? 
-        value.substring(0, 8) + '*'.repeat(value.length - 8) : 
-        '*'.repeat(value.length);
-      console.log(`   ${varName}: ✅ 설정됨 (${maskedValue})`);
+      // 유효성 검증
+      if (config.validation) {
+        const validationResult = config.validation(value)
+        if (validationResult !== true) {
+          console.error(`❌ ${key}: ${validationResult}`)
+          hasErrors = true
+        } else {
+          console.log(`✅ ${key}: 설정됨`)
+        }
+      } else {
+        console.log(`✅ ${key}: 설정됨`)
+      }
     }
-  });
-
-  console.log('\n🔧 선택적 환경변수 확인...');
-  optionalEnvVars.forEach(varName => {
-    const value = process.env[varName];
-    const isSet = value && !value.includes('your_') && !value.includes('_here');
-    console.log(`   ${varName}: ${isSet ? '✅ 설정됨' : '⚪ 미설정'}`);
-  });
-
-  // Airtable 연결 테스트
-  if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
-    console.log('\n🔗 Airtable 연결 테스트...');
-    await testAirtableConnection();
   }
-
-  // Supabase 연결 테스트  
-  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    console.log('\n🔗 Supabase 연결 테스트...');
-    await testSupabaseConnection();
-  }
-
-  // 결과 요약
-  console.log('\n📊 환경변수 설정 요약:');
-  console.log(`   ✅ 설정된 필수 변수: ${setVars.length}/${requiredEnvVars.length}`);
-  console.log(`   ❌ 누락된 필수 변수: ${missingVars.length}`);
-
-  if (missingVars.length > 0) {
-    console.log('\n⚠️ 다음 환경변수를 설정해야 합니다:');
-    missingVars.forEach(varName => {
-      console.log(`   - ${varName}`);
-    });
+  
+  // 선택적 환경 변수 검증
+  console.log('\n📋 선택적 환경 변수 검사:')
+  for (const [key, description] of Object.entries(optionalEnvVars)) {
+    const value = process.env[key]
     
-    console.log('\n💡 설정 가이드:');
-    console.log('   1. .env.local 파일을 열어주세요');
-    console.log('   2. 각 서비스의 실제 키값으로 교체해주세요');
-    console.log('   3. 개발 서버를 재시작해주세요 (npm run dev)');
+    if (value) {
+      console.log(`✅ ${key}: 설정됨`)
+    } else {
+      console.log(`⭕ ${key}: 미설정 - ${description}`)
+    }
+  }
+  
+  // .env.local 파일 존재 여부 확인
+  console.log('\n📁 환경 파일 검사:')
+  if (fs.existsSync(envPath)) {
+    console.log(`✅ .env.local: 존재함`)
   } else {
-    console.log('\n✅ 모든 필수 환경변수가 설정되었습니다!');
+    console.warn(`⚠️  .env.local: 없음 - .env.example을 복사하여 생성하세요`)
+    console.log(`   명령어: cp .env.example .env.local`)
+    hasWarnings = true
   }
+  
+  // 결과 요약
+  console.log('\n' + '='.repeat(50))
+  if (hasErrors) {
+    console.error('❌ 환경 변수 검증 실패!')
+    console.error('필수 환경 변수가 누락되었습니다.')
+    console.log('\n🔧 해결 방법:')
+    console.log('1. .env.example 파일을 참고하여 .env.local 파일 생성')
+    console.log('2. 필요한 API 키들을 각 서비스에서 발급받아 설정')
+    console.log('3. npm run env:example 명령어로 기본 템플릿 생성 가능')
+    process.exit(1)
+  } else if (hasWarnings) {
+    console.warn('⚠️  환경 변수 검증 완료 (경고 있음)')
+    console.log('선택적 환경 변수들이 미설정되어 있습니다.')
+    console.log('필요에 따라 설정하시기 바랍니다.')
+  } else {
+    console.log('✅ 환경 변수 검증 완료!')
+    console.log('모든 필수 환경 변수가 올바르게 설정되었습니다.')
+  }
+  
+  // 개발 환경 정보 출력
+  if (process.env.NODE_ENV === 'development') {
+    console.log('\n🚀 개발 환경 정보:')
+    console.log(`📍 사이트 URL: ${process.env.NEXT_PUBLIC_SITE_URL}`)
+    console.log(`🔧 개발 모드: ${process.env.NEXT_PUBLIC_DEV_MODE === 'true' ? '활성화' : '비활성화'}`)
+    console.log(`🛡️  관리자 모드: ${process.env.DEV_ADMIN_MODE === 'true' ? '활성화' : '비활성화'}`)
+    console.log(`📝 로그 레벨: ${process.env.LOG_LEVEL || 'info'}`)
+  }
+  
+  console.log('')
 }
 
-async function testAirtableConnection() {
-  try {
-    const Airtable = require('airtable');
-    const base = new Airtable({ 
-      apiKey: process.env.AIRTABLE_API_KEY 
-    }).base(process.env.AIRTABLE_BASE_ID);
-
-    // Artists 테이블에서 1개 레코드만 가져와서 테스트
-    const records = await base('Artists').select({
-      maxRecords: 1
-    }).firstPage();
-
-    console.log(`   ✅ Airtable 연결 성공 (Artists 테이블: ${records.length > 0 ? '데이터 있음' : '데이터 없음'})`);
-    
-    if (records.length > 0) {
-      const sampleRecord = records[0];
-      const fieldCount = Object.keys(sampleRecord.fields).length;
-      console.log(`   📊 샘플 레코드 필드 수: ${fieldCount}개`);
-    }
-    
-  } catch (error) {
-    console.log(`   ❌ Airtable 연결 실패: ${error.message}`);
-    
-    if (error.message.includes('AUTHENTICATION_REQUIRED')) {
-      console.log('   💡 API 키를 확인해주세요');
-    } else if (error.message.includes('NOT_FOUND')) {
-      console.log('   💡 Base ID나 테이블명을 확인해주세요');
-    }
-  }
+// 스크립트 실행
+if (require.main === module) {
+  checkEnvVars()
 }
 
-async function testSupabaseConnection() {
-  try {
-    const { createClient } = require('@supabase/supabase-js');
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
-
-    // 간단한 쿼리로 연결 테스트
-    const { data, error } = await supabase
-      .from('artists')
-      .select('count', { count: 'exact', head: true });
-
-    if (error) {
-      throw error;
-    }
-
-    console.log(`   ✅ Supabase 연결 성공 (artists 테이블 레코드 수: ${data || 0}개)`);
-
-  } catch (error) {
-    console.log(`   ❌ Supabase 연결 실패: ${error.message}`);
-    
-    if (error.message.includes('Invalid API key')) {
-      console.log('   💡 Supabase API 키를 확인해주세요');
-    } else if (error.message.includes('relation') && error.message.includes('does not exist')) {
-      console.log('   💡 데이터베이스 테이블이 생성되지 않았을 수 있습니다');
-    }
-  }
-}
-
-// 실행
-checkEnvironment().catch(console.error); 
+module.exports = { checkEnvVars } 
