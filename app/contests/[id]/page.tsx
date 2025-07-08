@@ -26,6 +26,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Route } from 'next'
 import type { Contest } from '@/types/contest'
 
 // 샘플 데이터 (실제로는 API에서 가져옴)
@@ -331,7 +332,7 @@ export default function ContestDetailPage() {
                   
                   {canSubmit() ? (
                     <Button asChild className="w-full" size="lg">
-                      <Link href={`/contests/${contest.id}/submit`}>
+                      <Link href={`/contests/${contest.id}/submit` as Route}>
                         지금 출품하기
                       </Link>
                     </Button>

@@ -10,8 +10,8 @@ import { CheckCircle, XCircle, AlertCircle, Download, Upload, Database, Settings
 import Link from 'next/link'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { AdminNavigation } from '@/components/AdminNavigation'
-import AdminProtectedRoute from '@/components/AdminProtectedRoute'
+import { AdminNavigation } from '@/components/admin-navigation'
+import AdminProtectedRoute from '@/components/admin-protected-route'
 
 interface MigrationStatus {
   airtable: { artists: number; artworks: number; exhibitions: number; events: number; notices: number };

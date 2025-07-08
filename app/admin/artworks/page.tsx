@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { AdminNavigation } from '@/components/AdminNavigation'
-import AdminProtectedRoute from '@/components/AdminProtectedRoute'
+import { AdminNavigation } from '@/components/admin-navigation'
+import AdminProtectedRoute from '@/components/admin-protected-route'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -281,7 +281,7 @@ export default function ArtworksManagement() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Image className="h-12 w-12 text-muted-foreground" />
+                          <Image className="h-12 w-12 text-muted-foreground" aria-label="작품 이미지 없음" />
                         </div>
                       )}
                       
@@ -380,7 +380,7 @@ export default function ArtworksManagement() {
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <Image className="h-6 w-6 text-muted-foreground" />
+                              <Image className="h-6 w-6 text-muted-foreground" aria-label="작품 이미지 없음" />
                             </div>
                           )}
                         </div>

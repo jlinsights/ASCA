@@ -18,7 +18,7 @@ import Image from 'next/image'
 import { createArtist, uploadImage } from '@/lib/admin-api'
 import { toast } from '@/hooks/use-toast'
 import { ImageUpload } from '@/components/ui/image-upload'
-import { ArtistPreview } from '@/components/ArtistPreview'
+import { ArtistPreview } from '@/components/artist-preview'
 
 export default function NewArtistPage() {
   const router = useRouter()

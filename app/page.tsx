@@ -5,7 +5,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { TranslatedContent } from "@/components/translated-content"
 import { ArrowRight, Calendar, Users, Eye, MapPin } from "lucide-react"
-import CalligraphyText from "@/components/CalligraphyText"
+import CalligraphyText from "@/components/calligraphy-text"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {

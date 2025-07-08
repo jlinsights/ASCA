@@ -759,27 +759,20 @@ export default function NewsPage() {
                         </div>
                 
                 {/* 수상자 명단 이미지 (ID가 5인 뉴스에만 표시) */}
-                {selectedNews.id === '5' && (
+                {selectedNews && selectedNews.id === '5' && (
                   <div className="my-6">
                     <div className="bg-gradient-to-r from-celadon/10 to-transparent p-6 rounded-lg border border-celadon/20">
                       <h3 className="text-lg font-semibold mb-4 text-celadon">
                         {language === 'ko' ? '제22회 대한민국 동양서예대전 공모전 수상자 명단' : '22nd Korea Oriental Calligraphy Competition Winners List'}
                       </h3>
                       <div className="bg-white rounded-lg p-4 shadow-sm">
-                        <img 
+                        <Image 
                           src="/images/news/award-winners-2024.jpg" 
                           alt={language === 'ko' ? '제22회 수상자 명단' : '22nd Competition Winners List'}
                           className="w-full h-auto rounded-lg border border-gray-200"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
-                            if (placeholder) placeholder.classList.remove('hidden');
-                          }}
+                          width={800}
+                          height={600}
                         />
-                        <div className="hidden bg-gray-100 rounded-lg p-8 text-center text-gray-500">
-                          <p>{language === 'ko' ? '수상자 명단 이미지를 준비 중입니다.' : 'Winners list image is being prepared.'}</p>
-                          <p className="text-sm mt-2">{language === 'ko' ? '이미지 파일을 public/images/news/award-winners-2024.jpg 경로에 업로드해주세요.' : 'Please upload the image file to public/images/news/award-winners-2024.jpg'}</p>
-                        </div>
                       </div>
                       <p className="text-sm text-muted-foreground mt-2">
                         {language === 'ko' 
