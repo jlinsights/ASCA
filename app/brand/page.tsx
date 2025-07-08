@@ -5,12 +5,13 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Logo } from "@/components/logo"
 import { useLanguage } from "@/contexts/language-context"
-import CalligraphyText from "@/components/CalligraphyText"
+import CalligraphyText from "@/components/calligraphy-text"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Download, Eye, Palette, Type, Target, Globe, Users, TrendingUp, Layers } from "lucide-react"
+import Image from 'next/image'
 
 export default function BrandGuidelinesPage() {
   const [activeTab, setActiveTab] = useState("brand-strategy")
@@ -446,7 +447,7 @@ export default function BrandGuidelinesPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="variation-preview bg-white p-4 rounded border">
-                      <img 
+                      <Image 
                         src="/logo/Logo & Slogan_white BG.png" 
                         alt="ASCA Logo with Slogan" 
                         width={200} 
@@ -466,7 +467,7 @@ export default function BrandGuidelinesPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="variation-preview bg-gray-900 p-4 rounded border">
-                      <img 
+                      <Image 
                         src="/logo/Logo & Slogan_black BG.png" 
                         alt="ASCA Logo with Slogan" 
                         width={200} 

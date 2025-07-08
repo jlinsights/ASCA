@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { AdminNavigation } from '@/components/AdminNavigation'
-import AdminProtectedRoute from '@/components/AdminProtectedRoute'
+import { AdminNavigation } from '@/components/admin-navigation'
+import AdminProtectedRoute from '@/components/admin-protected-route'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -26,6 +26,7 @@ import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
 import { getArtists } from '@/lib/api/artists'
 import type { Database } from '@/lib/supabase'
+import Image from 'next/image'
 
 // Supabase 작가 타입
 type Artist = Database['public']['Tables']['artists']['Row']
@@ -242,10 +243,13 @@ export default function ArtistsManagement() {
                     <div className="flex-shrink-0">
                       <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center">
                         {artist.profile_image ? (
-                          <img 
+                          <Image 
                             src={artist.profile_image} 
                             alt={artist.name}
+                            width={96}
+                            height={96}
                             className="w-full h-full object-cover rounded-lg"
+                            unoptimized
                           />
                         ) : (
                           <Users className="h-8 w-8 text-muted-foreground" />
