@@ -166,5 +166,8 @@
     "typescript": "^5",
     "wait-on": "^7.2.0",
     "webpack-bundle-analyzer": "^4.10.1"
+  },
+  "jest": {
+    "preset": "./config/build/jest.config.js"
   }
 }

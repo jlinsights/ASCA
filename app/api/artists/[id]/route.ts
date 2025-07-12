@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getArtist } from '@/lib/api/artists'
+import { handleApiError, AppError } from '@/lib/utils/error-handler'
+import { log } from '@/lib/utils/logger'
 
 type RouteParams = {
   params: Promise<{ id: string }>
@@ -29,14 +31,8 @@ export async function GET(
     })
 
   } catch (error) {
-    
-    
-    return NextResponse.json(
-      {
-        success: false,
-        message: error instanceof Error ? error.message : 'Failed to fetch artist'
-      },
-      { status: 500 }
-    )
+    log.error('GET /api/artists/[id] error', error, { url: request.url })
+    const errRes = handleApiError(error)
+    return NextResponse.json(errRes, { status: errRes.statusCode || 500 })
   }
 } 

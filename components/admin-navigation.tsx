@@ -24,12 +24,6 @@ export const AdminNavigation = React.memo(({ currentPage }: AdminNavigationProps
 
   const navItems = useMemo(() => [
     {
-      key: 'notices',
-      href: '/admin/notices',
-      icon: FileText,
-      label: language === 'ko' ? '공지사항' : 'Notices'
-    },
-    {
       key: 'exhibitions', 
       href: '/admin/exhibitions',
       icon: Star,
@@ -97,7 +91,7 @@ export const AdminNavigation = React.memo(({ currentPage }: AdminNavigationProps
             const isCurrent = item.key === currentPage
             
             return (
-              <Link key={item.key} href={item.href} prefetch={true}>
+              <Link key={item.key} href={item.href as string} prefetch={true}>
                 <Button 
                   variant={isCurrent ? "secondary" : "ghost"} 
                   size="sm" 

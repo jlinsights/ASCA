@@ -105,18 +105,65 @@ const nextConfig = {
   // 압축 설정
   compress: true,
   
-  // 개발 서버 전용 헤더
+  // 보안 헤더 및 CORS 설정
   headers: async () => {
     const headers = []
     
-    // 개발 환경에서 CORS 허용
+    // 보안 헤더 (모든 페이지에 적용)
+    headers.push({
+      source: '/(.*)',
+      headers: [
+        // Content Security Policy
+        {
+          key: 'Content-Security-Policy',
+          value: process.env.NODE_ENV === 'development' 
+            ? "default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https: ws: wss:;"
+            : "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:;"
+        },
+        // XSS Protection
+        { key: 'X-XSS-Protection', value: '1; mode=block' },
+        // Content Type Options
+        { key: 'X-Content-Type-Options', value: 'nosniff' },
+        // Frame Options
+        { key: 'X-Frame-Options', value: 'DENY' },
+        // Referrer Policy
+        { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        // Permissions Policy
+        { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+      ],
+    })
+
+    // HSTS (프로덕션에서만)
+    if (process.env.NODE_ENV === 'production') {
+      headers.push({
+        source: '/(.*)',
+        headers: [
+          { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+        ],
+      })
+    }
+
+    // API 라우트용 제한적 CORS (개발환경에서만 느슨하게)
     if (process.env.NODE_ENV === 'development') {
       headers.push({
         source: '/api/:path*',
         headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Origin', value: 'http://localhost:3000' },
           { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
-          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization, X-CSRF-Token' },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+        ],
+      })
+    } else {
+      // 프로덕션에서는 매우 제한적인 CORS
+      headers.push({
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization, X-CSRF-Token' },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Max-Age', value: '86400' },
         ],
       })
     }

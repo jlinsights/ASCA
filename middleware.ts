@@ -1,14 +1,16 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { getAuth } from '@clerk/nextjs/server'
+import { clerkClient } from '@clerk/nextjs/server'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const isDev = process.env.NODE_ENV === 'development'
   
   // 개발 환경에서 요청 로깅
-  if (isDev && process.env.ENABLE_CONSOLE_LOGS === 'true') {
-    console.log(`🔍 [${new Date().toISOString()}] ${request.method} ${pathname}`)
-  }
+  // if (isDev && process.env.ENABLE_CONSOLE_LOGS === 'true') {
+  //   console.log(`🔍 [${new Date().toISOString()}] ${request.method} ${pathname}`)
+  // }
 
   // 정적 파일들은 바로 통과
   if (
@@ -38,8 +40,26 @@ export function middleware(request: NextRequest) {
 
     // 개발 모드에서 관리자 권한 체크 우회 (보안 주의!)
     if (isDev && process.env.DEV_ADMIN_MODE === 'true') {
-      console.warn('⚠️  개발 모드: 관리자 권한 체크 우회됨')
+      // console.warn('⚠️  개발 모드: 관리자 권한 체크 우회됨')
       return response
+    }
+
+    // Clerk 인증 정보에서 관리자 2FA 미등록 시 /profile로 리다이렉트
+    try {
+      const auth = getAuth(request)
+      const claims = auth.sessionClaims as any
+      if (
+        auth.userId &&
+        claims?.publicMetadata?.role === 'admin' &&
+        claims?.twoFactorEnabled === false
+      ) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/profile'
+        url.searchParams.set('require2fa', '1')
+        return NextResponse.redirect(url)
+      }
+    } catch (e) {
+      // Clerk 인증 정보가 없거나 파싱 실패 시 무시
     }
 
     // 클라이언트 사이드에서 인증 상태를 확인하도록 허용
