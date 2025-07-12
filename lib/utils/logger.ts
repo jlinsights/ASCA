@@ -6,7 +6,8 @@ export enum LogLevel {
   ERROR = 3,
 }
 
-interface LogEntry {
+// LogEntry 타입 정의 보강
+export type LogEntry = {
   level: LogLevel
   message: string
   timestamp: string
@@ -47,8 +48,9 @@ class Logger {
     
     const entry = this.createEntry(LogLevel.DEBUG, message, context)
     if (this.isDevelopment) {
-      
+      console.debug(this.formatMessage(entry), context || '')
     }
+    this.writeToFile(entry)
   }
 
   info(message: string, context?: Record<string, any>) {
@@ -56,26 +58,42 @@ class Logger {
     
     const entry = this.createEntry(LogLevel.INFO, message, context)
     if (this.isDevelopment) {
-      
+      console.info(this.formatMessage(entry), context || '')
     }
+    this.writeToFile(entry)
   }
 
   warn(message: string, context?: Record<string, any>) {
     if (!this.shouldLog(LogLevel.WARN)) return
     
     const entry = this.createEntry(LogLevel.WARN, message, context)
-    
+    console.warn(this.formatMessage(entry), context || '')
+    this.writeToFile(entry)
   }
 
   error(message: string, error?: Error, context?: Record<string, any>) {
     if (!this.shouldLog(LogLevel.ERROR)) return
     
     const entry = this.createEntry(LogLevel.ERROR, message, context, error)
-    
+    console.error(this.formatMessage(entry), error?.stack || error, context || '')
+    this.writeToFile(entry)
     
     // 프로덕션에서는 외부 로깅 서비스로 전송
     if (!this.isDevelopment) {
       this.sendToLoggingService(entry)
+    }
+  }
+
+  private writeToFile(entry: LogEntry) {
+    // 서버사이드에서만 파일 로깅
+    if (typeof window === 'undefined') {
+      try {
+        // 파일 시스템 로깅은 프로덕션에서 구현
+        const logData = JSON.stringify(entry) + '\n'
+        // fs.appendFileSync('logs/app.log', logData)
+      } catch (error) {
+        // 파일 로깅 실패는 무시
+      }
     }
   }
 
@@ -128,12 +146,27 @@ export const logger = new Logger()
 
 // 편의 함수들
 export const log = {
-  debug: (message: string, context?: Record<string, any>) => logger.debug(message, context),
-  info: (message: string, context?: Record<string, any>) => logger.info(message, context),
-  warn: (message: string, context?: Record<string, any>) => logger.warn(message, context),
-  error: (message: string, error?: Error, context?: Record<string, any>) => logger.error(message, error, context),
-  time: (label: string) => logger.time(label),
-  timeEnd: (label: string) => logger.timeEnd(label),
-  group: (label: string) => logger.group(label),
-  groupEnd: () => logger.groupEnd(),
+  info: (...args: unknown[]) => {
+    if (process.env.LOG_LEVEL === 'debug' || process.env.LOG_LEVEL === 'info') {
+      // eslint-disable-next-line no-console
+      console.info('[INFO]', ...args)
+    }
+  },
+  warn: (...args: unknown[]) => {
+    if (['debug', 'info', 'warn'].includes(process.env.LOG_LEVEL || '')) {
+      // eslint-disable-next-line no-console
+      console.warn('[WARN]', ...args)
+    }
+  },
+  error: (...args: unknown[]) => {
+    // eslint-disable-next-line no-console
+    console.error('[ERROR]', ...args)
+    // TODO: Sentry 등 외부 연동
+  },
+  debug: (...args: unknown[]) => {
+    if (process.env.LOG_LEVEL === 'debug') {
+      // eslint-disable-next-line no-console
+      console.debug('[DEBUG]', ...args)
+    }
+  },
 } 

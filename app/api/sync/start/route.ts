@@ -1,39 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { syncEngine } from '@/lib/sync-engine'
+
+// 🚨 SECURITY: This endpoint has been temporarily disabled due to security vulnerabilities
+// 🔒 REASON: No authentication check - allows unauthorized sync engine control
+// 📅 DISABLED: 2025-07-12
+// 💾 BACKUP: Available in api-backup/ directory
+// 🔧 TODO: Implement proper admin authentication before re-enabling
 
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json().catch(() => ({}))
-    const { intervalMs = 60000 } = body
-
-    // 동기화 엔진 시작
-    await syncEngine.start(intervalMs)
-
-    return NextResponse.json({
-      success: true,
-      message: '동기화 엔진이 성공적으로 시작되었습니다.',
-      interval: intervalMs
-    })
-
-  } catch (error) {
-    
-    return NextResponse.json(
-      { 
-        success: false,
-        error: '동기화 엔진 시작에 실패했습니다.',
-        details: error instanceof Error ? error.message : String(error)
-      },
-      { status: 500 }
-    )
-  }
+  return NextResponse.json(
+    {
+      success: false,
+      message: 'SECURITY: Sync start endpoint temporarily disabled',
+      reason: 'This endpoint has been disabled due to security vulnerabilities. Authentication required.',
+      disabledAt: '2025-07-12',
+      contact: 'Contact admin to re-enable with proper security measures'
+    },
+    { status: 503 } // Service Unavailable
+  )
 }
 
 export async function GET() {
-  return NextResponse.json({
-    message: 'POST 요청으로 동기화 엔진을 시작하세요.',
-    example: {
-      method: 'POST',
-      body: { intervalMs: 60000 }
-    }
-  })
+  return NextResponse.json(
+    {
+      success: false,
+      message: 'SECURITY: Sync endpoint temporarily disabled',
+      reason: 'Authentication required for sync operations',
+      disabledAt: '2025-07-12'
+    },
+    { status: 503 }
+  )
 } 

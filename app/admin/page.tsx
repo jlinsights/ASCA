@@ -165,12 +165,6 @@ export default function AdminDashboard() {
   // 빠른 액션 버튼 설정 메모이제이션
   const quickActions = useMemo(() => [
     {
-      href: '/admin/notices/new',
-      icon: FileText,
-      title: language === 'ko' ? '새 공지사항' : 'New Notice',
-      color: 'bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950/50 dark:hover:bg-blue-950/70 dark:text-blue-300 dark:border-blue-800'
-    },
-    {
       href: '/admin/exhibitions/new',
       icon: Star,
       title: language === 'ko' ? '새 전시회' : 'New Exhibition',
@@ -357,25 +351,19 @@ export default function AdminDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-            <Link href="/admin/notices" prefetch={true}>
-              <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
-                      <FileText className="h-4 w-4 mr-2" />
-                      {language === 'ko' ? '공지사항 관리' : 'Manage Notices'}
-                    </Button>
-                  </Link>
-            <Link href="/admin/exhibitions" prefetch={true}>
+            <Link href={"/admin/exhibitions"} prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
                       <Star className="h-4 w-4 mr-2" />
                       {language === 'ko' ? '전시회 관리' : 'Manage Exhibitions'}
                     </Button>
                   </Link>
-            <Link href="/admin/events" prefetch={true}>
+            <Link href={"/admin/events"} prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
                       <Calendar className="h-4 w-4 mr-2" />
                       {language === 'ko' ? '행사 관리' : 'Manage Events'}
                     </Button>
                   </Link>
-            <Link href="/admin/files" prefetch={true}>
+            <Link href={"/admin/files"} prefetch={true}>
               <Button className="w-full justify-start hover:bg-accent/50 text-sm" variant="ghost">
                 <Folder className="h-4 w-4 mr-2" />
                 {language === 'ko' ? '파일 관리' : 'Manage Files'}

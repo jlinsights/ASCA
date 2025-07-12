@@ -14,23 +14,19 @@ import { getNotices } from "@/lib/supabase/cms"
 import { searchNotices, AdvancedSearchFilters } from "@/lib/supabase/search"
 import SimpleSearch from "@/components/search/SimpleSearch"
 import type { Notice, SearchFilters, PaginationParams } from "@/types/cms"
+import Link from "next/link"
 
 const categoryColors = {
-  "exhibition": "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-300 dark:border-red-800",
-  "education": "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-300 dark:border-blue-800",
-  "competition": "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300 dark:border-emerald-800",
-  "general": "bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-950/30 dark:text-slate-300 dark:border-slate-800",
-  "meeting": "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/30 dark:text-purple-300 dark:border-purple-800",
-  "exchange": "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/30 dark:text-orange-300 dark:border-orange-800"
+  general: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+  event: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+  announcement: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+  urgent: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
 }
-
 const categoryLabels = {
-  "exhibition": "전시회",
-  "education": "교육",
-  "competition": "공모전",
-  "general": "일반",
-  "meeting": "총회",
-  "exchange": "교류전"
+  general: '일반',
+  event: '행사',
+  announcement: '공지',
+  urgent: '긴급'
 }
 
 export default function NoticePage() {
@@ -70,10 +66,9 @@ export default function NoticePage() {
       
       if (searchQuery.trim()) {
         // 검색어가 있는 경우
-        const searchFilters = {
-          category: selectedCategory !== "all" ? selectedCategory : undefined,
-          status: 'published'
-        }
+        const searchFilters: SearchFilters = {}
+        if (selectedCategory !== "all") searchFilters.category = selectedCategory
+        searchFilters.status = 'published'
         
         const response = await searchNotices(searchQuery.trim(), searchFilters)
         setNotices(response.data)
@@ -222,49 +217,55 @@ export default function NoticePage() {
               </div>
               <div className="space-y-4">
                 {pinnedNotices.map((notice) => (
-                  <Card key={notice.id} className="border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20 shadow-sm hover:shadow-md transition-all duration-200">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <Pin className="h-4 w-4 text-red-500 mt-1" />
-                          <Badge className={categoryColors[notice.category as keyof typeof categoryColors]}>
-                            {categoryLabels[notice.category as keyof typeof categoryLabels]}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Eye className="h-4 w-4" />
-                            <span className="font-medium">{notice.views}</span>
+                  <Link key={notice.id} href={`/notice/${notice.id}`} className="block">
+                    <Card className="border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20 shadow-sm hover:shadow-md transition-all duration-200">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <Badge className={categoryColors[notice.category as keyof typeof categoryColors]}>
+                              {categoryLabels[notice.category as keyof typeof categoryLabels]}
+                            </Badge>
+                            {notice.is_pinned && (
+                              <Badge variant="secondary" className="flex items-center gap-1">
+                                <Pin className="h-3 w-3" />
+                                고정
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Eye className="h-4 w-4" />
+                              <span className="font-medium">{notice.views}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      
-                      <h3 className="text-lg font-bold mb-3 text-foreground hover:text-primary cursor-pointer transition-colors">
-                        {notice.title}
-                      </h3>
-                      
-                      <p className="text-muted-foreground mb-4 leading-relaxed">
-                        {notice.excerpt || notice.content.substring(0, 200) + '...'}
-                      </p>
-                      
-                      <div className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-4 text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            <span>{formatDate(notice.published_at)}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <User className="h-4 w-4" />
-                            <span>{notice.author_name || '관리자'}</span>
+                        <h3 className="text-lg font-bold mb-3 text-foreground group-hover:text-primary cursor-pointer transition-colors">
+                          {notice.title}
+                        </h3>
+                        <div className="prose prose-slate dark:prose-invert max-w-none mb-4">
+                          <div className="whitespace-pre-wrap text-foreground leading-relaxed">
+                            {notice.excerpt || notice.content.substring(0, 200) + '...'}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 text-muted-foreground">
-                          <Clock className="h-4 w-4" />
-                          <span>{formatRelativeTime(notice.published_at)}</span>
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-4 text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-4 w-4" />
+                              <span>{formatDate(notice.published_at)}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <User className="h-4 w-4" />
+                              <span>{notice.author_name || '관리자'}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 text-muted-foreground">
+                            <Clock className="h-4 w-4" />
+                            <span>{formatRelativeTime(notice.published_at)}</span>
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -274,48 +275,65 @@ export default function NoticePage() {
           <div>
             <h2 className="text-xl font-bold mb-6 text-foreground">{t("generalNotice")}</h2>
             <div className="space-y-4">
-              {regularNotices.map((notice) => (
-                <Card key={notice.id} className="border-border/50 shadow-sm hover:shadow-md hover:border-border transition-all duration-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <Badge className={categoryColors[notice.category as keyof typeof categoryColors]}>
-                        {categoryLabels[notice.category as keyof typeof categoryLabels]}
-                      </Badge>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Eye className="h-4 w-4" />
-                          <span className="font-medium">{notice.views}</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <h3 className="text-lg font-bold mb-3 text-foreground hover:text-primary cursor-pointer transition-colors">
-                      {notice.title}
-                    </h3>
-                    
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
-                      {notice.excerpt || notice.content.substring(0, 200) + '...'}
-                    </p>
-                    
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-4 text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{formatDate(notice.published_at)}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <User className="h-4 w-4" />
-                          <span>{notice.author_name || '관리자'}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <Clock className="h-4 w-4" />
-                        <span>{formatRelativeTime(notice.published_at)}</span>
-                      </div>
-                    </div>
+              {regularNotices.length === 0 ? (
+                <Card className="border-border/50 shadow-sm">
+                  <CardContent className="p-6 text-center text-muted-foreground">
+                    등록된 공지사항이 없습니다.
                   </CardContent>
                 </Card>
-              ))}
+              ) : (
+                regularNotices.map((notice) => (
+                  <Link key={notice.id} href={`/notice/${notice.id}`} className="block">
+                    <Card className="border-border/50 shadow-sm hover:shadow-md hover:border-border transition-all duration-200">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <Badge className={categoryColors[notice.category as keyof typeof categoryColors]}>
+                              {categoryLabels[notice.category as keyof typeof categoryLabels]}
+                            </Badge>
+                            {notice.is_pinned && (
+                              <Badge variant="secondary" className="flex items-center gap-1">
+                                <Pin className="h-3 w-3" />
+                                고정
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Eye className="h-4 w-4" />
+                              <span className="font-medium">{notice.views}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <h3 className="text-lg font-bold mb-3 text-foreground group-hover:text-primary cursor-pointer transition-colors">
+                          {notice.title}
+                        </h3>
+                        <div className="prose prose-slate dark:prose-invert max-w-none mb-4">
+                          <div className="whitespace-pre-wrap text-foreground leading-relaxed">
+                            {notice.excerpt || notice.content.substring(0, 200) + '...'}
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-4 text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-4 w-4" />
+                              <span>{formatDate(notice.published_at)}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <User className="h-4 w-4" />
+                              <span>{notice.author_name || '관리자'}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 text-muted-foreground">
+                            <Clock className="h-4 w-4" />
+                            <span>{formatRelativeTime(notice.published_at)}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))
+              )}
             </div>
           </div>
 

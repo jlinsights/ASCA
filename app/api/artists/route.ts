@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getArtists } from '@/lib/api/artists'
+import { handleApiError, AppError } from '@/lib/utils/error-handler'
+import { log } from '@/lib/utils/logger'
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,18 +18,9 @@ export async function GET(request: NextRequest) {
       page,
       limit
     })
-
   } catch (error) {
-    
-    
-    return NextResponse.json(
-      {
-        success: false,
-        message: error instanceof Error ? error.message : 'Failed to fetch artists',
-        artists: [],
-        total: 0
-      },
-      { status: 500 }
-    )
+    log.error('GET /api/artists error', error, { url: request.url })
+    const errRes = handleApiError(error)
+    return NextResponse.json(errRes, { status: errRes.statusCode || 500 })
   }
 } 
