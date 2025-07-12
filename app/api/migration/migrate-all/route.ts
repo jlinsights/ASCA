@@ -17,5 +17,4 @@ export async function POST(request: NextRequest) {
     },
     { status: 503 } // Service Unavailable
   )
-}
 } 

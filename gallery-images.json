@@ -1,0 +1,37 @@
+[
+  {
+    "id": "committee1",
+    "title": "위원회 회의 1",
+    "description": "2025년 4월 19일 위원회 회의",
+    "src": "/images/gallery/committee_2025-04-19/thumbnails/committee1.jpg",
+    "category": "committee"
+  },
+  {
+    "id": "committee2", 
+    "title": "위원회 회의 2",
+    "description": "2025년 4월 19일 위원회 회의",
+    "src": "/images/gallery/committee_2025-04-19/thumbnails/committee2.jpg",
+    "category": "committee"
+  },
+  {
+    "id": "contest1",
+    "title": "서예 대회 1",
+    "description": "2025년 4월 26일 서예 대회",
+    "src": "/images/gallery/contest_2025-04-26/thumbnails/contest1.jpg",
+    "category": "contest"
+  },
+  {
+    "id": "contest2",
+    "title": "서예 대회 2", 
+    "description": "2025년 4월 26일 서예 대회",
+    "src": "/images/gallery/contest_2025-04-26/thumbnails/contest2.jpg",
+    "category": "contest"
+  },
+  {
+    "id": "invited1",
+    "title": "초대작가 작품",
+    "description": "윤경희 작가 초대작품",
+    "src": "/images/gallery/invited_2025/윤경희-초대.jpg",
+    "category": "invited"
+  }
+]

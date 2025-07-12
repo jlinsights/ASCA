@@ -329,7 +329,7 @@ export default function ContestsPage() {
                   </Button>
                   {contest.status === 'submission-open' && (
                     <Button asChild variant="outline">
-                      <Link href={`/contests/${contest.id}/submit`}>
+                      <Link href={`/contests/${contest.id}/submit` as any}>
                         출품하기
                       </Link>
                     </Button>

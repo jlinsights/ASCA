@@ -67,7 +67,7 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
     const securityStats = auditLogger.getStats()
 
     // 최근 활동 데이터 구성 (개선된 버전)
-    const recentActivity = []
+    const recentActivity: any[] = []
     
     // 전시회 활동
     recentExhibitions?.forEach(exhibition => {
