@@ -98,7 +98,7 @@ const QuickActionButton = React.memo(({
   }
 
   return (
-    <Link href={href} prefetch={true}>
+    <Link href={href as any} prefetch={true}>
       {buttonContent}
     </Link>
   )

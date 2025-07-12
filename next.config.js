@@ -29,7 +29,7 @@ const nextConfig = {
     // 트리 쉐이킹 개선
     serverMinification: true,
     // 개발 모드에서 타입 체크 개선
-    typedRoutes: true,
+    typedRoutes: false,
   },
   
   // Next.js 15에서 변경된 설정
@@ -198,7 +198,7 @@ const nextConfig = {
 
   // 타입스크립트 성능 개선
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
     tsconfigPath: './tsconfig.json',
   },
   

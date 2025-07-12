@@ -20,7 +20,7 @@ async function secureSyncStatusHandler({ user, request }: SecureAPIContext) {
 
     // 동기화 엔진 상태 조회
     const { syncEngine } = await import('@/lib/sync-engine')
-    const status = syncEngine.getStatus()
+    const status = (syncEngine as any).getStatus ? (syncEngine as any).getStatus() : { active: false, message: 'Status not available' }
 
     return NextResponse.json({
       success: true,

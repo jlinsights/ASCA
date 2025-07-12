@@ -23,6 +23,7 @@ export function ThemeTransition({ clickPosition }: ThemeTransitionProps) {
 
       return () => clearTimeout(timer)
     }
+    return () => {} // 빈 cleanup 함수
   }, [clickPosition, theme])
 
   if (!isAnimating || !position) return null
