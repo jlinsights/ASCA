@@ -906,4 +906,3 @@ export const defaultImageConfig = {
   }
 };
 
-export type { ImageProcessingConfig, ImageSizeConfig, DeepZoomConfig };
