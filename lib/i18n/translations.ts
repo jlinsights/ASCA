@@ -8,11 +8,13 @@ export interface TranslationModule {
 // 지연 로딩을 위한 번역 로더
 export const loadTranslations = async (language: Language): Promise<TranslationModule> => {
   try {
+    // @ts-ignore - Dynamic import path, locale files may not exist during build
     const translationModule = await import(`./locales/${language}.json`)
     return translationModule.default || translationModule
   } catch (error) {
     
     try {
+      // @ts-ignore - ko.json may not exist during build
       const fallbackModule = await import('./locales/ko.json')
       return fallbackModule.default || fallbackModule
     } catch (fallbackError) {
