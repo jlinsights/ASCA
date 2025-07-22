@@ -77,19 +77,19 @@ export function createSecureAPI(
       if (requireAuth) {
         const authResult = await requireAdminAuth(request)
         
-        if (!authResult.success) {
-          auditLogger.logAuthFailure(request, authResult.error || 'Unknown auth error')
+        if (!authResult) {
+          auditLogger.logAuthFailure(request, 'Authentication failed')
           return NextResponse.json(
             {
               success: false,
-              error: authResult.error,
+              error: 'Authentication required',
               code: 'AUTH_REQUIRED'
             },
-            { status: authResult.statusCode || 401 }
+            { status: 401 }
           )
         }
 
-        user = authResult.user!
+        user = authResult
         auditLogger.logAuthSuccess(request, user)
 
         // 4. 권한 확인
@@ -123,7 +123,7 @@ export function createSecureAPI(
           path: request.nextUrl.pathname,
           userId: user?.id,
           userRole: user?.role,
-          ip: request.headers.get('x-forwarded-for') || request.ip
+          ip: request.headers.get('x-forwarded-for') || 'unknown'
         })
       }
 

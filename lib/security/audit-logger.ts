@@ -182,7 +182,6 @@ export class SecurityAuditLogger {
     return cfConnectingIP || 
            forwardedFor?.split(',')[0]?.trim() || 
            realIP || 
-           request.ip || 
            'unknown'
   }
 
@@ -191,7 +190,7 @@ export class SecurityAuditLogger {
    */
   private sendCriticalAlert(event: SecurityEvent): void {
     // 프로덕션에서는 Slack, 이메일, PagerDuty 등으로 전송
-    console.error('🚨 CRITICAL SECURITY ALERT 🚨', {
+    log.error('CRITICAL SECURITY ALERT', new Error(`Security alert: ${event.type}`), {
       type: event.type,
       source: event.source,
       user: event.user,

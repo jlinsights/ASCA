@@ -108,7 +108,7 @@ function getClientIdentifier(request: NextRequest): string {
   // Vercel/Cloudflare 등에서 실제 IP 가져오기
   const forwardedFor = request.headers.get('x-forwarded-for')
   const realIP = request.headers.get('x-real-ip')
-  const ip = forwardedFor?.split(',')[0] || realIP || request.ip || 'unknown'
+  const ip = forwardedFor?.split(',')[0] || realIP || 'unknown'
   
   // User Agent 해시 추가 (같은 IP에서 다른 클라이언트 구분)
   const userAgent = request.headers.get('user-agent') || ''
