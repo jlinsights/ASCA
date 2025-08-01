@@ -1,4 +1,4 @@
-export default function Home() {
+export default function HomeSimple() {
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8">
@@ -37,22 +37,22 @@ export default function Home() {
         </div>
 
         <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900">최근 소식</h2>
+          <h2 className="text-3xl font-bold mb-8">최근 소식</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="border border-gray-200 rounded-lg p-6 bg-white">
-              <h3 className="text-lg font-semibold mb-2 text-gray-900">새로운 전시 개최</h3>
+            <div className="border rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-2">새로운 전시 개최</h3>
               <p className="text-gray-600 mb-4">2024년 동양서예협회 정기전시가 개최됩니다.</p>
               <a href="/exhibitions" className="text-blue-600 hover:underline">자세히 보기</a>
             </div>
             
-            <div className="border border-gray-200 rounded-lg p-6 bg-white">
-              <h3 className="text-lg font-semibold mb-2 text-gray-900">신규 작가 모집</h3>
+            <div className="border rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-2">신규 작가 모집</h3>
               <p className="text-gray-600 mb-4">동양서예협회에서 신규 작가를 모집합니다.</p>
               <a href="/artists" className="text-blue-600 hover:underline">자세히 보기</a>
             </div>
             
-            <div className="border border-gray-200 rounded-lg p-6 bg-white">
-              <h3 className="text-lg font-semibold mb-2 text-gray-900">서예 교육 프로그램</h3>
+            <div className="border rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-2">서예 교육 프로그램</h3>
               <p className="text-gray-600 mb-4">초보자를 위한 서예 교육 프로그램을 운영합니다.</p>
               <a href="/events" className="text-blue-600 hover:underline">자세히 보기</a>
             </div>

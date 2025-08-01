@@ -41,3 +41,4 @@ next-env.d.ts
 coverage/
 .nyc_output/
 .eslintcache
+.vercel

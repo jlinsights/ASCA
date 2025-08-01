@@ -7,10 +7,10 @@ import type { CulturalExchangeProgramInfo } from '@/lib/types/membership'
 // GET - 특정 프로그램 상세 조회
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const programId = params.id
+    const { id: programId } = await params
 
     // 프로그램 기본 정보 조회
     const programResult = await db
@@ -84,10 +84,10 @@ export async function GET(
 // PUT - 프로그램 정보 수정 (관리자 전용)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const programId = params.id
+    const { id: programId } = await params
     const body = await request.json()
 
     // TODO: 관리자 권한 확인
@@ -199,10 +199,10 @@ export async function PUT(
 // DELETE - 프로그램 삭제 (관리자 전용)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const programId = params.id
+    const { id: programId } = await params
 
     // TODO: 관리자 권한 확인
     // const user = await getCurrentUser(request)
