@@ -13,7 +13,7 @@ export function WebVitalsTracker() {
     trackWebVitals((metric) => {
       // Log to console in development
       if (process.env.NODE_ENV === 'development') {
-        console.log(`${metric.name}: ${metric.value} (${metric.rating})`)
+        // console.log(`${metric.name}: ${metric.value} (${metric.rating})`)
       }
 
       // Send to analytics service (if configured)
@@ -191,24 +191,34 @@ export function useImageLoadingTracker() {
 
 // API call performance tracker
 export function useApiPerformanceTracker() {
-  const trackApiCall = async <T>(
-    promise: Promise<T>,
+  const trackApiCall = async (
+    promise: Promise<any>,
     endpoint: string,
     method: string = 'GET'
-  ): Promise<T> => {
+  ): Promise<any> => {
     const startTime = performance.now()
     
     try {
       const result = await promise
-      const duration = performance.now() - startTime
+      const endTime = performance.now()
       
-      performanceMonitor.trackApiCall(endpoint, method, duration, 200)
+      performanceMonitor.trackCustomMetric(
+        'api_call_success',
+        endTime - startTime,
+        'ms',
+        { endpoint, method }
+      )
       
       return result
     } catch (error) {
-      const duration = performance.now() - startTime
+      const endTime = performance.now()
       
-      performanceMonitor.trackApiCall(endpoint, method, duration, 500)
+      performanceMonitor.trackCustomMetric(
+        'api_call_error',
+        endTime - startTime,
+        'ms',
+        { endpoint, method, error: String(error) }
+      )
       
       throw error
     }
@@ -216,88 +226,3 @@ export function useApiPerformanceTracker() {
 
   return { trackApiCall }
 }
-
-// Performance budget monitor
-export function PerformanceBudgetMonitor({ 
-  budgets = {
-    lcp: 2500,
-    fid: 100,
-    cls: 0.1,
-    fcp: 1800,
-    bundleSize: 500 * 1024
-  }
-}) {
-  useEffect(() => {
-    trackWebVitals((metric) => {
-      const budgetKey = metric.name.toLowerCase() as keyof typeof budgets
-      const budget = budgets[budgetKey]
-      
-      if (budget && metric.value > budget) {
-        console.warn(
-          `Performance budget exceeded: ${metric.name} = ${metric.value} (budget: ${budget})`
-        )
-        
-        // Send alert to monitoring service
-        performanceMonitor.trackCustomMetric(
-          'budget_violation',
-          metric.value,
-          metric.name === 'CLS' ? 'score' : 'ms',
-          {
-            metric: metric.name,
-            budget,
-            violation: metric.value - budget
-          }
-        )
-      }
-    })
-  }, [budgets])
-
-  return null
-}
-
-// Memory usage monitor
-export function MemoryUsageMonitor() {
-  useEffect(() => {
-    const trackMemoryUsage = () => {
-      if ('memory' in performance) {
-        const memory = (performance as any).memory
-        
-        performanceMonitor.trackCustomMetric(
-          'memory_usage',
-          memory.usedJSHeapSize,
-          'bytes',
-          {
-            total: memory.totalJSHeapSize,
-            limit: memory.jsHeapSizeLimit,
-            percentage: (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100
-          }
-        )
-      }
-    }
-
-    // Track initially
-    trackMemoryUsage()
-    
-    // Track every 30 seconds
-    const interval = setInterval(trackMemoryUsage, 30000)
-    
-    return () => clearInterval(interval)
-  }, [])
-
-  return null
-}
-
-// All-in-one performance tracker
-export function PerformanceTracker() {
-  return (
-    <>
-      <WebVitalsTracker />
-      <ResourceLoadingTracker />
-      <MemoryUsageMonitor />
-      <PerformanceBudgetMonitor />
-      {process.env.NODE_ENV === 'development' && <PerformanceDebugPanel />}
-    </>
-  )
-}
-
-export default PerformanceTracker
