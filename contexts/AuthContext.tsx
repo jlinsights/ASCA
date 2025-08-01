@@ -4,9 +4,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
 import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase'
-import { getCurrentUser, hasPermission } from '@/lib/supabase/auth'
+import { getCurrentUser, hasPermission as supabaseHasPermission } from '@/lib/supabase/auth'
 import type { AdminUser, AuthContextType } from '@/types/auth'
 import { log } from '@/lib/utils/logger'
+import { devAuth } from '@/lib/auth/dev-auth'
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -44,100 +45,60 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkUser = async () => {
     try {
-      // 특별 관리자 세션 확인
-      const specialSession = localStorage.getItem('special_admin_session')
-      if (specialSession) {
-        const session = JSON.parse(specialSession)
-        if (session.isAuthenticated) {
-          setUser({
-            id: 'special_admin',
-            user_id: 'special_admin',
-            role_id: 'super_admin',
-            name: '동양서예협회 관리자',
-            email: 'info@orientalcalligraphy.org',
-            is_active: true,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            role: {
-              id: 'super_admin',
-              name: 'super_admin',
-              description: '최고 관리자',
-              permissions: {
-                cms: {
-                  notices: ['create', 'read', 'update', 'delete', 'publish'],
-                  exhibitions: ['create', 'read', 'update', 'delete', 'publish'],
-                  events: ['create', 'read', 'update', 'delete', 'publish'],
-                  comments: ['read', 'approve', 'delete']
-                },
-                artists: {
-                  artists: ['create', 'read', 'update', 'delete'],
-                  artworks: ['create', 'read', 'update', 'delete']
-                },
-                admin: {
-                  users: ['create', 'read', 'update', 'delete'],
-                  roles: ['create', 'read', 'update', 'delete'],
-                  logs: ['read'],
-                  backup: ['create', 'restore']
-                }
-              },
+      // 개발 모드에서 dev-auth 세션 확인
+      if (process.env.NODE_ENV === 'development') {
+        const isAuthenticated = await devAuth.isAuthenticated()
+        if (isAuthenticated) {
+          const devUser = await devAuth.getCurrentUser()
+          if (devUser) {
+            // dev-auth 사용자를 AdminUser 형식으로 변환
+            const adminUser: AdminUser = {
+              id: devUser.id,
+              user_id: devUser.id,
+              role_id: devUser.role === 'admin' ? 'admin' : 'member',
+              name: `${devUser.firstName || ''} ${devUser.lastName || ''}`.trim() || devUser.email,
+              email: devUser.email,
+              is_active: true,
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            }
-          })
-          setLoading(false)
-          return
-        }
-      }
-
-      // 개발 모드에서 localStorage 세션 확인
-      const devSession = localStorage.getItem('dev_admin_session')
-      if (devSession) {
-        const session = JSON.parse(devSession)
-        if (session.isAuthenticated) {
-          setUser({
-            id: session.user.id,
-            user_id: session.user.id,
-            role_id: session.user.role,
-            name: session.user.name,
-            email: session.user.email,
-            is_active: true,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-                      role: {
-            id: session.user.role,
-            name: session.user.role,
-            description: `${session.user.name} 역할`,
-            permissions: {
-              cms: {
-                notices: ['create', 'read', 'update', 'delete', 'publish'],
-                exhibitions: ['create', 'read', 'update', 'delete', 'publish'],
-                events: ['create', 'read', 'update', 'delete', 'publish'],
-                comments: ['read', 'approve', 'delete']
-              },
-              artists: {
-                artists: ['create', 'read', 'update', 'delete'],
-                artworks: ['create', 'read', 'update', 'delete']
-              },
-              admin: {
-                users: ['create', 'read', 'update', 'delete'],
-                roles: ['create', 'read', 'update', 'delete'],
-                logs: ['read'],
-                backup: ['create', 'restore']
+              updated_at: new Date().toISOString(),
+              role: {
+                id: devUser.role,
+                name: devUser.role,
+                description: devUser.role === 'admin' ? '관리자' : '회원',
+                permissions: {
+                  cms: {
+                    notices: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete', 'publish'] : ['read'],
+                    exhibitions: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete', 'publish'] : ['read'],
+                    events: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete', 'publish'] : ['read'],
+                    comments: devUser.role === 'admin' ? ['read', 'approve', 'delete'] : ['read']
+                  },
+                  artists: {
+                    artists: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete'] : ['read'],
+                    artworks: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete'] : ['read']
+                  },
+                  admin: {
+                    users: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete'] : [],
+                    roles: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete'] : [],
+                    logs: devUser.role === 'admin' ? ['read'] : [],
+                    backup: devUser.role === 'admin' ? ['create', 'restore'] : []
+                  }
+                },
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
               }
-            },
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            }
+            setUser(adminUser)
+            setLoading(false)
+            return
           }
-          })
-          setLoading(false)
-          return
         }
       }
 
+      // Supabase 인증 확인 (프로덕션)
       const adminUser = await getCurrentUser()
       setUser(adminUser)
     } catch (error) {
-      
+      log.error('인증 확인 실패', { error })
       setUser(null)
     } finally {
       setLoading(false)
@@ -155,113 +116,92 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signIn = async (email: string, password: string) => {
-    // 특별 관리자 로그인 (개발 환경)
-    if (process.env.NODE_ENV === 'development' && email && password) {
-      if (email === 'info@orientalcalligraphy.org' && password === 'asca2024!') {
-        const specialAdminUser = {
-          id: 'special-admin',
-          email: 'info@orientalcalligraphy.org',
-          name: 'Special Admin',
-          role: 'super_admin'
-        }
-        setUser(specialAdminUser)
-        localStorage.setItem('special_admin_user', JSON.stringify(specialAdminUser))
-        log.debug('특별 관리자 로그인 성공', { email: specialAdminUser.email })
-        return { success: true, user: specialAdminUser }
-      }
-    }
-
-    // 개발 모드에서 테스트 계정 확인
-    const devAccounts = [
-      { email: 'admin@asca.kr', password: 'admin123!@#', role: 'super_admin', name: '시스템 관리자' },
-      { email: 'content@asca.kr', password: 'content123!@#', role: 'content_manager', name: '콘텐츠 관리자' },
-      { email: 'editor@asca.kr', password: 'editor123!@#', role: 'editor', name: '편집자' }
-    ]
-
-    const devAccount = devAccounts.find(acc => acc.email === email && acc.password === password)
-    
-    if (devAccount) {
-      // 개발 모드 로그인
-      const devUser = {
-        id: devAccount.role,
-        user_id: devAccount.role,
-        role_id: devAccount.role,
-        name: devAccount.name,
-        email: devAccount.email,
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        role: {
-          id: devAccount.role,
-          name: devAccount.role,
-          description: `${devAccount.name} 역할`,
-          permissions: {
-            cms: {
-              notices: ['create', 'read', 'update', 'delete', 'publish'],
-              exhibitions: ['create', 'read', 'update', 'delete', 'publish'],
-              events: ['create', 'read', 'update', 'delete', 'publish'],
-              comments: ['read', 'approve', 'delete']
-            },
-            artists: {
-              artists: ['create', 'read', 'update', 'delete'],
-              artworks: ['create', 'read', 'update', 'delete']
-            },
-            admin: {
-              users: ['create', 'read', 'update', 'delete'],
-              roles: ['create', 'read', 'update', 'delete'],
-              logs: ['read'],
-              backup: ['create', 'restore']
-            }
-          },
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      }
-      
-      localStorage.setItem('dev_admin_session', JSON.stringify({
-        user: devAccount,
-        isAuthenticated: true,
-        loginTime: new Date().toISOString()
-      }))
-      
-      setUser(devUser)
-      return
-    }
-
-    // 정식 Supabase Auth 로그인 시도
     try {
+      // 개발 모드에서 dev-auth 사용
+      if (process.env.NODE_ENV === 'development') {
+        const devUser = await devAuth.signIn(email, password)
+        
+        // dev-auth 사용자를 AdminUser 형식으로 변환
+        const adminUser: AdminUser = {
+          id: devUser.id,
+          user_id: devUser.id,
+          role_id: devUser.role === 'admin' ? 'admin' : 'member',
+          name: `${devUser.firstName || ''} ${devUser.lastName || ''}`.trim() || devUser.email,
+          email: devUser.email,
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          role: {
+            id: devUser.role,
+            name: devUser.role,
+            description: devUser.role === 'admin' ? '관리자' : '회원',
+            permissions: {
+              cms: {
+                notices: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete', 'publish'] : ['read'],
+                exhibitions: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete', 'publish'] : ['read'],
+                events: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete', 'publish'] : ['read'],
+                comments: devUser.role === 'admin' ? ['read', 'approve', 'delete'] : ['read']
+              },
+              artists: {
+                artists: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete'] : ['read'],
+                artworks: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete'] : ['read']
+              },
+              admin: {
+                users: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete'] : [],
+                roles: devUser.role === 'admin' ? ['create', 'read', 'update', 'delete'] : [],
+                logs: devUser.role === 'admin' ? ['read'] : [],
+                backup: devUser.role === 'admin' ? ['create', 'restore'] : []
+              }
+            },
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        }
+        
+        setUser(adminUser)
+        return
+      }
+
+      // 프로덕션에서 Supabase Auth 사용
       const { signInWithEmail } = await import('@/lib/supabase/auth')
       const result = await signInWithEmail(email, password)
       setUser(result.adminUser)
     } catch (error) {
+      log.error('로그인 실패', { error, email })
       throw new Error('이메일 또는 비밀번호가 올바르지 않습니다.')
     }
   }
 
   const signOut = async () => {
-    // 특별 관리자 세션 제거
-    localStorage.removeItem('special_admin_session')
-    // 개발 모드 세션 제거
-    localStorage.removeItem('dev_admin_session')
-    
     try {
-      const { signOut: authSignOut } = await import('@/lib/supabase/auth')
-      await authSignOut()
+      // 개발 모드에서 dev-auth 로그아웃
+      if (process.env.NODE_ENV === 'development') {
+        await devAuth.signOut()
+      } else {
+        // 프로덕션에서 Supabase Auth 로그아웃
+        const { signOut: authSignOut } = await import('@/lib/supabase/auth')
+        await authSignOut()
+      }
     } catch (error) {
-      log.warn('Supabase 로그아웃 오류 (개발 모드에서는 무시)', error as Error)
+      log.warn('로그아웃 오류', error as Error)
     }
     
     setUser(null)
   }
 
-  const checkPermission = (resource: string, action: string): boolean => {
+  const hasPermission = async (resource: string, action: string): Promise<boolean> => {
     if (!user) return false
-    // 특별 관리자 계정은 모든 권한 허용
-    if (user.email === 'info@orientalcalligraphy.org') return true
-    // 개발 계정도 모든 권한 허용
-    if (['admin@asca.kr', 'content@asca.kr', 'editor@asca.kr'].includes(user.email)) return true
-    // 일반적인 권한 체크는 동기적으로 처리
-    return true // 임시로 모든 권한 허용
+    
+    // 개발 모드에서 dev-auth 사용자 권한 확인
+    if (process.env.NODE_ENV === 'development') {
+      // 관리자는 모든 권한 허용
+      if (user.role?.name === 'admin') return true
+      // 일반 회원은 읽기 권한만 허용
+      return action === 'read'
+    }
+    
+    // 프로덕션에서 Supabase 권한 확인
+    return await supabaseHasPermission(resource, action)
   }
 
   const refreshUser = async () => {
@@ -273,7 +213,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     signIn,
     signOut,
-    hasPermission: checkPermission,
+    hasPermission,
     refreshUser
   }
 

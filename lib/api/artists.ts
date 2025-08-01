@@ -34,6 +34,15 @@ export async function getArtists(
 ): Promise<{ artists: Artist[]; total: number }> {
   try {
     const supabase = ensureSupabase()
+    if (!supabase) {
+      // Supabase가 설정되지 않았을 때 더미 데이터 반환
+      log.warn('Supabase not configured, returning mock data')
+      return {
+        artists: [],
+        total: 0
+      }
+    }
+    
     const { data: artistsData, error: artistsError } = await supabase
       .from('artists')
       .select('*', { count: 'exact' })
@@ -48,7 +57,11 @@ export async function getArtists(
     }
   } catch (error) {
     log.error('getArtists unexpected error', error)
-    throw error
+    // 에러 발생 시 빈 배열 반환
+    return {
+      artists: [],
+      total: 0
+    }
   }
 }
 

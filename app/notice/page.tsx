@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useLanguage } from "@/contexts/language-context"
@@ -60,7 +60,7 @@ export default function NoticePage() {
     return formatDate(dateString)
   }
 
-  const fetchNotices = async () => {
+  const fetchNotices = useCallback(async () => {
     try {
       setLoading(true)
       
@@ -95,11 +95,11 @@ export default function NoticePage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchQuery, selectedCategory, currentPage])
 
   useEffect(() => {
     fetchNotices()
-  }, [currentPage, selectedCategory, searchQuery])
+  }, [fetchNotices])
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)

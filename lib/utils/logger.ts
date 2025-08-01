@@ -1,4 +1,5 @@
 // 구조화된 로깅 시스템
+/* eslint-disable no-console */
 export enum LogLevel {
   DEBUG = 0,
   INFO = 1,

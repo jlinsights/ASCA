@@ -90,7 +90,7 @@ export function ImageUpload({
     } finally {
       setLoading(false)
     }
-  }, [onUpload, onChange, maxSize, acceptedTypes])
+  }, [onUpload, onChange, validateFile])
 
   // 파일 선택 처리
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {

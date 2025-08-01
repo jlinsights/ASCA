@@ -1,13 +1,13 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LanguageSelector } from "@/components/language-selector"
 import { KakaoLoginButton } from "@/components/kakao/kakao-login-button"
-import { SignInButton, SignUpButton, UserButton, SignedIn, SignedOut } from "@clerk/nextjs"
 import { NavigationMenu } from "@/components/header/navigation-menu"
 import { useLanguage } from "@/contexts/language-context"
 import { log } from "@/lib/utils/logger"
@@ -53,44 +53,27 @@ export function MobileMenu() {
 
             {/* 모바일 로그인 섹션 */}
             <div className="p-4 border-t bg-muted/30">
-              <SignedOut>
-                <div className="space-y-3">
-                  <SignInButton mode="modal">
-                    <Button variant="outline" className="w-full">
-                      {language === 'ko' ? '로그인' : 'Sign In'}
-                    </Button>
-                  </SignInButton>
-                  
-                  <SignUpButton mode="modal">
-                    <Button className="w-full">
-                      {language === 'ko' ? '회원가입' : 'Sign Up'}
-                    </Button>
-                  </SignUpButton>
-                  
-                  <KakaoLoginButton
-                    loginText="카카오 로그인"
-                    onLoginSuccess={(userInfo) => {
-                      log.debug('Mobile Kakao login success', { userInfo })
-                      handleClose()
-                    }}
-                  />
-                </div>
-              </SignedOut>
-              
-              <SignedIn>
-                <div className="flex items-center justify-between">
-                  <UserButton 
-                    appearance={{
-                      elements: {
-                        avatarBox: "h-8 w-8"
-                      }
-                    }}
-                  />
-                  <span className="text-sm text-muted-foreground">
-                    {language === 'ko' ? '로그인됨' : 'Signed in'}
-                  </span>
-                </div>
-              </SignedIn>
+              <div className="space-y-3">
+                <Link href="/admin/dev-login">
+                  <Button variant="outline" className="w-full">
+                    {language === 'ko' ? '로그인' : 'Sign In'}
+                  </Button>
+                </Link>
+                
+                <Link href="/admin/dev-login">
+                  <Button className="w-full">
+                    {language === 'ko' ? '회원가입' : 'Sign Up'}
+                  </Button>
+                </Link>
+                
+                <KakaoLoginButton
+                  loginText="카카오 로그인"
+                  onLoginSuccess={(userInfo) => {
+                    log.debug('Mobile Kakao login success', { userInfo })
+                    handleClose()
+                  }}
+                />
+              </div>
             </div>
           </div>
         </SheetContent>

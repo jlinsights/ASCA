@@ -1,0 +1,177 @@
+'use client';
+
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { generateCardClasses } from '@/lib/design-system';
+
+interface EnhancedCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'default' | 'elevated' | 'bordered' | 'glass';
+  interactive?: boolean;
+  loading?: boolean;
+}
+
+interface EnhancedCardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  showDivider?: boolean;
+}
+
+interface EnhancedCardContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  padding?: 'none' | 'sm' | 'md' | 'lg';
+}
+
+interface EnhancedCardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  showDivider?: boolean;
+}
+
+const EnhancedCard = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
+  ({ className, variant = 'default', interactive = false, loading = false, children, ...props }, ref) => {
+    const cardClasses = generateCardClasses(variant);
+    
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          cardClasses,
+          // Interactive states
+          interactive && [
+            'cursor-pointer transition-all duration-300',
+            'hover:shadow-lg hover:scale-[1.02] hover:-translate-y-1',
+            'active:scale-[0.98] active:translate-y-0'
+          ],
+          // Glass morphism variant
+          variant === 'glass' && [
+            'bg-rice-paper/80 backdrop-blur-md border-celadon-green/10',
+            'shadow-lg shadow-celadon-green/5'
+          ],
+          // Loading state
+          loading && 'animate-pulse',
+          className
+        )}
+        {...props}
+      >
+        {loading ? (
+          <div className="p-6 space-y-4">
+            <div className="h-4 bg-silk-cream rounded animate-pulse" />
+            <div className="h-4 bg-silk-cream rounded animate-pulse w-3/4" />
+            <div className="h-32 bg-silk-cream rounded animate-pulse" />
+            <div className="h-4 bg-silk-cream rounded animate-pulse w-1/2" />
+          </div>
+        ) : (
+          children
+        )}
+        
+        {/* Subtle border gradient for elevated cards */}
+        {variant === 'elevated' && (
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-celadon-green/10 via-transparent to-temple-gold/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
+        )}
+      </div>
+    );
+  }
+);
+
+const EnhancedCardHeader = React.forwardRef<HTMLDivElement, EnhancedCardHeaderProps>(
+  ({ className, showDivider = false, children, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'flex flex-col space-y-2 p-6',
+        showDivider && 'border-b border-celadon-green/10',
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+);
+
+const EnhancedCardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
+  ({ className, children, ...props }, ref) => (
+    <h3
+      ref={ref}
+      className={cn(
+        'font-calligraphy text-xl font-semibold leading-none tracking-tight text-ink-black',
+        'transition-colors duration-200 group-hover:text-celadon-green',
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </h3>
+  )
+);
+
+const EnhancedCardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, children, ...props }, ref) => (
+    <p
+      ref={ref}
+      className={cn(
+        'text-sm text-ink-black/70 leading-relaxed',
+        'transition-colors duration-200',
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </p>
+  )
+);
+
+const EnhancedCardContent = React.forwardRef<HTMLDivElement, EnhancedCardContentProps>(
+  ({ className, padding = 'md', children, ...props }, ref) => {
+    const paddingClasses = {
+      none: '',
+      sm: 'p-4',
+      md: 'p-6',
+      lg: 'p-8',
+    };
+
+    return (
+      <div
+        ref={ref}
+        className={cn(paddingClasses[padding], className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+const EnhancedCardFooter = React.forwardRef<HTMLDivElement, EnhancedCardFooterProps>(
+  ({ className, showDivider = false, children, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'flex items-center p-6 pt-0',
+        showDivider && 'border-t border-celadon-green/10 pt-6',
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+);
+
+EnhancedCard.displayName = 'EnhancedCard';
+EnhancedCardHeader.displayName = 'EnhancedCardHeader';
+EnhancedCardTitle.displayName = 'EnhancedCardTitle';
+EnhancedCardDescription.displayName = 'EnhancedCardDescription';
+EnhancedCardContent.displayName = 'EnhancedCardContent';
+EnhancedCardFooter.displayName = 'EnhancedCardFooter';
+
+export {
+  EnhancedCard,
+  EnhancedCardHeader,
+  EnhancedCardTitle,
+  EnhancedCardDescription,
+  EnhancedCardContent,
+  EnhancedCardFooter,
+};
+
+export type {
+  EnhancedCardProps,
+  EnhancedCardHeaderProps,
+  EnhancedCardContentProps,
+  EnhancedCardFooterProps,
+};

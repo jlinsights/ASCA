@@ -8,6 +8,88 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Enhanced Gallery Components */
+@layer components {
+  /* Gallery Container */
+  .gallery-container {
+    @apply max-w-[1400px] mx-auto px-6;
+  }
+  
+  /* Gallery Cards */
+  .gallery-card {
+    @apply bg-rice-paper border border-celadon-green/20 rounded-lg transition-all duration-300 relative overflow-hidden;
+  }
+  
+  .gallery-card-elevated {
+    @apply shadow-lg border-celadon-green/10;
+  }
+  
+  .gallery-card-glass {
+    @apply bg-rice-paper/80 backdrop-blur-md border-celadon-green/10 shadow-lg;
+  }
+  
+  .gallery-card-bordered {
+    @apply border-2 border-celadon-green/30;
+  }
+  
+  /* Gallery Buttons */
+  .gallery-btn {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-all duration-300 relative overflow-hidden cursor-pointer border-none;
+  }
+  
+  .gallery-btn-xs {
+    @apply h-7 px-2 text-xs;
+  }
+  
+  .gallery-btn-sm {
+    @apply h-8 px-3 text-sm;
+  }
+  
+  .gallery-btn-md {
+    @apply h-10 px-4 text-sm;
+  }
+  
+  .gallery-btn-lg {
+    @apply h-11 px-6 text-base;
+  }
+  
+  .gallery-btn-xl {
+    @apply h-12 px-8 text-base;
+  }
+  
+  .gallery-btn-default {
+    @apply bg-celadon-green text-ink-black shadow-sm hover:bg-celadon-green/90 hover:shadow-md hover:-translate-y-0.5;
+  }
+  
+  .gallery-btn-outline {
+    @apply bg-transparent text-celadon-green border border-celadon-green/30 hover:bg-celadon-green hover:text-ink-black hover:border-celadon-green;
+  }
+  
+  .gallery-btn-ghost {
+    @apply bg-transparent text-ink-black hover:bg-silk-cream/50;
+  }
+  
+  .gallery-btn-secondary {
+    @apply bg-silk-cream text-ink-black border border-celadon-green/20 hover:bg-silk-cream/80 hover:border-celadon-green/30;
+  }
+  
+  /* Gallery Container Responsive */
+  @media (max-width: 768px) {
+    .gallery-container {
+      @apply px-4;
+    }
+  }
+  
+  /* Enhanced Card Hover Effects */
+  .gallery-card:hover {
+    @apply -translate-y-1 shadow-xl;
+  }
+  
+  .gallery-card.interactive:hover {
+    @apply -translate-y-2 scale-[1.02] shadow-2xl;
+  }
+}
+
 @layer base {
   :root {
     --background: 60 30% 96%; /* Rice Paper White (#f5f5f0) */

@@ -11,7 +11,8 @@ import {
   Folder, 
   RefreshCw,
   Settings,
-  ArrowLeftRight
+  ArrowLeftRight,
+  Bell
 } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 
@@ -23,6 +24,12 @@ export const AdminNavigation = React.memo(({ currentPage }: AdminNavigationProps
   const { language } = useLanguage()
 
   const navItems = useMemo(() => [
+    {
+      key: 'notices',
+      href: '/admin/notices',
+      icon: Bell,
+      label: language === 'ko' ? '공지사항' : 'Notices'
+    },
     {
       key: 'exhibitions', 
       href: '/admin/exhibitions',

@@ -1197,22 +1197,35 @@ const translations: Record<Language, Record<string, string>> = {
   },
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+const defaultValue: LanguageContextType = {
+  language: "ko",
+  setLanguage: () => {},
+  t: (key: string) => key
+}
+
+const LanguageContext = createContext<LanguageContextType>(defaultValue)
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("ko")
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem("language") as Language
-    if (savedLanguage && ["ko", "en", "ja", "zh"].includes(savedLanguage)) {
-      setLanguage(savedLanguage)
+    setMounted(true)
+    // 클라이언트에서만 localStorage 접근
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem("language") as Language
+      if (savedLanguage && ["ko", "en", "ja", "zh"].includes(savedLanguage)) {
+        setLanguage(savedLanguage)
+      }
     }
   }, [])
 
   useEffect(() => {
-    localStorage.setItem("language", language)
-    document.documentElement.lang = language
-  }, [language])
+    if (mounted && typeof window !== 'undefined') {
+      localStorage.setItem("language", language)
+      document.documentElement.lang = language
+    }
+  }, [language, mounted])
 
   const t = (key: string): string => {
     return translations[language][key] || key
@@ -1223,8 +1236,5 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
 export function useLanguage() {
   const context = useContext(LanguageContext)
-  if (context === undefined) {
-    throw new Error("useLanguage must be used within a LanguageProvider")
-  }
   return context
 }

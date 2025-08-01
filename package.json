@@ -53,6 +53,8 @@
     "db:seed": "tsx lib/db/seed.ts",
     "db:reset": "npm run db:drop && npm run db:push && npm run db:seed",
     "db:setup": "npm run db:push && npm run db:seed",
+    "db:migrate:run": "tsx lib/db/migrate.ts run",
+    "db:migrate:status": "tsx lib/db/migrate.ts status",
     "env:check": "node scripts/check-env-vars.js",
     "env:example": "cp .env.example .env.local",
     "deps:check": "npm audit",
@@ -62,7 +64,8 @@
     "server:prod": "npm run build && npm run start"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.20.0",
+    "@clerk/nextjs": "^6.25.4",
+    "@emailjs/browser": "^4.4.1",
     "@hookform/resolvers": "^3.9.1",
     "@libsql/client": "^0.15.7",
     "@radix-ui/react-accordion": "1.2.2",
@@ -92,6 +95,7 @@
     "@radix-ui/react-toggle": "1.1.1",
     "@radix-ui/react-toggle-group": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.6",
+    "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.8",
     "@types/airtable": "^0.10.0",
     "@types/pg": "^8.15.2",
@@ -107,18 +111,22 @@
     "drizzle-orm": "^0.43.1",
     "embla-carousel-react": "8.5.1",
     "html2canvas": "^1.4.1",
+    "i18next": "^25.3.2",
+    "i18next-browser-languagedetector": "^8.2.0",
     "input-otp": "1.4.1",
     "jspdf": "^2.5.2",
     "lucide-react": "^0.454.0",
     "mysql2": "^3.14.1",
-    "next": "^15.3.5",
+    "next": "^15.0.3",
     "next-themes": "^0.4.4",
     "node-fetch": "^2.7.0",
     "pg": "^8.16.0",
     "react": "^18.3.1",
     "react-day-picker": "8.10.1",
     "react-dom": "^18.3.1",
+    "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.54.1",
+    "react-i18next": "^15.6.0",
     "react-pageflip": "latest",
     "react-resizable-panels": "^2.1.7",
     "recharts": "2.15.0",
@@ -134,6 +142,8 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^15.3.5",
+    "@svgr/webpack": "^8.1.0",
+    "webpack-bundle-analyzer": "^4.10.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.0",
     "@testing-library/user-event": "^14.5.2",
@@ -166,8 +176,5 @@
     "typescript": "^5",
     "wait-on": "^7.2.0",
     "webpack-bundle-analyzer": "^4.10.1"
-  },
-  "jest": {
-    "preset": "./config/build/jest.config.js"
   }
 }

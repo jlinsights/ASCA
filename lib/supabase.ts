@@ -6,20 +6,24 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key'
 
+// 안전한 클라이언트 생성 함수
+const createSafeSupabaseClient = (url: string, key: string) => {
+  try {
+    if (url.includes('placeholder') || key.includes('placeholder')) {
+      return null
+    }
+    return createClient(url, key)
+  } catch (error) {
+    log.warn('Failed to create Supabase client', error instanceof Error ? error : new Error(String(error)))
+    return null
+  }
+}
+
 // 일반 클라이언트 (Anon Key 사용)
-export const supabase = (supabaseUrl.includes('placeholder') || supabaseAnonKey.includes('placeholder')) 
-  ? null 
-  : createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createSafeSupabaseClient(supabaseUrl, supabaseAnonKey)
 
 // 관리용 클라이언트 (Service Role Key 사용)
-export const supabaseAdmin = (supabaseUrl.includes('placeholder') || supabaseServiceRoleKey.includes('placeholder')) 
-  ? null 
-  : createClient(supabaseUrl, supabaseServiceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    })
+export const supabaseAdmin = createSafeSupabaseClient(supabaseUrl, supabaseServiceRoleKey)
 
 // Supabase가 설정되지 않았을 때 사용할 더미 함수들
 export const isSupabaseConfigured = () => supabase !== null
@@ -50,7 +54,8 @@ export const getSupabaseAdminClient = () => {
 // 안전한 Supabase 사용을 위한 헬퍼 함수 (일반 클라이언트)
 export const ensureSupabase = () => {
   if (!supabase) {
-    throw new Error('Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.')
+    log.warn('Supabase is not configured. Using mock data.')
+    return null
   }
   return supabase
 }
@@ -58,7 +63,8 @@ export const ensureSupabase = () => {
 // 안전한 Supabase Admin 사용을 위한 헬퍼 함수 (Service Role)
 export const ensureSupabaseAdmin = () => {
   if (!supabaseAdmin) {
-    throw new Error('Supabase Admin is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.')
+    log.warn('Supabase Admin is not configured.')
+    return null
   }
   return supabaseAdmin
 }
@@ -69,9 +75,13 @@ export const safeSupabaseCall = async <T>(
 ): Promise<T | null> => {
   try {
     const client = ensureSupabase()
+    if (!client) {
+      log.warn('Supabase client not available, returning null')
+      return null
+    }
     return await operation(client)
   } catch (error) {
-    log.error('Supabase operation failed', error as Error)
+    log.warn('Supabase operation failed', error instanceof Error ? error : new Error(String(error)))
     return null
   }
 }
@@ -82,9 +92,13 @@ export const safeSupabaseAdminCall = async <T>(
 ): Promise<T | null> => {
   try {
     const client = ensureSupabaseAdmin()
+    if (!client) {
+      log.warn('Supabase Admin client not available, returning null')
+      return null
+    }
     return await operation(client)
   } catch (error) {
-    log.error('Supabase Admin operation failed', error as Error)
+    log.warn('Supabase Admin operation failed', error instanceof Error ? error : new Error(String(error)))
     return null
   }
 }

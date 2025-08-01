@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ASCA | 사단법인 동양서예협회</title>
+    <meta name="description" content="正法의 계승, 創新의 조화 - 동양 서예 문화의 발전과 보급을 선도하는 사단법인 동양서예협회입니다.">
+    <style>
+        /* Enhanced Gallery CSS System - Complete Static Version */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Color Variables */
+        :root {
+            --rice-paper: #faf8f5;
+            --ink-black: #1a1a1a;
+            --celadon-green: #87a96b;
+            --temple-gold: #d4af37;
+            --stone-gray: #6b7280;
+            --silk-cream: #f8f5f0;
+            --vermillion: #e34234;
+            --summer-jade: #a8c686;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--rice-paper);
+            color: var(--ink-black);
+            line-height: 1.6;
+        }
+        
+        /* Typography */
+        .font-calligraphy {
+            font-family: 'Noto Serif KR', 'Noto Serif CJK KR', serif;
+            font-weight: 600;
+        }
+        
+        .font-serif { font-family: serif; }
+        .font-sans { font-family: sans-serif; }
+        .font-english { font-family: 'Inter', sans-serif; }
+        
+        /* Utility Classes */
+        .min-h-screen { min-height: 100vh; }
+        .bg-rice-paper { background-color: var(--rice-paper); }
+        .bg-ink-black { background-color: var(--ink-black); }
+        .bg-celadon-green { background-color: var(--celadon-green); }
+        .bg-temple-gold { background-color: var(--temple-gold); }
+        .bg-silk-cream { background-color: var(--silk-cream); }
+        .bg-vermillion { background-color: var(--vermillion); }
+        
+        .text-ink-black { color: var(--ink-black); }
+        .text-rice-paper { color: var(--rice-paper); }
+        .text-celadon-green { color: var(--celadon-green); }
+        .text-temple-gold { color: var(--temple-gold); }
+        .text-stone-gray { color: var(--stone-gray); }
+        
+        /* Gallery Components */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .gallery-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-card-bordered {
+            border: 1px solid rgba(135, 169, 107, 0.2);
+        }
+        
+        .gallery-card-elevated {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .gallery-card-glass {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .gallery-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .gallery-btn-default {
+            background: var(--celadon-green);
+            color: white;
+        }
+        
+        .gallery-btn-outline {
+            background: transparent;
+            color: var(--celadon-green);
+            border: 2px solid var(--celadon-green);
+        }
+        
+        .gallery-btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+        
+        .gallery-btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Layout */
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .hidden { display: none; }
+        .sticky { position: sticky; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .text-center { text-align: center; }
+        
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .max-w-xl { max-width: 36rem; }
+        .max-w-2xl { max-width: 42rem; }
+        
+        /* Spacing */
+        .p-6 { padding: 1.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-12 { margin-bottom: 3rem; }
+        
+        .space-x-3 > * + * { margin-left: 0.75rem; }
+        .space-x-8 > * + * { margin-left: 2rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-8 { gap: 2rem; }
+        .gap-12 { gap: 3rem; }
+        
+        /* Typography Sizes */
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        .text-5xl { font-size: 3rem; }
+        .text-6xl { font-size: 3.75rem; }
+        
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .leading-tight { line-height: 1.25; }
+        .leading-relaxed { line-height: 1.625; }
+        .tracking-wider { letter-spacing: 0.05em; }
+        .uppercase { text-transform: uppercase; }
+        
+        /* Responsive Grid */
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .aspect-square { aspect-ratio: 1; }
+        .aspect-34 { aspect-ratio: 3/4; }
+        .aspect-35 { aspect-ratio: 3/5; }
+        
+        /* Border Radius */
+        .rounded { border-radius: 0.25rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-full { border-radius: 50%; }
+        
+        /* Size Classes */
+        .w-8 { width: 2rem; }
+        .h-8 { height: 2rem; }
+        .w-10 { width: 2.5rem; }
+        .h-10 { height: 2.5rem; }
+        .w-12 { width: 3rem; }
+        .h-12 { height: 3rem; }
+        
+        /* Z-index */
+        .z-50 { z-index: 50; }
+        .top-0 { top: 0; }
+        
+        /* Background Effects */
+        .backdrop-blur-sm { backdrop-filter: blur(4px); }
+        .bg-gradient-br {
+            background: linear-gradient(135deg, var(--rice-paper) 0%, var(--silk-cream) 100%);
+        }
+        
+        /* Hover Effects */
+        .hover-celadon:hover { color: var(--celadon-green); }
+        .transition-colors { transition: color 0.3s ease; }
+        
+        /* Opacity */
+        .opacity-80 { opacity: 0.8; }
+        .opacity-95 { opacity: 0.95; }
+        
+        /* Overflow */
+        .overflow-hidden { overflow: hidden; }
+        
+        /* Media Queries */
+        @media (min-width: 768px) {
+            .md\:flex { display: flex; }
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+            .md\:text-4xl { font-size: 2.25rem; }
+            .md\:text-5xl { font-size: 3rem; }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+            .lg\:py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+            .lg\:text-6xl { font-size: 3.75rem; }
+        }
+        
+        @media (min-width: 640px) {
+            .sm\:flex-row { flex-direction: row; }
+        }
+    </style>
+</head>
+<body>
+    <main class="min-h-screen bg-rice-paper">
+        <!-- Header -->
+        <header class="gallery-card gallery-card-bordered sticky top-0 z-50 bg-rice-paper opacity-95 backdrop-blur-sm">
+            <div class="gallery-container">
+                <div class="flex items-center justify-between py-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-celadon-green rounded-full flex items-center justify-center">
+                            <span class="font-calligraphy text-rice-paper font-bold text-lg">書</span>
+                        </div>
+                        <div>
+                            <h1 class="font-calligraphy text-xl font-bold text-ink-black">ASCA</h1>
+                            <p class="text-xs text-stone-gray">동양서예협회</p>
+                        </div>
+                    </div>
+                    <nav class="hidden md:flex items-center space-x-8">
+                        <span class="text-ink-black hover-celadon transition-colors">전시</span>
+                        <span class="text-ink-black hover-celadon transition-colors">작품</span>
+                        <span class="text-ink-black hover-celadon transition-colors">작가</span>
+                        <span class="text-ink-black hover-celadon transition-colors">소개</span>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden bg-gradient-br">
+            <div class="gallery-container py-16 lg:py-24">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <div class="space-y-4">
+                            <p class="text-sm uppercase tracking-wider text-stone-gray font-english">
+                                ART GALLERY EXHIBITION
+                            </p>
+                            <h2 class="text-4xl md:text-5xl lg:text-6xl font-calligraphy leading-tight text-ink-black">
+                                동양 서예의<br>새로운 여정
+                            </h2>
+                            <p class="text-lg text-stone-gray leading-relaxed max-w-xl">
+                                <span class="font-calligraphy text-temple-gold font-semibold">正法</span>의 계승과 
+                                <span class="font-calligraphy text-celadon-green font-semibold">創新</span>의 조화가 만나는 
+                                특별한 공간에서 동양 서예 예술의 새로운 차원을 경험하세요.
+                            </p>
+                        </div>
+                        
+                        <div class="flex space-y-4 sm:flex-row gap-4">
+                            <div class="gallery-btn gallery-btn-default gallery-btn-lg flex items-center gap-2">
+                                전시 관람 예약 <span>→</span>
+                            </div>
+                            <div class="gallery-btn gallery-btn-outline gallery-btn-lg">
+                                가상 투어
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div class="gallery-card gallery-card-elevated aspect-34 bg-silk-cream flex items-center justify-center">
+                                <div style="background: linear-gradient(135deg, rgba(135,169,107,0.2), rgba(212,175,55,0.2));" class="w-full h-full rounded-lg flex items-center justify-center">
+                                    <span class="font-calligraphy text-4xl text-ink-black">書</span>
+                                </div>
+                            </div>
+                            <div class="gallery-card gallery-card-elevated aspect-square bg-silk-cream flex items-center justify-center">
+                                <div style="background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(227,66,52,0.2));" class="w-full h-full rounded-lg flex items-center justify-center">
+                                    <span class="font-calligraphy text-3xl text-ink-black">藝</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top: 2rem;">
+                            <div class="gallery-card gallery-card-elevated aspect-35 bg-silk-cream flex items-center justify-center">
+                                <div style="background: linear-gradient(135deg, rgba(135,169,107,0.3), rgba(168,198,134,0.2));" class="w-full h-full rounded-lg flex items-center justify-center">
+                                    <span class="font-calligraphy text-5xl text-ink-black">道</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CSS Test Section -->
+        <section class="py-16 bg-ink-black">
+            <div class="gallery-container">
+                <div class="text-center mb-12">
+                    <h3 class="font-calligraphy text-3xl md:text-4xl font-bold mb-4 text-temple-gold">
+                        Enhanced Gallery CSS 테스트
+                    </h3>
+                    <p class="text-rice-paper opacity-80 max-w-2xl" style="margin: 0 auto;">
+                        동양 서예 테마의 컴포넌트와 색상 시스템을 확인하세요
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="gallery-card gallery-card-glass">
+                        <div class="p-6">
+                            <h4 class="font-calligraphy text-xl font-semibold text-ink-black mb-2">Gallery Card</h4>
+                            <p style="color: rgba(26,26,26,0.7);" class="text-sm mb-4">Enhanced styling test</p>
+                            <div class="gallery-btn gallery-btn-outline gallery-btn-sm w-full">Test Button</div>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-card gallery-card-elevated bg-rice-paper">
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold text-ink-black mb-4">Color Palette</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="w-full h-12 bg-ink-black rounded flex items-center justify-center">
+                                    <span class="text-rice-paper text-xs">ink-black</span>
+                                </div>
+                                <div class="w-full h-12 bg-celadon-green rounded flex items-center justify-center">
+                                    <span class="text-rice-paper text-xs">celadon</span>
+                                </div>
+                                <div class="w-full h-12 bg-temple-gold rounded flex items-center justify-center">
+                                    <span class="text-rice-paper text-xs">temple-gold</span>
+                                </div>
+                                <div class="w-full h-12 bg-vermillion rounded flex items-center justify-center">
+                                    <span class="text-rice-paper text-xs">vermillion</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-card gallery-card-bordered bg-silk-cream">
+                        <div class="p-6">
+                            <h4 class="font-calligraphy text-xl text-celadon-green mb-4">Typography</h4>
+                            <p class="font-calligraphy text-lg text-ink-black mb-2">서예체 폰트</p>
+                            <p class="font-serif text-stone-gray mb-2">Serif 폰트</p>
+                            <p class="font-sans text-sm text-ink-black">Sans 폰트</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="gallery-card bg-ink-black text-rice-paper">
+            <div class="gallery-container py-12">
+                <div class="text-center">
+                    <div class="flex items-center justify-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-celadon-green rounded-full flex items-center justify-center">
+                            <span class="font-calligraphy text-rice-paper font-bold">書</span>
+                        </div>
+                        <h3 class="font-calligraphy text-lg font-bold">ASCA</h3>
+                    </div>
+                    <p style="color: rgba(250,248,245,0.8);" class="text-sm">
+                        사단법인 동양서예협회 | Enhanced Gallery CSS System - No Errors Version
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>

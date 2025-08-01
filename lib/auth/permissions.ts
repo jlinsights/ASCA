@@ -16,6 +16,14 @@ export enum Permission {
   MANAGE_NEWS = 'manage_news',
   MANAGE_EVENTS = 'manage_events',
   
+  // 회원 관리
+  VIEW_MEMBERS = 'view_members',
+  MANAGE_MEMBERS = 'manage_members',
+  MANAGE_MEMBERSHIP_TIERS = 'manage_membership_tiers',
+  REVIEW_APPLICATIONS = 'review_applications',
+  MANAGE_CULTURAL_PROGRAMS = 'manage_cultural_programs',
+  ISSUE_CERTIFICATES = 'issue_certificates',
+  
   // 시스템 관리
   ADMIN = 'admin',
   SYSTEM = 'system',
@@ -56,6 +64,12 @@ export const RolePermissions = {
     Permission.MANAGE_EXHIBITIONS,
     Permission.MANAGE_NEWS,
     Permission.MANAGE_EVENTS,
+    Permission.VIEW_MEMBERS,
+    Permission.MANAGE_MEMBERS,
+    Permission.MANAGE_MEMBERSHIP_TIERS,
+    Permission.REVIEW_APPLICATIONS,
+    Permission.MANAGE_CULTURAL_PROGRAMS,
+    Permission.ISSUE_CERTIFICATES,
     Permission.VIEW_STATS,
     Permission.ADMIN
   ],
