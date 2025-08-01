@@ -1,45 +1,16 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// 최소한의 미들웨어 - 오류 방지를 위해 단순화
 export function middleware(request: NextRequest) {
-  try {
-    const { pathname } = request.nextUrl
-    
-    // 정적 파일들과 API는 바로 통과
-    if (
-      pathname.startsWith('/_next') ||
-      pathname.startsWith('/api') ||
-      pathname.includes('.') ||
-      pathname === '/favicon.ico'
-    ) {
-      return NextResponse.next()
-    }
-
-    // 기본 응답 생성
-    const response = NextResponse.next()
-    
-    // 기본 보안 헤더 추가
-    response.headers.set('X-Content-Type-Options', 'nosniff')
-    response.headers.set('X-Frame-Options', 'DENY')
-    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-
-    return response
-  } catch (error) {
-    // 미들웨어 오류 발생 시 요청을 그대로 통과시킴
-    console.error('Middleware error:', error)
-    return NextResponse.next()
-  }
+  // 모든 요청을 그대로 통과시킴
+  return NextResponse.next()
 }
 
+// 매처를 최대한 제한하여 오류 가능성 최소화
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    // 관리자 페이지만 체크 (필수적인 경우에만)
+    '/admin/:path*'
   ],
 } 
