@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -32,9 +32,9 @@ export default function UnsplashImagePicker({ onImageSelect, trigger }: Unsplash
     if (isOpen && images.length === 0) {
       handleSearch('calligraphy art')
     }
-  }, [isOpen])
+  }, [isOpen, images.length, handleSearch])
 
-  const handleSearch = async (query?: string) => {
+  const handleSearch = useCallback(async (query?: string) => {
     const searchTerm = query || searchQuery
     if (!searchTerm.trim()) return
 
@@ -48,7 +48,7 @@ export default function UnsplashImagePicker({ onImageSelect, trigger }: Unsplash
       log.error('Error searching images', error as Error)
       setLoading(false)
     }
-  }
+  }, [searchQuery])
 
   const loadMoreImages = async () => {
     if (page >= totalPages || loading) return

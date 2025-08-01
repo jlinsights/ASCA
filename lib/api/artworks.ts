@@ -1,4 +1,6 @@
 import { ensureSupabase, type Database } from '../supabase'
+import { AppError } from '@/lib/utils/error-handler'
+import { log } from '@/lib/utils/logger'
 
 type Artwork = Database['public']['Tables']['artworks']['Row']
 type ArtworkInsert = Database['public']['Tables']['artworks']['Insert']
@@ -51,73 +53,91 @@ export async function getArtworks(
   page: number = 1,
   limit: number = 12
 ): Promise<{ artworks: ArtworkWithArtist[]; total: number }> {
-  const supabase = ensureSupabase()
-  let query = supabase
-    .from('artworks')
-    .select(`
-      *,
-      artist:artists(
-        id,
-        name,
-        name_en,
-        name_ja,
-        name_zh,
-        bio,
-        bio_en,
-        bio_ja,
-        bio_zh,
-        profile_image,
-        nationality
-      )
-    `, { count: 'exact' })
-
-  // 필터 적용
-  if (filters) {
-    if (filters.category && filters.category.length > 0) {
-      query = query.in('category', filters.category)
+  try {
+    const supabase = ensureSupabase()
+    if (!supabase) {
+      // Supabase가 설정되지 않았을 때 더미 데이터 반환
+      log.warn('Supabase not configured, returning mock data')
+      return {
+        artworks: [],
+        total: 0
+      }
     }
-    if (filters.style && filters.style.length > 0) {
-      query = query.in('style', filters.style)
-    }
-    if (filters.availability && filters.availability.length > 0) {
-      query = query.in('availability', filters.availability)
-    }
-    if (filters.featured !== undefined) {
-      query = query.eq('featured', filters.featured)
-    }
-    if (filters.artistId) {
-      query = query.eq('artist_id', filters.artistId)
-    }
-    if (filters.yearRange) {
-      query = query
-        .gte('year', filters.yearRange.min)
-        .lte('year', filters.yearRange.max)
-    }
-    // 가격 필터는 JSON 필드라서 별도 처리 필요
-  }
-
-  // 정렬 적용
-  if (sort) {
-    query = query.order(sort.field, { ascending: sort.direction === 'asc' })
-  } else {
-    query = query.order('created_at', { ascending: false })
-  }
-
-  // 페이지네이션
-  const from = (page - 1) * limit
-  const to = from + limit - 1
-  query = query.range(from, to)
-
-  const { data, error, count } = await query
-
-  if (error) {
     
-    throw new Error('작품 목록을 불러오는데 실패했습니다.')
-  }
+    let query = supabase
+      .from('artworks')
+      .select(`
+        *,
+        artist:artists(
+          id,
+          name,
+          name_en,
+          name_ja,
+          name_zh,
+          bio,
+          bio_en,
+          bio_ja,
+          bio_zh,
+          profile_image,
+          nationality
+        )
+      `, { count: 'exact' })
 
-  return {
-    artworks: (data as ArtworkWithArtist[]) || [],
-    total: count || 0
+    // 필터 적용
+    if (filters) {
+      if (filters.category && filters.category.length > 0) {
+        query = query.in('category', filters.category)
+      }
+      if (filters.style && filters.style.length > 0) {
+        query = query.in('style', filters.style)
+      }
+      if (filters.availability && filters.availability.length > 0) {
+        query = query.in('availability', filters.availability)
+      }
+      if (filters.featured !== undefined) {
+        query = query.eq('featured', filters.featured)
+      }
+      if (filters.artistId) {
+        query = query.eq('artist_id', filters.artistId)
+      }
+      if (filters.yearRange) {
+        query = query
+          .gte('year', filters.yearRange.min)
+          .lte('year', filters.yearRange.max)
+      }
+      // 가격 필터는 JSON 필드라서 별도 처리 필요
+    }
+
+    // 정렬 적용
+    if (sort) {
+      query = query.order(sort.field, { ascending: sort.direction === 'asc' })
+    } else {
+      query = query.order('created_at', { ascending: false })
+    }
+
+    // 페이지네이션
+    const from = (page - 1) * limit
+    const to = from + limit - 1
+    query = query.range(from, to)
+
+    const { data, error, count } = await query
+
+    if (error) {
+      log.error('getArtworks error', error)
+      throw new AppError('작품 목록을 불러오는데 실패했습니다.', 500, error.code)
+    }
+
+    return {
+      artworks: (data as ArtworkWithArtist[]) || [],
+      total: count || 0
+    }
+  } catch (error) {
+    log.error('getArtworks unexpected error', error)
+    // 에러 발생 시 빈 배열 반환
+    return {
+      artworks: [],
+      total: 0
+    }
   }
 }
 
@@ -125,37 +145,47 @@ export async function getArtworks(
  * 특정 작품 조회
  */
 export async function getArtwork(id: string): Promise<ArtworkWithArtist | null> {
-  const supabase = ensureSupabase()
-  const { data, error } = await supabase
-    .from('artworks')
-    .select(`
-      *,
-      artist:artists(
-        id,
-        name,
-        name_en,
-        name_ja,
-        name_zh,
-        bio,
-        bio_en,
-        bio_ja,
-        bio_zh,
-        profile_image,
-        nationality
-      )
-    `)
-    .eq('id', id)
-    .single()
-
-  if (error) {
-    if (error.code === 'PGRST116') {
+  try {
+    const supabase = ensureSupabase()
+    if (!supabase) {
+      log.warn('Supabase not configured, returning null')
       return null
     }
     
-    throw new Error('작품 정보를 불러오는데 실패했습니다.')
-  }
+    const { data, error } = await supabase
+      .from('artworks')
+      .select(`
+        *,
+        artist:artists(
+          id,
+          name,
+          name_en,
+          name_ja,
+          name_zh,
+          bio,
+          bio_en,
+          bio_ja,
+          bio_zh,
+          profile_image,
+          nationality
+        )
+      `)
+      .eq('id', id)
+      .single()
 
-  return data as ArtworkWithArtist
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return null
+      }
+      log.error('getArtwork error', error)
+      throw new AppError('작품 정보를 불러오는데 실패했습니다.', 500, error.code)
+    }
+
+    return data as ArtworkWithArtist
+  } catch (error) {
+    log.error('getArtwork unexpected error', error)
+    return null
+  }
 }
 
 /**
@@ -254,34 +284,44 @@ export async function searchArtworks(
  * 추천 작품 조회
  */
 export async function getFeaturedArtworks(limit: number = 6): Promise<ArtworkWithArtist[]> {
-  const supabase = ensureSupabase()
-  const { data, error } = await supabase
-    .from('artworks')
-    .select(`
-      *,
-      artist:artists(
-        id,
-        name,
-        name_en,
-        name_ja,
-        name_zh,
-        bio,
-        bio_en,
-        bio_ja,
-        bio_zh,
-        profile_image,
-        nationality
-      )
-    `)
-    .eq('featured', true)
-    .limit(limit)
-
-  if (error) {
+  try {
+    const supabase = ensureSupabase()
+    if (!supabase) {
+      log.warn('Supabase not configured, returning empty array')
+      return []
+    }
     
-    throw new Error('추천 작품을 불러오는데 실패했습니다.')
-  }
+    const { data, error } = await supabase
+      .from('artworks')
+      .select(`
+        *,
+        artist:artists(
+          id,
+          name,
+          name_en,
+          name_ja,
+          name_zh,
+          bio,
+          bio_en,
+          bio_ja,
+          bio_zh,
+          profile_image,
+          nationality
+        )
+      `)
+      .eq('featured', true)
+      .limit(limit)
 
-  return (data as ArtworkWithArtist[]) || []
+    if (error) {
+      log.error('getFeaturedArtworks error', error)
+      throw new AppError('추천 작품을 불러오는데 실패했습니다.', 500, error.code)
+    }
+
+    return (data as ArtworkWithArtist[]) || []
+  } catch (error) {
+    log.error('getFeaturedArtworks unexpected error', error)
+    return []
+  }
 }
 
 /**

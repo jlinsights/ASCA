@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { searchKakaoLocation } from "@/lib/kakao"
 import { MapPin, Navigation, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -80,7 +80,7 @@ export function KakaoMap({
   // 카카오맵 SDK 로드
   useEffect(() => {
     loadKakaoMapScript()
-  }, [])
+  }, [loadKakaoMapScript])
 
   // 검색어 변경 시 위치 검색
   useEffect(() => {
@@ -94,9 +94,9 @@ export function KakaoMap({
     if (mapInstance.current && markers.length > 0) {
       updateMarkers()
     }
-  }, [markers])
+  }, [markers, updateMarkers])
 
-  const loadKakaoMapScript = async () => {
+  const loadKakaoMapScript = useCallback(async () => {
     try {
       if (window.kakao && window.kakao.maps) {
         initializeMap()
@@ -124,7 +124,7 @@ export function KakaoMap({
       setError('카카오맵 로드 중 오류가 발생했습니다')
       setIsLoading(false)
     }
-  }
+  }, [])
 
   const initializeMap = () => {
     if (!mapContainer.current || !window.kakao?.maps) return
@@ -211,7 +211,7 @@ export function KakaoMap({
     }
   }
 
-  const updateMarkers = () => {
+  const updateMarkers = useCallback(() => {
     if (!mapInstance.current || !window.kakao?.maps) return
 
     markers.forEach((markerData) => {
@@ -241,7 +241,7 @@ export function KakaoMap({
         infowindow.open(mapInstance.current, marker)
       })
     })
-  }
+  }, [markers, onMarkerClick])
 
   const openKakaoMap = () => {
     if (searchResult) {

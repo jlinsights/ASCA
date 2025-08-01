@@ -110,7 +110,7 @@ export function MultiImageUpload({
     } finally {
       setLoading(false)
     }
-  }, [onUpload, onChange, value, maxSize, maxFiles, acceptedTypes])
+  }, [onUpload, onChange, value, validateFiles])
 
   // 파일 선택 처리
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {

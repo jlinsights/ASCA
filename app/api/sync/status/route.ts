@@ -1,8 +1,27 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+
+import { devAuth } from '@/lib/auth/dev-auth'
 import { createClient } from '@supabase/supabase-js'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // 개발 모드에서 인증 확인
+    let userId: string | null = null;
+    let isAdmin = false;
+    
+    const devUser = await devAuth.getCurrentUser();
+    if (devUser && devUser.role === 'admin') {
+      userId = devUser.id;
+      isAdmin = true;
+    }
+
+    if (!userId || !isAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Admin access required' },
+        { status: 401 }
+      );
+    }
+
     // Supabase 연결
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -17,7 +36,7 @@ export async function GET() {
       .limit(10)
 
     if (logsError) {
-      
+      // 에러 처리
     }
 
     // 동기화 통계
@@ -27,7 +46,7 @@ export async function GET() {
       .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()) // 최근 24시간
 
     if (statsError) {
-      
+      // 에러 처리
     }
 
     // 통계 집계
@@ -69,7 +88,6 @@ export async function GET() {
     })
 
   } catch (error) {
-    
     return NextResponse.json(
       { 
         success: false,

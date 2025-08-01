@@ -53,11 +53,36 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Brand colors
+        // Traditional East Asian Color Palette (Obang Colors + Cultural Extensions)
         "ink-black": "#1a1a1a",
         "rice-paper": "#f5f5f0",
         "scholar-red": "#af2626",
         "celadon-green": "#88A891",
+        "stone-gray": "#707070",
+        
+        // Traditional Five Elements Colors (Obang)
+        "east-wood": "#4a7c59",       // Spring/Wood - Eastern Direction
+        "south-fire": "#d73527",      // Summer/Fire - Southern Direction  
+        "center-earth": "#f4e2d7",    // Late Summer/Earth - Center
+        "west-metal": "#f2f2f2",      // Autumn/Metal - Western Direction
+        "north-water": "#1e3a8a",     // Winter/Water - Northern Direction
+        
+        // Cultural Seasonal Palette
+        "spring-blossom": "#fad0c4",  // Cherry blossom pink
+        "summer-jade": "#7dd3c0",     // Jade green
+        "autumn-gold": "#fdb462",     // Golden leaf
+        "winter-snow": "#ffffff",     // Pure snow white
+        
+        // Calligraphy Materials
+        "bamboo-green": "#6b7c32",    // Bamboo brush handle
+        "silk-cream": "#faf7f0",      // Silk paper texture
+        "lacquer-black": "#0d1b2a",   // Lacquer ink stone
+        "vermillion": "#e63946",      // Traditional red seal
+        
+        // Cultural Accents
+        "temple-gold": "#d4af37",     // Temple decoration
+        "moon-silver": "#c0c0c0",     // Moonlight reflection
+        "plum-purple": "#8e4585",     // Plum blossom
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -92,15 +117,15 @@ const config = {
         "ink-spread": "ink-spread 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards",
       },
       fontFamily: {
+        // Primary Typography System
         sans: [
-          "'Playfair Display'",
-          "'Source Han Serif SC'",
-          "'Source Han Serif TC'", 
-          "'Noto Serif CJK SC'",
-          "'Noto Serif CJK TC'", 
-          "'Noto Serif CJK KR'", 
-          "'Noto Serif CJK JP'", 
-          "serif"
+          "'Inter'",
+          "'Noto Sans CJK KR'",
+          "'Noto Sans CJK SC'",
+          "'Noto Sans CJK TC'",
+          "'Noto Sans CJK JP'",
+          "system-ui",
+          "sans-serif"
         ],
         serif: [
           "'Playfair Display'",
@@ -112,6 +137,8 @@ const config = {
           "'Noto Serif CJK JP'", 
           "serif"
         ],
+        
+        // Cultural Typography Variants
         calligraphy: [
           "'Source Han Serif SC'",
           "'Source Han Serif TC'", 
@@ -119,11 +146,54 @@ const config = {
           "'Noto Serif CJK TC'", 
           "'Noto Serif CJK KR'", 
           "'Noto Serif CJK JP'", 
+          "'KaiTi'",
+          "'STKaiti'",
+          "serif"
+        ],
+        brush: [
+          "'Ma Shan Zheng'",
+          "'Long Cang'",
+          "'Source Han Serif SC'",
+          "'Noto Serif CJK SC'",
+          "cursive"
+        ],
+        
+        // Language-Specific Optimizations
+        korean: [
+          "'Noto Serif CJK KR'",
+          "'Source Han Serif KR'",
+          "'Nanum Myeongjo'",
+          "'Batang'",
+          "serif"
+        ],
+        chinese: [
+          "'Source Han Serif SC'",
+          "'Noto Serif CJK SC'",
+          "'SimSun'",
+          "'Microsoft YaHei'",
+          "serif"
+        ],
+        japanese: [
+          "'Noto Serif CJK JP'",
+          "'Source Han Serif JP'",
+          "'Yu Mincho'",
+          "'Hiragino Mincho Pro'",
           "serif"
         ],
         english: [
           "'Playfair Display'",
+          "'Crimson Text'",
+          "'Georgia'",
           "serif"
+        ],
+        
+        // Specialized Typography
+        mono: [
+          "'JetBrains Mono'",
+          "'SF Mono'",
+          "'Monaco'",
+          "'Consolas'",
+          "monospace"
         ]
       },
     },

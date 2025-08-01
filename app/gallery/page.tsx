@@ -9,19 +9,19 @@ export default function GalleryPage() {
       <h1 className="text-3xl font-bold mb-6">갤러리</h1>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {images.map((img: any) => (
-          <div key={img.original} className="flex flex-col items-center">
+          <div key={img.id} className="flex flex-col items-center">
             <Image
-              src={img.thumbnail}
-              alt={img.name}
+              src={img.src}
+              alt={img.title}
               width={200}
               height={150}
               className="rounded shadow mb-2"
             />
             <a
-              href={img.original}
+              href={img.src}
               download
               className="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-              aria-label={`${img.name} 다운로드`}
+              aria-label={`${img.title} 다운로드`}
             >
               다운로드
               <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">

@@ -3,21 +3,14 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { Menu, X, ChevronDown, Settings } from "lucide-react"
-import { 
-  SignInButton, 
-  SignUpButton, 
-  UserButton, 
-  SignedIn, 
-  SignedOut,
-  useUser 
-} from "@clerk/nextjs"
+
+import { HeaderAuthSection } from "./header-auth-section"
+import { HeaderMobileAuth } from "./header-mobile-auth"
 import { ThemeToggle } from "./theme-toggle"
 import { ThemeTransition } from "./theme-transition"
 import { LanguageSelector } from "./language-selector"
 import { Logo } from "./logo"
 import { useLanguage } from "@/contexts/language-context"
-import { KakaoLoginButton } from "./kakao/kakao-login-button"
-import { log } from "@/lib/utils/logger"
 
 // 메뉴 구조 정의
 
@@ -28,11 +21,6 @@ export function Header() {
   const [mobileDropdowns, setMobileDropdowns] = useState<Record<string, boolean>>({})
   const headerRef = useRef<HTMLElement>(null)
   const { t } = useLanguage()
-  const { user } = useUser()
-  
-  // 관리자 계정 확인
-  const isAdmin = user?.emailAddresses?.[0]?.emailAddress === 'info@orientalcalligraphy.org' || 
-                  ['admin@asca.kr', 'content@asca.kr', 'editor@asca.kr'].includes(user?.emailAddresses?.[0]?.emailAddress || '')
 
   const menuStructure = [
     {
@@ -243,47 +231,7 @@ export function Header() {
 
             {/* Desktop Auth & Controls */}
             <div className="hidden lg:flex items-center space-x-3">
-              <SignedOut>
-                <div className="flex items-center space-x-2">
-                  <KakaoLoginButton 
-                    variant="outline"
-                    size="sm"
-                    loginText="카카오 로그인"
-                    onLoginSuccess={(userInfo) => {
-                      log.debug('Kakao login success', { userInfo })
-                    }}
-                  />
-                  <div className="h-4 w-px bg-border"></div>
-                  <SignInButton mode="modal">
-                    <button className="text-xs uppercase tracking-wider px-3 py-2 border border-current rounded hover:bg-foreground hover:text-background transition-colors">
-                      {t("signIn")}
-                    </button>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
-                    <button className="text-xs uppercase tracking-wider px-3 py-2 bg-foreground text-background rounded hover:bg-foreground/90 transition-colors">
-                      {t("signUp")}
-                    </button>
-                  </SignUpButton>
-                </div>
-              </SignedOut>
-              <SignedIn>
-                {isAdmin && (
-                  <Link 
-                    href="/admin" 
-                    className="p-2 hover:bg-foreground/10 rounded transition-colors"
-                    title="관리자 대시보드"
-                  >
-                    <Settings className="w-4 h-4" />
-                  </Link>
-                )}
-                <UserButton 
-                  appearance={{
-                    elements: {
-                      avatarBox: "w-8 h-8"
-                    }
-                  }}
-                />
-              </SignedIn>
+              <HeaderAuthSection />
               <ThemeToggle onToggle={handleThemeToggle} />
               <LanguageSelector />
             </div>
@@ -379,82 +327,9 @@ export function Header() {
                 >
                   검색
                 </Link>
-                {isAdmin && (
-                  <Link
-                    href="/admin"
-                    className="flex items-center gap-2 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Settings className="w-4 h-4" />
-                    {t("adminDashboard")}
-                  </Link>
-                )}
               </div>
               
-              <div className="border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 pt-4 mt-4">
-                <SignedOut>
-                  <div className="space-y-3">
-                    <KakaoLoginButton 
-                      variant="outline"
-                      size="md"
-                      className="w-full justify-start"
-                      loginText="카카오 로그인"
-                      onLoginSuccess={(userInfo) => {
-                        log.debug('Mobile Kakao login success', { userInfo })
-                        // 모바일 카카오 로그인 성공 처리
-                      }}
-                    />
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t border-border/50" />
-                      </div>
-                      <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-background px-2 text-muted-foreground">또는</span>
-                      </div>
-                    </div>
-                    <SignInButton mode="modal">
-                      <button 
-                        className="w-full text-sm uppercase tracking-wider py-3 px-4 border border-current rounded hover:bg-foreground hover:text-background transition-colors text-left"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {t("signIn")}
-                      </button>
-                    </SignInButton>
-                    <SignUpButton mode="modal">
-                      <button 
-                        className="w-full text-sm uppercase tracking-wider py-3 px-4 bg-foreground text-background rounded hover:bg-foreground/90 transition-colors text-left"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {t("signUp")}
-                      </button>
-                    </SignUpButton>
-                  </div>
-                </SignedOut>
-                <SignedIn>
-                  <div className="space-y-3">
-                    {isAdmin && (
-                      <Link
-                        href="/admin"
-                        className="flex items-center gap-2 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <Settings className="w-4 h-4" />
-                        {t("adminDashboard")}
-                      </Link>
-                    )}
-                    <div className="flex items-center gap-3 py-3 px-2">
-                      <UserButton 
-                        appearance={{
-                          elements: {
-                            avatarBox: "w-8 h-8"
-                          }
-                        }}
-                      />
-                      <span className="text-sm">{user?.emailAddresses?.[0]?.emailAddress}</span>
-                    </div>
-                  </div>
-                </SignedIn>
-              </div>
+              <HeaderMobileAuth onCloseMenu={() => setIsMenuOpen(false)} />
             </nav>
           </div>
         )}

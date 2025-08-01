@@ -6,7 +6,7 @@ import AdminProtectedRoute from '@/components/admin-protected-route'
 
 interface AdminLayoutProps {
   children: React.ReactNode
-  currentPage: 'exhibitions' | 'events' | 'files' | 'artists' | 'artworks' | 'migration'
+  currentPage: 'exhibitions' | 'events' | 'files' | 'artists' | 'artworks' | 'migration' | 'notices'
 }
 
 export const AdminLayout = React.memo(({ children, currentPage }: AdminLayoutProps) => {

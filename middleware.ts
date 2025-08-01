@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getAuth } from '@clerk/nextjs/server'
-import { clerkClient } from '@clerk/nextjs/server'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -44,23 +42,7 @@ export function middleware(request: NextRequest) {
       return response
     }
 
-    // Clerk 인증 정보에서 관리자 2FA 미등록 시 /profile로 리다이렉트
-    try {
-      const auth = getAuth(request)
-      const claims = auth.sessionClaims as any
-      if (
-        auth.userId &&
-        claims?.publicMetadata?.role === 'admin' &&
-        claims?.twoFactorEnabled === false
-      ) {
-        const url = request.nextUrl.clone()
-        url.pathname = '/profile'
-        url.searchParams.set('require2fa', '1')
-        return NextResponse.redirect(url)
-      }
-    } catch (e) {
-      // Clerk 인증 정보가 없거나 파싱 실패 시 무시
-    }
+    // 개발 모드에서 관리자 권한 체크는 클라이언트 사이드에서 수행
 
     // 클라이언트 사이드에서 인증 상태를 확인하도록 허용
     // 실제 인증 체크는 AdminProtectedRoute 컴포넌트에서 수행

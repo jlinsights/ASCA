@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useLanguage } from "@/contexts/language-context"
@@ -52,7 +52,7 @@ export default function ExhibitionsPage() {
     })
   }
 
-  const fetchExhibitions = async () => {
+  const fetchExhibitions = useCallback(async () => {
     try {
       setLoading(true)
       const filters: SearchFilters = {}
@@ -76,11 +76,11 @@ export default function ExhibitionsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchQuery, selectedStatus, currentPage])
 
   useEffect(() => {
     fetchExhibitions()
-  }, [currentPage, selectedStatus])
+  }, [fetchExhibitions])
 
   const handleSearch = () => {
     setCurrentPage(1)

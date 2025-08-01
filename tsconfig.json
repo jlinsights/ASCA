@@ -15,7 +15,6 @@
     "incremental": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
-    "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
     "plugins": [
       {

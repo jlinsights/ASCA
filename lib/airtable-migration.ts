@@ -46,14 +46,7 @@ export class AirtableMigration {
       profile_image: fields['Profile Image']?.[0]?.url || null,
       membership_type: fields['Membership Type'] || '준회원',
       artist_type: fields['Artist Type'] || '일반작가',
-      title: fields['Title'] || null,
-      // 새로 추가된 필드들
-      phone: fields['Phone'] || null,
-      email: fields['Email'] || null,
-      date_of_birth: parseDOB(fields['DOB']),
-      address: fields['Address'] || null,
-      bio_korean: fields['Bio (Korean)'] || null,
-      artist_group: fields['Group'] || null
+      title: fields['Title'] || null
     };
   }
 

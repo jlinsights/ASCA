@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -332,14 +333,18 @@ export default function EventDetailPage() {
               
               {event.featured_image_url && (
                 <div className="px-6 pb-4">
-                  <img
-                    src={event.featured_image_url}
-                    alt={event.title}
-                    className="w-full h-96 object-cover rounded-lg"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none'
-                    }}
-                  />
+                  <div className="relative w-full h-96">
+                    <Image
+                      src={event.featured_image_url}
+                      alt={event.title}
+                      fill
+                      className="object-cover rounded-lg"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  </div>
                 </div>
               )}
               

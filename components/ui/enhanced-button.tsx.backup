@@ -1,0 +1,92 @@
+'use client';
+
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { generateButtonClasses, type ComponentSize, type ComponentVariant } from '@/lib/design-system';
+import { Loader2 } from 'lucide-react';
+
+interface EnhancedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: ComponentSize;
+  variant?: ComponentVariant;
+  isLoading?: boolean;
+  loadingText?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  fullWidth?: boolean;
+  asChild?: boolean;
+}
+
+const EnhancedButton = React.forwardRef<HTMLButtonElement, EnhancedButtonProps>(
+  (
+    {
+      className,
+      size = 'md',
+      variant = 'default',
+      isLoading = false,
+      loadingText,
+      leftIcon,
+      rightIcon,
+      fullWidth = false,
+      children,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    const buttonClasses = generateButtonClasses(size, variant);
+    
+    return (
+      <button
+        className={cn(
+          buttonClasses,
+          fullWidth && 'w-full',
+          'group relative overflow-hidden',
+          className
+        )}
+        ref={ref}
+        disabled={disabled || isLoading}
+        {...props}
+      >
+        {/* Loading State */}
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-inherit">
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            {loadingText && <span>{loadingText}</span>}
+          </div>
+        )}
+        
+        {/* Button Content */}
+        <div className={cn(
+          'flex items-center justify-center gap-2 transition-opacity duration-200',
+          isLoading && 'opacity-0'
+        )}>
+          {leftIcon && (
+            <span className="flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
+              {leftIcon}
+            </span>
+          )}
+          
+          {children && (
+            <span className="transition-all duration-200 group-hover:tracking-wide">
+              {children}
+            </span>
+          )}
+          
+          {rightIcon && (
+            <span className="flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
+              {rightIcon}
+            </span>
+          )}
+        </div>
+        
+        {/* Hover Effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full transition-transform duration-700 group-hover:translate-x-full" />
+      </button>
+    );
+  }
+);
+
+EnhancedButton.displayName = 'EnhancedButton';
+
+export { EnhancedButton };
+export type { EnhancedButtonProps };

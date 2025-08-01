@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Card, CardContent } from '@/components/ui/card'
@@ -87,7 +87,7 @@ export default function EventsPage() {
     { value: 'cancelled', label: language === 'ko' ? '취소' : 'Cancelled' }
   ]
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
@@ -110,11 +110,11 @@ export default function EventsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchQuery, selectedCategory, selectedStatus, currentPage, language])
 
   useEffect(() => {
     fetchEvents()
-  }, [currentPage, selectedCategory, selectedStatus])
+  }, [fetchEvents])
 
   const handleSearch = () => {
     setCurrentPage(1)

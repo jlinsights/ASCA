@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -55,12 +55,12 @@ export function ImageViewer({
     setZoom(prev => Math.min(prev * 1.5, 5))
   }
 
-  const handleZoomOut = () => {
+  const handleZoomOut = useCallback(() => {
     setZoom(prev => Math.max(prev / 1.5, 0.5))
     if (zoom <= 1) {
       setPosition({ x: 0, y: 0 })
     }
-  }
+  }, [zoom])
 
   // 이미지 회전
   const handleRotate = () => {
@@ -68,22 +68,22 @@ export function ImageViewer({
   }
 
   // 리셋
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setZoom(1)
     setPosition({ x: 0, y: 0 })
     setRotation(0)
-  }
+  }, [])
 
   // 이전/다음 이미지
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setActiveIndex(prev => (prev > 0 ? prev - 1 : images.length - 1))
     handleReset()
-  }
+  }, [images.length, handleReset])
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setActiveIndex(prev => (prev < images.length - 1 ? prev + 1 : 0))
     handleReset()
-  }
+  }, [images.length, handleReset])
 
   // 고해상도 이미지 다운로드
   const handleDownload = async () => {
@@ -218,7 +218,7 @@ export function ImageViewer({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen])
+  }, [isOpen, handleNext, handlePrevious, handleZoomOut])
 
   // 다이얼로그 열림/닫힘 시 상태 초기화
   useEffect(() => {

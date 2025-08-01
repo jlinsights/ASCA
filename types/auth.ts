@@ -59,7 +59,7 @@ export interface AuthContextType {
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
-  hasPermission: (resource: string, action: string) => boolean
+  hasPermission: (resource: string, action: string) => Promise<boolean>
   refreshUser: () => Promise<void>
 }
 

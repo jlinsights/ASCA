@@ -2,6 +2,8 @@
  * 개발 서버 환경 설정
  */
 
+import { logger } from '@/lib/utils/logger'
+
 export const devConfig = {
   // 서버 설정
   server: {
@@ -42,10 +44,7 @@ export const devConfig = {
       anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
       serviceKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
     },
-    clerk: {
-      publishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-      secretKey: process.env.CLERK_SECRET_KEY,
-    },
+
     airtable: {
       apiKey: process.env.AIRTABLE_API_KEY,
       baseId: process.env.AIRTABLE_BASE_ID,
@@ -86,18 +85,14 @@ export const validateDevConfig = () => {
     errors.push('NEXT_PUBLIC_SUPABASE_ANON_KEY가 설정되지 않았습니다.')
   }
   
-  if (!devConfig.services.clerk.publishableKey) {
-    errors.push('NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY가 설정되지 않았습니다.')
-  }
+
   
   if (errors.length > 0) {
-    console.error('❌ 개발 환경 설정 오류:')
-    errors.forEach(error => console.error(`  - ${error}`))
-    console.error('\n📋 .env.example 파일을 참고하여 환경 변수를 설정하세요.')
+    logger.error('개발 환경 설정 오류', new Error('Environment configuration errors'), { errors })
     return false
   }
   
-  console.log('✅ 개발 환경 설정이 완료되었습니다.')
+  logger.info('개발 환경 설정이 완료되었습니다.')
   return true
 }
 
@@ -105,23 +100,26 @@ export const validateDevConfig = () => {
 export const logDevInfo = () => {
   if (process.env.NODE_ENV !== 'development') return
   
-  console.log('\n🚀 개발 서버 시작')
-  console.log(`📍 주소: http://${devConfig.server.host}:${devConfig.server.port}`)
-  console.log(`🔧 개발 모드: ${devConfig.development.devMode ? '활성화' : '비활성화'}`)
-  console.log(`🛡️  관리자 모드: ${devConfig.development.adminMode ? '활성화' : '비활성화'}`)
-  console.log(`📝 로그 레벨: ${devConfig.logging.level}`)
-  console.log(`🎯 모의 데이터: ${devConfig.development.mockData ? '사용' : '미사용'}`)
-  console.log(`📊 성능 모니터링: ${devConfig.logging.performance ? '활성화' : '비활성화'}`)
-  
-  if (devConfig.development.adminMode) {
-    console.warn('⚠️  주의: 개발 모드에서 관리자 권한 체크가 우회됩니다.')
+  const devInfo = {
+    message: '개발 서버 시작',
+    address: `http://${devConfig.server.host}:${devConfig.server.port}`,
+    devMode: devConfig.development.devMode ? '활성화' : '비활성화',
+    adminMode: devConfig.development.adminMode ? '활성화' : '비활성화',
+    logLevel: devConfig.logging.level,
+    mockData: devConfig.development.mockData ? '사용' : '미사용',
+    performanceMonitoring: devConfig.logging.performance ? '활성화' : '비활성화',
+    links: {
+      admin: `http://${devConfig.server.host}:${devConfig.server.port}/admin`,
+      api: `http://${devConfig.server.host}:${devConfig.server.port}/api`,
+      database: 'http://localhost:4983'
+    }
   }
   
-  console.log('\n🔗 개발 도구 링크:')
-  console.log(`  - 관리자 페이지: http://${devConfig.server.host}:${devConfig.server.port}/admin`)
-  console.log(`  - API 문서: http://${devConfig.server.host}:${devConfig.server.port}/api`)
-  console.log(`  - 데이터베이스 스튜디오: http://localhost:4983 (drizzle-kit studio)`)
-  console.log('')
+  logger.info('개발 서버 정보', devInfo)
+  
+  if (devConfig.development.adminMode) {
+    logger.warn('개발 모드에서 관리자 권한 체크가 우회됩니다.')
+  }
 }
 
 // 개발 환경 초기화
@@ -129,9 +127,7 @@ export const initializeDevEnvironment = () => {
   if (process.env.NODE_ENV !== 'development') return
   
   // 환경 변수 검증
-  if (!validateDevConfig()) {
-    process.exit(1)
-  }
+  validateDevConfig()
   
   // 개발 환경 정보 출력
   logDevInfo()

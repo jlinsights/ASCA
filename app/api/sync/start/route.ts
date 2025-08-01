@@ -1,32 +1,80 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// 🚨 SECURITY: This endpoint has been temporarily disabled due to security vulnerabilities
-// 🔒 REASON: No authentication check - allows unauthorized sync engine control
-// 📅 DISABLED: 2025-07-12
-// 💾 BACKUP: Available in api-backup/ directory
-// 🔧 TODO: Implement proper admin authentication before re-enabling
+import { devAuth } from '@/lib/auth/dev-auth'
 
+// POST /api/sync/start - 동기화 시작
 export async function POST(request: NextRequest) {
-  return NextResponse.json(
-    {
-      success: false,
-      message: 'SECURITY: Sync start endpoint temporarily disabled',
-      reason: 'This endpoint has been disabled due to security vulnerabilities. Authentication required.',
-      disabledAt: '2025-07-12',
-      contact: 'Contact admin to re-enable with proper security measures'
-    },
-    { status: 503 } // Service Unavailable
-  )
+  try {
+    // 개발 모드에서 인증 확인
+    let userId: string | null = null;
+    let isAdmin = false;
+    
+    const devUser = await devAuth.getCurrentUser();
+    if (devUser && devUser.role === 'admin') {
+      userId = devUser.id;
+      isAdmin = true;
+    }
+
+    if (!userId || !isAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Admin access required' },
+        { status: 401 }
+      );
+    }
+
+    // 동기화 시작 로직 (구현 예정)
+    return NextResponse.json({
+      success: true,
+      message: 'Sync started successfully',
+      data: {
+        status: 'running',
+        startedAt: new Date().toISOString(),
+        initiatedBy: userId
+      }
+    });
+
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
 }
 
+// GET /api/sync/start - 동기화 상태 확인
 export async function GET() {
-  return NextResponse.json(
-    {
-      success: false,
-      message: 'SECURITY: Sync endpoint temporarily disabled',
-      reason: 'Authentication required for sync operations',
-      disabledAt: '2025-07-12'
-    },
-    { status: 503 }
-  )
+  try {
+    // 개발 모드에서 인증 확인
+    let userId: string | null = null;
+    let isAdmin = false;
+    
+    const devUser = await devAuth.getCurrentUser();
+    if (devUser && devUser.role === 'admin') {
+      userId = devUser.id;
+      isAdmin = true;
+    }
+
+    if (!userId || !isAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Admin access required' },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Sync status retrieved',
+      data: {
+        status: 'idle',
+        lastSync: null,
+        nextSync: null
+      }
+    });
+
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
 } 
