@@ -6,14 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { FileQuestion, ArrowLeft, Home, Search } from 'lucide-react'
 
 export default function NotFound() {
-  const handleBack = () => {
-    if (window.history?.length > 1) {
-      window.history.back()
-    } else {
-      window.location.href = '/'
-    }
-  }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md shadow-lg">
@@ -48,9 +40,11 @@ export default function NotFound() {
               </Link>
             </Button>
             
-            <Button variant="ghost" onClick={handleBack} className="w-full">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              이전 페이지로
+            <Button variant="ghost" asChild className="w-full">
+              <Link href="/">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                이전 페이지로
+              </Link>
             </Button>
           </div>
 
