@@ -42,7 +42,7 @@
     "perf:audit": "npm run build && npx @next/bundle-analyzer .next/static/chunks/*.js",
     "perf:lighthouse": "npx lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-report.json",
     "pre-commit": "npm run type-check && npm run lint && npm run format:check && npm run test:ci",
-    "postinstall": "husky install || exit 0",
+    "postinstall": "[ -d .git ] && husky install || echo 'Skipping husky install in non-git environment'",
     "setup": "npm install && npm run db:setup && npm run db:seed",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
