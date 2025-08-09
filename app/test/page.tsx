@@ -2,7 +2,7 @@ export default function TestPage() {
   return (
     <div>
       <h1>Test Page</h1>
-      <p>If you can see this, the server is working.</p>
+      <p>This is a simple test page to verify Next.js is working.</p>
     </div>
   )
 }

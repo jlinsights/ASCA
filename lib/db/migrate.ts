@@ -37,7 +37,7 @@ function loadMigrations(): Migration[] {
   const migrationsDir = path.join(__dirname, 'migrations');
   
   if (!fs.existsSync(migrationsDir)) {
-    console.log('Migrations directory not found');
+
     return [];
   }
   
@@ -84,9 +84,7 @@ async function getExecutedMigrations(): Promise<string[]> {
 // 단일 마이그레이션 실행
 async function executeMigration(migration: Migration): Promise<void> {
   const startTime = Date.now();
-  
-  console.log(`Executing migration: ${migration.filename}`);
-  
+
   try {
     // 트랜잭션 내에서 마이그레이션 실행
     await db.transaction(async (tx) => {
@@ -129,18 +127,16 @@ async function executeMigration(migration: Migration): Promise<void> {
         )
       `);
     } catch (insertError) {
-      console.error('Failed to record migration failure:', insertError);
+
     }
-    
-    console.error(`❌ Migration ${migration.filename} failed:`, error);
+
     throw error;
   }
 }
 
 // 모든 대기 중인 마이그레이션 실행
 export async function runMigrations(): Promise<void> {
-  console.log('🚀 Starting database migrations...');
-  
+
   try {
     // 마이그레이션 테이블 확인/생성
     await createMigrationsTable();
@@ -155,13 +151,13 @@ export async function runMigrations(): Promise<void> {
     );
     
     if (pendingMigrations.length === 0) {
-      console.log('✅ No pending migrations found. Database is up to date.');
+
       return;
     }
     
     console.log(`📋 Found ${pendingMigrations.length} pending migration(s):`);
     pendingMigrations.forEach(migration => {
-      console.log(`   - ${migration.filename}`);
+
     });
     
     // 순차적으로 마이그레이션 실행
@@ -172,7 +168,7 @@ export async function runMigrations(): Promise<void> {
     console.log(`🎉 Successfully executed ${pendingMigrations.length} migration(s)!`);
     
   } catch (error) {
-    console.error('💥 Migration failed:', error);
+
     throw error;
   }
 }
@@ -236,8 +232,7 @@ export async function getMigrationStatus(): Promise<{
 
 // 마이그레이션 롤백 (개발 환경용)
 export async function rollbackMigration(filename: string): Promise<void> {
-  console.warn('⚠️  Migration rollback is not implemented. Manual intervention required.');
-  console.warn('   Please restore from backup or manually revert schema changes.');
+
 }
 
 // CLI 실행 지원
@@ -254,18 +249,13 @@ if (require.main === module) {
     case 'status':
       getMigrationStatus()
         .then(status => {
-          console.log('\n📊 Migration Status:');
-          console.log(`   Total: ${status.total}`);
-          console.log(`   Executed: ${status.executed}`);
-          console.log(`   Pending: ${status.pending}`);
-          console.log(`   Failed: ${status.failed}\n`);
-          
+
           status.migrations.forEach(migration => {
             const statusIcon = migration.status === 'executed' ? '✅' : 
                               migration.status === 'failed' ? '❌' : '⏳';
             console.log(`${statusIcon} ${migration.filename} (v${migration.version})`);
             if (migration.executedAt) {
-              console.log(`   Executed: ${migration.executedAt.toISOString()}`);
+              console.log(`   Executed at: ${migration.executedAt}`);
             }
           });
           
@@ -275,10 +265,7 @@ if (require.main === module) {
       break;
       
     default:
-      console.log('Usage: npm run migrate [command]');
-      console.log('Commands:');
-      console.log('  run    - Execute pending migrations');
-      console.log('  status - Show migration status');
+
       process.exit(0);
   }
 }

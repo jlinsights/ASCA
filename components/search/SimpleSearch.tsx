@@ -11,6 +11,7 @@ interface SimpleSearchProps {
   className?: string;
 }
 
+// @deprecated Use SimpleSearch from @/components/search/search-components instead
 export default function SimpleSearch({ 
   onSearch, 
   placeholder = '검색어를 입력하세요...', 

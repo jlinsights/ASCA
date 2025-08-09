@@ -51,25 +51,25 @@ export async function GET(request: NextRequest) {
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(desc(culturalExchangeParticipants.appliedAt))
 
-    // 데이터 변환
-    const formattedApplications = applications.map(app => ({
+    // 데이터 변환 (안전한 null 처리 추가)
+    const formattedApplications = applications.map((app: any) => ({
       ...app.participant,
-      appliedAt: new Date(Number(app.participant.appliedAt) * 1000),
-      approvedAt: app.participant.approvedAt ? new Date(Number(app.participant.approvedAt) * 1000) : undefined,
-      completedAt: app.participant.completedAt ? new Date(Number(app.participant.completedAt) * 1000) : undefined,
-      applicationData: app.participant.applicationData ? JSON.parse(app.participant.applicationData) : {},
-      emergencyContact: app.participant.emergencyContact ? JSON.parse(app.participant.emergencyContact) : {},
-      feedback: app.participant.feedback ? JSON.parse(app.participant.feedback) : undefined,
+      appliedAt: app.participant?.appliedAt ? new Date(Number(app.participant.appliedAt) * 1000) : new Date(),
+      approvedAt: app.participant?.approvedAt ? new Date(Number(app.participant.approvedAt) * 1000) : undefined,
+      completedAt: app.participant?.completedAt ? new Date(Number(app.participant.completedAt) * 1000) : undefined,
+      applicationData: app.participant?.applicationData ? JSON.parse(app.participant.applicationData) : {},
+      emergencyContact: app.participant?.emergencyContact ? JSON.parse(app.participant.emergencyContact) : {},
+      feedback: app.participant?.feedback ? JSON.parse(app.participant.feedback) : undefined,
       program: app.program ? {
         ...app.program,
-        startDate: new Date(Number(app.program.startDate) * 1000),
-        endDate: new Date(Number(app.program.endDate) * 1000),
+        startDate: app.program.startDate ? new Date(Number(app.program.startDate) * 1000) : new Date(),
+        endDate: app.program.endDate ? new Date(Number(app.program.endDate) * 1000) : new Date(),
         applicationDeadline: app.program.applicationDeadline ? new Date(Number(app.program.applicationDeadline) * 1000) : undefined
       } : undefined,
       member: app.member ? {
         ...app.member,
-        fullName: app.member.fullName,
-        membershipNumber: app.member.membershipNumber
+        fullName: app.member.fullName || '',
+        membershipNumber: app.member.membershipNumber || ''
       } : undefined
     }))
 
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error fetching applications:', error)
+
     return NextResponse.json(
       { success: false, error: '신청 내역을 가져오는 중 오류가 발생했습니다' },
       { status: 500 }
@@ -175,16 +175,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 자격 요건 확인
-    const requirements = program[0].requirements ? JSON.parse(program[0].requirements) : []
-    const memberTierLevel = member[0].tierLevel
+    // 자격 요건 확인 (안전한 처리 추가)
+    let requirements: any[] = []
+    try {
+      requirements = program[0].requirements ? JSON.parse(program[0].requirements) : []
+    } catch (error) {
+      requirements = []
+    }
+    
+    const memberTierLevel = member[0].tierLevel || 1
     
     for (const req of requirements) {
-      if (req.mandatory) {
+      if (req?.mandatory) {
         if (req.type === 'membership_level' && req.details?.minimumLevel) {
           if (memberTierLevel < req.details.minimumLevel) {
             return NextResponse.json(
-              { success: false, error: `회원 등급이 부족합니다. ${req.description}` },
+              { success: false, error: `회원 등급이 부족합니다. ${req.description || ''}` },
               { status: 400 }
             )
           }
@@ -194,7 +200,7 @@ export async function POST(request: NextRequest) {
           const memberExperience = member[0].calligraphyExperience || 0
           if (memberExperience < req.details.minimumYears) {
             return NextResponse.json(
-              { success: false, error: `경력이 부족합니다. ${req.description}` },
+              { success: false, error: `경력이 부족합니다. ${req.description || ''}` },
               { status: 400 }
             )
           }
@@ -240,15 +246,15 @@ export async function POST(request: NextRequest) {
       success: true,
       application: {
         ...result[0],
-        appliedAt: new Date(Number(result[0].appliedAt) * 1000),
-        applicationData: JSON.parse(result[0].applicationData),
-        emergencyContact: JSON.parse(result[0].emergencyContact)
+        appliedAt: result[0].appliedAt ? new Date(Number(result[0].appliedAt) * 1000) : new Date(),
+        applicationData: result[0].applicationData ? JSON.parse(result[0].applicationData) : {},
+        emergencyContact: result[0].emergencyContact ? JSON.parse(result[0].emergencyContact) : {}
       },
       message: '프로그램 신청이 완료되었습니다'
     })
 
   } catch (error) {
-    console.error('Error creating application:', error)
+
     return NextResponse.json(
       { success: false, error: '신청 처리 중 오류가 발생했습니다' },
       { status: 500 }

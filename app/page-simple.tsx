@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function HomeSimple() {
   return (
     <div className="min-h-screen bg-white">
@@ -15,25 +17,25 @@ export default function HomeSimple() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          <a href="/exhibitions" className="group p-6 border rounded-lg hover:shadow-lg transition-all">
+          <Link href="/exhibitions" className="group p-6 border rounded-lg hover:shadow-lg transition-all">
             <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600">전시</h3>
             <p className="text-gray-600">현재 진행 중인 전시와 예정된 전시를 확인하세요</p>
-          </a>
+          </Link>
           
-          <a href="/artworks" className="group p-6 border rounded-lg hover:shadow-lg transition-all">
+          <Link href="/artworks" className="group p-6 border rounded-lg hover:shadow-lg transition-all">
             <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600">작품</h3>
             <p className="text-gray-600">다양한 서예 작품들을 감상해보세요</p>
-          </a>
+          </Link>
           
-          <a href="/artists" className="group p-6 border rounded-lg hover:shadow-lg transition-all">
+          <Link href="/artists" className="group p-6 border rounded-lg hover:shadow-lg transition-all">
             <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600">작가</h3>
             <p className="text-gray-600">협회 소속 작가들을 만나보세요</p>
-          </a>
+          </Link>
           
-          <a href="/events" className="group p-6 border rounded-lg hover:shadow-lg transition-all">
+          <Link href="/events" className="group p-6 border rounded-lg hover:shadow-lg transition-all">
             <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600">행사</h3>
             <p className="text-gray-600">다양한 서예 행사에 참여하세요</p>
-          </a>
+          </Link>
         </div>
 
         <div className="mb-16">
@@ -42,19 +44,19 @@ export default function HomeSimple() {
             <div className="border rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">새로운 전시 개최</h3>
               <p className="text-gray-600 mb-4">2024년 동양서예협회 정기전시가 개최됩니다.</p>
-              <a href="/exhibitions" className="text-blue-600 hover:underline">자세히 보기</a>
+              <Link href="/exhibitions" className="text-blue-600 hover:underline">자세히 보기</Link>
             </div>
             
             <div className="border rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">신규 작가 모집</h3>
               <p className="text-gray-600 mb-4">동양서예협회에서 신규 작가를 모집합니다.</p>
-              <a href="/artists" className="text-blue-600 hover:underline">자세히 보기</a>
+              <Link href="/artists" className="text-blue-600 hover:underline">자세히 보기</Link>
             </div>
             
             <div className="border rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">서예 교육 프로그램</h3>
               <p className="text-gray-600 mb-4">초보자를 위한 서예 교육 프로그램을 운영합니다.</p>
-              <a href="/events" className="text-blue-600 hover:underline">자세히 보기</a>
+              <Link href="/events" className="text-blue-600 hover:underline">자세히 보기</Link>
             </div>
           </div>
         </div>

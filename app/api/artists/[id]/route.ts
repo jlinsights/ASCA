@@ -1,38 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getArtist } from '@/lib/api/artists'
-import { handleApiError, AppError } from '@/lib/utils/error-handler'
-import { log } from '@/lib/utils/logger'
-
-type RouteParams = {
-  params: Promise<{ id: string }>
-}
 
 export async function GET(
   request: NextRequest,
-  { params }: RouteParams
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const artist = await getArtist(resolvedParams.id)
+    const { id } = await params
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: '작가 ID가 필요합니다.' },
+        { status: 400 }
+      )
+    }
 
+    const artist = await getArtist(id)
+    
     if (!artist) {
       return NextResponse.json(
-        {
-          success: false,
-          message: 'Artist not found'
-        },
+        { error: '작가를 찾을 수 없습니다.' },
         { status: 404 }
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      artist
-    })
-
+    return NextResponse.json(artist)
   } catch (error) {
-    log.error('GET /api/artists/[id] error', error, { url: request.url })
-    const errRes = handleApiError(error)
-    return NextResponse.json(errRes, { status: errRes.statusCode || 500 })
+
+    return NextResponse.json(
+      { error: '작가 정보를 불러오는데 실패했습니다.' },
+      { status: 500 }
+    )
   }
 } 

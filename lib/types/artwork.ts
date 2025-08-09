@@ -29,17 +29,19 @@ export interface Artwork {
   mediumZh: string
   dimensions: string
   year: number
-  price: number
+  price?: number
   currency: Currency
   description: string
   descriptionEn: string
   descriptionJa: string
   descriptionZh: string
-  imageUrl: string
+  imageUrl?: string
+  image_url?: string
   images: string[]
   thumbnailUrl?: string
   isAvailable: boolean
-  isFeatured: boolean
+  isFeatured?: boolean
+  featured?: boolean
   tags: string[]
   tagsEn: string[]
   tagsJa: string[]
@@ -47,7 +49,22 @@ export interface Artwork {
   views: number
   likes: number
   createdAt: Date
+  created_at: string
   updatedAt: Date
+  // 추가 필드들
+  orientation?: 'portrait' | 'landscape' | 'square'
+  collection_status?: 'private' | 'museum' | 'gallery' | 'public'
+}
+
+// 작가 정보 포함 작품 인터페이스
+export interface ArtworkWithArtist extends Artwork {
+  artist_profile?: {
+    id: string
+    name: string
+    nameEn?: string
+    bio?: string
+    bioEn?: string
+  }
 }
 
 // 작품 상세 정보 인터페이스 (옵션 필드들)

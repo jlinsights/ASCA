@@ -1,7 +1,6 @@
 # 동양서예협회 데이터베이스 설정 가이드
 
-이 문서는 Drizzle ORM을 사용한 동양서예협회 웹사이트의 데이터베이스 설정 방법을
-설명합니다.
+이 문서는 Drizzle ORM과 PostgreSQL(Supabase)을 사용한 동양서예협회 웹사이트의 데이터베이스 설정 방법을 설명합니다.
 
 ## 📋 목차
 
@@ -17,7 +16,7 @@
 ### 1. 패키지 설치
 
 ```bash
-npm install drizzle-orm drizzle-kit better-sqlite3 @libsql/client --legacy-peer-deps
+npm install drizzle-orm drizzle-kit postgres --legacy-peer-deps
 npm install tsx --save-dev --legacy-peer-deps
 ```
 
@@ -26,8 +25,8 @@ npm install tsx --save-dev --legacy-peer-deps
 `.env.local` 파일을 생성하고 다음 내용을 추가하세요:
 
 ```env
-# Database
-DATABASE_URL="file:./sqlite.db"
+# Database (Supabase PostgreSQL)
+DATABASE_URL="postgresql://user:password@host:port/database"
 
 # Next.js
 NEXT_PUBLIC_APP_URL="http://localhost:3000"

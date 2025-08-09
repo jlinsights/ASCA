@@ -14,7 +14,6 @@ import {
 
 // 시드 데이터 생성 함수
 export async function seedDatabase() {
-  
 
   try {
     // 1. 사용자 데이터 생성
@@ -365,8 +364,7 @@ export async function seedDatabase() {
     await db.insert(galleries).values(sampleGalleries);
 
     // 8. 관계 테이블 데이터 생성
-    
-    
+
     // 전시회-작품 관계
     await db.insert(exhibitionArtworks).values([
       {
@@ -428,16 +426,6 @@ export async function seedDatabase() {
       grantedBy: 'user-admin-001',
     });
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
   } catch (error) {
     
     throw error;
@@ -446,8 +434,7 @@ export async function seedDatabase() {
 
 // 시드 데이터 삭제 함수 (개발용)
 export async function clearDatabase() {
-  
-  
+
   try {
     // 관계 테이블부터 삭제 (외래키 제약 조건 때문)
     await db.delete(galleryArtworks);
@@ -462,8 +449,7 @@ export async function clearDatabase() {
     await db.delete(artists);
     await db.delete(galleries);
     await db.delete(users);
-    
-    
+
   } catch (error) {
     
     throw error;

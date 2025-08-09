@@ -1,26 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getArtists } from '@/lib/api/artists'
-import { handleApiError, AppError } from '@/lib/utils/error-handler'
-import { log } from '@/lib/utils/logger'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
+    
+    // 쿼리 파라미터 파싱
     const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '12')
+    const limit = parseInt(searchParams.get('limit') || '20')
+    const membershipType = searchParams.get('membershipType')
+    const artistType = searchParams.get('artistType')
+    const specialty = searchParams.get('specialty')
+    const title = searchParams.get('title')
 
-    const result = await getArtists(undefined, undefined, page, limit)
+    // filters 객체 구성
+    const filters = {
+      membershipType: membershipType ? [membershipType] : undefined,
+      artistType: artistType ? [artistType] : undefined,
+      specialties: specialty ? [specialty] : undefined,
+    }
 
-    return NextResponse.json({
-      success: true,
-      artists: result.artists,
-      total: result.total,
+    const result = await getArtists(
+      filters,
+      undefined, // sort
       page,
       limit
-    })
+    )
+
+    return NextResponse.json(result)
   } catch (error) {
-    log.error('GET /api/artists error', error, { url: request.url })
-    const errRes = handleApiError(error)
-    return NextResponse.json(errRes, { status: errRes.statusCode || 500 })
+
+    return NextResponse.json(
+      { error: '작가 목록을 불러오는데 실패했습니다.' },
+      { status: 500 }
+    )
   }
 } 

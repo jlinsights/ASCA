@@ -218,7 +218,7 @@ export function ImageViewer({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, handleNext, handlePrevious, handleZoomOut])
+  }, [isOpen, handleNext, handlePrevious, handleZoomOut, handleReset])
 
   // 다이얼로그 열림/닫힘 시 상태 초기화
   useEffect(() => {
@@ -226,7 +226,7 @@ export function ImageViewer({
       setActiveIndex(currentIndex)
       handleReset()
     }
-  }, [isOpen, currentIndex])
+  }, [isOpen, currentIndex, handleReset])
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

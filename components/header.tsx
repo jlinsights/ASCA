@@ -14,6 +14,7 @@ import { useLanguage } from "@/contexts/language-context"
 
 // 메뉴 구조 정의
 
+// @deprecated Use LayoutHeader from @/components/layout/layout-header instead
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)

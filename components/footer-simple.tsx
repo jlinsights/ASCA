@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
 
+// @deprecated Use LayoutFooter with variant="simple" from @/components/layout/layout-footer instead
 export function FooterSimple() {
   const { t = (key: string) => key } = useLanguage() || {}
 
