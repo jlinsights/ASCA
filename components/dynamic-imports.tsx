@@ -150,50 +150,52 @@ export const DynamicPerformanceMonitor = dynamic(
 // 차트 및 시각화 관련 동적 컴포넌트들
 // ==============================================================
 
-export const DynamicRecharts = dynamic(
-  () => import('recharts').then(mod => ({ 
-    default: { 
-      LineChart: mod.LineChart,
-      AreaChart: mod.AreaChart,
-      BarChart: mod.BarChart,
-      PieChart: mod.PieChart,
-      ResponsiveContainer: mod.ResponsiveContainer,
-      XAxis: mod.XAxis,
-      YAxis: mod.YAxis,
-      CartesianGrid: mod.CartesianGrid,
-      Tooltip: mod.Tooltip,
-      Legend: mod.Legend,
-      Line: mod.Line,
-      Area: mod.Area,
-      Bar: mod.Bar,
-      Pie: mod.Pie,
-      Cell: mod.Cell,
-    }
-  })),
-  {
-    loading: () => <LoadingSpinner />,
-    ssr: false,
-  }
-)
+// TODO: Fix Recharts dynamic import - currently causing TypeScript compilation errors
+// export const DynamicRecharts = dynamic(
+//   () => import('recharts').then(mod => ({ 
+//     default: { 
+//       LineChart: mod.LineChart,
+//       AreaChart: mod.AreaChart,
+//       BarChart: mod.BarChart,
+//       PieChart: mod.PieChart,
+//       ResponsiveContainer: mod.ResponsiveContainer,
+//       XAxis: mod.XAxis,
+//       YAxis: mod.YAxis,
+//       CartesianGrid: mod.CartesianGrid,
+//       Tooltip: mod.Tooltip,
+//       Legend: mod.Legend,
+//       Line: mod.Line,
+//       Area: mod.Area,
+//       Bar: mod.Bar,
+//       Pie: mod.Pie,
+//       Cell: mod.Cell,
+//     }
+//   })),
+//   {
+//     loading: () => <LoadingSpinner />,
+//     ssr: false,
+//   }
+// )
 
 // ==============================================================
 // UI 컴포넌트 번들링 최적화
 // ==============================================================
 
 // Radix UI 컴포넌트들의 동적 로딩 (필요시에만)
-export const DynamicDialog = dynamic(
-  () => import('@radix-ui/react-dialog').then(mod => ({ 
-    default: {
-      Dialog: mod.Dialog,
-      DialogTrigger: mod.DialogTrigger,
-      DialogContent: mod.DialogContent,
-      DialogHeader: mod.DialogHeader,
-      DialogTitle: mod.DialogTitle,
-      DialogDescription: mod.DialogDescription,
-    }
-  })),
-  { ssr: true }
-)
+// TODO: Fix Dialog dynamic import - currently causing TypeScript compilation errors
+// export const DynamicDialog = dynamic(
+//   () => import('@radix-ui/react-dialog').then(mod => ({ 
+//     default: {
+//       Dialog: mod.Dialog,
+//       DialogTrigger: mod.DialogTrigger,
+//       DialogContent: mod.DialogContent,
+//       DialogHeader: mod.DialogHeader,
+//       DialogTitle: mod.DialogTitle,
+//       DialogDescription: mod.DialogDescription,
+//     }
+//   })),
+//   { ssr: true }
+// )
 
 // ==============================================================
 // 조건부 로딩 헬퍼
@@ -258,6 +260,6 @@ export default {
   PerformanceDashboard: DynamicPerformanceDashboard,
   PerformanceMonitor: DynamicPerformanceMonitor,
   
-  // 차트
-  Charts: DynamicRecharts,
+  // 차트 (commented out due to TypeScript compilation issues)
+  // Charts: DynamicRecharts,
 }
