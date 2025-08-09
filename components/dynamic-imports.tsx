@@ -39,7 +39,7 @@ const ErrorFallback = ({ error, retry }: { error?: Error; retry?: () => void }) 
 // ==============================================================
 
 export const DynamicZoomableImageViewer = dynamic(
-  () => import('@/components/gallery/ZoomableImageViewer').then(mod => ({ default: mod.ZoomableImageViewer })),
+  () => import('@/components/gallery/ZoomableImageViewer'),
   {
     loading: () => <LoadingSpinner />,
     ssr: false, // 클라이언트에서만 로딩
@@ -111,7 +111,7 @@ export const DynamicLearningHub = dynamic(
 // ==============================================================
 
 export const DynamicSearchComponents = dynamic(
-  () => import('@/components/search/search-components').then(mod => ({ default: mod.UnifiedSearchInterface })),
+  () => import('@/components/search/search-components'),
   {
     loading: () => <LoadingSpinner />,
     ssr: false,
@@ -119,7 +119,7 @@ export const DynamicSearchComponents = dynamic(
 )
 
 export const DynamicAdvancedFilters = dynamic(
-  () => import('@/components/search/search-components').then(mod => ({ default: mod.AdvancedFilters })),
+  () => import('@/components/search/search-components'),
   {
     loading: () => <LoadingSpinner />,
     ssr: false,
