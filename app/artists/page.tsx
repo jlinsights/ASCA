@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, lazy, Suspense } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Header } from "@/components/header"
@@ -13,12 +13,13 @@ import { TranslatedContent } from "@/components/translated-content"
 import { Input } from "@/components/ui/input"
 import { Search, User, Filter, Award, Calendar, Star, MapPin, Mail, Globe, Users } from "lucide-react"
 import { AdaptiveImage } from "@/components/adaptive-image"
-import { getArtists } from "@/lib/api/artists"
+
 import type { Database } from "@/lib/supabase"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useLanguage } from "@/contexts/language-context"
 import { ArtistShareButton } from "@/components/kakao/kakao-share-button"
+
+// Lazy load the heavy modal component
+const ArtistDetailModal = lazy(() => import("@/components/artists/ArtistDetailModal"))
 
 // 데이터베이스 타입 사용
 type Artist = Database['public']['Tables']['artists']['Row']
@@ -54,11 +55,15 @@ export default function ArtistsPage() {
     const loadArtists = async () => {
       try {
         setLoading(true)
-        const artistsData = await getArtists()
+        const response = await fetch('/api/artists')
+        if (!response.ok) {
+          throw new Error('Failed to fetch artists')
+        }
+        const artistsData = await response.json()
         setArtists(artistsData.artists)
         setFilteredArtists(artistsData.artists)
-      } catch (error) {  
-        // Error handling without console.log
+      } catch (error) {
+
         setArtists([])
         setFilteredArtists([])
       } finally {
@@ -730,236 +735,26 @@ export default function ArtistsPage() {
         )}
       </section>
 
-      {/* 작가 상세 모달 */}
-      <Dialog open={!!selectedArtist} onOpenChange={() => setSelectedArtist(null)}>
-        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-          {selectedArtist && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-semibold">
-                  {selectedArtist.name} {language === 'ko' ? '작가 프로필' : 'Artist Profile'}
-                </DialogTitle>
-              </DialogHeader>
-              
-              <div className="space-y-6">
-                {/* 헤더 섹션 */}
-                <div className="relative">
-                  <div className="h-32 bg-muted rounded-lg overflow-hidden">
-                    <Image
-                      src={selectedArtist.profile_image || "/placeholder-cover.jpg"}
-                      alt={`${selectedArtist.name} cover`}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/20" />
-                  </div>
-                  
-                  <div className="flex items-end gap-4 px-6 -mt-8 relative">
-                    <div className="w-20 h-20 bg-white rounded-full border-4 border-white overflow-hidden">
-                      <Image
-                        src={selectedArtist.profile_image || "/placeholder-profile.jpg"}
-                        alt={selectedArtist.name}
-                        width={80}
-                        height={80}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    
-                    <div className="flex-1 pb-2">
-                      <h2 className="text-2xl font-bold text-foreground mb-1">
-                        {selectedArtist.name}
-                      </h2>
-                      <p className="text-muted-foreground">
-                        {selectedArtist.name_en || selectedArtist.birth_year ? `${selectedArtist.name_en || ''} ${selectedArtist.birth_year ? `(${selectedArtist.birth_year})` : ''}`.trim() : ''}
-                      </p>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          {(selectedArtist as any).location || '위치 정보 없음'}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Mail className="h-3 w-3" />
-                          {(selectedArtist as any).email || '이메일 정보 없음'}
-                        </span>
-                        {(selectedArtist as any).website && (
-                          <a href={(selectedArtist as any).website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-celadon">
-                            <Globe className="h-3 w-3" />
-                            {language === 'ko' ? '웹사이트' : 'Website'}
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <Button 
-                      onClick={() => toggleFollow(selectedArtist.id)}
-                      className="mb-2"
-                    >
-                      <Users className={`h-4 w-4 mr-2 ${followedArtists.has(selectedArtist.id) ? 'fill-current' : ''}`} />
-                      {followedArtists.has(selectedArtist.id) 
-                        ? (language === 'ko' ? '팔로잉' : 'Following')
-                        : (language === 'ko' ? '팔로우' : 'Follow')
-                      }
-                    </Button>
-                  </div>
-                </div>
-
-                {/* 탭 콘텐츠 */}
-                <Tabs defaultValue="about" className="w-full">
-                  <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="about">{language === 'ko' ? '소개' : 'About'}</TabsTrigger>
-                    <TabsTrigger value="artworks">{language === 'ko' ? '작품' : 'Artworks'}</TabsTrigger>
-                    <TabsTrigger value="exhibitions">{language === 'ko' ? '전시' : 'Exhibitions'}</TabsTrigger>
-                    <TabsTrigger value="awards">{language === 'ko' ? '수상' : 'Awards'}</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="about" className="space-y-4">
-                    {/* 전문 분야 */}
-                    <div>
-                      <h3 className="font-semibold mb-2">{language === 'ko' ? '전문 분야' : 'Specialties'}</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedArtist.specialties?.map((specialty, index) => (
-                          <Badge key={index} variant="outline">
-                            {specialty}
-                          </Badge>
-                        )) || <p className="text-muted-foreground">전문 분야 정보가 없습니다.</p>}
-                      </div>
-                    </div>
-                    
-                    {/* 소개 */}
-                    <div>
-                      <h3 className="font-semibold mb-2">{language === 'ko' ? '작가 소개' : 'Biography'}</h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {language === 'ko' ? selectedArtist.bio : (selectedArtist.bio_en || selectedArtist.bio)}
-                      </p>
-                    </div>
-                    
-                    {/* 학력 */}
-                    <div>
-                      <h3 className="font-semibold mb-2">{language === 'ko' ? '학력' : 'Education'}</h3>
-                      <ul className="space-y-1 text-muted-foreground">
-                        {((selectedArtist as any).education || ['학력 정보 없음']).map((edu: string, index: number) => (
-                          <li key={index}>• {edu}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    {/* 통계 */}
-                    <div>
-                      <h3 className="font-semibold mb-2">{language === 'ko' ? '활동 통계' : 'Statistics'}</h3>
-                      <div className="grid grid-cols-4 gap-4 text-center">
-                        <div className="p-3 bg-muted rounded-lg">
-                          <div className="text-2xl font-bold text-celadon">{(selectedArtist as any).stats?.artworksCount || 0}</div>
-                          <div className="text-sm text-muted-foreground">{language === 'ko' ? '작품' : 'Artworks'}</div>
-                        </div>
-                        <div className="p-3 bg-muted rounded-lg">
-                          <div className="text-2xl font-bold text-celadon">{(selectedArtist as any).stats?.exhibitionsCount || 0}</div>
-                          <div className="text-sm text-muted-foreground">{language === 'ko' ? '전시' : 'Exhibitions'}</div>
-                        </div>
-                        <div className="p-3 bg-muted rounded-lg">
-                          <div className="text-2xl font-bold text-celadon">{(selectedArtist as any).stats?.viewCount || 0}</div>
-                          <div className="text-sm text-muted-foreground">{language === 'ko' ? '조회수' : 'Views'}</div>
-                        </div>
-                        <div className="p-3 bg-muted rounded-lg">
-                          <div className="text-2xl font-bold text-celadon">{(selectedArtist as any).stats?.followers || 0}</div>
-                          <div className="text-sm text-muted-foreground">{language === 'ko' ? '팔로워' : 'Followers'}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="artworks">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {((selectedArtist as any).artworks || []).length > 0 ? (
-                        (selectedArtist as any).artworks.map((artwork: any) => (
-                          <Card key={artwork.id} className="overflow-hidden">
-                            <CardContent className="p-0">
-                              <div className="relative aspect-[3/4] bg-muted">
-                                <Image
-                                  src={artwork.imageUrl || "/placeholder-artwork.jpg"}
-                                  alt={artwork.title || "작품"}
-                                  fill
-                                  className="object-cover"
-                                />
-                                {artwork.isForSale && (
-                                  <div className="absolute top-2 right-2">
-                                    <Badge variant="secondary">
-                                      {language === 'ko' ? '판매중' : 'For Sale'}
-                                    </Badge>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="p-3">
-                                <h4 className="font-medium mb-1">{artwork.title || "제목 없음"}</h4>
-                                <p className="text-sm text-muted-foreground mb-2">{artwork.year || "연도 미상"}</p>
-                                {artwork.isForSale && artwork.price && (
-                                  <p className="text-sm font-medium text-celadon">
-                                    {formatPrice(artwork.price)}
-                                  </p>
-                                )}
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))
-                      ) : (
-                        <p className="text-muted-foreground col-span-full text-center">등록된 작품이 없습니다.</p>
-                      )}
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="exhibitions">
-                    <div className="space-y-4">
-                      {selectedArtist.exhibitions && selectedArtist.exhibitions.length > 0 ? (
-                        selectedArtist.exhibitions.map((exhibition, index) => (
-                          <Card key={index}>
-                            <CardContent className="p-4">
-                              <div className="flex items-start justify-between">
-                                <div>
-                                  <h4 className="font-medium mb-1">{typeof exhibition === 'string' ? exhibition : (exhibition as any).title || "전시명"}</h4>
-                                  <p className="text-sm text-muted-foreground mb-1">{typeof exhibition === 'string' ? "장소 미상" : (exhibition as any).venue || "장소 미상"}</p>
-                                  <div className="flex items-center gap-2">
-                                    <Badge variant="outline" className="text-xs">
-                                      {typeof exhibition === 'string' ? "전시" : (exhibition as any).type || "전시"}
-                                    </Badge>
-                                    <span className="text-xs text-muted-foreground">
-                                      {typeof exhibition === 'string' ? "연도 미상" : (exhibition as any).year || "연도 미상"}
-                                    </span>
-                                  </div>
-                                </div>
-                                <Calendar className="h-4 w-4 text-muted-foreground" />
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))
-                      ) : (
-                        <p className="text-muted-foreground text-center">전시 이력이 없습니다.</p>
-                      )}
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="awards">
-                    <div className="space-y-4">
-                      {selectedArtist.awards && selectedArtist.awards.length > 0 ? (
-                        selectedArtist.awards.map((award, index) => (
-                          <Card key={index}>
-                            <CardContent className="p-4">
-                              <div className="flex items-center gap-3">
-                                <Award className="h-5 w-5 text-yellow-500" />
-                                <span className="font-medium">{award}</span>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))
-                      ) : (
-                        <p className="text-muted-foreground text-center">수상 이력이 없습니다.</p>
-                      )}
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      {/* 작가 상세 모달 - Lazy Loaded */}
+      {selectedArtist && (
+        <Suspense fallback={
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-background p-6 rounded-lg shadow-lg">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-scholar-red mx-auto mb-4"></div>
+              <p className="text-sm text-muted-foreground">작가 정보를 불러오는 중...</p>
+            </div>
+          </div>
+        }>
+          <ArtistDetailModal
+            artist={selectedArtist}
+            isOpen={!!selectedArtist}
+            onClose={() => setSelectedArtist(null)}
+            followedArtists={followedArtists}
+            onToggleFollow={toggleFollow}
+            formatPrice={formatPrice}
+          />
+        </Suspense>
+      )}
 
       <Footer />
     </main>

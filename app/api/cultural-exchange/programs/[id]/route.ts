@@ -64,7 +64,7 @@ export async function GET(
       success: true,
       program: formattedProgram,
       participantsCount: participants.length,
-      participants: participants.map(p => ({
+      participants: participants.map((p: any) => ({
         ...p,
         appliedAt: new Date(Number(p.appliedAt) * 1000),
         approvedAt: p.approvedAt ? new Date(Number(p.approvedAt) * 1000) : undefined,
@@ -73,7 +73,7 @@ export async function GET(
     })
 
   } catch (error) {
-    console.error('Error fetching program details:', error)
+
     return NextResponse.json(
       { success: false, error: '프로그램 정보를 가져오는 중 오류가 발생했습니다' },
       { status: 500 }
@@ -188,7 +188,7 @@ export async function PUT(
     })
 
   } catch (error) {
-    console.error('Error updating program:', error)
+
     return NextResponse.json(
       { success: false, error: '프로그램 수정 중 오류가 발생했습니다' },
       { status: 500 }
@@ -248,7 +248,7 @@ export async function DELETE(
     })
 
   } catch (error) {
-    console.error('Error deleting program:', error)
+
     return NextResponse.json(
       { success: false, error: '프로그램 삭제 중 오류가 발생했습니다' },
       { status: 500 }

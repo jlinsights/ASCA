@@ -50,6 +50,7 @@ function SponsorLogo({ src, alt, width, height, className, fallbackSrc, fallback
   )
 }
 
+// @deprecated Use LayoutFooter from @/components/layout/layout-footer instead
 export function Footer() {
   return (
     <footer className="bg-[#222222] text-[#fcfcfc] dark:bg-[#111111] py-12">

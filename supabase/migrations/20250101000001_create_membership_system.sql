@@ -169,14 +169,11 @@ CREATE INDEX idx_mentoring_relationships_mentee_id ON mentoring_relationships(me
 CREATE INDEX idx_member_activity_logs_member_id ON member_activity_logs(member_id);
 CREATE INDEX idx_member_activity_logs_created_at ON member_activity_logs(created_at);
 
--- 기본 회원 등급 데이터 삽입
+-- 기본 회원 등급 데이터 삽입 (3단계로 간소화)
 INSERT INTO membership_levels (name, display_name_ko, display_name_en, description_ko, description_en, privileges, max_mentees, can_teach, can_evaluate, can_approve) VALUES
-('honorary_master', '명예 마스터', 'Honorary Master', '평생 공로상 수상자, 특별 권한 보유', 'Lifetime achievement recipients with special privileges', '{"all_access": true, "special_events": true, "vip_access": true}', 10, true, true, true),
-('certified_master', '인증 마스터', 'Certified Master', '교육 자격을 갖춘 전문 서예가', 'Professional calligraphers with teaching credentials', '{"teaching": true, "evaluation": true, "mentoring": true}', 5, true, true, false),
-('advanced_practitioner', '고급 실습자', 'Advanced Practitioner', '전시 이력이 있는 경험 많은 예술가', 'Experienced artists with exhibition history', '{"portfolio_sharing": true, "community_leadership": true}', 2, false, false, false),
-('student', '학습자', 'Student', '다양한 기술 수준의 학습 회원', 'Learning members with various skill levels', '{"basic_community": true, "learning_resources": true}', 0, false, false, false),
-('institutional_member', '기관 회원', 'Institutional Member', '박물관, 학교, 문화 기관', 'Museums, schools, cultural organizations', '{"institutional_access": true, "collaboration": true}', 0, false, false, false),
-('international_associate', '국제 협회원', 'International Associate', '서예 애호가들의 글로벌 네트워크', 'Global network of calligraphy enthusiasts', '{"international_network": true, "cultural_exchange": true}', 0, false, false, false);
+('member', '회원', 'Member', '일반 회원으로 기본적인 서비스를 이용할 수 있습니다', 'Regular members with access to basic services', '{"basic_community": true, "learning_resources": true, "forum_access": true}', 0, false, false, false),
+('featured_artist', '추천작가', 'Featured Artist', '전시 이력과 작품 활동을 인정받은 우수 작가', 'Outstanding artists with recognized exhibition history and artistic achievements', '{"portfolio_sharing": true, "community_leadership": true, "exhibition_priority": true, "mentoring": true}', 3, true, false, false),
+('invited_artist', '초대작가', 'Invited Artist', '특별히 초대된 명성있는 작가로 최고 권한을 보유합니다', 'Distinguished invited artists with highest privileges and recognition', '{"all_access": true, "special_events": true, "vip_access": true, "teaching": true, "evaluation": true}', 10, true, true, true);
 
 -- RLS (Row Level Security) 정책 설정
 ALTER TABLE members ENABLE ROW LEVEL SECURITY;

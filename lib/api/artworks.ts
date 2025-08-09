@@ -8,6 +8,10 @@ type ArtworkUpdate = Database['public']['Tables']['artworks']['Update']
 
 // 작품과 작가 정보를 함께 가져오는 타입
 export type ArtworkWithArtist = Artwork & {
+  orientation?: 'portrait' | 'landscape' | 'square'
+  collection_status?: 'private' | 'museum' | 'gallery' | 'public'
+  image_url?: string
+  price?: number
   artist: {
     id: string
     name: string

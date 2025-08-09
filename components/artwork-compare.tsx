@@ -1,13 +1,19 @@
 'use client'
 
-import { useState, useEffect, createContext, useContext } from 'react'
+import { useState, useEffect, createContext, useContext, useCallback } from 'react'
 import Image from 'next/image'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { X, ZoomIn, RotateCw, ArrowLeftRight, Grid2X2, Grid3X3 } from 'lucide-react'
-import { ImageViewer } from './image-viewer'
+import { X, ZoomIn, ArrowLeftRight, Grid2X2 } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+// ImageViewer를 동적으로 로드하여 서버 컴포넌트 충돌 방지
+const ImageViewer = dynamic(() => import('./image-viewer').then(mod => ({ default: mod.ImageViewer })), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-muted animate-pulse" />
+})
 
 interface Artwork {
   id: string
@@ -52,16 +58,16 @@ export function CompareProvider({ children }: CompareProviderProps) {
   const maxArtworks = 4
 
   // 작품 추가
-  const addArtwork = (artwork: Artwork) => {
+  const addArtwork = useCallback((artwork: Artwork) => {
     if (selectedArtworks.length < maxArtworks && !selectedArtworks.find(a => a.id === artwork.id)) {
       setSelectedArtworks(prev => [...prev, artwork])
     }
-  }
+  }, [selectedArtworks, maxArtworks])
 
   // 작품 제거
-  const removeArtwork = (artworkId: string) => {
+  const removeArtwork = useCallback((artworkId: string) => {
     setSelectedArtworks(prev => prev.filter(a => a.id !== artworkId))
-  }
+  }, [])
 
   // 다이얼로그 닫힐 때 초기화 (선택사항)
   useEffect(() => {
@@ -97,9 +103,9 @@ export function ArtworkCompareDialog({ children }: ArtworkCompareDialogProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'side-by-side'>('side-by-side')
 
   // 전체 초기화
-  const clearAll = () => {
+  const clearAll = useCallback(() => {
     selectedArtworks.forEach(artwork => removeArtwork(artwork.id))
-  }
+  }, [selectedArtworks, removeArtwork])
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -264,14 +270,14 @@ export function CompareButton({ artwork, className }: CompareButtonProps) {
   const isSelected = selectedArtworks.find(a => a.id === artwork.id)
   const isFull = selectedArtworks.length >= maxArtworks
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (!isSelected && !isFull) {
       addArtwork(artwork)
       setIsOpen(true)
     } else if (isSelected) {
       setIsOpen(true)
     }
-  }
+  }, [isSelected, isFull, addArtwork, artwork, setIsOpen])
 
   return (
     <Button

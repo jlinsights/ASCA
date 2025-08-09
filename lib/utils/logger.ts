@@ -150,24 +150,24 @@ export const log = {
   info: (...args: unknown[]) => {
     if (process.env.LOG_LEVEL === 'debug' || process.env.LOG_LEVEL === 'info') {
       // eslint-disable-next-line no-console
-      console.info('[INFO]', ...args)
+
     }
   },
   warn: (...args: unknown[]) => {
     if (['debug', 'info', 'warn'].includes(process.env.LOG_LEVEL || '')) {
       // eslint-disable-next-line no-console
-      console.warn('[WARN]', ...args)
+
     }
   },
   error: (...args: unknown[]) => {
     // eslint-disable-next-line no-console
-    console.error('[ERROR]', ...args)
+
     // TODO: Sentry 등 외부 연동
   },
   debug: (...args: unknown[]) => {
     if (process.env.LOG_LEVEL === 'debug') {
       // eslint-disable-next-line no-console
-      console.debug('[DEBUG]', ...args)
+
     }
   },
 } 

@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
 
+// @deprecated Use LayoutHeader with variant="simple" from @/components/layout/layout-header instead
 export function HeaderSimple() {
   const { 
     t = (key: string) => key, 

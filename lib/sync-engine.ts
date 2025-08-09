@@ -37,7 +37,6 @@ export class SyncEngine {
       return
     }
 
-    
     this.isRunning = true
 
     // 초기 전체 동기화
@@ -48,7 +47,6 @@ export class SyncEngine {
       await this.processPendingChanges()
     }, intervalMs)
 
-    
   }
 
   /**
@@ -67,16 +65,14 @@ export class SyncEngine {
    * 전체 동기화 수행
    */
   async performFullSync() {
-    
-    
+
     try {
       // 1. 스키마 동기화
       await this.syncSchemas()
       
       // 2. 데이터 동기화
       await this.syncAllData()
-      
-      
+
     } catch (error) {
       
       throw error
@@ -87,8 +83,7 @@ export class SyncEngine {
    * 스키마 동기화 (Airtable → Supabase)
    */
   async syncSchemas() {
-    
-    
+
     const tables = ['Artists', 'Artworks', 'Exhibitions']
     
     for (const tableName of tables) {
@@ -120,8 +115,7 @@ export class SyncEngine {
       
       // 필요한 스키마 변경 적용
       await this.applySchemaChanges(supabaseTableName, differences)
-      
-      
+
     } catch (error) {
       
     }
@@ -237,11 +231,9 @@ export class SyncEngine {
           changes: change,
           status: 'success'
         })
-        
-        
+
       } catch (error) {
-        
-        
+
         // 에러 로그 기록
         await this.supabase.from('sync_logs').insert({
           sync_type: 'schema',
@@ -285,8 +277,7 @@ export class SyncEngine {
    * 모든 데이터 동기화
    */
   async syncAllData() {
-    
-    
+
     const tables = ['Artists', 'Artworks', 'Exhibitions']
     
     for (const tableName of tables) {
@@ -312,8 +303,7 @@ export class SyncEngine {
       for (const record of airtableRecords) {
         await this.syncSingleRecord(airtableTableName, record)
       }
-      
-      
+
     } catch (error) {
       
     }

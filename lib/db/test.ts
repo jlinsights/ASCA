@@ -8,7 +8,6 @@ import {
 } from './queries';
 
 async function testDatabase() {
-  
 
   try {
     // 1. 연결 테스트
@@ -17,7 +16,6 @@ async function testDatabase() {
     if (!connectionResult) {
       throw new Error('데이터베이스 연결 실패');
     }
-    
 
     // 2. 사용자 생성 테스트
     
@@ -62,15 +60,6 @@ async function testDatabase() {
     // 6. 대시보드 통계 테스트
     
     const stats = await getDashboardStats();
-    
-    
-    
-    
-    
-    
-    
-
-    
 
   } catch (error) {
     

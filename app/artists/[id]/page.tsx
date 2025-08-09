@@ -11,8 +11,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { useParams } from 'next/navigation'
-import { getArtist } from '@/lib/api/artists'
-import { getArtworks, type ArtworkWithArtist } from '@/lib/api/artworks'
+import type { ArtworkWithArtist } from '@/lib/api/artworks'
 import { useLanguage } from '@/contexts/language-context'
 import type { Database } from '@/lib/supabase'
 
@@ -34,18 +33,16 @@ export default function ArtistPage() {
         setLoading(true)
         setError(null)
 
-        
-
         // 작가 정보 로드
-        
-        const artistData = await getArtist(id)
-        
-        
-        if (!artistData) {
-          
-          notFound()
-          return
+        const response = await fetch(`/api/artists/${id}`)
+        if (!response.ok) {
+          if (response.status === 404) {
+            notFound()
+            return
+          }
+          throw new Error('Failed to fetch artist')
         }
+        const artistData = await response.json()
         setArtist(artistData)
 
         // 작가의 작품 목록 로드 (임시 비활성화)
@@ -60,8 +57,7 @@ export default function ArtistPage() {
         setArtworks([]) // 임시로 빈 배열 설정
         
       } catch (err) {
-        
-        
+
         setError(`작가 정보를 불러오는데 실패했습니다. 오류: ${err instanceof Error ? err.message : String(err)}`)
       } finally {
         setLoading(false)

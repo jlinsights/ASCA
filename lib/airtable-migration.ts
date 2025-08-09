@@ -327,36 +327,30 @@ export class AirtableMigration {
     events: { success: number; failed: number; total: number };
     notices: { success: number; failed: number; total: number };
   }> {
-    
-    
+
     // 1. Artists 마이그레이션 (배치 처리)
     
     const artistResults = await this.migrateArtistsInBatches();
-    
-    
+
     // 아티스트 ID 매핑 생성
     const artistIdMap = await this.createArtistIdMap();
     
     // 2. Artworks 마이그레이션
     
     const artworkResults = await this.migrateArtworks(artistIdMap);
-    
-    
+
     // 3. Exhibitions 마이그레이션
     
     const exhibitionResults = await this.migrateExhibitions();
-    
-    
+
     // 4. Events 마이그레이션
     
     const eventResults = await this.migrateEvents();
-    
-    
+
     // 5. Notices 마이그레이션
     
     const noticeResults = await this.migrateNotices();
-    
-    
+
     return {
       artists: { ...artistResults, total: artistResults.success + artistResults.failed },
       artworks: { ...artworkResults, total: artworkResults.success + artworkResults.failed },
@@ -432,7 +426,6 @@ export class AirtableMigration {
         }
       }
 
-      
       return map;
     } catch (error) {
       

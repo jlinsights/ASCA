@@ -77,6 +77,7 @@ interface AdvancedSearchProps {
   className?: string;
 }
 
+// @deprecated Use AdvancedSearch from @/components/search/search-components instead
 export default function AdvancedSearch({ 
   onSearch, 
   contentType, 

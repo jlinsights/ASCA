@@ -16,16 +16,22 @@ export interface MembershipTierInfo {
   nameCn?: string
   nameJp?: string
   description?: string
+  descriptionKo?: string
+  descriptionEn?: string
+  descriptionCn?: string
+  descriptionJp?: string
   level: number // 1: Student, 2: Advanced, 3: Certified Master, 4: Honorary Master, 5: Institutional, 6: International
-  requirements: MembershipRequirement[]
-  benefits: MembershipBenefit[]
+  requirements: string // JSON 형태로 저장 (스키마와 일치)
+  benefits: string // JSON 형태로 저장 (스키마와 일치)
   annualFee: number
   currency: string
   color: string // 회원등급 식별 색상
   icon?: string
   isActive: boolean
   sortOrder: number
-  metadata?: Record<string, any>
+  metadata?: string // JSON 형태로 저장 (스키마와 일치)
+  createdAt: Date
+  updatedAt: Date
 }
 
 /**
@@ -79,42 +85,55 @@ export interface MemberProfile {
   gender?: 'male' | 'female' | 'other' | 'prefer_not_to_say'
   nationality: string
 
-  // 연락처 정보
+  // 연락처 정보 (스키마와 일치)
   phoneNumber?: string
   alternateEmail?: string
-  emergencyContact: EmergencyContact
+  emergencyContactName?: string
+  emergencyContactPhone?: string
 
-  // 주소 정보
-  address: AddressInfo
+  // 주소 정보 (스키마와 일치)
+  address?: string
+  addressKo?: string
+  addressEn?: string
+  city?: string
+  state?: string
+  postalCode?: string
+  country?: string
 
-  // 서예 관련 정보
-  calligraphyInfo: CalligraphyInfo
+  // 서예 관련 정보 (스키마 필드와 일치)
+  calligraphyExperience?: number // 연수 (년)
+  specializations?: string // JSON 배열
+  preferredStyles?: string // JSON 배열
+  teachingExperience?: number // 교육 경력 (년)
+  certifications?: string // JSON 배열
+  achievements?: string // JSON 배열
 
-  // 교육 배경
-  educationBackground: EducationInfo
+  // 교육 배경 (스키마와 일치)
+  educationBackground?: string // JSON 형태
+  calligraphyEducation?: string // JSON 형태
 
-  // 관심 분야 및 문화적 배경
-  interests: string[]
+  // 관심 분야 및 문화적 배경 (스키마와 일치)
+  interests?: string // JSON 배열
   culturalBackground?: string
-  languages: string[] // ["ko", "en", "zh", "ja"]
+  languages?: string // JSON 배열
 
-  // 멤버십 정보
-  membershipHistory: MembershipHistoryEntry[]
-  paymentHistory: PaymentHistoryEntry[]
-  participationScore: number
-  contributionScore: number
+  // 멤버십 정보 (스키마와 일치)
+  membershipHistory?: string // JSON 배열
+  paymentHistory?: string // JSON 배열
+  participationScore?: number
+  contributionScore?: number
 
-  // 프라이버시 설정
-  privacySettings: PrivacySettings
-  marketingConsent: boolean
-  dataProcessingConsent: boolean
+  // 프라이버시 설정 (스키마와 일치)
+  privacySettings?: string // JSON 형태
+  marketingConsent?: boolean
+  dataProcessingConsent?: boolean
 
-  // 메타데이터
-  profileCompleteness: number // 0-100%
+  // 메타데이터 (스키마와 일치)
+  profileCompleteness?: number // 0-100%
   lastProfileUpdate?: Date
   referredBy?: string // 추천인 member ID
   notes?: string // 관리자 메모
-  metadata?: Record<string, any>
+  metadata?: string // JSON 형태
 
   createdAt: Date
   updatedAt: Date

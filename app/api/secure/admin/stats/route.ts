@@ -20,6 +20,9 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
     )
 
     const supabase = ensureSupabase()
+    if (!supabase) {
+      throw new Error('Supabase client not initialized')
+    }
 
     // 데이터베이스 연결 확인
     const { error: connectionError } = await supabase.from('artists').select('id').limit(1)

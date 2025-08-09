@@ -84,9 +84,7 @@ export const validateDevConfig = () => {
   if (!devConfig.services.supabase.anonKey) {
     errors.push('NEXT_PUBLIC_SUPABASE_ANON_KEY가 설정되지 않았습니다.')
   }
-  
 
-  
   if (errors.length > 0) {
     logger.error('개발 환경 설정 오류', new Error('Environment configuration errors'), { errors })
     return false
@@ -132,12 +130,7 @@ export const initializeDevEnvironment = () => {
   // 개발 환경 정보 출력
   logDevInfo()
   
-  // 성능 모니터링 초기화
-  if (devConfig.logging.performance && typeof window !== 'undefined') {
-    import('@/lib/monitoring/performance').then(({ initializePerformanceMonitoring }) => {
-      initializePerformanceMonitoring()
-    })
-  }
+  // 성능 모니터링 제거됨
 }
 
 export default devConfig 

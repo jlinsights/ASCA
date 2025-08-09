@@ -80,8 +80,10 @@ const membershipTiers: MembershipTierInfo[] = [
     icon: '📚',
     annualFee: 50000,
     currency: 'KRW',
-    requirements: [],
-    benefits: [],
+    requirements: JSON.stringify([]),
+    benefits: JSON.stringify([]),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     isActive: true,
     sortOrder: 1
   },
@@ -95,8 +97,10 @@ const membershipTiers: MembershipTierInfo[] = [
     icon: '🎨',
     annualFee: 100000,
     currency: 'KRW',
-    requirements: [],
-    benefits: [],
+    requirements: JSON.stringify([]),
+    benefits: JSON.stringify([]),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     isActive: true,
     sortOrder: 2
   },
@@ -110,8 +114,10 @@ const membershipTiers: MembershipTierInfo[] = [
     icon: '🏆',
     annualFee: 200000,
     currency: 'KRW',
-    requirements: [],
-    benefits: [],
+    requirements: JSON.stringify([]),
+    benefits: JSON.stringify([]),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     isActive: true,
     sortOrder: 3
   },
@@ -125,8 +131,10 @@ const membershipTiers: MembershipTierInfo[] = [
     icon: '👑',
     annualFee: 0,
     currency: 'KRW',
-    requirements: [],
-    benefits: [],
+    requirements: JSON.stringify([]),
+    benefits: JSON.stringify([]),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     isActive: true,
     sortOrder: 4
   },
@@ -140,8 +148,10 @@ const membershipTiers: MembershipTierInfo[] = [
     icon: '🏛️',
     annualFee: 500000,
     currency: 'KRW',
-    requirements: [],
-    benefits: [],
+    requirements: JSON.stringify([]),
+    benefits: JSON.stringify([]),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     isActive: true,
     sortOrder: 5
   },
@@ -155,8 +165,10 @@ const membershipTiers: MembershipTierInfo[] = [
     icon: '🌏',
     annualFee: 150000,
     currency: 'KRW',
-    requirements: [],
-    benefits: [],
+    requirements: JSON.stringify([]),
+    benefits: JSON.stringify([]),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     isActive: true,
     sortOrder: 6
   }
@@ -176,22 +188,23 @@ const mockMembers: (MemberProfile & { user?: any })[] = [
     fullNameEn: 'Kim Seo-ye',
     nationality: 'KR',
     phoneNumber: '010-1234-5678',
-    calligraphyInfo: {
-      experience: 12,
-      specializations: [],
-      preferredStyles: [],
-      teachingExperience: 5,
-      certifications: [],
-      achievements: []
-    },
-    emergencyContact: {},
-    address: { country: 'KR' },
-    educationBackground: { general: [], calligraphy: [] },
-    interests: [],
-    languages: ['ko', 'en'],
-    membershipHistory: [],
-    paymentHistory: [],
-    privacySettings: { profileVisibility: 'members_only', contactInfoVisible: false, achievementsVisible: true, participationHistoryVisible: true, allowDirectMessages: true, showOnlinStatus: false },
+    // 스키마와 일치하도록 수정
+    calligraphyExperience: 12,
+    specializations: JSON.stringify([]),
+    preferredStyles: JSON.stringify([]),
+    teachingExperience: 5,
+    certifications: JSON.stringify([]),
+    achievements: JSON.stringify([]),
+    emergencyContactName: '',
+    emergencyContactPhone: '',
+    address: '',
+    country: 'KR',
+    educationBackground: JSON.stringify({ general: [], calligraphy: [] }),
+    interests: JSON.stringify([]),
+    languages: JSON.stringify(['ko', 'en']),
+    membershipHistory: JSON.stringify([]),
+    paymentHistory: JSON.stringify([]),
+    privacySettings: JSON.stringify({ profileVisibility: 'members_only', contactInfoVisible: false, achievementsVisible: true, participationHistoryVisible: true, allowDirectMessages: true, showOnlinStatus: false }),
     participationScore: 450,
     contributionScore: 120,
     profileCompleteness: 95,
@@ -217,22 +230,23 @@ const mockMembers: (MemberProfile & { user?: any })[] = [
     fullNameEn: 'Lee Muk-hyang',
     nationality: 'KR',
     phoneNumber: '010-2345-6789',
-    calligraphyInfo: {
-      experience: 8,
-      specializations: [],
-      preferredStyles: [],
-      teachingExperience: 3,
-      certifications: [],
-      achievements: []
-    },
-    emergencyContact: {},
-    address: { country: 'KR' },
-    educationBackground: { general: [], calligraphy: [] },
-    interests: [],
-    languages: ['ko'],
-    membershipHistory: [],
-    paymentHistory: [],
-    privacySettings: { profileVisibility: 'members_only', contactInfoVisible: false, achievementsVisible: true, participationHistoryVisible: true, allowDirectMessages: true, showOnlinStatus: false },
+    // 스키마와 일치하도록 수정
+    calligraphyExperience: 8,
+    specializations: JSON.stringify([]),
+    preferredStyles: JSON.stringify([]),
+    teachingExperience: 3,
+    certifications: JSON.stringify([]),
+    achievements: JSON.stringify([]),
+    emergencyContactName: '',
+    emergencyContactPhone: '',
+    address: '',
+    country: 'KR',
+    educationBackground: JSON.stringify({ general: [], calligraphy: [] }),
+    interests: JSON.stringify([]),
+    languages: JSON.stringify(['ko']),
+    membershipHistory: JSON.stringify([]),
+    paymentHistory: JSON.stringify([]),
+    privacySettings: JSON.stringify({ profileVisibility: 'members_only', contactInfoVisible: false, achievementsVisible: true, participationHistoryVisible: true, allowDirectMessages: true, showOnlinStatus: false }),
     participationScore: 320,
     contributionScore: 85,
     profileCompleteness: 78,
@@ -553,6 +567,7 @@ export default function AdminMembershipPage() {
                 <div className="space-y-4">
                   {members.map(member => {
                     const tierInfo = getTierInfo(member.tierLevel)
+                    if (!tierInfo) return null // tierInfo가 없으면 렌더링하지 않음
                     
                     return (
                       <div key={member.id} className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
@@ -600,7 +615,7 @@ export default function AdminMembershipPage() {
                               </span>
                             </div>
                             <div className="text-xs text-muted-foreground">
-                              {member.calligraphyInfo.experience}년 경력
+                              {member.calligraphyExperience || 0}년 경력
                             </div>
                           </div>
 

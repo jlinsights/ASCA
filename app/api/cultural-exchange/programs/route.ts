@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     const total = totalResult[0]?.count || 0
 
     // 데이터 변환
-    const formattedPrograms: CulturalExchangeProgramInfo[] = programs.map(program => ({
+    const formattedPrograms: CulturalExchangeProgramInfo[] = programs.map((program: any) => ({
       ...program,
       startDate: new Date(Number(program.startDate) * 1000),
       endDate: new Date(Number(program.endDate) * 1000),
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error fetching cultural exchange programs:', error)
+
     return NextResponse.json(
       { success: false, error: '프로그램 목록을 가져오는 중 오류가 발생했습니다' },
       { status: 500 }
@@ -216,7 +216,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error creating cultural exchange program:', error)
+
     return NextResponse.json(
       { success: false, error: '프로그램 생성 중 오류가 발생했습니다' },
       { status: 500 }

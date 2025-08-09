@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -602,14 +603,19 @@ const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({
           transition: viewerState.isDragging ? 'none' : 'transform 0.2s ease-out'
         }}
       >
-        <img
+        <Image
           ref={imageRef}
           src={currentImageUrl}
           alt={image.metadata.filename}
+          width={800}
+          height={600}
           className="max-w-full max-h-full object-contain select-none"
           onLoad={handleImageLoad}
           onError={() => setIsLoading(false)}
           draggable={false}
+          priority
+          quality={90}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
         />
         
         {/* Regions and Annotations Overlay */}

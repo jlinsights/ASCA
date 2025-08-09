@@ -12,13 +12,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    
-
     const { AirtableMigration } = await import('@/lib/airtable-migration')
     
     const result = await AirtableMigration.migrateNotices()
-
-    
 
     return NextResponse.json({
       success: true,

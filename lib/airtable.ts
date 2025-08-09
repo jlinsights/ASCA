@@ -1,14 +1,18 @@
-import Airtable from 'airtable';
+import Airtable, { Base, Record, FieldSet } from 'airtable';
 
 // Airtable 설정
 const airtableApiKey = process.env.AIRTABLE_API_KEY;
 const airtableBaseId = process.env.AIRTABLE_BASE_ID;
 
+// Airtable Base 타입 정의
+type AirtableBase = Base;
+type AirtableRecord<T extends FieldSet = FieldSet> = Record<T>;
+
 // Airtable 클라이언트 초기화 - 빌드 시에는 초기화하지 않음
 let airtable: Airtable | null = null;
-let base: any = null;
+let base: AirtableBase | null = null;
 
-function initializeAirtable() {
+function initializeAirtable(): AirtableBase {
   if (!airtableApiKey || !airtableBaseId) {
     throw new Error('Airtable credentials not configured');
   }
@@ -16,6 +20,10 @@ function initializeAirtable() {
   if (!airtable) {
     airtable = new Airtable({ apiKey: airtableApiKey });
     base = airtable.base(airtableBaseId);
+  }
+  
+  if (!base) {
+    throw new Error('Failed to initialize Airtable base');
   }
   
   return base;
@@ -226,9 +234,7 @@ export class AirtableService {
         sort: [{ field: 'Name (Korean)', direction: 'asc' }]
       }).all();
 
-      
-
-      return records.map((record: any) => ({
+      return records.map((record) => ({
         id: record.id,
         fields: record.fields as unknown as AirtableArtist['fields']
       }));
@@ -247,9 +253,7 @@ export class AirtableService {
         sort: [{ field: 'Title (Korean)', direction: 'asc' }]
       }).all();
 
-      
-
-      return records.map((record: any) => ({
+      return records.map((record) => ({
         id: record.id,
         fields: record.fields as unknown as AirtableArtwork['fields']
       }));
@@ -267,8 +271,6 @@ export class AirtableService {
       const records = await currentBase(TABLES.EXHIBITIONS).select({
         sort: [{ field: 'Start Date', direction: 'desc' }]
       }).all();
-
-      
 
       return records.map((record: any) => ({
         id: record.id,
@@ -306,28 +308,19 @@ export class AirtableService {
 
     try {
       // 먼저 전체 개수 확인
-      const allRecords = await currentBase(TABLES.ARTISTS).select({
+      const countRecords = await currentBase(TABLES.ARTISTS).select({
         fields: ['Name (Korean)'], // 최소한의 필드만 가져와서 성능 향상
         sort: [{ field: 'Name (Korean)', direction: 'asc' }]
       }).all();
 
-      const total = allRecords.length;
+      const total = countRecords.length;
 
       // 실제 데이터 가져오기 (배치)
-      const records = await currentBase(TABLES.ARTISTS).select({
+      const allRecords = await currentBase(TABLES.ARTISTS).select({
         sort: [{ field: 'Name (Korean)', direction: 'asc' }]
-      }).eachPage(async (records: any, fetchNextPage: any) => {
-        // 현재 페이지의 레코드 수를 확인하고 필요한 범위만 처리
-        const startIndex = offset;
-        const endIndex = offset + limit;
-        
-        // 현재 배치에 해당하는 레코드만 반환
-        if (records.length > startIndex) {
-          return records.slice(startIndex, endIndex);
-        }
-        
-        fetchNextPage();
-      });
+      }).all();
+      
+      const records = allRecords.slice(offset, offset + limit);
 
       const artists = records.map((record: any) => ({
         id: record.id,
@@ -368,8 +361,7 @@ export class AirtableService {
 
             await processor(batch);
             processed += batch.length;
-            
-            
+
           }
 
           fetchNextPage();
@@ -380,7 +372,6 @@ export class AirtableService {
         }
       });
 
-      
       return { processed, errors };
     } catch (error) {
       
@@ -396,8 +387,6 @@ export class AirtableService {
       const records = await currentBase(TABLES.EVENTS).select({
         sort: [{ field: 'Start Date', direction: 'desc' }]
       }).all();
-
-      
 
       return records.map((record: any) => ({
         id: record.id,
@@ -417,8 +406,6 @@ export class AirtableService {
       const records = await currentBase(TABLES.NOTICES).select({
         sort: [{ field: 'Created', direction: 'desc' }]
       }).all();
-
-      
 
       return records.map((record: any) => ({
         id: record.id,

@@ -243,40 +243,38 @@ export function logOptimizationSuggestions(report: ComponentOptimizationReport) 
   console.group('🚀 Server Components 최적화 리포트')
   
   // eslint-disable-next-line no-console
-  console.log('📊 전체 현황:')
+
   // eslint-disable-next-line no-console
-  console.log(`  • 총 페이지: ${report.totalPages}`)
+
   // eslint-disable-next-line no-console
-  console.log(`  • Server Components: ${report.serverComponentPages}`)
+
   // eslint-disable-next-line no-console
-  console.log(`  • Client Components: ${report.clientComponentPages}`)
-  
+
   if (report.optimizablePages.length > 0) {
     // eslint-disable-next-line no-console
-    console.log('')
+
     // eslint-disable-next-line no-console
-    console.log('🎯 최적화 가능한 페이지들:')
-    
+
     report.optimizablePages.forEach(page => {
       // eslint-disable-next-line no-console
-      console.log(`  📄 ${page.filePath}`)
+
       page.recommendedChanges.forEach(change => {
         // eslint-disable-next-line no-console
-        console.log(`    ✅ ${change}`)
+
       })
     })
     
     // eslint-disable-next-line no-console
-    console.log('')
+
     // eslint-disable-next-line no-console
-    console.log(`💡 예상 효과: ${report.estimatedPerformanceGain}`)
+
     // eslint-disable-next-line no-console
-    console.log(`📦 번들 크기 절약: ${report.totalBundleReduction}`)
+
   } else {
     // eslint-disable-next-line no-console
-    console.log('')
+
     // eslint-disable-next-line no-console
-    console.log('✅ 모든 컴포넌트가 최적화되어 있습니다!')
+
   }
   
   // eslint-disable-next-line no-console
