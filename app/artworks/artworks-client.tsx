@@ -176,17 +176,10 @@ export function ArtworksClient() {
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            <TranslatedContent
-              ko="작품 갤러리"
-              en="Artwork Gallery"
-              currentLanguage={language}
-            />
+            <TranslatedContent textKey="artworks.gallery.title" />
           </h1>
           <p className="text-muted-foreground">
-            <TranslatedContent
-              ko="동양서예협회의 다양한 작품들을 감상하세요"
-              en="Explore various artworks from the Oriental Calligraphy Association"
-              currentLanguage={language}
+            <TranslatedContent textKey="artworks.gallery.description"
             />
           </p>
         </div>
@@ -285,7 +278,7 @@ export function ArtworksClient() {
                   {/* 이미지 */}
                   <div className={`relative ${getImageAspectRatio(artwork)} overflow-hidden rounded-t-lg`}>
                     <ArtworkImage
-                      src={artwork.image_url}
+                      src={artwork.image_url || '/placeholder.svg'}
                       alt={artwork.title}
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />

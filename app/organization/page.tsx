@@ -138,7 +138,7 @@ export default function OrganizationPage() {
       if (!acc[member.level]) {
         acc[member.level] = []
       }
-      acc[member.level].push(member)
+      acc[member.level]?.push(member)
       return acc
     }, {} as Record<number, OrganizationMember[]>)
   }
