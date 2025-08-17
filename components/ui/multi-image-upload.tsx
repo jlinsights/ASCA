@@ -37,8 +37,8 @@ export function MultiImageUpload({
   const [dragActive, setDragActive] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // 파일 검증 함수
-  const validateFiles = (files: File[]): { valid: File[], errors: string[] } => {
+  // 파일 검증 함수 (memoized)
+  const validateFiles = useCallback((files: File[]): { valid: File[], errors: string[] } => {
     const valid: File[] = []
     const errors: string[] = []
 
@@ -65,7 +65,7 @@ export function MultiImageUpload({
     })
 
     return { valid, errors }
-  }
+  }, [value.length, maxFiles, maxSize, acceptedTypes])
 
   // 파일 업로드 처리
   const handleFileUpload = useCallback(async (files: File[]) => {

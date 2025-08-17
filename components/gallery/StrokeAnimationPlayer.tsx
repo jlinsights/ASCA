@@ -356,7 +356,10 @@ const StrokeAnimationPlayer: React.FC<StrokeAnimationPlayerProps> = ({
 
     // Draw previous completed strokes
     for (let i = 0; i < playbackState.currentStroke; i++) {
-      drawStroke(ctx, strokes[i], 1);
+      const stroke = strokes[i];
+      if (stroke) {
+        drawStroke(ctx, stroke, 1);
+      }
     }
 
     // Draw current stroke
@@ -410,7 +413,7 @@ const StrokeAnimationPlayer: React.FC<StrokeAnimationPlayerProps> = ({
               totalProgress: 0,
               isComplete: false
             });
-            startTimeRef.current = undefined;
+            startTimeRef.current = null;
             
             setTimeout(() => {
               setPlaybackState(prev => ({ ...prev, isPlaying: true }));
@@ -446,7 +449,7 @@ const StrokeAnimationPlayer: React.FC<StrokeAnimationPlayerProps> = ({
       totalProgress: 0,
       isComplete: false
     });
-    startTimeRef.current = undefined;
+    startTimeRef.current = null;
     
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
@@ -460,7 +463,7 @@ const StrokeAnimationPlayer: React.FC<StrokeAnimationPlayerProps> = ({
     }
 
     setPlaybackState(prev => ({ ...prev, isPlaying: true }));
-    startTimeRef.current = undefined;
+    startTimeRef.current = null;
     animationRef.current = requestAnimationFrame(animate);
   }, [playbackState.isComplete, settings.loopMode, resetAnimation, animate]);
 
@@ -487,7 +490,7 @@ const StrokeAnimationPlayer: React.FC<StrokeAnimationPlayerProps> = ({
         currentStroke: prev.currentStroke + 1,
         currentProgress: 0
       }));
-      startTimeRef.current = undefined;
+      startTimeRef.current = null;
     }
   };
 
@@ -498,7 +501,7 @@ const StrokeAnimationPlayer: React.FC<StrokeAnimationPlayerProps> = ({
         currentStroke: prev.currentStroke - 1,
         currentProgress: 0
       }));
-      startTimeRef.current = undefined;
+      startTimeRef.current = null;
     }
   };
 

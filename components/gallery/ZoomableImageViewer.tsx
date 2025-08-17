@@ -241,17 +241,23 @@ const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (e.touches.length === 1 && activeTool === 'pan') {
       const touch = e.touches[0];
-      setViewerState(prev => ({
-        ...prev,
-        isDragging: true,
-        dragStart: { x: touch.clientX, y: touch.clientY }
-      }));
+      if (touch) {
+        setViewerState(prev => ({
+          ...prev,
+          isDragging: true,
+          dragStart: { x: touch.clientX, y: touch.clientY }
+        }));
+      }
     } else if (e.touches.length === 2) {
-      const distance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      setViewerState(prev => ({ ...prev, lastPinchDistance: distance }));
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      if (touch1 && touch2) {
+        const distance = Math.hypot(
+          touch1.clientX - touch2.clientX,
+          touch1.clientY - touch2.clientY
+        );
+        setViewerState(prev => ({ ...prev, lastPinchDistance: distance }));
+      }
     }
   }, [activeTool]);
 
@@ -260,33 +266,39 @@ const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({
     
     if (e.touches.length === 1 && viewerState.isDragging) {
       const touch = e.touches[0];
-      const deltaX = touch.clientX - viewerState.dragStart.x;
-      const deltaY = touch.clientY - viewerState.dragStart.y;
-      
-      handlePan(deltaX, deltaY);
-      
-      setViewerState(prev => ({
-        ...prev,
-        dragStart: { x: touch.clientX, y: touch.clientY }
-      }));
-    } else if (e.touches.length === 2 && viewerState.lastPinchDistance) {
-      const distance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      
-      const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-      const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-      
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (rect) {
-        const localCenterX = centerX - rect.left;
-        const localCenterY = centerY - rect.top;
-        const delta = (distance - viewerState.lastPinchDistance) * 0.01;
-        handleZoom(delta, localCenterX, localCenterY);
+      if (touch) {
+        const deltaX = touch.clientX - viewerState.dragStart.x;
+        const deltaY = touch.clientY - viewerState.dragStart.y;
+        
+        handlePan(deltaX, deltaY);
+        
+        setViewerState(prev => ({
+          ...prev,
+          dragStart: { x: touch.clientX, y: touch.clientY }
+        }));
       }
-      
-      setViewerState(prev => ({ ...prev, lastPinchDistance: distance }));
+    } else if (e.touches.length === 2 && viewerState.lastPinchDistance) {
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      if (touch1 && touch2) {
+        const distance = Math.hypot(
+          touch1.clientX - touch2.clientX,
+          touch1.clientY - touch2.clientY
+        );
+        
+        const centerX = (touch1.clientX + touch2.clientX) / 2;
+        const centerY = (touch1.clientY + touch2.clientY) / 2;
+        
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (rect) {
+          const localCenterX = centerX - rect.left;
+          const localCenterY = centerY - rect.top;
+          const delta = (distance - viewerState.lastPinchDistance) * 0.01;
+          handleZoom(delta, localCenterX, localCenterY);
+        }
+        
+        setViewerState(prev => ({ ...prev, lastPinchDistance: distance }));
+      }
     }
   }, [viewerState.isDragging, viewerState.dragStart, viewerState.lastPinchDistance, handlePan, handleZoom]);
 

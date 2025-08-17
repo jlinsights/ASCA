@@ -36,8 +36,9 @@ export function ImageUpload({
   const [dragActive, setDragActive] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // 파일 검증 함수
-  const validateFile = (file: File): string | null => {
+
+  // 파일 검증 함수 (memoized)
+  const validateFile = useCallback((file: File): string | null => {
     // 파일 크기 검증
     if (file.size > maxSize * 1024 * 1024) {
       return `파일 크기가 ${maxSize}MB를 초과합니다.`
@@ -49,7 +50,7 @@ export function ImageUpload({
     }
 
     return null
-  }
+  }, [maxSize, acceptedTypes])
 
   // 파일 업로드 처리
   const handleFileUpload = useCallback(async (file: File) => {

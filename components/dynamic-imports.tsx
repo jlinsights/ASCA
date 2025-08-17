@@ -239,7 +239,7 @@ export const createIntersectionImport = <T extends ComponentType<any>>(
   })
 }
 
-export default {
+const DynamicComponents = {
   // 갤러리
   ZoomableImageViewer: DynamicZoomableImageViewer,
   GalleryManagementDashboard: DynamicGalleryManagementDashboard,
@@ -263,3 +263,5 @@ export default {
   // 차트 (commented out due to TypeScript compilation issues)
   // Charts: DynamicRecharts,
 }
+
+export default DynamicComponents;
