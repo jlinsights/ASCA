@@ -208,6 +208,9 @@ const StrokeAnimationPlayer: React.FC<StrokeAnimationPlayerProps> = ({
     for (let i = 0; i < currentPointIndex - 1; i++) {
       const point1 = stroke.points[i];
       const point2 = stroke.points[i + 1];
+      
+      // Safety check for undefined points
+      if (!point1 || !point2) continue;
 
       // Calculate line width based on pressure
       const pressure1 = settings.showPressure ? point1.pressure : 0.5;
@@ -244,6 +247,10 @@ const StrokeAnimationPlayer: React.FC<StrokeAnimationPlayerProps> = ({
     // Draw current brush position
     if (currentPointIndex < totalPoints) {
       const currentPoint = stroke.points[currentPointIndex];
+      
+      // Safety check for undefined point
+      if (!currentPoint) return;
+      
       const pressure = settings.showPressure ? currentPoint.pressure : 0.5;
       const brushSize = Math.max(4, pressure * 24);
 
