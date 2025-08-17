@@ -225,7 +225,10 @@ export function MultiImageUpload({
                     {loading ? '업로드 중...' : '클릭하거나 드래그하여 이미지 업로드'}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {acceptedTypes.map(type => type.split('/')[1].toUpperCase()).join(', ')} (최대 {maxSize}MB, {maxFiles}개)
+                    {acceptedTypes.map(type => {
+                      const parts = type.split('/')
+                      return parts[1]?.toUpperCase() || ''
+                    }).filter(Boolean).join(', ')} (최대 {maxSize}MB, {maxFiles}개)
                   </p>
                   <p className="text-xs text-muted-foreground">
                     현재 {value.length}/{maxFiles}개 업로드됨
