@@ -252,8 +252,11 @@ export class PerformanceMonitor {
   }
 
   private logMetricToConsole(metric: EnhancedMetric): void {
-    const emoji = metric.score === 'good' ? '🟢' : metric.score === 'needs-improvement' ? '🟡' : '🔴'
-    console.log(`${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === 'CLS' ? '' : 'ms'} (${metric.score})`)
+    if (process.env.NODE_ENV === 'development') {
+      const emoji = metric.score === 'good' ? '🟢' : metric.score === 'needs-improvement' ? '🟡' : '🔴'
+      // eslint-disable-next-line no-console
+      console.log(`${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === 'CLS' ? '' : 'ms'} (${metric.score})`)
+    }
   }
 
   private storeMetricLocally(metric: EnhancedMetric): void {

@@ -1,4 +1,4 @@
-import { ensureSupabaseAdmin, type Database } from './supabase'
+import { safeSupabaseAdminCall, type Database } from './supabase'
 
 type Artist = Database['public']['Tables']['artists']['Row']
 type ArtistInsert = Database['public']['Tables']['artists']['Insert']
@@ -12,18 +12,18 @@ type ArtworkUpdate = Database['public']['Tables']['artworks']['Update']
 
 // 모든 작가 조회
 export async function getAllArtists() {
-  const supabase = ensureSupabaseAdmin()
-  const { data, error } = await supabase
-    .from('artists')
-    .select('*')
-    .order('created_at', { ascending: false })
+  return await safeSupabaseAdminCall(async (supabase) => {
+    const { data, error } = await supabase
+      .from('artists')
+      .select('*')
+      .order('created_at', { ascending: false })
 
-  if (error) {
-    
-    throw error
-  }
+    if (error) {
+      throw error
+    }
 
-  return data
+    return data
+  })
 }
 
 // 작가 단일 조회
