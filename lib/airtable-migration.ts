@@ -23,7 +23,8 @@ export class AirtableMigration {
       try {
         // YYYY-MM-DD 형식으로 변환
         const date = new Date(dobString);
-        return date.toISOString().split('T')[0];
+        const dateString = date.toISOString().split('T')[0];
+        return dateString || null;
       } catch {
         return null;
       }
