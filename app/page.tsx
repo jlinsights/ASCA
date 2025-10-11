@@ -2,7 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { ArrowRight, Calendar, Users, Award, BookOpen, MapPin, Phone, Mail } from 'lucide-react'
 
 export default function Page() {
