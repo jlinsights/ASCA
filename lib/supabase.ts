@@ -64,7 +64,7 @@ export const ensureSupabase = () => {
 export const ensureSupabaseAdmin = () => {
   if (!supabaseAdmin) {
     log.warn('Supabase Admin is not configured.')
-    return null
+    throw new Error('Supabase Admin client not available')
   }
   return supabaseAdmin
 }
