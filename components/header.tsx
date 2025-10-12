@@ -72,42 +72,6 @@ export function Header() {
         { title: t("calligraphyContest2024"), href: "/events/calligraphy-contest-2024" }
       ]
     },
-    {
-      title: t("about"),
-      key: "about",
-      href: "/about",
-      subItems: [
-        { title: t("overview"), href: "/about" },
-        { title: t("history"), href: "/history" },
-        { title: t("organizationPage"), href: "/organization" },
-        { title: t("brandGuidelines"), href: "/brand" }
-      ]
-    },
-    {
-      title: t("regulations"),
-      key: "regulations",
-      href: "/regulations",
-      subItems: [
-        { title: t("articles"), href: "/regulations/articles" },
-        { title: t("operationJudging"), href: "/regulations/operation-judging" },
-        { title: t("judgingSystem"), href: "https://jury.orientalcalligraphy.org" },
-        { title: t("artistSelection"), href: "/regulations/artist-selection" },
-        { title: t("qualifications"), href: "/regulations/qualifications" }
-      ]
-    },
-    {
-      title: t("guide"),
-      key: "guide",
-      href: "/notice",
-      subItems: [
-        { title: t("notices"), href: "/notice" },
-        { title: t("news"), href: "/news" },
-        { title: t("calligraphyLessons"), href: "/lessons" },
-        { title: t("gallery"), href: "/gallery" },
-        { title: t("fundraising"), href: "/fundraising" },
-        { title: t("shop"), href: "/shop" }
-      ]
-    }
   ]
 
   const handleThemeToggle = (position: { x: number; y: number }) => {

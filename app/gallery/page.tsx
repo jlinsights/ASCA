@@ -1,7 +1,9 @@
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import galleryData from '@/lib/data/gallery-data.json'
 import { GalleryData } from '@/types/gallery'
+import '@/styles/gallery.css'
 
 // 동적 임포트로 성능 최적화
 const GalleryClient = dynamic(() => import('@/components/gallery/GalleryClient'), {
@@ -59,64 +61,164 @@ function GalleryErrorBoundary({ error, reset }: { error: Error; reset: () => voi
   )
 }
 
-// 갤러리 통계 컴포넌트
+// 현대적인 갤러리 통계 컴포넌트
 function GalleryStats({ data }: { data: GalleryData }) {
+  const stats = [
+    {
+      icon: '🖼️',
+      value: data.metadata.totalImages,
+      label: '총 작품 수',
+      description: '고화질 서예 작품',
+      gradient: 'from-blue-500 to-blue-600',
+      bgGradient: 'from-blue-50 to-blue-100'
+    },
+    {
+      icon: '📂',
+      value: data.categories.length,
+      label: '카테고리',
+      description: '다양한 분류',
+      gradient: 'from-emerald-500 to-emerald-600',
+      bgGradient: 'from-emerald-50 to-emerald-100'
+    },
+    {
+      icon: '📅',
+      value: new Date(data.metadata.lastUpdated).getFullYear(),
+      label: '최신 연도',
+      description: '업데이트됨',
+      gradient: 'from-purple-500 to-purple-600',
+      bgGradient: 'from-purple-50 to-purple-100'
+    },
+    {
+      icon: '⭐',
+      value: '95%',
+      label: '품질',
+      description: '최고 화질',
+      gradient: 'from-amber-500 to-amber-600',
+      bgGradient: 'from-amber-50 to-amber-100'
+    }
+  ]
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-        <div className="text-2xl font-bold text-blue-600">{data.metadata.totalImages}</div>
-        <div className="text-sm text-blue-800">총 작품 수</div>
-      </div>
-      <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-        <div className="text-2xl font-bold text-green-600">{data.categories.length}</div>
-        <div className="text-sm text-green-800">카테고리</div>
-      </div>
-      <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
-        <div className="text-2xl font-bold text-purple-600">
-          {new Date(data.metadata.lastUpdated).getFullYear()}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {stats.map((stat, index) => (
+        <div
+          key={index}
+          className={`relative group cursor-default transform transition-all duration-300 hover:scale-105 hover:-translate-y-2`}
+        >
+          {/* 카드 배경 */}
+          <div className={`relative p-6 bg-gradient-to-br ${stat.bgGradient} rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50`}>
+            {/* 아이콘 */}
+            <div className="text-3xl mb-3 text-center group-hover:scale-110 transition-transform duration-300">
+              {stat.icon}
+            </div>
+            
+            {/* 값 */}
+            <div className={`text-3xl font-bold text-center bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-2`}>
+              {stat.value}
+            </div>
+            
+            {/* 라벨 */}
+            <div className="text-sm font-semibold text-gray-700 text-center mb-1">
+              {stat.label}
+            </div>
+            
+            {/* 설명 */}
+            <div className="text-xs text-gray-500 text-center">
+              {stat.description}
+            </div>
+
+            {/* 호버 효과 오버레이 */}
+            <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+          </div>
+
+          {/* 그림자 효과 */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-20 blur-xl scale-110 group-hover:opacity-30 transition-all duration-300 rounded-2xl -z-10`}></div>
         </div>
-        <div className="text-sm text-purple-800">최신 연도</div>
-      </div>
-      <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
-        <div className="text-2xl font-bold text-orange-600">HD</div>
-        <div className="text-sm text-orange-800">고화질</div>
-      </div>
+      ))}
     </div>
   )
 }
 
 export default function GalleryPage() {
-  const data = galleryData as GalleryData
-
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* 헤더 섹션 */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              동양서예협회 갤러리
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+      {/* 리디렉션 안내 */}
+      <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent"></div>
+        
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center text-white space-y-8">
+            <div className="text-6xl mb-6">🎨</div>
+            
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+              갤러리가 메인 페이지로 이동했습니다
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              서예 작품과 협회 활동을 한눈에 감상하세요. 
-              위원회 회의, 서예 대회, 초대 작가 작품 등 다양한 갤러리를 제공합니다.
+            
+            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed mb-8">
+              동양서예협회 웹사이트가 갤러리 전문 사이트로 새롭게 태어났습니다
             </p>
-            <div className="mt-6 text-sm text-gray-500">
-              마지막 업데이트: {new Date(data.metadata.lastUpdated).toLocaleDateString('ko-KR')}
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8">
+              <p className="text-blue-100/90 text-lg leading-relaxed">
+                모든 갤러리 기능과 148개의 고화질 서예 작품들이<br />
+                이제 <strong className="text-white">메인 페이지</strong>에서 바로 확인하실 수 있습니다.
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                href="/"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl text-white font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
+                </svg>
+                메인 갤러리로 이동
+              </Link>
+              
+              <Link 
+                href="/about-organization"
+                className="inline-flex items-center gap-2 px-8 py-4 border border-white/30 rounded-2xl text-white font-semibold hover:bg-white/20 transition-all duration-300"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                협회 소개
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 메인 콘텐츠 */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 갤러리 통계 */}
-        <GalleryStats data={data} />
-
-        {/* 갤러리 그리드 */}
-        <Suspense fallback={<GalleryLoadingSkeleton />}>
-          <GalleryClient data={data} />
-        </Suspense>
+      {/* 변경사항 설명 */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
+            <div className="text-4xl mb-4">🖼️</div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">통합 갤러리</h3>
+            <p className="text-gray-600">
+              메인 페이지에서 모든 작품을 한눈에 감상하세요
+            </p>
+          </div>
+          
+          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
+            <div className="text-4xl mb-4">⚡</div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">빠른 접근</h3>
+            <p className="text-gray-600">
+              사이트 접속 즉시 갤러리를 바로 확인할 수 있습니다
+            </p>
+          </div>
+          
+          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
+            <div className="text-4xl mb-4">🎨</div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">향상된 UX</h3>
+            <p className="text-gray-600">
+              현대적인 디자인과 최적화된 사용자 경험
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* SEO 및 메타데이터 */}
@@ -129,15 +231,15 @@ export default function GalleryPage() {
             "name": "동양서예협회 갤러리",
             "description": "동양서예협회의 서예 작품과 활동 사진 갤러리",
             "url": "https://asca-main-orkqns499-jlinsights-projects.vercel.app/gallery",
-            "image": data.items.slice(0, 5).map(item => ({
+            "image": galleryData.items.slice(0, 5).map(item => ({
               "@type": "ImageObject",
               "name": item.title,
               "description": item.description,
               "url": `https://asca-main-orkqns499-jlinsights-projects.vercel.app${item.src}`,
               "thumbnailUrl": `https://asca-main-orkqns499-jlinsights-projects.vercel.app${item.thumbnail}`
             })),
-            "numberOfItems": data.metadata.totalImages,
-            "dateModified": data.metadata.lastUpdated
+            "numberOfItems": galleryData.metadata.totalImages,
+            "dateModified": galleryData.metadata.lastUpdated
           })
         }}
       />
@@ -145,18 +247,14 @@ export default function GalleryPage() {
   )
 }
 
-// 메타데이터 내보내기 (App Router)
+// 메타데이터 내보내기 (리디렉션 페이지)
 export const metadata = {
-  title: '갤러리 | 동양서예협회',
-  description: `동양서예협회의 서예 작품과 활동 사진을 감상하세요. 총 ${galleryData.metadata.totalImages}개의 고화질 이미지를 제공합니다.`,
-  keywords: ['서예', '갤러리', '동양서예', '서예작품', '전시회', '서예대회'],
+  title: '갤러리 페이지 이동 안내 | 동양서예협회',
+  description: '동양서예협회 갤러리가 메인 페이지로 이동했습니다. 148개의 고화질 서예 작품을 메인 페이지에서 확인하세요.',
+  keywords: ['서예', '갤러리', '동양서예', '서예작품', '리디렉션', '메인페이지'],
   openGraph: {
-    title: '갤러리 | 동양서예협회',
-    description: `${galleryData.metadata.totalImages}개의 서예 작품과 활동 사진`,
-    type: 'website',
-    images: galleryData.items.slice(0, 4).map(item => ({
-      url: item.thumbnail,
-      alt: item.title
-    }))
+    title: '갤러리 페이지 이동 안내 | 동양서예협회',
+    description: '갤러리가 메인 페이지로 이동했습니다. 더 나은 사용자 경험을 위해 갤러리 전문 사이트로 리뉴얼되었습니다.',
+    type: 'website'
   }
 }

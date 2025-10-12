@@ -60,6 +60,10 @@ function scanDirectory(dirPath, relativePath = '') {
       const stat = fs.statSync(fullPath);
       
       if (stat.isDirectory()) {
+        // 썸네일 폴더는 건너뛰기
+        if (file.toLowerCase() === 'thumbnails') {
+          continue;
+        }
         // 하위 디렉토리 스캔
         const subItems = scanDirectory(fullPath, path.join(relativePath, file));
         items.push(...subItems);
@@ -180,9 +184,9 @@ function generateGalleryData() {
     // 원본 이미지를 그대로 사용하되, Next.js 이미지 최적화에 의존
     const originalPath = webPath;
     
-    // 썸네일은 더 작은 크기로 최적화된 버전 사용
-    // Next.js가 자동으로 적절한 크기로 변환
-    const thumbnailPath = webPath;
+    // 썸네일도 원본 이미지 사용 (Next.js가 크기별로 자동 최적화)
+    // 기존 썸네일 폴더는 무시하고 원본 이미지를 썸네일로도 사용
+    const thumbnailPath = originalPath;
     
     return {
       id: `gallery_${index + 1}`,
