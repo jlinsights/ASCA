@@ -37,8 +37,8 @@ export function MultiImageUpload({
   const [dragActive, setDragActive] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // 파일 검증 함수
-  const validateFiles = (files: File[]): { valid: File[], errors: string[] } => {
+  // 파일 검증 함수 (memoized)
+  const validateFiles = useCallback((files: File[]): { valid: File[], errors: string[] } => {
     const valid: File[] = []
     const errors: string[] = []
 
@@ -65,7 +65,7 @@ export function MultiImageUpload({
     })
 
     return { valid, errors }
-  }
+  }, [value.length, maxFiles, maxSize, acceptedTypes])
 
   // 파일 업로드 처리
   const handleFileUpload = useCallback(async (files: File[]) => {
@@ -225,7 +225,10 @@ export function MultiImageUpload({
                     {loading ? '업로드 중...' : '클릭하거나 드래그하여 이미지 업로드'}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {acceptedTypes.map(type => type.split('/')[1].toUpperCase()).join(', ')} (최대 {maxSize}MB, {maxFiles}개)
+                    {acceptedTypes.map(type => {
+                      const parts = type.split('/')
+                      return parts[1]?.toUpperCase() || ''
+                    }).filter(Boolean).join(', ')} (최대 {maxSize}MB, {maxFiles}개)
                   </p>
                   <p className="text-xs text-muted-foreground">
                     현재 {value.length}/{maxFiles}개 업로드됨

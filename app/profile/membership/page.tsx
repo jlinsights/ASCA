@@ -79,45 +79,39 @@ const mockMemberProfile: MemberProfile = {
   // 연락처
   phoneNumber: '010-1234-5678',
   alternateEmail: 'kim.seoye.art@gmail.com',
-  emergencyContact: {
-    name: '김부모',
-    phoneNumber: '010-9876-5432',
-    relationship: '부모',
-    email: 'emergency@example.com'
-  },
+  emergencyContactName: '김부모',
+  emergencyContactPhone: '010-9876-5432',
   
-  // 주소
-  address: {
-    address: '서울특별시 중구 인사동길 12',
-    addressKo: '서울특별시 중구 인사동길 12',
-    addressEn: '12 Insadong-gil, Jung-gu, Seoul',
-    city: '서울',
-    state: '서울특별시',
-    postalCode: '04519',
-    country: 'KR'
-  },
+  // 주소 필드들 (스키마와 일치)
+  address: '서울특별시 중구 인사동길 12',
+  addressKo: '서울특별시 중구 인사동길 12',
+  addressEn: '12 Insadong-gil, Jung-gu, Seoul',
+  city: '서울',
+  state: '서울특별시',
+  postalCode: '04519',
+  country: 'KR',
   
   // 서예 정보
-  calligraphyInfo: {
-    experience: 12,
-    specializations: ['kaishu', 'xingshu', 'caoshu'],
-    preferredStyles: ['kaishu', 'xingshu'],
-    teachingExperience: 5,
-    certifications: [
-      {
-        name: 'ASCA 서예 인증서 3급',
-        issuingOrganization: '사단법인 동양서예협회',
-        level: 'advanced',
-        issuedDate: new Date('2022-06-15'),
-        certificateNumber: 'ASCA-CERT-2022-156'
-      }
-    ],
-    achievements: [
+  // 서예 관련 정보 (스키마 필드와 일치)
+  calligraphyExperience: 12,
+  specializations: JSON.stringify(['kaishu', 'xingshu', 'caoshu']),
+  preferredStyles: JSON.stringify(['kaishu', 'xingshu']),
+  teachingExperience: 5,
+  certifications: JSON.stringify([
+    {
+      name: 'ASCA 서예 인증서 3급',
+      issuingOrganization: '사단법인 동양서예협회',
+      level: 'advanced',
+      issuedDate: '2022-06-15',
+      certificateNumber: 'ASCA-CERT-2022-156'
+    }
+  ]),
+  achievements: JSON.stringify([
     {
       type: 'award',
       title: '제47회 대한민국서예대전 특선',
       description: '행서 부문 특선 수상',
-      date: new Date('2023-10-15'),
+      date: '2023-10-15',
       organization: '대한민국서예협회',
       rank: '특선',
       significance: 'national'
@@ -126,15 +120,14 @@ const mockMemberProfile: MemberProfile = {
       type: 'exhibition',
       title: '서울서예비엔날레 2024 참가',
       description: '개인 작품 3점 전시',
-      date: new Date('2024-05-20'),
+      date: '2024-05-20',
       organization: '서울문화재단',
       significance: 'local'
     }
-  ]
-  },
+  ]),
   
-  // 교육 배경
-  educationBackground: {
+  // 교육 배경 (JSON 형태)
+  educationBackground: JSON.stringify({
     general: [
       {
         level: 'bachelor',
@@ -150,45 +143,45 @@ const mockMemberProfile: MemberProfile = {
         institution: '동양서예아카데미',
         teacher: '박서예 선생',
         duration: 24,
-        startDate: new Date('2018-03-01'),
-        endDate: new Date('2020-02-28'),
+        startDate: '2018-03-01',
+        endDate: '2020-02-28',
         level: 'advanced',
         focus: ['kaishu', 'xingshu']
       }
     ]
-  },
+  }),
   
-  // 관심사 및 기타
-  interests: ['전통문화', '붓글씨', '한문학', '차문화'],
+  // 관심사 및 기타 (JSON 형태)
+  interests: JSON.stringify(['전통문화', '붓글씨', '한문학', '차문화']),
   culturalBackground: '한국 전통 서예 가문 출신',
-  languages: ['ko', 'en', 'zh'],
+  languages: JSON.stringify(['ko', 'en', 'zh']),
   
-  // 멤버십 정보
-  membershipHistory: [
+  // 멤버십 정보 (JSON 형태)
+  membershipHistory: JSON.stringify([
     {
-      date: new Date('2023-01-15'),
+      date: '2023-01-15',
       action: 'joined',
       toTier: 1,
       reason: '신규 가입'
     },
     {
-      date: new Date('2023-06-15'),
+      date: '2023-06-15',
       action: 'upgraded',
       fromTier: 1,
       toTier: 2,
       reason: '6개월 활동 우수'
     },
     {
-      date: new Date('2024-01-15'),
+      date: '2024-01-15',
       action: 'upgraded',
       fromTier: 2,
       toTier: 3,
       reason: '인증서 취득 및 작품 활동'
     }
-  ],
-  paymentHistory: [
+  ]),
+  paymentHistory: JSON.stringify([
     {
-      date: new Date('2025-01-01'),
+      date: '2025-01-01',
       amount: 200000,
       currency: 'KRW',
       paymentMethod: 'bank_transfer',
@@ -196,19 +189,19 @@ const mockMemberProfile: MemberProfile = {
       status: 'completed',
       receiptNumber: 'ASCA-2025-001-001'
     }
-  ],
+  ]),
   participationScore: 450,
   contributionScore: 120,
   
   // 프라이버시 설정
-  privacySettings: {
+  privacySettings: JSON.stringify({
     profileVisibility: 'members_only',
     contactInfoVisible: false,
     achievementsVisible: true,
     participationHistoryVisible: true,
     allowDirectMessages: true,
     showOnlinStatus: false
-  },
+  }),
   marketingConsent: true,
   dataProcessingConsent: true,
   
@@ -231,10 +224,12 @@ const mockTierInfo: MembershipTierInfo = {
   icon: '🏆',
   annualFee: 200000,
   currency: 'KRW',
-  requirements: [],
-  benefits: [],
+  requirements: JSON.stringify([]),
+  benefits: JSON.stringify([]),
   isActive: true,
-  sortOrder: 3
+  sortOrder: 3,
+  createdAt: new Date(),
+  updatedAt: new Date()
 }
 
 const mockActivities: MemberActivityLog[] = [
@@ -283,6 +278,9 @@ export default function MemberProfilePage() {
     modern: '현대서예',
     experimental: '실험서예'
   }
+
+  // Parse JSON fields
+  const parsedPrivacySettings = profile.privacySettings ? JSON.parse(profile.privacySettings) : {}
 
   // 프로필 수정 핸들러
   const handleSaveProfile = async () => {
@@ -349,7 +347,7 @@ export default function MemberProfilePage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4 text-muted-foreground" />
-                  <span>{profile.calligraphyInfo.experience}년 경력</span>
+                  <span>{profile.calligraphyExperience}년 경력</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Star className="h-4 w-4 text-muted-foreground" />
@@ -426,13 +424,13 @@ export default function MemberProfilePage() {
                     </div>
                     <div className="text-center p-4 border border-border rounded-lg">
                       <div className="text-2xl font-bold text-purple-600 mb-1">
-                        {profile.calligraphyInfo.achievements?.length || 0}
+                        {profile.achievements ? JSON.parse(profile.achievements).length : 0}
                       </div>
                       <div className="text-sm text-muted-foreground">수상 경력</div>
                     </div>
                     <div className="text-center p-4 border border-border rounded-lg">
                       <div className="text-2xl font-bold text-amber-600 mb-1">
-                        {profile.calligraphyInfo.experience}년
+                        {profile.calligraphyExperience}년
                       </div>
                       <div className="text-sm text-muted-foreground">서예 경력</div>
                     </div>
@@ -449,33 +447,33 @@ export default function MemberProfilePage() {
                   <div>
                     <div className="text-sm text-muted-foreground mb-2">특화 서체</div>
                     <div className="flex flex-wrap gap-2">
-                      {profile.calligraphyInfo.specializations?.map(style => (
+                      {profile.specializations ? JSON.parse(profile.specializations).map((style: string) => (
                         <Badge key={style} variant="secondary">
                           {styleNames[style as CalligraphyStyle]}
                         </Badge>
-                      ))}
+                      )) : null}
                     </div>
                   </div>
                   
                   <div>
                     <div className="text-sm text-muted-foreground mb-2">관심 분야</div>
                     <div className="flex flex-wrap gap-2">
-                      {profile.interests?.map(interest => (
+                      {profile.interests ? JSON.parse(profile.interests).map((interest: string) => (
                         <Badge key={interest} variant="outline">
                           {interest}
                         </Badge>
-                      ))}
+                      )) : null}
                     </div>
                   </div>
 
                   <div>
                     <div className="text-sm text-muted-foreground mb-2">구사 언어</div>
                     <div className="flex gap-2">
-                      {profile.languages?.map(lang => (
+                      {profile.languages ? JSON.parse(profile.languages).map((lang: string) => (
                         <Badge key={lang} variant="secondary">
                           {lang === 'ko' ? '한국어' : lang === 'en' ? '영어' : lang === 'zh' ? '중국어' : lang === 'ja' ? '일본어' : lang}
                         </Badge>
-                      ))}
+                      )) : null}
                     </div>
                   </div>
                 </CardContent>
@@ -585,11 +583,11 @@ export default function MemberProfilePage() {
                       </div>
                       <div>
                         <div className="text-sm text-muted-foreground">주소</div>
-                        <div className="font-medium">{profile.address.address}</div>
+                        <div className="font-medium">{profile.address}</div>
                       </div>
                       <div>
                         <div className="text-sm text-muted-foreground">우편번호</div>
-                        <div className="font-medium">{profile.address.postalCode}</div>
+                        <div className="font-medium">{profile.postalCode}</div>
                       </div>
                     </div>
                   </div>
@@ -607,13 +605,13 @@ export default function MemberProfilePage() {
                   <div className="space-y-4">
                     <div>
                       <div className="text-sm text-muted-foreground">이름</div>
-                      <div className="font-medium">{profile.emergencyContact.name || '미설정'}</div>
+                      <div className="font-medium">{profile.emergencyContactName || '미설정'}</div>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div>
                       <div className="text-sm text-muted-foreground">전화번호</div>
-                      <div className="font-medium">{profile.emergencyContact.phoneNumber || '미설정'}</div>
+                      <div className="font-medium">{profile.emergencyContactPhone || '미설정'}</div>
                     </div>
                   </div>
                 </div>
@@ -632,22 +630,22 @@ export default function MemberProfilePage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <div className="text-sm text-muted-foreground">서예 경력</div>
-                      <div className="text-2xl font-bold text-blue-600">{profile.calligraphyInfo.experience}년</div>
+                      <div className="text-2xl font-bold text-blue-600">{profile.calligraphyExperience}년</div>
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground">교육 경력</div>
-                      <div className="text-2xl font-bold text-green-600">{profile.calligraphyInfo.teachingExperience}년</div>
+                      <div className="text-2xl font-bold text-green-600">{profile.teachingExperience}년</div>
                     </div>
                   </div>
                   
                   <div>
                     <div className="text-sm text-muted-foreground mb-2">전문 서체</div>
                     <div className="flex flex-wrap gap-2">
-                      {profile.calligraphyInfo.specializations?.map(style => (
+                      {profile.specializations ? JSON.parse(profile.specializations).map((style: string) => (
                         <Badge key={style} className="bg-primary/10 text-primary">
                           {styleNames[style as CalligraphyStyle]}
                         </Badge>
-                      ))}
+                      )) : null}
                     </div>
                   </div>
 
@@ -664,16 +662,16 @@ export default function MemberProfilePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {profile.calligraphyInfo.certifications?.map((cert, index) => (
+                    {profile.certifications ? JSON.parse(profile.certifications).map((cert: any, index: number) => (
                       <div key={index} className="p-3 border border-border rounded-lg">
                         <div className="font-medium">{cert.name}</div>
                         <div className="text-sm text-muted-foreground">{cert.issuingOrganization}</div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          발급일: {cert.issuedDate.toLocaleDateString()}
+                          발급일: {cert.issuedDate}
                           {cert.certificateNumber && ` • ${cert.certificateNumber}`}
                         </div>
                       </div>
-                    ))}
+                    )) : null}
                   </div>
                 </CardContent>
               </Card>
@@ -688,7 +686,7 @@ export default function MemberProfilePage() {
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-semibold mb-3">일반 교육</h4>
-                    {profile.educationBackground?.general?.map((edu, index) => (
+                    {profile.educationBackground && JSON.parse(profile.educationBackground).general?.map((edu: any, index: number) => (
                       <div key={index} className="p-3 border border-border rounded-lg">
                         <div className="font-medium">{edu.institution}</div>
                         <div className="text-sm text-muted-foreground">
@@ -700,16 +698,16 @@ export default function MemberProfilePage() {
 
                   <div>
                     <h4 className="font-semibold mb-3">서예 교육</h4>
-                    {profile.educationBackground?.calligraphy?.map((edu, index) => (
+                    {profile.educationBackground && JSON.parse(profile.educationBackground).calligraphy?.map((edu: any, index: number) => (
                       <div key={index} className="p-3 border border-border rounded-lg">
                         <div className="font-medium">{edu.institution}</div>
                         <div className="text-sm text-muted-foreground">
                           {edu.teacher && `${edu.teacher} • `}
-                          {edu.startDate.getFullYear()}-{edu.endDate?.getFullYear()} • 
+                          {edu.startYear}-{edu.endYear} • 
                           {edu.level} 과정
                         </div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          전공: {edu.focus.map(f => styleNames[f]).join(', ')}
+                          전공: {edu.focus?.map((f: string) => styleNames[f as CalligraphyStyle] || f).join(', ')}
                         </div>
                       </div>
                     ))}
@@ -727,7 +725,7 @@ export default function MemberProfilePage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {profile.calligraphyInfo.achievements?.map((achievement, index) => (
+                  {profile.achievements ? JSON.parse(profile.achievements).map((achievement: any, index: number) => (
                     <div key={index} className="p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
                       <div className="flex items-start gap-3">
                         <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center flex-shrink-0">
@@ -748,7 +746,7 @@ export default function MemberProfilePage() {
                               </p>
                               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                                 <span>{achievement.organization}</span>
-                                <span>{achievement.date.toLocaleDateString()}</span>
+                                <span>{achievement.date}</span>
                                 {achievement.rank && <span>• {achievement.rank}</span>}
                               </div>
                             </div>
@@ -760,7 +758,7 @@ export default function MemberProfilePage() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )) : null}
                 </div>
               </CardContent>
             </Card>
@@ -813,7 +811,7 @@ export default function MemberProfilePage() {
                         누가 내 프로필을 볼 수 있는지 설정합니다
                       </div>
                     </div>
-                    <Select value={profile.privacySettings?.profileVisibility}>
+                    <Select value={parsedPrivacySettings.profileVisibility}>
                       <SelectTrigger className="w-40">
                         <SelectValue />
                       </SelectTrigger>
@@ -832,7 +830,7 @@ export default function MemberProfilePage() {
                         전화번호, 이메일 등 연락처 정보 공개 여부
                       </div>
                     </div>
-                    <Checkbox checked={profile.privacySettings?.contactInfoVisible} />
+                    <Checkbox checked={parsedPrivacySettings.contactInfoVisible} />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -842,7 +840,7 @@ export default function MemberProfilePage() {
                         수상 경력, 전시 참가 등 업적 공개 여부
                       </div>
                     </div>
-                    <Checkbox checked={profile.privacySettings?.achievementsVisible} />
+                    <Checkbox checked={parsedPrivacySettings.achievementsVisible} />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -852,7 +850,7 @@ export default function MemberProfilePage() {
                         참여한 이벤트, 프로그램 등 활동 내역 공개 여부
                       </div>
                     </div>
-                    <Checkbox checked={profile.privacySettings?.participationHistoryVisible} />
+                    <Checkbox checked={parsedPrivacySettings.participationHistoryVisible} />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -862,7 +860,7 @@ export default function MemberProfilePage() {
                         다른 회원들이 직접 메시지를 보낼 수 있도록 허용
                       </div>
                     </div>
-                    <Checkbox checked={profile.privacySettings?.allowDirectMessages} />
+                    <Checkbox checked={parsedPrivacySettings.allowDirectMessages} />
                   </div>
                 </div>
 
@@ -938,7 +936,7 @@ export default function MemberProfilePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {profile.membershipHistory?.map((history, index) => (
+                    {profile.membershipHistory ? JSON.parse(profile.membershipHistory).map((history: any, index: number) => (
                       <div key={index} className="flex items-center gap-3 p-3 border border-border rounded-lg">
                         <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
                           <TrendingUp className="h-4 w-4 text-blue-600" />
@@ -950,13 +948,13 @@ export default function MemberProfilePage() {
                              history.action === 'downgraded' ? '등급 하락' : history.action}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {history.date.toLocaleDateString()}
+                            {history.date}
                             {history.fromTier && history.toTier && 
                               ` • Lv.${history.fromTier} → Lv.${history.toTier}`}
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )) : null}
                   </div>
                 </CardContent>
               </Card>
@@ -969,7 +967,7 @@ export default function MemberProfilePage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {profile.paymentHistory?.map((payment, index) => (
+                  {profile.paymentHistory ? JSON.parse(profile.paymentHistory).map((payment: any, index: number) => (
                     <div key={index} className="flex items-center justify-between p-3 border border-border rounded-lg">
                       <div>
                         <div className="font-medium">
@@ -978,7 +976,7 @@ export default function MemberProfilePage() {
                            payment.purpose === 'workshop_fee' ? '워크샵 참가비' : payment.purpose}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          {payment.date.toLocaleDateString()} • {payment.paymentMethod}
+                          {payment.date} • {payment.paymentMethod}
                           {payment.receiptNumber && ` • ${payment.receiptNumber}`}
                         </div>
                       </div>
@@ -997,7 +995,7 @@ export default function MemberProfilePage() {
                         </Badge>
                       </div>
                     </div>
-                  ))}
+                  )) : null}
                 </div>
               </CardContent>
             </Card>

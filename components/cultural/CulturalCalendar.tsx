@@ -122,9 +122,9 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
       day,
       lunarMonth,
       lunarDay,
-      element,
-      animal,
-      season,
+      element: element || 'wood', // Provide fallback for TypeScript
+      animal: animal || 'Rat', // Provide fallback for TypeScript
+      season: season || 'spring', // Provide fallback for TypeScript
       festivals: getTraditionalFestivals(month, day)
     };
   };
@@ -188,21 +188,21 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
     
     // Previous month's trailing days
     for (let i = startingDayOfWeek - 1; i >= 0; i--) {
-      const date = new Date(year, month, -i);
-      days.push({ date, isCurrentMonth: false });
+      const prevDate = new Date(year, month, -i);
+      days.push({ date: prevDate, isCurrentMonth: false });
     }
     
     // Current month's days
     for (let i = 1; i <= daysInMonth; i++) {
-      const date = new Date(year, month, i);
-      days.push({ date, isCurrentMonth: true });
+      const currentDate = new Date(year, month, i);
+      days.push({ date: currentDate, isCurrentMonth: true });
     }
     
     // Next month's leading days
     const totalCells = Math.ceil(days.length / 7) * 7;
     for (let i = days.length; i < totalCells; i++) {
-      const date = new Date(year, month + 1, i - days.length + 1);
-      days.push({ date, isCurrentMonth: false });
+      const nextMonthDate: Date = new Date(year, month + 1, i - days.length + 1);
+      days.push({ date: nextMonthDate, isCurrentMonth: false });
     }
     
     return days;

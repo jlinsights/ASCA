@@ -451,7 +451,7 @@ export function MultiChartDashboard({
         )}
       >
         {selectedChart !== null 
-          ? renderChart(charts[selectedChart], selectedChart)
+          ? (charts[selectedChart] ? renderChart(charts[selectedChart], selectedChart) : null)
           : charts.map((chart, index) => renderChart(chart, index))
         }
       </div>

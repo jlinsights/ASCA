@@ -112,7 +112,7 @@ async function executeMigration(migration: Migration): Promise<void> {
       `);
     });
     
-    console.log(`✅ Migration ${migration.filename} completed in ${Date.now() - startTime}ms`);
+    // Migration completed successfully
     
   } catch (error) {
     // 실패 기록 저장
@@ -155,7 +155,7 @@ export async function runMigrations(): Promise<void> {
       return;
     }
     
-    console.log(`📋 Found ${pendingMigrations.length} pending migration(s):`);
+    // Found pending migrations
     pendingMigrations.forEach(migration => {
 
     });
@@ -165,7 +165,7 @@ export async function runMigrations(): Promise<void> {
       await executeMigration(migration);
     }
     
-    console.log(`🎉 Successfully executed ${pendingMigrations.length} migration(s)!`);
+    // Migrations executed successfully
     
   } catch (error) {
 
@@ -253,9 +253,10 @@ if (require.main === module) {
           status.migrations.forEach(migration => {
             const statusIcon = migration.status === 'executed' ? '✅' : 
                               migration.status === 'failed' ? '❌' : '⏳';
-            console.log(`${statusIcon} ${migration.filename} (v${migration.version})`);
+            // Log migration status - disabled for production
+            // console.log(`${statusIcon} ${migration.filename} (v${migration.version})`);
             if (migration.executedAt) {
-              console.log(`   Executed at: ${migration.executedAt}`);
+              // console.log(`   Executed at: ${migration.executedAt}`);
             }
           });
           

@@ -3,12 +3,6 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm ci",
-  "rewrites": [
-    {
-      "source": "/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)",
-      "destination": "/"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -27,10 +21,5 @@
         }
       ]
     }
-  ],
-  "functions": {
-    "app/**": {
-      "includeFiles": "**"
-    }
-  }
+  ]
 } 
