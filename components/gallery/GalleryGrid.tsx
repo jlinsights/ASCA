@@ -159,7 +159,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
         {/* 헤더 섹션 */}
         <div className="text-center space-y-4">
           <motion.h1 
-            className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent"
+            className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-gray-100 dark:via-gray-300 dark:to-gray-100 bg-clip-text text-transparent"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -167,7 +167,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
             작품 갤러리
           </motion.h1>
           <motion.p 
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
+            className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -183,7 +183,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -196,7 +196,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               setSearchQuery(e.target.value)
               setCurrentPage(1)
             }}
-            className="w-full pl-12 pr-6 py-4 bg-white border-2 border-gray-100 rounded-2xl text-lg placeholder-gray-400 focus:ring-4 focus:ring-blue-100 focus:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md"
+            className="w-full pl-12 pr-6 py-4 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/50 focus:border-blue-300 dark:focus:border-blue-600 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-gray-900/20"
           />
           {searchQuery && (
             <button
@@ -204,7 +204,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                 setSearchQuery('')
                 setCurrentPage(1)
               }}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -228,7 +228,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
             className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 ${
               selectedCategory === 'all'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-100 hover:border-blue-200 hover:shadow-md'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md dark:shadow-gray-900/20'
             }`}
             whileHover={{ scale: selectedCategory === 'all' ? 1.05 : 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -245,7 +245,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 ${
                 selectedCategory === category.id
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-100 hover:border-blue-200 hover:shadow-md'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md dark:shadow-gray-900/20'
               }`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -268,15 +268,15 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
           {filteredItems.length === 0 ? (
             <div className="py-8">
               <div className="text-6xl mb-4">🔍</div>
-              <p className="text-xl text-gray-500 mb-2">검색 결과가 없습니다</p>
-              <p className="text-gray-400">다른 키워드로 시도해보세요</p>
+              <p className="text-xl text-gray-500 dark:text-gray-400 mb-2">검색 결과가 없습니다</p>
+              <p className="text-gray-400 dark:text-gray-500">다른 키워드로 시도해보세요</p>
             </div>
           ) : (
-            <div className="flex items-center justify-center space-x-2 text-gray-600">
-              <span className="text-2xl font-bold text-blue-600">{filteredItems.length}</span>
+            <div className="flex items-center justify-center space-x-2 text-gray-600 dark:text-gray-400">
+              <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">{filteredItems.length}</span>
               <span>개의 작품</span>
               {searchQuery && (
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-500 dark:text-gray-500">
                   "{searchQuery}" 검색 결과
                 </span>
               )}
@@ -316,7 +316,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                 whileHover={{ y: -8, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
+                <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl dark:shadow-gray-900/50 dark:hover:shadow-gray-900/80 transition-all duration-500"
                      style={{
                        aspectRatio: getRandomAspectRatio(index),
                        minHeight: '250px'
@@ -337,7 +337,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                   
                   {/* 카테고리 배지 */}
                   <div className="absolute top-4 left-4 z-10">
-                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-semibold text-gray-800 rounded-full shadow-sm">
+                    <span className="px-3 py-1 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-xs font-semibold text-gray-800 dark:text-gray-200 rounded-full shadow-sm">
                       {getCategoryIcon(item.category)} {getCategoryName(item.category)}
                     </span>
                   </div>
@@ -348,11 +348,11 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                       initial={{ scale: 0, rotate: 45 }}
                       animate={{ scale: 0, rotate: 45 }}
                       whileHover={{ scale: 1.1, rotate: 0 }}
-                      className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300"
+                      className="p-2.5 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl transition-all duration-300"
                       onClick={(e) => handleShareClick(e, item)}
                       aria-label="공유하기"
                     >
-                      <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                       </svg>
                     </motion.button>
@@ -361,14 +361,14 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                       initial={{ scale: 0, rotate: 45 }}
                       animate={{ scale: 0, rotate: 45 }}
                       whileHover={{ scale: 1.1, rotate: 0 }}
-                      className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300"
+                      className="p-2.5 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl transition-all duration-300"
                       onClick={(e) => {
                         e.stopPropagation()
                         handleImageClick(item)
                       }}
                       aria-label="전체화면 보기"
                     >
-                      <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                       </svg>
                     </motion.button>
@@ -418,11 +418,11 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
           <motion.button
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="p-3 rounded-full bg-white border-2 border-gray-100 shadow-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 hover:border-blue-200 hover:shadow-md transition-all duration-300"
+            className="p-3 rounded-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 shadow-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md transition-all duration-300"
             whileHover={{ scale: currentPage === 1 ? 1 : 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </motion.button>
@@ -447,7 +447,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                   className={`w-12 h-12 rounded-full text-sm font-semibold transition-all duration-300 ${
                     currentPage === pageNum
                       ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-110'
-                      : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-100 hover:border-blue-200 hover:shadow-md'
+                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md'
                   }`}
                   whileHover={{ scale: currentPage === pageNum ? 1.1 : 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -464,11 +464,11 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
           <motion.button
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="p-3 rounded-full bg-white border-2 border-gray-100 shadow-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 hover:border-blue-200 hover:shadow-md transition-all duration-300"
+            className="p-3 rounded-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 shadow-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md transition-all duration-300"
             whileHover={{ scale: currentPage === totalPages ? 1 : 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </motion.button>
@@ -498,7 +498,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.8, opacity: 0, y: 50 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative max-w-7xl max-h-full bg-white rounded-3xl overflow-hidden shadow-2xl"
+              className="relative max-w-7xl max-h-full bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* 상단 헤더 */}
@@ -593,7 +593,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
 
               {/* 하단 정보 패널 */}
               <motion.div 
-                className="p-8 bg-white border-t border-gray-100"
+                className="p-8 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800"
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
@@ -601,15 +601,15 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-3">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full">
+                      <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-semibold rounded-full">
                         {getCategoryIcon(selectedImage.category)} {getCategoryName(selectedImage.category)}
                       </span>
                       {selectedImage.eventDate && (
-                        <span className="text-gray-500 text-sm">{selectedImage.eventDate}</span>
+                        <span className="text-gray-500 dark:text-gray-400 text-sm">{selectedImage.eventDate}</span>
                       )}
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{selectedImage.title}</h3>
-                    <p className="text-gray-600 text-lg leading-relaxed">{selectedImage.description}</p>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{selectedImage.title}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">{selectedImage.description}</p>
                   </div>
                 </div>
                 
@@ -618,7 +618,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                   {selectedImage.tags.map((tag, index) => (
                     <motion.span
                       key={index}
-                      className="px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-xl hover:bg-gray-200 transition-colors cursor-default"
+                      className="px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-default"
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.4 + index * 0.05 }}
@@ -630,11 +630,11 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                 </div>
 
                 {/* 이미지 네비게이션 정보 */}
-                <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
+                <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
                   <span>
                     {filteredItems.findIndex(item => item.id === selectedImage.id) + 1} / {filteredItems.length}
                   </span>
-                  <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                  <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-2 py-1 rounded">
                     ESC로 닫기 | ← → 키로 이동
                   </span>
                 </div>
