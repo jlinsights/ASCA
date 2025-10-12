@@ -141,8 +141,8 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
               ) : (
                 <div className="relative group w-full max-w-4xl aspect-[4/3]">
                   <Image
-                    src={currentArtwork.image.url}
-                    alt={currentArtwork.image.alt}
+                    src={currentArtwork?.image.url || ''}
+                    alt={currentArtwork?.image.alt || ''}
                     fill
                     className="object-contain rounded-lg shadow-2xl transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
@@ -157,13 +157,13 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                     showInfo ? "opacity-100" : "opacity-0"
                   )}>
                     <h3 className="font-calligraphy text-lg font-semibold text-ink-black mb-2">
-                      {currentArtwork.title.original}
+                      {currentArtwork?.title.original}
                     </h3>
                     <p className="font-english text-sm text-ink-black/80 mb-1">
-                      {currentArtwork.title.english}
+                      {currentArtwork?.title.english}
                     </p>
                     <p className="font-serif text-xs text-ink-black/60">
-                      {currentArtwork.artist.name} • {currentArtwork.artist.period}
+                      {currentArtwork?.artist.name} • {currentArtwork?.artist.period}
                     </p>
                   </div>
                 </div>
@@ -203,63 +203,63 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                   variant="outline" 
                   className={cn(
                     "border-temple-gold text-temple-gold font-english text-xs tracking-wider",
-                    `bg-${getSeasonalAccent(currentArtwork.season)}/10`
+                    `bg-${getSeasonalAccent(currentArtwork?.season || 'spring')}/10`
                   )}
                 >
-                  {currentArtwork.artist.school}
+                  {currentArtwork?.artist.school}
                 </Badge>
-                {currentArtwork.season && showSeasonalThemes && (
+                {currentArtwork?.season && showSeasonalThemes && (
                   <Badge 
                     variant="outline"
                     className={cn(
                       "text-xs capitalize",
-                      `border-${getSeasonalAccent(currentArtwork.season)}`,
-                      `text-${getSeasonalAccent(currentArtwork.season)}`
+                      `border-${getSeasonalAccent(currentArtwork?.season || 'spring')}`,
+                      `text-${getSeasonalAccent(currentArtwork?.season || 'spring')}`
                     )}
                   >
-                    {currentArtwork.season}
+                    {currentArtwork?.season}
                   </Badge>
                 )}
               </div>
 
               <h1 className="font-calligraphy text-4xl font-bold mb-2 leading-tight">
-                {currentArtwork.title.original}
+                {currentArtwork?.title.original}
               </h1>
               
               <p className="font-english text-xl text-rice-paper/80 mb-1">
-                {currentArtwork.title.romanized}
+                {currentArtwork?.title.romanized}
               </p>
               
               <p className="font-english text-lg text-rice-paper/60">
-                "{currentArtwork.title.english}"
+                "{currentArtwork?.title.english}"
               </p>
             </div>
 
             {/* Artist Information */}
             <div className="border-l-2 border-temple-gold/30 pl-4">
               <p className="font-serif text-lg font-semibold text-rice-paper">
-                {currentArtwork.artist.name}
+                {currentArtwork?.artist.name}
               </p>
               <p className="font-english text-sm text-rice-paper/60">
-                {currentArtwork.artist.period}
+                {currentArtwork?.artist.period}
               </p>
             </div>
 
             {/* Description */}
             <div className="space-y-3">
               <p className="font-serif text-sm leading-relaxed text-rice-paper/80">
-                {currentArtwork.description.cultural}
+                {currentArtwork?.description.cultural}
               </p>
               
               <p className="font-english text-sm leading-relaxed text-rice-paper/70 italic">
-                {currentArtwork.description.artistic}
+                {currentArtwork?.description.artistic}
               </p>
             </div>
 
             {/* Tags */}
-            {currentArtwork.tags.length > 0 && (
+            {currentArtwork?.tags.length && currentArtwork.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {currentArtwork.tags.map((tag, index) => (
+                {currentArtwork?.tags.map((tag, index) => (
                   <Badge 
                     key={index}
                     variant="secondary"
@@ -277,14 +277,14 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                 size="sm"
                 className={cn(
                   "flex-1 font-english font-medium transition-all duration-300",
-                  `bg-${getSeasonalAccent(currentArtwork.season)} text-ink-black`,
-                  `hover:bg-${getSeasonalAccent(currentArtwork.season)}/80`
+                  `bg-${getSeasonalAccent(currentArtwork?.season || 'spring')} text-ink-black`,
+                  `hover:bg-${getSeasonalAccent(currentArtwork?.season || 'spring')}/80`
                 )}
               >
                 Explore Collection
               </Button>
               
-              {currentArtwork.audio && (
+              {currentArtwork?.audio && (
                 <Button 
                   size="sm" 
                   variant="outline"
@@ -334,7 +334,7 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                   className={cn(
                     "h-1 rounded-full transition-all duration-300",
                     index === currentIndex 
-                      ? `bg-${getSeasonalAccent(currentArtwork.season)} w-8` 
+                      ? `bg-${getSeasonalAccent(currentArtwork?.season || 'spring')} w-8` 
                       : "bg-rice-paper/20 w-4 hover:bg-rice-paper/40"
                   )}
                   aria-label={`Go to artwork ${index + 1}`}
@@ -349,10 +349,10 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
       <div className="sr-only">
         <h2>Featured Calligraphy Artwork</h2>
         <p>
-          Currently displaying "{currentArtwork.title.english}" by {currentArtwork.artist.name}, 
-          created during the {currentArtwork.artist.period} period in the {currentArtwork.artist.school} style.
+          Currently displaying "{currentArtwork?.title.english}" by {currentArtwork?.artist.name}, 
+          created during the {currentArtwork?.artist.period} period in the {currentArtwork?.artist.school} style.
         </p>
-        <p>{currentArtwork.description.cultural}</p>
+        <p>{currentArtwork?.description.cultural}</p>
       </div>
     </section>
   );

@@ -44,8 +44,8 @@ export function LanguageSelector() {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <span className="mr-1">{currentLanguage.flag}</span>
-        <span className="hidden md:inline">{currentLanguage.code.toUpperCase()}</span>
+        <span className="mr-1">{currentLanguage?.flag}</span>
+        <span className="hidden md:inline">{currentLanguage?.code.toUpperCase()}</span>
         <ChevronDown className="h-3 w-3" />
       </button>
 

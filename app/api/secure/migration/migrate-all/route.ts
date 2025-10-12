@@ -26,7 +26,7 @@ async function secureMigrationHandler({ user, request }: SecureAPIContext) {
     }
 
     // 추가 권한 검증 (마이그레이션은 매우 민감한 작업)
-    if (!user?.permissions.includes('system') && !user?.permissions.includes('migration')) {
+    if (!user?.permissions?.includes('system') && !user?.permissions?.includes('migration')) {
       auditLogger.logSuspiciousActivity(request, 'Unauthorized migration attempt', {
         userId: user?.id,
         userPermissions: user?.permissions,

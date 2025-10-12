@@ -153,19 +153,30 @@ const ArtworkComparison: React.FC<ArtworkComparisonProps> = ({
   const updateViewerState = useCallback((index: number, updates: Partial<ViewerState>) => {
     setViewerStates(prev => {
       const newStates = [...prev];
-      newStates[index] = { ...newStates[index], ...updates };
+      // Only update fields that are actually provided and not undefined
+      const currentState = newStates[index];
+      if (!currentState) return prev; // Safety check
+      
+      newStates[index] = {
+        scale: updates.scale !== undefined ? updates.scale : currentState.scale,
+        offsetX: updates.offsetX !== undefined ? updates.offsetX : currentState.offsetX,
+        offsetY: updates.offsetY !== undefined ? updates.offsetY : currentState.offsetY,
+        isDragging: updates.isDragging !== undefined ? updates.isDragging : currentState.isDragging,
+        dragStart: updates.dragStart !== undefined ? updates.dragStart : currentState.dragStart,
+      };
       
       // Sync with other viewers if enabled
       if ((comparisonMode.syncZoom && (updates.scale !== undefined)) ||
           (comparisonMode.syncPan && (updates.offsetX !== undefined || updates.offsetY !== undefined))) {
         for (let i = 0; i < newStates.length; i++) {
-          if (i !== index) {
+          const syncState = newStates[i];
+          if (i !== index && syncState) {
             if (comparisonMode.syncZoom && updates.scale !== undefined) {
-              newStates[i].scale = updates.scale;
+              syncState.scale = updates.scale;
             }
             if (comparisonMode.syncPan) {
-              if (updates.offsetX !== undefined) newStates[i].offsetX = updates.offsetX;
-              if (updates.offsetY !== undefined) newStates[i].offsetY = updates.offsetY;
+              if (updates.offsetX !== undefined) syncState.offsetX = updates.offsetX;
+              if (updates.offsetY !== undefined) syncState.offsetY = updates.offsetY;
             }
           }
         }
@@ -177,6 +188,8 @@ const ArtworkComparison: React.FC<ArtworkComparisonProps> = ({
 
   const handleZoom = useCallback((index: number, delta: number, centerX?: number, centerY?: number) => {
     const currentState = viewerStates[index];
+    if (!currentState) return; // Safety check
+    
     const newScale = Math.max(0.1, Math.min(5, currentState.scale + delta));
     
     if (centerX !== undefined && centerY !== undefined) {
@@ -196,6 +209,8 @@ const ArtworkComparison: React.FC<ArtworkComparisonProps> = ({
 
   const handlePan = useCallback((index: number, deltaX: number, deltaY: number) => {
     const currentState = viewerStates[index];
+    if (!currentState) return; // Safety check
+    
     updateViewerState(index, {
       offsetX: currentState.offsetX + deltaX,
       offsetY: currentState.offsetY + deltaY
@@ -238,7 +253,7 @@ const ArtworkComparison: React.FC<ArtworkComparisonProps> = ({
 
   const handleMouseMove = useCallback((index: number, e: React.MouseEvent) => {
     const currentState = viewerStates[index];
-    if (!currentState.isDragging) return;
+    if (!currentState || !currentState.isDragging) return; // Safety check
     
     const deltaX = e.clientX - currentState.dragStart.x;
     const deltaY = e.clientY - currentState.dragStart.y;
@@ -451,7 +466,7 @@ const ArtworkComparison: React.FC<ArtworkComparisonProps> = ({
     const viewerState = viewerStates[index];
     const primaryImage = artwork.images.find(img => img.type === 'primary') || artwork.images[0];
     
-    if (!primaryImage) return null;
+    if (!primaryImage || !viewerState) return null;
 
     return (
       <div
@@ -609,7 +624,9 @@ const ArtworkComparison: React.FC<ArtworkComparisonProps> = ({
 
       case 'overlay':
         if (selectedArtworks.length < 2) {
-          return renderImageViewer(selectedArtworks[0], 0);
+          const firstArtwork = selectedArtworks[0];
+          if (!firstArtwork) return null;
+          return renderImageViewer(firstArtwork, 0);
         }
         // TODO: Implement overlay mode
         return (
