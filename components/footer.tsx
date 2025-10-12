@@ -56,7 +56,7 @@ export function Footer() {
     <footer className="bg-[#222222] text-[#fcfcfc] dark:bg-[#111111] py-12">
       <div className="container mx-auto px-4">
         {/* 회사 정보 및 메뉴 링크 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* 회사 정보 */}
           <div className="md:col-span-1 lg:col-span-1">
             <Link href="/" className="block mb-4">
@@ -237,65 +237,11 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* 소개 메뉴 */}
-          <div>
-            <h3 className="text-sm font-medium mb-4">소개</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/about"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  개요
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/regulations"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  회칙
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about/history"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  연혁
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/organization"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  조직도
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/brand"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  브랜드
-                </Link>
-              </li>
-            </ul>
-          </div>
 
           {/* 소식 메뉴 */}
           <div>
             <h3 className="text-sm font-medium mb-4">소식</h3>
             <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/notice"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  공지사항
-                </Link>
-              </li>
               <li>
                 <Link
                   href="/events"

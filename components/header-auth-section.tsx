@@ -10,6 +10,10 @@ import { log } from "@/lib/utils/logger"
 export function HeaderAuthSection() {
   const { t } = useLanguage()
   
+  // 인증 기능 숨김 처리
+  return null
+  
+  /*
   return (
     <div className="flex items-center space-x-2">
       <KakaoLoginButton 
@@ -33,4 +37,5 @@ export function HeaderAuthSection() {
       </Link>
     </div>
   )
+  */
 }
