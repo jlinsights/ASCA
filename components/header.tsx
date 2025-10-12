@@ -125,13 +125,13 @@ export function Header() {
       <header ref={headerRef} className="border-b border-[#222222]/10 dark:border-[#fcfcfc]/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-14 md:h-16">
-            <Link href="/" className="flex items-center">
+            <a href="https://orientalcalligraphy.org" target="_blank" rel="noopener noreferrer" className="flex items-center">
               <Logo 
                 width={150} 
                 height={50} 
                 className="h-10 md:h-12 lg:h-14 w-auto" 
               />
-            </Link>
+            </a>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">

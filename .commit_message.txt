@@ -1,1 +1,1 @@
-🌐 헤더 다국어 버튼 숨김 및 한글화 완료 - UI 현지화 개선
+🔗 헤더 로고 클릭 시 공식 웹사이트 연결 - orientalcalligraphy.org
