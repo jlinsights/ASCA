@@ -189,9 +189,6 @@ export function Header() {
               ))}
               
               {/* Additional Menu Items */}
-              <Link href="/gallery" className="text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2">
-                갤러리
-              </Link>
               <Link href="/search" className="text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2">
                 검색
               </Link>
@@ -286,13 +283,6 @@ export function Header() {
               ))}
               
               <div className="pt-2 border-t border-border/50">
-                <Link
-                  href="/gallery"
-                  className="block text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  갤러리
-                </Link>
                 <Link
                   href="/search"
                   className="block text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
