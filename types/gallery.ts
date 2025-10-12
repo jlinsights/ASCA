@@ -12,6 +12,7 @@ export interface GalleryItem {
   originalSize: number
   modifiedTime: string
   eventDate?: string
+  eventYear: number  // 연도 필드 추가
   tags: string[]
   // 이미지 품질 정보 추가
   dimensions?: {
@@ -37,6 +38,8 @@ export interface GalleryMetadata {
   totalImages: number
   lastUpdated: string
   categories: Record<string, GalleryCategory>
+  yearStats: Record<number, { count: number; categories: string[] }>  // 연도별 통계 추가
+  availableYears: number[]  // 사용 가능한 연도 목록
   version: string
 }
 
@@ -48,8 +51,9 @@ export interface GalleryData {
 
 export interface GalleryFilterState {
   category: string
+  year: number | 'all'  // 연도 필터 추가
   searchQuery: string
-  sortBy: 'date' | 'title' | 'category'
+  sortBy: 'date' | 'title' | 'category' | 'year'  // 연도 정렬 옵션 추가
   sortOrder: 'asc' | 'desc'
   page: number
   itemsPerPage: number

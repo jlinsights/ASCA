@@ -28,19 +28,25 @@ const getCategoryIcon = (category: string) => {
     invited: '🎨',
     nominee: '⭐',
     exhibition: '🖼️',
-    workshop: '📚'
+    workshop: '📚',
+    group: '👨‍👩‍👧‍👦',
+    award: '🏅',
+    ceremony: '🎉'
   }
   return icons[category as keyof typeof icons] || '📷'
 }
 
 const getCategoryName = (category: string) => {
   const names = {
-    committee: '위원회',
-    contest: '서예대회',
+    committee: '심사위원회',
+    contest: '휘호대회',
     invited: '초대작가', 
     nominee: '추천작가',
     exhibition: '전시회',
-    workshop: '워크샵'
+    workshop: '워크샵',
+    group: '단체사진',
+    award: '시상기념',
+    ceremony: '시상식'
   }
   return names[category as keyof typeof names] || '기타'
 }
