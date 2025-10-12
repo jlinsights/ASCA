@@ -187,3 +187,20 @@ export const getAbsoluteUrl = (relativePath: string) => {
   }
   return relativePath
 }
+
+/**
+ * 고화질 이미지 URL 생성
+ */
+export const getHighQualityImageUrl = (imagePath: string, width?: number, quality = 95) => {
+  if (typeof window !== 'undefined') {
+    const baseUrl = window.location.origin
+    const encodedPath = encodeURIComponent(imagePath)
+    const params = new URLSearchParams({
+      url: encodedPath,
+      w: (width || 1920).toString(),
+      q: quality.toString()
+    })
+    return `${baseUrl}/_next/image?${params.toString()}`
+  }
+  return imagePath
+}

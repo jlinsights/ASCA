@@ -10,7 +10,8 @@ import {
   shareToTwitter, 
   copyLink, 
   shareNative,
-  getAbsoluteUrl 
+  getAbsoluteUrl,
+  getHighQualityImageUrl
 } from '@/lib/utils/sns-share'
 
 interface SocialShareProps {
@@ -24,11 +25,11 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
   const [copied, setCopied] = useState(false)
   const [isSharing, setIsSharing] = useState(false)
 
-  // 공유 데이터 준비
+  // 공유 데이터 준비 (고화질 이미지 사용)
   const shareData = {
     title: `${item.title} - 동양서예협회`,
     description: item.description,
-    imageUrl: getAbsoluteUrl(item.src),
+    imageUrl: getHighQualityImageUrl(item.src, 1920, 95), // 고화질 이미지
     url: getAbsoluteUrl(`/gallery?image=${item.id}`),
     hashtags: ['동양서예협회', '서예', '전통예술', ...item.tags.slice(0, 3)]
   }
