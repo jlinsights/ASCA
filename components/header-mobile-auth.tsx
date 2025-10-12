@@ -14,6 +14,10 @@ interface HeaderMobileAuthProps {
 export function HeaderMobileAuth({ onCloseMenu }: HeaderMobileAuthProps) {
   const { t } = useLanguage()
 
+  // 모바일 인증 기능 숨김 처리
+  return null
+
+  /*
   return (
     <div className="border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 pt-4 mt-4">
       <div className="space-y-3">
@@ -53,4 +57,5 @@ export function HeaderMobileAuth({ onCloseMenu }: HeaderMobileAuthProps) {
       </div>
     </div>
   )
+  */
 }
