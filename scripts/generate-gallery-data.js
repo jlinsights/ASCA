@@ -194,22 +194,22 @@ function generateGalleryData() {
       originalSize: file.size,
       modifiedTime: file.modifiedTime.toISOString(),
       eventDate: metadata.eventDate,
-      // 이미지 품질 정보 추가
+      // 이미지 품질 정보 추가 (모든 이미지 고화질 처리)
       dimensions: {
         width: null, // 실제 사용시 동적 계산
         height: null,
         aspectRatio: '1:1' // 기본값, 실제로는 이미지에 따라 다름
       },
       quality: {
-        isHighRes: file.size > 500000, // 500KB 이상이면 고해상도로 간주
-        suggested: file.size > 1000000 ? 95 : 85 // 1MB 이상이면 95% 품질
+        isHighRes: true, // 모든 이미지를 고해상도로 처리
+        suggested: 95 // 모든 이미지 95% 품질
       },
       tags: [
         metadata.category,
         ...(metadata.eventDate ? [metadata.eventDate.split('-')[0]] : []), // 연도 추가
         ...(metadata.title.includes('-') ? metadata.title.split('-').map(t => t.trim()) : []),
-        // 이미지 품질 태그 추가
-        file.size > 1000000 ? '고화질' : '표준화질'
+        // 모든 이미지 고화질 태그
+        '고화질'
       ].filter(Boolean)
     };
   });
