@@ -188,12 +188,15 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               >
                 <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
                   <Image
-                    src={item.thumbnail}
+                    src={item.src}
                     alt={item.title}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 16vw"
-                    loading="lazy"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 16vw"
+                    quality={item.quality?.suggested || 85}
+                    priority={index < 6}
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknygjLMzHkkknqTzSlT54b6bk+h0R//Z"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300" />
                   <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -308,7 +311,9 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                   width={1200}
                   height={800}
                   className="max-w-full max-h-[80vh] object-contain"
+                  quality={selectedImage.quality?.isHighRes ? 95 : 90}
                   priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
                 />
               </div>
 

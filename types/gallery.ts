@@ -13,6 +13,16 @@ export interface GalleryItem {
   modifiedTime: string
   eventDate?: string
   tags: string[]
+  // 이미지 품질 정보 추가
+  dimensions?: {
+    width: number | null
+    height: number | null
+    aspectRatio: string
+  }
+  quality?: {
+    isHighRes: boolean
+    suggested: number
+  }
 }
 
 export interface GalleryCategory {
