@@ -4,6 +4,7 @@ import React, { useState, useMemo, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { GalleryItem, GalleryCategory } from '@/types/gallery'
+import SocialShare from './SocialShare'
 
 interface GalleryGridProps {
   items: GalleryItem[]
@@ -20,6 +21,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [shareItem, setShareItem] = useState<GalleryItem | null>(null)
 
   // 필터링된 아이템
   const filteredItems = useMemo(() => {
@@ -53,6 +55,17 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
   // 이미지 클릭 핸들러
   const handleImageClick = useCallback((item: GalleryItem) => {
     setSelectedImage(item)
+  }, [])
+
+  // 공유 버튼 클릭 핸들러
+  const handleShareClick = useCallback((e: React.MouseEvent, item: GalleryItem) => {
+    e.stopPropagation() // 이미지 클릭 이벤트 방지
+    setShareItem(item)
+  }, [])
+
+  // 공유 모달 닫기
+  const handleShareClose = useCallback(() => {
+    setShareItem(null)
   }, [])
 
   // 라이트박스 네비게이션
@@ -199,6 +212,19 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknygjLMzHkkknqTzSlT54b6bk+h0R//Z"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300" />
+                  
+                  {/* 공유 버튼 */}
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 0, scale: 0.8 }}
+                    whileHover={{ scale: 1.1 }}
+                    className="absolute top-3 right-3 p-2 bg-white bg-opacity-90 backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white z-10"
+                    onClick={(e) => handleShareClick(e, item)}
+                    aria-label="공유하기"
+                  >
+                    <span className="text-lg">📤</span>
+                  </motion.button>
+
                   <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                     <h3 className="text-white text-sm font-medium truncate">
                       {item.title}
@@ -281,13 +307,31 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               className="relative max-w-5xl max-h-full"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* 닫기 버튼 */}
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 z-10 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-colors"
-              >
-                ✕
-              </button>
+              {/* 상단 버튼들 */}
+              <div className="absolute top-4 right-4 z-10 flex space-x-2">
+                {/* 공유 버튼 */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleShareClick(e, selectedImage)
+                  }}
+                  className="p-3 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-colors"
+                  aria-label="공유하기"
+                >
+                  <span className="text-xl">📤</span>
+                </motion.button>
+                
+                {/* 닫기 버튼 */}
+                <button
+                  onClick={() => setSelectedImage(null)}
+                  className="p-3 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-colors"
+                  aria-label="닫기"
+                >
+                  <span className="text-xl">✕</span>
+                </button>
+              </div>
 
               {/* 이전/다음 버튼 */}
               <button
@@ -337,6 +381,27 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                 </div>
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* SNS 공유 모달 */}
+      <AnimatePresence>
+        {shareItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4"
+            onClick={handleShareClose}
+          >
+            <div onClick={(e) => e.stopPropagation()}>
+              <SocialShare
+                item={shareItem}
+                isOpen={!!shareItem}
+                onClose={handleShareClose}
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
