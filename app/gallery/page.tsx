@@ -65,10 +65,10 @@ function GalleryErrorBoundary({ error, reset }: { error: Error; reset: () => voi
 function GalleryStats({ data }: { data: GalleryData }) {
   const stats = [
     {
-      icon: '🖼️',
+      icon: '📸',
       value: data.metadata.totalImages,
-      label: '총 작품 수',
-      description: '고화질 서예 작품',
+      label: '총 이미지 수',
+      description: '다양한 활동 기록',
       gradient: 'from-blue-500 to-blue-600',
       bgGradient: 'from-blue-50 to-blue-100'
     },
@@ -156,13 +156,13 @@ export default function GalleryPage() {
             </h1>
             
             <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed mb-8">
-              동양서예협회 웹사이트가 갤러리 전문 사이트로 새롭게 태어났습니다
+              동양서예협회의 다양한 활동과 순간들을 담은 갤러리가 메인 페이지로 이동했습니다
             </p>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8">
               <p className="text-blue-100/90 text-lg leading-relaxed">
-                모든 갤러리 기능과 148개의 고화질 서예 작품들이<br />
-                이제 <strong className="text-white">메인 페이지</strong>에서 바로 확인하실 수 있습니다.
+                서예 작품, 전시회 현장, 심사위원회 활동, 휘호대회, 시상식, 기념사진 등<br />
+                265개의 고화질 이미지가 <strong className="text-white">메인 페이지</strong>에서 바로 확인하실 수 있습니다.
               </p>
             </div>
             
@@ -196,10 +196,10 @@ export default function GalleryPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-            <div className="text-4xl mb-4">🖼️</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">통합 갤러리</h3>
+            <div className="text-4xl mb-4">📸</div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">다양한 활동 기록</h3>
             <p className="text-gray-600">
-              메인 페이지에서 모든 작품을 한눈에 감상하세요
+              서예 작품부터 전시회, 행사, 기념식까지 모든 순간
             </p>
           </div>
           
@@ -207,15 +207,15 @@ export default function GalleryPage() {
             <div className="text-4xl mb-4">⚡</div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">빠른 접근</h3>
             <p className="text-gray-600">
-              사이트 접속 즉시 갤러리를 바로 확인할 수 있습니다
+              사이트 접속 즉시 모든 활동 사진을 바로 확인할 수 있습니다
             </p>
           </div>
           
           <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
             <div className="text-4xl mb-4">🎨</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">향상된 UX</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">체계적 분류</h3>
             <p className="text-gray-600">
-              현대적인 디자인과 최적화된 사용자 경험
+              작품, 전시회, 심사위원회, 휘호대회 등 카테고리별 정리
             </p>
           </div>
         </div>
@@ -229,7 +229,7 @@ export default function GalleryPage() {
             "@context": "https://schema.org",
             "@type": "ImageGallery",
             "name": "동양서예협회 갤러리",
-            "description": "동양서예협회의 서예 작품과 활동 사진 갤러리",
+            "description": "동양서예협회의 서예 작품, 전시회, 심사위원회, 휘호대회, 시상식 등 다양한 활동 기록 갤러리",
             "url": "https://asca-main-orkqns499-jlinsights-projects.vercel.app/gallery",
             "image": galleryData.items.slice(0, 5).map(item => ({
               "@type": "ImageObject",
@@ -250,11 +250,11 @@ export default function GalleryPage() {
 // 메타데이터 내보내기 (리디렉션 페이지)
 export const metadata = {
   title: '갤러리 페이지 이동 안내 | 동양서예협회',
-  description: '동양서예협회 갤러리가 메인 페이지로 이동했습니다. 148개의 고화질 서예 작품을 메인 페이지에서 확인하세요.',
-  keywords: ['서예', '갤러리', '동양서예', '서예작품', '리디렉션', '메인페이지'],
+  description: '동양서예협회 갤러리가 메인 페이지로 이동했습니다. 서예 작품, 전시회, 심사위원회, 휘호대회, 시상식 등 265개의 다양한 활동 사진을 메인 페이지에서 확인하세요.',
+  keywords: ['서예', '갤러리', '동양서예', '전시회', '휘호대회', '심사위원회', '시상식', '기념사진', '리디렉션', '메인페이지'],
   openGraph: {
     title: '갤러리 페이지 이동 안내 | 동양서예협회',
-    description: '갤러리가 메인 페이지로 이동했습니다. 더 나은 사용자 경험을 위해 갤러리 전문 사이트로 리뉴얼되었습니다.',
+    description: '서예 작품부터 전시회, 심사위원회, 휘호대회, 시상식까지 다양한 활동을 담은 갤러리가 메인 페이지로 이동했습니다.',
     type: 'website'
   }
 }
