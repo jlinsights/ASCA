@@ -176,26 +176,40 @@ function generateGalleryData() {
     const metadata = extractMetadata(file);
     const webPath = `/images/gallery/${file.relativePath}`;
     
-    // 썸네일 경로 결정
-    let thumbnailPath = webPath;
-    if (file.relativePath.includes('/originals/')) {
-      thumbnailPath = webPath.replace('/originals/', '/thumbnails/');
-    }
+    // 고화질 이미지 경로 설정
+    // 원본 이미지를 그대로 사용하되, Next.js 이미지 최적화에 의존
+    const originalPath = webPath;
+    
+    // 썸네일은 더 작은 크기로 최적화된 버전 사용
+    // Next.js가 자동으로 적절한 크기로 변환
+    const thumbnailPath = webPath;
     
     return {
       id: `gallery_${index + 1}`,
       title: metadata.title,
       description: metadata.description,
       category: metadata.category,
-      src: webPath,
-      thumbnail: thumbnailPath,
+      src: originalPath, // 고화질 원본 이미지
+      thumbnail: thumbnailPath, // 썸네일용 (Next.js가 자동 최적화)
       originalSize: file.size,
       modifiedTime: file.modifiedTime.toISOString(),
       eventDate: metadata.eventDate,
+      // 이미지 품질 정보 추가
+      dimensions: {
+        width: null, // 실제 사용시 동적 계산
+        height: null,
+        aspectRatio: '1:1' // 기본값, 실제로는 이미지에 따라 다름
+      },
+      quality: {
+        isHighRes: file.size > 500000, // 500KB 이상이면 고해상도로 간주
+        suggested: file.size > 1000000 ? 95 : 85 // 1MB 이상이면 95% 품질
+      },
       tags: [
         metadata.category,
         ...(metadata.eventDate ? [metadata.eventDate.split('-')[0]] : []), // 연도 추가
-        ...(metadata.title.includes('-') ? metadata.title.split('-').map(t => t.trim()) : [])
+        ...(metadata.title.includes('-') ? metadata.title.split('-').map(t => t.trim()) : []),
+        // 이미지 품질 태그 추가
+        file.size > 1000000 ? '고화질' : '표준화질'
       ].filter(Boolean)
     };
   });
