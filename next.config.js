@@ -22,18 +22,26 @@ const nextConfig = {
     ignoreDuringBuilds: true, // Temporarily ignore for security fix deployment
   },
 
-  // 향상된 이미지 최적화
+  // 향상된 이미지 최적화 - 갤러리 고화질 지원
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60,
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 640, 768, 1024],
+    minimumCacheTTL: 3600, // 1시간 캐시
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '**',
       },
     ],
+    // 갤러리 이미지에 대한 특별 처리
+    loader: 'default',
+    path: '/_next/image',
+    domains: [],
+    unoptimized: false,
   },
 
   // Webpack configuration to fix RSC issues

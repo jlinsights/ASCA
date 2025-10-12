@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalImages": 290,
-    "lastUpdated": "2025-10-12T00:31:43.407Z",
+    "lastUpdated": "2025-10-12T00:50:57.695Z",
     "categories": {
       "committee": {
         "count": 146,
@@ -71,11 +71,21 @@
       "originalSize": 873452,
       "modifiedTime": "2025-07-07T14:34:57.825Z",
       "eventDate": "2025",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": true,
+        "suggested": 85
+      },
       "tags": [
         "nominee",
         "2025",
         "sodam",
-        "corinthians 2025"
+        "corinthians 2025",
+        "표준화질"
       ]
     },
     {
@@ -88,11 +98,21 @@
       "originalSize": 794440,
       "modifiedTime": "2025-07-07T14:34:57.821Z",
       "eventDate": "2025",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": true,
+        "suggested": 85
+      },
       "tags": [
         "nominee",
         "2025",
         "shalom",
-        "you called because the moon rose 2025"
+        "you called because the moon rose 2025",
+        "표준화질"
       ]
     },
     {
@@ -105,11 +125,21 @@
       "originalSize": 1024115,
       "modifiedTime": "2025-07-07T14:34:57.817Z",
       "eventDate": "2025",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": true,
+        "suggested": 95
+      },
       "tags": [
         "nominee",
         "2025",
         "ilmook",
-        "autumn visit 2025"
+        "autumn visit 2025",
+        "고화질"
       ]
     },
     {
@@ -122,11 +152,21 @@
       "originalSize": 1196725,
       "modifiedTime": "2025-07-07T14:34:57.812Z",
       "eventDate": "2025",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": true,
+        "suggested": 95
+      },
       "tags": [
         "nominee",
         "2025",
         "danbi",
-        "only love 2025"
+        "only love 2025",
+        "고화질"
       ]
     },
     {
@@ -139,11 +179,21 @@
       "originalSize": 365079,
       "modifiedTime": "2025-07-07T14:34:57.807Z",
       "eventDate": "2025",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "nominee",
         "2025",
         "cheongbong",
-        "seon poems 2025"
+        "seon poems 2025",
+        "표준화질"
       ]
     },
     {
@@ -156,11 +206,21 @@
       "originalSize": 1552808,
       "modifiedTime": "2025-07-07T14:34:57.805Z",
       "eventDate": "2025",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": true,
+        "suggested": 95
+      },
       "tags": [
         "invited",
         "2025",
         "윤경희",
-        "초대"
+        "초대",
+        "고화질"
       ]
     },
     {
@@ -173,9 +233,19 @@
       "originalSize": 16581,
       "modifiedTime": "2025-07-07T14:34:57.793Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -188,9 +258,19 @@
       "originalSize": 25298,
       "modifiedTime": "2025-07-07T14:34:57.792Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -203,9 +283,19 @@
       "originalSize": 23754,
       "modifiedTime": "2025-07-07T14:34:57.792Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -218,9 +308,19 @@
       "originalSize": 41983,
       "modifiedTime": "2025-07-07T14:34:57.792Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -233,9 +333,19 @@
       "originalSize": 17431,
       "modifiedTime": "2025-07-07T14:34:57.792Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -248,9 +358,19 @@
       "originalSize": 21889,
       "modifiedTime": "2025-07-07T14:34:57.791Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -263,9 +383,19 @@
       "originalSize": 23299,
       "modifiedTime": "2025-07-07T14:34:57.791Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -278,9 +408,19 @@
       "originalSize": 23857,
       "modifiedTime": "2025-07-07T14:34:57.791Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -293,9 +433,19 @@
       "originalSize": 22676,
       "modifiedTime": "2025-07-07T14:34:57.791Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -308,9 +458,19 @@
       "originalSize": 16669,
       "modifiedTime": "2025-07-07T14:34:57.790Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -323,9 +483,19 @@
       "originalSize": 21722,
       "modifiedTime": "2025-07-07T14:34:57.790Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -338,9 +508,19 @@
       "originalSize": 21274,
       "modifiedTime": "2025-07-07T14:34:57.789Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -353,9 +533,19 @@
       "originalSize": 23380,
       "modifiedTime": "2025-07-07T14:34:57.789Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -368,9 +558,19 @@
       "originalSize": 21794,
       "modifiedTime": "2025-07-07T14:34:57.789Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -383,9 +583,19 @@
       "originalSize": 23200,
       "modifiedTime": "2025-07-07T14:34:57.789Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -398,9 +608,19 @@
       "originalSize": 22186,
       "modifiedTime": "2025-07-07T14:34:57.788Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -413,9 +633,19 @@
       "originalSize": 21248,
       "modifiedTime": "2025-07-07T14:34:57.788Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -428,9 +658,19 @@
       "originalSize": 19858,
       "modifiedTime": "2025-07-07T14:34:57.788Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -443,9 +683,19 @@
       "originalSize": 20073,
       "modifiedTime": "2025-07-07T14:34:57.787Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -458,9 +708,19 @@
       "originalSize": 22268,
       "modifiedTime": "2025-07-07T14:34:57.787Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -473,9 +733,19 @@
       "originalSize": 22183,
       "modifiedTime": "2025-07-07T14:34:57.787Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -488,9 +758,19 @@
       "originalSize": 23620,
       "modifiedTime": "2025-07-07T14:34:57.786Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -503,9 +783,19 @@
       "originalSize": 15100,
       "modifiedTime": "2025-07-07T14:34:57.786Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -518,9 +808,19 @@
       "originalSize": 18429,
       "modifiedTime": "2025-07-07T14:34:57.786Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -533,9 +833,19 @@
       "originalSize": 24195,
       "modifiedTime": "2025-07-07T14:34:57.785Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -548,9 +858,19 @@
       "originalSize": 20338,
       "modifiedTime": "2025-07-07T14:34:57.785Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -563,9 +883,19 @@
       "originalSize": 24262,
       "modifiedTime": "2025-07-07T14:34:57.785Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -578,9 +908,19 @@
       "originalSize": 23893,
       "modifiedTime": "2025-07-07T14:34:57.785Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -593,9 +933,19 @@
       "originalSize": 19035,
       "modifiedTime": "2025-07-07T14:34:57.784Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -608,9 +958,19 @@
       "originalSize": 21775,
       "modifiedTime": "2025-07-07T14:34:57.784Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -623,9 +983,19 @@
       "originalSize": 24219,
       "modifiedTime": "2025-07-07T14:34:57.784Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -638,9 +1008,19 @@
       "originalSize": 21585,
       "modifiedTime": "2025-07-07T14:34:57.783Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -653,9 +1033,19 @@
       "originalSize": 12948,
       "modifiedTime": "2025-07-07T14:34:57.783Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -668,9 +1058,19 @@
       "originalSize": 25029,
       "modifiedTime": "2025-07-07T14:34:57.783Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -683,9 +1083,19 @@
       "originalSize": 21667,
       "modifiedTime": "2025-07-07T14:34:57.782Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -698,9 +1108,19 @@
       "originalSize": 22384,
       "modifiedTime": "2025-07-07T14:34:57.782Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -713,9 +1133,19 @@
       "originalSize": 24760,
       "modifiedTime": "2025-07-07T14:34:57.782Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -728,9 +1158,19 @@
       "originalSize": 23401,
       "modifiedTime": "2025-07-07T14:34:57.782Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -743,9 +1183,19 @@
       "originalSize": 20143,
       "modifiedTime": "2025-07-07T14:34:57.781Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -758,9 +1208,19 @@
       "originalSize": 17706,
       "modifiedTime": "2025-07-07T14:34:57.781Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -773,9 +1233,19 @@
       "originalSize": 17602,
       "modifiedTime": "2025-07-07T14:34:57.781Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -788,9 +1258,19 @@
       "originalSize": 7816,
       "modifiedTime": "2025-07-07T14:34:57.781Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -803,9 +1283,19 @@
       "originalSize": 18887,
       "modifiedTime": "2025-07-07T14:34:57.780Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -818,9 +1308,19 @@
       "originalSize": 19328,
       "modifiedTime": "2025-07-07T14:34:57.780Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -833,9 +1333,19 @@
       "originalSize": 17319,
       "modifiedTime": "2025-07-07T14:34:57.780Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -848,9 +1358,19 @@
       "originalSize": 22688,
       "modifiedTime": "2025-07-07T14:34:57.779Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -863,9 +1383,19 @@
       "originalSize": 19331,
       "modifiedTime": "2025-07-07T14:34:57.779Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -878,9 +1408,19 @@
       "originalSize": 17781,
       "modifiedTime": "2025-07-07T14:34:57.779Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -893,9 +1433,19 @@
       "originalSize": 16443,
       "modifiedTime": "2025-07-07T14:34:57.779Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -908,9 +1458,19 @@
       "originalSize": 19976,
       "modifiedTime": "2025-07-07T14:34:57.778Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -923,9 +1483,19 @@
       "originalSize": 18647,
       "modifiedTime": "2025-07-07T14:34:57.777Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -938,9 +1508,19 @@
       "originalSize": 24643,
       "modifiedTime": "2025-07-07T14:34:57.777Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -953,9 +1533,19 @@
       "originalSize": 24192,
       "modifiedTime": "2025-07-07T14:34:57.777Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -968,9 +1558,19 @@
       "originalSize": 20347,
       "modifiedTime": "2025-07-07T14:34:57.777Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -983,9 +1583,19 @@
       "originalSize": 21065,
       "modifiedTime": "2025-07-07T14:34:57.776Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -998,9 +1608,19 @@
       "originalSize": 24104,
       "modifiedTime": "2025-07-07T14:34:57.776Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1013,9 +1633,19 @@
       "originalSize": 22409,
       "modifiedTime": "2025-07-07T14:34:57.775Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1028,9 +1658,19 @@
       "originalSize": 24040,
       "modifiedTime": "2025-07-07T14:34:57.775Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1043,9 +1683,19 @@
       "originalSize": 21850,
       "modifiedTime": "2025-07-07T14:34:57.775Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1058,9 +1708,19 @@
       "originalSize": 15374,
       "modifiedTime": "2025-07-07T14:34:57.774Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1073,9 +1733,19 @@
       "originalSize": 21353,
       "modifiedTime": "2025-07-07T14:34:57.774Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1088,9 +1758,19 @@
       "originalSize": 15163,
       "modifiedTime": "2025-07-07T14:34:57.774Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1103,9 +1783,19 @@
       "originalSize": 19228,
       "modifiedTime": "2025-07-07T14:34:57.771Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1118,9 +1808,19 @@
       "originalSize": 18415,
       "modifiedTime": "2025-07-07T14:34:57.771Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1133,9 +1833,19 @@
       "originalSize": 17869,
       "modifiedTime": "2025-07-07T14:34:57.771Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1148,9 +1858,19 @@
       "originalSize": 18273,
       "modifiedTime": "2025-07-07T14:34:57.770Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1163,9 +1883,19 @@
       "originalSize": 20946,
       "modifiedTime": "2025-07-07T14:34:57.770Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1178,9 +1908,19 @@
       "originalSize": 19399,
       "modifiedTime": "2025-07-07T14:34:57.770Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1193,9 +1933,19 @@
       "originalSize": 18851,
       "modifiedTime": "2025-07-07T14:34:57.770Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1204,13 +1954,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest8.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest8.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest8.jpg",
       "originalSize": 47997,
       "modifiedTime": "2025-07-07T14:34:57.769Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1219,13 +1979,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest9.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest9.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest9.jpg",
       "originalSize": 44727,
       "modifiedTime": "2025-07-07T14:34:57.769Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1234,13 +2004,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest7.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest7.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest7.jpg",
       "originalSize": 116537,
       "modifiedTime": "2025-07-07T14:34:57.768Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1249,13 +2029,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest67.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest67.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest67.jpg",
       "originalSize": 72097,
       "modifiedTime": "2025-07-07T14:34:57.767Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1264,13 +2054,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest68.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest68.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest68.jpg",
       "originalSize": 78786,
       "modifiedTime": "2025-07-07T14:34:57.767Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1279,13 +2079,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest69.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest69.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest69.jpg",
       "originalSize": 74926,
       "modifiedTime": "2025-07-07T14:34:57.767Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1294,13 +2104,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest66.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest66.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest66.jpg",
       "originalSize": 76606,
       "modifiedTime": "2025-07-07T14:34:57.766Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1309,13 +2129,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest63.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest63.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest63.jpg",
       "originalSize": 67770,
       "modifiedTime": "2025-07-07T14:34:57.765Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1324,13 +2154,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest64.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest64.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest64.jpg",
       "originalSize": 69606,
       "modifiedTime": "2025-07-07T14:34:57.765Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1339,13 +2179,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest65.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest65.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest65.jpg",
       "originalSize": 71723,
       "modifiedTime": "2025-07-07T14:34:57.765Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1354,13 +2204,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest61.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest61.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest61.jpg",
       "originalSize": 72005,
       "modifiedTime": "2025-07-07T14:34:57.764Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1369,13 +2229,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest62.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest62.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest62.jpg",
       "originalSize": 49315,
       "modifiedTime": "2025-07-07T14:34:57.764Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1384,13 +2254,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest6.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest6.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest6.jpg",
       "originalSize": 65792,
       "modifiedTime": "2025-07-07T14:34:57.763Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1399,13 +2279,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest60.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest60.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest60.jpg",
       "originalSize": 65893,
       "modifiedTime": "2025-07-07T14:34:57.763Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1414,13 +2304,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest58.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest58.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest58.jpg",
       "originalSize": 64712,
       "modifiedTime": "2025-07-07T14:34:57.762Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1429,13 +2329,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest59.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest59.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest59.jpg",
       "originalSize": 66616,
       "modifiedTime": "2025-07-07T14:34:57.762Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1444,13 +2354,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest56.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest56.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest56.jpg",
       "originalSize": 68260,
       "modifiedTime": "2025-07-07T14:34:57.761Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1459,13 +2379,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest57.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest57.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest57.jpg",
       "originalSize": 66338,
       "modifiedTime": "2025-07-07T14:34:57.761Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1474,13 +2404,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest54.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest54.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest54.jpg",
       "originalSize": 69719,
       "modifiedTime": "2025-07-07T14:34:57.760Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1489,13 +2429,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest55.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest55.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest55.jpg",
       "originalSize": 68288,
       "modifiedTime": "2025-07-07T14:34:57.760Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1504,13 +2454,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest51.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest51.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest51.jpg",
       "originalSize": 40461,
       "modifiedTime": "2025-07-07T14:34:57.759Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1519,13 +2479,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest52.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest52.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest52.jpg",
       "originalSize": 55487,
       "modifiedTime": "2025-07-07T14:34:57.759Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1534,13 +2504,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest53.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest53.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest53.jpg",
       "originalSize": 63152,
       "modifiedTime": "2025-07-07T14:34:57.759Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1549,13 +2529,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest5.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest5.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest5.jpg",
       "originalSize": 68782,
       "modifiedTime": "2025-07-07T14:34:57.758Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1564,13 +2554,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest50.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest50.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest50.jpg",
       "originalSize": 70715,
       "modifiedTime": "2025-07-07T14:34:57.758Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1579,13 +2579,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest47.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest47.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest47.jpg",
       "originalSize": 73019,
       "modifiedTime": "2025-07-07T14:34:57.757Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1594,13 +2604,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest48.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest48.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest48.jpg",
       "originalSize": 57853,
       "modifiedTime": "2025-07-07T14:34:57.757Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1609,13 +2629,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest49.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest49.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest49.jpg",
       "originalSize": 73739,
       "modifiedTime": "2025-07-07T14:34:57.757Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1624,13 +2654,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest45.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest45.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest45.jpg",
       "originalSize": 62022,
       "modifiedTime": "2025-07-07T14:34:57.756Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1639,13 +2679,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest46.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest46.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest46.jpg",
       "originalSize": 70071,
       "modifiedTime": "2025-07-07T14:34:57.756Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1654,13 +2704,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest43.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest43.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest43.jpg",
       "originalSize": 73516,
       "modifiedTime": "2025-07-07T14:34:57.755Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1669,13 +2729,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest44.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest44.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest44.jpg",
       "originalSize": 63790,
       "modifiedTime": "2025-07-07T14:34:57.755Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1684,13 +2754,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest40.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest40.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest40.jpg",
       "originalSize": 68357,
       "modifiedTime": "2025-07-07T14:34:57.754Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1699,13 +2779,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest41.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest41.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest41.jpg",
       "originalSize": 62988,
       "modifiedTime": "2025-07-07T14:34:57.754Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1714,13 +2804,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest42.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest42.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest42.jpg",
       "originalSize": 35025,
       "modifiedTime": "2025-07-07T14:34:57.754Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1729,13 +2829,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest38.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest38.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest38.jpg",
       "originalSize": 67120,
       "modifiedTime": "2025-07-07T14:34:57.753Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1744,13 +2854,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest39.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest39.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest39.jpg",
       "originalSize": 64468,
       "modifiedTime": "2025-07-07T14:34:57.753Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1759,13 +2879,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest4.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest4.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest4.jpg",
       "originalSize": 75582,
       "modifiedTime": "2025-07-07T14:34:57.753Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1774,13 +2904,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest35.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest35.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest35.jpg",
       "originalSize": 50470,
       "modifiedTime": "2025-07-07T14:34:57.752Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1789,13 +2929,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest36.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest36.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest36.jpg",
       "originalSize": 47976,
       "modifiedTime": "2025-07-07T14:34:57.752Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1804,13 +2954,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest37.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest37.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest37.jpg",
       "originalSize": 20344,
       "modifiedTime": "2025-07-07T14:34:57.752Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1819,13 +2979,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest34.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest34.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest34.jpg",
       "originalSize": 53962,
       "modifiedTime": "2025-07-07T14:34:57.751Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1834,13 +3004,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest32.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest32.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest32.jpg",
       "originalSize": 67829,
       "modifiedTime": "2025-07-07T14:34:57.749Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1849,13 +3029,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest33.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest33.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest33.jpg",
       "originalSize": 50650,
       "modifiedTime": "2025-07-07T14:34:57.749Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1864,13 +3054,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest30.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest30.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest30.jpg",
       "originalSize": 45548,
       "modifiedTime": "2025-07-07T14:34:57.747Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1879,13 +3079,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest31.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest31.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest31.jpg",
       "originalSize": 54445,
       "modifiedTime": "2025-07-07T14:34:57.747Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1894,13 +3104,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest28.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest28.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest28.jpg",
       "originalSize": 65029,
       "modifiedTime": "2025-07-07T14:34:57.746Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1909,13 +3129,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest29.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest29.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest29.jpg",
       "originalSize": 54550,
       "modifiedTime": "2025-07-07T14:34:57.746Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1924,13 +3154,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest3.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest3.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest3.jpg",
       "originalSize": 47731,
       "modifiedTime": "2025-07-07T14:34:57.746Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1939,13 +3179,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest26.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest26.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest26.jpg",
       "originalSize": 57006,
       "modifiedTime": "2025-07-07T14:34:57.744Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1954,13 +3204,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest27.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest27.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest27.jpg",
       "originalSize": 54614,
       "modifiedTime": "2025-07-07T14:34:57.744Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1969,13 +3229,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest23.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest23.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest23.jpg",
       "originalSize": 52234,
       "modifiedTime": "2025-07-07T14:34:57.743Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1984,13 +3254,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest24.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest24.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest24.jpg",
       "originalSize": 71577,
       "modifiedTime": "2025-07-07T14:34:57.743Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -1999,13 +3279,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest25.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest25.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest25.jpg",
       "originalSize": 67604,
       "modifiedTime": "2025-07-07T14:34:57.743Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2014,13 +3304,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest22.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest22.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest22.jpg",
       "originalSize": 70281,
       "modifiedTime": "2025-07-07T14:34:57.742Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2029,13 +3329,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest20.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest20.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest20.jpg",
       "originalSize": 62419,
       "modifiedTime": "2025-07-07T14:34:57.741Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2044,13 +3354,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest21.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest21.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest21.jpg",
       "originalSize": 58756,
       "modifiedTime": "2025-07-07T14:34:57.741Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2059,13 +3379,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest19.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest19.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest19.jpg",
       "originalSize": 62305,
       "modifiedTime": "2025-07-07T14:34:57.740Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2074,13 +3404,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest2.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest2.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest2.jpg",
       "originalSize": 73828,
       "modifiedTime": "2025-07-07T14:34:57.740Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2089,13 +3429,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest16.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest16.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest16.jpg",
       "originalSize": 42619,
       "modifiedTime": "2025-07-07T14:34:57.739Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2104,13 +3454,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest17.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest17.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest17.jpg",
       "originalSize": 60219,
       "modifiedTime": "2025-07-07T14:34:57.739Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2119,13 +3479,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest18.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest18.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest18.jpg",
       "originalSize": 41682,
       "modifiedTime": "2025-07-07T14:34:57.739Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2134,13 +3504,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest14.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest14.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest14.jpg",
       "originalSize": 57935,
       "modifiedTime": "2025-07-07T14:34:57.738Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2149,13 +3529,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest15.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest15.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest15.jpg",
       "originalSize": 52539,
       "modifiedTime": "2025-07-07T14:34:57.738Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2164,13 +3554,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest11.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest11.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest11.jpg",
       "originalSize": 53914,
       "modifiedTime": "2025-07-07T14:34:57.737Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2179,13 +3579,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest12.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest12.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest12.jpg",
       "originalSize": 55562,
       "modifiedTime": "2025-07-07T14:34:57.737Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2194,13 +3604,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest13.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest13.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest13.jpg",
       "originalSize": 52741,
       "modifiedTime": "2025-07-07T14:34:57.737Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2209,13 +3629,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest1.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest1.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest1.jpg",
       "originalSize": 54562,
       "modifiedTime": "2025-07-07T14:34:57.736Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2224,13 +3654,23 @@
       "description": "서예대회 (2025. 4. 26.)",
       "category": "contest",
       "src": "/images/gallery/contest_2025-04-26/originals/contest10.jpg",
-      "thumbnail": "/images/gallery/contest_2025-04-26/thumbnails/contest10.jpg",
+      "thumbnail": "/images/gallery/contest_2025-04-26/originals/contest10.jpg",
       "originalSize": 58039,
       "modifiedTime": "2025-07-07T14:34:57.736Z",
       "eventDate": "2025-04-26",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "contest",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2243,9 +3683,19 @@
       "originalSize": 24362,
       "modifiedTime": "2025-07-07T14:34:57.735Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2258,9 +3708,19 @@
       "originalSize": 20310,
       "modifiedTime": "2025-07-07T14:34:57.735Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2273,9 +3733,19 @@
       "originalSize": 21262,
       "modifiedTime": "2025-07-07T14:34:57.734Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2288,9 +3758,19 @@
       "originalSize": 27697,
       "modifiedTime": "2025-07-07T14:34:57.734Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2303,9 +3783,19 @@
       "originalSize": 23664,
       "modifiedTime": "2025-07-07T14:34:57.734Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2318,9 +3808,19 @@
       "originalSize": 26701,
       "modifiedTime": "2025-07-07T14:34:57.734Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2333,9 +3833,19 @@
       "originalSize": 25014,
       "modifiedTime": "2025-07-07T14:34:57.734Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2348,9 +3858,19 @@
       "originalSize": 33881,
       "modifiedTime": "2025-07-07T14:34:57.733Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2363,9 +3883,19 @@
       "originalSize": 21148,
       "modifiedTime": "2025-07-07T14:34:57.733Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2378,9 +3908,19 @@
       "originalSize": 26741,
       "modifiedTime": "2025-07-07T14:34:57.733Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2393,9 +3933,19 @@
       "originalSize": 26524,
       "modifiedTime": "2025-07-07T14:34:57.732Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2408,9 +3958,19 @@
       "originalSize": 26980,
       "modifiedTime": "2025-07-07T14:34:57.732Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2423,9 +3983,19 @@
       "originalSize": 57205,
       "modifiedTime": "2025-07-07T14:34:57.732Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2438,9 +4008,19 @@
       "originalSize": 32425,
       "modifiedTime": "2025-07-07T14:34:57.732Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2453,9 +4033,19 @@
       "originalSize": 22457,
       "modifiedTime": "2025-07-07T14:34:57.731Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2468,9 +4058,19 @@
       "originalSize": 19679,
       "modifiedTime": "2025-07-07T14:34:57.731Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2483,9 +4083,19 @@
       "originalSize": 27274,
       "modifiedTime": "2025-07-07T14:34:57.731Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2498,9 +4108,19 @@
       "originalSize": 22957,
       "modifiedTime": "2025-07-07T14:34:57.730Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2513,9 +4133,19 @@
       "originalSize": 21706,
       "modifiedTime": "2025-07-07T14:34:57.730Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2528,9 +4158,19 @@
       "originalSize": 25151,
       "modifiedTime": "2025-07-07T14:34:57.730Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2543,9 +4183,19 @@
       "originalSize": 20492,
       "modifiedTime": "2025-07-07T14:34:57.730Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2558,9 +4208,19 @@
       "originalSize": 26332,
       "modifiedTime": "2025-07-07T14:34:57.729Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2573,9 +4233,19 @@
       "originalSize": 25511,
       "modifiedTime": "2025-07-07T14:34:57.729Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2588,9 +4258,19 @@
       "originalSize": 19076,
       "modifiedTime": "2025-07-07T14:34:57.729Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2603,9 +4283,19 @@
       "originalSize": 21195,
       "modifiedTime": "2025-07-07T14:34:57.729Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2618,9 +4308,19 @@
       "originalSize": 20267,
       "modifiedTime": "2025-07-07T14:34:57.728Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2633,9 +4333,19 @@
       "originalSize": 27468,
       "modifiedTime": "2025-07-07T14:34:57.728Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2648,9 +4358,19 @@
       "originalSize": 27943,
       "modifiedTime": "2025-07-07T14:34:57.728Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2663,9 +4383,19 @@
       "originalSize": 26867,
       "modifiedTime": "2025-07-07T14:34:57.727Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2678,9 +4408,19 @@
       "originalSize": 26215,
       "modifiedTime": "2025-07-07T14:34:57.727Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2693,9 +4433,19 @@
       "originalSize": 25240,
       "modifiedTime": "2025-07-07T14:34:57.727Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2708,9 +4458,19 @@
       "originalSize": 20962,
       "modifiedTime": "2025-07-07T14:34:57.727Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2723,9 +4483,19 @@
       "originalSize": 18539,
       "modifiedTime": "2025-07-07T14:34:57.726Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2738,9 +4508,19 @@
       "originalSize": 18747,
       "modifiedTime": "2025-07-07T14:34:57.726Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2753,9 +4533,19 @@
       "originalSize": 19331,
       "modifiedTime": "2025-07-07T14:34:57.726Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2768,9 +4558,19 @@
       "originalSize": 13517,
       "modifiedTime": "2025-07-07T14:34:57.725Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2783,9 +4583,19 @@
       "originalSize": 20369,
       "modifiedTime": "2025-07-07T14:34:57.725Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2798,9 +4608,19 @@
       "originalSize": 14868,
       "modifiedTime": "2025-07-07T14:34:57.725Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2813,9 +4633,19 @@
       "originalSize": 18675,
       "modifiedTime": "2025-07-07T14:34:57.724Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2828,9 +4658,19 @@
       "originalSize": 21397,
       "modifiedTime": "2025-07-07T14:34:57.724Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2843,9 +4683,19 @@
       "originalSize": 14997,
       "modifiedTime": "2025-07-07T14:34:57.723Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2858,9 +4708,19 @@
       "originalSize": 15019,
       "modifiedTime": "2025-07-07T14:34:57.723Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2873,9 +4733,19 @@
       "originalSize": 13512,
       "modifiedTime": "2025-07-07T14:34:57.723Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2888,9 +4758,19 @@
       "originalSize": 14985,
       "modifiedTime": "2025-07-07T14:34:57.722Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2903,9 +4783,19 @@
       "originalSize": 16294,
       "modifiedTime": "2025-07-07T14:34:57.722Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2918,9 +4808,19 @@
       "originalSize": 13264,
       "modifiedTime": "2025-07-07T14:34:57.721Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2933,9 +4833,19 @@
       "originalSize": 12555,
       "modifiedTime": "2025-07-07T14:34:57.721Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2948,9 +4858,19 @@
       "originalSize": 14394,
       "modifiedTime": "2025-07-07T14:34:57.720Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2963,9 +4883,19 @@
       "originalSize": 13954,
       "modifiedTime": "2025-07-07T14:34:57.719Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2978,9 +4908,19 @@
       "originalSize": 13258,
       "modifiedTime": "2025-07-07T14:34:57.719Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -2993,9 +4933,19 @@
       "originalSize": 14763,
       "modifiedTime": "2025-07-07T14:34:57.718Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3008,9 +4958,19 @@
       "originalSize": 13802,
       "modifiedTime": "2025-07-07T14:34:57.718Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3023,9 +4983,19 @@
       "originalSize": 23626,
       "modifiedTime": "2025-07-07T14:34:57.718Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3038,9 +5008,19 @@
       "originalSize": 14516,
       "modifiedTime": "2025-07-07T14:34:57.717Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3053,9 +5033,19 @@
       "originalSize": 13650,
       "modifiedTime": "2025-07-07T14:34:57.717Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3068,9 +5058,19 @@
       "originalSize": 13069,
       "modifiedTime": "2025-07-07T14:34:57.716Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3083,9 +5083,19 @@
       "originalSize": 14336,
       "modifiedTime": "2025-07-07T14:34:57.716Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3098,9 +5108,19 @@
       "originalSize": 14669,
       "modifiedTime": "2025-07-07T14:34:57.715Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3113,9 +5133,19 @@
       "originalSize": 13990,
       "modifiedTime": "2025-07-07T14:34:57.715Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3128,9 +5158,19 @@
       "originalSize": 19177,
       "modifiedTime": "2025-07-07T14:34:57.714Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3143,9 +5183,19 @@
       "originalSize": 15624,
       "modifiedTime": "2025-07-07T14:34:57.714Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3158,9 +5208,19 @@
       "originalSize": 14869,
       "modifiedTime": "2025-07-07T14:34:57.714Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3173,9 +5233,19 @@
       "originalSize": 15696,
       "modifiedTime": "2025-07-07T14:34:57.713Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3188,9 +5258,19 @@
       "originalSize": 16227,
       "modifiedTime": "2025-07-07T14:34:57.713Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3203,9 +5283,19 @@
       "originalSize": 14237,
       "modifiedTime": "2025-07-07T14:34:57.712Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3218,9 +5308,19 @@
       "originalSize": 12830,
       "modifiedTime": "2025-07-07T14:34:57.712Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3233,9 +5333,19 @@
       "originalSize": 13772,
       "modifiedTime": "2025-07-07T14:34:57.711Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3248,9 +5358,19 @@
       "originalSize": 12984,
       "modifiedTime": "2025-07-07T14:34:57.711Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3263,9 +5383,19 @@
       "originalSize": 14005,
       "modifiedTime": "2025-07-07T14:34:57.710Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3278,9 +5408,19 @@
       "originalSize": 13867,
       "modifiedTime": "2025-07-07T14:34:57.710Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3293,9 +5433,19 @@
       "originalSize": 15055,
       "modifiedTime": "2025-07-07T14:34:57.709Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3308,9 +5458,19 @@
       "originalSize": 16037,
       "modifiedTime": "2025-07-07T14:34:57.709Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3323,9 +5483,19 @@
       "originalSize": 25014,
       "modifiedTime": "2025-07-07T14:34:57.708Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3334,13 +5504,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee8.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee8.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee8.jpg",
       "originalSize": 77336,
       "modifiedTime": "2025-07-07T14:34:57.706Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3349,13 +5529,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee9.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee9.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee9.jpg",
       "originalSize": 57473,
       "modifiedTime": "2025-07-07T14:34:57.706Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3364,13 +5554,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee73.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee73.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee73.jpg",
       "originalSize": 79699,
       "modifiedTime": "2025-07-07T14:34:57.704Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3379,13 +5579,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee71.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee71.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee71.jpg",
       "originalSize": 66590,
       "modifiedTime": "2025-07-07T14:34:57.703Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3394,13 +5604,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee72.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee72.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee72.jpg",
       "originalSize": 85411,
       "modifiedTime": "2025-07-07T14:34:57.703Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3409,13 +5629,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee69.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee69.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee69.jpg",
       "originalSize": 76095,
       "modifiedTime": "2025-07-07T14:34:57.702Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3424,13 +5654,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee7.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee7.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee7.jpg",
       "originalSize": 59119,
       "modifiedTime": "2025-07-07T14:34:57.702Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3439,13 +5679,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee70.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee70.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee70.jpg",
       "originalSize": 83878,
       "modifiedTime": "2025-07-07T14:34:57.702Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3454,13 +5704,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee67.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee67.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee67.jpg",
       "originalSize": 102934,
       "modifiedTime": "2025-07-07T14:34:57.701Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3469,13 +5729,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee68.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee68.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee68.jpg",
       "originalSize": 63204,
       "modifiedTime": "2025-07-07T14:34:57.701Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3484,13 +5754,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee65.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee65.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee65.jpg",
       "originalSize": 157032,
       "modifiedTime": "2025-07-07T14:34:57.700Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3499,13 +5779,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee66.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee66.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee66.jpg",
       "originalSize": 92266,
       "modifiedTime": "2025-07-07T14:34:57.700Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3514,13 +5804,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee63.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee63.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee63.jpg",
       "originalSize": 77475,
       "modifiedTime": "2025-07-07T14:34:57.699Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3529,13 +5829,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee64.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee64.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee64.jpg",
       "originalSize": 87129,
       "modifiedTime": "2025-07-07T14:34:57.699Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3544,13 +5854,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee62.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee62.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee62.jpg",
       "originalSize": 80164,
       "modifiedTime": "2025-07-07T14:34:57.698Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3559,13 +5879,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee6.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee6.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee6.jpg",
       "originalSize": 55984,
       "modifiedTime": "2025-07-07T14:34:57.697Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3574,13 +5904,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee60.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee60.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee60.jpg",
       "originalSize": 66434,
       "modifiedTime": "2025-07-07T14:34:57.697Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3589,13 +5929,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee61.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee61.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee61.jpg",
       "originalSize": 61094,
       "modifiedTime": "2025-07-07T14:34:57.697Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3604,13 +5954,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee58.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee58.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee58.jpg",
       "originalSize": 63939,
       "modifiedTime": "2025-07-07T14:34:57.696Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3619,13 +5979,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee59.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee59.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee59.jpg",
       "originalSize": 80655,
       "modifiedTime": "2025-07-07T14:34:57.696Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3634,13 +6004,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee56.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee56.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee56.jpg",
       "originalSize": 59211,
       "modifiedTime": "2025-07-07T14:34:57.695Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3649,13 +6029,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee57.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee57.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee57.jpg",
       "originalSize": 62489,
       "modifiedTime": "2025-07-07T14:34:57.695Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3664,13 +6054,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee54.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee54.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee54.jpg",
       "originalSize": 69950,
       "modifiedTime": "2025-07-07T14:34:57.694Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3679,13 +6079,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee55.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee55.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee55.jpg",
       "originalSize": 50685,
       "modifiedTime": "2025-07-07T14:34:57.694Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3694,13 +6104,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee52.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee52.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee52.jpg",
       "originalSize": 79941,
       "modifiedTime": "2025-07-07T14:34:57.693Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3709,13 +6129,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee53.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee53.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee53.jpg",
       "originalSize": 74190,
       "modifiedTime": "2025-07-07T14:34:57.693Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3724,13 +6154,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee51.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee51.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee51.jpg",
       "originalSize": 90209,
       "modifiedTime": "2025-07-07T14:34:57.692Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3739,13 +6179,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee5.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee5.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee5.jpg",
       "originalSize": 62034,
       "modifiedTime": "2025-07-07T14:34:57.691Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3754,13 +6204,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee50.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee50.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee50.jpg",
       "originalSize": 56688,
       "modifiedTime": "2025-07-07T14:34:57.691Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3769,13 +6229,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee48.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee48.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee48.jpg",
       "originalSize": 72707,
       "modifiedTime": "2025-07-07T14:34:57.690Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3784,13 +6254,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee49.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee49.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee49.jpg",
       "originalSize": 70236,
       "modifiedTime": "2025-07-07T14:34:57.690Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3799,13 +6279,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee46.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee46.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee46.jpg",
       "originalSize": 53098,
       "modifiedTime": "2025-07-07T14:34:57.689Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3814,13 +6304,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee47.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee47.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee47.jpg",
       "originalSize": 77421,
       "modifiedTime": "2025-07-07T14:34:57.689Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3829,13 +6329,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee43.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee43.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee43.jpg",
       "originalSize": 42318,
       "modifiedTime": "2025-07-07T14:34:57.688Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3844,13 +6354,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee44.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee44.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee44.jpg",
       "originalSize": 53704,
       "modifiedTime": "2025-07-07T14:34:57.688Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3859,13 +6379,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee45.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee45.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee45.jpg",
       "originalSize": 52817,
       "modifiedTime": "2025-07-07T14:34:57.688Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3874,13 +6404,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee40.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee40.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee40.jpg",
       "originalSize": 61793,
       "modifiedTime": "2025-07-07T14:34:57.687Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3889,13 +6429,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee41.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee41.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee41.jpg",
       "originalSize": 37615,
       "modifiedTime": "2025-07-07T14:34:57.687Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3904,13 +6454,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee42.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee42.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee42.jpg",
       "originalSize": 56934,
       "modifiedTime": "2025-07-07T14:34:57.687Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3919,13 +6479,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee38.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee38.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee38.jpg",
       "originalSize": 40869,
       "modifiedTime": "2025-07-07T14:34:57.686Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3934,13 +6504,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee39.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee39.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee39.jpg",
       "originalSize": 38904,
       "modifiedTime": "2025-07-07T14:34:57.686Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3949,13 +6529,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee4.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee4.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee4.jpg",
       "originalSize": 52483,
       "modifiedTime": "2025-07-07T14:34:57.686Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3964,13 +6554,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee36.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee36.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee36.jpg",
       "originalSize": 47951,
       "modifiedTime": "2025-07-07T14:34:57.685Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3979,13 +6579,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee37.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee37.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee37.jpg",
       "originalSize": 43931,
       "modifiedTime": "2025-07-07T14:34:57.685Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -3994,13 +6604,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee33.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee33.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee33.jpg",
       "originalSize": 36037,
       "modifiedTime": "2025-07-07T14:34:57.684Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4009,13 +6629,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee34.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee34.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee34.jpg",
       "originalSize": 38413,
       "modifiedTime": "2025-07-07T14:34:57.684Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4024,13 +6654,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee35.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee35.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee35.jpg",
       "originalSize": 43618,
       "modifiedTime": "2025-07-07T14:34:57.684Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4039,13 +6679,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee30.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee30.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee30.jpg",
       "originalSize": 38720,
       "modifiedTime": "2025-07-07T14:34:57.683Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4054,13 +6704,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee31.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee31.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee31.jpg",
       "originalSize": 37942,
       "modifiedTime": "2025-07-07T14:34:57.683Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4069,13 +6729,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee32.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee32.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee32.jpg",
       "originalSize": 42977,
       "modifiedTime": "2025-07-07T14:34:57.683Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4084,13 +6754,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee29.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee29.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee29.jpg",
       "originalSize": 38084,
       "modifiedTime": "2025-07-07T14:34:57.682Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4099,13 +6779,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee3.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee3.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee3.jpg",
       "originalSize": 75765,
       "modifiedTime": "2025-07-07T14:34:57.682Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4114,13 +6804,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee26.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee26.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee26.jpg",
       "originalSize": 40637,
       "modifiedTime": "2025-07-07T14:34:57.681Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4129,13 +6829,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee27.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee27.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee27.jpg",
       "originalSize": 38936,
       "modifiedTime": "2025-07-07T14:34:57.681Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4144,13 +6854,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee28.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee28.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee28.jpg",
       "originalSize": 43184,
       "modifiedTime": "2025-07-07T14:34:57.681Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4159,13 +6879,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee24.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee24.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee24.jpg",
       "originalSize": 37846,
       "modifiedTime": "2025-07-07T14:34:57.680Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4174,13 +6904,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee25.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee25.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee25.jpg",
       "originalSize": 41056,
       "modifiedTime": "2025-07-07T14:34:57.680Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4189,13 +6929,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee21.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee21.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee21.jpg",
       "originalSize": 41185,
       "modifiedTime": "2025-07-07T14:34:57.679Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4204,13 +6954,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee22.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee22.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee22.jpg",
       "originalSize": 42938,
       "modifiedTime": "2025-07-07T14:34:57.679Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4219,13 +6979,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee23.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee23.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee23.jpg",
       "originalSize": 39194,
       "modifiedTime": "2025-07-07T14:34:57.679Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4234,13 +7004,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee2.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee2.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee2.jpg",
       "originalSize": 57502,
       "modifiedTime": "2025-07-07T14:34:57.678Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4249,13 +7029,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee20.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee20.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee20.jpg",
       "originalSize": 44850,
       "modifiedTime": "2025-07-07T14:34:57.678Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4264,13 +7054,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee16.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee16.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee16.jpg",
       "originalSize": 40479,
       "modifiedTime": "2025-07-07T14:34:57.677Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4279,13 +7079,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee17.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee17.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee17.jpg",
       "originalSize": 37826,
       "modifiedTime": "2025-07-07T14:34:57.677Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4294,13 +7104,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee18.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee18.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee18.jpg",
       "originalSize": 43304,
       "modifiedTime": "2025-07-07T14:34:57.677Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4309,13 +7129,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee19.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee19.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee19.jpg",
       "originalSize": 45872,
       "modifiedTime": "2025-07-07T14:34:57.677Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4324,13 +7154,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee14.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee14.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee14.jpg",
       "originalSize": 39773,
       "modifiedTime": "2025-07-07T14:34:57.676Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4339,13 +7179,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee15.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee15.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee15.jpg",
       "originalSize": 39608,
       "modifiedTime": "2025-07-07T14:34:57.676Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4354,13 +7204,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee13.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee13.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee13.jpg",
       "originalSize": 40411,
       "modifiedTime": "2025-07-07T14:34:57.675Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4369,13 +7229,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee11.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee11.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee11.jpg",
       "originalSize": 47532,
       "modifiedTime": "2025-07-07T14:34:57.674Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4384,13 +7254,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee12.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee12.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee12.jpg",
       "originalSize": 40133,
       "modifiedTime": "2025-07-07T14:34:57.674Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4399,13 +7279,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee1.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee1.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee1.jpg",
       "originalSize": 79699,
       "modifiedTime": "2025-07-07T14:34:57.673Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     },
     {
@@ -4414,13 +7304,23 @@
       "description": "위원회 (2025. 4. 19.)",
       "category": "committee",
       "src": "/images/gallery/committee_2025-04-19/originals/committee10.jpg",
-      "thumbnail": "/images/gallery/committee_2025-04-19/thumbnails/committee10.jpg",
+      "thumbnail": "/images/gallery/committee_2025-04-19/originals/committee10.jpg",
       "originalSize": 43316,
       "modifiedTime": "2025-07-07T14:34:57.673Z",
       "eventDate": "2025-04-19",
+      "dimensions": {
+        "width": null,
+        "height": null,
+        "aspectRatio": "1:1"
+      },
+      "quality": {
+        "isHighRes": false,
+        "suggested": 85
+      },
       "tags": [
         "committee",
-        "2025"
+        "2025",
+        "표준화질"
       ]
     }
   ]
