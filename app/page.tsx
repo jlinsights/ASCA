@@ -35,8 +35,8 @@ function GalleryStats({ data }: { data: GalleryData }) {
     {
       icon: Camera,
       value: data.metadata.totalImages,
-      label: '총 작품',
-      description: '고화질 서예 작품'
+      label: '총 이미지',
+      description: '작품부터 행사까지'
     },
     {
       icon: Palette,
@@ -123,7 +123,7 @@ export default function Page() {
               <div className="flex items-center gap-2">
                 <Camera className="w-4 h-4" />
                 <span className="font-medium">{data.metadata.totalImages}</span>
-                <span>작품</span>
+                <span>이미지</span>
               </div>
               <div className="w-px h-4 bg-border"></div>
               <div className="flex items-center gap-2">
@@ -340,7 +340,7 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "ImageGallery",
             "name": "동양서예협회 갤러리",
-            "description": "동양서예협회의 서예 작품과 활동 사진 갤러리. 전통 서예의 정법을 계승하고 현대적 창신을 통해 동양서예의 새로운 미래를 열어갑니다.",
+            "description": "동양서예협회의 서예 작품, 전시회, 심사위원회, 휘호대회, 시상식 등 다양한 활동을 담은 종합 갤러리. 전통 서예의 정법을 계승하고 현대적 창신을 통해 동양서예의 새로운 미래를 열어갑니다.",
             "url": typeof window !== 'undefined' ? window.location.origin : '',
             "image": data.items.slice(0, 8).map(item => ({
               "@type": "ImageObject",
@@ -371,11 +371,11 @@ export default function Page() {
 // 메타데이터 내보내기 (갤러리 전문 사이트)
 export const metadata = {
   title: '동양서예 갤러리 | 사단법인 동양서예협회',
-  description: `동양서예협회의 서예 작품 갤러리. ${galleryData.metadata.totalImages}개의 고화질 서예 작품과 협회 활동 사진을 감상하세요. 전통 서예의 정법 계승과 현대적 창신의 조화.`,
-  keywords: ['동양서예', '서예갤러리', '서예작품', '전통서예', '서예협회', '서예전시', '한국서예', '동양문화'],
+  description: `동양서예협회의 종합 활동 갤러리. ${galleryData.metadata.totalImages}개의 서예 작품, 전시회, 심사위원회, 휘호대회, 시상식 등 다양한 활동 사진을 감상하세요. 전통 서예의 정법 계승과 현대적 창신의 조화.`,
+  keywords: ['동양서예', '서예갤러리', '서예작품', '전시회', '휘호대회', '심사위원회', '시상식', '전통서예', '서예협회', '서예전시', '한국서예', '동양문화'],
   openGraph: {
     title: '동양서예 갤러리 | 사단법인 동양서예협회',
-    description: `${galleryData.metadata.totalImages}개의 서예 작품과 활동 사진. 전통과 현대가 조화를 이루는 동양서예의 새로운 패러다임.`,
+    description: `${galleryData.metadata.totalImages}개의 서예 작품, 전시회, 심사위원회, 휘호대회, 시상식 등 종합 활동 기록. 전통과 현대가 조화를 이루는 동양서예의 새로운 패러다임.`,
     type: 'website',
     images: galleryData.items.slice(0, 6).map(item => ({
       url: item.thumbnail,
@@ -387,7 +387,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: '동양서예 갤러리 | 동양서예협회',
-    description: `${galleryData.metadata.totalImages}개의 고화질 서예 작품 갤러리`,
+    description: `${galleryData.metadata.totalImages}개의 서예 작품 및 협회 활동 종합 갤러리`,
     images: [galleryData.items[0]?.thumbnail]
   }
 } 
