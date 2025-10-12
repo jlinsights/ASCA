@@ -36,8 +36,9 @@ export function ImageUpload({
   const [dragActive, setDragActive] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // 파일 검증 함수
-  const validateFile = (file: File): string | null => {
+
+  // 파일 검증 함수 (memoized)
+  const validateFile = useCallback((file: File): string | null => {
     // 파일 크기 검증
     if (file.size > maxSize * 1024 * 1024) {
       return `파일 크기가 ${maxSize}MB를 초과합니다.`
@@ -45,11 +46,14 @@ export function ImageUpload({
 
     // 파일 형식 검증
     if (!acceptedTypes.includes(file.type)) {
-      return `지원하지 않는 파일 형식입니다. (${acceptedTypes.map(type => type.split('/')[1]).join(', ')}만 지원)`
+      return `지원하지 않는 파일 형식입니다. (${acceptedTypes.map(type => {
+        const parts = type.split('/')
+        return parts[1] || ''
+      }).filter(Boolean).join(', ')}만 지원)`
     }
 
     return null
-  }
+  }, [maxSize, acceptedTypes])
 
   // 파일 업로드 처리
   const handleFileUpload = useCallback(async (file: File) => {
@@ -207,7 +211,10 @@ export function ImageUpload({
                     {loading ? '업로드 중...' : '클릭하거나 드래그하여 이미지 업로드'}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {acceptedTypes.map(type => type.split('/')[1].toUpperCase()).join(', ')} (최대 {maxSize}MB)
+                    {acceptedTypes.map(type => {
+                      const parts = type.split('/')
+                      return parts[1]?.toUpperCase() || ''
+                    }).filter(Boolean).join(', ')} (최대 {maxSize}MB)
                   </p>
                 </div>
               </div>

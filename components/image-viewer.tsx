@@ -99,6 +99,12 @@ export function ImageViewer({
     try {
       setIsLoading(true)
       const imageUrl = images[activeIndex]
+      
+      if (!imageUrl) {
+        setIsLoading(false)
+        return
+      }
+      
       const response = await fetch(imageUrl)
       const blob = await response.blob()
       
@@ -158,27 +164,35 @@ export function ImageViewer({
   // 터치 제스처 처리
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 2) {
-      const distance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      )
-      setLastPinchDistance(distance)
+      const touch1 = e.touches[0]
+      const touch2 = e.touches[1]
+      if (touch1 && touch2) {
+        const distance = Math.hypot(
+          touch1.clientX - touch2.clientX,
+          touch1.clientY - touch2.clientY
+        )
+        setLastPinchDistance(distance)
+      }
     }
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (e.touches.length === 2) {
       e.preventDefault()
-      const distance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      )
-      
-      if (lastPinchDistance > 0) {
-        const delta = distance / lastPinchDistance
-        setZoom(prev => Math.max(0.5, Math.min(5, prev * delta)))
+      const touch1 = e.touches[0]
+      const touch2 = e.touches[1]
+      if (touch1 && touch2) {
+        const distance = Math.hypot(
+          touch1.clientX - touch2.clientX,
+          touch1.clientY - touch2.clientY
+        )
+        
+        if (lastPinchDistance > 0) {
+          const delta = distance / lastPinchDistance
+          setZoom(prev => Math.max(0.5, Math.min(5, prev * delta)))
+        }
+        setLastPinchDistance(distance)
       }
-      setLastPinchDistance(distance)
     }
   }
 
@@ -328,7 +342,7 @@ export function ImageViewer({
               className="relative"
             >
               <Image
-                src={images[activeIndex]}
+                src={images[activeIndex] || '/placeholder.jpg'}
                 alt={`${title} by ${artist}`}
                 width={1200}
                 height={800}

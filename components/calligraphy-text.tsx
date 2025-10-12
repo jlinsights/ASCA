@@ -57,9 +57,9 @@ export default function CalligraphyText({ children, className = '' }: Calligraph
         for (let i = 0; i < text.length; i++) {
           const char = text[i]
           const span = document.createElement('span')
-          span.textContent = char
+          span.textContent = char || ''
           
-          const optimalFont = getOptimalFont(char)
+          const optimalFont = getOptimalFont(char || '')
           if (optimalFont !== 'inherit') {
             span.style.fontFamily = optimalFont
             span.style.fontWeight = '500'

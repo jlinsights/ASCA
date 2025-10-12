@@ -411,7 +411,7 @@ export default function NewsPage() {
               </Badge>
               <div className="flex-1 overflow-hidden">
                 <p className="text-sm font-medium text-red-800 dark:text-red-200 truncate">
-                  {language === 'ko' ? breakingNews[0].title : breakingNews[0].titleEn}
+                  {language === 'ko' ? breakingNews[0]?.title : breakingNews[0]?.titleEn}
                 </p>
               </div>
               <Button size="sm" variant="outline" className="border-red-200 text-red-800 hover:bg-red-100">

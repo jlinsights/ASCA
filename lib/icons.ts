@@ -308,7 +308,7 @@ export const CommonIconCombos = {
   info: { icon: Info, className: 'text-blue-500' },
 } as const
 
-export default {
+const IconComponents = {
   Navigation: NavigationIcons,
   Action: ActionIcons,
   Media: MediaIcons,
@@ -317,3 +317,5 @@ export default {
   Sizes: ICON_SIZES,
   Combos: CommonIconCombos,
 }
+
+export default IconComponents;
