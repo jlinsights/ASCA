@@ -25,51 +25,51 @@ export function Header() {
 
   const menuStructure = [
     {
-      title: t("exhibition"),
+      title: "전시회",
       key: "exhibition",
       href: "/exhibitions",
       subItems: [
-        { title: t("currentExhibitions"), href: "/exhibitions/current" },
-        { title: t("upcomingExhibitions"), href: "/exhibitions/upcoming" },
-        { title: t("pastExhibitions"), href: "/exhibitions/past" },
-        { title: t("onlineExhibitions"), href: "/exhibitions/online" }
+        { title: "현재 전시", href: "/exhibitions/current" },
+        { title: "예정 전시", href: "/exhibitions/upcoming" },
+        { title: "지난 전시", href: "/exhibitions/past" },
+        { title: "온라인 전시", href: "/exhibitions/online" }
       ]
     },
     {
-      title: t("artworks"),
+      title: "작품",
       key: "artworks", 
       href: "/artworks",
       subItems: [
-        { title: t("hangeulCalligraphy"), href: "/artworks?category=한글서예" },
-        { title: t("hanjaCalligraphy"), href: "/artworks?category=한자서예" },
-        { title: t("literatiPainting"), href: "/artworks?category=문인화" },
-        { title: t("inkPainting"), href: "/artworks?category=수묵화" },
-        { title: t("folkPainting"), href: "/artworks?category=민화" },
-        { title: t("modernCalligraphy"), href: "/artworks?category=현대서예" },
-        { title: t("calligraphyArt"), href: "/artworks?category=캘리그라피" },
-        { title: t("sealEngraving"), href: "/artworks?category=전각" },
-        { title: t("woodEngraving"), href: "/artworks?category=서각" }
+        { title: "한글서예", href: "/artworks?category=한글서예" },
+        { title: "한자서예", href: "/artworks?category=한자서예" },
+        { title: "문인화", href: "/artworks?category=문인화" },
+        { title: "수묵화", href: "/artworks?category=수묵화" },
+        { title: "민화", href: "/artworks?category=민화" },
+        { title: "현대서예", href: "/artworks?category=현대서예" },
+        { title: "캘리그라피", href: "/artworks?category=캘리그라피" },
+        { title: "전각", href: "/artworks?category=전각" },
+        { title: "서각", href: "/artworks?category=서각" }
       ]
     },
     {
-      title: t("artists"),
+      title: "작가",
       key: "artists",
       href: "/artists", 
       subItems: [
-        { title: t("openCallArtists"), href: "/artists?type=공모작가" },
-        { title: t("youngArtists"), href: "/artists?type=청년작가" },
-        { title: t("recommendedArtists"), href: "/artists?type=추천작가" },
-        { title: t("invitedArtists"), href: "/artists?type=초대작가" }
+        { title: "공모작가", href: "/artists?type=공모작가" },
+        { title: "청년작가", href: "/artists?type=청년작가" },
+        { title: "추천작가", href: "/artists?type=추천작가" },
+        { title: "초대작가", href: "/artists?type=초대작가" }
       ]
     },
     {
-      title: t("events"),
+      title: "행사",
       key: "events", 
       href: "/events",
       subItems: [
-        { title: t("currentEvents"), href: "/events" },
-        { title: t("calligraphyContest2025"), href: "/events/calligraphy-contest-2025" },
-        { title: t("calligraphyContest2024"), href: "/events/calligraphy-contest-2024" }
+        { title: "진행중인 행사", href: "/events" },
+        { title: "2025 휘호대회", href: "/events/calligraphy-contest-2025" },
+        { title: "2024 휘호대회", href: "/events/calligraphy-contest-2024" }
       ]
     },
   ]
@@ -189,8 +189,11 @@ export function Header() {
               ))}
               
               {/* Additional Menu Items */}
+              <Link href="/gallery" className="text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2">
+                갤러리
+              </Link>
               <Link href="/search" className="text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2">
-                {t("search")}
+                검색
               </Link>
             </nav>
 
@@ -198,7 +201,6 @@ export function Header() {
             <div className="hidden lg:flex items-center space-x-3">
               <HeaderAuthSection />
               <ThemeToggle onToggle={handleThemeToggle} />
-              <LanguageSelector />
             </div>
 
             {/* Mobile Menu Button */}
@@ -213,7 +215,6 @@ export function Header() {
             {/* Mobile Controls */}
             <div className="lg:hidden flex items-center gap-2">
               <ThemeToggle onToggle={handleThemeToggle} />
-              <LanguageSelector />
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="flex items-center justify-center w-8 h-8 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2"
@@ -285,6 +286,13 @@ export function Header() {
               ))}
               
               <div className="pt-2 border-t border-border/50">
+                <Link
+                  href="/gallery"
+                  className="block text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  갤러리
+                </Link>
                 <Link
                   href="/search"
                   className="block text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
