@@ -205,9 +205,9 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                     alt={item.title}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 16vw"
-                    quality={item.quality?.suggested || 85}
-                    priority={index < 6}
+                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, (max-width: 1280px) 25vw, 20vw"
+                    quality={95}
+                    priority={index < 12}
                     placeholder="blur"
                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknygjLMzHkkknqTzSlT54b6bk+h0R//Z"
                   />
@@ -352,12 +352,13 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                 <Image
                   src={selectedImage.src}
                   alt={selectedImage.title}
-                  width={1200}
-                  height={800}
-                  className="max-w-full max-h-[80vh] object-contain"
-                  quality={selectedImage.quality?.isHighRes ? 95 : 90}
+                  width={1600}
+                  height={1200}
+                  className="max-w-full max-h-[85vh] object-contain"
+                  quality={100}
                   priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+                  sizes="100vw"
+                  unoptimized={false}
                 />
               </div>
 

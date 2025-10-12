@@ -22,12 +22,12 @@ const nextConfig = {
     ignoreDuringBuilds: true, // Temporarily ignore for security fix deployment
   },
 
-  // 향상된 이미지 최적화 - 갤러리 고화질 지원
+  // 최고 화질 이미지 최적화 - 갤러리 특화
   images: {
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 640, 768, 1024],
-    minimumCacheTTL: 3600, // 1시간 캐시
+    deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920, 2048, 2560, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 640, 768, 1024, 1280, 1536, 1920],
+    minimumCacheTTL: 86400, // 24시간 캐시 (고화질 이미지)
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -37,7 +37,7 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    // 갤러리 이미지에 대한 특별 처리
+    // 고화질 갤러리 이미지 최적화
     loader: 'default',
     path: '/_next/image',
     domains: [],
