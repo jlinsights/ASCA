@@ -84,7 +84,7 @@ function GalleryStats({ data }: { data: GalleryData }) {
 }
 
 export default function Page() {
-  const data = galleryData as GalleryData
+  const data = galleryData as unknown as GalleryData
   
   return (
     <div className="min-h-screen bg-background">
