@@ -115,7 +115,37 @@ function getCategorySpecificTags(category, year) {
 }
 
 /**
- * 디렉토리를 재귀적으로 스캔하여 이미지 파일 찾기
+ * 이미지 파일이 실제로 존재하는지 확인 (파일 크기와 유효성 체크)
+ */
+function isValidImageFile(filePath) {
+  try {
+    const stat = fs.statSync(filePath);
+    // 파일 크기가 너무 작으면 (1KB 미만) 손상된 이미지로 간주
+    if (stat.size < 1024) {
+      console.warn(`⚠️ 파일 크기가 너무 작음: ${filePath} (${stat.size} bytes)`);
+      return false;
+    }
+    
+    // 파일 읽기 테스트 (처음 몇 바이트만 읽어서 유효성 확인)
+    const buffer = Buffer.alloc(8);
+    const fd = fs.openSync(filePath, 'r');
+    const bytesRead = fs.readSync(fd, buffer, 0, 8, 0);
+    fs.closeSync(fd);
+    
+    if (bytesRead < 8) {
+      console.warn(`⚠️ 파일을 읽을 수 없음: ${filePath}`);
+      return false;
+    }
+    
+    return true;
+  } catch (error) {
+    console.warn(`⚠️ 파일 확인 실패: ${filePath} - ${error.message}`);
+    return false;
+  }
+}
+
+/**
+ * 디렉토리를 재귀적으로 스캔하여 유효한 이미지 파일만 찾기
  */
 function scanDirectory(dirPath, relativePath = '') {
   const items = [];
@@ -138,13 +168,18 @@ function scanDirectory(dirPath, relativePath = '') {
       } else if (stat.isFile()) {
         const ext = path.extname(file).toLowerCase();
         if (IMAGE_EXTENSIONS.includes(ext)) {
-          items.push({
-            filename: file,
-            path: fullPath,
-            relativePath: path.join(relativePath, file).replace(/\\/g, '/'),
-            size: stat.size,
-            modifiedTime: stat.mtime
-          });
+          // 유효한 이미지 파일인지 확인
+          if (isValidImageFile(fullPath)) {
+            items.push({
+              filename: file,
+              path: fullPath,
+              relativePath: path.join(relativePath, file).replace(/\\/g, '/'),
+              size: stat.size,
+              modifiedTime: stat.mtime
+            });
+          } else {
+            console.log(`🗑️ 손상된 이미지 파일 제외: ${fullPath}`);
+          }
         }
       }
     }
