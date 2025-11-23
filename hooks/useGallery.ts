@@ -37,6 +37,7 @@ interface UseGalleryReturn {
 
 const DEFAULT_FILTER_STATE: GalleryFilterState = {
   category: 'all',
+  year: 'all',
   searchQuery: '',
   sortBy: 'date',
   sortOrder: 'desc',
@@ -203,8 +204,10 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
     }
 
     const newItem = filteredItems[newIndex]
-    setViewState(prev => ({ ...prev, selectedImage: newItem }))
-    emitEvent('item_clicked', { itemId: newItem.id })
+    if (newItem) {
+      setViewState(prev => ({ ...prev, selectedImage: newItem }))
+      emitEvent('item_clicked', { itemId: newItem.id })
+    }
   }, [viewState.selectedImage, filteredItems, emitEvent])
 
   // 필터 리셋
