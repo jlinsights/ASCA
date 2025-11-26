@@ -285,10 +285,31 @@ export default function MemberProfilePage() {
   // 프로필 수정 핸들러
   const handleSaveProfile = async () => {
     try {
-      // TODO: API 호출로 프로필 업데이트
-      setProfile({ ...profile, ...editForm })
-      setIsEditing(false)
-      // 성공 토스트 메시지
+      // API 호출로 프로필 업데이트
+      const response = await fetch('/api/members/me', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          member: editForm
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile')
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        setProfile({ ...profile, ...editForm })
+        setIsEditing(false)
+        logger.info('프로필이 성공적으로 업데이트되었습니다.')
+        // 성공 토스트 메시지
+      } else {
+        throw new Error(result.error || 'Failed to update profile')
+      }
     } catch (error) {
       logger.error('프로필 업데이트 실패', error instanceof Error ? error : new Error(String(error)))
       // 에러 토스트 메시지

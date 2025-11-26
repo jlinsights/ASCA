@@ -189,4 +189,93 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// PATCH /api/members/me - 현재 로그인한 사용자의 프로필 업데이트
+export async function PATCH(request: NextRequest) {
+  try {
+    // 개발 모드에서 인증 확인
+    let userId: string | null = null;
+    const devUser = await devAuth.getCurrentUser();
+    if (devUser) {
+      userId = devUser.id;
+    }
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // 요청 본문 파싱
+    const body = await request.json();
+    const { member, artistic_profile } = body;
+
+    // Supabase 클라이언트 확인
+    if (!supabase) {
+      // 개발 모드에서는 성공 응답만 반환
+      return NextResponse.json({
+        success: true,
+        message: 'Profile updated successfully (dev mode)',
+        data: { member, artistic_profile }
+      });
+    }
+
+    // 멤버 정보 업데이트
+    if (member) {
+      const { error: memberError } = await supabase
+        .from('members')
+        .update({
+          ...member,
+          updated_at: new Date().toISOString()
+        })
+        .eq('clerk_user_id', userId);
+
+      if (memberError) {
+        return NextResponse.json(
+          { success: false, error: 'Failed to update member profile' },
+          { status: 500 }
+        );
+      }
+    }
+
+    // 예술 프로필 업데이트
+    if (artistic_profile) {
+      // 먼저 현재 멤버 ID 조회
+      const { data: memberData } = await supabase
+        .from('members')
+        .select('id')
+        .eq('clerk_user_id', userId)
+        .single();
+
+      if (memberData) {
+        const { error: profileError } = await supabase
+          .from('artistic_profiles')
+          .update({
+            ...artistic_profile,
+            updated_at: new Date().toISOString()
+          })
+          .eq('member_id', memberData.id);
+
+        if (profileError) {
+          return NextResponse.json(
+            { success: false, error: 'Failed to update artistic profile' },
+            { status: 500 }
+          );
+        }
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Profile updated successfully'
+    });
+
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
 } 
