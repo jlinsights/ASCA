@@ -100,10 +100,10 @@ export class EventBus {
       this.subscribers.set(type, []);
     }
 
-    this.subscribers.get(type)!.push({ handler, options });
+    this.subscribers.get(type)!.push({ handler: handler as EventHandler, options });
 
     // 구독 해제 함수 반환
-    return () => this.unsubscribe(type, handler);
+    return () => this.unsubscribe(type, handler as EventHandler);
   }
 
   /**
@@ -128,6 +128,21 @@ export class EventBus {
     } else {
       this.subscribers.clear();
     }
+  }
+
+  /**
+   * 구독자 수 조회
+   */
+  getSubscriberCount(type?: string): number {
+    if (type) {
+      return this.subscribers.get(type)?.length || 0;
+    }
+    
+    let count = 0;
+    for (const subs of this.subscribers.values()) {
+      count += subs.length;
+    }
+    return count;
   }
 
   /**

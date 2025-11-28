@@ -127,8 +127,8 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">☎︎ 0502-5550-8700</p>
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">FAX: 0504-256-6600</p>
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">info@orientalcalligraphy.org</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">서울시 성북구 보문로 57-1,</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">중앙빌딩 6층 (보문동7가)</p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">〒02872 서울시 성북구 보문로 105</p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">보림빌딩</p>
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">무통장 입금계좌: 신한은행 100-028-611714</p>
             </div>
           </div>

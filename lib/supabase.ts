@@ -358,4 +358,16 @@ export type Database = {
       }
     }
   }
-} 
+}
+
+export type ArtistInsert = Database['public']['Tables']['artists']['Insert']
+export type ArtistUpdate = Database['public']['Tables']['artists']['Update']
+export type ArtistRow = Database['public']['Tables']['artists']['Row']
+
+export type ArtworkInsert = Database['public']['Tables']['artworks']['Insert']
+export type ArtworkUpdate = Database['public']['Tables']['artworks']['Update']
+export type ArtworkRow = Database['public']['Tables']['artworks']['Row']
+
+export type FileInsert = Database['public']['Tables']['files']['Insert']
+export type FileUpdate = Database['public']['Tables']['files']['Update']
+export type FileRow = Database['public']['Tables']['files']['Row'] 

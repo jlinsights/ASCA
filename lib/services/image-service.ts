@@ -127,10 +127,10 @@ export class ImageService {
       id: this.generateImageId(),
       type: imageType,
       urls: {
-        thumbnail: processedSizes.thumbnail,
-        small: processedSizes.small,
-        medium: processedSizes.medium,
-        large: processedSizes.large,
+        thumbnail: processedSizes.thumbnail || '',
+        small: processedSizes.small || '',
+        medium: processedSizes.medium || '',
+        large: processedSizes.large || '',
         original: originalUrl,
         zoom_tiles: zoomTiles
       },
@@ -630,8 +630,8 @@ export class ImageService {
       
       if (url) {
         try {
-          const imageUrl = Array.isArray(url) ? url[0] : url;
-          await this.preloadImage(imageUrl);
+          const imageUrl = Array.isArray(url) ? url[0] || '' : url;
+          if (imageUrl) await this.preloadImage(imageUrl);
         } catch (error) {
           logger.warn(`Failed to preload ${size} image`, error instanceof Error ? error : new Error(String(error)));
         }
@@ -760,8 +760,8 @@ export class ImageService {
         const i = (y * width + x) * 4;
         
         // Calculate gradient in x and y directions
-        const gx = (data[i + 4] - data[i - 4]) / 2;
-        const gy = (data[i + width * 4] - data[i - width * 4]) / 2;
+        const gx = ((data[i + 4] || 0) - (data[i - 4] || 0)) / 2;
+        const gy = ((data[i + width * 4] || 0) - (data[i - width * 4] || 0)) / 2;
         
         // Gradient magnitude
         const magnitude = Math.sqrt(gx * gx + gy * gy);
@@ -779,7 +779,7 @@ export class ImageService {
     
     // Convert to grayscale and collect pixel values
     for (let i = 0; i < data.length; i += 4) {
-      const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+      const gray = 0.299 * (data[i] || 0) + 0.587 * (data[i + 1] || 0) + 0.114 * (data[i + 2] || 0);
       values.push(gray);
     }
     
@@ -796,7 +796,7 @@ export class ImageService {
     let count = 0;
     
     for (let i = 0; i < data.length; i += 4) {
-      const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+      const gray = 0.299 * (data[i] || 0) + 0.587 * (data[i + 1] || 0) + 0.114 * (data[i + 2] || 0);
       brightness += gray;
       count++;
     }
@@ -810,9 +810,9 @@ export class ImageService {
     
     // Sample every 10th pixel to avoid performance issues
     for (let i = 0; i < data.length; i += 40) {
-      const r = Math.floor(data[i] / 16) * 16;
-      const g = Math.floor(data[i + 1] / 16) * 16;
-      const b = Math.floor(data[i + 2] / 16) * 16;
+      const r = Math.floor((data[i] || 0) / 16) * 16;
+      const g = Math.floor((data[i + 1] || 0) / 16) * 16;
+      const b = Math.floor((data[i + 2] || 0) / 16) * 16;
       colors.add(`${r},${g},${b}`);
     }
     

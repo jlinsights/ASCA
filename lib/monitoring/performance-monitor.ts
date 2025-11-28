@@ -195,11 +195,11 @@ export class PerformanceMonitor {
 
     return {
       avg: sum / values.length,
-      min: values[0],
-      max: values[values.length - 1],
+      min: values[0] as number,
+      max: values[values.length - 1] as number,
       count: values.length,
-      p95: values[Math.floor(values.length * 0.95)] || values[values.length - 1],
-      p99: values[Math.floor(values.length * 0.99)] || values[values.length - 1]
+      p95: (values[Math.floor(values.length * 0.95)] || values[values.length - 1]) as number,
+      p99: (values[Math.floor(values.length * 0.99)] || values[values.length - 1]) as number
     };
   }
 

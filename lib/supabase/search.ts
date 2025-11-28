@@ -83,6 +83,7 @@ export async function searchNotices(
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<{ data: Notice[]; total: number }> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase.rpc('search_notices', {
     search_query: query,
     category_filter: filters.category,
@@ -103,6 +104,7 @@ export async function searchExhibitions(
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<{ data: Exhibition[]; total: number }> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase.rpc('search_exhibitions', {
     search_query: query,
     status_filter: filters.status,
@@ -123,6 +125,7 @@ export async function searchEvents(
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<{ data: Event[]; total: number }> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase.rpc('search_events', {
     search_query: query,
     event_type_filter: filters.eventType,
@@ -143,6 +146,7 @@ export async function searchArtists(
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<{ data: any[]; total: number }> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase.rpc('search_artists', {
     search_query: query,
     nationality_filter: filters.nationality,
@@ -162,6 +166,7 @@ export async function searchArtworks(
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<{ data: any[]; total: number }> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase.rpc('search_artworks', {
     search_query: query,
     category_filter: filters.category,
@@ -181,6 +186,7 @@ export async function searchAllContent(
   params: GlobalSearchParams = { query }
 ): Promise<SearchResultItem[]> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase.rpc('search_all_content', {
     search_query: query,
     content_types: params.contentTypes || ['notices', 'exhibitions', 'events', 'artists', 'artworks'],
@@ -200,7 +206,9 @@ export async function simpleSearch(
   limit = 20
 ) {
   try {
-    let searchQuery = ensureSupabase()
+    const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
+    let searchQuery = supabase
       .from(table)
       .select('*')
       .limit(limit);
@@ -257,6 +265,7 @@ export async function getSearchSuggestions(query: string, limit = 5) {
 // 고급 검색 (다중 테이블 조인)
 export async function advancedSearch(params: GlobalSearchParams): Promise<SearchResults> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   let searchQuery = supabase
     .from('search_view') // 가상의 통합 검색 뷰
     .select('*')

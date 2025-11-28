@@ -97,16 +97,16 @@ export const shareToTwitter = (data: ShareData) => {
 /**
  * 링크 복사
  */
-export const copyLink = (url: string) => {
+export const copyLink = async (url: string): Promise<boolean> => {
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(() => {
-      // 복사 완료 피드백 (컴포넌트에서 처리)
+    try {
+      await navigator.clipboard.writeText(url)
       return true
-    }).catch(() => {
+    } catch (error) {
       // 폴백: 텍스트 선택
       fallbackCopyTextToClipboard(url)
       return true
-    })
+    }
   } else {
     fallbackCopyTextToClipboard(url)
     return true

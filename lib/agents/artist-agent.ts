@@ -4,6 +4,7 @@
  */
 
 import { SubAgent, AgentTask, createTask, agentPool } from './sub-agent';
+export { agentPool };
 import { commandBus, COMMANDS } from '../cqrs/command-bus';
 import { queryBus, QUERIES } from '../cqrs/query-bus';
 import { eventBus, EVENTS } from '../events/event-bus';

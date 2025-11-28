@@ -245,7 +245,10 @@ export class GetAllArtistsHandler implements QueryHandler {
         success: true,
         data: result,
         metadata: {
-          totalCount: result.length
+          totalCount: result.length,
+          executionTime: 0,
+          fromCache: false,
+          timestamp: Date.now()
         }
       };
 
@@ -321,7 +324,10 @@ export class SearchArtistsHandler implements QueryHandler {
         success: true,
         data: data || [],
         metadata: {
-          totalCount: data?.length || 0
+          totalCount: data?.length || 0,
+          executionTime: 0,
+          fromCache: false,
+          timestamp: Date.now()
         }
       };
 

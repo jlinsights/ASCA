@@ -197,6 +197,7 @@ export async function getArtwork(id: string): Promise<ArtworkWithArtist | null> 
  */
 export async function createArtwork(artwork: ArtworkInsert): Promise<Artwork> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('artworks')
     .insert([artwork])
@@ -216,6 +217,7 @@ export async function createArtwork(artwork: ArtworkInsert): Promise<Artwork> {
  */
 export async function updateArtwork(id: string, updates: ArtworkUpdate): Promise<Artwork> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('artworks')
     .update({ ...updates, updated_at: new Date().toISOString() })
@@ -236,6 +238,7 @@ export async function updateArtwork(id: string, updates: ArtworkUpdate): Promise
  */
 export async function deleteArtwork(id: string): Promise<void> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { error } = await supabase
     .from('artworks')
     .delete()
@@ -255,6 +258,7 @@ export async function searchArtworks(
   limit: number = 20
 ): Promise<ArtworkWithArtist[]> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -338,6 +342,7 @@ export async function getRelatedArtworks(
   limit: number = 4
 ): Promise<ArtworkWithArtist[]> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('artworks')
     .select(`
@@ -373,6 +378,7 @@ export async function getRelatedArtworks(
  */
 export async function incrementArtworkViews(id: string): Promise<void> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { error } = await supabase.rpc('increment_artwork_views', {
     artwork_uuid: id
   })
@@ -387,6 +393,7 @@ export async function incrementArtworkViews(id: string): Promise<void> {
  */
 export async function toggleArtworkLike(id: string, userId?: string): Promise<boolean> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { error } = await supabase.rpc('toggle_artwork_like', {
     artwork_uuid: id,
     user_uuid: userId

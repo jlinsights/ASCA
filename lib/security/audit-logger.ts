@@ -84,8 +84,8 @@ export class SecurityAuditLogger {
       source: this.extractSourceInfo(request),
       user: {
         id: user.id,
-        email: user.email,
-        role: user.role
+        email: user.email || 'unknown',
+        role: user.role || 'unknown'
       },
       details: {
         permissions: user.permissions
@@ -149,8 +149,8 @@ export class SecurityAuditLogger {
       source: this.extractSourceInfo(request),
       user: {
         id: user.id,
-        email: user.email,
-        role: user.role
+        email: user.email || 'unknown',
+        role: user.role || 'unknown'
       },
       details: {
         action,

@@ -321,7 +321,7 @@ export class PerformanceMonitor {
     Object.keys(PERFORMANCE_THRESHOLDS).forEach(metricName => {
       const metrics = this.getMetricsByName(metricName as PerformanceMetricName)
       if (metrics.length > 0) {
-        const latestMetric = metrics[metrics.length - 1]
+        const latestMetric = metrics[metrics.length - 1]!
         breakdown[metricName] = latestMetric.score
         totalScore += scoreValues[latestMetric.score]
         metricCount++

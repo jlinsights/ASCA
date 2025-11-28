@@ -94,8 +94,8 @@ export function createSecureAPI(
 
         // 4. 권한 확인
         if (requiredPermissions.length > 0) {
-          const hasRequiredPermissions = requiredPermissions.every(permission =>
-            user!.permissions.includes('*') || user!.permissions.includes(permission)
+          const hasRequiredPermissions = user && requiredPermissions.every(permission =>
+            (user?.permissions?.includes('*') ?? false) || (user?.permissions?.includes(permission) ?? false)
           )
 
           if (!hasRequiredPermissions) {

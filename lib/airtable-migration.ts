@@ -271,6 +271,7 @@ export class AirtableMigration {
   static async migrateEvents(): Promise<{ success: number; failed: number }> {
     const airtableEvents = await AirtableService.getAllEvents();
     const supabase = ensureSupabase();
+    if (!supabase) throw new Error('Supabase client not available');
     
     let success = 0;
     let failed = 0;
@@ -297,6 +298,7 @@ export class AirtableMigration {
   static async migrateNotices(): Promise<{ success: number; failed: number }> {
     const airtableNotices = await AirtableService.getAllNotices();
     const supabase = ensureSupabase();
+    if (!supabase) throw new Error('Supabase client not available');
     
     let success = 0;
     let failed = 0;
@@ -396,6 +398,7 @@ export class AirtableMigration {
   // Airtable ID → Supabase ID 매핑 생성
   static async createArtistIdMap(): Promise<Map<string, string>> {
     const supabase = ensureSupabase();
+    if (!supabase) throw new Error('Supabase client not available');
     const map = new Map<string, string>();
 
     try {

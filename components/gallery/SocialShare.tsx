@@ -180,7 +180,7 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
             {/* 추가 공유 옵션 */}
             <div className="space-y-2">
               {/* 네이티브 공유 (모바일에서만 표시) */}
-              {typeof navigator !== 'undefined' && navigator.share && (
+              {typeof navigator !== 'undefined' && 'share' in navigator && (
                 <motion.button
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}

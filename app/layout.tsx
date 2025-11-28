@@ -5,10 +5,9 @@ import { ClientProviders } from '@/components/client-providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'ASCA | 사단법인 동양서예협회',
-  description: '正法의 계승, 創新의 조화 - 동양서예협회 공식 웹사이트',
-}
+import { constructMetadata } from '@/lib/seo'
+
+export const metadata = constructMetadata()
 
 export default function RootLayout({
   children,
@@ -37,10 +36,16 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-rice-paper dark:bg-ink-black transition-colors duration-300`}>
         <ClientProviders>
-          <div className="min-h-screen flex flex-col">
-            <main className="flex-1">
+          <div className="min-h-screen flex flex-col relative overflow-hidden">
+            {/* Ambient Background Effects */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+              <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-celadon-green/5 blur-[100px] animate-pulse" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-scholar-red/5 blur-[100px] animate-pulse delay-1000" />
+            </div>
+            
+            <main className="flex-1 relative z-10">
               {children}
             </main>
           </div>

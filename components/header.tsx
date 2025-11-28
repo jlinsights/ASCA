@@ -122,7 +122,7 @@ export function Header() {
   return (
     <>
       <ThemeTransition clickPosition={clickPosition} />
-      <header ref={headerRef} className="border-b border-[#222222]/10 dark:border-[#fcfcfc]/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+      <header ref={headerRef} className="border-b border-white/10 bg-white/70 dark:bg-black/70 backdrop-blur-md supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-black/40 sticky top-0 z-50 transition-all duration-300">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-14 md:h-16">
             <a href="https://orientalcalligraphy.org" className="flex items-center">
@@ -144,7 +144,7 @@ export function Header() {
                 >
                   <Link 
                     href={menu.href}
-                    className="flex items-center gap-1 text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2"
+                    className="flex items-center gap-1 text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
                   >
                     {menu.title}
                     {menu.subItems.length > 0 && (
@@ -154,7 +154,7 @@ export function Header() {
                   
                   {/* Dropdown Menu */}
                   {menu.subItems.length > 0 && (
-                    <div className={`absolute top-full left-0 w-48 bg-background border border-border rounded-lg shadow-lg transition-all duration-200 z-50 ${
+                    <div className={`absolute top-full left-0 w-48 glass-panel rounded-lg transition-all duration-200 z-50 ${
                       activeDropdown === menu.key 
                         ? 'opacity-100 visible translate-y-0' 
                         : 'opacity-0 invisible -translate-y-2'
