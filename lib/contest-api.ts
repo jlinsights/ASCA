@@ -24,6 +24,7 @@ export class ContestAPI {
     offset?: number
   }) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     let query = supabase
       .from('contests')
       .select(`
@@ -63,6 +64,7 @@ export class ContestAPI {
    */
   static async getContestById(id: string) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contests')
       .select(`
@@ -89,6 +91,7 @@ export class ContestAPI {
    */
   static async createContest(contest: Omit<Contest, 'id' | 'createdAt' | 'updatedAt'>) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contests')
       .insert(contest)
@@ -104,6 +107,7 @@ export class ContestAPI {
    */
   static async updateContest(id: string, updates: Partial<Contest>) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contests')
       .update({ ...updates, updated_at: new Date() })
@@ -120,6 +124,7 @@ export class ContestAPI {
    */
   static async deleteContest(id: string) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { error } = await supabase
       .from('contests')
       .delete()
@@ -142,6 +147,7 @@ export class ContestAPI {
     offset?: number
   }) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     let query = supabase
       .from('contest_submissions')
       .select(`
@@ -175,6 +181,7 @@ export class ContestAPI {
    */
   static async submitArtwork(submission: Omit<ContestSubmission, 'id' | 'submittedAt' | 'updatedAt'>) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contest_submissions')
       .insert({
@@ -194,6 +201,7 @@ export class ContestAPI {
    */
   static async updateSubmission(id: string, updates: Partial<ContestSubmission>) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contest_submissions')
       .update({ ...updates, updated_at: new Date() })
@@ -210,6 +218,7 @@ export class ContestAPI {
    */
   static async updatePaymentStatus(submissionId: string, paymentInfo: ContestSubmission['payment']) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contest_submissions')
       .update({ 
@@ -233,6 +242,7 @@ export class ContestAPI {
    */
   static async getJudgeAssignments(judgeId: string, contestId: string) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contest_submissions')
       .select(`
@@ -257,6 +267,7 @@ export class ContestAPI {
    */
   static async submitJudgeScore(score: Omit<JudgeScore, 'scoredAt'>) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('judge_scores')
       .insert({
@@ -275,6 +286,7 @@ export class ContestAPI {
    */
   static async calculateJudgingResults(contestId: string) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data: scores, error: scoresError } = await supabase
       .from('judge_scores')
       .select(`
@@ -339,6 +351,7 @@ export class ContestAPI {
    */
   static async getContestStatistics(contestId: string) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     
     // 기본 통계
     const [
@@ -390,6 +403,7 @@ export class ContestAPI {
    */
   static async getRevenueStatistics(contestId: string) {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contest_submissions')
       .select('payment')

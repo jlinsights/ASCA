@@ -18,6 +18,7 @@ export async function getNotices(
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<PaginatedResponse<Notice>> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   let query = supabase
     .from('notices')
     .select('*', { count: 'exact' })
@@ -65,6 +66,7 @@ export async function getNotices(
 
 export async function getNoticeById(id: string): Promise<Notice | null> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('notices')
     .select('*')
@@ -85,6 +87,7 @@ export async function getNoticeById(id: string): Promise<Notice | null> {
 
 export async function createNotice(data: NoticeFormData): Promise<Notice> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data: notice, error } = await supabase
     .from('notices')
     .insert([data])
@@ -97,6 +100,7 @@ export async function createNotice(data: NoticeFormData): Promise<Notice> {
 
 export async function updateNotice(id: string, data: Partial<NoticeFormData>): Promise<Notice> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data: notice, error } = await supabase
     .from('notices')
     .update(data)
@@ -110,6 +114,7 @@ export async function updateNotice(id: string, data: Partial<NoticeFormData>): P
 
 export async function deleteNotice(id: string): Promise<void> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { error } = await supabase
     .from('notices')
     .delete()
@@ -124,6 +129,7 @@ export async function getExhibitions(
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<PaginatedResponse<Exhibition>> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   let query = supabase
     .from('exhibitions')
     .select('*', { count: 'exact' })
@@ -171,6 +177,7 @@ export async function getExhibitions(
 
 export async function getExhibitionById(id: string): Promise<Exhibition | null> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('exhibitions')
     .select('*')
@@ -191,6 +198,7 @@ export async function getExhibitionById(id: string): Promise<Exhibition | null> 
 
 export async function createExhibition(data: ExhibitionFormData): Promise<Exhibition> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data: exhibition, error } = await supabase
     .from('exhibitions')
     .insert([data])
@@ -203,6 +211,7 @@ export async function createExhibition(data: ExhibitionFormData): Promise<Exhibi
 
 export async function updateExhibition(id: string, data: Partial<ExhibitionFormData>): Promise<Exhibition> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data: exhibition, error } = await supabase
     .from('exhibitions')
     .update(data)
@@ -216,6 +225,7 @@ export async function updateExhibition(id: string, data: Partial<ExhibitionFormD
 
 export async function deleteExhibition(id: string): Promise<void> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { error } = await supabase
     .from('exhibitions')
     .delete()
@@ -230,6 +240,7 @@ export async function getEvents(
   pagination: PaginationParams = { page: 1, limit: 10 }
 ): Promise<PaginatedResponse<Event>> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   let query = supabase
     .from('events')
     .select('*', { count: 'exact' })
@@ -280,6 +291,7 @@ export async function getEvents(
 
 export async function getEventById(id: string): Promise<Event | null> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('events')
     .select('*')
@@ -300,6 +312,7 @@ export async function getEventById(id: string): Promise<Event | null> {
 
 export async function createEvent(data: EventFormData): Promise<Event> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data: event, error } = await supabase
     .from('events')
     .insert([data])
@@ -312,6 +325,7 @@ export async function createEvent(data: EventFormData): Promise<Event> {
 
 export async function updateEvent(id: string, data: Partial<EventFormData>): Promise<Event> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data: event, error } = await supabase
     .from('events')
     .update(data)
@@ -325,6 +339,7 @@ export async function updateEvent(id: string, data: Partial<EventFormData>): Pro
 
 export async function deleteEvent(id: string): Promise<void> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { error } = await supabase
     .from('events')
     .delete()
@@ -336,6 +351,7 @@ export async function deleteEvent(id: string): Promise<void> {
 // Comment functions
 export async function getNoticeComments(noticeId: string): Promise<NoticeComment[]> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('notice_comments')
     .select('*')
@@ -354,6 +370,7 @@ export async function createNoticeComment(data: {
   content: string
 }): Promise<NoticeComment> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data: comment, error } = await supabase
     .from('notice_comments')
     .insert([{
@@ -370,6 +387,7 @@ export async function createNoticeComment(data: {
 // Utility functions
 export async function getFeaturedContent() {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const [notices, exhibitions, events] = await Promise.all([
     supabase
       .from('notices')
@@ -403,6 +421,7 @@ export async function getFeaturedContent() {
 
 export async function updateContentStatus() {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   await Promise.all([
     supabase.rpc('update_exhibition_status'),
     supabase.rpc('update_event_status')
@@ -412,21 +431,25 @@ export async function updateContentStatus() {
 // Additional utility functions for detail pages
 export async function incrementNoticeViews(id: string): Promise<void> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   await supabase.rpc('increment_notice_views', { notice_uuid: id })
 }
 
 export async function incrementExhibitionViews(id: string): Promise<void> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   await supabase.rpc('increment_exhibition_views', { exhibition_uuid: id })
 }
 
 export async function incrementEventViews(id: string): Promise<void> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   await supabase.rpc('increment_event_views', { event_uuid: id })
 }
 
 export async function getRelatedNotices(noticeId: string, category: string, limit: number = 5): Promise<Notice[]> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('notices')
     .select('*')
@@ -442,6 +465,7 @@ export async function getRelatedNotices(noticeId: string, category: string, limi
 
 export async function getRelatedExhibitions(exhibitionId: string, limit: number = 5): Promise<Exhibition[]> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('exhibitions')
     .select('*')
@@ -456,6 +480,7 @@ export async function getRelatedExhibitions(exhibitionId: string, limit: number 
 
 export async function getRelatedEvents(eventId: string, eventType: string, limit: number = 5): Promise<Event[]> {
   const supabase = ensureSupabase()
+  if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
     .from('events')
     .select('*')

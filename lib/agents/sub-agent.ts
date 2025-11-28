@@ -32,9 +32,9 @@ export interface AgentResult<TOutput = any> {
  * SubAgent 기본 클래스
  */
 export abstract class SubAgent<TInput = any, TOutput = any> {
-  protected id: string;
-  protected type: string;
-  protected isRunning = false;
+  public readonly id: string;
+  public readonly type: string;
+  public isRunning = false;
   protected currentTask: AgentTask<TInput> | null = null;
 
   constructor(id: string, type: string) {

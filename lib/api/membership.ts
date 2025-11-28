@@ -69,15 +69,15 @@ export async function getMembers(
     }
     
     if (filters.statuses?.length) {
-      conditions.push(inArray(members.status, filters.statuses))
+      conditions.push(inArray(members.status, filters.statuses as any))
     }
     
     if (filters.joinDateRange) {
       if (filters.joinDateRange.start) {
-        conditions.push(gte(members.joinDate, Math.floor(filters.joinDateRange.start.getTime() / 1000)))
+        conditions.push(gte(members.joinDate, filters.joinDateRange.start))
       }
       if (filters.joinDateRange.end) {
-        conditions.push(lte(members.joinDate, Math.floor(filters.joinDateRange.end.getTime() / 1000)))
+        conditions.push(lte(members.joinDate, filters.joinDateRange.end))
       }
     }
     
@@ -141,7 +141,7 @@ export async function getMembers(
       .offset(offset)
     
     // 결과 매핑
-    const membersList = results.map(result => ({
+    const membersList = results.map((result: any) => ({
       ...result.member,
       joinDate: new Date(Number(result.member.joinDate) * 1000),
       lastActivityDate: result.member.lastActivityDate ? new Date(Number(result.member.lastActivityDate) * 1000) : undefined,
@@ -239,24 +239,24 @@ export async function getMember(memberId: string): Promise<MemberDetailResponse>
         user: member.user
       } as any,
       tier: member.tier as any,
-      recentActivities: recentActivities.map(activity => ({
+      recentActivities: recentActivities.map((activity: any) => ({
         ...activity,
         timestamp: new Date(Number(activity.timestamp) * 1000)
       })) as any,
-      applications: applications.map(app => ({
+      applications: applications.map((app: any) => ({
         ...app,
         submittedAt: new Date(Number(app.submittedAt) * 1000),
         reviewedAt: app.reviewedAt ? new Date(Number(app.reviewedAt) * 1000) : undefined,
         decidedAt: app.decidedAt ? new Date(Number(app.decidedAt) * 1000) : undefined
       })) as any,
-      certifications: certifications.map(cert => ({
+      certifications: certifications.map((cert: any) => ({
         ...cert,
         issuedAt: new Date(Number(cert.issuedAt) * 1000),
         expiresAt: cert.expiresAt ? new Date(Number(cert.expiresAt) * 1000) : undefined,
         createdAt: new Date(Number(cert.createdAt) * 1000),
         updatedAt: new Date(Number(cert.updatedAt) * 1000)
       })) as any,
-      programParticipations: programParticipations.map(pp => ({
+      programParticipations: programParticipations.map((pp: any) => ({
         ...pp.participation,
         appliedAt: new Date(Number(pp.participation.appliedAt) * 1000),
         approvedAt: pp.participation.approvedAt ? new Date(Number(pp.participation.approvedAt) * 1000) : undefined,
@@ -298,8 +298,8 @@ export async function createMember(memberData: Partial<MemberProfile>): Promise<
       nationality: memberData.nationality || 'KR',
       phoneNumber: memberData.phoneNumber,
       alternateEmail: memberData.alternateEmail,
-      emergencyContactName: memberData.emergencyContact?.name,
-      emergencyContactPhone: memberData.emergencyContact?.phoneNumber,
+      emergencyContactName: memberData.emergencyContactName,
+      emergencyContactPhone: memberData.emergencyContactPhone,
       address: memberData.address,
       createdAt: Math.floor(Date.now() / 1000),
       updatedAt: Math.floor(Date.now() / 1000)
@@ -403,7 +403,7 @@ export async function getMembershipTiers(): Promise<MembershipTierInfo[]> {
       .where(eq(membershipTiers.isActive, true))
       .orderBy(asc(membershipTiers.level))
     
-    return results.map(tier => ({
+    return results.map((tier: any) => ({
       ...tier,
       requirements: tier.requirements ? JSON.parse(tier.requirements) : [],
       benefits: tier.benefits ? JSON.parse(tier.benefits) : [],
@@ -534,12 +534,12 @@ export async function getMembershipDashboardStats(): Promise<MembershipDashboard
     const thisMonthStart = new Date()
     thisMonthStart.setDate(1)
     thisMonthStart.setHours(0, 0, 0, 0)
-    
+
     const newMembersThisMonthResult = await db
       .select({ count: count() })
       .from(members)
-      .where(gte(members.joinDate, Math.floor(thisMonthStart.getTime() / 1000)))
-    
+      .where(gte(members.joinDate, thisMonthStart))
+
     // 대기 중인 신청서
     const pendingApplicationsResult = await db
       .select({ count: count() })
@@ -565,11 +565,11 @@ export async function getMembershipDashboardStats(): Promise<MembershipDashboard
     
     return {
       totalMembers: totalMembersResult[0]?.count || 0,
-      membersByTier: membersByTierResult.reduce((acc, item) => {
+      membersByTier: membersByTierResult.reduce((acc: any, item: any) => {
         acc[item.tierLevel] = item.count
         return acc
       }, {} as Record<number, number>),
-      membersByStatus: membersByStatusResult.reduce((acc, item) => {
+      membersByStatus: membersByStatusResult.reduce((acc: any, item: any) => {
         acc[item.status] = item.count
         return acc
       }, {} as Record<string, number>),

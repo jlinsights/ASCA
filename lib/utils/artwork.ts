@@ -71,8 +71,8 @@ export function filterArtworks(artworks: Artwork[], filters: ArtworkFilters): Ar
     }
 
     // 가격 범위 필터
-    if (filters.minPrice && artwork.price < filters.minPrice) return false
-    if (filters.maxPrice && artwork.price > filters.maxPrice) return false
+    if (filters.minPrice && (artwork.price === undefined || artwork.price < filters.minPrice)) return false
+    if (filters.maxPrice && (artwork.price === undefined || artwork.price > filters.maxPrice)) return false
 
     // 연도 범위 필터
     if (filters.minYear && artwork.year < filters.minYear) return false
@@ -141,10 +141,10 @@ export function sortArtworks(artworks: Artwork[], sortOption: SortOption): Artwo
       return sorted.sort((a, b) => a.year - b.year)
 
     case 'price-low':
-      return sorted.sort((a, b) => a.price - b.price)
+      return sorted.sort((a, b) => (a.price || 0) - (b.price || 0))
 
     case 'price-high':
-      return sorted.sort((a, b) => b.price - a.price)
+      return sorted.sort((a, b) => (b.price || 0) - (a.price || 0))
 
     case 'popular':
       return sorted.sort((a, b) => b.views - a.views)
@@ -329,8 +329,10 @@ export function findRelatedArtworks(
       if (artwork.style === targetArtwork.style) score += 20
 
       // 비슷한 가격대 (±30%)
-      const priceRange = targetArtwork.price * 0.3
-      if (Math.abs(artwork.price - targetArtwork.price) <= priceRange) score += 15
+      if (targetArtwork.price !== undefined && artwork.price !== undefined) {
+        const priceRange = targetArtwork.price * 0.3
+        if (Math.abs(artwork.price - targetArtwork.price) <= priceRange) score += 15
+      }
 
       // 공통 태그
       const commonTags = artwork.tags.filter(tag => 

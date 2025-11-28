@@ -14,7 +14,7 @@ export const FloatingCulturalNav = ({
     nameZh?: string;
     nameJa?: string;
     link: string;
-    icon?: JSX.Element;
+    icon?: React.ReactNode;
   }[];
   className?: string;
 }) => {
@@ -93,7 +93,7 @@ export const FloatingCulturalNav = ({
             onClick={() => {
               const langs: Array<'en' | 'ko' | 'zh' | 'ja'> = ['ko', 'zh', 'ja', 'en'];
               const currentIndex = langs.indexOf(currentLang);
-              setCurrentLang(langs[(currentIndex + 1) % langs.length]);
+              setCurrentLang(langs[(currentIndex + 1) % langs.length]!);
             }}
             className="text-xs px-2 py-1 rounded-full bg-bamboo-green/20 text-bamboo-green hover:bg-bamboo-green/30 transition-colors"
           >

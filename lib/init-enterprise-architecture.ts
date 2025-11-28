@@ -53,7 +53,7 @@ export class EnterpriseArchitecture {
     startupTime: 0,
     version: '1.0.0',
     environment: process.env.NODE_ENV === 'production' ? 'production' : 
-                  process.env.NODE_ENV === 'staging' ? 'staging' : 'development'
+                  (process.env.NODE_ENV as string) === 'staging' ? 'staging' : 'development'
   };
 
   private config: ArchitectureConfig = {

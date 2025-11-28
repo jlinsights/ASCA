@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { sqliteTable, text, integer, real, blob } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, blob, AnySQLiteColumn } from 'drizzle-orm/sqlite-core';
 
 // 사용자 테이블
 export const users = sqliteTable('users', {
@@ -351,7 +351,7 @@ export const members = sqliteTable('members', {
   // 메타데이터
   profileCompleteness: integer('profile_completeness').default(0), // 프로필 완성도 (%)
   lastProfileUpdate: integer('last_profile_update', { mode: 'timestamp' }),
-  referredBy: text('referred_by').references(() => members.id), // 추천인
+  referredBy: text('referred_by').references((): AnySQLiteColumn => members.id), // 추천인
   notes: text('notes'), // 관리자 메모
   metadata: text('metadata'), // JSON 형태
   

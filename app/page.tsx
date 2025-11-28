@@ -283,8 +283,8 @@ export default function Page() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  서울시 성북구 보문로 57-1,<br />
-                  중앙빌딩 6층 (보문동7가)
+                  〒02872 서울시 성북구 보문로 105<br />
+                  보림빌딩
                 </p>
               </CardContent>
             </Card>

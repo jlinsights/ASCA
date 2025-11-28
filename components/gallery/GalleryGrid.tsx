@@ -117,7 +117,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
       newIndex = currentIndex < filteredItems.length - 1 ? currentIndex + 1 : 0
     }
 
-    setSelectedImage(filteredItems[newIndex])
+    setSelectedImage(filteredItems[newIndex]!)
   }, [selectedImage, filteredItems])
 
   // 키보드 이벤트 핸들러
@@ -429,7 +429,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
 
           <div className="flex space-x-2">
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-              let pageNum
+              let pageNum: number
               if (totalPages <= 7) {
                 pageNum = i + 1
               } else if (currentPage <= 4) {

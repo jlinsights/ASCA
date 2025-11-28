@@ -133,7 +133,7 @@ export class SyncEngine {
 
       const fieldMap = new Map<string, AirtableField>()
 
-      records.forEach(record => {
+      records.forEach((record: any) => {
         Object.entries(record.fields).forEach(([fieldName, value]) => {
           if (!fieldMap.has(fieldName)) {
             fieldMap.set(fieldName, {

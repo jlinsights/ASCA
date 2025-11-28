@@ -94,12 +94,12 @@ export class PermissionChecker {
    */
   hasPermission(permission: Permission): boolean {
     // 슈퍼 관리자는 모든 권한 보유
-    if (this.user.permissions.includes(Permission.SUPER_ADMIN)) {
+    if (this.user.permissions?.includes(Permission.SUPER_ADMIN)) {
       return true
     }
 
     // 구체적 권한 검사
-    return this.user.permissions.includes(permission)
+    return this.user.permissions?.includes(permission) || false
   }
 
   /**
@@ -128,7 +128,7 @@ export class PermissionChecker {
    */
   hasMinimumRole(minimumRole: keyof typeof RolePermissions): boolean {
     const roleHierarchy = ['viewer', 'editor', 'admin', 'system']
-    const userRoleIndex = roleHierarchy.indexOf(this.user.role)
+    const userRoleIndex = roleHierarchy.indexOf(this.user.role || 'viewer')
     const minimumRoleIndex = roleHierarchy.indexOf(minimumRole)
     
     return userRoleIndex >= minimumRoleIndex

@@ -71,6 +71,7 @@ export async function getArtists(
 export async function getArtist(id: string): Promise<Artist | null> {
   try {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data: artistData, error: artistError } = await supabase
       .from('artists')
       .select('*')
@@ -96,6 +97,7 @@ export async function getArtist(id: string): Promise<Artist | null> {
 export async function createArtist(artist: ArtistInsert): Promise<Artist> {
   try {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { error: createArtistError } = await supabase
       .from('artists')
       .insert([artist])
@@ -116,6 +118,7 @@ export async function createArtist(artist: ArtistInsert): Promise<Artist> {
 export async function updateArtist(id: string, updates: ArtistUpdate): Promise<Artist> {
   try {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data: updatedArtistData, error: updateArtistError } = await supabase
       .from('artists')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -139,6 +142,7 @@ export async function updateArtist(id: string, updates: ArtistUpdate): Promise<A
 export async function deleteArtist(id: string): Promise<void> {
   try {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data: deletedArtistData, error: deleteArtistError } = await supabase
       .from('artists')
       .select('*')
@@ -160,6 +164,7 @@ export async function deleteArtist(id: string): Promise<void> {
 export async function searchArtists(query: string, limit: number = 20): Promise<Artist[]> {
   try {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data: searchedArtistsData, error: searchArtistsError } = await supabase
       .from('artists')
       .select('*')
@@ -181,7 +186,9 @@ export async function searchArtists(query: string, limit: number = 20): Promise<
  */
 export async function getArtistsByNationality(nationality: string): Promise<Artist[]> {
   try {
-    const { data: artistsByNationalityData, error: artistsByNationalityError } = await ensureSupabase()
+    const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
+    const { data: artistsByNationalityData, error: artistsByNationalityError } = await supabase
       .from('artists')
       .select('*')
       .eq('nationality', nationality)
@@ -200,6 +207,7 @@ export async function getArtistsByNationality(nationality: string): Promise<Arti
 export async function getFeaturedArtists(limit: number = 6): Promise<Artist[]> {
   try {
     const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
     const { data: featuredArtistsData, error: featuredArtistsError } = await supabase
       .from('artists')
       .select('*')

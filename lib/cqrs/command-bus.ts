@@ -74,7 +74,7 @@ export class CommandBus {
       let processedCommand = command;
       for (const middleware of this.middleware) {
         if (middleware.before) {
-          processedCommand = await middleware.before(processedCommand) || processedCommand;
+          processedCommand = (await middleware.before(processedCommand) || processedCommand) as T;
         }
       }
 

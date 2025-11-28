@@ -12,8 +12,8 @@ export default function GalleryClient({ data }: GalleryClientProps) {
   // 갤러리 이벤트 추적
   const handleGalleryEvent = useCallback((event: any) => {
     // 엔터프라이즈 아키텍처의 이벤트 시스템과 연동
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', event.type, {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', event.type, {
         event_category: 'Gallery',
         event_label: event.payload.category || event.payload.itemId,
         custom_map: {

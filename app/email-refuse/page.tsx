@@ -252,7 +252,7 @@ export default function EmailRefusePage() {
               <div className="space-y-2 text-sm text-muted-foreground">
                 <p>📧 info@orientalcalligraphy.org</p>
                 <p>📞 0502-5550-8700</p>
-                <p>📍 서울시 성북구 보문로 57-1 중앙빌딩 6층</p>
+                <p>📍 〒02872 서울시 성북구 보문로 105 보림빌딩</p>
               </div>
               <div className="flex gap-4 justify-center mt-6">
                 <Button className="gap-2">

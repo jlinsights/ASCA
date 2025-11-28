@@ -25,7 +25,6 @@ export function LanguageSelector({
   // 언어 데이터 메모화
   const languageOptions = useMemo(() => {
     return supportedLanguages.map(code => ({
-      code,
       ...allLanguages[code]
     }))
   }, [supportedLanguages, allLanguages])
@@ -62,6 +61,7 @@ export function LanguageSelector({
       document.addEventListener("mousedown", handleClickOutside)
       return () => document.removeEventListener("mousedown", handleClickOutside)
     }
+    return undefined
   }, [isOpen])
 
   // 키보드 네비게이션

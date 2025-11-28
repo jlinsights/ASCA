@@ -21,6 +21,7 @@ export interface AuditEntry {
     sessionId?: string;
     source: string;
     version: string;
+    [key: string]: any;
   };
   result: 'success' | 'failure' | 'partial';
   errorMessage?: string;
@@ -201,8 +202,10 @@ export class AuditTrail {
       userActivity[entry.userId] = (userActivity[entry.userId] || 0) + 1;
 
       // 일별 활동
-      const date = new Date(entry.timestamp).toISOString().split('T')[0];
-      dailyActivity[date] = (dailyActivity[date] || 0) + 1;
+      const date = new Date(entry.timestamp).toISOString().split('T')[0] || '';
+      if (date) {
+        dailyActivity[date] = (dailyActivity[date] || 0) + 1;
+      }
     });
 
     return {

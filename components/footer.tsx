@@ -53,8 +53,13 @@ function SponsorLogo({ src, alt, width, height, className, fallbackSrc, fallback
 // @deprecated Use LayoutFooter from @/components/layout/layout-footer instead
 export function Footer() {
   return (
-    <footer className="bg-[#222222] text-[#fcfcfc] dark:bg-[#111111] py-12">
-      <div className="container mx-auto px-4">
+    <footer className="bg-ink-black/95 backdrop-blur-lg text-rice-paper border-t border-white/10 py-16 relative overflow-hidden">
+      {/* Ambient Background Effect */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[20%] w-[60%] h-[60%] rounded-full bg-celadon-green/5 blur-[120px]" />
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
         {/* 회사 정보 및 메뉴 링크 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* 회사 정보 */}
@@ -74,8 +79,8 @@ export function Footer() {
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">☎︎ 0502-5550-8700</p>
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">FAX: 0504-256-6600</p>
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">info@orientalcalligraphy.org</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">서울시 성북구 보문로 57-1,</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">중앙빌딩 6층 (보문동7가)</p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">〒02872 서울시 성북구 보문로 105</p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">보림빌딩</p>
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">무통장 입금계좌: 신한은행 100-028-611714</p>
             </div>
           </div>

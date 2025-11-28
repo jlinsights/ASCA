@@ -139,7 +139,7 @@ export class QueryBus {
       let processedQuery = query;
       for (const middleware of this.middleware) {
         if (middleware.before) {
-          processedQuery = await middleware.before(processedQuery) || processedQuery;
+          processedQuery = (await middleware.before(processedQuery) || processedQuery) as T;
         }
       }
 
@@ -194,7 +194,7 @@ export class QueryBus {
   invalidateCache(pattern?: string): void {
     if (pattern) {
       // 패턴 매칭 캐시 삭제 (간단한 구현)
-      const keys = Array.from((this.cache as any).cache.keys());
+      const keys = Array.from((this.cache as any).cache.keys()) as string[];
       keys.forEach(key => {
         if (key.includes(pattern)) {
           this.cache.delete(key);

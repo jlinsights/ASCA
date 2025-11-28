@@ -62,8 +62,8 @@ export const translationLoader: TranslationLoader = {
   
   async load(language: Language, namespace: keyof TranslationNamespaces): Promise<Record<string, string>> {
     // 캐시 확인
-    if (this.cache[namespace][language]) {
-      return this.cache[namespace][language]
+    if (this.cache[namespace] && this.cache[namespace][language]) {
+      return this.cache[namespace][language]!
     }
     
     let translations: Record<string, string> = {}
@@ -92,6 +92,9 @@ export const translationLoader: TranslationLoader = {
       }
       
       // 캐시에 저장
+      if (!this.cache[namespace]) {
+        this.cache[namespace] = {}
+      }
       this.cache[namespace][language] = translations
       
       return translations
@@ -126,7 +129,7 @@ export const getTranslation = async (
   const translations = await translationLoader.load(language, namespace)
   
   if (translations[key]) {
-    return translations[key]
+    return translations[key]!
   }
   
   // 다른 네임스페이스에서 검색
@@ -134,7 +137,7 @@ export const getTranslation = async (
     if (ns !== namespace) {
       const nsTranslations = await translationLoader.load(language, ns)
       if (nsTranslations[key]) {
-        return nsTranslations[key]
+        return nsTranslations[key]!
       }
     }
   }
@@ -189,9 +192,9 @@ export const getLanguageMetadata = (language: Language): LanguageMetadata => {
 export const getTranslationSync = (language: Language, key: string): string => {
   // 캐시된 번역 데이터에서 검색
   for (const namespace of ['navigation', 'artworks', 'common'] as const) {
-    const cached = translationCache[namespace][language]
+    const cached = translationCache[namespace] ? translationCache[namespace][language] : undefined
     if (cached && cached[key]) {
-      return cached[key]
+      return cached![key]!
     }
   }
   

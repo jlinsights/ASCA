@@ -9,17 +9,17 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   reactStrictMode: true,
-  
+
   // 성능 최적화
   compress: true,
-  
+
   // Basic TypeScript and ESLint settings
   typescript: {
-    ignoreBuildErrors: true, // Temporarily ignore for security fix deployment
+    // ignoreBuildErrors removed to enforce type checking
   },
-  
+
   eslint: {
-    ignoreDuringBuilds: true, // Temporarily ignore for security fix deployment
+    // ignoreDuringBuilds removed to enforce linting
   },
 
   // 최고 화질 이미지 최적화 - 갤러리 특화
@@ -53,10 +53,10 @@ const nextConfig = {
         fs: false,
         net: false,
         tls: false,
-      };
+      }
     }
-    
-    return config;
+
+    return config
   },
 
   // 실험적 기능으로 성능 향상
