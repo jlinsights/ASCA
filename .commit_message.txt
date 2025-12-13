@@ -1,17 +1,17 @@
-🎨 Curator.io 소셜 피드를 푸터 최상단에 추가
+🔧 Curator.io 피드 스크립트 로딩 개선 및 Next.js 업데이트
 
-푸터에 Curator.io 소셜 미디어 피드 통합:
+Curator.io 소셜 피드 표시 문제 해결 및 보안 업데이트:
 
-**추가된 기능**
-- 푸터 최상단에 Curator.io 피드 섹션 배치
-- 인스타그램 및 스레드 최신 소식 표시
-- Next.js Script 컴포넌트로 최적화된 스크립트 로딩
+**Curator.io 피드 수정**
+- Script strategy를 lazyOnload → afterInteractive로 변경
+- 스크립트 로딩 방식 간소화 (직접 src 지정)
+- 피드가 더 빨리 로드되도록 개선
 
-**보안 강화**
-- CSP(Content Security Policy) 헤더 추가
-- Curator.io 도메인 화이트리스트 설정
-- script-src, style-src, img-src, connect-src, frame-src 허용
+**Next.js 보안 업데이트**
+- Next.js를 최신 버전으로 업데이트 (보안 취약점 해결)
+- React 및 React-DOM 최신 버전 동기화
+- Vercel 배포 차단 문제 해결
 
-**코드 변경**
-- components/footer.tsx: Curator.io 피드 섹션 추가
-- next.config.js: CSP 보안 헤더 설정 추가
+**파일 수정**
+- components/footer.tsx: Curator.io 스크립트 로딩 개선
+- package.json: Next.js, React 최신 버전으로 업데이트
