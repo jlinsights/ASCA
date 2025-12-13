@@ -6,6 +6,7 @@ import { ClientProviders } from '@/components/client-providers'
 const inter = Inter({ subsets: ['latin'] })
 
 import { constructMetadata } from '@/lib/seo'
+import { JsonLd } from '@/components/json-ld'
 
 export const metadata = constructMetadata()
 
@@ -35,6 +36,8 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Global JSON-LD for AEO */}
+        <JsonLd />
       </head>
       <body className={`${inter.className} bg-rice-paper dark:bg-ink-black transition-colors duration-300`}>
         <ClientProviders>
