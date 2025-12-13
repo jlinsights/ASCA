@@ -13,14 +13,13 @@ const nextConfig = {
   // 성능 최적화
   compress: true,
 
-  // Basic TypeScript and ESLint settings
+  // Basic TypeScript settings
   typescript: {
     // ignoreBuildErrors removed to enforce type checking
   },
 
-  eslint: {
-    // ignoreDuringBuilds removed to enforce linting
-  },
+  // Turbopack 설정 (Next.js 16+ 호환)
+  turbopack: {},
 
   // 최고 화질 이미지 최적화 - 갤러리 특화
   images: {

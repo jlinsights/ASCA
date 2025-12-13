@@ -38,7 +38,7 @@ const pastExhibitions = [
     participatingArtists: 52,
     artworks: 156,
     visitors: 15420,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     hasCatalog: true
   },
   {
@@ -53,7 +53,7 @@ const pastExhibitions = [
     participatingArtists: 30,
     artworks: 90,
     visitors: 12800,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     hasCatalog: true
   }
 ]

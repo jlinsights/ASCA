@@ -1,17 +1,23 @@
-🔧 Curator.io 피드 스크립트 로딩 개선 및 Next.js 업데이트
+⚡ Next.js 16 마이그레이션 및 Supabase 인증 통합
 
-Curator.io 소셜 피드 표시 문제 해결 및 보안 업데이트:
+Next.js 16 호환성 확보 및 인증 시스템 통합:
 
-**Curator.io 피드 수정**
-- Script strategy를 lazyOnload → afterInteractive로 변경
-- 스크립트 로딩 방식 간소화 (직접 src 지정)
-- 피드가 더 빨리 로드되도록 개선
+**Next.js 16 업그레이드**
+- Next.js를 16.0.10으로 업데이트 (Turbopack 지원)
+- Turbopack 설정 추가 (next.config.js)
+- 더 이상 사용되지 않는 eslint 설정 제거
 
-**Next.js 보안 업데이트**
-- Next.js를 최신 버전으로 업데이트 (보안 취약점 해결)
-- React 및 React-DOM 최신 버전 동기화
-- Vercel 배포 차단 문제 해결
+**인증 시스템 통합**
+- Clerk 인증 제거 및 Supabase 인증으로 완전 전환
+- 모든 API 라우트에서 Supabase auth 사용
+- 일관된 인증 구조로 통합
+
+**Curator.io 피드 개선**
+- Script strategy를 afterInteractive로 변경
+- 피드 로딩 성능 개선
 
 **파일 수정**
-- components/footer.tsx: Curator.io 스크립트 로딩 개선
-- package.json: Next.js, React 최신 버전으로 업데이트
+- app/api/members/[id]/route.ts: Clerk → Supabase 인증 전환
+- next.config.js: Turbopack 설정 추가, eslint 설정 제거
+- components/footer.tsx: Curator.io 스크립트 최적화
+- package.json: Next.js 16.0.10, Clerk 최신 버전 업데이트

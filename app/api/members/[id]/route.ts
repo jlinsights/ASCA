@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/utils/logger';
 import { UpdateMemberRequest, ApiResponse, Member } from '@/types/membership';
@@ -10,15 +9,16 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    const supabase = await createClient();
     const { id } = await params;
 
     // 회원 정보 조회 (관계 데이터 포함)
@@ -65,22 +65,23 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    const supabase = await createClient();
     const { id } = await params;
     const body: UpdateMemberRequest = await request.json();
 
     // 회원 존재 확인 및 권한 검증
     const { data: existingMember } = await supabase
       .from('members')
-      .select('clerk_user_id, membership_level_id')
+      .select('user_id, membership_level_id')
       .eq('id', id)
       .single();
 
@@ -92,7 +93,7 @@ export async function PUT(
     }
 
     // 본인 또는 관리자만 수정 가능
-    if (existingMember.clerk_user_id !== userId) {
+    if (existingMember.user_id !== user.id) {
       // 관리자 권한 확인 로직 추가 필요
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
@@ -162,21 +163,22 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    const supabase = await createClient();
     const { id } = await params;
 
     // 회원 존재 확인
     const { data: existingMember } = await supabase
       .from('members')
-      .select('clerk_user_id')
+      .select('user_id')
       .eq('id', id)
       .single();
 
@@ -188,7 +190,7 @@ export async function DELETE(
     }
 
     // 본인 또는 관리자만 삭제 가능
-    if (existingMember.clerk_user_id !== userId) {
+    if (existingMember.user_id !== user.id) {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }

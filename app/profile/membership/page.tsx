@@ -311,7 +311,7 @@ export default function MemberProfilePage() {
             {/* 프로필 이미지 */}
             <div className="relative">
               <Avatar className="w-24 h-24 md:w-32 md:h-32 border-4 border-background shadow-lg">
-                <AvatarImage src="/placeholder.svg?height=128&width=128" />
+                <AvatarImage src="/placeholder.svg" />
                 <AvatarFallback className="text-2xl font-bold">
                   {profile.fullName.slice(0, 2)}
                 </AvatarFallback>

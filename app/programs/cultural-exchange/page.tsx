@@ -470,7 +470,7 @@ export default function CulturalExchangePage() {
                     {/* 프로그램 이미지 */}
                     <div className="relative h-48 overflow-hidden">
                       <Image
-                        src={program.images[0] || '/placeholder.svg?height=200&width=400'}
+                        src={program.images[0] || '/placeholder.svg'}
                         alt={program.title}
                         fill
                         className="object-cover"

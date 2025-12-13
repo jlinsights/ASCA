@@ -34,7 +34,7 @@ const onlineExhibitions = [
     type: '온라인전시' as ExhibitionType,
     viewers: 25000,
     artworks: 200,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     isInteractive: true,
     hasCatalog: true
   },
@@ -46,7 +46,7 @@ const onlineExhibitions = [
     type: '온라인전시' as ExhibitionType,
     viewers: 8500,
     artworks: 50,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     isInteractive: true,
     hasCatalog: false
   }
