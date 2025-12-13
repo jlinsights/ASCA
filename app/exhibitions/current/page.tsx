@@ -41,11 +41,11 @@ const currentExhibitions = [
     curator: '김서예',
     participatingArtists: 45,
     artworks: 120,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     gallery: [
-      '/placeholder.svg?height=300&width=400',
-      '/placeholder.svg?height=300&width=400',
-      '/placeholder.svg?height=300&width=400'
+      '/placeholder.svg',
+      '/placeholder.svg',
+      '/placeholder.svg'
     ],
     highlights: [
       '한글서예 특별 섹션',
@@ -68,10 +68,10 @@ const currentExhibitions = [
     curator: '이한글',
     participatingArtists: 25,
     artworks: 80,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     gallery: [
-      '/placeholder.svg?height=300&width=400',
-      '/placeholder.svg?height=300&width=400'
+      '/placeholder.svg',
+      '/placeholder.svg'
     ],
     highlights: [
       '궁체 서예의 정수',

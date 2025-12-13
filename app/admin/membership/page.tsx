@@ -214,7 +214,7 @@ const mockMembers: (MemberProfile & { user?: any })[] = [
     updatedAt: new Date('2025-01-20'),
     user: {
       email: 'kim.seoye@example.com',
-      avatar: '/placeholder.svg?height=40&width=40'
+      avatar: '/placeholder.svg'
     }
   },
   {
@@ -256,7 +256,7 @@ const mockMembers: (MemberProfile & { user?: any })[] = [
     updatedAt: new Date('2025-01-19'),
     user: {
       email: 'lee.mukhyang@example.com',
-      avatar: '/placeholder.svg?height=40&width=40'
+      avatar: '/placeholder.svg'
     }
   }
 ]

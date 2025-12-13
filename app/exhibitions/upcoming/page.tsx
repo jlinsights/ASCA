@@ -41,7 +41,7 @@ const upcomingExhibitions = [
     curator: '박청년',
     participatingArtists: 20,
     artworks: 60,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     status: 'upcoming',
     daysUntil: 15
   },
@@ -59,7 +59,7 @@ const upcomingExhibitions = [
     curator: '김국제',
     participatingArtists: 60,
     artworks: 180,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     status: 'upcoming',
     daysUntil: 45
   },
@@ -77,7 +77,7 @@ const upcomingExhibitions = [
     curator: '이전각',
     participatingArtists: 15,
     artworks: 100,
-    image: '/placeholder.svg?height=400&width=600',
+    image: '/placeholder.svg',
     status: 'upcoming',
     daysUntil: 60
   }

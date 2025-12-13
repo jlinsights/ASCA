@@ -64,7 +64,7 @@
     "server:prod": "npm run build && npm run start"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.25.4",
+    "@clerk/nextjs": "^6.36.2",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "1.2.2",
