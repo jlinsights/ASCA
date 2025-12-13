@@ -80,17 +80,8 @@ export function Footer() {
           {/* Curator.io Script */}
           <Script
             id="curator-feed-script"
-            type="text/javascript"
-            strategy="lazyOnload"
-            dangerouslySetInnerHTML={{
-              __html: `
-                /* curator-feed-default-feed-layout */
-                (function(){
-                var i,e,d=document,s="script";i=d.createElement("script");i.async=1;i.charset="UTF-8";
-                i.src="https://cdn.curator.io/published/57e06f30-eafa-4d69-bd9a-ff53587c1167.js";
-                e=d.getElementsByTagName(s)[0];e.parentNode.insertBefore(i, e);})();
-              `,
-            }}
+            src="https://cdn.curator.io/published/57e06f30-eafa-4d69-bd9a-ff53587c1167.js"
+            strategy="afterInteractive"
           />
         </div>
 
