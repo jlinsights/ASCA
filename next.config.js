@@ -91,6 +91,43 @@ const nextConfig = {
 
   // Server external packages
   serverExternalPackages: ['@clerk/nextjs'],
+
+  // 보안 헤더 설정
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on'
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: process.env.NODE_ENV === 'development'
+              ? "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data: blob:; font-src * data:; connect-src *; frame-src *;"
+              : "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.curator.io https://*.curator.io; style-src 'self' 'unsafe-inline' https://cdn.curator.io; img-src 'self' data: blob: https://cdn.curator.io https://*.curator.io; font-src 'self' data:; connect-src 'self' https://cdn.curator.io https://*.curator.io; frame-src 'self' https://cdn.curator.io https://*.curator.io; object-src 'none'; base-uri 'self'; form-action 'self';"
+          },
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = withBundleAnalyzer(nextConfig)

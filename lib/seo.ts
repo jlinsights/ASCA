@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { defaultSEO } from './seo-constants'
 
 interface SEOProps {
   title?: string
@@ -8,12 +9,7 @@ interface SEOProps {
   type?: 'website' | 'article'
 }
 
-export const defaultSEO = {
-  title: 'ASCA | 사단법인 동양서예협회',
-  description: '正法의 계승, 創新의 조화 - 동양서예협회 공식 웹사이트',
-  url: 'https://asca.co.kr', // Replace with actual domain
-  image: '/images/og-default.jpg', // Ensure this image exists
-}
+export { defaultSEO }
 
 export function constructMetadata({
   title = defaultSEO.title,
@@ -40,7 +36,7 @@ export function constructMetadata({
         },
       ],
       type,
-      siteName: 'ASCA',
+      siteName: defaultSEO.siteName,
       locale: 'ko_KR',
     },
     twitter: {
@@ -56,6 +52,60 @@ export function constructMetadata({
     robots: {
       index: true,
       follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+  }
+}
+
+// JSON-LD Generators for AEO
+export function generateOrganizationSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: '동양서예협회',
+    alternateName: 'ASCA',
+    url: defaultSEO.url,
+    logo: `${defaultSEO.url}/logo/Logo & Tagline_black BG.png`,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+82-502-5550-8700',
+      contactType: 'customer service',
+      areaServed: 'KR',
+      availableLanguage: 'Korean',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '보문로 105, 보림빌딩',
+      addressLocality: '성북구',
+      addressRegion: '서울시',
+      postalCode: '02872',
+      addressCountry: 'KR',
+    },
+    sameAs: [
+      // Add social media links here if available
+    ],
+  }
+}
+
+export function generateWebSiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: defaultSEO.siteName,
+    url: defaultSEO.url,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${defaultSEO.url}/search?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
     },
   }
 }

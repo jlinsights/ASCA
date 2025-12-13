@@ -1,6 +1,7 @@
 'use client'
 
 import Link from "next/link"
+import Script from "next/script"
 import { TranslatedContent } from "./translated-content"
 import Image from "next/image"
 import { useState } from "react"
@@ -60,6 +61,39 @@ export function Footer() {
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
+        {/* Curator.io 소셜 미디어 피드 */}
+        <div className="mb-12">
+          <div className="text-center mb-6">
+            <h4 className="text-xl font-semibold mb-2">최신 소식</h4>
+            <p className="text-sm text-[#fcfcfc]/70">
+              인스타그램과 스레드에서 공유되는 최신 인사이트를 확인하세요
+            </p>
+          </div>
+
+          {/* Curator.io Feed Container */}
+          <div id="curator-feed-default-feed-layout" className="max-w-6xl mx-auto">
+            <a href="https://curator.io" target="_blank" rel="noopener noreferrer" className="crt-logo crt-tag">
+              Powered by Curator.io
+            </a>
+          </div>
+
+          {/* Curator.io Script */}
+          <Script
+            id="curator-feed-script"
+            type="text/javascript"
+            strategy="lazyOnload"
+            dangerouslySetInnerHTML={{
+              __html: `
+                /* curator-feed-default-feed-layout */
+                (function(){
+                var i,e,d=document,s="script";i=d.createElement("script");i.async=1;i.charset="UTF-8";
+                i.src="https://cdn.curator.io/published/57e06f30-eafa-4d69-bd9a-ff53587c1167.js";
+                e=d.getElementsByTagName(s)[0];e.parentNode.insertBefore(i, e);})();
+              `,
+            }}
+          />
+        </div>
+
         {/* 회사 정보 및 메뉴 링크 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* 회사 정보 */}
