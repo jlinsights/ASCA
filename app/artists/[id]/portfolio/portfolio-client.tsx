@@ -20,8 +20,11 @@ import {
   ExternalLink
 } from 'lucide-react'
 import { fetchPublicPortfolio } from '@/lib/api/profiles'
+import { fetchCareerEntries } from '@/lib/api/career'
 import { ArtworkCard } from '@/components/artwork/artwork-card'
+import { Timeline } from '@/components/career/timeline'
 import type { PublicPortfolio } from '@/types/profile'
+import type { CareerEntry } from '@/types/career'
 
 interface PortfolioClientProps {
   artistId: string
@@ -30,18 +33,29 @@ interface PortfolioClientProps {
 export function PortfolioClient({ artistId }: PortfolioClientProps) {
   const router = useRouter()
   const [portfolio, setPortfolio] = useState<PublicPortfolio | null>(null)
+  const [careerEntries, setCareerEntries] = useState<CareerEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const loadPortfolio = async () => {
       setLoading(true)
-      const { data, error } = await fetchPublicPortfolio(artistId)
       
-      if (error) {
+      // Fetch portfolio and career data in parallel
+      const [portfolioResult, careerResult] = await Promise.all([
+        fetchPublicPortfolio(artistId),
+        fetchCareerEntries(artistId)
+      ])
+      
+      if (portfolioResult.error) {
         setError('포트폴리오를 불러오는데 실패했습니다.')
-      } else if (data) {
-        setPortfolio(data)
+      } else if (portfolioResult.data) {
+        setPortfolio(portfolioResult.data)
+      }
+
+      // Load career entries (ignore errors, just show empty if unavailable)
+      if (careerResult.data) {
+        setCareerEntries(careerResult.data)
       }
       
       setLoading(false)
@@ -266,6 +280,30 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
             </div>
           </div>
         </section>
+
+        {/* Career Timeline */}
+        {careerEntries.length > 0 && (
+          <section className="py-16 bg-rice-paper/50 dark:bg-stone-gray/10">
+            <div className="container mx-auto px-4">
+              <div className="max-w-7xl mx-auto">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl font-serif font-bold text-foreground mb-4">
+                    경력 및 이력
+                  </h2>
+                  <p className="text-muted-foreground">
+                    작가의 주요 활동과 성과를 시간순으로 확인해보세요
+                  </p>
+                </div>
+
+                <Timeline 
+                  entries={careerEntries}
+                  view={{ groupBy: 'year', sortOrder: 'desc', showImages: true }}
+                  showActions={false}
+                />
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Contact Section */}
         {config?.showContact && (profile.email || profile.phone) && (

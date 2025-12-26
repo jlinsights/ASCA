@@ -1,61 +1,112 @@
 "use client"
 
 import Link from "next/link"
-import { Settings } from "lucide-react"
-
-import { useLanguage } from "@/contexts/language-context"
-import { KakaoLoginButton } from "./kakao/kakao-login-button"
-import { log } from "@/lib/utils/logger"
+import { useEffect, useState } from "react"
+import { User } from "@supabase/supabase-js"
+import { getSupabaseClient } from "@/lib/supabase"
+import { Button } from "./ui/button"
+import { LogOut } from "lucide-react"
 
 interface HeaderMobileAuthProps {
   onCloseMenu: () => void
 }
 
 export function HeaderMobileAuth({ onCloseMenu }: HeaderMobileAuthProps) {
-  const { t } = useLanguage()
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+  const supabase = getSupabaseClient()
 
-  // 모바일 인증 기능 숨김 처리
-  return null
+  useEffect(() => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
 
-  /*
+    // Get initial user
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user)
+      setLoading(false)
+    })
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [supabase])
+
+  const handleSignOut = async () => {
+    if (!supabase) return
+    await supabase.auth.signOut()
+    onCloseMenu()
+    window.location.href = '/'
+  }
+
+  if (loading) {
+    return (
+      <div className="border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 pt-4 mt-4">
+        <div className="h-12 bg-muted animate-pulse rounded" />
+      </div>
+    )
+  }
+
   return (
     <div className="border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 pt-4 mt-4">
-      <div className="space-y-3">
-        <KakaoLoginButton 
-          variant="outline"
-          size="md"
-          className="w-full justify-start"
-          loginText="카카오 로그인"
-          onLoginSuccess={(userInfo) => {
-            log.debug('Mobile Kakao login success', { userInfo })
-          }}
-        />
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border/50" />
+      {user ? (
+        <div className="space-y-3">
+          <div className="p-3 bg-muted/50 rounded-lg">
+            <p className="text-sm font-medium text-foreground mb-1">로그인됨</p>
+            <p className="text-xs text-muted-foreground truncate">{user.email}</p>
           </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">또는</span>
-          </div>
+          <Link href="/profile/edit">
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={onCloseMenu}
+            >
+              프로필
+            </Button>
+          </Link>
+          <Link href="/profile/applications">
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={onCloseMenu}
+            >
+              내 신청
+            </Button>
+          </Link>
+          <Button
+            variant="outline"
+            className="w-full justify-start text-scholar-red hover:bg-scholar-red/10"
+            onClick={handleSignOut}
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            로그아웃
+          </Button>
         </div>
-        <Link href="/admin/dev-login">
-          <button 
-            className="w-full text-sm uppercase tracking-wider py-3 px-4 border border-current rounded hover:bg-foreground hover:text-background transition-colors text-left"
-            onClick={onCloseMenu}
-          >
-            {t("signIn")}
-          </button>
-        </Link>
-        <Link href="/admin/dev-login">
-          <button 
-            className="w-full text-sm uppercase tracking-wider py-3 px-4 bg-foreground text-background rounded hover:bg-foreground/90 transition-colors text-left"
-            onClick={onCloseMenu}
-          >
-            {t("signUp")}
-          </button>
-        </Link>
-      </div>
+      ) : (
+        <div className="space-y-3">
+          <Link href="/sign-in">
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={onCloseMenu}
+            >
+              로그인
+            </Button>
+          </Link>
+          <Link href="/sign-up">
+            <Button
+              className="w-full justify-start bg-celadon-green hover:bg-celadon-green/90"
+              onClick={onCloseMenu}
+            >
+              회원가입
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   )
-  */
 }
