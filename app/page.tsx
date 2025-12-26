@@ -1,6 +1,7 @@
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { HeroSectionEnhanced } from '@/components/sections/hero-section-enhanced'
+import { FeaturedExhibitionsSection } from '@/components/sections/featured-exhibitions-section'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -21,6 +22,9 @@ export default function Home() {
       <main className="flex-1">
         {/* Enhanced Hero Section */}
         <HeroSectionEnhanced />
+
+        {/* Featured Exhibitions Section */}
+        <FeaturedExhibitionsSection />
       </main>
 
       <Footer />
