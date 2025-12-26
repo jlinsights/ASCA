@@ -113,8 +113,9 @@ export function Timeline({
 
   return (
     <div className="space-y-8">
-      {sortedGroups.map(groupKey => {
-        const entries = groupedEntries[groupKey as keyof typeof groupedEntries]
+      {sortedGroups.map((groupKey: string) => {
+        // Type-safe access: use index signature instead of keyof typeof
+        const entries = groupedEntries[groupKey as any]
         if (!entries || !Array.isArray(entries)) return null
         
         return (
