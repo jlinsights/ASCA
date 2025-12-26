@@ -205,6 +205,49 @@ const config = {
         'aurora': 'aurora 60s linear infinite',
         'scroll': 'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
       },
+      fontSize: {
+        // Type Scale (1.25 ratio for harmonious hierarchy)
+        xs: ['0.75rem', { lineHeight: '1rem' }],      // 12px
+        sm: ['0.875rem', { lineHeight: '1.25rem' }],   // 14px
+        base: ['1rem', { lineHeight: '1.5rem' }],      // 16px
+        lg: ['1.125rem', { lineHeight: '1.75rem' }],   // 18px
+        xl: ['1.25rem', { lineHeight: '1.75rem' }],    // 20px
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],     // 24px
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],  // 36px
+        '5xl': ['3rem', { lineHeight: '1.1' }],        // 48px
+        '6xl': ['3.75rem', { lineHeight: '1.1' }],     // 60px
+        '7xl': ['4.5rem', { lineHeight: '1.1' }],      // 72px
+        '8xl': ['6rem', { lineHeight: '1.1' }],        // 96px
+        '9xl': ['8rem', { lineHeight: '1' }],          // 128px
+      },
+      fontWeight: {
+        thin: '100',
+        extralight: '200',
+        light: '300',
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+        extrabold: '800',
+        black: '900',
+      },
+      letterSpacing: {
+        tighter: '-0.05em',
+        tight: '-0.025em',
+        normal: '0em',
+        wide: '0.025em',
+        wider: '0.05em',
+        widest: '0.1em',
+      },
+      lineHeight: {
+        none: '1',
+        tight: '1.1',
+        snug: '1.25',
+        normal: '1.5',
+        relaxed: '1.75',
+        loose: '2',
+      },
       fontFamily: {
         // Primary Typography System (최적화된 next/font/google 폰트 사용)
         sans: [
@@ -226,15 +269,15 @@ const config = {
           "'Noto Serif CJK JP'",
           "serif"
         ],
-        
+
         // Cultural Typography Variants
         calligraphy: [
           "'Source Han Serif SC'",
-          "'Source Han Serif TC'", 
+          "'Source Han Serif TC'",
           "'Noto Serif CJK SC'",
-          "'Noto Serif CJK TC'", 
-          "'Noto Serif CJK KR'", 
-          "'Noto Serif CJK JP'", 
+          "'Noto Serif CJK TC'",
+          "'Noto Serif CJK KR'",
+          "'Noto Serif CJK JP'",
           "'KaiTi'",
           "'STKaiti'",
           "serif"
@@ -246,7 +289,7 @@ const config = {
           "'Noto Serif CJK SC'",
           "cursive"
         ],
-        
+
         // Language-Specific Optimizations
         korean: [
           "var(--font-noto-serif-kr)",
@@ -275,7 +318,7 @@ const config = {
           "'Georgia'",
           "serif"
         ],
-        
+
         // Specialized Typography
         mono: [
           "'JetBrains Mono'",
@@ -284,6 +327,13 @@ const config = {
           "'Consolas'",
           "monospace"
         ]
+      },
+      spacing: {
+        // 8px 기반 스페이싱 시스템 확장
+        '18': '4.5rem',   // 72px
+        '88': '22rem',    // 352px
+        '104': '26rem',   // 416px
+        '128': '32rem',   // 512px
       },
     },
   },

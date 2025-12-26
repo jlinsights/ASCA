@@ -205,12 +205,12 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
       <ThemeTransition clickPosition={clickPosition} />
       <header ref={headerRef} className="border-b border-[#222222]/10 dark:border-[#fcfcfc]/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-14 md:h-16">
+          <div className="flex items-center justify-between h-16 md:h-20 lg:h-24">
             <Link href="/" className="flex items-center">
-              <Logo 
-                width={150} 
-                height={50} 
-                className="h-10 md:h-12 lg:h-14 w-auto" 
+              <Logo
+                width={150}
+                height={50}
+                className="h-12 md:h-16 lg:h-20 w-auto"
               />
             </Link>
 
@@ -284,12 +284,12 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
               <LanguageSelector />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center justify-center w-10 h-10 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2 touch-manipulation"
+                className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2 touch-manipulation"
                 aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-navigation"
               >
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
           </div>

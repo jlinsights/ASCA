@@ -178,6 +178,15 @@
     --royal-blue: #275eea;
     --scholar-red: #af2626;
 
+    /* 시맨틱 색상 매핑 (전통 색상 → 의미적 용도) */
+    --color-primary: var(--celadon); /* 주요 브랜드 색상 - 청자 녹색 */
+    --color-secondary: var(--scholar-red); /* 보조 색상 - 선비 홍색 */
+    --color-accent: #d4af37; /* 강조 색상 - 사찰 금색 (temple-gold) */
+    --color-success: #4a7c59; /* 성공 상태 - 동방목 (east-wood) */
+    --color-warning: #fdb462; /* 경고 상태 - 가을 황금 (autumn-gold) */
+    --color-error: var(--scholar-red); /* 오류 상태 - 선비 홍색 */
+    --color-info: #1e3a8a; /* 정보 상태 - 북방수 (north-water) */
+
     /* 뉴트럴 컬러 */
     --neutral-100: #ffffff;
     --neutral-200: #f7f7fb;
