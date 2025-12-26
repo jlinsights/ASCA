@@ -4,6 +4,7 @@
  */
 
 import { eventBus, EVENTS } from './events/event-bus';
+import { log } from './utils/logger';
 import { commandBus } from './cqrs/command-bus';
 import { queryBus } from './cqrs/query-bus';
 import { agentPool, artistAgent } from './agents/artist-agent';
@@ -81,7 +82,7 @@ export class EnterpriseArchitecture {
     const startTime = Date.now();
     
     try {
-      console.log('🚀 Initializing Enterprise Architecture...');
+      log.info('🚀 Initializing Enterprise Architecture...');
       
       // 설정 적용
       if (customConfig) {
@@ -126,9 +127,9 @@ export class EnterpriseArchitecture {
           .map(([name]) => name)
       });
 
-      console.log(`✅ Enterprise Architecture initialized in ${this.status.startupTime}ms`);
-      console.log(`🏗️  Environment: ${this.status.environment.toUpperCase()}`);
-      console.log('📊 Enabled Components:', Object.entries(this.status.components)
+      log.info(`✅ Enterprise Architecture initialized in ${this.status.startupTime}ms`);
+      log.info(`🏗️  Environment: ${this.status.environment.toUpperCase()}`);
+      log.info('📊 Enabled Components:', Object.entries(this.status.components)
         .filter(([_, enabled]) => enabled)
         .map(([name]) => name)
         .join(', '));
@@ -141,7 +142,7 @@ export class EnterpriseArchitecture {
       }
 
     } catch (error) {
-      console.error('❌ Failed to initialize Enterprise Architecture:', error);
+      log.error('❌ Failed to initialize Enterprise Architecture:', error);
       
       await eventBus.emit(EVENTS.SYSTEM_ERROR, {
         error: error instanceof Error ? error.message : 'Initialization failed',
@@ -161,10 +162,10 @@ export class EnterpriseArchitecture {
       // 이미 초기화된 싱글톤이므로 상태만 확인
       if (eventBus) {
         this.status.components.eventBus = true;
-        console.log('✅ EventBus initialized');
+        log.info('✅ EventBus initialized');
       }
     } catch (error) {
-      console.error('❌ EventBus initialization failed:', error);
+      log.error('❌ EventBus initialization failed:', error);
       throw error;
     }
   }
@@ -177,16 +178,16 @@ export class EnterpriseArchitecture {
       // Command Bus 확인
       if (commandBus) {
         this.status.components.commandBus = true;
-        console.log('✅ CommandBus initialized');
+        log.info('✅ CommandBus initialized');
       }
 
       // Query Bus 확인
       if (queryBus) {
         this.status.components.queryBus = true;
-        console.log('✅ QueryBus initialized');
+        log.info('✅ QueryBus initialized');
       }
     } catch (error) {
-      console.error('❌ CQRS initialization failed:', error);
+      log.error('❌ CQRS initialization failed:', error);
       throw error;
     }
   }
@@ -201,13 +202,13 @@ export class EnterpriseArchitecture {
       
       if (poolStatus.totalAgents > 0) {
         this.status.components.agentPool = true;
-        console.log(`✅ AgentPool initialized with ${poolStatus.totalAgents} agents`);
+        log.info(`✅ AgentPool initialized with ${poolStatus.totalAgents} agents`);
       } else {
-        console.log('⚠️  AgentPool initialized but no agents registered');
+        log.info('⚠️  AgentPool initialized but no agents registered');
         this.status.components.agentPool = true;
       }
     } catch (error) {
-      console.error('❌ AgentPool initialization failed:', error);
+      log.error('❌ AgentPool initialization failed:', error);
       throw error;
     }
   }
@@ -221,9 +222,9 @@ export class EnterpriseArchitecture {
       performanceMonitor.start();
       
       this.status.components.performanceMonitor = true;
-      console.log('✅ PerformanceMonitor initialized');
+      log.info('✅ PerformanceMonitor initialized');
     } catch (error) {
-      console.error('❌ PerformanceMonitor initialization failed:', error);
+      log.error('❌ PerformanceMonitor initialization failed:', error);
       throw error;
     }
   }
@@ -241,9 +242,9 @@ export class EnterpriseArchitecture {
       });
 
       this.status.components.auditTrail = true;
-      console.log('✅ AuditTrail initialized');
+      log.info('✅ AuditTrail initialized');
     } catch (error) {
-      console.error('❌ AuditTrail initialization failed:', error);
+      log.error('❌ AuditTrail initialization failed:', error);
       throw error;
     }
   }
@@ -254,30 +255,30 @@ export class EnterpriseArchitecture {
   private async setupSystemEventListeners(): Promise<void> {
     // 시스템 오류 모니터링
     eventBus.subscribe(EVENTS.SYSTEM_ERROR, async (event) => {
-      console.error('🚨 System Error:', event.payload);
+      log.error('🚨 System Error:', event.payload);
       
       if (event.payload.fatal) {
-        console.log('💀 Fatal error detected, initiating graceful shutdown...');
+        log.info('💀 Fatal error detected, initiating graceful shutdown...');
         await this.shutdown();
       }
     });
 
     // 성능 임계값 초과 모니터링
     eventBus.subscribe(EVENTS.PERFORMANCE_THRESHOLD_EXCEEDED, async (event) => {
-      console.warn('⚡ Performance threshold exceeded:', event.payload);
+      log.warn('⚡ Performance threshold exceeded:', event.payload);
     });
 
     // 보안 위반 모니터링
     eventBus.subscribe(EVENTS.SECURITY_VIOLATION, async (event) => {
-      console.warn('🛡️  Security violation detected:', event.payload);
+      log.warn('🛡️  Security violation detected:', event.payload);
     });
 
     // 고위험 감사 이벤트 모니터링
     eventBus.subscribe(EVENTS.AUDIT_HIGH_RISK, async (event) => {
-      console.warn('🔍 High-risk audit event:', event.payload);
+      log.warn('🔍 High-risk audit event:', event.payload);
     });
 
-    console.log('✅ System event listeners configured');
+    log.info('✅ System event listeners configured');
   }
 
   /**
@@ -306,10 +307,10 @@ export class EnterpriseArchitecture {
    */
   async runHealthCheck(): Promise<void> {
     try {
-      console.log('🔍 Running system health check...');
+      log.info('🔍 Running system health check...');
       await runSystemHealthCheck();
     } catch (error) {
-      console.error('❌ Health check failed:', error);
+      log.error('❌ Health check failed:', error);
     }
   }
 
@@ -318,7 +319,7 @@ export class EnterpriseArchitecture {
    */
   async shutdown(): Promise<void> {
     try {
-      console.log('🔄 Shutting down Enterprise Architecture...');
+      log.info('🔄 Shutting down Enterprise Architecture...');
 
       // 종료 이벤트 발행
       await eventBus.emit(EVENTS.SYSTEM_SHUTDOWN, {
@@ -329,13 +330,13 @@ export class EnterpriseArchitecture {
       // Agent Pool 정리
       if (this.status.components.agentPool) {
         await agentPool.cleanup();
-        console.log('✅ AgentPool cleaned up');
+        log.info('✅ AgentPool cleaned up');
       }
 
       // Performance Monitor 중지
       if (this.status.components.performanceMonitor) {
         performanceMonitor.stop();
-        console.log('✅ PerformanceMonitor stopped');
+        log.info('✅ PerformanceMonitor stopped');
       }
 
       // 감사 로그 기록
@@ -343,17 +344,17 @@ export class EnterpriseArchitecture {
         await logSystemEvent('system.shutdown', {
           uptime: Date.now() - (Date.now() - this.status.startupTime)
         });
-        console.log('✅ AuditTrail recorded shutdown');
+        log.info('✅ AuditTrail recorded shutdown');
       }
 
       // 모든 이벤트 구독 해제
       eventBus.unsubscribeAll();
 
       this.status.isInitialized = false;
-      console.log('✅ Enterprise Architecture shutdown complete');
+      log.info('✅ Enterprise Architecture shutdown complete');
 
     } catch (error) {
-      console.error('❌ Shutdown error:', error);
+      log.error('❌ Shutdown error:', error);
     }
   }
 
@@ -362,16 +363,16 @@ export class EnterpriseArchitecture {
    */
   async developmentUtilities(): Promise<void> {
     if (!this.config.developmentMode) {
-      console.log('⚠️  Development utilities only available in development mode');
+      log.info('⚠️  Development utilities only available in development mode');
       return;
     }
 
-    console.log('\n🛠️  === DEVELOPMENT UTILITIES ===');
-    console.log('1. System Status:', this.getStatus());
-    console.log('2. Agent Pool Status:', agentPool.getStatus());
-    console.log('3. Performance Metrics:', performanceMonitor.getSystemStatus());
-    console.log('4. Recent Audit Entries:', auditTrail.query({ limit: 5 }));
-    console.log('=== END UTILITIES ===\n');
+    log.info('\n🛠️  === DEVELOPMENT UTILITIES ===');
+    log.info('1. System Status:', this.getStatus());
+    log.info('2. Agent Pool Status:', agentPool.getStatus());
+    log.info('3. Performance Metrics:', performanceMonitor.getSystemStatus());
+    log.info('4. Recent Audit Entries:', auditTrail.query({ limit: 5 }));
+    log.info('=== END UTILITIES ===\n');
   }
 }
 
@@ -381,20 +382,20 @@ export const enterpriseArchitecture = EnterpriseArchitecture.getInstance();
 // 자동 초기화 (브라우저 환경이 아닌 경우)
 if (typeof window === 'undefined') {
   // 서버 사이드에서 자동 초기화
-  enterpriseArchitecture.initialize().catch(console.error);
+  enterpriseArchitecture.initialize().catch((error) => log.error('Failed to initialize enterprise architecture:', error));
 }
 
 // 프로세스 종료 시 정리
 if (typeof process !== 'undefined') {
   process.on('SIGINT', () => {
-    console.log('\n🔄 Received SIGINT, shutting down gracefully...');
+    log.info('\n🔄 Received SIGINT, shutting down gracefully...');
     enterpriseArchitecture.shutdown().then(() => {
       process.exit(0);
     });
   });
 
   process.on('SIGTERM', () => {
-    console.log('\n🔄 Received SIGTERM, shutting down gracefully...');
+    log.info('\n🔄 Received SIGTERM, shutting down gracefully...');
     enterpriseArchitecture.shutdown().then(() => {
       process.exit(0);
     });

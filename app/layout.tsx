@@ -1,9 +1,37 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Playfair_Display, Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google'
 import './globals.css'
 import { ClientProviders } from '@/components/client-providers'
 
-const inter = Inter({ subsets: ['latin'] })
+// 주 폰트 - Inter (영문)
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+// 장식 폰트 - Playfair Display
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-playfair',
+})
+
+// 한국어 산세리프 - Noto Sans KR
+const notoSansKr = Noto_Sans_KR({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+  variable: '--font-noto-sans-kr',
+})
+
+// 한국어 세리프 - Noto Serif KR (서예 작품 제목용)
+const notoSerifKr = Noto_Serif_KR({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  display: 'swap',
+  variable: '--font-noto-serif-kr',
+})
 
 import { constructMetadata } from '@/lib/seo'
 import { JsonLd } from '@/components/json-ld'
@@ -39,7 +67,7 @@ export default function RootLayout({
         {/* Global JSON-LD for AEO */}
         <JsonLd />
       </head>
-      <body className={`${inter.className} bg-rice-paper dark:bg-ink-black transition-colors duration-300`}>
+      <body className={`${inter.variable} ${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans bg-rice-paper dark:bg-ink-black transition-colors duration-300`}>
         <ClientProviders>
           <div className="min-h-screen flex flex-col relative overflow-hidden">
             {/* Ambient Background Effects */}

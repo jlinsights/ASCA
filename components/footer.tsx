@@ -86,7 +86,7 @@ export function Footer() {
         </div>
 
         {/* 회사 정보 및 메뉴 링크 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
           {/* 회사 정보 */}
           <div className="md:col-span-1 lg:col-span-1">
             <Link href="/" className="block mb-4">
@@ -108,6 +108,7 @@ export function Footer() {
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">보림빌딩</p>
               <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">무통장 입금계좌: 신한은행 100-028-611714</p>
             </div>
+
           </div>
 
           {/* 전시 메뉴 */}
@@ -282,10 +283,10 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/news"
+                  href="/blog"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
-                  뉴스
+                  블로그
                 </Link>
               </li>
               <li>

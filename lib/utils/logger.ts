@@ -145,29 +145,25 @@ class Logger {
 // 싱글톤 인스턴스
 export const logger = new Logger()
 
-// 편의 함수들
+// 편의 함수들 - 간단한 개발용 로깅
 export const log = {
   info: (...args: unknown[]) => {
-    if (process.env.LOG_LEVEL === 'debug' || process.env.LOG_LEVEL === 'info') {
-      // eslint-disable-next-line no-console
-
+    if (process.env.NODE_ENV === 'development') {
+      console.log(...args)
     }
   },
   warn: (...args: unknown[]) => {
-    if (['debug', 'info', 'warn'].includes(process.env.LOG_LEVEL || '')) {
-      // eslint-disable-next-line no-console
-
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(...args)
     }
   },
   error: (...args: unknown[]) => {
-    // eslint-disable-next-line no-console
-
+    console.error(...args)
     // TODO: Sentry 등 외부 연동
   },
   debug: (...args: unknown[]) => {
-    if (process.env.LOG_LEVEL === 'debug') {
-      // eslint-disable-next-line no-console
-
+    if (process.env.NODE_ENV === 'development' && process.env.LOG_LEVEL === 'debug') {
+      console.log('[DEBUG]', ...args)
     }
   },
 } 

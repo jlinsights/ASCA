@@ -101,11 +101,11 @@ export default function ArtistPage() {
   const getArtworkTitle = (artwork: ArtworkWithArtist) => {
     switch (language) {
       case 'en':
-        return artwork.title_en || artwork.title
+        return artwork.titleEn || artwork.title
       case 'ja':
-        return artwork.title_ja || artwork.title
+        return artwork.title || artwork.title
       case 'zh':
-        return artwork.title_zh || artwork.title
+        return artwork.title || artwork.title
       default:
         return artwork.title
     }
@@ -290,7 +290,7 @@ export default function ArtistPage() {
                 <div className="group cursor-pointer">
                   <div className="relative aspect-square mb-4 overflow-hidden rounded-lg">
                     <Image
-                      src={artwork.thumbnail}
+                      src={artwork.thumbnail || '/placeholder.jpg'}
                       alt={getArtworkTitle(artwork)}
                       fill
                       className="object-cover transition-transform group-hover:scale-105"

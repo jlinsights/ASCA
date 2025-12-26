@@ -134,7 +134,7 @@ export function Header() {
             </a>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-8">
+            <nav className="hidden lg:flex items-center space-x-8" role="navigation" aria-label="주 메뉴">
               {menuStructure.map((menu) => (
                 <div
                   key={menu.key}
@@ -142,23 +142,29 @@ export function Header() {
                   onMouseEnter={menu.subItems.length > 0 ? () => handleMouseEnter(menu.key) : undefined}
                   onMouseLeave={menu.subItems.length > 0 ? handleMouseLeave : undefined}
                 >
-                  <Link 
+                  <Link
                     href={menu.href}
                     className="flex items-center gap-1 text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
+                    aria-haspopup={menu.subItems.length > 0 ? "menu" : undefined}
+                    aria-expanded={menu.subItems.length > 0 ? activeDropdown === menu.key : undefined}
                   >
                     {menu.title}
                     {menu.subItems.length > 0 && (
-                      <ChevronDown className="w-3 h-3 transition-transform duration-200 group-hover:rotate-180" />
+                      <ChevronDown className="w-3 h-3 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
                     )}
                   </Link>
-                  
+
                   {/* Dropdown Menu */}
                   {menu.subItems.length > 0 && (
-                    <div className={`absolute top-full left-0 w-48 glass-panel rounded-lg transition-all duration-200 z-50 ${
-                      activeDropdown === menu.key 
-                        ? 'opacity-100 visible translate-y-0' 
-                        : 'opacity-0 invisible -translate-y-2'
-                    }`}>
+                    <div
+                      role="menu"
+                      aria-label={`${menu.title} 하위 메뉴`}
+                      className={`absolute top-full left-0 w-48 glass-panel rounded-lg transition-all duration-200 z-50 ${
+                        activeDropdown === menu.key
+                          ? 'opacity-100 visible translate-y-0'
+                          : 'opacity-0 invisible -translate-y-2'
+                      }`}
+                    >
                       <div className="py-2">
                         {menu.subItems.map((subItem, index) => {
                           const isExternalLink = subItem.href.startsWith('http')
@@ -168,7 +174,8 @@ export function Header() {
                               href={subItem.href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                              role="menuitem"
+                              className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
                             >
                               {subItem.title}
                             </a>
@@ -176,7 +183,8 @@ export function Header() {
                             <Link
                               key={index}
                               href={subItem.href}
-                              className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                              role="menuitem"
+                              className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
                             >
                               {subItem.title}
                             </Link>
@@ -197,27 +205,32 @@ export function Header() {
             {/* Desktop Auth & Controls */}
             <div className="hidden lg:flex items-center space-x-3">
               <HeaderAuthSection />
+
               <ThemeToggle onToggle={handleThemeToggle} />
             </div>
 
             {/* Mobile Menu Button */}
-            <button 
+            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden flex items-center justify-center w-8 h-8 rounded text-foreground hover:bg-foreground/10 transition-colors"
-              aria-label="메뉴 열기"
+              aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
             >
-              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
             </button>
 
             {/* Mobile Controls */}
             <div className="lg:hidden flex items-center gap-2">
               <ThemeToggle onToggle={handleThemeToggle} />
-              <button 
+              <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="flex items-center justify-center w-8 h-8 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2"
-                aria-label="메뉴 열기"
+                aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-menu"
               >
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {isMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
               </button>
             </div>
           </div>
@@ -225,14 +238,14 @@ export function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg">
-            <nav className="container mx-auto px-4 py-6 space-y-2">
+          <div id="mobile-menu" className="lg:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg">
+            <nav className="container mx-auto px-4 py-6 space-y-2" role="navigation" aria-label="모바일 메뉴">
               {menuStructure.map((menu) => (
                 <div key={menu.key} className="space-y-1">
                   <div className="flex items-center justify-between">
                     <Link
                       href={menu.href}
-                      className="flex-1 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
+                      className="flex-1 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {menu.title}
@@ -240,19 +253,26 @@ export function Header() {
                     {menu.subItems.length > 0 && (
                       <button
                         onClick={() => toggleMobileDropdown(menu.key)}
-                        className="p-2 hover:bg-foreground/5 rounded transition-colors"
-                        aria-label={`${menu.title} 하위 메뉴 토글`}
+                        className="p-2 hover:bg-foreground/5 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green"
+                        aria-label={`${menu.title} 하위 메뉴 ${mobileDropdowns[menu.key] ? '닫기' : '열기'}`}
+                        aria-expanded={mobileDropdowns[menu.key]}
+                        aria-controls={`mobile-submenu-${menu.key}`}
                       >
                         <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${
                           mobileDropdowns[menu.key] ? 'rotate-180' : ''
-                        }`} />
+                        }`} aria-hidden="true" />
                       </button>
                     )}
                   </div>
                   {menu.subItems.length > 0 && (
-                    <div className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
-                      mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}>
+                    <div
+                      id={`mobile-submenu-${menu.key}`}
+                      role="menu"
+                      aria-label={`${menu.title} 하위 메뉴`}
+                      className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
+                        mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
                       {menu.subItems.map((subItem, index) => {
                         const isExternalLink = subItem.href.startsWith('http')
                         return isExternalLink ? (
@@ -261,7 +281,8 @@ export function Header() {
                             href={subItem.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors"
+                            role="menuitem"
+                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {subItem.title}
@@ -270,7 +291,8 @@ export function Header() {
                           <Link
                             key={index}
                             href={subItem.href}
-                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors"
+                            role="menuitem"
+                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {subItem.title}
@@ -284,11 +306,11 @@ export function Header() {
               
               <div className="pt-2 border-t border-border/50">
                 <Link
-                  href="/search"
+                  href="/blog"
                   className="block text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  검색
+                  블로그
                 </Link>
               </div>
               

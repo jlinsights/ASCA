@@ -1,7 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR:wght@200..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Han+Serif+TC:wght@200;300;400;500;600;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Han+Serif+SC:wght@200;300;400;500;600;700;900&display=swap');
+/* 폰트는 next/font/google을 통해 최적화되어 로드됩니다 (app/layout.tsx) */
 
 @tailwind base;
 @tailwind components;
@@ -16,19 +13,19 @@
 
   /* Gallery Cards */
   .gallery-card {
-    @apply bg-rice-paper border border-celadon-green/20 rounded-lg transition-all duration-300 relative overflow-hidden;
+    @apply bg-rice-paper dark:bg-card border border-celadon-green/20 dark:border-border rounded-lg transition-all duration-300 relative overflow-hidden;
   }
 
   .gallery-card-elevated {
-    @apply shadow-lg border-celadon-green/10;
+    @apply shadow-lg border-celadon-green/10 dark:border-border/50;
   }
 
   .gallery-card-glass {
-    @apply bg-rice-paper/80 backdrop-blur-md border-celadon-green/10 shadow-lg;
+    @apply bg-rice-paper/80 dark:bg-card/80 backdrop-blur-md border-celadon-green/10 dark:border-border/30 shadow-lg;
   }
 
   .gallery-card-bordered {
-    @apply border-2 border-celadon-green/30;
+    @apply border-2 border-celadon-green/30 dark:border-border;
   }
 
   /* Gallery Buttons */
@@ -57,19 +54,19 @@
   }
 
   .gallery-btn-default {
-    @apply bg-celadon-green text-ink-black shadow-sm hover:bg-celadon-green/90 hover:shadow-md hover:-translate-y-0.5;
+    @apply bg-celadon-green dark:bg-primary text-ink-black dark:text-primary-foreground shadow-sm hover:bg-celadon-green/90 dark:hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5;
   }
 
   .gallery-btn-outline {
-    @apply bg-transparent text-celadon-green border border-celadon-green/30 hover:bg-celadon-green hover:text-ink-black hover:border-celadon-green;
+    @apply bg-transparent text-celadon-green dark:text-primary border border-celadon-green/30 dark:border-border hover:bg-celadon-green dark:hover:bg-primary hover:text-ink-black dark:hover:text-primary-foreground hover:border-celadon-green dark:hover:border-primary;
   }
 
   .gallery-btn-ghost {
-    @apply bg-transparent text-ink-black hover:bg-silk-cream/50;
+    @apply bg-transparent text-ink-black dark:text-foreground hover:bg-silk-cream/50 dark:hover:bg-muted/50;
   }
 
   .gallery-btn-secondary {
-    @apply bg-silk-cream text-ink-black border border-celadon-green/20 hover:bg-silk-cream/80 hover:border-celadon-green/30;
+    @apply bg-silk-cream dark:bg-secondary text-ink-black dark:text-secondary-foreground border border-celadon-green/20 dark:border-border hover:bg-silk-cream/80 dark:hover:bg-secondary/80 hover:border-celadon-green/30 dark:hover:border-border/50;
   }
 
   /* Gallery Container Responsive */

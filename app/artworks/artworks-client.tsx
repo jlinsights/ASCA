@@ -71,11 +71,11 @@ export function ArtworksClient() {
       // 검색어 필터
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase()
-        matchesSearch = 
+        matchesSearch =
           artwork.title.toLowerCase().includes(searchLower) ||
           artwork.artist.name.toLowerCase().includes(searchLower) ||
           artwork.description.toLowerCase().includes(searchLower) ||
-          artwork.materials.some(material => material.toLowerCase().includes(searchLower))
+          (artwork.materials?.some((material: string) => material.toLowerCase().includes(searchLower)) ?? false)
       }
       
       // 카테고리 필터
@@ -101,9 +101,9 @@ export function ArtworksClient() {
       case 'sortFeatured':
         return filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
       case 'sortNewest':
-        return filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       case 'sortOldest':
-        return filtered.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+        return filtered.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
       case 'sortPriceHigh':
         return filtered.sort((a, b) => Number(b.price || 0) - Number(a.price || 0))
       case 'sortPriceLow':
@@ -315,7 +315,7 @@ export function ArtworksClient() {
                     <div className="flex items-center justify-between">
                       <div className="text-xs text-muted-foreground">
                         <p>{artwork.year}</p>
-                        <p>{artwork.materials.join(', ')}</p>
+                        <p>{artwork.materials?.join(', ') || ''}</p>
                       </div>
 
                       <div className="flex items-center gap-1">

@@ -1,4 +1,5 @@
 "use client"
+import { log } from '@/lib/utils/logger';
 
 import type React from "react"
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react"
@@ -439,7 +440,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         document.documentElement.dir = metadata.dir
       }
     } catch (error) {
-      console.error('Failed to change language:', error)
+      log.error('Failed to change language:', error)
     } finally {
       setIsLoading(false)
     }
@@ -466,7 +467,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       const translations = await translationLoader.load(language, namespace)
       return translations[key] || t(key)
     } catch (error) {
-      console.warn('Async translation failed:', error)
+      log.warn('Async translation failed:', error)
       return t(key)
     }
   }, [language, t])
@@ -493,7 +494,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // 언어 변경 시 번역 데이터 프리로드
   useEffect(() => {
     if (isClient) {
-      translationLoader.preload(language).catch(console.warn)
+      translationLoader.preload(language).catch((error) => log.warn('Translation preload failed:', error))
     }
   }, [language, isClient])
 

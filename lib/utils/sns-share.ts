@@ -2,6 +2,8 @@
  * SNS 공유 유틸리티 함수
  */
 
+import { log } from './logger';
+
 export interface ShareData {
   title: string
   description: string
@@ -39,7 +41,7 @@ export const shareToKakao = (data: ShareData) => {
         ],
       })
     } catch (error) {
-      console.error('카카오톡 공유 실패:', error)
+      log.error('카카오톡 공유 실패:', error)
       // 폴백: 카카오톡 웹 공유 URL
       const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(data.url)}`
       window.open(kakaoUrl, '_blank')
@@ -80,7 +82,7 @@ export const shareToInstagram = (data: ShareData) => {
       prompt('다음 텍스트를 복사하여 인스타그램에 사용하세요:', shareText)
     })
   } catch (error) {
-    console.error('인스타그램 공유 준비 실패:', error)
+    log.error('인스타그램 공유 준비 실패:', error)
     alert('공유 준비 중 오류가 발생했습니다.')
   }
 }
@@ -126,7 +128,7 @@ export const shareNative = async (data: ShareData) => {
       })
       return true
     } catch (error) {
-      console.error('네이티브 공유 실패:', error)
+      log.error('네이티브 공유 실패:', error)
       return false
     }
   }
@@ -151,7 +153,7 @@ const downloadImage = async (imageUrl: string, filename: string) => {
     
     window.URL.revokeObjectURL(url)
   } catch (error) {
-    console.error('이미지 다운로드 실패:', error)
+    log.error('이미지 다운로드 실패:', error)
   }
 }
 
@@ -172,7 +174,7 @@ const fallbackCopyTextToClipboard = (text: string) => {
   try {
     document.execCommand('copy')
   } catch (err) {
-    console.error('클립보드 복사 실패:', err)
+    log.error('클립보드 복사 실패:', err)
   }
   
   document.body.removeChild(textArea)

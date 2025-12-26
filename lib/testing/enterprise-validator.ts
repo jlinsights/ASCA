@@ -3,6 +3,7 @@
  * CQRS + Agent + 보안 시스템 통합 테스트
  */
 
+import { log } from '@/lib/utils/logger';
 import { commandBus } from '../cqrs/command-bus';
 import { queryBus } from '../cqrs/query-bus';
 import { eventBus } from '../events/event-bus';
@@ -57,7 +58,7 @@ export class EnterpriseValidator {
     const startTime = performance.now();
     const components: ValidationResult[] = [];
 
-    console.log('🔍 Starting Enterprise Architecture Validation...');
+    log.info('🔍 Starting Enterprise Architecture Validation...');
 
     // 1. Event Bus 검증
     components.push(await this.validateEventBus());
@@ -94,9 +95,9 @@ export class EnterpriseValidator {
 
     const recommendations = this.generateRecommendations(components);
 
-    console.log(`✅ Validation completed in ${totalExecutionTime.toFixed(2)}ms`);
-    console.log(`📊 Performance Score: ${performanceScore}/100`);
-    console.log(`🚨 Status: ${overall.toUpperCase()}`);
+    log.info(`✅ Validation completed in ${totalExecutionTime.toFixed(2)}ms`);
+    log.info(`📊 Performance Score: ${performanceScore}/100`);
+    log.info(`🚨 Status: ${overall.toUpperCase()}`);
 
     return {
       overall,
@@ -528,30 +529,30 @@ export const enterpriseValidator = EnterpriseValidator.getInstance();
 export async function runSystemHealthCheck(): Promise<void> {
   const report = await enterpriseValidator.validateSystem();
   
-  console.log('\n📊 === ENTERPRISE ARCHITECTURE HEALTH REPORT ===');
-  console.log(`Overall Status: ${report.overall.toUpperCase()}`);
-  console.log(`Performance Score: ${report.systemMetrics.performanceScore}/100`);
-  console.log(`Total Execution Time: ${report.systemMetrics.totalExecutionTime.toFixed(2)}ms`);
-  console.log(`Errors: ${report.systemMetrics.errorCount}, Warnings: ${report.systemMetrics.warningCount}`);
+  log.info('\n📊 === ENTERPRISE ARCHITECTURE HEALTH REPORT ===');
+  log.info(`Overall Status: ${report.overall.toUpperCase()}`);
+  log.info(`Performance Score: ${report.systemMetrics.performanceScore}/100`);
+  log.info(`Total Execution Time: ${report.systemMetrics.totalExecutionTime.toFixed(2)}ms`);
+  log.info(`Errors: ${report.systemMetrics.errorCount}, Warnings: ${report.systemMetrics.warningCount}`);
   
-  console.log('\n🔍 Component Status:');
+  log.info('\n🔍 Component Status:');
   report.components.forEach(component => {
     const status = component.passed ? '✅' : '❌';
-    console.log(`${status} ${component.component} (${component.metrics.executionTime.toFixed(2)}ms)`);
+    log.info(`${status} ${component.component} (${component.metrics.executionTime.toFixed(2)}ms)`);
     
     if (component.errors.length > 0) {
-      component.errors.forEach(error => console.log(`   ❌ ${error}`));
+      component.errors.forEach(error => log.info(`   ❌ ${error}`));
     }
     
     if (component.warnings.length > 0) {
-      component.warnings.forEach(warning => console.log(`   ⚠️  ${warning}`));
+      component.warnings.forEach(warning => log.info(`   ⚠️  ${warning}`));
     }
   });
 
   if (report.recommendations.length > 0) {
-    console.log('\n💡 Recommendations:');
-    report.recommendations.forEach(rec => console.log(`   ${rec}`));
+    log.info('\n💡 Recommendations:');
+    report.recommendations.forEach(rec => log.info(`   ${rec}`));
   }
   
-  console.log('\n=== END REPORT ===\n');
+  log.info('\n=== END REPORT ===\n');
 }

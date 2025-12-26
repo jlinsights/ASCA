@@ -3,6 +3,8 @@
  * 읽기 작업 최적화 및 캐싱 지원
  */
 
+import { log } from '@/lib/utils/logger';
+
 export interface Query {
   type: string;
   params: any;
@@ -224,7 +226,7 @@ export class PerformanceMiddleware implements QueryMiddleware {
     const executionTime = result.metadata?.executionTime || 0;
     
     if (executionTime > this.slowQueryThreshold) {
-      console.warn(`[SLOW QUERY] ${query.type} took ${executionTime}ms`, {
+      log.warn(`[SLOW QUERY] ${query.type} took ${executionTime}ms`, {
         params: query.params,
         fromCache: result.metadata?.fromCache
       });

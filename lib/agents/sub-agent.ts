@@ -3,6 +3,7 @@
  * 독립적이고 재사용 가능한 작업 단위
  */
 
+import { log } from '@/lib/utils/logger';
 import { eventBus, Event } from '../events/event-bus';
 
 export interface AgentTask<TInput = any, TOutput = any> {
@@ -233,7 +234,7 @@ export class AgentPool {
         }
 
       } catch (error) {
-        console.error(`Agent pool error for task ${task.id}:`, error);
+        log.error(`Agent pool error for task ${task.id}:`, error);
       }
     }
 

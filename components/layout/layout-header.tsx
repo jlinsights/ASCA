@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Menu, X, ChevronDown } from "lucide-react"
 
 import { HeaderAuthSection } from "../header-auth-section"
@@ -23,8 +24,10 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
   const [mobileDropdowns, setMobileDropdowns] = useState<Record<string, boolean>>({})
   const headerRef = useRef<HTMLElement>(null)
   const { t } = useLanguage()
+  const pathname = usePathname()
 
-  const menuStructure = [
+  // Memoize menu structure to prevent recreation on every render
+  const menuStructure = useMemo(() => [
     {
       title: t("exhibition"),
       key: "exhibition",
@@ -109,7 +112,7 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
         { title: t("shop"), href: "/shop" }
       ]
     }
-  ]
+  ], [t]) // Dependency: re-create when translations change
 
   const handleThemeToggle = (position: { x: number; y: number }) => {
     setClickPosition(position)
@@ -271,6 +274,7 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
 
             <div className="hidden lg:flex items-center space-x-3">
               <HeaderAuthSection />
+
               <ThemeToggle onToggle={handleThemeToggle} />
               <LanguageSelector />
             </div>
@@ -278,10 +282,12 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
             <div className="lg:hidden flex items-center gap-2">
               <ThemeToggle onToggle={handleThemeToggle} />
               <LanguageSelector />
-              <button 
+              <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center justify-center w-8 h-8 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2"
-                aria-label="메뉴 열기"
+                className="flex items-center justify-center w-10 h-10 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2 touch-manipulation"
+                aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-navigation"
               >
                 {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
@@ -291,42 +297,57 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
 
         {isMenuOpen && (
           <div className="lg:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg">
-            <nav className="container mx-auto px-4 py-6 space-y-2">
-              {menuStructure.map((menu) => (
-                <div key={menu.key} className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href={menu.href}
-                      className="flex-1 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {menu.title}
-                    </Link>
-                    {menu.subItems.length > 0 && (
-                      <button
-                        onClick={() => toggleMobileDropdown(menu.key)}
-                        className="p-2 hover:bg-foreground/5 rounded transition-colors"
-                        aria-label={`${menu.title} 하위 메뉴 토글`}
+            <nav id="mobile-navigation" className="container mx-auto px-4 py-6 space-y-2" aria-label="모바일 메인 메뉴">
+              {menuStructure.map((menu) => {
+                const isActive = pathname === menu.href || pathname?.startsWith(menu.href + '/')
+                return (
+                  <div key={menu.key} className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <Link
+                        href={menu.href}
+                        className={`flex-1 text-sm font-medium py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
+                          isActive ? 'bg-foreground/5 text-foreground' : ''
+                        }`}
+                        onClick={() => setIsMenuOpen(false)}
+                        aria-current={isActive ? 'page' : undefined}
                       >
-                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${
-                          mobileDropdowns[menu.key] ? 'rotate-180' : ''
-                        }`} />
-                      </button>
-                    )}
-                  </div>
+                        {menu.title}
+                      </Link>
+                      {menu.subItems.length > 0 && (
+                        <button
+                          onClick={() => toggleMobileDropdown(menu.key)}
+                          className="p-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                          aria-label={`${menu.title} 하위 메뉴 ${mobileDropdowns[menu.key] ? '닫기' : '열기'}`}
+                          aria-expanded={mobileDropdowns[menu.key]}
+                          aria-controls={`mobile-submenu-${menu.key}`}
+                        >
+                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${
+                            mobileDropdowns[menu.key] ? 'rotate-180' : ''
+                          }`} />
+                        </button>
+                      )}
+                    </div>
                   {menu.subItems.length > 0 && (
-                    <div className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
-                      mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}>
+                    <div
+                      id={`mobile-submenu-${menu.key}`}
+                      className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
+                        mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                      role="region"
+                      aria-label={`${menu.title} 하위 메뉴`}
+                    >
                       {menu.subItems.map((subItem, index) => {
                         const isExternalLink = subItem.href.startsWith('http')
+                        const isSubActive = pathname === subItem.href
                         return isExternalLink ? (
                           <a
                             key={index}
                             href={subItem.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors"
+                            className={`block text-sm py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
+                              isSubActive ? 'bg-foreground/5 text-foreground' : 'text-muted-foreground hover:text-foreground'
+                            }`}
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {subItem.title}
@@ -335,8 +356,11 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
                           <Link
                             key={index}
                             href={subItem.href}
-                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors"
+                            className={`block text-sm py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
+                              isSubActive ? 'bg-foreground/5 text-foreground' : 'text-muted-foreground hover:text-foreground'
+                            }`}
                             onClick={() => setIsMenuOpen(false)}
+                            aria-current={isSubActive ? 'page' : undefined}
                           >
                             {subItem.title}
                           </Link>
@@ -345,15 +369,19 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
                     </div>
                   )}
                 </div>
-              ))}
+              )
+            })}
               
               <div className="pt-2 border-t border-border/50">
                 <Link
                   href="/search"
-                  className="block text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors"
+                  className={`block text-sm font-medium py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
+                    pathname === '/search' ? 'bg-foreground/5 text-foreground' : ''
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
+                  aria-current={pathname === '/search' ? 'page' : undefined}
                 >
-                  검색
+                  {t("search")}
                 </Link>
               </div>
               

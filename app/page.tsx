@@ -1,393 +1,97 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Suspense } from 'react'
-import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight, Calendar, Users, Award, BookOpen, MapPin, Phone, Mail, Camera, Palette, Sparkles } from 'lucide-react'
-import galleryData from '@/lib/data/gallery-data.json'
-import { GalleryData } from '@/types/gallery'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import '@/styles/gallery.css'
+import { ArrowRight, Image as ImageIcon, BookOpen } from 'lucide-react'
+import { Metadata } from 'next'
 
-// 갤러리 컴포넌트 동적 임포트
-const GalleryClient = dynamic(() => import('@/components/gallery/GalleryClient'), {
-  loading: () => <GalleryLoadingSkeleton />
-})
-
-// 로딩 스켈레톤 컴포넌트
-function GalleryLoadingSkeleton() {
-  return (
-    <div className="space-y-8">
-      <div className="masonry-grid">
-        {Array.from({ length: 12 }, (_, i) => (
-          <div key={i} className="aspect-square bg-gray-200 rounded-2xl animate-pulse loading-shimmer" />
-        ))}
-      </div>
-    </div>
-  )
+export const metadata: Metadata = {
+  title: '사단법인 동양서예협회',
+  description: '전통 서예의 정법을 계승하고 현대적 창신을 통해 동양서예의 새로운 미래를 열어갑니다.',
+  openGraph: {
+    title: '사단법인 동양서예협회',
+    description: '동양서예협회 공식 홈페이지. 갤러리와 블로그를 통해 협회의 다양한 활동을 만나보세요.',
+    images: ['/logo/Logo & Tagline_white BG.png'],
+  },
 }
 
-// 갤러리 통계 컴포넌트
-function GalleryStats({ data }: { data: GalleryData }) {
-  const stats = [
-    {
-      icon: Camera,
-      value: data.metadata.totalImages,
-      label: '총 이미지',
-      description: '작품부터 행사까지'
-    },
-    {
-      icon: Palette,
-      value: data.categories.length,
-      label: '카테고리',
-      description: '다양한 분류'
-    },
-    {
-      icon: Sparkles,
-      value: '95%',
-      label: '품질',
-      description: '최고 화질'
-    }
-  ]
-
+export default function Home() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      {stats.map((stat, index) => {
-        const IconComponent = stat.icon
-        return (
-          <div
-            key={index}
-            className="bg-card border border-border rounded-lg p-6 text-center hover-scale smooth-transition"
-          >
-            <div className="flex justify-center mb-4">
-              <IconComponent className="w-8 h-8 text-muted-foreground" />
-            </div>
-            
-            <div className="text-3xl font-bold text-foreground mb-2">
-              {stat.value}
-            </div>
-            
-            <div className="text-sm font-medium text-foreground mb-1">
-              {stat.label}
-            </div>
-            
-            <div className="text-xs text-muted-foreground">
-              {stat.description}
-            </div>
-          </div>
-        )}
-      )}
-    </div>
-  )
-}
-
-export default function Page() {
-  const data = galleryData as unknown as GalleryData
-  
-  return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      {/* Hero Section - 미니멀 모던 디자인 */}
-      <section className="bg-background border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24">
-          <div className="text-center space-y-8">
-            {/* 로고 */}
-            <div className="flex justify-center mb-8">
+      
+      <main className="flex-1 flex flex-col justify-center relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 pointer-events-none z-0 opacity-5">
+           <div className="absolute top-0 left-0 w-full h-full bg-[url('/patterns/korean-pattern.png')] bg-repeat opacity-20" /> 
+           {/* Fallback pattern if image is missing, or CSS gradient */}
+           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-background via-stone-50 to-stone-100 dark:from-background dark:via-stone-900 dark:to-stone-950" />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center">
+          {/* Logo Section */}
+          <div className="mb-12 animate-fade-in-up">
+            <div className="relative w-64 h-24 md:w-80 md:h-32 mx-auto mb-8">
               <Image
                 src="/logo/Logo & Tagline_white BG.png"
-                alt="동양서예협회 로고"
-                width={400}
-                height={160}
-                className="h-24 md:h-32 w-auto object-contain"
+                alt="동양서예협회"
+                fill
+                className="object-contain dark:invert"
                 priority
               />
             </div>
-            
-            {/* 메인 타이틀 */}
-            <div className="space-y-4">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
-                동양서예 갤러리
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                正法의 계승, 創新의 조화
-              </p>
-              <p className="text-sm md:text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                전통 서예의 정법을 계승하고 현대적 창신을 통해 동양서예의 새로운 미래를 열어갑니다
-              </p>
-            </div>
-            
-            {/* 갤러리 통계 - 미니멀 스타일 */}
-            <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground py-6">
-              <div className="flex items-center gap-2">
-                <Camera className="w-4 h-4" />
-                <span className="font-medium">{data.metadata.totalImages}</span>
-                <span>활동사진</span>
-              </div>
-              <div className="w-px h-4 bg-border"></div>
-              <div className="flex items-center gap-2">
-                <Palette className="w-4 h-4" />
-                <span className="font-medium">{data.categories.length}</span>
-                <span>카테고리</span>
-              </div>
-              <div className="w-px h-4 bg-border"></div>
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4" />
-                <span className="font-medium">HD</span>
-                <span>품질</span>
-              </div>
-            </div>
-            
-            {/* 액션 버튼 */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-              <Button asChild size="default" className="gap-2">
-                <Link href="#gallery">
-                  <Camera className="w-4 h-4" />
-                  갤러리 보기
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="default" className="gap-2">
-                <Link href="/events">
-                  <BookOpen className="w-4 h-4" />
-                  행사 안내
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 갤러리 섹션 */}
-      <section id="gallery" className="py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          {/* 갤러리 통계 카드 */}
-          <div className="relative z-10 mb-16">
-            <GalleryStats data={data} />
-          </div>
-
-          {/* 갤러리 그리드 */}
-          <Suspense fallback={<GalleryLoadingSkeleton />}>
-            <GalleryClient data={data} />
-          </Suspense>
-        </div>
-      </section>
-
-      {/* 추가 서비스 섹션 */}
-      <section className="py-20 bg-muted/30 border-t border-border">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-              추가 서비스
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              동양서예협회에서 제공하는 다양한 서비스를 확인해보세요
+            <h1 className="text-4xl md:text-5xl lg:text-3xl font-light text-foreground mb-4 tracking-wide font-serif">
+              正法의 계승, 創新의 조화
+            </h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
+              동양서예협회에 오신 것을 환영합니다.<br className="hidden md:block"/>
+              우리는 전통과 현대가 어우러지는 서예 문화를 만들어갑니다.
             </p>
+
+
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="group hover-scale smooth-transition border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Calendar className="w-8 h-8 text-muted-foreground" />
-                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+
+          {/* Navigation Cards */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-12">
+            {/* Gallery Card */}
+            <Link href="/gallery" className="group">
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-card/50 hover:bg-card/80 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full p-8 md:p-12 flex flex-col items-center text-center">
+                <div className="p-4 rounded-full bg-primary/10 mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <ImageIcon className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-foreground">전시회</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  현재, 예정, 과거 전시회 정보를 확인하세요
+                <h2 className="text-2xl font-bold mb-3 text-foreground">갤러리</h2>
+                <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">Gallery</h3>
+                <p className="text-muted-foreground mb-8 line-clamp-2">
+                  협회의 다양한 활동과 작품들을 고화질로 감상하세요.
                 </p>
-                <Button asChild variant="ghost" className="p-0 h-auto text-primary hover:text-primary">
-                  <Link href="/exhibitions">
-                    자세히 보기
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-            
-            <Card className="group hover-scale smooth-transition border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Users className="w-8 h-8 text-muted-foreground" />
-                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                <div className="mt-auto flex items-center text-primary font-medium group-hover:gap-2 transition-all">
+                  입장하기 <ArrowRight className="w-4 h-4 ml-1" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-foreground">작가 소개</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  협회 소속 작가들의 프로필을 확인하세요
-                </p>
-                <Button asChild variant="ghost" className="p-0 h-auto text-primary hover:text-primary">
-                  <Link href="/artists">
-                    자세히 보기
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-            
-            <Card className="group hover-scale smooth-transition border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Award className="w-8 h-8 text-muted-foreground" />
-                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Blog (News) Card */}
+            <Link href="/blog" className="group">
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-card/50 hover:bg-card/80 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full p-8 md:p-12 flex flex-col items-center text-center">
+                 <div className="p-4 rounded-full bg-primary/10 mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-foreground">공모전</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  서예 공모전 정보와 참가 방법을 확인하세요
+                <h2 className="text-2xl font-bold mb-3 text-foreground">블로그</h2>
+                <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">Blog & News</h3>
+                <p className="text-muted-foreground mb-8 line-clamp-2">
+                  동양서예협회의 최신 소식과 이야기를 만나보세요.
                 </p>
-                <Button asChild variant="ghost" className="p-0 h-auto text-primary hover:text-primary">
-                  <Link href="/contests">
-                    자세히 보기
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-            
-            <Card className="group hover-scale smooth-transition border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <BookOpen className="w-8 h-8 text-muted-foreground" />
-                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                <div className="mt-auto flex items-center text-primary font-medium group-hover:gap-2 transition-all">
+                  구독하기 <ArrowRight className="w-4 h-4 ml-1" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-foreground">뉴스</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  동양서예협회의 최신 소식을 확인하세요
-                </p>
-                <Button asChild variant="ghost" className="p-0 h-auto text-primary hover:text-primary">
-                  <Link href="/news">
-                    자세히 보기
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+              </div>
+            </Link>
           </div>
         </div>
-      </section>
-
-      {/* Contact Section */}
-      <section className="py-20 bg-background border-t border-border">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-              문의 및 연락처
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              동양서예협회에 대한 문의사항이 있으시면 언제든 연락주세요
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  주소
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  〒02872 서울시 성북구 보문로 105<br />
-                  보림빌딩
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Phone className="w-5 h-5" />
-                  연락처
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  ☎ 0502-5550-8700<br />
-                  FAX: 0504-256-6600
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Mail className="w-5 h-5" />
-                  이메일
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  info@orientalcalligraphy.org
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>고유번호</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  209-82-11380
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* SEO 및 메타데이터 */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ImageGallery",
-            "name": "동양서예협회 갤러리",
-            "description": "동양서예협회의 전시회, 심사위원회, 휘호대회, 시상식 등 다양한 협회 활동을 담은 종합 갤러리. 전통 서예의 정법을 계승하고 현대적 창신을 통해 동양서예의 새로운 미래를 열어가는 협회의 발자취를 기록합니다.",
-            "url": typeof window !== 'undefined' ? window.location.origin : '',
-            "image": data.items.slice(0, 8).map(item => ({
-              "@type": "ImageObject",
-              "name": item.title,
-              "description": item.description,
-              "url": typeof window !== 'undefined' ? `${window.location.origin}${item.src}` : item.src,
-              "thumbnailUrl": typeof window !== 'undefined' ? `${window.location.origin}${item.thumbnail}` : item.thumbnail
-            })),
-            "numberOfItems": data.metadata.totalImages,
-            "dateModified": data.metadata.lastUpdated,
-            "publisher": {
-              "@type": "Organization",
-              "name": "동양서예협회",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "/logo/Logo & Tagline_white BG.png"
-              }
-            }
-          })
-        }}
-      />
+      </main>
       
       <Footer />
     </div>
   )
 }
-
-// 메타데이터 내보내기 (갤러리 전문 사이트)
-export const metadata = {
-  title: '동양서예 갤러리 | 사단법인 동양서예협회',
-  description: `동양서예협회의 종합 활동 갤러리. ${galleryData.metadata.totalImages}장의 전시회, 심사위원회, 휘호대회, 시상식 등 다양한 협회 활동 사진을 감상하세요. 전통 서예의 정법 계승과 현대적 창신의 조화.`,
-  keywords: ['동양서예', '서예갤러리', '협회활동', '전시회', '휘호대회', '심사위원회', '시상식', '전통서예', '서예협회', '서예전시', '한국서예', '동양문화'],
-  openGraph: {
-    title: '동양서예 갤러리 | 사단법인 동양서예협회',
-    description: `${galleryData.metadata.totalImages}개의 서예 작품, 전시회, 심사위원회, 휘호대회, 시상식 등 종합 활동 기록. 전통과 현대가 조화를 이루는 동양서예의 새로운 패러다임.`,
-    type: 'website',
-    images: galleryData.items.slice(0, 6).map(item => ({
-      url: item.thumbnail,
-      alt: item.title,
-      width: 800,
-      height: 600
-    }))
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: '동양서예 갤러리 | 동양서예협회',
-    description: `${galleryData.metadata.totalImages}개의 서예 작품 및 협회 활동 종합 갤러리`,
-    images: [galleryData.items[0]?.thumbnail]
-  }
-} 
