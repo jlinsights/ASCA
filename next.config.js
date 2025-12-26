@@ -83,6 +83,8 @@ const nextConfig = {
       '@radix-ui/react-tooltip',
       'recharts',
       'date-fns',
+      'react-virtuoso',
+      'framer-motion',
     ],
     optimizeCss: false, // Temporarily disable for deployment
     gzipSize: true,

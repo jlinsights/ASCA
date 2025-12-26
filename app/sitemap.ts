@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/artworks',
     '/artists',
     '/events',
-    '/news',
+    '/blog',
     '/gallery',
     '/search',
     '/terms-of-service',

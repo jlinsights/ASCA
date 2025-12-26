@@ -3,6 +3,8 @@
  * 마이크로서비스 간 통신을 위한 중앙 이벤트 버스
  */
 
+import { log } from '@/lib/utils/logger';
+
 export interface EventPayload {
   [key: string]: any;
 }
@@ -81,7 +83,7 @@ export class EventBus {
           this.unsubscribe(type, subscription.handler);
         }
       } catch (error) {
-        console.error(`Event handler error for ${type}:`, error);
+        log.error(`Event handler error for ${type}:`, error);
       }
     });
 

@@ -3,6 +3,7 @@
  * Agent OS 패턴을 활용한 실시간 성능 추적
  */
 
+import { log } from '@/lib/utils/logger';
 import { eventBus, EVENTS } from '../events/event-bus';
 
 export interface PerformanceMetric {
@@ -55,7 +56,7 @@ export class PerformanceMonitor {
     this.setupEventListeners();
     this.startSystemMetrics();
     
-    console.log('Performance monitoring started');
+    log.info('Performance monitoring started');
   }
 
   /**
@@ -63,7 +64,7 @@ export class PerformanceMonitor {
    */
   stop(): void {
     this.isMonitoring = false;
-    console.log('Performance monitoring stopped');
+    log.info('Performance monitoring stopped');
   }
 
   /**
@@ -367,7 +368,7 @@ export class PerformanceMonitor {
     // 알림 이벤트 발행
     eventBus.emit('performance.alert.created', { alert });
 
-    console.warn(alert.message);
+    log.warn(alert.message);
   }
 }
 

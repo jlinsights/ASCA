@@ -206,10 +206,10 @@ const config = {
         'scroll': 'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
       },
       fontFamily: {
-        // Primary Typography System
+        // Primary Typography System (최적화된 next/font/google 폰트 사용)
         sans: [
-          "'Inter'",
-          "'Noto Sans CJK KR'",
+          "var(--font-inter)",
+          "var(--font-noto-sans-kr)",
           "'Noto Sans CJK SC'",
           "'Noto Sans CJK TC'",
           "'Noto Sans CJK JP'",
@@ -217,13 +217,13 @@ const config = {
           "sans-serif"
         ],
         serif: [
-          "'Playfair Display'",
+          "var(--font-playfair)",
+          "var(--font-noto-serif-kr)",
           "'Source Han Serif SC'",
           "'Source Han Serif TC'",
           "'Noto Serif CJK SC'",
-          "'Noto Serif CJK TC'", 
-          "'Noto Serif CJK KR'", 
-          "'Noto Serif CJK JP'", 
+          "'Noto Serif CJK TC'",
+          "'Noto Serif CJK JP'",
           "serif"
         ],
         
@@ -249,7 +249,7 @@ const config = {
         
         // Language-Specific Optimizations
         korean: [
-          "'Noto Serif CJK KR'",
+          "var(--font-noto-serif-kr)",
           "'Source Han Serif KR'",
           "'Nanum Myeongjo'",
           "'Batang'",

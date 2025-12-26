@@ -1,4 +1,5 @@
 import type { Language, LanguageMetadata, TranslationLoader, TranslationCache, TranslationNamespaces } from './types'
+import { log } from '@/lib/utils/logger';
 import { navigationTranslations } from './translations/navigation'
 import { artworksTranslations } from './translations/artworks'
 
@@ -99,7 +100,7 @@ export const translationLoader: TranslationLoader = {
       
       return translations
     } catch (error) {
-      console.warn(`Failed to load translations for ${language}:${namespace}`, error)
+      log.warn(`Failed to load translations for ${language}:${namespace}`, error)
       
       // 폴백 언어 시도
       const fallback = LANGUAGE_METADATA[language].fallback

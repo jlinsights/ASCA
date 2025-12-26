@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { VirtuosoGrid } from 'react-virtuoso'
 import { GalleryItem, GalleryCategory } from '@/types/gallery'
 import SocialShare from './SocialShare'
 
@@ -12,8 +13,6 @@ interface GalleryGridProps {
   className?: string
   onEvent?: (event: any) => void
 }
-
-const ITEMS_PER_PAGE = 24
 
 // 마사이크 레이아웃을 위한 헬퍼 함수들
 const getRandomAspectRatio = (index: number) => {
@@ -54,10 +53,21 @@ const getCategoryName = (category: string) => {
 export default function GalleryGrid({ items, categories, className = '', onEvent }: GalleryGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [shareItem, setShareItem] = useState<GalleryItem | null>(null)
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
+  const [errorImages, setErrorImages] = useState<Set<string>>(new Set())
+
+  // 이미지 로드 완료 핸들러
+  const handleImageLoad = useCallback((itemId: string) => {
+    setLoadedImages(prev => new Set(prev).add(itemId))
+  }, [])
+
+  // 이미지 로드 에러 핸들러
+  const handleImageError = useCallback((itemId: string) => {
+    setErrorImages(prev => new Set(prev).add(itemId))
+  }, [])
 
   // 필터링된 아이템
   const filteredItems = useMemo(() => {
@@ -80,13 +90,6 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
 
     return filtered
   }, [items, selectedCategory, searchQuery])
-
-  // 페이지네이션
-  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE)
-  const currentItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-    return filteredItems.slice(startIndex, startIndex + ITEMS_PER_PAGE)
-  }, [filteredItems, currentPage])
 
   // 이미지 클릭 핸들러
   const handleImageClick = useCallback((item: GalleryItem) => {
@@ -177,36 +180,35 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
         </div>
 
         {/* 고급 검색 바 */}
-        <motion.div 
+        <motion.div
           className="relative max-w-xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500">
+          <label htmlFor="gallery-search" className="sr-only">갤러리 검색</label>
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" aria-hidden="true">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
           <input
-            type="text"
+            id="gallery-search"
+            type="search"
             placeholder="작품명, 설명, 태그로 검색..."
             value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value)
-              setCurrentPage(1)
-            }}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            aria-label="갤러리 작품 검색"
+            aria-describedby="search-results-count"
             className="w-full pl-12 pr-6 py-4 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/50 focus:border-blue-300 dark:focus:border-blue-600 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-gray-900/20"
           />
           {searchQuery && (
             <button
-              onClick={() => {
-                setSearchQuery('')
-                setCurrentPage(1)
-              }}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+              onClick={() => setSearchQuery('')}
+              aria-label="검색어 지우기"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 rounded"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -214,18 +216,19 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
         </motion.div>
 
         {/* 현대적인 카테고리 필터 */}
-        <motion.div 
+        <motion.div
+          role="group"
+          aria-label="카테고리 필터"
           className="flex flex-wrap justify-center gap-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <motion.button
-            onClick={() => {
-              setSelectedCategory('all')
-              setCurrentPage(1)
-            }}
-            className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 ${
+            onClick={() => setSelectedCategory('all')}
+            aria-pressed={selectedCategory === 'all'}
+            aria-label={`전체 카테고리 (${items.length}개 작품)`}
+            className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 ${
               selectedCategory === 'all'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
                 : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md dark:shadow-gray-900/20'
@@ -233,16 +236,15 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
             whileHover={{ scale: selectedCategory === 'all' ? 1.05 : 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            ✨ 전체 <span className="ml-1 text-xs opacity-75">({items.length})</span>
+            ✨ 전체 <span className="ml-1 text-xs opacity-75" aria-hidden="true">({items.length})</span>
           </motion.button>
           {categories.map((category, index) => (
             <motion.button
               key={category.id}
-              onClick={() => {
-                setSelectedCategory(category.id)
-                setCurrentPage(1)
-              }}
-              className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 ${
+              onClick={() => setSelectedCategory(category.id)}
+              aria-pressed={selectedCategory === category.id}
+              aria-label={`${category.name} 카테고리 (${category.count}개 작품)`}
+              className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 ${
                 selectedCategory === category.id
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
                   : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md dark:shadow-gray-900/20'
@@ -253,13 +255,16 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               whileHover={{ scale: selectedCategory === category.id ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              {category.icon} {category.name} <span className="ml-1 text-xs opacity-75">({category.count})</span>
+              {category.icon} {category.name} <span className="ml-1 text-xs opacity-75" aria-hidden="true">({category.count})</span>
             </motion.button>
           ))}
         </motion.div>
 
         {/* 결과 정보 */}
-        <motion.div 
+        <motion.div
+          id="search-results-count"
+          role="status"
+          aria-live="polite"
           className="text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -267,7 +272,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
         >
           {filteredItems.length === 0 ? (
             <div className="py-8">
-              <div className="text-6xl mb-4">🔍</div>
+              <div className="text-6xl mb-4" aria-hidden="true">🔍</div>
               <p className="text-xl text-gray-500 dark:text-gray-400 mb-2">검색 결과가 없습니다</p>
               <p className="text-gray-400 dark:text-gray-500">다른 키워드로 시도해보세요</p>
             </div>
@@ -285,52 +290,103 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
         </motion.div>
       </div>
 
-      {/* 갤러리 그리드 - 마사이크 레이아웃 */}
-      {currentItems.length > 0 && (
-        <motion.div
-          layout
-          className="masonry-grid mb-12"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '20px',
-            gridAutoRows: 'auto'
+      {/* 갤러리 그리드 - Virtual Scrolling 마사이크 레이아웃 */}
+      {filteredItems.length > 0 && (
+        <VirtuosoGrid
+          style={{ height: '100vh', minHeight: '800px' }}
+          totalCount={filteredItems.length}
+          overscan={200}
+          listClassName="masonry-grid"
+          itemClassName="gallery-card"
+          components={{
+            List: React.forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>((props, ref) => (
+              <div
+                ref={ref}
+                {...props}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                  gap: '20px',
+                  gridAutoRows: 'auto',
+                  ...props.style
+                }}
+              />
+            )),
           }}
-        >
-          <AnimatePresence>
-            {currentItems.map((item, index) => (
+          itemContent={(index) => {
+            const item = filteredItems[index]!
+            const isImageLoaded = loadedImages.has(item.id)
+            const hasImageError = errorImages.has(item.id)
+
+            return (
               <motion.div
                 key={item.id}
                 layout
                 initial={{ opacity: 0, scale: 0.8, y: 40 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.8, y: 40 }}
-                transition={{ 
-                  duration: 0.5, 
+                transition={{
+                  duration: 0.5,
                   delay: index * 0.08,
                   type: "spring",
                   bounce: 0.3
                 }}
-                className="group cursor-pointer gallery-card"
+                className="group cursor-pointer gallery-card touch-manipulation"
                 onClick={() => handleImageClick(item)}
                 whileHover={{ y: -8, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                role="button"
+                tabIndex={0}
+                aria-label={`${item.title} - ${item.description}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleImageClick(item)
+                  }
+                }}
               >
                 <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl dark:shadow-gray-900/50 dark:hover:shadow-gray-900/80 transition-all duration-500"
                      style={{
                        aspectRatio: getRandomAspectRatio(index),
                        minHeight: '250px'
                      }}>
+
+                  {/* 스켈레톤 로더 */}
+                  {!isImageLoaded && !hasImageError && (
+                    <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 bg-[length:200%_100%] animate-shimmer">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <svg className="w-12 h-12 text-gray-400 dark:text-gray-500 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 에러 플레이스홀더 */}
+                  {hasImageError && (
+                    <div className="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                      <svg className="w-16 h-16 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">이미지를 불러올 수 없습니다</p>
+                    </div>
+                  )}
+
                   <Image
                     src={item.src}
-                    alt={item.title}
+                    alt={`${item.title} - ${getCategoryName(item.category)} - ${item.description}`}
                     fill
-                    className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110"
+                    className={`object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110 ${
+                      isImageLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
                     sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, (max-width: 1536px) 25vw, 20vw"
                     quality={95}
                     priority={index < 8}
                     placeholder="blur"
                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknygjLMzHkkknqTzSlT54b6bk+h0R//Z"
+                    onLoad={() => handleImageLoad(item.id)}
+                    onError={() => handleImageError(item.id)}
                   />
                   {/* 그라디언트 오버레이 */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
@@ -402,83 +458,19 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                   </motion.div>
                 </div>
               </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-      )}
-
-      {/* 현대적인 페이지네이션 */}
-      {totalPages > 1 && (
-        <motion.div 
-          className="flex justify-center items-center space-x-3 mt-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <motion.button
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="p-3 rounded-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 shadow-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md transition-all duration-300"
-            whileHover={{ scale: currentPage === 1 ? 1 : 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </motion.button>
-
-          <div className="flex space-x-2">
-            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-              let pageNum: number
-              if (totalPages <= 7) {
-                pageNum = i + 1
-              } else if (currentPage <= 4) {
-                pageNum = i + 1
-              } else if (currentPage >= totalPages - 3) {
-                pageNum = totalPages - 6 + i
-              } else {
-                pageNum = currentPage - 3 + i
-              }
-
-              return (
-                <motion.button
-                  key={pageNum}
-                  onClick={() => setCurrentPage(pageNum)}
-                  className={`w-12 h-12 rounded-full text-sm font-semibold transition-all duration-300 ${
-                    currentPage === pageNum
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-110'
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md'
-                  }`}
-                  whileHover={{ scale: currentPage === pageNum ? 1.1 : 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: currentPage === pageNum ? 1.1 : 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {pageNum}
-                </motion.button>
-              )
-            })}
-          </div>
-
-          <motion.button
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="p-3 rounded-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 shadow-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md transition-all duration-300"
-            whileHover={{ scale: currentPage === totalPages ? 1 : 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </motion.button>
-        </motion.div>
+            )
+          }}
+        />
       )}
 
       {/* 현대적인 라이트박스 모달 */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="lightbox-title"
+            aria-describedby="lightbox-description"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -491,6 +483,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/90 to-black/95"
+              aria-hidden="true"
             />
 
             <motion.div
@@ -505,8 +498,8 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               <div className="absolute top-0 left-0 right-0 z-20 p-6 bg-gradient-to-b from-black/60 to-transparent">
                 <div className="flex items-center justify-between">
                   <div className="text-white">
-                    <h2 className="text-2xl font-bold mb-1">{selectedImage.title}</h2>
-                    <p className="text-gray-200 text-sm">{selectedImage.description}</p>
+                    <h2 id="lightbox-title" className="text-2xl font-bold mb-1">{selectedImage.title}</h2>
+                    <p id="lightbox-description" className="text-gray-200 text-sm">{selectedImage.description}</p>
                   </div>
                   
                   <div className="flex items-center space-x-3">
@@ -545,28 +538,30 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
               {/* 네비게이션 버튼들 */}
               <motion.button
                 onClick={() => navigateImage('prev')}
-                className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 p-4 bg-white/20 backdrop-blur-sm text-white rounded-2xl hover:bg-white/30 transition-all duration-300 shadow-lg"
+                aria-label="이전 이미지 보기"
+                className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 p-4 bg-white/20 backdrop-blur-sm text-white rounded-2xl hover:bg-white/30 transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50"
                 whileHover={{ scale: 1.1, x: -5 }}
                 whileTap={{ scale: 0.9 }}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </motion.button>
-              
+
               <motion.button
                 onClick={() => navigateImage('next')}
-                className="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 p-4 bg-white/20 backdrop-blur-sm text-white rounded-2xl hover:bg-white/30 transition-all duration-300 shadow-lg"
+                aria-label="다음 이미지 보기"
+                className="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 p-4 bg-white/20 backdrop-blur-sm text-white rounded-2xl hover:bg-white/30 transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50"
                 whileHover={{ scale: 1.1, x: 5 }}
                 whileTap={{ scale: 0.9 }}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </motion.button>

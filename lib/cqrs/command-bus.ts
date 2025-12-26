@@ -3,6 +3,7 @@
  * Command와 Query를 분리하여 확장성과 성능 개선
  */
 
+import { log } from '@/lib/utils/logger';
 import { eventBus, EVENTS } from '../events/event-bus';
 
 export interface Command {
@@ -140,7 +141,7 @@ export interface CommandMiddleware {
 // 로깅 미들웨어
 export class LoggingMiddleware implements CommandMiddleware {
   async before(command: Command): Promise<void> {
-    console.log(`[COMMAND] Executing: ${command.type}`, {
+    log.info(`[COMMAND] Executing: ${command.type}`, {
       payload: command.payload,
       metadata: command.metadata
     });
@@ -148,7 +149,7 @@ export class LoggingMiddleware implements CommandMiddleware {
 
   async after(command: Command, result: CommandResult): Promise<void> {
     const status = result.success ? 'SUCCESS' : 'FAILED';
-    console.log(`[COMMAND] ${status}: ${command.type}`, {
+    log.info(`[COMMAND] ${status}: ${command.type}`, {
       executionTime: result.metadata?.executionTime,
       error: result.error
     });

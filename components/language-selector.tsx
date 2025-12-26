@@ -1,4 +1,5 @@
 "use client"
+import { log } from '@/lib/utils/logger';
 
 import { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import { ChevronDown, Globe, Check, Loader2 } from "lucide-react"
@@ -43,7 +44,7 @@ export function LanguageSelector({
     try {
       await setLanguage(langCode)
     } catch (error) {
-      console.error('Language change failed:', error)
+      log.error('Language change failed:', error)
     } finally {
       setIsChanging(false)
     }

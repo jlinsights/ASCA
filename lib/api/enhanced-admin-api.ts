@@ -2,6 +2,7 @@
  * Enhanced Admin API - CQRS + Agent 패턴 적용
  * 기존 admin-api.ts의 개선된 버전
  */
+import { log } from '../utils/logger';
 
 import { commandBus, CommandHandler, Command, CommandResult, COMMANDS } from '../cqrs/command-bus';
 import { queryBus, QueryHandler, Query, QueryResult, QUERIES } from '../cqrs/query-bus';
@@ -435,7 +436,7 @@ export class EnhancedAdminAPI {
     const agentResult = await ArtistService.createArtist(artistData);
     
     if (!agentResult.success) {
-      console.error('Artist creation failed:', agentResult.message);
+      log.error('Artist creation failed:', agentResult.message);
       return null;
     }
 
@@ -446,7 +447,7 @@ export class EnhancedAdminAPI {
     const agentResult = await ArtistService.updateArtist(id, artistData);
     
     if (!agentResult.success) {
-      console.error('Artist update failed:', agentResult.message);
+      log.error('Artist update failed:', agentResult.message);
       return null;
     }
 
@@ -470,7 +471,7 @@ export class EnhancedAdminAPI {
     const agentResult = await ArtistService.searchArtists(query);
     
     if (!agentResult.success) {
-      console.error('Artist search failed:', agentResult.message);
+      log.error('Artist search failed:', agentResult.message);
       return null;
     }
 
@@ -493,16 +494,16 @@ export class EnhancedAdminAPI {
 
 // 이벤트 리스너 등록
 eventBus.subscribe(EVENTS.ARTIST_CREATED, async (event) => {
-  console.log('Artist created:', event.payload);
+  log.info('Artist created:', event.payload);
   // 추가 비즈니스 로직 (알림, 로깅 등)
 });
 
 eventBus.subscribe(EVENTS.ARTIST_UPDATED, async (event) => {
-  console.log('Artist updated:', event.payload);
+  log.info('Artist updated:', event.payload);
   // 추가 비즈니스 로직
 });
 
 eventBus.subscribe(EVENTS.ARTIST_DELETED, async (event) => {
-  console.log('Artist deleted:', event.payload);
+  log.info('Artist deleted:', event.payload);
   // 추가 비즈니스 로직
 });
