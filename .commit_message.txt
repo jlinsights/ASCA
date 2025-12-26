@@ -1,33 +1,47 @@
-✨ Week 1 UI/UX 개선 완료: 홈페이지 Hero 섹션 전면 개편
+✨ Week 1 UI/UX 개선 완료: 홈페이지 Featured Exhibitions 섹션 추가
 
-## Task 5: 홈페이지 Hero 섹션 개편 ✅
+## Task 6: Featured Exhibitions 섹션 추가 ✅
 
 **개선 사항**
-- 전면 재설계된 Hero 섹션 컴포넌트 생성
-- 캘리그라피 작품 배경 이미지 레이어링
-- 동적 텍스트 애니메이션 (staggered fade-in)
-- 그라데이션 텍스트 효과 (청자녹→선비홍→사찰금)
-- 강화된 CTA 버튼 (hover 효과, scale 애니메이션)
-- 스크롤 인디케이터 추가
-- 반응형 타이포그래피 (4xl~7xl)
+- 주요 전시를 소개하는 Featured Exhibitions 섹션 생성
+- 3단 그리드 카드 레이아웃 (반응형: 1열→2열→3열)
+- 전시 타입별 색상 매핑 (시맨틱 컬러 활용)
+- 전시 이미지에 hover 시 scale 애니메이션
+- 카드별 staggered fade-in 애니메이션 (0-400ms)
+- Featured/추천 배지 표시 시스템
+- "모든 전시 둘러보기" CTA 버튼
 
 **새로운 파일**
-- components/sections/hero-section-enhanced.tsx: 새 Hero 컴포넌트
+- components/sections/featured-exhibitions-section.tsx: Featured Exhibitions 컴포넌트
 
 **수정된 파일**
-- app/page.tsx: HeroSectionEnhanced 컴포넌트 적용
+- app/page.tsx: FeaturedExhibitionsSection 컴포넌트 추가
 
-**시각적 개선**
-- 배경: 다층 레이어 (그라데이션 + 패턴 + 오버레이)
-- 애니메이션: 6단계 staggered 페이드인 (0-800ms)
-- 타이포그래피: 새로운 Type Scale 활용 (lg:text-6xl xl:text-7xl)
-- 색상: 시맨틱 컬러 시스템 활용
+**디자인 시스템 활용**
+- 색상: 시맨틱 컬러 시스템 (celadon-green, scholar-red, temple-gold 등)
+- 타이포그래피: 새 Type Scale (text-3xl~5xl)
+- 애니메이션: Hero 섹션과 일관된 패턴
+- 레이아웃: 반응형 그리드 (md:grid-cols-2 lg:grid-cols-3)
+
+**전시 정보 표시**
+- 전시 타입 배지 (개인전, 공모전, 회원전 등)
+- 장소 (MapPin 아이콘)
+- 기간 (Calendar 아이콘)
+- 상세보기 링크 (hover 시 색상 전환)
 
 **사용자 경험**
-- 시각적 임팩트 300% 향상
-- 전환율 개선 예상 (명확한 CTA)
-- 스크롤 유도 (Scroll 인디케이터)
-- 모바일 최적화 (반응형 레이아웃)
+- 홈페이지에서 바로 주요 전시 확인 가능
+- 직관적인 카드 기반 레이아웃
+- 시각적 hierarchy 명확 (이미지→타이틀→상세정보)
+- 모바일 최적화 (터치 친화적 카드 크기)
+
+**Week 1 전체 완료 항목**
+1. ✅ 타이포그래피 시스템 정리 및 개선
+2. ✅ 모바일 헤더 크기 조정 (h-16, 터치 타겟 44px)
+3. ✅ 색상 시맨틱 매핑 추가
+4. ✅ 변경사항 git commit & push
+5. ✅ 홈페이지 Hero 섹션 개편
+6. ✅ Featured Exhibitions 섹션 추가
 
 🚀 Generated with Claude Code
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
