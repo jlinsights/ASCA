@@ -86,9 +86,9 @@ export function Footer() {
         </div>
 
         {/* 회사 정보 및 메뉴 링크 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-8 mb-12">
           {/* 회사 정보 */}
-          <div className="md:col-span-1 lg:col-span-1">
+          <div className="md:col-span-1 lg:col-span-2">
             <Link href="/" className="block mb-4">
               <Image
                 src="/logo/Logo & Tagline_black BG.png"
@@ -111,9 +111,40 @@ export function Footer() {
 
           </div>
 
-          {/* 전시 메뉴 */}
+          {/* 작가 & 작품 */}
           <div>
-            <h3 className="text-sm font-medium mb-4">전시</h3>
+            <h3 className="text-sm font-medium mb-4">작가 & 작품</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/artists"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  작가 소개
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/artworks"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  작품 갤러리
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/artworks/upload"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  작품 업로드
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* 전시 & 공모전 */}
+          <div>
+            <h3 className="text-sm font-medium mb-4">전시 & 공모전</h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -133,154 +164,27 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/exhibitions/past"
+                  href="/contests"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
-                  지난 전시
+                  진행중 공모전
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/exhibitions/online"
+                  href="/profile/applications"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
-                  온라인 전시
+                  내 신청 현황
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* 작품 메뉴 */}
+          {/* 소식 & 미디어 */}
           <div>
-            <h3 className="text-sm font-medium mb-4">작품</h3>
+            <h3 className="text-sm font-medium mb-4">소식 & 미디어</h3>
             <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/artworks?category=한글서예"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  한글서예
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artworks?category=한자서예"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  한자서예
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artworks?category=문인화"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  문인화
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artworks?category=수묵화"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  수묵화
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artworks?category=민화"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  민화
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artworks?category=현대서예"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  현대서예
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artworks?category=캘리그라피"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  캘리그라피
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artworks?category=전각"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  전각
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artworks?category=서각"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  서각
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* 작가 메뉴 */}
-          <div>
-            <h3 className="text-sm font-medium mb-4">작가</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/artists?type=공모작가"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  공모작가
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artists?type=청년작가"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  청년작가
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artists?type=추천작가"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  추천작가
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/artists?type=초대작가"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  초대작가
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-
-          {/* 소식 메뉴 */}
-          <div>
-            <h3 className="text-sm font-medium mb-4">소식</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/events"
-                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
-                >
-                  행사
-                </Link>
-              </li>
               <li>
                 <Link
                   href="/blog"
@@ -295,6 +199,63 @@ export function Footer() {
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
                   갤러리
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/events"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  행사
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="http://pf.kakao.com/_xkchGj"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  카카오 채널
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* 회원 서비스 */}
+          <div>
+            <h3 className="text-sm font-medium mb-4">회원 서비스</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/sign-in"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  로그인
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/sign-up"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  회원가입
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/profile/edit"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  내 프로필
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/profile/exhibitions"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  내 전시
                 </Link>
               </li>
             </ul>

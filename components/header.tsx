@@ -25,14 +25,15 @@ export function Header() {
 
   const menuStructure = [
     {
-      title: "전시회",
-      key: "exhibition",
-      href: "/exhibitions",
+      title: "작가",
+      key: "artists",
+      href: "/artists", 
       subItems: [
-        { title: "현재 전시", href: "/exhibitions/current" },
-        { title: "예정 전시", href: "/exhibitions/upcoming" },
-        { title: "지난 전시", href: "/exhibitions/past" },
-        { title: "온라인 전시", href: "/exhibitions/online" }
+        { title: "작가 소개", href: "/artists" },
+        { title: "공모작가", href: "/artists?type=공모작가" },
+        { title: "청년작가", href: "/artists?type=청년작가" },
+        { title: "추천작가", href: "/artists?type=추천작가" },
+        { title: "초대작가", href: "/artists?type=초대작가" }
       ]
     },
     {
@@ -40,6 +41,7 @@ export function Header() {
       key: "artworks", 
       href: "/artworks",
       subItems: [
+        { title: "전체 작품", href: "/artworks" },
         { title: "한글서예", href: "/artworks?category=한글서예" },
         { title: "한자서예", href: "/artworks?category=한자서예" },
         { title: "문인화", href: "/artworks?category=문인화" },
@@ -52,26 +54,40 @@ export function Header() {
       ]
     },
     {
-      title: "작가",
-      key: "artists",
-      href: "/artists", 
+      title: "전시회",
+      key: "exhibitions",
+      href: "/exhibitions",
       subItems: [
-        { title: "공모작가", href: "/artists?type=공모작가" },
-        { title: "청년작가", href: "/artists?type=청년작가" },
-        { title: "추천작가", href: "/artists?type=추천작가" },
-        { title: "초대작가", href: "/artists?type=초대작가" }
+        { title: "현재 전시", href: "/exhibitions/current" },
+        { title: "예정 전시", href: "/exhibitions/upcoming" },
+        { title: "지난 전시", href: "/exhibitions/past" },
+        { title: "온라인 전시", href: "/exhibitions/online" }
       ]
     },
     {
-      title: "행사",
-      key: "events", 
-      href: "/events",
+      title: "공모전",
+      key: "contests", 
+      href: "/contests",
       subItems: [
-        { title: "진행중인 행사", href: "/events" },
-        { title: "2025 휘호대회", href: "/events/calligraphy-contest-2025" },
-        { title: "2024 휘호대회", href: "/events/calligraphy-contest-2024" }
+        { title: "진행중 공모전", href: "/contests?status=open" },
+        { title: "마감된 공모전", href: "/contests?status=closed" },
+        { title: "내 신청 현황", href: "/profile/applications" }
       ]
     },
+    {
+      title: "갤러리",
+      key: "gallery", 
+      href: "/gallery",
+      subItems: [
+        { title: "협회 활동", href: "/gallery" },
+        { title: "행사 사진", href: "/events" }
+      ]
+    },
+    {
+      title: "블로그",
+      key: "blog", 
+      href: "/blog"
+    }
   ]
 
   const handleThemeToggle = (position: { x: number; y: number }) => {
@@ -139,23 +155,23 @@ export function Header() {
                 <div
                   key={menu.key}
                   className="relative group"
-                  onMouseEnter={menu.subItems.length > 0 ? () => handleMouseEnter(menu.key) : undefined}
-                  onMouseLeave={menu.subItems.length > 0 ? handleMouseLeave : undefined}
+                  onMouseEnter={menu.subItems?.length ? () => handleMouseEnter(menu.key) : undefined}
+                  onMouseLeave={menu.subItems?.length ? handleMouseLeave : undefined}
                 >
                   <Link
                     href={menu.href}
                     className="flex items-center gap-1 text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
-                    aria-haspopup={menu.subItems.length > 0 ? "menu" : undefined}
-                    aria-expanded={menu.subItems.length > 0 ? activeDropdown === menu.key : undefined}
+                    aria-haspopup={menu.subItems?.length ? "menu" : undefined}
+                    aria-expanded={menu.subItems?.length ? activeDropdown === menu.key : undefined}
                   >
                     {menu.title}
-                    {menu.subItems.length > 0 && (
+                    {(menu.subItems?.length ?? 0) > 0 && (
                       <ChevronDown className="w-3 h-3 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
                     )}
                   </Link>
 
                   {/* Dropdown Menu */}
-                  {menu.subItems.length > 0 && (
+                  {(menu.subItems?.length ?? 0) > 0 && (
                     <div
                       role="menu"
                       aria-label={`${menu.title} 하위 메뉴`}
@@ -166,7 +182,7 @@ export function Header() {
                       }`}
                     >
                       <div className="py-2">
-                        {menu.subItems.map((subItem, index) => {
+                        {menu.subItems?.map((subItem, index) => {
                           const isExternalLink = subItem.href.startsWith('http')
                           return isExternalLink ? (
                             <a
@@ -250,7 +266,7 @@ export function Header() {
                     >
                       {menu.title}
                     </Link>
-                    {menu.subItems.length > 0 && (
+                    {(menu.subItems?.length ?? 0) > 0 && (
                       <button
                         onClick={() => toggleMobileDropdown(menu.key)}
                         className="p-2 hover:bg-foreground/5 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green"
@@ -264,7 +280,7 @@ export function Header() {
                       </button>
                     )}
                   </div>
-                  {menu.subItems.length > 0 && (
+                  {(menu.subItems?.length ?? 0) > 0 && (
                     <div
                       id={`mobile-submenu-${menu.key}`}
                       role="menu"
@@ -273,7 +289,7 @@ export function Header() {
                         mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                       }`}
                     >
-                      {menu.subItems.map((subItem, index) => {
+                      {menu.subItems?.map((subItem, index) => {
                         const isExternalLink = subItem.href.startsWith('http')
                         return isExternalLink ? (
                           <a
