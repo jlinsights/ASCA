@@ -26,7 +26,7 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920, 2048, 2560, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 640, 768, 1024, 1280, 1536, 1920],
-    qualities: [75, 85, 90, 95], // 커스텀 품질 설정 지원
+    qualities: [75, 85, 90, 95, 100], // 커스텀 품질 설정 지원 (100은 라이트박스용)
     minimumCacheTTL: 86400, // 24시간 캐시 (고화질 이미지)
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
