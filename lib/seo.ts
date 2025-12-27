@@ -60,6 +60,13 @@ export function constructMetadata({
         'max-snippet': -1,
       },
     },
+    icons: {
+      icon: [
+        { url: '/icon.svg', type: 'image/svg+xml' },
+        { url: '/favicon/favicon.svg', type: 'image/svg+xml' },
+      ],
+      apple: '/favicon/favicon.svg',
+    },
   }
 }
 
