@@ -61,29 +61,36 @@ export function Footer() {
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        {/* Curator.io 소셜 미디어 피드 */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h4 className="text-xl font-semibold mb-2">최신 소식</h4>
-            <p className="text-sm text-[#fcfcfc]/70">
-              인스타그램과 스레드에서 공유되는 최신 인사이트를 확인하세요
-            </p>
-          </div>
-
+        {/* Curator.io      {/* 소셜 미디어 피드 섹션 */}
+      {/* 
+      TEMPORARILY DISABLED: Causing 403 errors from Instagram CDN
+      TODO: Update Curator.io configuration or replace with alternative solution
+      
+      <section className="bg-gradient-to-b from-ink-black to-ink-black/95 py-12 border-t border-b border-white/10">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">
+            소셜 미디어
+          </h2>
+          
           {/* Curator.io Feed Container */}
           <div id="curator-feed-default-feed-layout" className="max-w-6xl mx-auto">
             <a href="https://curator.io" target="_blank" rel="noopener noreferrer" className="crt-logo crt-tag">
               Powered by Curator.io
             </a>
           </div>
-
+          
           {/* Curator.io Script */}
           <Script
             id="curator-feed-script"
             src="https://cdn.curator.io/published/57e06f30-eafa-4d69-bd9a-ff53587c1167.js"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
+            onError={(e) => {
+              console.warn('Curator.io feed failed to load:', e);
+            }}
           />
         </div>
+      </section>
+      */}
 
         {/* 회사 정보 및 메뉴 링크 */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-8 mb-12">
