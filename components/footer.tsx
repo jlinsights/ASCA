@@ -61,36 +61,11 @@ export function Footer() {
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        {/* Curator.io      {/* 소셜 미디어 피드 섹션 */}
-      {/* 
-      TEMPORARILY DISABLED: Causing 403 errors from Instagram CDN
-      TODO: Update Curator.io configuration or replace with alternative solution
-      
-      <section className="bg-gradient-to-b from-ink-black to-ink-black/95 py-12 border-t border-b border-white/10">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white text-center mb-8">
-            소셜 미디어
-          </h2>
-          
-          {/* Curator.io Feed Container */}
-          <div id="curator-feed-default-feed-layout" className="max-w-6xl mx-auto">
-            <a href="https://curator.io" target="_blank" rel="noopener noreferrer" className="crt-logo crt-tag">
-              Powered by Curator.io
-            </a>
-          </div>
-          
-          {/* Curator.io Script */}
-          <Script
-            id="curator-feed-script"
-            src="https://cdn.curator.io/published/57e06f30-eafa-4d69-bd9a-ff53587c1167.js"
-            strategy="lazyOnload"
-            onError={(e) => {
-              console.warn('Curator.io feed failed to load:', e);
-            }}
-          />
-        </div>
-      </section>
-      */}
+        {/* 
+          TEMPORARILY DISABLED: Curator.io Social Feed
+          Reason: Causing 403 errors from Instagram CDN
+          TODO: Update Curator.io configuration or replace with alternative solution
+        */}
 
         {/* 회사 정보 및 메뉴 링크 */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-8 mb-12">
