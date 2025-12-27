@@ -1,7 +1,6 @@
 'use client'
 
 import Link from "next/link"
-import Script from "next/script"
 import { TranslatedContent } from "./translated-content"
 import Image from "next/image"
 import { useState } from "react"
@@ -61,12 +60,6 @@ export function Footer() {
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        {/* 
-          TEMPORARILY DISABLED: Curator.io Social Feed
-          Reason: Causing 403 errors from Instagram CDN
-          TODO: Update Curator.io configuration or replace with alternative solution
-        */}
-
         {/* 회사 정보 및 메뉴 링크 */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-8 mb-12">
           {/* 회사 정보 */}
