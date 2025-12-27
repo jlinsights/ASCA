@@ -380,9 +380,11 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                     className={`object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110 ${
                       isImageLoaded ? 'opacity-100' : 'opacity-0'
                     }`}
-                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, (max-width: 1536px) 25vw, 20vw"
-                    quality={95}
-                    priority={index < 8}
+                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw"
+                    quality={85}
+                    priority={index < 6}
+                    loading={index < 6 ? undefined : 'lazy'}
+                    unoptimized={false}
                     placeholder="blur"
                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknygjLMzHkkknqTzSlT54b6bk+h0R//Z"
                     onLoad={() => handleImageLoad(item.id)}
