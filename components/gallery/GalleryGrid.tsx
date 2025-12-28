@@ -324,7 +324,7 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
           }}
           itemContent={(index) => {
             const item = filteredItems[index]!
-            const isImageLoaded = loadedImages.has(item.id)
+            const isImageLoaded = loadedImages[item.id]
             const hasImageError = errorImages.has(item.id)
 
             return (
