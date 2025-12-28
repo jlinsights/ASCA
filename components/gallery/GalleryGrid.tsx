@@ -56,17 +56,26 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [shareItem, setShareItem] = useState<GalleryItem | null>(null)
-  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
+  
+  // 이미지 로딩 상태 - 기본값을 true로 설정하여 캐시된 이미지도 표시
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>(() => {
+    // 초기 렌더링 시 모든 이미지를 로드된 것으로 간주
+    const initialState: Record<string, boolean> = {}
+    items.forEach(item => {
+      initialState[item.id] = true
+    })
+    return initialState
+  })
   const [errorImages, setErrorImages] = useState<Set<string>>(new Set())
 
-  // 이미지 로드 완료 핸들러
-  const handleImageLoad = useCallback((itemId: string) => {
-    setLoadedImages(prev => new Set(prev).add(itemId))
+  // 이미지 로드 핸들러
+  const handleImageLoad = useCallback((id: string) => {
+    setLoadedImages(prev => ({ ...prev, [id]: true }))
   }, [])
 
-  // 이미지 로드 에러 핸들러
-  const handleImageError = useCallback((itemId: string) => {
-    setErrorImages(prev => new Set(prev).add(itemId))
+  // 이미지 에러 핸들러
+  const handleImageError = useCallback((id: string) => {
+    setErrorImages(prev => new Set(prev).add(id))
   }, [])
 
   // 필터링된 아이템
