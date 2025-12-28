@@ -520,7 +520,7 @@ export default function ExhibitionDetailPage() {
                 </Link>
                 <Link href="/artworks">
                   <Button variant="outline" className="w-full justify-start">
-                    작품 갤러리
+                    갤러리
                   </Button>
                 </Link>
                 <Link href="/artists">

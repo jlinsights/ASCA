@@ -103,7 +103,7 @@ export function Footer() {
                   href="/artworks"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
-                  작품 갤러리
+                  갤러리
                 </Link>
               </li>
               <li>

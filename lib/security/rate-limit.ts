@@ -1,12 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
 import { log } from '@/lib/utils/logger'
+import { env, isRedisConfigured, isDevelopment } from '@/lib/config/env'
 
 interface RateLimitEntry {
   count: number
   resetTime: number
 }
 
-// 메모리 기반 Rate Limiting (프로덕션에서는 Redis 사용 권장)
+/**
+ * Redis client for production-grade rate limiting
+ * Falls back to in-memory storage if Redis is not configured
+ */
+const redis = isRedisConfigured
+  ? new Redis({
+      url: env.UPSTASH_REDIS_REST_URL!,
+      token: env.UPSTASH_REDIS_REST_TOKEN!,
+    })
+  : null
+
+// 메모리 기반 Rate Limiting (Redis 없을 때 fallback)
 const rateLimitStore = new Map<string, RateLimitEntry>()
 
 export interface RateLimitConfig {
@@ -18,15 +32,78 @@ export interface RateLimitConfig {
 }
 
 /**
- * Rate limiting 미들웨어
+ * Redis-based rate limiter (when Redis is available)
  */
-export function rateLimit(config: RateLimitConfig) {
+function createRedisRateLimiter(config: RateLimitConfig) {
+  const { maxRequests, windowMs, keyGenerator = (req) => getClientIdentifier(req) } = config
+
+  const limiter = new Ratelimit({
+    redis: redis!,
+    limiter: Ratelimit.slidingWindow(maxRequests, `${windowMs}ms`),
+    analytics: true,
+    prefix: 'ratelimit',
+  })
+
+  return {
+    check: async (request: NextRequest): Promise<NextResponse | null> => {
+      const key = keyGenerator(request)
+
+      try {
+        const result = await limiter.limit(key)
+
+        if (!result.success) {
+          const retryAfter = Math.ceil((result.reset - Date.now()) / 1000)
+
+          log.warn('Rate limit exceeded (Redis)', {
+            key,
+            limit: result.limit,
+            remaining: result.remaining,
+            resetIn: retryAfter,
+          })
+
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'Too Many Requests',
+              message: `Rate limit exceeded. Try again in ${retryAfter} seconds.`,
+              retryAfter,
+            },
+            {
+              status: 429,
+              headers: {
+                'Retry-After': retryAfter.toString(),
+                'X-RateLimit-Limit': result.limit.toString(),
+                'X-RateLimit-Remaining': result.remaining.toString(),
+                'X-RateLimit-Reset': Math.floor(result.reset / 1000).toString(),
+              },
+            }
+          )
+        }
+
+        return null // Passed rate limit check
+      } catch (error) {
+        log.error('Redis rate limit check failed, allowing request', error)
+        return null // Allow request on error
+      }
+    },
+
+    addHeaders: (response: NextResponse, request: NextRequest): NextResponse => {
+      // Headers are already added in check()
+      return response
+    },
+  }
+}
+
+/**
+ * Memory-based rate limiter (fallback when Redis is not available)
+ */
+function createMemoryRateLimiter(config: RateLimitConfig) {
   const {
     maxRequests,
     windowMs,
     skipSuccessfulRequests = false,
     skipFailedRequests = false,
-    keyGenerator = (req) => getClientIdentifier(req)
+    keyGenerator = (req) => getClientIdentifier(req),
   } = config
 
   return {
@@ -37,12 +114,12 @@ export function rateLimit(config: RateLimitConfig) {
 
       // 기존 엔트리 가져오기 또는 새로 생성
       let entry = rateLimitStore.get(key)
-      
+
       if (!entry || entry.resetTime <= now) {
         // 새 윈도우 시작
         entry = {
           count: 0,
-          resetTime: now + windowMs
+          resetTime: now + windowMs,
         }
       }
 
@@ -53,12 +130,12 @@ export function rateLimit(config: RateLimitConfig) {
       // 제한 확인
       if (entry.count > maxRequests) {
         const remainingTime = Math.ceil((entry.resetTime - now) / 1000)
-        
-        log.warn('Rate limit exceeded', {
+
+        log.warn('Rate limit exceeded (Memory)', {
           key,
           count: entry.count,
           maxRequests,
-          resetIn: remainingTime
+          resetIn: remainingTime,
         })
 
         return NextResponse.json(
@@ -66,16 +143,16 @@ export function rateLimit(config: RateLimitConfig) {
             success: false,
             error: 'Too Many Requests',
             message: `Rate limit exceeded. Try again in ${remainingTime} seconds.`,
-            retryAfter: remainingTime
+            retryAfter: remainingTime,
           },
-          { 
+          {
             status: 429,
             headers: {
               'Retry-After': remainingTime.toString(),
               'X-RateLimit-Limit': maxRequests.toString(),
               'X-RateLimit-Remaining': '0',
-              'X-RateLimit-Reset': entry.resetTime.toString()
-            }
+              'X-RateLimit-Reset': entry.resetTime.toString(),
+            },
           }
         )
       }
@@ -88,7 +165,7 @@ export function rateLimit(config: RateLimitConfig) {
     addHeaders: (response: NextResponse, request: NextRequest): NextResponse => {
       const key = keyGenerator(request)
       const entry = rateLimitStore.get(key)
-      
+
       if (entry) {
         const remaining = Math.max(0, maxRequests - entry.count)
         response.headers.set('X-RateLimit-Limit', maxRequests.toString())
@@ -97,7 +174,25 @@ export function rateLimit(config: RateLimitConfig) {
       }
 
       return response
+    },
+  }
+}
+
+/**
+ * Rate limiting middleware
+ * Automatically uses Redis if configured, otherwise falls back to memory
+ */
+export function rateLimit(config: RateLimitConfig) {
+  if (redis) {
+    if (!isDevelopment) {
+      log.info('Using Redis-based rate limiting for production')
     }
+    return createRedisRateLimiter(config)
+  } else {
+    if (!isDevelopment) {
+      log.warn('⚠️  Using memory-based rate limiting (not recommended for production)')
+    }
+    return createMemoryRateLimiter(config)
   }
 }
 

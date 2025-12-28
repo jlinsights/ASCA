@@ -128,7 +128,7 @@ export default function CulturalDemo() {
               className="border-bamboo-green text-bamboo-green hover:bg-bamboo-green/10 font-calligraphy" 
               size="lg"
             >
-              작품 갤러리 보기
+              갤러리 보기
             </Button>
           </div>
         </div>
@@ -271,7 +271,7 @@ export default function CulturalDemo() {
               className="border-bamboo-green text-bamboo-green hover:bg-bamboo-green/10 font-calligraphy" 
               size="lg"
             >
-              작품 갤러리 둘러보기
+              갤러리 둘러보기
             </Button>
           </div>
         </div>
