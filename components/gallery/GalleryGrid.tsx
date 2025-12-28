@@ -386,15 +386,12 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                     src={item.src}
                     alt={`${item.title} - ${getCategoryName(item.category)} - ${item.description}`}
                     fill
-                    className={`object-cover transition-opacity duration-200 group-hover:scale-110 group-hover:brightness-110 ${
-                      isImageLoaded ? 'opacity-100' : 'opacity-0'
-                    }`}
+                    className="object-cover group-hover:scale-110 group-hover:brightness-110 transition-transform duration-300"
                     sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw"
                     quality={85}
                     priority={index < 6}
                     loading={index < 6 ? undefined : 'lazy'}
                     unoptimized={false}
-                    onLoad={() => handleImageLoad(item.id)}
                     onError={() => handleImageError(item.id)}
                   />
                   {/* 그라디언트 오버레이 */}
