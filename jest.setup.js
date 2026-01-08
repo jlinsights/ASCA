@@ -1,5 +1,11 @@
 import '@testing-library/jest-dom'
 
+// Load test environment variables
+import { config } from 'dotenv'
+import path from 'path'
+
+config({ path: path.resolve(process.cwd(), '.env.test') })
+
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -23,35 +29,37 @@ jest.mock('next/image', () => ({
   },
 }))
 
-// Mock performance API
-Object.defineProperty(window, 'performance', {
-  value: {
-    now: jest.fn(() => Date.now()),
-    getEntriesByType: jest.fn(() => []),
-    mark: jest.fn(),
-    measure: jest.fn(),
-    memory: {
-      usedJSHeapSize: 1000000,
-      totalJSHeapSize: 2000000,
-      jsHeapSizeLimit: 4000000,
+// Mock performance API (only in browser environment)
+if (typeof window !== 'undefined') {
+  Object.defineProperty(window, 'performance', {
+    value: {
+      now: jest.fn(() => Date.now()),
+      getEntriesByType: jest.fn(() => []),
+      mark: jest.fn(),
+      measure: jest.fn(),
+      memory: {
+        usedJSHeapSize: 1000000,
+        totalJSHeapSize: 2000000,
+        jsHeapSizeLimit: 4000000,
+      },
     },
-  },
-  writable: true,
-})
+    writable: true,
+  })
 
-// Mock IntersectionObserver
-global.IntersectionObserver = jest.fn().mockImplementation((callback) => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}))
+  // Mock IntersectionObserver
+  global.IntersectionObserver = jest.fn().mockImplementation((callback) => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }))
 
-// Mock ResizeObserver
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}))
+  // Mock ResizeObserver
+  global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }))
+}
 
 // Mock Web Vitals
 jest.mock('web-vitals', () => ({
@@ -64,20 +72,22 @@ jest.mock('web-vitals', () => ({
 
 // Database mocks will be defined in individual test files as needed
 
-// Suppress console warnings in tests
-const originalConsoleWarn = console.warn
-beforeAll(() => {
-  console.warn = (...args) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('React does not recognize')
-    ) {
-      return
+// Suppress console warnings in tests (only in browser environment)
+if (typeof window !== 'undefined') {
+  const originalConsoleWarn = console.warn
+  beforeAll(() => {
+    console.warn = (...args) => {
+      if (
+        typeof args[0] === 'string' &&
+        args[0].includes('React does not recognize')
+      ) {
+        return
+      }
+      originalConsoleWarn.call(console, ...args)
     }
-    originalConsoleWarn.call(console, ...args)
-  }
-})
+  })
 
-afterAll(() => {
-  console.warn = originalConsoleWarn
-})
+  afterAll(() => {
+    console.warn = originalConsoleWarn
+  })
+}

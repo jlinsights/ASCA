@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -314,7 +314,7 @@ export function CareerManagementClient() {
         </div>
       </main>
 
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 }

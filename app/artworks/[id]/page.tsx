@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -509,7 +509,7 @@ export default function ArtworkDetailPage() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto"></div>
           <p className="mt-4 text-sm text-muted-foreground">작품 정보를 불러오는 중...</p>
         </div>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -526,7 +526,7 @@ export default function ArtworkDetailPage() {
             </Button>
           </Link>
         </div>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -916,7 +916,7 @@ export default function ArtworkDetailPage() {
           </section>
         )}
 
-      <Footer />
+      <LayoutFooter />
     </main>
   )
 } 

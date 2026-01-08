@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { ExhibitionManagementClient } from './exhibition-management-client'
 
 export default function ExhibitionManagementPage() {
@@ -10,7 +10,7 @@ export default function ExhibitionManagementPage() {
       <Suspense fallback={<div className="min-h-screen flex items-center justify-center">로딩 중...</div>}>
         <ExhibitionManagementClient />
       </Suspense>
-      <Footer />
+      <LayoutFooter />
     </>
   )
 }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
+import { LayoutFooter } from "@/components/layout/layout-footer"
 import { useLanguage } from "@/contexts/language-context"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -121,7 +121,7 @@ export default function ExhibitionsPage() {
             <p className="mt-4 text-muted-foreground font-medium">전시회 정보를 불러오는 중...</p>
           </div>
         </section>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -138,7 +138,7 @@ export default function ExhibitionsPage() {
             </div>
           </div>
         </section>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -690,7 +690,7 @@ export default function ExhibitionsPage() {
         </DialogContent>
       </Dialog>
 
-      <Footer />
+      <LayoutFooter />
     </main>
   )
 }

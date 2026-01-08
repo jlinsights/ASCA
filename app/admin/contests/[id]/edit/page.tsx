@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { ContestForm } from '@/components/admin/contest-form'
 import { fetchContestById } from '@/lib/api/contests'
@@ -68,13 +66,11 @@ export default function AdminContestEditPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Header />
         <main className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
           </div>
         </main>
-        <Footer />
       </div>
     )
   }
@@ -82,7 +78,6 @@ export default function AdminContestEditPage() {
   if (error || !contest) {
     return (
       <div className="min-h-screen bg-background">
-        <Header />
         <main className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="text-center py-12">
             <p className="text-scholar-red mb-4">{error || '공모전을 찾을 수 없습니다'}</p>
@@ -91,15 +86,12 @@ export default function AdminContestEditPage() {
             </Link>
           </div>
         </main>
-        <Footer />
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
           <Link href="/admin/contests">
@@ -118,8 +110,6 @@ export default function AdminContestEditPage() {
 
         <ContestForm contest={contest} />
       </main>
-
-      <Footer />
     </div>
   )
 }

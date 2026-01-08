@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { TranslatedContent } from '@/components/translated-content'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -251,7 +251,7 @@ export default function CategoryPage() {
             </Button>
           </Link>
         </div>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -497,7 +497,7 @@ export default function CategoryPage() {
         </div>
       </section>
 
-      <Footer />
+      <LayoutFooter />
     </main>
   )
 } 

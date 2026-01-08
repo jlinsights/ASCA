@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, lazy, Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { TranslatedContent } from '@/components/translated-content'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -145,7 +145,7 @@ export function ArtworksClient() {
             </div>
           </div>
         </div>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -163,7 +163,7 @@ export function ArtworksClient() {
             </Button>
           </div>
         </div>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -362,7 +362,7 @@ export function ArtworksClient() {
         )}
       </main>
 
-      <Footer />
+      <LayoutFooter />
       <Toaster />
     </div>
   )

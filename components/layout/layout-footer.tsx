@@ -300,10 +300,62 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
               </li>
               <li>
                 <Link
-                  href="/regulations"
+                  href="https://docs.google.com/document/d/1on5DqNNLBXvr_wvvapz5zhWFPR1dPlHKaZ6y3bgIWuE/edit?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  정관
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://docs.google.com/document/d/1LqwokChxq-7qgus7B3ntAKl2skP-Ch31co7kyDs4RDE/edit?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
                   회칙
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://docs.google.com/document/d/1x65nBE0Auk-_8UMF0sWpBpbyyI3aKmYKwGGo_Htvenw/edit?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  운영 및 심사 규정
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://docs.google.com/document/d/1dOtCRVEsBZ0dW87lynU-ZulnvaxThhD6vU-28i9tBPY/edit?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  추천ㆍ초대작가 선임 규정
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://docs.google.com/document/d/1zyRHlG-PqJ2QqAHVqzUNHX5I0ztp4uzIP_YCkAuUrOk/edit?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  작품 감정 및 보증서 발행 규정
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://docs.google.com/document/d/1PCt1HOOuilplQg47c5GrK6nHbWozkzrJWJhLUVnOtOQ/edit?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
+                >
+                  전시 관리 및 운영 규정
                 </Link>
               </li>
               <li>

@@ -1,7 +1,7 @@
 'use client'
 
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
@@ -254,7 +254,7 @@ export default function TermsOfServicePage() {
         </div>
       </section>
 
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 } 

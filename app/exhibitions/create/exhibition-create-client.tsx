@@ -88,9 +88,10 @@ export function ExhibitionCreateClient() {
 
     try {
       // TODO: Upload images to Supabase Storage
-      // For now, using placeholder URLs
-      const featuredImageUrl = featuredImage ? '/placeholder/exhibition-main.jpg' : undefined
-      const galleryImageUrls = galleryImages.map((_, i) => `/placeholder/gallery-${i}.jpg`)
+      // 🚨 DEV NOTE: Using local object URLs for demonstration. 
+      // In production, these must be replaced with actual storage URLs after uploading to a bucket.
+      const featuredImageUrl = featuredImage ? URL.createObjectURL(featuredImage) : undefined
+      const galleryImageUrls = galleryImages.map(file => URL.createObjectURL(file))
 
       const exhibitionData: ExhibitionFormData = {
         ...formData,

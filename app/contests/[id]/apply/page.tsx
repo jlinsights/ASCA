@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -206,7 +206,7 @@ export default function ContestApplyPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
           </div>
         </main>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -233,7 +233,7 @@ export default function ContestApplyPage() {
             </CardContent>
           </Card>
         </main>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -253,7 +253,7 @@ export default function ContestApplyPage() {
             </Link>
           </div>
         </main>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -519,7 +519,7 @@ export default function ContestApplyPage() {
         </form>
       </main>
 
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 }

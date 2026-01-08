@@ -8,7 +8,7 @@ import { ArrowRight, Calendar, Users, Award, BookOpen, MapPin, Phone, Mail, Came
 import galleryData from '@/lib/data/gallery-data.json'
 import { GalleryData } from '@/types/gallery'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import '@/styles/gallery.css'
 
 // 갤러리 컴포넌트 동적 임포트
@@ -363,7 +363,7 @@ export default function Page() {
         }}
       />
       
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 }

@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -39,9 +37,15 @@ import { cn } from '@/lib/utils'
 import type { 
   MemberProfile, 
   MembershipDashboardStats, 
-  MemberSearchFilters,
   MembershipTierInfo 
 } from '@/lib/types/membership'
+import { 
+  getPendingApplications, 
+  approveApplication, 
+  rejectApplication, 
+  seedTestApplication,
+  type PendingApplication 
+} from './actions'
 
 // Mock data - 실제 구현시 API에서 가져올 데이터
 const mockStats: MembershipDashboardStats = {
@@ -270,6 +274,60 @@ export default function AdminMembershipPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
   const [currentPage, setCurrentPage] = useState(1)
 
+  // -- Application Management Logic --
+  const [applications, setApplications] = useState<PendingApplication[]>([])
+  const [appsLoading, setAppsLoading] = useState(false)
+
+  const loadApplications = useCallback(async () => {
+    setAppsLoading(true)
+    try {
+      const data = await getPendingApplications()
+      setApplications(data)
+    } catch (error) {
+      console.error('Failed to load applications', error)
+    } finally {
+      setAppsLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadApplications()
+  }, [loadApplications])
+
+  const handleApprove = async (id: string) => {
+    if (!confirm('승인하시겠습니까?')) return
+    const res = await approveApplication(id)
+    if (res.success) {
+      alert('승인되었습니다.')
+      loadApplications()
+    } else {
+      alert('오류가 발생했습니다.')
+    }
+  }
+
+  const handleReject = async (id: string) => {
+    const reason = prompt('거절 사유를 입력하세요:')
+    if (reason === null) return
+    const res = await rejectApplication(id, reason || 'No reason provided')
+    if (res.success) {
+      alert('거절되었습니다.')
+      loadApplications()
+    } else {
+      alert('오류가 발생했습니다.')
+    }
+  }
+
+  const handleSeed = async () => {
+      const res = await seedTestApplication()
+      if (res.success) {
+          alert('테스트 신청서가 생성되었습니다.')
+          loadApplications()
+      } else {
+          alert('생성 실패: ' + res.error)
+      }
+  }
+  // ----------------------------------
+
   // 회원 등급별 색상 및 아이콘 가져오기
   const getTierInfo = (tierLevel: number) => {
     const tier = membershipTiers.find(t => t.level === tierLevel)
@@ -302,34 +360,37 @@ export default function AdminMembershipPage() {
     }
   }
 
+// ... imports ...
+// Removed Header, LayoutFooter imports
+
+// ... code ...
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="space-y-6"> {/* Removed global wrapper and Header */}
       
       {/* 관리자 페이지 헤더 */}
-      <section className="border-b border-border bg-muted/30">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground mb-2">회원 관리</h1>
-              <p className="text-muted-foreground">ASCA 회원 정보 관리 및 통계</p>
-            </div>
-            <div className="flex gap-3">
-              <Button variant="outline">
-                <Download className="w-4 h-4 mr-2" />
-                회원 목록 내보내기
-              </Button>
-              <Button>
-                <UserPlus className="w-4 h-4 mr-2" />
-                새 회원 추가
-              </Button>
-            </div>
+      <section className="border-b border-border bg-muted/30 -mx-4 px-4 py-6 -mt-8 mb-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">회원 관리</h1>
+            <p className="text-muted-foreground">ASCA 회원 정보 관리 및 통계</p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline">
+              <Download className="w-4 h-4 mr-2" />
+              회원 목록 내보내기
+            </Button>
+            <Button>
+              <UserPlus className="w-4 h-4 mr-2" />
+              새 회원 추가
+            </Button>
           </div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="dashboard" className="space-y-6">
+      <Tabs defaultValue="dashboard" className="space-y-6">
+        {/* ... existing tabs content ... */}
+        {/* Copied existing content below */}
           <TabsList>
             <TabsTrigger value="dashboard">대시보드</TabsTrigger>
             <TabsTrigger value="members">회원 목록</TabsTrigger>
@@ -340,7 +401,7 @@ export default function AdminMembershipPage() {
 
           {/* 대시보드 탭 */}
           <TabsContent value="dashboard" className="space-y-6">
-            {/* 주요 통계 카드 */}
+            {/* ... stats cards ... */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -354,7 +415,7 @@ export default function AdminMembershipPage() {
                   </p>
                 </CardContent>
               </Card>
-
+              {/* ... other stats ... */}
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">승인 대기</CardTitle>
@@ -509,7 +570,6 @@ export default function AdminMembershipPage() {
 
           {/* 회원 목록 탭 */}
           <TabsContent value="members" className="space-y-6">
-            {/* 검색 및 필터 */}
             <Card>
               <CardHeader>
                 <CardTitle>회원 검색 및 필터</CardTitle>
@@ -558,7 +618,6 @@ export default function AdminMembershipPage() {
               </CardContent>
             </Card>
 
-            {/* 회원 목록 */}
             <Card>
               <CardHeader>
                 <CardTitle>전체 회원 ({members.length})</CardTitle>
@@ -567,7 +626,7 @@ export default function AdminMembershipPage() {
                 <div className="space-y-4">
                   {members.map(member => {
                     const tierInfo = getTierInfo(member.tierLevel)
-                    if (!tierInfo) return null // tierInfo가 없으면 렌더링하지 않음
+                    if (!tierInfo) return null 
                     
                     return (
                       <div key={member.id} className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
@@ -606,7 +665,6 @@ export default function AdminMembershipPage() {
                         </div>
 
                         <div className="flex items-center gap-6">
-                          {/* 회원 등급 */}
                           <div className="text-center">
                             <div className="flex items-center gap-1 text-sm font-medium mb-1">
                               <span>{tierInfo.icon}</span>
@@ -619,7 +677,6 @@ export default function AdminMembershipPage() {
                             </div>
                           </div>
 
-                          {/* 활동 점수 */}
                           <div className="text-center">
                             <div className="text-sm font-medium text-amber-600 mb-1">
                               {member.participationScore}점
@@ -629,7 +686,6 @@ export default function AdminMembershipPage() {
                             </div>
                           </div>
 
-                          {/* 프로필 완성도 */}
                           <div className="text-center min-w-[80px]">
                             <div className="text-sm font-medium mb-1">
                               {member.profileCompleteness}%
@@ -640,7 +696,6 @@ export default function AdminMembershipPage() {
                             />
                           </div>
 
-                          {/* 액션 버튼 */}
                           <div className="flex gap-2">
                             <Button size="sm" variant="outline">
                               <Eye className="h-4 w-4" />
@@ -661,16 +716,15 @@ export default function AdminMembershipPage() {
             </Card>
           </TabsContent>
 
-          {/* 가입 신청 탭 */}
           <TabsContent value="applications">
             <Card>
-              <CardHeader>
-                <CardTitle>가입 신청 관리</CardTitle>
-                <p className="text-muted-foreground">
-                  승인 대기 중인 신규 회원 및 등급 변경 신청을 관리합니다.
-                </p>
-              </CardHeader>
-              <CardContent>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>가입 신청 관리</CardTitle>
+                    <p className="text-muted-foreground">
+                    승인 대기 중인 신규 회원 및 등급 변경 신청을 관리합니다.
+                    </p>
+                </div>
                 <div className="text-center py-12">
                   <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-semibold mb-2">승인 대기 중인 신청이 없습니다</h3>
@@ -678,11 +732,53 @@ export default function AdminMembershipPage() {
                     새로운 가입 신청이 있으면 여기에 표시됩니다.
                   </p>
                 </div>
+                <Button variant="outline" size="sm" onClick={handleSeed}>
+                    🛠️ 테스트 데이터 생성
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {appsLoading ? (
+                    <div className="text-center py-8">로딩 중...</div>
+                ) : applications.length === 0 ? (
+                    <div className="text-center py-12">
+                    <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">승인 대기 중인 신청이 없습니다</h3>
+                    <p className="text-muted-foreground">
+                        새로운 가입 신청이 있으면 여기에 표시됩니다.
+                    </p>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {applications.map(app => (
+                            <div key={app.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg gap-4">
+                                <div>
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <h4 className="font-semibold">{app.memberName}</h4>
+                                        <Badge>{app.applicationType === 'new_member' ? '신규 가입' : '등급 변경'}</Badge>
+                                        <Badge variant="outline">{app.requestedTierName}</Badge>
+                                    </div>
+                                    <div className="text-sm text-muted-foreground space-y-1">
+                                        <p>{app.memberEmail}</p>
+                                        <p>신청일: {new Date(app.submittedAt).toLocaleDateString()}</p>
+                                        {app.reason && <p className="text-foreground mt-2 bg-secondary/10 p-2 rounded">"{app.reason}"</p>}
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button variant="outline" className="text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleReject(app.id)}>
+                                        거절
+                                    </Button>
+                                    <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleApprove(app.id)}>
+                                        승인
+                                    </Button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* 회원 등급 탭 */}
           <TabsContent value="tiers">
             <div className="space-y-6">
               <Card>
@@ -742,7 +838,6 @@ export default function AdminMembershipPage() {
             </div>
           </TabsContent>
 
-          {/* 분석 탭 */}
           <TabsContent value="analytics">
             <Card>
               <CardHeader>
@@ -762,10 +857,7 @@ export default function AdminMembershipPage() {
               </CardContent>
             </Card>
           </TabsContent>
-        </Tabs>
-      </div>
-
-      <Footer />
+      </Tabs>
     </div>
   )
 }

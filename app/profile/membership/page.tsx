@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { logger } from '@/lib/utils/logger'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -1003,7 +1003,7 @@ export default function MemberProfilePage() {
         </Tabs>
       </div>
 
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 }

@@ -7,7 +7,7 @@ import {
   Calendar, Award, MapPin, Search, Filter, Clock, Trophy, Star, ChevronRight
 } from 'lucide-react'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -104,7 +104,7 @@ export default function ContestsPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
           </div>
         </main>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -359,7 +359,7 @@ export default function ContestsPage() {
         )}
       </main>
 
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 }

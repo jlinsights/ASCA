@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Search, Filter, Eye, Check, X, Award } from 'lucide-react'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -87,7 +85,7 @@ export default function AdminContestApplicationsPage() {
         setApplications(appsData || [])
         setFilteredApplications(appsData || [])
       } catch (err) {
-        console.error(err)
+        // console.error(err)
       } finally {
         setLoading(false)
       }
@@ -149,21 +147,17 @@ export default function AdminContestApplicationsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Header />
         <main className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
           </div>
         </main>
-        <Footer />
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
@@ -400,8 +394,6 @@ export default function AdminContestApplicationsPage() {
           </div>
         )}
       </main>
-
-      <Footer />
     </div>
   )
 }

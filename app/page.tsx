@@ -1,6 +1,6 @@
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
-import { HeroSectionEnhanced } from '@/components/sections/hero-section-enhanced'
+import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroSection } from '@/components/sections/hero-section'
 import { FeaturedExhibitionsSection } from '@/components/sections/featured-exhibitions-section'
 import { Metadata } from 'next'
 
@@ -20,14 +20,14 @@ export default function Home() {
       <Header />
 
       <main className="flex-1">
-        {/* Enhanced Hero Section */}
-        <HeroSectionEnhanced />
+        {/* Hero Section */}
+        <HeroSection />
 
         {/* Featured Exhibitions Section */}
         <FeaturedExhibitionsSection />
       </main>
 
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 }

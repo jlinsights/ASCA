@@ -1,7 +1,7 @@
 'use client'
 
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -131,7 +131,7 @@ export default function OnlineExhibitionsPage() {
         </div>
       </section>
 
-      <Footer />
+      <LayoutFooter />
     </main>
   )
 }

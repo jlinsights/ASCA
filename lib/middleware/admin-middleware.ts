@@ -42,28 +42,17 @@ export interface AdminMiddlewareOptions {
   skipAuth?: boolean;
 }
 
-/**
- * Get auth context from request
- *
- * TODO: Implement actual authentication (Clerk, NextAuth, etc.)
- * For now, this is a placeholder that extracts user ID from headers
- *
- * @param request - Next.js request
- * @returns Auth context or null
- */
 export async function getAuthContext(request: NextRequest): Promise<AuthContext | null> {
-  // TODO: Replace with actual auth implementation
-  // Example with Clerk:
-  // const { userId } = await auth();
-  // if (!userId) return null;
+  // Use Supabase server client to get current user
+  const { createClient } = await import('@/lib/supabase/server');
+  const supabase = await createClient();
+  const { data: { user }, error } = await supabase.auth.getUser();
 
-  // For now, extract from custom header (development only!)
-  const userId = request.headers.get('x-user-id');
-
-  if (!userId) {
+  if (error || !user) {
     return null;
   }
 
+  const userId = user.id;
   const roleManager = getRoleManager();
   const roles = roleManager.getUserRoles(userId);
   const permissions = roleManager.getUserPermissions(userId);
@@ -71,7 +60,7 @@ export async function getAuthContext(request: NextRequest): Promise<AuthContext 
 
   return {
     userId,
-    email: request.headers.get('x-user-email') || undefined,
+    email: user.email,
     roles,
     permissions,
     isAuthenticated: true,

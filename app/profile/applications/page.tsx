@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Calendar, FileText, Award, Eye, Trash2 } from 'lucide-react'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -108,7 +108,7 @@ export default function MyApplicationsPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
           </div>
         </main>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -284,7 +284,7 @@ export default function MyApplicationsPage() {
         )}
       </main>
 
-      <Footer />
+      <LayoutFooter />
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>

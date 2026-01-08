@@ -1,6 +1,6 @@
 import React from 'react'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { AdminNavigation } from '@/components/admin-navigation'
 import AdminProtectedRoute from '@/components/admin-protected-route'
 
@@ -18,7 +18,7 @@ export const AdminLayout = React.memo(({ children, currentPage }: AdminLayoutPro
         <main className="container mx-auto px-4 py-8">
           {children}
         </main>
-        <Footer />
+        <LayoutFooter />
       </div>
     </AdminProtectedRoute>
   )

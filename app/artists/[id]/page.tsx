@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -119,7 +119,7 @@ export default function ArtistPage() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto"></div>
           <p className="mt-4 text-sm text-muted-foreground">작가 정보를 불러오는 중...</p>
         </div>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -136,7 +136,7 @@ export default function ArtistPage() {
             </Button>
           </Link>
         </div>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -335,7 +335,7 @@ export default function ArtistPage() {
         )}
       </section>
 
-      <Footer />
+      <LayoutFooter />
     </main>
   )
 } 

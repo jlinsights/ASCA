@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useMemo } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -14,14 +16,19 @@ import {
   ArrowLeftRight,
   Bell
 } from 'lucide-react'
+
 import { useLanguage } from '@/contexts/language-context'
 
+import { usePathname } from 'next/navigation'
+
 interface AdminNavigationProps {
-  currentPage: 'notices' | 'exhibitions' | 'events' | 'files' | 'artists' | 'artworks' | 'migration' | 'sync'
+  // Optional: Allow overriding for specific cases
+  currentPage?: string
 }
 
-export const AdminNavigation = React.memo(({ currentPage }: AdminNavigationProps) => {
+export const AdminNavigation = React.memo(({ currentPage: propCurrentPage }: AdminNavigationProps = {}) => {
   const { language } = useLanguage()
+  const pathname = usePathname()
 
   const navItems = useMemo(() => [
     {
@@ -73,6 +80,15 @@ export const AdminNavigation = React.memo(({ currentPage }: AdminNavigationProps
       label: language === 'ko' ? '실시간 동기화' : 'Real-time Sync'
     }
   ], [language])
+
+  // Determine current page from prop or pathname
+  const currentPage = useMemo(() => {
+    if (propCurrentPage) return propCurrentPage;
+    
+    // Find matching nav item based on pathname prefix
+    const matchingItem = navItems.find(item => pathname?.startsWith(item.href as string));
+    return matchingItem ? matchingItem.key : 'dashboard';
+  }, [propCurrentPage, pathname, navItems]);
 
   const currentItem = useMemo(() => 
     navItems.find(item => item.key === currentPage),

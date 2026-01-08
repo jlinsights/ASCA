@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
+import { LayoutFooter } from "@/components/layout/layout-footer"
 import { useLanguage } from "@/contexts/language-context"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -119,7 +119,7 @@ export default function NoticePage() {
             <p className="mt-4 text-muted-foreground font-medium">공지사항을 불러오는 중...</p>
           </div>
         </section>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -138,7 +138,7 @@ export default function NoticePage() {
             </div>
           </div>
         </section>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -399,7 +399,7 @@ export default function NoticePage() {
         </div>
       </section>
 
-      <Footer />
+      <LayoutFooter />
     </main>
   )
 } 

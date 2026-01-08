@@ -7,10 +7,10 @@ import Link from 'next/link'
 import { 
   ArrowLeft, Calendar, Eye, MapPin, User, Star, AlertCircle, Loader2, 
   Ticket, Clock, Facebook, Twitter, Link as LinkIcon, Edit, Trash2,
-  Palette, Users
+  Palette, Users, Instagram
 } from 'lucide-react'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -52,6 +52,36 @@ export default function ExhibitionDetailPage() {
           if (user) {
             setCurrentUserId(user.id)
           }
+        }
+
+        // Check for static exhibition ID 3 (Suh-Kyung)
+        if (exhibitionId === '3') {
+           const staticExhibition: ExhibitionWithDetails = {
+            id: '3',
+            title: '서경(書境) 새로운 지평 - 동양서예의 현재와 미래',
+            subtitle: 'New Horizons in East Asian Calligraphy',
+            description: '사단법인 동양서예협회가 주최하는 2026년 특별 기획전입니다. 개인전뿐만 아니라 소규모 서예단체들의 부스전, 연합전, 그리고 작품 1점만 출품하는 것도 가능한 열린 전시입니다. 실력있는 작가들을 발굴하고 품격있는 전시공간에서 새로운 서예의 지평을 엽니다. 서경(書境) 1부와 2부로 나누어 진행되며, 동양서예의 현재와 미래를 조망할 수 있는 귀중한 자리가 될 것입니다.',
+            content: '',
+            startDate: '2026-04-15',
+            endDate: '2026-04-28',
+            location: '예술의전당',
+            venue: '서울서예박물관 제1전시실 (2층)',
+            curator: '(사)동양서예협회 운영위원회',
+            featuredImageUrl: '/images/exhibitions/poster-main.png',
+            galleryImages: [],
+            status: 'upcoming',
+            isFeatured: true,
+            isPublished: true,
+            views: 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            ticketPrice: 0,
+            artworks: [],
+            artists: []
+          }
+          setExhibition(staticExhibition)
+          setLoading(false)
+          return
         }
 
         // Fetch exhibition with details
@@ -112,6 +142,16 @@ export default function ExhibitionDetailPage() {
       case 'twitter':
         window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, '_blank')
         break
+      case 'instagram':
+        // Copy link and open Instagram
+        try {
+            await navigator.clipboard.writeText(url)
+            window.open('https://www.instagram.com', '_blank')
+            alert('인스타그램이 새 창에서 열렸습니다. 링크가 복사되었으니 게시물이나 스토리에 붙여넣어 공유해보세요!')
+        } catch (err) {
+            alert('링크 복사에 실패했습니다.')
+        }
+        break
       case 'copy':
         try {
           await navigator.clipboard.writeText(url)
@@ -162,7 +202,7 @@ export default function ExhibitionDetailPage() {
             </div>
           </div>
         </main>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -181,7 +221,7 @@ export default function ExhibitionDetailPage() {
             </Link>
           </div>
         </main>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -262,6 +302,9 @@ export default function ExhibitionDetailPage() {
                     <Button variant="outline" size="sm" onClick={() => handleShare('twitter')}>
                       <Twitter className="h-4 w-4" />
                     </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleShare('instagram')}>
+                      <Instagram className="h-4 w-4" />
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => handleShare('copy')}>
                       <LinkIcon className="h-4 w-4" />
                     </Button>
@@ -292,12 +335,12 @@ export default function ExhibitionDetailPage() {
               
               {exhibition.featuredImageUrl && (
                 <div className="px-6 pb-4">
-                  <div className="relative w-full h-96 rounded-lg overflow-hidden">
+                  <div className="relative w-full h-[900px] rounded-lg overflow-hidden bg-secondary/10">
                     <Image
                       src={exhibition.featuredImageUrl}
                       alt={exhibition.title}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
                     />
                   </div>
@@ -534,7 +577,7 @@ export default function ExhibitionDetailPage() {
         </div>
       </main>
 
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 }

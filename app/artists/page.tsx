@@ -4,7 +4,7 @@ import { useEffect, useState, lazy, Suspense } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
+import { LayoutFooter } from "@/components/layout/layout-footer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
@@ -188,7 +188,7 @@ export default function ArtistsPage() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-scholar-red mx-auto mb-4"></div>
           <p className="text-muted-foreground">작가 정보를 불러오는 중...</p>
         </div>
-        <Footer />
+        <LayoutFooter />
       </main>
     )
   }
@@ -756,7 +756,7 @@ export default function ArtistsPage() {
         </Suspense>
       )}
 
-      <Footer />
+      <LayoutFooter />
     </main>
   )
 }

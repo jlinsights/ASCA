@@ -1,8 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { ContestForm } from '@/components/admin/contest-form'
 
@@ -14,8 +12,6 @@ export const metadata: Metadata = {
 export default function AdminContestCreatePage() {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
           <Link href="/admin/contests">
@@ -34,8 +30,6 @@ export default function AdminContestCreatePage() {
 
         <ContestForm />
       </main>
-
-      <Footer />
     </div>
   )
 }

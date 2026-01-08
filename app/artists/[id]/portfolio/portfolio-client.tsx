@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { 
@@ -74,7 +74,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
             <p className="text-muted-foreground">포트폴리오를 불러오는 중...</p>
           </div>
         </div>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -92,7 +92,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
             </Button>
           </div>
         </div>
-        <Footer />
+        <LayoutFooter />
       </div>
     )
   }
@@ -339,7 +339,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
         )}
       </main>
 
-      <Footer />
+      <LayoutFooter />
     </div>
   )
 }
