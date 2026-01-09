@@ -17,8 +17,14 @@ export interface ShareData {
  */
 export const shareToKakao = (data: ShareData) => {
   // 카카오 SDK가 로드되어 있는지 확인
-  if (typeof window !== 'undefined' && window.Kakao) {
+  if (typeof window !== 'undefined' && window.Kakao && window.Kakao.Share) {
     try {
+      if (!window.Kakao.isInitialized()) {
+         // Try to init if key available (optional, but safer to skip or rely on main init)
+         // Assuming main init works, we just skip or try init
+         // window.Kakao.init(...) // We don't have env key here easily unless we import env
+      }
+      
       window.Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
