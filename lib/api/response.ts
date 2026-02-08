@@ -275,7 +275,7 @@ export function addCorsHeaders(
   response: NextResponse,
   allowedOrigins: string[] = []
 ): NextResponse {
-  const origin = allowedOrigins.length > 0 ? allowedOrigins[0] : '*';
+  const origin = allowedOrigins[0] || '*';
 
   response.headers.set('Access-Control-Allow-Origin', origin);
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');

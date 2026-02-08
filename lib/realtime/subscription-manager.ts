@@ -186,16 +186,16 @@ export class SubscriptionManager {
    */
   getClientsByEventType(eventType: EventType | string): Set<string> {
     // Direct match
-    const directMatch = this.eventTypeIndex.get(eventType) || new Set();
+    const directMatch = this.eventTypeIndex.get(eventType) || new Set<string>();
 
     // Wildcard match (e.g., 'member:*' matches 'member:created')
     const category = this.getEventCategory(eventType);
     const wildcardMatch = category
-      ? this.eventTypeIndex.get(`${category}:*`) || new Set()
-      : new Set();
+      ? this.eventTypeIndex.get(`${category}:*`) || new Set<string>()
+      : new Set<string>();
 
     // All events wildcard
-    const allMatch = this.eventTypeIndex.get('*') || new Set();
+    const allMatch = this.eventTypeIndex.get('*') || new Set<string>();
 
     // Combine all matches
     return new Set([...directMatch, ...wildcardMatch, ...allMatch]);
@@ -208,7 +208,7 @@ export class SubscriptionManager {
    * @returns Set of client IDs
    */
   getClientsByUserId(userId: string): Set<string> {
-    return this.userIdIndex.get(userId) || new Set();
+    return this.userIdIndex.get(userId) || new Set<string>();
   }
 
   /**
@@ -342,7 +342,7 @@ export class SubscriptionManager {
    */
   private getEventCategory(type: EventType | string): string | null {
     const parts = type.split(':');
-    return parts.length > 1 ? parts[0] : null;
+    return parts.length > 1 ? parts[0] ?? null : null;
   }
 }
 

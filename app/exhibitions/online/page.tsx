@@ -1,6 +1,5 @@
 'use client'
 
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -54,10 +53,9 @@ const onlineExhibitions = [
 
 export default function OnlineExhibitionsPage() {
   return (
-    <main className="min-h-screen">
-      <Header />
+    <main className="min-h-screen bg-transparent">
       
-      <section className="bg-gradient-to-b from-purple-50 to-background dark:from-purple-950/20 py-16">
+      <section className="bg-transparent py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <Badge className="mb-4 bg-purple-600 text-white">온라인 전시</Badge>

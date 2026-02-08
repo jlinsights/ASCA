@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -237,7 +236,6 @@ export default function AwardsPage() {
 
   return (
     <main className="min-h-screen">
-      <Header />
       
       {/* 히어로 섹션 */}
       <section className="bg-gradient-to-b from-celadon/10 to-background py-16">

@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero } from "@/components/layout/page-hero"
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -13,10 +13,7 @@ import { notFound } from 'next/navigation'
 import { useParams } from 'next/navigation'
 import type { ArtworkWithArtist } from '@/lib/api/artworks'
 import { useLanguage } from '@/contexts/language-context'
-import type { Database } from '@/lib/supabase'
-
-// 타입 정의
-type Artist = Database['public']['Tables']['artists']['Row']
+import type { ArtistRow as Artist } from '@/lib/supabase'
 
 export default function ArtistPage() {
   const params = useParams()
@@ -73,11 +70,11 @@ export default function ArtistPage() {
   const getArtistName = (artist: Artist) => {
     switch (language) {
       case 'en':
-        return artist.name_en || artist.name
+        return artist.nameEn || artist.name
       case 'ja':
-        return artist.name_ja || artist.name
+        return artist.nameJp || artist.name
       case 'zh':
-        return artist.name_zh || artist.name
+        return artist.nameCn || artist.name
       default:
         return artist.name
     }
@@ -87,11 +84,11 @@ export default function ArtistPage() {
   const getArtistBio = (artist: Artist) => {
     switch (language) {
       case 'en':
-        return artist.bio_en || artist.bio
+        return artist.bioEn || artist.bio
       case 'ja':
-        return artist.bio_ja || artist.bio
+        return artist.bioJp || artist.bio
       case 'zh':
-        return artist.bio_zh || artist.bio
+        return artist.bioCn || artist.bio
       default:
         return artist.bio
     }
@@ -113,8 +110,7 @@ export default function ArtistPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen">
-        <Header />
+      <main className="min-h-screen bg-transparent">
         <div className="container mx-auto px-4 py-16 text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto"></div>
           <p className="mt-4 text-sm text-muted-foreground">작가 정보를 불러오는 중...</p>
@@ -126,8 +122,7 @@ export default function ArtistPage() {
 
   if (error || !artist) {
     return (
-      <main className="min-h-screen">
-        <Header />
+      <main className="min-h-screen bg-transparent">
         <div className="container mx-auto px-4 py-16 text-center">
           <p className="text-red-500">{error || '작가를 찾을 수 없습니다.'}</p>
           <Link href="/artists">
@@ -142,8 +137,8 @@ export default function ArtistPage() {
   }
 
   return (
-    <main className="min-h-screen">
-      <Header />
+    <main className="min-h-screen bg-transparent">
+      <PageHero title="작가 프로필" subtitle={artist?.name} />
 
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-8">
@@ -162,9 +157,9 @@ export default function ArtistPage() {
           {/* Profile Image */}
           <div className="lg:col-span-1">
             <div className="relative aspect-square rounded-lg overflow-hidden">
-              {artist.profile_image ? (
+              {artist.profileImage ? (
                 <Image
-                  src={artist.profile_image}
+                  src={artist.profileImage}
                   alt={getArtistName(artist)}
                   fill
                   className="object-cover"
@@ -186,10 +181,10 @@ export default function ArtistPage() {
               
               {/* Basic Info */}
               <div className="flex flex-wrap gap-4 mb-6">
-                {artist.birth_year && (
+                {artist.birthYear && (
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Calendar className="w-4 h-4 mr-2" />
-                    {artist.birth_year}년 출생
+                    {artist.birthYear}년 출생
                   </div>
                 )}
                 {artist.nationality && (
@@ -203,16 +198,18 @@ export default function ArtistPage() {
               {/* Membership, Artist Type, and Title */}
               <div className="flex flex-wrap gap-3 mb-6">
                 <Badge variant="default" className="bg-blue-100 text-blue-800 hover:bg-blue-200">
-                  {artist.membership_type}
+                  {/* artist.membershipType placeholder */}
+                  Member
                 </Badge>
                 <Badge variant="outline" className="border-green-200 text-green-800">
-                  {artist.artist_type}
+                  {/* artist.artistType placeholder */}
+                  Artist
                 </Badge>
-                {artist.title && (
+                {/* artist.title && (
                   <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200">
                     {artist.title}
                   </Badge>
-                )}
+                ) */}
               </div>
 
               {/* Specialties */}

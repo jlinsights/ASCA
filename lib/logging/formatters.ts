@@ -165,7 +165,7 @@ export class TextFormatter implements LogFormatter {
       case 'locale':
         return date.toLocaleString();
       case 'time':
-        return date.toTimeString().split(' ')[0];
+        return date.toTimeString().split(' ')[0] || '';
       default:
         return date.toISOString();
     }

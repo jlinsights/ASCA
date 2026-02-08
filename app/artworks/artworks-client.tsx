@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect, lazy, Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { TranslatedContent } from '@/components/translated-content'
 import { Button } from '@/components/ui/button'
@@ -134,7 +133,7 @@ export function ArtworksClient() {
   if (loading) {
     return (
       <div className="min-h-screen">
-        <Header />
+
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse space-y-4">
             <div className="h-8 bg-gray-200 rounded w-1/4"></div>
@@ -153,7 +152,7 @@ export function ArtworksClient() {
   if (error) {
     return (
       <div className="min-h-screen">
-        <Header />
+
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-red-600 mb-4">오류가 발생했습니다</h1>
@@ -170,7 +169,7 @@ export function ArtworksClient() {
 
   return (
     <div className="min-h-screen">
-      <Header />
+
       
       <main className="container mx-auto px-4 py-8">
         {/* 페이지 헤더 */}

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Header } from "@/components/header"
 import { LayoutFooter } from "@/components/layout/layout-footer"
 import { useLanguage } from "@/contexts/language-context"
 import { Badge } from "@/components/ui/badge"
@@ -111,8 +110,7 @@ export default function NoticePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-background">
-        <Header />
+      <main className="min-h-screen bg-transparent">
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto"></div>
@@ -126,8 +124,7 @@ export default function NoticePage() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-background">
-        <Header />
+      <main className="min-h-screen bg-transparent">
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center">
             <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-6">
@@ -144,8 +141,7 @@ export default function NoticePage() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      <Header />
+    <main className="min-h-screen bg-transparent">
       
       <section className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">

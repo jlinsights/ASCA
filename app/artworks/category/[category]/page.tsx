@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { TranslatedContent } from '@/components/translated-content'
 import { Button } from '@/components/ui/button'
@@ -241,7 +240,7 @@ export default function CategoryPage() {
   if (!currentCategory) {
     return (
       <main className="min-h-screen bg-background">
-        <Header />
+
         <div className="container mx-auto px-4 py-12 md:py-16 text-center">
           <h1 className="text-xl md:text-2xl font-semibold mb-4">카테고리를 찾을 수 없습니다</h1>
           <Link href="/artworks">
@@ -257,11 +256,10 @@ export default function CategoryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      <Header />
+    <main className="min-h-screen bg-transparent">
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-rice-paper to-background dark:from-ink-black dark:to-background">
+      <section className="relative overflow-hidden bg-transparent">
         <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
           <div className="text-center space-y-4 md:space-y-6">
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">

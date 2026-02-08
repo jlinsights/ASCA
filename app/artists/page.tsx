@@ -3,8 +3,8 @@
 import { useEffect, useState, lazy, Suspense } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Header } from "@/components/header"
 import { LayoutFooter } from "@/components/layout/layout-footer"
+import { PageHero } from "@/components/layout/page-hero"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
@@ -14,15 +14,12 @@ import { Input } from "@/components/ui/input"
 import { Search, User, Filter, Award, Calendar, Star, MapPin, Mail, Globe, Users } from "lucide-react"
 import { AdaptiveImage } from "@/components/adaptive-image"
 
-import type { Database } from "@/lib/supabase"
+import type { ArtistRow as Artist } from "@/lib/supabase"
 import { useLanguage } from "@/contexts/language-context"
 import { ArtistShareButton } from "@/components/kakao/kakao-share-button"
 
 // Lazy load the heavy modal component
 const ArtistDetailModal = lazy(() => import("@/components/artists/ArtistDetailModal"))
-
-// 데이터베이스 타입 사용
-type Artist = Database['public']['Tables']['artists']['Row']
 
 const specialtyFilters = [
   { value: 'all', label: { ko: '전체', en: 'All' } },
@@ -90,13 +87,13 @@ export default function ArtistsPage() {
 
     // 회원 타입 필터
     if (membershipFilter !== 'all') {
-      filtered = filtered.filter(artist => artist.membership_type === membershipFilter)
+      filtered = filtered.filter(artist => (artist as any).membership_type === membershipFilter)
     }
 
     // 작가 타입 필터
     if (artistTypeFilter !== 'all') {
       filtered = filtered.filter(artist => 
-        artist.artist_type && artist.artist_type.includes(artistTypeFilter)
+        (artist as any).artist_type && (artist as any).artist_type.includes(artistTypeFilter)
       )
     }
 
@@ -109,7 +106,7 @@ export default function ArtistsPage() {
 
     // 직위 필터
     if (titleFilter !== 'all') {
-      filtered = filtered.filter(artist => artist.title === titleFilter)
+      filtered = filtered.filter(artist => (artist as any).title === titleFilter)
     }
 
     setFilteredArtists(filtered)
@@ -183,7 +180,7 @@ export default function ArtistsPage() {
   if (loading) {
     return (
       <main className="min-h-screen">
-        <Header />
+
         <div className="container mx-auto px-4 py-16 text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-scholar-red mx-auto mb-4"></div>
           <p className="text-muted-foreground">작가 정보를 불러오는 중...</p>
@@ -195,7 +192,7 @@ export default function ArtistsPage() {
 
   return (
     <main className="min-h-screen">
-      <Header />
+
 
       {/* Artists Header */}
       <section className="py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background dark:from-muted/20 dark:to-background">
@@ -447,7 +444,7 @@ export default function ArtistsPage() {
                   <div className="relative aspect-square overflow-hidden">
                     <div className="relative group">
                       <Image
-                        src={artist.profile_image || "/placeholder-profile.jpg"}
+                        src={artist.profileImage || "/placeholder-profile.jpg"}
                         alt={artist.name}
                         width={400}
                         height={400}
@@ -458,10 +455,10 @@ export default function ArtistsPage() {
                     
                     {/* 작가 정보 */}
                     <div className="space-y-4">
-                      {artist.profile_image && (
+                      {artist.profileImage && (
                         <div className="flex items-center justify-center">
                           <Image
-                            src={artist.profile_image}
+                            src={artist.profileImage}
                             alt={artist.name}
                             width={100}
                             height={100}
@@ -473,7 +470,7 @@ export default function ArtistsPage() {
                       <div className="text-center">
                         <h3 className="text-xl font-bold text-celadon mb-1">{artist.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {artist.name_en || artist.birth_year ? `${artist.name_en || ''} ${artist.birth_year ? `(${artist.birth_year})` : ''}`.trim() : ''}
+                          {artist.nameEn || artist.birthYear ? `${artist.nameEn || ''} ${artist.birthYear ? `(${artist.birthYear})` : ''}`.trim() : ''}
                         </p>
                       </div>
                       
@@ -494,10 +491,10 @@ export default function ArtistsPage() {
                         <h3 className="font-bold text-xl text-foreground group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0">
                           {artist.name}
                         </h3>
-                        {artist.birth_year && (
+                        {artist.birthYear && (
                         <div className="flex items-center gap-2 text-muted-foreground flex-shrink-0">
                           <Calendar className="h-4 w-4" />
-                            <span className="font-mono text-sm">b. {artist.birth_year}</span>
+                            <span className="font-mono text-sm">b. {artist.birthYear}</span>
                         </div>
                         )}
                       </div>
@@ -508,20 +505,20 @@ export default function ArtistsPage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">회원 구분</span>
                         <span className="font-medium text-foreground">
-                          {artist.membership_type}
+                          {(artist as any).membership_type}
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">작가 유형</span>
                         <span className="font-medium text-foreground">
-                          {artist.artist_type}
+                          {(artist as any).artist_type}
                         </span>
                       </div>
-                      {artist.title && (
+                      {(artist as any).title && (
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-muted-foreground">직위</span>
                           <span className="font-medium text-foreground">
-                            {artist.title}
+                            {(artist as any).title}
                           </span>
                         </div>
                       )}
@@ -574,7 +571,7 @@ export default function ArtistsPage() {
                         <ArtistShareButton
                           title={`${artist.name} 작가`}
                           description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
-                          imageUrl={artist.profile_image || "/placeholder-profile.jpg"}
+                          imageUrl={artist.profileImage || "/placeholder-profile.jpg"}
                           webUrl={`/artists/${artist.id}`}
                           variant="outline"
                           isIconOnly={true}
@@ -599,7 +596,7 @@ export default function ArtistsPage() {
                   <div className="relative aspect-square overflow-hidden">
                     <div className="relative group">
                       <Image
-                        src={artist.profile_image || "/placeholder-profile.jpg"}
+                        src={artist.profileImage || "/placeholder-profile.jpg"}
                         alt={artist.name}
                         width={400}
                         height={400}
@@ -610,10 +607,10 @@ export default function ArtistsPage() {
                     
                     {/* 작가 정보 */}
                     <div className="space-y-4">
-                      {artist.profile_image && (
+                      {artist.profileImage && (
                         <div className="flex items-center justify-center">
                           <Image
-                            src={artist.profile_image}
+                            src={artist.profileImage}
                             alt={artist.name}
                             width={100}
                             height={100}
@@ -625,7 +622,7 @@ export default function ArtistsPage() {
                       <div className="text-center">
                         <h3 className="text-xl font-bold text-celadon mb-1">{artist.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {artist.name_en || artist.birth_year ? `${artist.name_en || ''} ${artist.birth_year ? `(${artist.birth_year})` : ''}`.trim() : ''}
+                          {artist.nameEn || artist.birthYear ? `${artist.nameEn || ''} ${artist.birthYear ? `(${artist.birthYear})` : ''}`.trim() : ''}
                         </p>
                       </div>
                       
@@ -646,10 +643,10 @@ export default function ArtistsPage() {
                         <h3 className="font-bold text-lg text-foreground line-clamp-1 group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0">
                           {artist.name}
                         </h3>
-                        {artist.birth_year && (
+                        {artist.birthYear && (
                         <div className="flex items-center gap-2 text-muted-foreground flex-shrink-0">
                           <Calendar className="h-3 w-3" />
-                            <span className="font-mono text-xs">b. {artist.birth_year}</span>
+                            <span className="font-mono text-xs">b. {artist.birthYear}</span>
                         </div>
                         )}
                       </div>
@@ -658,13 +655,13 @@ export default function ArtistsPage() {
                     {/* 분류 정보 - 모바일용 컴팩트 */}
                     <div className="text-xs text-muted-foreground space-y-1 pt-2 border-t border-border/30 dark:border-border/20">
                       <div className="flex items-center justify-between">
-                        <span className="text-foreground font-medium">{artist.membership_type}</span>
+                        <span className="text-foreground font-medium">{(artist as any).membership_type}</span>
                         <span>•</span>
-                        <span className="text-foreground font-medium">{artist.artist_type}</span>
+                        <span className="text-foreground font-medium">{(artist as any).artist_type}</span>
                       </div>
-                      {artist.title && (
+                      {(artist as any).title && (
                         <div className="text-center">
-                          <span className="text-foreground font-medium">{artist.title}</span>
+                          <span className="text-foreground font-medium">{(artist as any).title}</span>
                         </div>
                       )}
                     </div>
@@ -714,7 +711,7 @@ export default function ArtistsPage() {
                         <ArtistShareButton
                           title={`${artist.name} 작가`}
                           description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
-                          imageUrl={artist.profile_image || "/placeholder-profile.jpg"}
+                          imageUrl={artist.profileImage || "/placeholder-profile.jpg"}
                           webUrl={`/artists/${artist.id}`}
                           variant="outline"
                           isIconOnly={true}
@@ -746,7 +743,7 @@ export default function ArtistsPage() {
           </div>
         }>
           <ArtistDetailModal
-            artist={selectedArtist}
+            artist={selectedArtist as any}
             isOpen={!!selectedArtist}
             onClose={() => setSelectedArtist(null)}
             followedArtists={followedArtists}

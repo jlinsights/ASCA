@@ -50,7 +50,7 @@ export function createSecureAPI(
       // 1. Rate Limiting 적용
       const rateLimitConfig = customRateLimit || RateLimitPresets[rateLimitPreset]
       const rateLimiter = rateLimit(rateLimitConfig)
-      const rateLimitResponse = rateLimiter.check(request)
+      const rateLimitResponse = await rateLimiter.check(request)
       
       if (rateLimitResponse) {
         auditLogger.logRateLimit(

@@ -64,12 +64,7 @@ export const typeResolvers = {
         : parent.preferredStyles;
     },
 
-    certifications: (parent: any) => {
-      if (!parent.certifications) return [];
-      return typeof parent.certifications === 'string'
-        ? JSON.parse(parent.certifications)
-        : parent.certifications;
-    },
+
 
     achievements: (parent: any) => {
       if (!parent.achievements) return [];

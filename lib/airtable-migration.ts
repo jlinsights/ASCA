@@ -1,5 +1,6 @@
 import { AirtableService, AirtableArtist, AirtableArtwork, AirtableExhibition, AirtableEvent, AirtableNotice } from './airtable';
 import { createArtist, createArtwork, type ArtistInsert, type ArtworkInsert } from './admin-api';
+import { randomUUID } from 'crypto';
 import { createExhibition } from './supabase/cms';
 import type { ExhibitionFormData } from '@/types/cms';
 import { ensureSupabase } from './supabase';
@@ -31,23 +32,24 @@ export class AirtableMigration {
     };
     
     return {
+      id: randomUUID(),
       name: fields['Name (Korean)'] || '',
-      name_en: fields['Name (English)'] || null,
-      name_ja: fields['Name (Japanese)'] || null,
-      name_zh: fields['Name (Chinese)'] || null,
+      nameEn: fields['Name (English)'] || null,
+      nameJp: fields['Name (Japanese)'] || null,
+      nameCn: fields['Name (Chinese)'] || null,
       bio: fields['Bio (Korean)'] || '',
-      bio_en: fields['Bio (English)'] || null,
-      bio_ja: fields['Bio (Japanese)'] || null,
-      bio_zh: fields['Bio (Chinese)'] || null,
-      birth_year: fields['Birth Year'] || null,
+      bioEn: fields['Bio (English)'] || null,
+      bioCn: fields['Bio (Chinese)'] || null,
+      bioJp: fields['Bio (Japanese)'] || null,
+      birthYear: fields['Birth Year'] || null,
       nationality: fields['Nationality'] || null,
       specialties: fields['Specialties'] || [],
       awards: fields['Awards'] || [],
       exhibitions: fields['Exhibitions'] || [],
-      profile_image: fields['Profile Image']?.[0]?.url || null,
-      membership_type: fields['Membership Type'] || '준회원',
-      artist_type: fields['Artist Type'] || '일반작가',
-      title: fields['Title'] || null
+      profileImage: fields['Profile Image']?.[0]?.url || null,
+      // Removed fields not in schema: membershipType, artistType, title
+      // Also ensuring nameKo is populated if name is Korean
+      nameKo: fields['Name (Korean)'] || null
     };
   }
 
@@ -63,35 +65,47 @@ export class AirtableMigration {
     }
     
     return {
+      id: randomUUID(),
       title: fields['Title (Korean)'] || '',
-      title_en: fields['Title (English)'] || null,
-      title_ja: fields['Title (Japanese)'] || null,
-      title_zh: fields['Title (Chinese)'] || null,
+      titleEn: fields['Title (English)'] || null,
+      titleJp: fields['Title (Japanese)'] || null,
+      titleCn: fields['Title (Chinese)'] || null,
       description: fields['Description (Korean)'] || '',
-      description_en: fields['Description (English)'] || null,
-      artist_id: artistIdMap.get(airtableArtistId)!,
-      category: fields['Category'] || 'mixed-media',
+      descriptionEn: fields['Description (English)'] || null,
+      artistId: artistIdMap.get(airtableArtistId)!,
+      category: fields['Category'] || 'mixed-media', // Ensure this matches enum if strictly typed
       style: fields['Style'] || 'traditional',
       year: fields['Year'] || null,
-      materials: fields['Materials'] || [],
-      dimensions: {
-        width: fields['Width (cm)'] || 0,
-        height: fields['Height (cm)'] || 0,
-        depth: fields['Depth (cm)'] || undefined,
-        unit: 'cm' as const
-      },
-      price: fields['Price Amount'] ? {
-        amount: fields['Price Amount'],
-        currency: fields['Price Currency'] || 'KRW'
-      } : null,
-      availability: fields['Availability'] || 'available',
-      featured: fields['Featured'] || false,
+      // materials is typically text or string array? Schema says text('medium')?
+      // Schema: medium: text('medium').
+      // Airtable 'Materials' might be array. Join if so.
+      medium: Array.isArray(fields['Materials']) ? fields['Materials'].join(', ') : fields['Materials'] || null, 
+      
+      // Schema dimensions: text. Format it.
+      dimensions: fields['Width (cm)'] && fields['Height (cm)'] 
+        ? `${fields['Width (cm)']}x${fields['Height (cm)']}${fields['Depth (cm)'] ? 'x'+fields['Depth (cm)'] : ''} cm` 
+        : null,
+        
+      // Schema price: real.
+      price: fields['Price Amount'] || null,
+      
+      // availability: schema has isForSale (boolean). Airtable has 'Availability' string.
+      isForSale: fields['Availability'] === 'available' || fields['Availability'] === 'for_sale',
+      
+      isFeatured: fields['Featured'] || false,
       tags: fields['Tags'] || [],
-      images: fields['Images']?.map((img: any) => img.url) || [],
-      thumbnail: fields['Images']?.[0]?.url || null,
-      condition: fields['Condition'] || null,
-      technique: fields['Technique'] || null,
-      authenticity_certificate: fields['Authenticity Certificate'] || false
+      
+      // imageUrl: text, imageUrls: jsonb string array
+      imageUrl: fields['Images']?.[0]?.url || null,
+      imageUrls: fields['Images']?.map((img: any) => img.url) || [],
+      
+      // metadata for extra fields
+      metadata: {
+        condition: fields['Condition'],
+        technique: fields['Technique'],
+        authenticityCertificate: fields['Authenticity Certificate'],
+        materials: fields['Materials'] // Store original array in metadata
+      }
     };
   }
 

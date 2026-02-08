@@ -44,7 +44,7 @@ export function createMockRequest(options: {
     init.body = JSON.stringify(body);
   }
 
-  return new NextRequest(urlObj.toString(), init);
+  return new NextRequest(urlObj.toString(), init as any);
 }
 
 /**
@@ -56,6 +56,7 @@ export function createAuthenticatedRequest(options: {
   role?: string;
   method?: string;
   url?: string;
+  headers?: Record<string, string>;
   body?: any;
   searchParams?: Record<string, string>;
 }): NextRequest {

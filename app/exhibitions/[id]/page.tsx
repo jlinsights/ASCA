@@ -9,7 +9,6 @@ import {
   Ticket, Clock, Facebook, Twitter, Link as LinkIcon, Edit, Trash2,
   Palette, Users, Instagram
 } from 'lucide-react'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -192,8 +191,7 @@ export default function ExhibitionDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-h-screen bg-transparent">
         <main className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-12">
             <div className="flex items-center gap-3">
@@ -209,8 +207,7 @@ export default function ExhibitionDetailPage() {
 
   if (error || !exhibition) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-h-screen bg-transparent">
         <main className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
             <AlertCircle className="h-16 w-16 text-red-600 mx-auto mb-4" />
@@ -227,8 +224,7 @@ export default function ExhibitionDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen bg-transparent">
       
       <main className="container mx-auto px-4 py-8">
         {/* Navigation */}

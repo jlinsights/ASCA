@@ -14,14 +14,33 @@ import { useLanguage } from "@/contexts/language-context"
 
 // 메뉴 구조 정의
 
+import { usePathname } from "next/navigation"
+
 // @deprecated Use LayoutHeader from @/components/layout/layout-header instead
-export function Header() {
+export function Header({ transparentOnTop = false }: { transparentOnTop?: boolean }) {
+  const pathname = usePathname()
+  const isHome = pathname === '/'
+  const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null)
   const [mobileDropdowns, setMobileDropdowns] = useState<Record<string, boolean>>({})
   const headerRef = useRef<HTMLElement>(null)
   const { t } = useLanguage()
+
+  // Handle scroll effect for transparency
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    // Check initial scroll
+    handleScroll()
+    
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // ... (menuStructure and handlers) ...
 
   const menuStructure = [
     {
@@ -84,6 +103,11 @@ export function Header() {
       ]
     },
     {
+      title: "강좌",
+      key: "academy",
+      href: "/academy"
+    },
+    {
       title: "블로그",
       key: "blog", 
       href: "/blog"
@@ -135,10 +159,29 @@ export function Header() {
     return () => document.removeEventListener('keydown', handleEscKey)
   }, [])
 
+  // Header Style Calculation
+  const isTargetPage = isHome || transparentOnTop
+  
+  // Use fixed positioning on target pages (Home) to overlay content
+  // Use sticky on other pages to push content
+  const positionClass = isTargetPage ? "fixed top-0 left-0 right-0" : "sticky top-0"
+  
+  const isTransparent = (isHome || transparentOnTop) && !isScrolled && !isMenuOpen
+  
+  // Hide header on admin pages
+  if (pathname?.startsWith('/admin')) return null
+
+  const headerClass = isTransparent
+    ? "bg-transparent border-transparent"
+    : "bg-white/70 dark:bg-black/70 backdrop-blur-md border-white/10 supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-black/40 shadow-sm"
+
   return (
     <>
       <ThemeTransition clickPosition={clickPosition} />
-      <header ref={headerRef} className="border-b border-white/10 bg-white/70 dark:bg-black/70 backdrop-blur-md supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-black/40 sticky top-0 z-50 transition-all duration-300">
+      <header 
+        ref={headerRef} 
+        className={`${positionClass} z-50 transition-all duration-300 border-b ${headerClass}`}
+      >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-14 md:h-16">
             <a href="https://orientalcalligraphy.org" className="flex items-center">

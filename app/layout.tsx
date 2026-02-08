@@ -36,6 +36,8 @@ const notoSerifKr = Noto_Serif_KR({
 import { constructMetadata } from '@/lib/seo'
 import { JsonLd } from '@/components/json-ld'
 import { KakaoScript } from '@/components/seo/kakao-script'
+import { VideoBackground } from '@/components/layout/video-background'
+import { Header } from '@/components/header'
 
 export const metadata = constructMetadata()
 
@@ -51,14 +53,11 @@ export default function RootLayout({
         {/* Global JSON-LD for AEO */}
         <JsonLd />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans bg-rice-paper dark:bg-ink-black transition-colors duration-300`}>
+      <body className={`${inter.variable} ${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans bg-background transition-colors duration-300`} suppressHydrationWarning={true}>
         <ClientProviders>
-          <div className="min-h-screen flex flex-col relative overflow-hidden">
-            {/* Ambient Background Effects */}
-            <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-celadon-green/5 blur-[100px] animate-pulse" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-scholar-red/5 blur-[100px] animate-pulse delay-1000" />
-            </div>
+          <VideoBackground />
+          <div className="min-h-screen flex flex-col relative">
+            <Header transparentOnTop={true} />
             
             <main className="flex-1 relative z-10">
               {children}

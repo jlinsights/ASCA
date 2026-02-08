@@ -5,6 +5,7 @@
 
 import { SubAgent, AgentTask, createTask, agentPool } from './sub-agent';
 export { agentPool };
+import { agentMonitor } from '../monitoring/agent-monitor';
 import { commandBus, COMMANDS } from '../cqrs/command-bus';
 import { queryBus, QUERIES } from '../cqrs/query-bus';
 import { eventBus, EVENTS } from '../events/event-bus';
@@ -35,26 +36,60 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
   }
 
   async execute(task: AgentTask<ArtistTaskInput>): Promise<ArtistTaskOutput> {
-    const { action, data, id, searchQuery, validationRules } = task.input;
+    const startTime = Date.now();
+    const { action } = task.input;
+    
+    try {
+      let result: ArtistTaskOutput;
+      
+      switch (action) {
+        case 'create':
+          result = await this.createArtist(task.input.data as ArtistInsert);
+          break;
+        
+        case 'update':
+          result = await this.updateArtist(task.input.id!, task.input.data as ArtistUpdate);
+          break;
+        
+        case 'delete':
+          result = await this.deleteArtist(task.input.id!);
+          break;
+        
+        case 'search':
+          result = await this.searchArtists(task.input.searchQuery!);
+          break;
+        
+        case 'validate':
+          result = await this.validateArtist(task.input.data as ArtistInsert, task.input.validationRules);
+          break;
+        
+        default:
+          throw new Error(`Unknown action: ${action}`);
+      }
 
-    switch (action) {
-      case 'create':
-        return await this.createArtist(data as ArtistInsert);
-      
-      case 'update':
-        return await this.updateArtist(id!, data as ArtistUpdate);
-      
-      case 'delete':
-        return await this.deleteArtist(id!);
-      
-      case 'search':
-        return await this.searchArtists(searchQuery!);
-      
-      case 'validate':
-        return await this.validateArtist(data as ArtistInsert, validationRules);
-      
-      default:
-        throw new Error(`Unknown action: ${action}`);
+      // Track successful execution (or logical failure if result.success is false)
+      agentMonitor.trackExecution({
+        agentId: this.id,
+        taskType: action,
+        status: result.success ? 'success' : 'failure',
+        executionTime: Date.now() - startTime,
+        timestamp: Date.now(),
+        error: result.success ? undefined : result.message
+      });
+
+      return result;
+
+    } catch (error) {
+      // Track exception
+      agentMonitor.trackExecution({
+        agentId: this.id,
+        taskType: action,
+        status: 'failure',
+        executionTime: Date.now() - startTime,
+        timestamp: Date.now(),
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+      throw error;
     }
   }
 

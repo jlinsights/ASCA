@@ -112,7 +112,7 @@ export const GET = withPermission(
  */
 export async function POST(request: NextRequest) {
   return withPermission(
-    Permission.ADMIN_SYSTEM_SETTINGS,
+    Permission.ADMIN_SETTINGS,
     async (req, auth) => {
       try {
         const { searchParams } = new URL(req.url);
@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
         );
       }
     }
-  )(request, {});
+  )(request);
 }
 
 /**

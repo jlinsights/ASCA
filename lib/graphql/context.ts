@@ -1,8 +1,8 @@
 import { db } from '@/lib/db';
 import { createIdLoader, DataLoader } from '@/lib/optimization/dataloader';
 import { eq, inArray } from 'drizzle-orm';
-import * as schema from '@/lib/db/schema-pg';
-import type { User } from '@/lib/db/schema-pg';
+import * as schema from '@/lib/db/schema';
+import type { User } from '@/lib/db/schema';
 
 /**
  * GraphQL Context

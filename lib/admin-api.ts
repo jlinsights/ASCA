@@ -1,12 +1,12 @@
-import { safeSupabaseAdminCall, ensureSupabaseAdmin, type Database } from './supabase'
+import { safeSupabaseAdminCall, ensureSupabaseAdmin, type ArtistRow, type ArtistInsert, type ArtistUpdate, type ArtworkRow, type ArtworkInsert, type ArtworkUpdate } from './supabase'
 
-type Artist = Database['public']['Tables']['artists']['Row']
-type ArtistInsert = Database['public']['Tables']['artists']['Insert']
-type ArtistUpdate = Database['public']['Tables']['artists']['Update']
+type Artist = ArtistRow
+// ArtistInsert is already imported
+// ArtistUpdate is already imported
 
-type Artwork = Database['public']['Tables']['artworks']['Row']
-type ArtworkInsert = Database['public']['Tables']['artworks']['Insert']
-type ArtworkUpdate = Database['public']['Tables']['artworks']['Update']
+type Artwork = ArtworkRow
+// ArtworkInsert is already imported
+// ArtworkUpdate is already imported
 
 // ========== 작가 관련 API ==========
 

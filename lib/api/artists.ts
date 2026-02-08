@@ -1,10 +1,8 @@
-import { ensureSupabase, type Database } from '../supabase'
+import { ensureSupabase, type ArtistRow, type ArtistInsert, type ArtistUpdate } from '../supabase'
 import { AppError } from '@/lib/utils/error-handler'
 import { log } from '@/lib/utils/logger'
 
-type Artist = Database['public']['Tables']['artists']['Row']
-type ArtistInsert = Database['public']['Tables']['artists']['Insert']
-type ArtistUpdate = Database['public']['Tables']['artists']['Update']
+type Artist = ArtistRow
 
 export interface ArtistFilters {
   membershipType?: string[]

@@ -196,8 +196,8 @@ export function createConnection<T extends Record<string, any>>(
 
   // Determine page info
   const pageInfo: PageInfo = {
-    startCursor: edges.length > 0 ? edges[0].cursor : null,
-    endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+    startCursor: edges.length > 0 ? edges[0]?.cursor ?? null : null,
+    endCursor: edges.length > 0 ? edges[edges.length - 1]?.cursor ?? null : null,
     hasPreviousPage: false, // Will be determined by caller
     hasNextPage: false,     // Will be determined by caller
     totalCount: options?.totalCount,

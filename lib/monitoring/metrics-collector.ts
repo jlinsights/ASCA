@@ -221,7 +221,7 @@ export class MetricsCollector {
 
     // 트렌드 방향 결정
     const threshold = 0.01; // 1% 변화를 안정으로 간주
-    const change = (slope / recentData[0]) * 100;
+    const change = (slope / (recentData[0] || 1)) * 100;
 
     let direction: 'increasing' | 'decreasing' | 'stable';
     if (Math.abs(change) < threshold) {
@@ -519,7 +519,7 @@ export class MetricsCollector {
 
     const sumX = indices.reduce((a, b) => a + b, 0);
     const sumY = values.reduce((a, b) => a + b, 0);
-    const sumXY = indices.reduce((acc, x, i) => acc + x * values[i], 0);
+    const sumXY = indices.reduce((acc, x, i) => acc + x * (values[i] || 0), 0);
     const sumXX = indices.reduce((acc, x) => acc + x * x, 0);
 
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);

@@ -1,8 +1,8 @@
 import { eq, or, like, desc, asc, and, sql } from 'drizzle-orm';
 import { BaseRepository, type PaginatedResult, type PaginationOptions } from './base.repository';
 import { db } from '@/lib/db';
-import { members } from '@/lib/db/schema-pg';
-import type { Member, NewMember } from '@/lib/db/schema-pg';
+import { members, users } from '@/lib/db/schema';
+import type { Member, NewMember } from '@/lib/db/schema';
 
 /**
  * Member search criteria
@@ -10,11 +10,11 @@ import type { Member, NewMember } from '@/lib/db/schema-pg';
 export interface MemberSearchCriteria {
   query?: string;
   status?: string;
-  levelId?: string;
+  tierId?: string;
   nationality?: string;
-  isVerified?: boolean;
-  isPublic?: boolean;
-  sortBy?: 'created_at' | 'updated_at' | 'email' | 'last_active' | 'joined_date';
+  // isVerified?: boolean; // Removed: Not in schema
+  // isPublic?: boolean;   // Removed: Not in schema (privacySettings complex handling)
+  sortBy?: 'created_at' | 'updated_at' | 'join_date' | 'last_activity_date';
   sortOrder?: 'asc' | 'desc';
 }
 
@@ -27,7 +27,7 @@ export interface MemberStatistics {
   inactive: number;
   suspended: number;
   pending: number;
-  byLevel: Record<string, number>;
+  byTier: Record<string, number>;
   byNationality: Record<string, number>;
 }
 
@@ -41,11 +41,18 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
   }
 
   /**
-   * Find member by email
+   * Find member by email (via User table)
    */
   async findByEmail(email: string): Promise<Member | null> {
+    const user = await db.query.users.findFirst({
+      where: eq(users.email, email),
+      columns: { id: true }
+    });
+    
+    if (!user) return null;
+
     return this.findOne({
-      where: eq(members.email, email),
+      where: eq(members.userId, user.id),
     });
   }
 
@@ -54,7 +61,7 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
    */
   async findByMembershipNumber(membershipNumber: string): Promise<Member | null> {
     return this.findOne({
-      where: eq(members.membership_number, membershipNumber),
+      where: eq(members.membershipNumber, membershipNumber),
     });
   }
 
@@ -71,24 +78,22 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
     if (criteria.query) {
       conditions.push(
         or(
-          like(members.first_name_ko, `%${criteria.query}%`),
-          like(members.last_name_ko, `%${criteria.query}%`),
-          like(members.first_name_en, `%${criteria.query}%`),
-          like(members.last_name_en, `%${criteria.query}%`),
-          like(members.email, `%${criteria.query}%`),
-          like(members.membership_number, `%${criteria.query}%`)
+          like(members.fullName, `%${criteria.query}%`),
+          like(members.fullNameKo, `%${criteria.query}%`),
+          like(members.fullNameEn, `%${criteria.query}%`),
+          like(members.membershipNumber, `%${criteria.query}%`)
         )
       );
     }
 
     // Status filter
     if (criteria.status) {
-      conditions.push(eq(members.membership_status, criteria.status));
+      conditions.push(eq(members.status, criteria.status as any));
     }
 
-    // Level filter
-    if (criteria.levelId) {
-      conditions.push(eq(members.membership_level_id, criteria.levelId));
+    // Tier filter
+    if (criteria.tierId) {
+      conditions.push(eq(members.tierId, criteria.tierId));
     }
 
     // Nationality filter
@@ -96,26 +101,21 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
       conditions.push(eq(members.nationality, criteria.nationality));
     }
 
-    // Verified filter
-    if (criteria.isVerified !== undefined) {
-      conditions.push(eq(members.is_verified, criteria.isVerified));
-    }
-
-    // Public profile filter
-    if (criteria.isPublic !== undefined) {
-      conditions.push(eq(members.is_public, criteria.isPublic));
-    }
-
     // Combine all conditions
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
     // Determine sort order
-    const sortField = criteria.sortBy || 'created_at';
-    const sortOrder = criteria.sortOrder || 'desc';
+    let sortColumn: any = members.createdAt;
+    if (criteria.sortBy) {
+        if (criteria.sortBy === 'join_date') sortColumn = members.joinDate;
+        else if (criteria.sortBy === 'last_activity_date') sortColumn = members.lastActivityDate;
+        else if (criteria.sortBy === 'updated_at') sortColumn = members.updatedAt;
+    }
+
     const orderBy =
-      sortOrder === 'asc'
-        ? asc(members[sortField])
-        : desc(members[sortField]);
+      criteria.sortOrder === 'asc'
+        ? asc(sortColumn)
+        : desc(sortColumn);
 
     return this.findWithPagination({
       ...pagination,
@@ -128,19 +128,19 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
    * Find active members
    */
   async findActive(options?: PaginationOptions): Promise<Member[] | PaginatedResult<Member>> {
-    const where = eq(members.membership_status, 'active');
+    const where = eq(members.status, 'active');
 
     if (options) {
       return this.findWithPagination({
         ...options,
         where,
-        orderBy: desc(members.joined_date),
+        orderBy: desc(members.joinDate),
       });
     }
 
     return this.findAll({
       where,
-      orderBy: desc(members.joined_date),
+      orderBy: desc(members.joinDate),
     });
   }
 
@@ -149,31 +149,31 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
    */
   async findPendingApproval(): Promise<Member[]> {
     return this.findAll({
-      where: eq(members.membership_status, 'pending_approval'),
-      orderBy: asc(members.created_at),
+      where: eq(members.status, 'pending_approval'),
+      orderBy: asc(members.createdAt),
     });
   }
 
   /**
-   * Find members by level
+   * Find members by tier
    */
-  async findByLevel(
-    levelId: string,
+  async findByTier(
+    tierId: string,
     pagination?: PaginationOptions
   ): Promise<Member[] | PaginatedResult<Member>> {
-    const where = eq(members.membership_level_id, levelId);
+    const where = eq(members.tierId, tierId);
 
     if (pagination) {
       return this.findWithPagination({
         ...pagination,
         where,
-        orderBy: desc(members.joined_date),
+        orderBy: desc(members.joinDate),
       });
     }
 
     return this.findAll({
       where,
-      orderBy: desc(members.joined_date),
+      orderBy: desc(members.joinDate),
     });
   }
 
@@ -183,7 +183,7 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
   async findByNationality(nationality: string): Promise<Member[]> {
     return this.findAll({
       where: eq(members.nationality, nationality),
-      orderBy: desc(members.joined_date),
+      orderBy: desc(members.joinDate),
     });
   }
 
@@ -192,7 +192,7 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
    */
   async getRecentlyJoined(limit: number = 10): Promise<Member[]> {
     return this.findAll({
-      orderBy: desc(members.joined_date),
+      orderBy: desc(members.joinDate),
       limit,
     });
   }
@@ -202,8 +202,8 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
    */
   async getMostActive(limit: number = 10): Promise<Member[]> {
     return this.findAll({
-      where: eq(members.membership_status, 'active'),
-      orderBy: desc(members.last_active),
+      where: eq(members.status, 'active'),
+      orderBy: desc(members.lastActivityDate),
       limit,
     });
   }
@@ -213,8 +213,8 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
    */
   async updateLastActive(id: string): Promise<Member | null> {
     return this.update(id, {
-      last_active: new Date(),
-      updated_at: new Date(),
+      lastActivityDate: new Date(),
+      updatedAt: new Date(),
     });
   }
 
@@ -226,38 +226,18 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
     status: 'active' | 'inactive' | 'suspended' | 'pending_approval' | 'expelled'
   ): Promise<Member | null> {
     return this.update(id, {
-      membership_status: status,
-      updated_at: new Date(),
+      status,
+      updatedAt: new Date(),
     });
   }
 
   /**
-   * Verify member
+   * Update membership tier
    */
-  async verify(id: string): Promise<Member | null> {
+  async updateTier(id: string, tierId: string): Promise<Member | null> {
     return this.update(id, {
-      is_verified: true,
-      updated_at: new Date(),
-    });
-  }
-
-  /**
-   * Unverify member
-   */
-  async unverify(id: string): Promise<Member | null> {
-    return this.update(id, {
-      is_verified: false,
-      updated_at: new Date(),
-    });
-  }
-
-  /**
-   * Update membership level
-   */
-  async updateLevel(id: string, levelId: string): Promise<Member | null> {
-    return this.update(id, {
-      membership_level_id: levelId,
-      updated_at: new Date(),
+      tierId,
+      updatedAt: new Date(),
     });
   }
 
@@ -265,11 +245,12 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
    * Check if email exists
    */
   async emailExists(email: string, excludeId?: string): Promise<boolean> {
-    const where = excludeId
-      ? and(eq(members.email, email), sql`${members.id} != ${excludeId}`)
-      : eq(members.email, email);
-
-    return this.existsWhere(where!);
+    const member = await this.findByEmail(email);
+    if (!member) return false;
+    
+    if (excludeId && member.id === excludeId) return false;
+    
+    return true;
   }
 
   /**
@@ -281,10 +262,10 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
   ): Promise<boolean> {
     const where = excludeId
       ? and(
-          eq(members.membership_number, membershipNumber),
+          eq(members.membershipNumber, membershipNumber),
           sql`${members.id} != ${excludeId}`
         )
-      : eq(members.membership_number, membershipNumber);
+      : eq(members.membershipNumber, membershipNumber);
 
     return this.existsWhere(where!);
   }
@@ -301,30 +282,20 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
       inactive: 0,
       suspended: 0,
       pending: 0,
-      byLevel: {},
+      byTier: {},
       byNationality: {},
     };
 
     allMembers.forEach((member) => {
       // Count by status
-      switch (member.membership_status) {
-        case 'active':
-          stats.active++;
-          break;
-        case 'inactive':
-          stats.inactive++;
-          break;
-        case 'suspended':
-          stats.suspended++;
-          break;
-        case 'pending_approval':
-          stats.pending++;
-          break;
-      }
+      if (member.status === 'active') stats.active++;
+      else if (member.status === 'inactive') stats.inactive++;
+      else if (member.status === 'suspended') stats.suspended++;
+      else if (member.status === 'pending_approval') stats.pending++;
 
-      // Count by level
-      const level = member.membership_level_id || 'unknown';
-      stats.byLevel[level] = (stats.byLevel[level] || 0) + 1;
+      // Count by tier
+      const tier = member.tierId || 'unknown';
+      stats.byTier[tier] = (stats.byTier[tier] || 0) + 1;
 
       // Count by nationality
       const nationality = member.nationality || 'unknown';
@@ -342,7 +313,7 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
       sql`${members.id} = ANY(${ids})`,
       {
         ...data,
-        updated_at: new Date(),
+        updatedAt: new Date(),
       }
     );
   }
@@ -363,14 +334,14 @@ export class MemberRepository extends BaseRepository<typeof members, Member, New
 
     // Get all membership numbers for current year
     const currentYearMembers = await this.findAll({
-      where: like(members.membership_number, `${prefix}%`),
+      where: like(members.membershipNumber, `${prefix}%`),
     });
 
     // Extract numbers and find the highest
     const numbers = currentYearMembers
       .map((m) => {
-        const match = m.membership_number?.match(/ASCA-\d{4}-(\d+)/);
-        return match ? parseInt(match[1], 10) : 0;
+        const match = m.membershipNumber?.match(/ASCA-\d{4}-(\d+)/);
+        return match ? parseInt(match[1] || '0', 10) : 0;
       })
       .filter((n) => !isNaN(n));
 

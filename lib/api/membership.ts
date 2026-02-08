@@ -291,9 +291,9 @@ export async function createMember(memberData: Partial<MemberProfile>): Promise<
       tierLevel: memberData.tierLevel || 1,
       tierId: memberData.tierId,
       status: memberData.status || 'pending_approval',
-      joinDate: Math.floor((memberData.joinDate || new Date()).getTime() / 1000),
+      joinDate: memberData.joinDate || new Date(),
       fullName: memberData.fullName!,
-      dateOfBirth: memberData.dateOfBirth ? Math.floor(memberData.dateOfBirth.getTime() / 1000) : null,
+      dateOfBirth: memberData.dateOfBirth || null,
       gender: memberData.gender,
       nationality: memberData.nationality || 'KR',
       phoneNumber: memberData.phoneNumber,
@@ -301,8 +301,8 @@ export async function createMember(memberData: Partial<MemberProfile>): Promise<
       emergencyContactName: memberData.emergencyContactName,
       emergencyContactPhone: memberData.emergencyContactPhone,
       address: memberData.address,
-      createdAt: Math.floor(Date.now() / 1000),
-      updatedAt: Math.floor(Date.now() / 1000)
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
     
     const result = await db.insert(members).values(newMember).returning()
@@ -323,18 +323,18 @@ export async function updateMember(
   try {
     const updateData: any = {
       ...updates,
-      updatedAt: Math.floor(Date.now() / 1000)
+      updatedAt: new Date()
     }
     
     // 날짜 필드 변환
     if (updates.dateOfBirth) {
-      updateData.dateOfBirth = Math.floor(updates.dateOfBirth.getTime() / 1000)
+      updateData.dateOfBirth = updates.dateOfBirth
     }
     if (updates.lastActivityDate) {
-      updateData.lastActivityDate = Math.floor(updates.lastActivityDate.getTime() / 1000)
+      updateData.lastActivityDate = updates.lastActivityDate
     }
     if (updates.lastProfileUpdate) {
-      updateData.lastProfileUpdate = Math.floor(updates.lastProfileUpdate.getTime() / 1000)
+      updateData.lastProfileUpdate = updates.lastProfileUpdate
     }
     
     // JSON 필드 변환
@@ -376,7 +376,7 @@ export async function deleteMember(memberId: string): Promise<boolean> {
       .update(members)
       .set({ 
         status: 'inactive',
-        updatedAt: Math.floor(Date.now() / 1000)
+        updatedAt: new Date()
       })
       .where(eq(members.id, memberId))
       .returning()
@@ -405,9 +405,9 @@ export async function getMembershipTiers(): Promise<MembershipTierInfo[]> {
     
     return results.map((tier: any) => ({
       ...tier,
-      requirements: tier.requirements ? JSON.parse(tier.requirements) : [],
-      benefits: tier.benefits ? JSON.parse(tier.benefits) : [],
-      metadata: tier.metadata ? JSON.parse(tier.metadata) : {},
+      requirements: tier.requirements || [],
+      benefits: tier.benefits || [],
+      metadata: tier.metadata || {},
       createdAt: new Date(Number(tier.createdAt) * 1000),
       updatedAt: new Date(Number(tier.updatedAt) * 1000)
     })) as any
@@ -434,9 +434,9 @@ export async function getMembershipTier(tierId: string): Promise<MembershipTierI
     
     return {
       ...result[0],
-      requirements: result[0].requirements ? JSON.parse(result[0].requirements) : [],
-      benefits: result[0].benefits ? JSON.parse(result[0].benefits) : [],
-      metadata: result[0].metadata ? JSON.parse(result[0].metadata) : {},
+      requirements: result[0].requirements || [],
+      benefits: result[0].benefits || [],
+      metadata: result[0].metadata || {},
       createdAt: new Date(Number(result[0].createdAt) * 1000),
       updatedAt: new Date(Number(result[0].updatedAt) * 1000)
     } as any
@@ -477,14 +477,18 @@ export async function logMemberActivity(
     
     const result = await db.insert(memberActivities).values(newActivity).returning()
     
+    if (!result[0]) {
+        throw new Error('Failed to log activity')
+    }
+    
     // 회원의 참여 점수 업데이트
     if (points > 0) {
       await db
         .update(members)
         .set({
           participationScore: sql`${members.participationScore} + ${points}`,
-          lastActivityDate: Math.floor(Date.now() / 1000),
-          updatedAt: Math.floor(Date.now() / 1000)
+          lastActivityDate: new Date(),
+          updatedAt: new Date()
         })
         .where(eq(members.id, memberId))
     }
@@ -492,7 +496,7 @@ export async function logMemberActivity(
     return {
       ...result[0],
       timestamp: new Date(Number(result[0].timestamp) * 1000),
-      metadata: result[0].metadata ? JSON.parse(result[0].metadata) : {}
+      metadata: result[0].metadata || {}
     } as any
   } catch (error) {
     logger.error('Error logging member activity', error instanceof Error ? error : new Error(String(error)))
@@ -608,7 +612,7 @@ async function generateMembershipNumber(): Promise<string> {
   
   let nextNumber = 1
   if (lastMember[0]) {
-    const lastNumber = parseInt(lastMember[0].membershipNumber.split('-')[2])
+    const lastNumber = parseInt(lastMember[0].membershipNumber.split('-')[2] || '0')
     nextNumber = lastNumber + 1
   }
   

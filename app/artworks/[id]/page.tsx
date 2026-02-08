@@ -5,8 +5,8 @@ import { useParams, useRouter } from 'next/navigation'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero } from "@/components/layout/page-hero"
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -504,7 +504,7 @@ export default function ArtworkDetailPage() {
   if (loading) {
     return (
       <main className="min-h-screen">
-        <Header />
+
         <div className="container mx-auto px-4 py-16 text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto"></div>
           <p className="mt-4 text-sm text-muted-foreground">작품 정보를 불러오는 중...</p>
@@ -517,7 +517,7 @@ export default function ArtworkDetailPage() {
   if (error || !artwork) {
     return (
       <main className="min-h-screen">
-        <Header />
+
         <div className="container mx-auto px-4 py-16 text-center">
           <p className="text-red-500">{error || '작품을 찾을 수 없습니다.'}</p>
           <Link href="/artworks">
@@ -538,7 +538,7 @@ export default function ArtworkDetailPage() {
 
   return (
     <main className="min-h-screen">
-      <Header />
+      <PageHero title="작품 상세" subtitle={artwork?.title} />
       
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-8">

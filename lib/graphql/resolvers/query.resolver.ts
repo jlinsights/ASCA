@@ -1,6 +1,7 @@
 import { eq, and, or, like, desc, asc, inArray, sql } from 'drizzle-orm';
 import type { GraphQLContext } from '../context';
-import * as schema from '@/lib/db/schema-pg';
+import { requireAuth } from '../context';
+import * as schema from '@/lib/db/schema';
 import { encodeCursor, decodeCursor } from '@/lib/pagination/cursor';
 
 /**
@@ -19,9 +20,7 @@ export const queryResolvers = {
   },
 
   me: async (_: any, __: any, context: GraphQLContext) => {
-    if (!context.user) {
-      throw new Error('Not authenticated');
-    }
+    requireAuth(context);
     return context.user;
   },
 
@@ -34,6 +33,7 @@ export const queryResolvers = {
   },
 
   memberByUserId: async (_: any, { userId }: { userId: string }, context: GraphQLContext) => {
+    requireAuth(context);
     return context.loaders.memberByUserIdLoader.load(userId);
   },
 
@@ -60,13 +60,7 @@ export const queryResolvers = {
       conditions.push(eq(schema.members.tierLevel, tierLevel));
     }
 
-    // Parse cursor
-    let cursorValue: string | null = null;
-    if (after) {
-      cursorValue = decodeCursor(after);
-    } else if (before) {
-      cursorValue = decodeCursor(before);
-    }
+
 
     // Build query
     let query = context.db.query.members.findMany({
@@ -85,7 +79,7 @@ export const queryResolvers = {
 
     const edges = members.map(node => ({
       node,
-      cursor: encodeCursor(node.id),
+      cursor: encodeCursor({ id: node.id }),
     }));
 
     return {
@@ -93,8 +87,8 @@ export const queryResolvers = {
       pageInfo: {
         hasNextPage: first ? hasMore : false,
         hasPreviousPage: last ? hasMore : false,
-        startCursor: edges.length > 0 ? edges[0].cursor : null,
-        endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+        startCursor: edges.length > 0 ? edges[0]?.cursor : null,
+        endCursor: edges.length > 0 ? edges[edges.length - 1]?.cursor : null,
       },
       totalCount: members.length,
     };
@@ -105,6 +99,7 @@ export const queryResolvers = {
     { query, limit = 10 }: { query: string; limit?: number },
     context: GraphQLContext
   ) => {
+    requireAuth(context);
     const members = await context.db.query.members.findMany({
       where: or(
         like(schema.members.fullName, `%${query}%`),
@@ -177,7 +172,7 @@ export const queryResolvers = {
 
     const edges = artists.map(node => ({
       node,
-      cursor: encodeCursor(node.id),
+      cursor: encodeCursor({ id: node.id }),
     }));
 
     return {
@@ -185,8 +180,8 @@ export const queryResolvers = {
       pageInfo: {
         hasNextPage: hasMore,
         hasPreviousPage: false,
-        startCursor: edges.length > 0 ? edges[0].cursor : null,
-        endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+        startCursor: edges.length > 0 ? edges[0]?.cursor : null,
+        endCursor: edges.length > 0 ? edges[edges.length - 1]?.cursor : null,
       },
       totalCount: artists.length,
     };
@@ -258,7 +253,7 @@ export const queryResolvers = {
 
     const edges = artworks.map(node => ({
       node,
-      cursor: encodeCursor(node.id),
+      cursor: encodeCursor({ id: node.id }),
     }));
 
     return {
@@ -266,8 +261,8 @@ export const queryResolvers = {
       pageInfo: {
         hasNextPage: hasMore,
         hasPreviousPage: false,
-        startCursor: edges.length > 0 ? edges[0].cursor : null,
-        endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+        startCursor: edges.length > 0 ? edges[0]?.cursor : null,
+        endCursor: edges.length > 0 ? edges[edges.length - 1]?.cursor : null,
       },
       totalCount: artworks.length,
     };
@@ -336,7 +331,7 @@ export const queryResolvers = {
 
     const edges = exhibitions.map(node => ({
       node,
-      cursor: encodeCursor(node.id),
+      cursor: encodeCursor({ id: node.id }),
     }));
 
     return {
@@ -344,8 +339,8 @@ export const queryResolvers = {
       pageInfo: {
         hasNextPage: hasMore,
         hasPreviousPage: false,
-        startCursor: edges.length > 0 ? edges[0].cursor : null,
-        endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+        startCursor: edges.length > 0 ? edges[0]?.cursor : null,
+        endCursor: edges.length > 0 ? edges[edges.length - 1]?.cursor : null,
       },
       totalCount: exhibitions.length,
     };
@@ -429,7 +424,7 @@ export const queryResolvers = {
 
     const edges = events.map(node => ({
       node,
-      cursor: encodeCursor(node.id),
+      cursor: encodeCursor({ id: node.id }),
     }));
 
     return {
@@ -437,8 +432,8 @@ export const queryResolvers = {
       pageInfo: {
         hasNextPage: hasMore,
         hasPreviousPage: false,
-        startCursor: edges.length > 0 ? edges[0].cursor : null,
-        endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+        startCursor: edges.length > 0 ? edges[0]?.cursor : null,
+        endCursor: edges.length > 0 ? edges[edges.length - 1]?.cursor : null,
       },
       totalCount: events.length,
     };

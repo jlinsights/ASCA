@@ -1,0 +1,1605 @@
+
+> my-v0-project@0.1.0 prebuild
+> npm run images:optimize
+
+
+> my-v0-project@0.1.0 images:optimize
+> node scripts/optimize-gallery-images.js
+
+🚀 ASCA 갤러리 이미지 최적화 시작
+
+📁 대상 디렉토리: public/images/gallery
+📐 생성할 크기: 640w, 750w, 828w, 1080w, 1200w, 1920w, 2560w
+🎨 포맷: WebP (85%), AVIF (80%)
+
+📸 총 445개 이미지 발견
+
+⏭️  건너뛰기: 2025/group_2025/JTL02055-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02052-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02051-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02050-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02049-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02048-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02047-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02046-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02045-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02044-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02043-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02042-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02035-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02034-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02033-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/group_2025/JTL02032-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150635.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150623.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150618.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150613.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150609.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150557.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150548.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150538.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150531.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150526.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150522.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150513.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150502.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150456.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150453.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150441.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150435.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150420.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150412.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150403.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150353.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150343.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150331.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150324.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150311.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150255.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150234.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150234(0).jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150213.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150159.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150151.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150132.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025/20250620_150121.jpg (이미 최적화됨)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest9.jpg
+   원본: 400x225 (16.19 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 11.2% (50/445)
+✅ 처리완료: 1개
+⏭️  건너뛰기: 49개
+💾 원본 크기: 228.61 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest8.jpg
+   원본: 400x225 (17.02 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest7.jpg
+   원본: 400x711 (41 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest69.jpg
+   원본: 400x225 (23.2 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest68.jpg
+   원본: 400x225 (24.71 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest67.jpg
+   원본: 400x225 (22.14 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest66.jpg
+   원본: 400x247 (23.3 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest65.jpg
+   원본: 400x225 (22.75 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest64.jpg
+   원본: 400x225 (21.38 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest63.jpg
+   원본: 400x225 (21.21 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest62.jpg
+   원본: 400x225 (16.28 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 13.5% (60/445)
+✅ 처리완료: 11개
+⏭️  건너뛰기: 49개
+💾 원본 크기: 228.84 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest61.jpg
+   원본: 400x225 (22.66 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest60.jpg
+   원본: 400x225 (21.28 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest6.jpg
+   원본: 400x225 (22.83 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest59.jpg
+   원본: 400x225 (20.78 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest58.jpg
+   원본: 400x225 (19.39 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest57.jpg
+   원본: 400x225 (20.75 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest56.jpg
+   원본: 400x225 (21.67 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest55.jpg
+   원본: 400x225 (21.66 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest54.jpg
+   원본: 400x225 (21.75 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest53.jpg
+   원본: 400x225 (19.6 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 15.7% (70/445)
+✅ 처리완료: 21개
+⏭️  건너뛰기: 49개
+💾 원본 크기: 229.05 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest52.jpg
+   원본: 400x225 (18 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest51.jpg
+   원본: 400x225 (14.75 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest50.jpg
+   원본: 400x225 (23.07 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest5.jpg
+   원본: 400x225 (23.33 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest49.jpg
+   원본: 400x225 (23.69 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest48.jpg
+   원본: 400x225 (19.86 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest47.jpg
+   원본: 400x225 (23.63 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest46.jpg
+   원본: 400x225 (23.65 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest45.jpg
+   원본: 400x225 (21.26 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest44.jpg
+   원본: 400x225 (18.59 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 18.0% (80/445)
+✅ 처리완료: 31개
+⏭️  건너뛰기: 49개
+💾 원본 크기: 229.25 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest43.jpg
+   원본: 400x225 (24.44 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest42.jpg
+   원본: 400x225 (12.64 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest41.jpg
+   원본: 400x225 (21.08 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest40.jpg
+   원본: 400x225 (22.85 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest4.jpg
+   원본: 400x225 (24.18 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest39.jpg
+   원본: 400x225 (21.86 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest38.jpg
+   원본: 400x225 (21.16 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest37.jpg
+   원본: 400x225 (7.63 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest36.jpg
+   원본: 400x225 (17.19 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest35.jpg
+   원본: 400x225 (17.29 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 20.2% (90/445)
+✅ 처리완료: 41개
+⏭️  건너뛰기: 49개
+💾 원본 크기: 229.44 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest34.jpg
+   원본: 400x225 (19.67 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest33.jpg
+   원본: 400x225 (16.91 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest32.jpg
+   원본: 400x225 (18.88 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest31.jpg
+   원본: 400x225 (18.44 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest30.jpg
+   원본: 400x225 (16.06 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest3.jpg
+   원본: 400x225 (17.36 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest29.jpg
+   원본: 400x225 (18.88 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest28.jpg
+   원본: 400x225 (22.16 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest27.jpg
+   원본: 400x225 (19.51 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest26.jpg
+   원본: 400x225 (19.87 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 22.5% (100/445)
+✅ 처리완료: 51개
+⏭️  건너뛰기: 49개
+💾 원본 크기: 229.62 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest25.jpg
+   원본: 400x225 (23.63 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest24.jpg
+   원본: 400x225 (24.07 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest23.jpg
+   원본: 400x225 (18.21 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest22.jpg
+   원본: 400x225 (23.54 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest21.jpg
+   원본: 400x225 (20.57 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest20.jpg
+   원본: 400x225 (21.34 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest2.jpg
+   원본: 400x225 (23.48 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest19.jpg
+   원본: 400x225 (21.88 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest18.jpg
+   원본: 400x225 (14.81 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest17.jpg
+   원본: 400x225 (20.85 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 24.7% (110/445)
+✅ 처리완료: 61개
+⏭️  건너뛰기: 49개
+💾 원본 크기: 229.83 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest16.jpg
+   원본: 400x225 (15.01 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest15.jpg
+   원본: 400x225 (17.45 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest14.jpg
+   원본: 400x225 (17.98 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest13.jpg
+   원본: 400x225 (18.78 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest12.jpg
+   원본: 400x225 (18.41 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest11.jpg
+   원본: 400x225 (18.94 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest10.jpg
+   원본: 400x225 (20.46 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/contest_2025-04-26/thumbnails/contest1.jpg
+   원본: 400x225 (17.84 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/44_추가장면_행사이모저모04.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/43_추가장면_행사이모저모03.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/42_추가장면_행사이모저모02.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/41_추가장면_행사이모저모01.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/40_주요장면_전시마무리02.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/39_주요장면_전시마무리01.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/38_주요장면_기념촬영03.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/37_주요장면_기념촬영02.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/36_주요장면_기념촬영01.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/35_주요장면_단체모임.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/34_주요장면_참석자들03.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/33_주요장면_참석자들02.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/32_주요장면_참석자들01.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/31_주요장면_작품감상.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/30_주요장면_전시공간02.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/29_주요장면_전시공간01.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/28_주요장면_관람객교류.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/27_주요장면_서예대작03.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/26_주요장면_서예대작02.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/25_주요장면_서예대작01.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/24_주요장면_전시작품05.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/23_주요장면_전시작품04.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/22_주요장면_전시작품03.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/21_주요장면_전시작품02.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/20_주요장면_전시작품01.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/19_주요장면_입구환영문.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/18_주요장면_회장전경01.jpeg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/17_오후행사_폐회준비.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/16_오후행사_교류시간.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/15_전시관람_작품세부.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/14_전시관람_전시공간.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/13_전시관람_작품해설.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/12_전시관람_관람객들.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/11_전시관람_서예작품감상.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/10_개전식_단체사진.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/09_개전식_기념촬영.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/08_개전식_테이프커팅.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/07_개전식_축사장면.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/06_개전식_주요인사.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/05_개전식_내빈환영.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/04_개전식준비_안내데스크.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/03_개전식준비_전시장입구.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/02_개전식준비_작품배치.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/exhibition_2025_12-13/01_개전식준비_회장전경.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL02062-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL02061-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL02060-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01987-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01986-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01985-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01983-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01982-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01981-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01980-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01979-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01975-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01971-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01969-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01967-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01966-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01965-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01962-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01960-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01959-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01958-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01957-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01956-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01955-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01953-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01952-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01951-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01950-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01949-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01948-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01947-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01946-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01945-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01928-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/ceremony_2025/JTL01927-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02039-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02036-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02030-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02029-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02026-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02025-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02024-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02022-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02021-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02020-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02019-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02017-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02015-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02012-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02011-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02010-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02009-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02008-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02005-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02004-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02003-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL02000-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01999-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01998-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01997-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01995-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01994-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01993-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01992-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01991-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01990-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01989-1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/award_2025/JTL01988-1.jpg (이미 최적화됨)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee9.jpg
+   원본: 400x300 (19.83 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee8.jpg
+   원본: 400x300 (23.79 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee73.jpg
+   원본: 400x231 (24.43 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee72.jpg
+   원본: 400x244 (26.08 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee71.jpg
+   원본: 400x225 (23.11 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee70.jpg
+   원본: 400x300 (27.05 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee7.jpg
+   원본: 400x300 (20.76 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee69.jpg
+   원본: 400x300 (26.11 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee68.jpg
+   원본: 400x300 (20.65 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee67.jpg
+   원본: 400x300 (33.09 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 53.9% (240/445)
+✅ 처리완료: 79개
+⏭️  건너뛰기: 161개
+💾 원본 크기: 774.9 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee66.jpg
+   원본: 400x300 (31.67 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee65.jpg
+   원본: 400x534 (55.86 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee64.jpg
+   원본: 400x300 (26.35 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee63.jpg
+   원본: 400x300 (25.9 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee62.jpg
+   원본: 400x300 (26.63 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee61.jpg
+   원본: 400x225 (19.22 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee60.jpg
+   원본: 400x225 (21.93 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee6.jpg
+   원본: 400x300 (20.01 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee59.jpg
+   원본: 400x225 (24.56 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee58.jpg
+   원본: 400x300 (21.2 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 56.2% (250/445)
+✅ 처리완료: 89개
+⏭️  건너뛰기: 161개
+💾 원본 크기: 775.17 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee57.jpg
+   원본: 400x300 (22.42 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee56.jpg
+   원본: 400x300 (20.7 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee55.jpg
+   원본: 400x300 (18.63 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee54.jpg
+   원본: 400x300 (24.91 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee53.jpg
+   원본: 400x300 (25.71 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee52.jpg
+   원본: 400x300 (27.29 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee51.jpg
+   원본: 400x300 (26.82 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee50.jpg
+   원본: 400x300 (19.79 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee5.jpg
+   원본: 400x375 (20.47 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee49.jpg
+   원본: 400x300 (24.65 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 58.4% (260/445)
+✅ 처리완료: 99개
+⏭️  건너뛰기: 161개
+💾 원본 크기: 775.39 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee48.jpg
+   원본: 400x300 (25.6 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee47.jpg
+   원본: 400x300 (26.24 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee46.jpg
+   원본: 400x225 (18.88 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee45.jpg
+   원본: 400x225 (18.31 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee44.jpg
+   원본: 400x225 (18.1 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee43.jpg
+   원본: 400x300 (14.52 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee42.jpg
+   원본: 400x300 (19.89 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee41.jpg
+   원본: 400x300 (13.2 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee40.jpg
+   원본: 400x300 (20.9 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee4.jpg
+   원본: 400x300 (18.24 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 60.7% (270/445)
+✅ 처리완료: 109개
+⏭️  건너뛰기: 161개
+💾 원본 크기: 775.58 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee39.jpg
+   원본: 400x300 (13.2 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee38.jpg
+   원본: 400x300 (14.67 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee37.jpg
+   원본: 400x300 (14.65 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee36.jpg
+   원본: 400x300 (15.91 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee35.jpg
+   원본: 400x300 (14.63 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee34.jpg
+   원본: 400x300 (12.26 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee33.jpg
+   원본: 400x300 (12.95 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee32.jpg
+   원본: 400x300 (14.06 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee31.jpg
+   원본: 400x300 (12.95 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee30.jpg
+   원본: 400x300 (13.63 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 62.9% (280/445)
+✅ 처리완료: 119개
+⏭️  건너뛰기: 161개
+💾 원본 크기: 775.72 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee3.jpg
+   원본: 400x300 (23.07 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee29.jpg
+   원본: 400x300 (13.48 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee28.jpg
+   원본: 400x300 (14.42 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee27.jpg
+   원본: 400x300 (13.33 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee26.jpg
+   원본: 400x300 (14.18 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee25.jpg
+   원본: 400x300 (14 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee24.jpg
+   원본: 400x300 (12.76 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee23.jpg
+   원본: 400x300 (13.66 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee22.jpg
+   원본: 400x300 (14.33 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee21.jpg
+   원본: 400x300 (14.52 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 65.2% (290/445)
+✅ 처리완료: 129개
+⏭️  건너뛰기: 161개
+💾 원본 크기: 775.86 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee20.jpg
+   원본: 400x300 (15.26 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee2.jpg
+   원본: 400x225 (18.73 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee19.jpg
+   원본: 400x300 (15.85 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee18.jpg
+   원본: 400x300 (15.33 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee17.jpg
+   원본: 400x291 (12.53 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee16.jpg
+   원본: 400x300 (13.9 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee15.jpg
+   원본: 400x300 (12.68 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee14.jpg
+   원본: 400x300 (13.45 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee13.jpg
+   원본: 400x300 (13.54 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee12.jpg
+   원본: 400x300 (13.68 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+📊 진행률: 67.4% (300/445)
+✅ 처리완료: 139개
+⏭️  건너뛰기: 161개
+💾 원본 크기: 776 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee11.jpg
+   원본: 400x300 (15.66 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee10.jpg
+   원본: 400x300 (14.7 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+
+🖼️  처리 중: 2025/committee_2025-04-19/thumbnails/committee1.jpg
+   원본: 400x231 (24.43 KB)
+   ✅ 0개 파일 생성 (0 Bytes, 100.0% 절감)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest9.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest8.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest7.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest69.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest68.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest67.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest66.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest65.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest64.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest63.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest62.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest61.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest60.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest6.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest59.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest58.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest57.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest56.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest55.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest54.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest53.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest52.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest51.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest50.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest5.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest49.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest48.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest47.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest46.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest45.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest44.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest43.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest42.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest41.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest40.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest4.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest39.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest38.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest37.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest36.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest35.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest34.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest33.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest32.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest31.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest30.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest3.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest29.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest28.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest27.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest26.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest25.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest24.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest23.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest22.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest21.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest20.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest2.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest19.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest18.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest17.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest16.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest15.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest14.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest13.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest12.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest11.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest10.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/contest_2025-04-26/originals/contest1.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee9.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee8.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee73.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee72.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee71.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee70.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee7.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee69.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee68.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee67.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee66.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee65.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee64.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee63.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee62.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee61.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee60.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee6.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee59.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee58.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee57.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee56.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee55.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee54.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee53.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee52.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee51.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee50.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee5.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee49.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee48.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee47.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee46.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee45.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee44.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee43.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee42.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee41.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee40.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee4.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee39.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee38.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee37.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee36.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee35.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee34.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee33.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee32.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee31.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee30.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee3.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee29.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee28.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee27.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee26.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee25.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee24.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee23.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee22.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee21.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee20.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee2.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee19.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee18.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee17.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee16.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee15.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee14.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee13.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee12.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee11.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee10.jpg (이미 최적화됨)
+⏭️  건너뛰기: 2025/committee_2025-04-19/originals/committee1.jpg (이미 최적화됨)
+
+============================================================
+✨ 최적화 완료!
+
+
+📊 진행률: 100.0% (445/445)
+✅ 처리완료: 142개
+⏭️  건너뛰기: 303개
+💾 원본 크기: 784.16 MB
+🚀 최적화 크기: 0 Bytes
+📉 용량 절감: 100.0%
+
+============================================================
+
+💡 다음 단계:
+   1. Next.js Image 컴포넌트에서 최적화된 이미지 사용
+   2. sizes 속성 설정: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+   3. 배포 후 Core Web Vitals 확인
+
+
+> my-v0-project@0.1.0 build
+> next build
+
+   ▲ Next.js 16.0.10 (Turbopack)
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+ ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+> Build error occurred
+Error: Turbopack build failed with 27 errors:
+./lib/graphql/context.ts:4:1
+Export eventParticipants doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export eventParticipants was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/mutation.resolver.ts:4:1
+Export eventParticipants doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { requireAuth[33m,[39m requireAdmin } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m
+ [90m 7 |[39m [90m * Mutation Resolvers[39m[0m
+
+The export eventParticipants was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/mutation.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/types.resolver.ts:3:1
+Export eventParticipants doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m
+ [90m 5 |[39m [90m/**[39m
+ [90m 6 |[39m [90m * Type Resolvers[39m[0m
+
+The export eventParticipants was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/types.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export events doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export events was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/mutation.resolver.ts:4:1
+Export events doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { requireAuth[33m,[39m requireAdmin } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m
+ [90m 7 |[39m [90m * Mutation Resolvers[39m[0m
+
+The export events was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/mutation.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/query.resolver.ts:3:1
+Export events doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq[33m,[39m and[33m,[39m or[33m,[39m like[33m,[39m desc[33m,[39m asc[33m,[39m inArray[33m,[39m sql } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { encodeCursor[33m,[39m decodeCursor } [36mfrom[39m [32m'@/lib/pagination/cursor'[39m[33m;[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m[0m
+
+The export events was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/query.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export exhibitionArtists doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export exhibitionArtists was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/types.resolver.ts:3:1
+Export exhibitionArtists doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m
+ [90m 5 |[39m [90m/**[39m
+ [90m 6 |[39m [90m * Type Resolvers[39m[0m
+
+The export exhibitionArtists was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/types.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export exhibitionArtworks doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export exhibitionArtworks was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/types.resolver.ts:3:1
+Export exhibitionArtworks doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m
+ [90m 5 |[39m [90m/**[39m
+ [90m 6 |[39m [90m * Type Resolvers[39m[0m
+
+The export exhibitionArtworks was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/types.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export galleries doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export galleries was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/query.resolver.ts:3:1
+Export galleries doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq[33m,[39m and[33m,[39m or[33m,[39m like[33m,[39m desc[33m,[39m asc[33m,[39m inArray[33m,[39m sql } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { encodeCursor[33m,[39m decodeCursor } [36mfrom[39m [32m'@/lib/pagination/cursor'[39m[33m;[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m[0m
+
+The export galleries was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/query.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export galleryArtworks doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export galleryArtworks was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/types.resolver.ts:3:1
+Export galleryArtworks doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m
+ [90m 5 |[39m [90m/**[39m
+ [90m 6 |[39m [90m * Type Resolvers[39m[0m
+
+The export galleryArtworks was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/types.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/types.resolver.ts:3:1
+Export memberActivities doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m
+ [90m 5 |[39m [90m/**[39m
+ [90m 6 |[39m [90m * Type Resolvers[39m[0m
+
+The export memberActivities was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/types.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/types.resolver.ts:3:1
+Export memberCertifications doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m
+ [90m 5 |[39m [90m/**[39m
+ [90m 6 |[39m [90m * Type Resolvers[39m[0m
+
+The export memberCertifications was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/types.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export members doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export members was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/mutation.resolver.ts:4:1
+Export members doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { requireAuth[33m,[39m requireAdmin } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m
+ [90m 7 |[39m [90m * Mutation Resolvers[39m[0m
+
+The export members was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/mutation.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/query.resolver.ts:3:1
+Export members doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq[33m,[39m and[33m,[39m or[33m,[39m like[33m,[39m desc[33m,[39m asc[33m,[39m inArray[33m,[39m sql } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { encodeCursor[33m,[39m decodeCursor } [36mfrom[39m [32m'@/lib/pagination/cursor'[39m[33m;[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m[0m
+
+The export members was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/query.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/types.resolver.ts:3:1
+Export members doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m
+ [90m 5 |[39m [90m/**[39m
+ [90m 6 |[39m [90m * Type Resolvers[39m[0m
+
+The export members was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/types.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/mutation.resolver.ts:4:1
+Export membershipApplications doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { requireAuth[33m,[39m requireAdmin } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m
+ [90m 7 |[39m [90m * Mutation Resolvers[39m[0m
+
+The export membershipApplications was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/mutation.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/types.resolver.ts:3:1
+Export membershipApplications doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m
+ [90m 5 |[39m [90m/**[39m
+ [90m 6 |[39m [90m * Type Resolvers[39m[0m
+
+The export membershipApplications was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/types.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export membershipTiers doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export membershipTiers was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/query.resolver.ts:3:1
+Export membershipTiers doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq[33m,[39m and[33m,[39m or[33m,[39m like[33m,[39m desc[33m,[39m asc[33m,[39m inArray[33m,[39m sql } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { encodeCursor[33m,[39m decodeCursor } [36mfrom[39m [32m'@/lib/pagination/cursor'[39m[33m;[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m[0m
+
+The export membershipTiers was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import exhibitions?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/query.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export news doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export news was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/resolvers/query.resolver.ts:3:1
+Export news doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { eq[33m,[39m and[33m,[39m or[33m,[39m like[33m,[39m desc[33m,[39m asc[33m,[39m inArray[33m,[39m sql } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m type { [33mGraphQLContext[39m } [36mfrom[39m [32m'../context'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { encodeCursor[33m,[39m decodeCursor } [36mfrom[39m [32m'@/lib/pagination/cursor'[39m[33m;[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [90m/**[39m[0m
+
+The export news was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/resolvers/query.resolver.ts
+    ./lib/graphql/resolvers/index.ts
+    ./app/api/graphql/route.ts
+
+
+./lib/graphql/context.ts:4:1
+Export users doesn't exist in target module
+[0m [90m 2 |[39m [36mimport[39m { createIdLoader[33m,[39m [33mDataLoader[39m } [36mfrom[39m [32m'@/lib/optimization/dataloader'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { eq[33m,[39m inArray } [36mfrom[39m [32m'drizzle-orm'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m schema [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m type { [33mUser[39m } [36mfrom[39m [32m'@/lib/db/schema-pg'[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [90m/**[39m[0m
+
+The export users was not found in module [project]/lib/db/schema-pg.ts [app-route] (ecmascript).
+Did you mean to import artists?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./lib/graphql/context.ts
+    ./app/api/graphql/route.ts
+
+
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/mutation.resolver.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/types.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/mutation.resolver.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/query.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/types.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/types.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/query.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/types.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/resolvers/types.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/resolvers/types.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/mutation.resolver.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/query.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/resolvers/types.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/resolvers/mutation.resolver.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/types.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/query.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
+    at <unknown> (./lib/graphql/resolvers/query.resolver.ts:3:1)
+    at <unknown> (./lib/graphql/context.ts:4:1)
