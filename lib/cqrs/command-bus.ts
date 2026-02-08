@@ -16,10 +16,13 @@ export interface Command {
   };
 }
 
+import { AppError } from '@/lib/utils/app-error';
+
 export interface CommandResult<T = any> {
   success: boolean;
   data?: T;
   error?: string;
+  statusCode?: number;
   metadata?: {
     executionTime: number;
     timestamp: number;
@@ -82,7 +85,7 @@ export class CommandBus {
       // 핸들러 찾기
       const handler = this.handlers.get(command.type);
       if (!handler) {
-        throw new Error(`No handler registered for command type: ${command.type}`);
+        throw AppError.internal(`No handler registered for command type: ${command.type}`);
       }
 
       // Command 실행
@@ -104,6 +107,7 @@ export class CommandBus {
 
       return {
         ...result,
+        statusCode: 200,
         metadata: {
           executionTime: Date.now() - startTime,
           timestamp: Date.now()
@@ -111,9 +115,11 @@ export class CommandBus {
       };
 
     } catch (error) {
+      const statusCode = error instanceof AppError ? error.statusCode : 500;
       const errorResult: CommandResult = {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
+        statusCode,
         metadata: {
           executionTime: Date.now() - startTime,
           timestamp: Date.now()
@@ -161,7 +167,7 @@ export class ValidationMiddleware implements CommandMiddleware {
   async before(command: Command): Promise<Command> {
     // 기본 검증 로직
     if (!command.type) {
-      throw new Error('Command type is required');
+      throw AppError.badRequest('Command type is required');
     }
 
     if (!command.metadata) {

@@ -129,7 +129,7 @@ export async function setupTestDatabase(): Promise<Pool> {
   // Get pg-compatible pool
   testPool = testDb.adapters.createPg().Pool;
 
-  return new testPool();
+  return new (testPool as any)();
 }
 
 /**
@@ -212,7 +212,7 @@ export async function executeQuery<T = any>(sql: string, params?: any[]): Promis
   if (!testDb) {
     throw new Error('Test database not initialized');
   }
-  return testDb.public.many(sql, params);
+  return (testDb.public as any).many(sql, params);
 }
 
 /**

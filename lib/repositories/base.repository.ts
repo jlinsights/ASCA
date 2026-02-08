@@ -1,5 +1,5 @@
 import { SQL, eq, and, or, like, desc, asc } from 'drizzle-orm';
-import { db, type schema } from '@/lib/db';
+import { db } from '@/lib/db';
 import type { PgTable } from 'drizzle-orm/pg-core';
 
 /**
@@ -66,8 +66,8 @@ export abstract class BaseRepository<
   async findById(id: string): Promise<TSelect | null> {
     const [result] = await db
       .select()
-      .from(this.table)
-      .where(eq(this.table.id, id))
+      .from(this.table as any)
+      .where(eq((this.table as any).id, id))
       .limit(1);
 
     return (result as TSelect) || null;
@@ -77,7 +77,7 @@ export abstract class BaseRepository<
    * Find all records with optional filtering and sorting
    */
   async findAll(options?: QueryOptions<TSelect>): Promise<TSelect[]> {
-    let query = db.select().from(this.table);
+    let query = db.select().from(this.table as any);
 
     if (options?.where) {
       query = query.where(options.where) as typeof query;
@@ -112,7 +112,7 @@ export abstract class BaseRepository<
     const offset = (page - 1) * limit;
 
     // Get total count
-    let countQuery = db.select().from(this.table);
+    let countQuery = db.select().from(this.table as any);
     if (queryOptions.where) {
       countQuery = countQuery.where(queryOptions.where) as typeof countQuery;
     }
@@ -179,7 +179,7 @@ export abstract class BaseRepository<
     const [result] = await db
       .update(this.table)
       .set(data as any)
-      .where(eq(this.table.id, id))
+      .where(eq((this.table as any).id, id))
       .returning();
 
     return (result as TSelect) || null;
@@ -207,7 +207,7 @@ export abstract class BaseRepository<
   async delete(id: string): Promise<boolean> {
     const result = await db
       .delete(this.table)
-      .where(eq(this.table.id, id))
+      .where(eq((this.table as any).id, id))
       .returning();
 
     return result.length > 0;
@@ -245,7 +245,7 @@ export abstract class BaseRepository<
    * Count total records
    */
   async count(where?: SQL): Promise<number> {
-    let query = db.select().from(this.table);
+    let query = db.select().from(this.table as any);
 
     if (where) {
       query = query.where(where) as typeof query;
@@ -298,7 +298,7 @@ export abstract class BaseRepository<
     callback: (tx: typeof db) => Promise<T>
   ): Promise<T> {
     return await db.transaction(async (tx) => {
-      return await callback(tx as typeof db);
+      return await callback(tx as any);
     });
   }
 }

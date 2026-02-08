@@ -1,20 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { sqliteTable, text, integer, real, blob, AnySQLiteColumn } from 'drizzle-orm/sqlite-core';
+import { pgTable, text, integer, boolean, timestamp, jsonb, real, doublePrecision, uuid } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 // 사용자 테이블
-export const users = sqliteTable('users', {
+export const users = pgTable('users', {
   id: text('id').primaryKey(),
   email: text('email').notNull().unique(),
   name: text('name').notNull(),
   role: text('role', { enum: ['admin', 'artist', 'member', 'visitor'] }).default('visitor').notNull(),
   avatar: text('avatar'),
   bio: text('bio'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 작가 테이블
-export const artists = sqliteTable('artists', {
+export const artists = pgTable('artists', {
   id: text('id').primaryKey(),
   userId: text('user_id').references(() => users.id),
   name: text('name').notNull(),
@@ -29,19 +30,19 @@ export const artists = sqliteTable('artists', {
   bioJp: text('bio_jp'),
   birthYear: integer('birth_year'),
   nationality: text('nationality'),
-  specialties: text('specialties'), // JSON 형태로 저장
-  awards: text('awards'), // JSON 형태로 저장
-  exhibitions: text('exhibitions'), // JSON 형태로 저장
+  specialties: jsonb('specialties').$type<string[]>(), // JSON 형태로 저장
+  awards: jsonb('awards').$type<string[]>(), // JSON 형태로 저장
+  exhibitions: jsonb('exhibitions').$type<string[]>(), // JSON 형태로 저장
   profileImage: text('profile_image'),
   website: text('website'),
-  socialMedia: text('social_media'), // JSON 형태로 저장
-  isActive: integer('is_active', { mode: 'boolean' }).default(true).notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  socialMedia: jsonb('social_media'), // JSON 형태로 저장
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 작품 테이블
-export const artworks = sqliteTable('artworks', {
+export const artworks = pgTable('artworks', {
   id: text('id').primaryKey(),
   artistId: text('artist_id').references(() => artists.id).notNull(),
   title: text('title').notNull(),
@@ -62,19 +63,19 @@ export const artworks = sqliteTable('artworks', {
   dimensions: text('dimensions'), // "가로 x 세로 cm"
   year: integer('year'),
   imageUrl: text('image_url'),
-  imageUrls: text('image_urls'), // JSON 배열
+  imageUrls: jsonb('image_urls').$type<string[]>(), // JSON 배열
   price: real('price'),
   currency: text('currency').default('KRW'),
-  isForSale: integer('is_for_sale', { mode: 'boolean' }).default(false).notNull(),
-  isFeatured: integer('is_featured', { mode: 'boolean' }).default(false).notNull(),
-  tags: text('tags'), // JSON 배열
-  metadata: text('metadata'), // JSON 형태로 추가 정보 저장
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  isForSale: boolean('is_for_sale').default(false).notNull(),
+  isFeatured: boolean('is_featured').default(false).notNull(),
+  tags: jsonb('tags').$type<string[]>(), // JSON 배열
+  metadata: jsonb('metadata'), // JSON 형태로 추가 정보 저장
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 전시회 테이블
-export const exhibitions = sqliteTable('exhibitions', {
+export const exhibitions = pgTable('exhibitions', {
   id: text('id').primaryKey(),
   title: text('title').notNull(),
   titleKo: text('title_ko'),
@@ -94,41 +95,41 @@ export const exhibitions = sqliteTable('exhibitions', {
   }).default('upcoming').notNull(),
   venue: text('venue'),
   venueAddress: text('venue_address'),
-  startDate: integer('start_date', { mode: 'timestamp' }).notNull(),
-  endDate: integer('end_date', { mode: 'timestamp' }).notNull(),
+  startDate: timestamp('start_date').notNull(),
+  endDate: timestamp('end_date').notNull(),
   openingHours: text('opening_hours'),
   admissionFee: real('admission_fee'),
   currency: text('currency').default('KRW'),
   posterImage: text('poster_image'),
-  galleryImages: text('gallery_images'), // JSON 배열
+  galleryImages: jsonb('gallery_images').$type<string[]>(), // JSON 배열
   curatorNotes: text('curator_notes'),
-  isFeatured: integer('is_featured', { mode: 'boolean' }).default(false).notNull(),
-  metadata: text('metadata'), // JSON 형태
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  isFeatured: boolean('is_featured').default(false).notNull(),
+  metadata: jsonb('metadata'), // JSON 형태
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 전시회-작품 관계 테이블
-export const exhibitionArtworks = sqliteTable('exhibition_artworks', {
+export const exhibitionArtworks = pgTable('exhibition_artworks', {
   id: text('id').primaryKey(),
   exhibitionId: text('exhibition_id').references(() => exhibitions.id).notNull(),
   artworkId: text('artwork_id').references(() => artworks.id).notNull(),
   displayOrder: integer('display_order'),
-  isHighlight: integer('is_highlight', { mode: 'boolean' }).default(false).notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  isHighlight: boolean('is_highlight').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 // 전시회-작가 관계 테이블
-export const exhibitionArtists = sqliteTable('exhibition_artists', {
+export const exhibitionArtists = pgTable('exhibition_artists', {
   id: text('id').primaryKey(),
   exhibitionId: text('exhibition_id').references(() => exhibitions.id).notNull(),
   artistId: text('artist_id').references(() => artists.id).notNull(),
   role: text('role').default('participant'), // participant, curator, guest 등
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 // 뉴스/공지사항 테이블
-export const news = sqliteTable('news', {
+export const news = pgTable('news', {
   id: text('id').primaryKey(),
   title: text('title').notNull(),
   titleKo: text('title_ko'),
@@ -149,18 +150,18 @@ export const news = sqliteTable('news', {
   }).default('draft').notNull(),
   authorId: text('author_id').references(() => users.id),
   featuredImage: text('featured_image'),
-  images: text('images'), // JSON 배열
-  tags: text('tags'), // JSON 배열
-  publishedAt: integer('published_at', { mode: 'timestamp' }),
-  isPinned: integer('is_pinned', { mode: 'boolean' }).default(false).notNull(),
+  images: jsonb('images').$type<string[]>(), // JSON 배열
+  tags: jsonb('tags').$type<string[]>(), // JSON 배열
+  publishedAt: timestamp('published_at'),
+  isPinned: boolean('is_pinned').default(false).notNull(),
   viewCount: integer('view_count').default(0).notNull(),
-  metadata: text('metadata'), // JSON 형태
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  metadata: jsonb('metadata'), // JSON 형태
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 이벤트 테이블
-export const events = sqliteTable('events', {
+export const events = pgTable('events', {
   id: text('id').primaryKey(),
   title: text('title').notNull(),
   titleKo: text('title_ko'),
@@ -180,38 +181,38 @@ export const events = sqliteTable('events', {
   }).default('upcoming').notNull(),
   venue: text('venue'),
   venueAddress: text('venue_address'),
-  startDate: integer('start_date', { mode: 'timestamp' }).notNull(),
-  endDate: integer('end_date', { mode: 'timestamp' }).notNull(),
-  registrationDeadline: integer('registration_deadline', { mode: 'timestamp' }),
+  startDate: timestamp('start_date').notNull(),
+  endDate: timestamp('end_date').notNull(),
+  registrationDeadline: timestamp('registration_deadline'),
   maxParticipants: integer('max_participants'),
   currentParticipants: integer('current_participants').default(0).notNull(),
   fee: real('fee'),
   currency: text('currency').default('KRW'),
   organizerId: text('organizer_id').references(() => users.id),
   posterImage: text('poster_image'),
-  images: text('images'), // JSON 배열
+  images: jsonb('images').$type<string[]>(), // JSON 배열
   requirements: text('requirements'),
-  materials: text('materials'), // JSON 배열
-  isFeatured: integer('is_featured', { mode: 'boolean' }).default(false).notNull(),
-  metadata: text('metadata'), // JSON 형태
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  materials: jsonb('materials').$type<string[]>(), // JSON 배열
+  isFeatured: boolean('is_featured').default(false).notNull(),
+  metadata: jsonb('metadata'), // JSON 형태
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 이벤트 참가자 테이블
-export const eventParticipants = sqliteTable('event_participants', {
+export const eventParticipants = pgTable('event_participants', {
   id: text('id').primaryKey(),
   eventId: text('event_id').references(() => events.id).notNull(),
   userId: text('user_id').references(() => users.id).notNull(),
   status: text('status', { 
     enum: ['registered', 'confirmed', 'attended', 'cancelled'] 
   }).default('registered').notNull(),
-  registeredAt: integer('registered_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  registeredAt: timestamp('registered_at').defaultNow().notNull(),
   notes: text('notes'),
 });
 
 // 갤러리 테이블
-export const galleries = sqliteTable('galleries', {
+export const galleries = pgTable('galleries', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   nameKo: text('name_ko'),
@@ -227,36 +228,36 @@ export const galleries = sqliteTable('galleries', {
     enum: ['permanent', 'temporary', 'virtual', 'archive'] 
   }).default('permanent').notNull(),
   coverImage: text('cover_image'),
-  isActive: integer('is_active', { mode: 'boolean' }).default(true).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
   sortOrder: integer('sort_order').default(0).notNull(),
-  metadata: text('metadata'), // JSON 형태
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  metadata: jsonb('metadata'), // JSON 형태
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 갤러리-작품 관계 테이블
-export const galleryArtworks = sqliteTable('gallery_artworks', {
+export const galleryArtworks = pgTable('gallery_artworks', {
   id: text('id').primaryKey(),
   galleryId: text('gallery_id').references(() => galleries.id).notNull(),
   artworkId: text('artwork_id').references(() => artworks.id).notNull(),
   displayOrder: integer('display_order'),
-  isHighlight: integer('is_highlight', { mode: 'boolean' }).default(false).notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  isHighlight: boolean('is_highlight').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 // 관리자 권한 테이블
-export const adminPermissions = sqliteTable('admin_permissions', {
+export const adminPermissions = pgTable('admin_permissions', {
   id: text('id').primaryKey(),
   userId: text('user_id').references(() => users.id).notNull(),
-  permissions: text('permissions').notNull(), // JSON 형태로 권한 저장
+  permissions: jsonb('permissions').notNull(), // JSON 형태
   grantedBy: text('granted_by').references(() => users.id),
-  grantedAt: integer('granted_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }),
-  isActive: integer('is_active', { mode: 'boolean' }).default(true).notNull(),
+  grantedAt: timestamp('granted_at').defaultNow().notNull(),
+  expiresAt: timestamp('expires_at'),
+  isActive: boolean('is_active').default(true).notNull(),
 });
 
 // 회원 등급 테이블
-export const membershipTiers = sqliteTable('membership_tiers', {
+export const membershipTiers = pgTable('membership_tiers', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   nameKo: text('name_ko').notNull(),
@@ -268,32 +269,32 @@ export const membershipTiers = sqliteTable('membership_tiers', {
   descriptionEn: text('description_en'),
   descriptionCn: text('description_cn'),
   descriptionJp: text('description_jp'),
-  level: integer('level').notNull(), // 1: Student, 2: Advanced, 3: Certified Master, 4: Honorary Master, 5: Institutional, 6: International
-  requirements: text('requirements'), // JSON 형태로 요구사항 저장
-  benefits: text('benefits'), // JSON 형태로 혜택 저장
+  level: integer('level').notNull(), 
+  requirements: jsonb('requirements'), // JSON 형태로 요구사항 저장
+  benefits: jsonb('benefits'), // JSON 형태로 혜택 저장
   annualFee: real('annual_fee').default(0).notNull(),
   currency: text('currency').default('KRW'),
-  color: text('color').default('#000000'), // 회원등급 식별 색상
-  icon: text('icon'), // 회원등급 아이콘
-  isActive: integer('is_active', { mode: 'boolean' }).default(true).notNull(),
+  color: text('color').default('#000000'), 
+  icon: text('icon'), 
+  isActive: boolean('is_active').default(true).notNull(),
   sortOrder: integer('sort_order').default(0).notNull(),
-  metadata: text('metadata'), // JSON 형태
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  metadata: jsonb('metadata'), 
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 회원 정보 테이블
-export const members = sqliteTable('members', {
+export const members = pgTable('members', {
   id: text('id').primaryKey(),
   userId: text('user_id').references(() => users.id).notNull().unique(),
-  membershipNumber: text('membership_number').notNull().unique(), // ASCA-2025-001 형태
-  tierLevel: integer('tier_level').default(1).notNull(), // 현재 회원 등급
+  membershipNumber: text('membership_number').notNull().unique(), 
+  tierLevel: integer('tier_level').default(1).notNull(), 
   tierId: text('tier_id').references(() => membershipTiers.id),
   status: text('status', { 
     enum: ['active', 'inactive', 'suspended', 'pending_approval', 'expelled'] 
   }).default('pending_approval').notNull(),
-  joinDate: integer('join_date', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  lastActivityDate: integer('last_activity_date', { mode: 'timestamp' }),
+  joinDate: timestamp('join_date').defaultNow().notNull(),
+  lastActivityDate: timestamp('last_activity_date'),
   
   // 개인 정보
   fullName: text('full_name').notNull(),
@@ -301,7 +302,7 @@ export const members = sqliteTable('members', {
   fullNameEn: text('full_name_en'),
   fullNameCn: text('full_name_cn'),
   fullNameJp: text('full_name_jp'),
-  dateOfBirth: integer('date_of_birth', { mode: 'timestamp' }),
+  dateOfBirth: timestamp('date_of_birth'),
   gender: text('gender', { enum: ['male', 'female', 'other', 'prefer_not_to_say'] }),
   nationality: text('nationality').default('KR'),
   
@@ -321,46 +322,46 @@ export const members = sqliteTable('members', {
   country: text('country').default('KR'),
   
   // 서예 관련 정보
-  calligraphyExperience: integer('calligraphy_experience'), // 연수 (년)
-  specializations: text('specializations'), // JSON 배열: ["kaishu", "xingshu", "caoshu"]
-  preferredStyles: text('preferred_styles'), // JSON 배열
-  teachingExperience: integer('teaching_experience'), // 교육 경력 (년)
-  certifications: text('certifications'), // JSON 배열: 보유 자격증
-  achievements: text('achievements'), // JSON 배열: 수상 경력, 전시 참가 등
+  calligraphyExperience: integer('calligraphy_experience'), 
+  specializations: jsonb('specializations').$type<string[]>(), 
+  preferredStyles: jsonb('preferred_styles').$type<string[]>(), 
+  teachingExperience: integer('teaching_experience'), 
+  certifications: jsonb('certifications').$type<string[]>(), 
+  achievements: jsonb('achievements').$type<string[]>(), 
   
   // 교육 배경
-  educationBackground: text('education_background'), // JSON 형태
-  calligraphyEducation: text('calligraphy_education'), // JSON 형태: 서예 관련 교육 이력
+  educationBackground: jsonb('education_background'), 
+  calligraphyEducation: jsonb('calligraphy_education'), 
   
   // 관심 분야
-  interests: text('interests'), // JSON 배열
+  interests: jsonb('interests').$type<string[]>(), 
   culturalBackground: text('cultural_background'),
-  languages: text('languages'), // JSON 배열: ["ko", "en", "zh", "ja"]
+  languages: jsonb('languages').$type<string[]>(), 
   
   // 멤버십 정보
-  membershipHistory: text('membership_history'), // JSON 배열: 등급 변경 이력
-  paymentHistory: text('payment_history'), // JSON 배열: 회비 납부 이력
-  participationScore: integer('participation_score').default(0), // 활동 점수
-  contributionScore: integer('contribution_score').default(0), // 기여도 점수
+  membershipHistory: jsonb('membership_history'), 
+  paymentHistory: jsonb('payment_history'), 
+  participationScore: integer('participation_score').default(0), 
+  contributionScore: integer('contribution_score').default(0), 
   
   // 프라이버시 설정
-  privacySettings: text('privacy_settings'), // JSON 형태
-  marketingConsent: integer('marketing_consent', { mode: 'boolean' }).default(false),
-  dataProcessingConsent: integer('data_processing_consent', { mode: 'boolean' }).default(true),
+  privacySettings: jsonb('privacy_settings'), 
+  marketingConsent: boolean('marketing_consent').default(false),
+  dataProcessingConsent: boolean('data_processing_consent').default(true),
   
   // 메타데이터
-  profileCompleteness: integer('profile_completeness').default(0), // 프로필 완성도 (%)
-  lastProfileUpdate: integer('last_profile_update', { mode: 'timestamp' }),
-  referredBy: text('referred_by').references((): AnySQLiteColumn => members.id), // 추천인
-  notes: text('notes'), // 관리자 메모
-  metadata: text('metadata'), // JSON 형태
+  profileCompleteness: integer('profile_completeness').default(0), 
+  lastProfileUpdate: timestamp('last_profile_update'),
+  referredBy: text('referred_by'), // Self Reference는 나중에 처리하거나 Any로
+  notes: text('notes'), 
+  metadata: jsonb('metadata'), 
   
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 회원 심사 테이블
-export const membershipApplications = sqliteTable('membership_applications', {
+export const membershipApplications = pgTable('membership_applications', {
   id: text('id').primaryKey(),
   memberId: text('member_id').references(() => members.id).notNull(),
   requestedTierLevel: integer('requested_tier_level').notNull(),
@@ -369,31 +370,28 @@ export const membershipApplications = sqliteTable('membership_applications', {
     enum: ['new_member', 'tier_upgrade', 'tier_downgrade', 'reactivation'] 
   }).notNull(),
   
-  // 신청 정보
   applicationReason: text('application_reason'),
-  supportingDocuments: text('supporting_documents'), // JSON 배열: 첨부 파일 URL
-  portfolioItems: text('portfolio_items'), // JSON 배열: 작품 포트폴리오
-  references: text('references'), // JSON 배열: 추천인 정보
+  supportingDocuments: jsonb('supporting_documents').$type<string[]>(), 
+  portfolioItems: jsonb('portfolio_items'), 
+  references: jsonb('references'), 
   
-  // 심사 정보
   status: text('status', { 
     enum: ['pending', 'under_review', 'approved', 'rejected', 'withdrawn'] 
   }).default('pending').notNull(),
   reviewerId: text('reviewer_id').references(() => users.id),
   reviewComments: text('review_comments'),
-  reviewScore: integer('review_score'), // 심사 점수 (1-100)
-  reviewCriteria: text('review_criteria'), // JSON 형태: 세부 평가 항목
+  reviewScore: integer('review_score'), 
+  reviewCriteria: jsonb('review_criteria'), 
   
-  // 날짜 정보
-  submittedAt: integer('submitted_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  reviewedAt: integer('reviewed_at', { mode: 'timestamp' }),
-  decidedAt: integer('decided_at', { mode: 'timestamp' }),
+  submittedAt: timestamp('submitted_at').defaultNow().notNull(),
+  reviewedAt: timestamp('reviewed_at'),
+  decidedAt: timestamp('decided_at'),
   
-  metadata: text('metadata'), // JSON 형태
+  metadata: jsonb('metadata'), 
 });
 
 // 회원 활동 로그 테이블
-export const memberActivities = sqliteTable('member_activities', {
+export const memberActivities = pgTable('member_activities', {
   id: text('id').primaryKey(),
   memberId: text('member_id').references(() => members.id).notNull(),
   activityType: text('activity_type', { 
@@ -401,15 +399,15 @@ export const memberActivities = sqliteTable('member_activities', {
            'forum_post', 'payment', 'certificate_earned', 'course_completion'] 
   }).notNull(),
   description: text('description'),
-  points: integer('points').default(0), // 활동에 따른 점수
-  relatedEntityId: text('related_entity_id'), // 관련 엔티티 ID (이벤트, 작품 등)
-  relatedEntityType: text('related_entity_type'), // 관련 엔티티 타입
-  metadata: text('metadata'), // JSON 형태
-  timestamp: integer('timestamp', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  points: integer('points').default(0), 
+  relatedEntityId: text('related_entity_id'), 
+  relatedEntityType: text('related_entity_type'), 
+  metadata: jsonb('metadata'), 
+  timestamp: timestamp('timestamp').defaultNow().notNull(),
 });
 
 // 문화교류 프로그램 테이블
-export const culturalExchangePrograms = sqliteTable('cultural_exchange_programs', {
+export const culturalExchangePrograms = pgTable('cultural_exchange_programs', {
   id: text('id').primaryKey(),
   title: text('title').notNull(),
   titleKo: text('title_ko'),
@@ -427,12 +425,12 @@ export const culturalExchangePrograms = sqliteTable('cultural_exchange_programs'
            'academic_collaboration', 'youth_program', 'master_class'] 
   }).notNull(),
   
-  targetAudience: text('target_audience'), // JSON 배열: 대상 회원 등급
-  partnerOrganizations: text('partner_organizations'), // JSON 배열
-  countries: text('countries'), // JSON 배열: 참여 국가
-  languages: text('languages'), // JSON 배열: 사용 언어
+  targetAudience: jsonb('target_audience').$type<string[]>(), 
+  partnerOrganizations: jsonb('partner_organizations'), 
+  countries: jsonb('countries').$type<string[]>(), 
+  languages: jsonb('languages').$type<string[]>(), 
   
-  duration: integer('duration'), // 일수
+  duration: integer('duration'), 
   maxParticipants: integer('max_participants'),
   currentParticipants: integer('current_participants').default(0),
   fee: real('fee'),
@@ -440,44 +438,44 @@ export const culturalExchangePrograms = sqliteTable('cultural_exchange_programs'
   
   location: text('location'),
   venue: text('venue'),
-  accommodationProvided: integer('accommodation_provided', { mode: 'boolean' }).default(false),
-  mealsProvided: integer('meals_provided', { mode: 'boolean' }).default(false),
-  transportationProvided: integer('transportation_provided', { mode: 'boolean' }).default(false),
+  accommodationProvided: boolean('accommodation_provided').default(false),
+  mealsProvided: boolean('meals_provided').default(false),
+  transportationProvided: boolean('transportation_provided').default(false),
   
-  requirements: text('requirements'), // JSON 형태
-  benefits: text('benefits'), // JSON 형태
-  schedule: text('schedule'), // JSON 형태
+  requirements: jsonb('requirements'), 
+  benefits: jsonb('benefits'), 
+  schedule: jsonb('schedule'), 
   
-  applicationDeadline: integer('application_deadline', { mode: 'timestamp' }),
-  startDate: integer('start_date', { mode: 'timestamp' }).notNull(),
-  endDate: integer('end_date', { mode: 'timestamp' }).notNull(),
+  applicationDeadline: timestamp('application_deadline'),
+  startDate: timestamp('start_date').notNull(),
+  endDate: timestamp('end_date').notNull(),
   
   status: text('status', { 
     enum: ['planning', 'open_for_applications', 'applications_closed', 'in_progress', 'completed', 'cancelled'] 
   }).default('planning').notNull(),
   
   organizerId: text('organizer_id').references(() => users.id),
-  coordinators: text('coordinators'), // JSON 배열: 담당자 정보
+  coordinators: jsonb('coordinators'), 
   
-  images: text('images'), // JSON 배열
-  documents: text('documents'), // JSON 배열: 관련 문서
+  images: jsonb('images').$type<string[]>(), 
+  documents: jsonb('documents'), 
   
-  isFeatured: integer('is_featured', { mode: 'boolean' }).default(false),
-  metadata: text('metadata'), // JSON 형태
+  isFeatured: boolean('is_featured').default(false),
+  metadata: jsonb('metadata'), 
   
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // 문화교류 프로그램 참가자 테이블
-export const culturalExchangeParticipants = sqliteTable('cultural_exchange_participants', {
+export const culturalExchangeParticipants = pgTable('cultural_exchange_participants', {
   id: text('id').primaryKey(),
   programId: text('program_id').references(() => culturalExchangePrograms.id).notNull(),
   memberId: text('member_id').references(() => members.id).notNull(),
   
-  applicationData: text('application_data'), // JSON 형태: 신청서 정보
+  applicationData: jsonb('application_data'), 
   specialRequests: text('special_requests'),
-  emergencyContact: text('emergency_contact'), // JSON 형태
+  emergencyContact: jsonb('emergency_contact'), 
   
   status: text('status', { 
     enum: ['applied', 'approved', 'confirmed', 'attended', 'completed', 'cancelled', 'no_show'] 
@@ -487,18 +485,18 @@ export const culturalExchangeParticipants = sqliteTable('cultural_exchange_parti
     enum: ['pending', 'partial', 'completed', 'refunded'] 
   }).default('pending'),
   
-  feedback: text('feedback'), // JSON 형태: 프로그램 후 피드백
-  completion_certificate: text('completion_certificate'), // 수료증 URL
+  feedback: jsonb('feedback'), 
+  completionCertificate: text('completion_certificate'), 
   
-  appliedAt: integer('applied_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  approvedAt: integer('approved_at', { mode: 'timestamp' }),
-  completedAt: integer('completed_at', { mode: 'timestamp' }),
+  appliedAt: timestamp('applied_at').defaultNow().notNull(),
+  approvedAt: timestamp('approved_at'),
+  completedAt: timestamp('completed_at'),
   
-  metadata: text('metadata'), // JSON 형태
+  metadata: jsonb('metadata'), 
 });
 
 // 회원 인증서/자격증 테이블
-export const memberCertifications = sqliteTable('member_certifications', {
+export const memberCertifications = pgTable('member_certifications', {
   id: text('id').primaryKey(),
   memberId: text('member_id').references(() => members.id).notNull(),
   
@@ -514,233 +512,35 @@ export const memberCertifications = sqliteTable('member_certifications', {
   titleJp: text('title_jp'),
   
   description: text('description'),
-  level: text('level'), // beginner, intermediate, advanced, master
+  level: text('level'), 
   
   issuingAuthority: text('issuing_authority').notNull(),
   authorityLogo: text('authority_logo'),
   
   certificateNumber: text('certificate_number').unique(),
-  certificateUrl: text('certificate_url'), // PDF 등 인증서 파일
+  certificateUrl: text('certificate_url'), 
   
-  skillsAssessed: text('skills_assessed'), // JSON 배열
-  score: integer('score'), // 점수 (해당되는 경우)
-  grade: text('grade'), // A, B, C 등급 (해당되는 경우)
+  skillsAssessed: jsonb('skills_assessed').$type<string[]>(), 
+  score: integer('score'), 
+  grade: text('grade'), 
   
-  issuedAt: integer('issued_at', { mode: 'timestamp' }).notNull(),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }),
+  issuedAt: timestamp('issued_at').notNull(),
+  expiresAt: timestamp('expires_at'),
   
-  verificationUrl: text('verification_url'), // 온라인 인증 확인 URL
+  verificationUrl: text('verification_url'), 
   
   status: text('status', { 
     enum: ['active', 'expired', 'revoked', 'pending_verification'] 
   }).default('active').notNull(),
   
-  metadata: text('metadata'), // JSON 형태
+  metadata: jsonb('metadata'), 
   
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-// 타입 정의 (TypeScript 타입 추론을 위해)
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
-
-export type Artist = typeof artists.$inferSelect;
-export type NewArtist = typeof artists.$inferInsert;
-
-export type Artwork = typeof artworks.$inferSelect;
-export type NewArtwork = typeof artworks.$inferInsert;
-
-export type Exhibition = typeof exhibitions.$inferSelect;
-export type NewExhibition = typeof exhibitions.$inferInsert;
-
-export type News = typeof news.$inferSelect;
-export type NewNews = typeof news.$inferInsert;
-
-export type Event = typeof events.$inferSelect;
-export type NewEvent = typeof events.$inferInsert;
-
-export type Gallery = typeof galleries.$inferSelect;
-export type NewGallery = typeof galleries.$inferInsert;
-
-// 회원 관리 관련 타입
-export type MembershipTier = typeof membershipTiers.$inferSelect;
-export type NewMembershipTier = typeof membershipTiers.$inferInsert;
-
-export type Member = typeof members.$inferSelect;
-export type NewMember = typeof members.$inferInsert;
-
-export type MembershipApplication = typeof membershipApplications.$inferSelect;
-export type NewMembershipApplication = typeof membershipApplications.$inferInsert;
-
-export type MemberActivity = typeof memberActivities.$inferSelect;
-export type NewMemberActivity = typeof memberActivities.$inferInsert;
-
-export type CulturalExchangeProgram = typeof culturalExchangePrograms.$inferSelect;
-export type NewCulturalExchangeProgram = typeof culturalExchangePrograms.$inferInsert;
-
-export type CulturalExchangeParticipant = typeof culturalExchangeParticipants.$inferSelect;
-export type NewCulturalExchangeParticipant = typeof culturalExchangeParticipants.$inferInsert;
-
-export type MemberCertification = typeof memberCertifications.$inferSelect;
-export type NewMemberCertification = typeof memberCertifications.$inferInsert;
-
-// AI 비전 분석 결과 테이블
-export const calligraphyAnalyses = sqliteTable('calligraphy_analyses', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').references(() => users.id),
-  memberId: text('member_id').references(() => members.id),
-  
-  // 이미지 정보
-  originalImageUrl: text('original_image_url').notNull(),
-  processedImageUrl: text('processed_image_url'),
-  imageMetadata: text('image_metadata'), // JSON: 이미지 크기, 형식 등
-  
-  // 분석 설정
-  analysisConfig: text('analysis_config'), // JSON: 분석 옵션
-  calligraphyStyle: text('calligraphy_style', { 
-    enum: ['kaishu', 'xingshu', 'caoshu', 'lishu', 'zhuanshu', 'mixed'] 
-  }).notNull(),
-  
-  // 분석 결과
-  overallScore: integer('overall_score'), // 0-100 종합 점수
-  confidence: real('confidence'), // 0.0-1.0 신뢰도
-  
-  // 세부 점수
-  brushControlScore: integer('brush_control_score'),
-  inkFlowScore: integer('ink_flow_score'),
-  strokeQualityScore: integer('stroke_quality_score'),
-  rhythmConsistencyScore: integer('rhythm_consistency_score'),
-  compositionScore: integer('composition_score'),
-  
-  // 분석 데이터
-  strokesDetected: integer('strokes_detected').default(0),
-  charactersAnalyzed: integer('characters_analyzed').default(0),
-  strokesData: text('strokes_data'), // JSON: 붓질 좌표 및 분석
-  charactersData: text('characters_data'), // JSON: 문자별 분석
-  
-  // 구성 분석
-  compositionData: text('composition_data'), // JSON: 균형, 간격, 비례 등
-  
-  // 피드백
-  feedback: text('feedback'), // JSON: AI 피드백 메시지
-  improvementSuggestions: text('improvement_suggestions'), // JSON: 개선 제안
-  
-  // 처리 정보
-  processingTime: integer('processing_time'), // 밀리초
-  analysisVersion: text('analysis_version').default('1.0'),
-  
-  // 학습 관련
-  isTrainingData: integer('is_training_data', { mode: 'boolean' }).default(false),
-  expertValidation: text('expert_validation'), // JSON: 전문가 검증 결과
-  
-  // 상태
-  status: text('status', { 
-    enum: ['processing', 'completed', 'failed', 'archived'] 
-  }).default('processing').notNull(),
-  
-  errorMessage: text('error_message'),
-  
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-});
-
-// 학습 진도 추적 테이블
-export const learningProgress = sqliteTable('learning_progress', {
-  id: text('id').primaryKey(),
-  memberId: text('member_id').references(() => members.id).notNull(),
-  
-  // 학습 분야
-  skillCategory: text('skill_category', { 
-    enum: ['brush_control', 'ink_flow', 'stroke_quality', 'composition', 'character_structure'] 
-  }).notNull(),
-  
-  currentLevel: integer('current_level').default(1), // 1-10 레벨
-  experiencePoints: integer('experience_points').default(0),
-  
-  // 진도 통계
-  totalAnalyses: integer('total_analyses').default(0),
-  averageScore: real('average_score').default(0),
-  bestScore: integer('best_score').default(0),
-  improvementRate: real('improvement_rate').default(0), // 개선율 %
-  
-  // 목표 설정
-  targetLevel: integer('target_level').default(5),
-  targetScore: integer('target_score').default(80),
-  targetDate: integer('target_date', { mode: 'timestamp' }),
-  
-  // 학습 패턴
-  practiceFrequency: text('practice_frequency', { 
-    enum: ['daily', 'weekly', 'monthly', 'irregular'] 
-  }).default('weekly'),
-  preferredTimeSlots: text('preferred_time_slots'), // JSON: 선호 시간대
-  
-  // 성취 기록
-  achievements: text('achievements'), // JSON: 달성한 성취
-  milestones: text('milestones'), // JSON: 중요 이정표
-  
-  lastPracticeDate: integer('last_practice_date', { mode: 'timestamp' }),
-  
-  metadata: text('metadata'), // JSON
-  
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-});
-
-// 시스템 설정 테이블
-export const systemSettings = sqliteTable('system_settings', {
-  id: text('id').primaryKey(),
-  category: text('category').notNull(), // general, ai_vision, membership, cultural_exchange
-  key: text('key').notNull(),
-  value: text('value').notNull(),
-  dataType: text('data_type', { 
-    enum: ['string', 'number', 'boolean', 'json'] 
-  }).default('string').notNull(),
-  
-  description: text('description'),
-  isPublic: integer('is_public', { mode: 'boolean' }).default(false),
-  isEditable: integer('is_editable', { mode: 'boolean' }).default(true),
-  
-  validationRules: text('validation_rules'), // JSON: 유효성 검사 규칙
-  
-  createdBy: text('created_by').references(() => users.id),
-  updatedBy: text('updated_by').references(() => users.id),
-  
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-});
-
-// 감사 로그 테이블 (보안 및 추적)
-export const auditLogs = sqliteTable('audit_logs', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').references(() => users.id),
-  
-  action: text('action').notNull(), // CREATE, UPDATE, DELETE, LOGIN, LOGOUT 등
-  resource: text('resource').notNull(), // 테이블명 또는 리소스명
-  resourceId: text('resource_id'), // 대상 레코드 ID
-  
-  oldValues: text('old_values'), // JSON: 변경 전 값
-  newValues: text('new_values'), // JSON: 변경 후 값
-  
-  ipAddress: text('ip_address'),
-  userAgent: text('user_agent'),
-  
-  severity: text('severity', { 
-    enum: ['low', 'medium', 'high', 'critical'] 
-  }).default('low').notNull(),
-  
-  result: text('result', { 
-    enum: ['success', 'failure', 'error'] 
-  }).default('success').notNull(),
-  
-  errorMessage: text('error_message'),
-  metadata: text('metadata'), // JSON
-  
-  timestamp: integer('timestamp', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-});
-
-// 파일 관리 테이블
-export const fileStorage = sqliteTable('file_storage', {
+// 파일 스토리지 (기존 fileStorage 유지)
+export const fileStorage = pgTable('file_storage', {
   id: text('id').primaryKey(),
   userId: text('user_id').references(() => users.id),
   
@@ -752,33 +552,28 @@ export const fileStorage = sqliteTable('file_storage', {
   }).notNull(),
   
   mimeType: text('mime_type').notNull(),
-  fileSize: integer('file_size').notNull(), // bytes
+  fileSize: integer('file_size').notNull(), 
   
   storagePath: text('storage_path').notNull(),
   publicUrl: text('public_url'),
   
-  // 이미지 메타데이터 (이미지 파일인 경우)
   width: integer('width'),
   height: integer('height'),
   format: text('format'),
   colorSpace: text('color_space'),
   
-  // 용도 분류
   purpose: text('purpose', { 
     enum: ['profile_image', 'artwork_image', 'analysis_image', 'document', 'certificate', 'other'] 
   }).default('other').notNull(),
   
-  // 관련 엔티티
-  relatedEntityType: text('related_entity_type'), // artwork, member, analysis 등
+  relatedEntityType: text('related_entity_type'), 
   relatedEntityId: text('related_entity_id'),
   
-  // 보안 및 접근
-  isPublic: integer('is_public', { mode: 'boolean' }).default(false),
+  isPublic: boolean('is_public').default(false),
   accessLevel: text('access_level', { 
     enum: ['public', 'members_only', 'admin_only', 'private'] 
   }).default('private').notNull(),
   
-  // 처리 상태
   processingStatus: text('processing_status', { 
     enum: ['uploaded', 'processing', 'ready', 'failed'] 
   }).default('uploaded').notNull(),
@@ -786,110 +581,78 @@ export const fileStorage = sqliteTable('file_storage', {
   checksumMd5: text('checksum_md5'),
   checksumSha256: text('checksum_sha256'),
   
-  expiresAt: integer('expires_at', { mode: 'timestamp' }),
+  expiresAt: timestamp('expires_at'),
   
-  metadata: text('metadata'), // JSON
+  metadata: jsonb('metadata'), 
   
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-// 알림 테이블
-export const notifications = sqliteTable('notifications', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').references(() => users.id).notNull(),
-  
-  type: text('type', { 
-    enum: ['info', 'success', 'warning', 'error', 'membership', 'event', 'system'] 
-  }).notNull(),
-  
-  title: text('title').notNull(),
-  message: text('message').notNull(),
-  
-  // 다국어 지원
-  titleKo: text('title_ko'),
-  titleEn: text('title_en'),
-  titleCn: text('title_cn'),
-  titleJp: text('title_jp'),
-  messageKo: text('message_ko'),
-  messageEn: text('message_en'),
-  messageCn: text('message_cn'),
-  messageJp: text('message_jp'),
-  
-  // 관련 리소스
-  relatedEntityType: text('related_entity_type'),
-  relatedEntityId: text('related_entity_id'),
-  actionUrl: text('action_url'),
-  
-  priority: text('priority', { 
-    enum: ['low', 'normal', 'high', 'urgent'] 
-  }).default('normal').notNull(),
-  
-  isRead: integer('is_read', { mode: 'boolean' }).default(false),
-  readAt: integer('read_at', { mode: 'timestamp' }),
-  
-  // 발송 설정
-  sendEmail: integer('send_email', { mode: 'boolean' }).default(false),
-  emailSentAt: integer('email_sent_at', { mode: 'timestamp' }),
-  
-  sendPush: integer('send_push', { mode: 'boolean' }).default(false),
-  pushSentAt: integer('push_sent_at', { mode: 'timestamp' }),
-  
-  expiresAt: integer('expires_at', { mode: 'timestamp' }),
-  
-  metadata: text('metadata'), // JSON
-  
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+// 아카데미 강좌 테이블
+export const academyCourses = pgTable("academy_courses", {
+  id: text("id").primaryKey(),
+  courseId: text("course_id").notNull().unique(), 
+  title: text("title").notNull(),
+  instructor: text("instructor"),
+  schedule: text("schedule"),
+  period: text("period"),
+  level: text("level"),
+  description: text("description"),
+  curriculum: jsonb("curriculum").$type<string[]>(), 
+  fee: text("fee"),
+  status: text("status"), 
+  externalLink: text("external_link"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// 성능 메트릭 테이블
-export const performanceMetrics = sqliteTable('performance_metrics', {
-  id: text('id').primaryKey(),
-  
-  metricType: text('metric_type', { 
-    enum: ['api_response_time', 'database_query_time', 'image_processing_time', 
-           'ai_analysis_time', 'page_load_time', 'error_rate'] 
-  }).notNull(),
-  
-  endpoint: text('endpoint'),
-  method: text('method'),
-  
-  value: real('value').notNull(),
-  unit: text('unit').notNull(), // ms, seconds, percentage 등
-  
-  // 컨텍스트 정보
-  userId: text('user_id').references(() => users.id),
-  sessionId: text('session_id'),
-  requestId: text('request_id'),
-  
-  // 환경 정보
-  userAgent: text('user_agent'),
-  ipAddress: text('ip_address'),
-  
-  // 추가 메타데이터
-  metadata: text('metadata'), // JSON
-  
-  timestamp: integer('timestamp', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+// 아카데미 강사 테이블
+export const academyInstructors = pgTable("academy_instructors", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  introTitle: text("intro_title"), 
+  category: text("category"), 
+  imageUrl: text("image_url"),
+  career: jsonb("career").$type<string[]>(), 
+  artworkUrl: text("artwork_url"),
+  artworkDesc: text("artwork_desc"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// 새로운 타입 추가
-export type CalligraphyAnalysis = typeof calligraphyAnalyses.$inferSelect;
-export type NewCalligraphyAnalysis = typeof calligraphyAnalyses.$inferInsert;
+// 타입 정의
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 
-export type LearningProgress = typeof learningProgress.$inferSelect;
-export type NewLearningProgress = typeof learningProgress.$inferInsert;
+export type Member = typeof members.$inferSelect;
+export type NewMember = typeof members.$inferInsert;
 
-export type SystemSetting = typeof systemSettings.$inferSelect;
-export type NewSystemSetting = typeof systemSettings.$inferInsert;
+export type Artist = typeof artists.$inferSelect;
+export type NewArtist = typeof artists.$inferInsert;
 
-export type AuditLog = typeof auditLogs.$inferSelect;
-export type NewAuditLog = typeof auditLogs.$inferInsert;
+export type Artwork = typeof artworks.$inferSelect;
+export type NewArtwork = typeof artworks.$inferInsert;
 
-export type FileStorage = typeof fileStorage.$inferSelect;
-export type NewFileStorage = typeof fileStorage.$inferInsert;
+export type Exhibition = typeof exhibitions.$inferSelect;
+export type NewExhibition = typeof exhibitions.$inferInsert;
 
-export type Notification = typeof notifications.$inferSelect;
-export type NewNotification = typeof notifications.$inferInsert;
+export type Event = typeof events.$inferSelect;
+export type NewEvent = typeof events.$inferInsert;
 
-export type PerformanceMetric = typeof performanceMetrics.$inferSelect;
-export type NewPerformanceMetric = typeof performanceMetrics.$inferInsert;
+export type Gallery = typeof galleries.$inferSelect;
+export type NewGallery = typeof galleries.$inferInsert;
+
+export type News = typeof news.$inferSelect;
+export type NewNews = typeof news.$inferInsert;
+
+export type MembershipTier = typeof membershipTiers.$inferSelect;
+export type MembershipApplication = typeof membershipApplications.$inferSelect;
+export type MemberActivity = typeof memberActivities.$inferSelect;
+export type MemberCertification = typeof memberCertifications.$inferSelect;
+
+export type CulturalExchangeProgram = typeof culturalExchangePrograms.$inferSelect;
+export type CulturalExchangeParticipant = typeof culturalExchangeParticipants.$inferSelect;
+
+export type AcademyCourse = typeof academyCourses.$inferSelect;
+export type AcademyInstructor = typeof academyInstructors.$inferSelect;

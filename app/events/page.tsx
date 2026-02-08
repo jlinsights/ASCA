@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent } from '@/components/ui/card'
+import { PageHero } from "@/components/layout/page-hero"
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -311,22 +311,13 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen bg-transparent">
       
-      <main className="container mx-auto px-4 py-16">
-        {/* 헤더 섹션 */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4 tracking-tight">
-            {language === 'ko' ? '행사 안내' : 'Events'}
-            </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
-            {language === 'ko' 
-              ? '동양서예협회에서 주최하는 다양한 행사와 프로그램을 확인하세요.'
-              : 'Discover various events and programs hosted by the Oriental Calligraphy Association.'
-            }
-          </p>
-        </div>
+      <main className="container mx-auto px-4 py-8">
+        <PageHero 
+          title={language === 'ko' ? '행사 안내' : 'Events'} 
+          subtitle={language === 'ko' ? '동양서예협회에서 주최하는 다양한 행사와 프로그램을 확인하세요.' : 'Discover various events and programs hosted by the Oriental Calligraphy Association.'} 
+        />
 
         {/* 검색 및 필터 섹션 */}
         <Card className="mb-8 border-border/50 shadow-sm">

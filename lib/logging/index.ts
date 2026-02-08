@@ -60,6 +60,9 @@ export {
   type LogFormatter,
 } from './formatters';
 
+import { LogLevel, logger } from './structured-logger';
+import { createConsoleTransport, createFileTransport, createHTTPTransport } from './transports';
+
 /**
  * 로깅 시스템 초기화
  */

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -66,8 +65,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <Header />
+      <div className="min-h-screen bg-transparent flex flex-col">
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-celadon-green mb-4" />
@@ -81,8 +79,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
 
   if (error || !portfolio) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <Header />
+      <div className="min-h-screen bg-transparent flex flex-col">
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-foreground mb-4">포트폴리오를 찾을 수 없습니다</h2>
@@ -101,8 +98,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
   const config = profile.portfolioConfig
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Header />
+    <div className="min-h-screen bg-transparent flex flex-col">
       
       <main className="flex-1">
         {/* Hero Section */}

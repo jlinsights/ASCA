@@ -292,7 +292,7 @@ export async function POST(request: NextRequest) {
         );
       }
     }
-  )(request, {});
+  )(request);
 }
 
 /**

@@ -428,7 +428,7 @@ export class SlowQueryDetector {
       const line = lines[i];
       if (line && !line.includes('slow-query-detector')) {
         const match = line.match(/at\s+(.+?)\s+\(/);
-        return match ? match[1] : 'unknown';
+        return (match && match[1]) || 'unknown';
       }
     }
 

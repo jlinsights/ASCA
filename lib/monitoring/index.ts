@@ -47,6 +47,10 @@ export {
   type DetectorConfig,
 } from './slow-query-detector';
 
+import { performanceMonitor } from './performance-monitor';
+import { metricsCollector } from './metrics-collector';
+import { slowQueryDetector } from './slow-query-detector';
+
 /**
  * 모니터링 시스템 초기화
  */

@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { sql } from 'drizzle-orm';
 import postgres from 'postgres';
-import * as schema from './schema-pg';
+import * as schema from './schema';
 import { env, isProduction, isDevelopment } from '@/lib/config/env';
 
 /**
@@ -17,7 +17,7 @@ const connectionConfig = {
   prepare: false,
 
   // Enable SSL in production
-  ssl: isProduction ? 'require' : false,
+  ssl: (isProduction || (env.DATABASE_URL && env.DATABASE_URL.includes('supabase')) ? 'require' : false) as any,
 
   // Connection lifecycle hooks
   onnotice: isDevelopment
@@ -128,7 +128,7 @@ export async function withTransaction<T>(
   callback: (tx: typeof db) => Promise<T>
 ): Promise<T> {
   return await db.transaction(async (tx) => {
-    return await callback(tx as typeof db);
+    return await callback(tx as unknown as typeof db);
   });
 }
 
@@ -176,4 +176,4 @@ export async function withPerformanceLog<T>(
 export { schema };
 
 // Export types from schema
-export type * from './schema-pg';
+export type * from './schema';

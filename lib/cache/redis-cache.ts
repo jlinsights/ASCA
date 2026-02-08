@@ -235,7 +235,7 @@ export class CacheManager {
 
     try {
       if (redis) {
-        const keys = await redis.smembers<string>(tagKey);
+        const keys = await redis.smembers<string[]>(tagKey);
         if (keys.length > 0) {
           await redis.del(...keys);
           await redis.del(tagKey);

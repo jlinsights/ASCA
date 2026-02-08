@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { culturalExchangePrograms, culturalExchangeParticipants } from '@/lib/db/schema'
-import { eq, desc, asc, and, inArray, gte, lte } from 'drizzle-orm'
+import { eq, desc, asc, and, inArray, gte, lte, sql } from 'drizzle-orm'
 import type { 
   CulturalExchangeProgramInfo,
   CulturalProgramType,
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
     // 총 개수 조회
     const totalQuery = db
-      .select({ count: 'count(*)' })
+      .select({ count: sql<number>`count(*)` })
       .from(culturalExchangePrograms)
       .where(conditions.length > 0 ? and(...conditions) : undefined)
 
@@ -61,27 +61,37 @@ export async function GET(request: NextRequest) {
     // 데이터 변환
     const formattedPrograms: CulturalExchangeProgramInfo[] = programs.map((program: any) => ({
       ...program,
-      startDate: new Date(Number(program.startDate) * 1000),
-      endDate: new Date(Number(program.endDate) * 1000),
-      applicationDeadline: program.applicationDeadline ? new Date(Number(program.applicationDeadline) * 1000) : undefined,
-      createdAt: new Date(Number(program.createdAt) * 1000),
-      updatedAt: new Date(Number(program.updatedAt) * 1000),
-      // JSON 필드 파싱
-      partnerOrganizations: program.partnerOrganizations ? JSON.parse(program.partnerOrganizations) : [],
-      countries: program.countries ? JSON.parse(program.countries) : [],
-      languages: program.languages ? JSON.parse(program.languages) : [],
-      requirements: program.requirements ? JSON.parse(program.requirements) : [],
-      benefits: program.benefits ? JSON.parse(program.benefits) : [],
-      schedule: program.schedule ? JSON.parse(program.schedule).map((item: any) => ({
+      titleKo: program.titleKo || undefined,
+      titleEn: program.titleEn || undefined,
+      titleCn: program.titleCn || undefined,
+      titleJp: program.titleJp || undefined,
+      description: program.description || undefined,
+      descriptionKo: program.descriptionKo || undefined,
+      descriptionEn: program.descriptionEn || undefined,
+      descriptionCn: program.descriptionCn || undefined,
+      descriptionJp: program.descriptionJp || undefined,
+      startDate: new Date(program.startDate),
+      endDate: new Date(program.endDate),
+      applicationDeadline: program.applicationDeadline ? new Date(program.applicationDeadline) : undefined,
+      createdAt: new Date(program.createdAt),
+      updatedAt: new Date(program.updatedAt),
+      // JSON 필드 처리 (이미 객체임)
+      targetAudience: (program.targetAudience as unknown as number[]) || [],
+      partnerOrganizations: (program.partnerOrganizations as any[]) || [],
+      countries: (program.countries as string[]) || [],
+      languages: (program.languages as string[]) || [],
+      requirements: (program.requirements as any[]) || [],
+      benefits: (program.benefits as any[]) || [],
+      schedule: ((program.schedule as any[]) || []).map((item: any) => ({
         ...item,
         date: new Date(item.date)
-      })) : [],
-      coordinators: program.coordinators ? JSON.parse(program.coordinators) : [],
-      images: program.images ? JSON.parse(program.images) : [],
-      documents: program.documents ? JSON.parse(program.documents).map((doc: any) => ({
+      })),
+      coordinators: (program.coordinators as any[]) || [],
+      images: (program.images as string[]) || [],
+      documents: ((program.documents as any[]) || []).map((doc: any) => ({
         ...doc,
         updatedAt: new Date(doc.updatedAt)
-      })) : []
+      }))
     }))
 
     return NextResponse.json({
@@ -166,44 +176,44 @@ export async function POST(request: NextRequest) {
       descriptionCn,
       descriptionJp,
       programType,
-      targetAudience: JSON.stringify(targetAudience),
-      partnerOrganizations: JSON.stringify(partnerOrganizations || []),
-      countries: JSON.stringify(countries || []),
-      languages: JSON.stringify(languages || []),
-      duration,
-      maxParticipants,
+      targetAudience: targetAudience || [], // Pass object directly
+      partnerOrganizations: partnerOrganizations || [],
+      countries: countries || [],
+      languages: languages || [],
+      duration: duration || 0,
+      maxParticipants: maxParticipants || 0,
       currentParticipants: 0,
-      fee,
+      fee: fee || 0,
       currency: currency || 'KRW',
-      location,
+      location: location || '',
       venue,
       accommodationProvided: accommodationProvided || false,
       mealsProvided: mealsProvided || false,
       transportationProvided: transportationProvided || false,
-      requirements: JSON.stringify(requirements || []),
-      benefits: JSON.stringify(benefits || []),
-      schedule: JSON.stringify(schedule?.map((item: any) => ({
+      requirements: requirements || [],
+      benefits: benefits || [],
+      schedule: (schedule || []).map((item: any) => ({
         ...item,
-        date: item.date instanceof Date ? item.date.toISOString() : item.date
-      })) || []),
-      applicationDeadline: applicationDeadline ? Math.floor(new Date(applicationDeadline).getTime() / 1000) : null,
-      startDate: Math.floor(new Date(startDate).getTime() / 1000),
-      endDate: Math.floor(new Date(endDate).getTime() / 1000),
+        date: item.date // Keep as string or Date compliant format
+      })),
+      applicationDeadline: applicationDeadline ? new Date(applicationDeadline) : null,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       status: 'planning' as CulturalProgramStatus,
-      organizerId,
-      coordinators: JSON.stringify(coordinators || []),
-      images: JSON.stringify(images || []),
-      documents: JSON.stringify(documents?.map((doc: any) => ({
+      organizerId: organizerId || '',
+      coordinators: coordinators || [],
+      images: images || [],
+      documents: (documents || []).map((doc: any) => ({
         ...doc,
-        updatedAt: doc.updatedAt instanceof Date ? doc.updatedAt.toISOString() : doc.updatedAt
-      })) || []),
+        updatedAt: doc.updatedAt // Keep format
+      })),
       isFeatured: isFeatured || false,
-      metadata: JSON.stringify({}),
-      createdAt: Math.floor(Date.now() / 1000),
-      updatedAt: Math.floor(Date.now() / 1000)
+      metadata: {},
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
 
-    const result = await db.insert(culturalExchangePrograms).values(newProgram).returning()
+    const result = await db.insert(culturalExchangePrograms).values([newProgram]).returning()
     
     if (!result[0]) {
       throw new Error('프로그램 생성에 실패했습니다')

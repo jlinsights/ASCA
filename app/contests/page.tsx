@@ -6,8 +6,8 @@ import Image from 'next/image'
 import { 
   Calendar, Award, MapPin, Search, Filter, Clock, Trophy, Star, ChevronRight
 } from 'lucide-react'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero } from "@/components/layout/page-hero"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -97,8 +97,7 @@ export default function ContestsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-h-screen bg-transparent">
         <main className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
@@ -110,19 +109,10 @@ export default function ContestsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen bg-transparent">
 
       <main className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-serif font-bold text-foreground mb-4">
-            공모전
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            다양한 예술 공모전에 도전하고 여러분의 재능을 펼쳐보세요
-          </p>
-        </div>
+        <PageHero title="공모전" subtitle="다양한 예술 공모전에 도전하고 여러분의 재능을 펼쳐보세요" />
 
         {/* Statistics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">

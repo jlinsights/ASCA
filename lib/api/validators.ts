@@ -48,7 +48,7 @@ export const memberSearchSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   status: memberStatusSchema.optional(),
   level: z.string().optional(),
-  sortBy: z.enum(['created_at', 'updated_at', 'email', 'last_active', 'joined_date']).default('created_at'),
+  sortBy: z.enum(['createdAt', 'updatedAt', 'email', 'lastActive', 'joinedDate']).default('createdAt'),
   sortOrder: sortOrderSchema,
 });
 
@@ -57,20 +57,20 @@ export type MemberSearchParams = z.infer<typeof memberSearchSchema>;
 // Create member schema
 export const createMemberSchema = z.object({
   email: emailSchema,
-  first_name_ko: z.string().min(1, 'Korean first name is required'),
-  last_name_ko: z.string().min(1, 'Korean last name is required'),
-  first_name_en: z.string().min(1).optional(),
-  last_name_en: z.string().min(1).optional(),
+  firstNameKo: z.string().min(1, 'Korean first name is required'),
+  lastNameKo: z.string().min(1, 'Korean last name is required'),
+  firstNameEn: z.string().min(1).optional(),
+  lastNameEn: z.string().min(1).optional(),
   phone: phoneSchema,
-  date_of_birth: dateSchema.optional(),
+  dateOfBirth: dateSchema.optional(),
   gender: z.enum(['male', 'female', 'other', 'prefer_not_to_say']).optional(),
   nationality: z.string().optional(),
-  residence_country: z.string().optional(),
-  residence_city: z.string().optional(),
+  residenceCountry: z.string().optional(),
+  residenceCity: z.string().optional(),
   timezone: z.string().default('Asia/Seoul'),
-  preferred_language: z.enum(['ko', 'en', 'ja', 'zh']).default('ko'),
-  membership_level_id: z.string().min(1),
-  membership_status: memberStatusSchema.default('pending_approval'),
+  preferredLanguage: z.enum(['ko', 'en', 'ja', 'zh']).default('ko'),
+  membershipLevelId: z.string().min(1),
+  membershipStatus: memberStatusSchema.default('pending_approval'),
 });
 
 export type CreateMemberDTO = z.infer<typeof createMemberSchema>;
@@ -89,21 +89,22 @@ export type UpdateMemberDTO = z.infer<typeof updateMemberSchema>;
 // Create artist schema
 export const createArtistSchema = z.object({
   name: z.string().min(1, 'Artist name is required'),
-  name_en: z.string().optional(),
-  name_ja: z.string().optional(),
-  name_zh: z.string().optional(),
+  nameKo: z.string().optional(),
+  nameEn: z.string().optional(),
+  nameJa: z.string().optional(),
+  nameZh: z.string().optional(),
   bio: z.string().default(''),
-  bio_en: z.string().optional(),
-  bio_ja: z.string().optional(),
-  bio_zh: z.string().optional(),
-  birth_year: z.number().int().min(1800).max(new Date().getFullYear()).optional(),
+  bioEn: z.string().optional(),
+  bioJa: z.string().optional(),
+  bioZh: z.string().optional(),
+  birthYear: z.number().int().min(1800).max(new Date().getFullYear()).optional(),
   nationality: z.string().optional(),
   specialties: z.array(z.string()).default([]),
   awards: z.array(z.string()).default([]),
   exhibitions: z.array(z.string()).default([]),
-  profile_image: z.string().url().optional(),
-  membership_type: z.string().default('준회원'),
-  artist_type: z.string().default('일반작가'),
+  profileImage: z.string().url().optional(),
+  membershipType: z.string().default('준회원'),
+  artistType: z.string().default('일반작가'),
   title: z.string().optional(),
 });
 
@@ -122,8 +123,8 @@ export const artistSearchSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   nationality: z.string().optional(),
-  membership_type: z.string().optional(),
-  sortBy: z.enum(['created_at', 'updated_at', 'name']).default('created_at'),
+  membershipType: z.string().optional(),
+  sortBy: z.enum(['createdAt', 'updatedAt', 'name']).default('createdAt'),
   sortOrder: sortOrderSchema,
 });
 
@@ -140,6 +141,7 @@ export const artworkAvailabilitySchema = z.enum([
   'reserved',
   'not_for_sale',
   'on_loan',
+  'n/a'
 ]);
 
 // Artwork category enum
@@ -165,13 +167,17 @@ export const artworkStyleSchema = z.enum([
 
 // Create artwork schema
 export const createArtworkSchema = z.object({
-  artist_id: uuidSchema,
+  artistId: uuidSchema,
   title: z.string().min(1, 'Title is required'),
-  title_en: z.string().optional(),
-  title_ja: z.string().optional(),
-  title_zh: z.string().optional(),
+  titleKo: z.string().optional(),
+  titleEn: z.string().optional(),
+  titleJa: z.string().optional(),
+  titleZh: z.string().optional(),
   description: z.string().default(''),
-  description_en: z.string().optional(),
+  descriptionKo: z.string().optional(),
+  descriptionEn: z.string().optional(),
+  descriptionJa: z.string().optional(),
+  descriptionZh: z.string().optional(),
   category: artworkCategorySchema.default('mixed-media'),
   style: artworkStyleSchema.default('traditional'),
   year: z.number().int().min(1800).max(new Date().getFullYear()).optional(),
@@ -179,13 +185,13 @@ export const createArtworkSchema = z.object({
   dimensions: z.string().optional(), // JSON string
   price: z.string().optional(), // JSON string
   availability: artworkAvailabilitySchema.default('available'),
-  featured: z.boolean().default(false),
+  isFeatured: z.boolean().default(false),
   tags: z.array(z.string()).default([]),
-  images: z.array(z.string().url()).default([]),
-  thumbnail: z.string().url().optional(),
+  imageUrls: z.array(z.string().url()).default([]),
+  imageUrl: z.string().url().optional(),
   condition: z.string().optional(),
   technique: z.string().optional(),
-  authenticity_certificate: z.boolean().default(false),
+  authenticityCertificate: z.boolean().default(false),
 });
 
 export type CreateArtworkDTO = z.infer<typeof createArtworkSchema>;
@@ -202,14 +208,14 @@ export const artworkSearchSchema = z.object({
   query: z.string().optional(),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
-  artist_id: uuidSchema.optional(),
+  artistId: uuidSchema.optional(),
   category: artworkCategorySchema.optional(),
   style: artworkStyleSchema.optional(),
   availability: artworkAvailabilitySchema.optional(),
   featured: z.coerce.boolean().optional(),
   minYear: z.coerce.number().int().optional(),
   maxYear: z.coerce.number().int().optional(),
-  sortBy: z.enum(['created_at', 'updated_at', 'title', 'year']).default('created_at'),
+  sortBy: z.enum(['createdAt', 'updatedAt', 'title', 'year']).default('createdAt'),
   sortOrder: sortOrderSchema,
 });
 
@@ -230,25 +236,27 @@ export const exhibitionStatusSchema = z.enum([
 // Create exhibition schema
 export const createExhibitionSchema = z.object({
   title: z.string().min(1, 'Title is required'),
+  titleKo: z.string().optional(),
+  titleEn: z.string().optional(),
   description: z.string().default(''),
-  start_date: z.string().date(),
-  end_date: z.string().date(),
+  startDate: z.string().date(),
+  endDate: z.string().date(),
   location: z.string().optional(),
   venue: z.string().optional(),
   curator: z.string().optional(),
-  featured_image_url: z.string().url().optional(),
-  gallery_images: z.array(z.string().url()).default([]),
+  featuredImageUrl: z.string().url().optional(),
+  galleryImages: z.array(z.string().url()).default([]),
   status: exhibitionStatusSchema.default('upcoming'),
-  is_featured: z.boolean().default(false),
-  is_published: z.boolean().default(true),
-  ticket_price: z.number().int().min(0).optional(),
+  isFeatured: z.boolean().default(false),
+  isPublished: z.boolean().default(true),
+  ticketPrice: z.number().int().min(0).optional(),
   currency: z.string().default('KRW'),
-  is_free: z.boolean().default(false),
+  isFree: z.boolean().default(false),
   subtitle: z.string().optional(),
   address: z.string().optional(),
-  max_capacity: z.number().int().min(1).optional(),
-  admission_fee: z.number().int().min(0).optional(),
-  opening_hours: z.string().optional(),
+  maxCapacity: z.number().int().min(1).optional(),
+  admissionFee: z.number().int().min(0).optional(),
+  openingHours: z.string().optional(),
   contact: z.string().optional(),
   website: z.string().url().optional(),
 });
@@ -268,9 +276,9 @@ export const exhibitionSearchSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   status: exhibitionStatusSchema.optional(),
-  is_featured: z.coerce.boolean().optional(),
-  is_published: z.coerce.boolean().optional(),
-  sortBy: z.enum(['created_at', 'updated_at', 'start_date', 'end_date']).default('start_date'),
+  isFeatured: z.coerce.boolean().optional(),
+  isPublished: z.coerce.boolean().optional(),
+  sortBy: z.enum(['createdAt', 'updatedAt', 'startDate', 'endDate']).default('startDate'),
   sortOrder: sortOrderSchema,
 });
 

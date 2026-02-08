@@ -113,14 +113,16 @@ export async function POST(request: NextRequest) {
       .where(eq(culturalExchangePrograms.id, programId))
       .limit(1)
 
-    if (!program[0]) {
+    const selectedProgram = program[0]
+
+    if (!selectedProgram) {
       return NextResponse.json(
         { success: false, error: '프로그램을 찾을 수 없습니다' },
         { status: 404 }
       )
     }
 
-    if (program[0].status !== 'open_for_applications') {
+    if (selectedProgram.status !== 'open_for_applications') {
       return NextResponse.json(
         { success: false, error: '현재 모집 중이지 않은 프로그램입니다' },
         { status: 400 }
@@ -128,8 +130,8 @@ export async function POST(request: NextRequest) {
     }
 
     // 마감일 확인
-    if (program[0].applicationDeadline && 
-        Date.now() > Number(program[0].applicationDeadline) * 1000) {
+    if (selectedProgram.applicationDeadline && 
+        Date.now() > Number(selectedProgram.applicationDeadline) * 1000) {
       return NextResponse.json(
         { success: false, error: '신청 마감일이 지났습니다' },
         { status: 400 }
@@ -137,7 +139,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 정원 확인
-    if (program[0].currentParticipants >= program[0].maxParticipants) {
+    if (selectedProgram.maxParticipants && (selectedProgram.currentParticipants || 0) >= selectedProgram.maxParticipants) {
       return NextResponse.json(
         { success: false, error: '모집 정원이 마감되었습니다' },
         { status: 400 }
@@ -178,7 +180,7 @@ export async function POST(request: NextRequest) {
     // 자격 요건 확인 (안전한 처리 추가)
     let requirements: any[] = []
     try {
-      requirements = program[0].requirements ? JSON.parse(program[0].requirements) : []
+      requirements = (selectedProgram.requirements as any[]) || []
     } catch (error) {
       requirements = []
     }
@@ -218,13 +220,13 @@ export async function POST(request: NextRequest) {
       emergencyContact: JSON.stringify(emergencyContact),
       status: 'applied' as ParticipantStatus,
       paymentStatus: 'pending' as PaymentStatus,
-      appliedAt: Math.floor(Date.now() / 1000),
+      appliedAt: new Date(),
       metadata: JSON.stringify({})
     }
 
     const result = await db
       .insert(culturalExchangeParticipants)
-      .values(newApplication)
+      .values([newApplication])
       .returning()
 
     if (!result[0]) {
@@ -235,8 +237,8 @@ export async function POST(request: NextRequest) {
     await db
       .update(culturalExchangePrograms)
       .set({ 
-        currentParticipants: program[0].currentParticipants + 1,
-        updatedAt: Math.floor(Date.now() / 1000)
+        currentParticipants: (selectedProgram.currentParticipants || 0) + 1,
+        updatedAt: new Date()
       })
       .where(eq(culturalExchangePrograms.id, programId))
 
@@ -246,9 +248,9 @@ export async function POST(request: NextRequest) {
       success: true,
       application: {
         ...result[0],
-        appliedAt: result[0].appliedAt ? new Date(Number(result[0].appliedAt) * 1000) : new Date(),
-        applicationData: result[0].applicationData ? JSON.parse(result[0].applicationData) : {},
-        emergencyContact: result[0].emergencyContact ? JSON.parse(result[0].emergencyContact) : {}
+        appliedAt: new Date(result[0].appliedAt),
+        applicationData: result[0].applicationData || {},
+        emergencyContact: result[0].emergencyContact || {}
       },
       message: '프로그램 신청이 완료되었습니다'
     })

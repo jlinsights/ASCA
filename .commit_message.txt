@@ -1,36 +1,39 @@
-✅ Phase 4.5 부분 완료: Service Layer 아키텍처 개선 성공
+✅ Phase 4.8 진행중: Real-time System 테스트 구축
 
-아키텍처 리팩토링 완료:
-1. ✅ Service Layer 생성 (lib/services/member-service.ts)
-   - Next.js 의존성 완전 분리
-   - 순수 비즈니스 로직 (logger, cookies 등 제거)
-   - Dependency Injection 패턴 적용
-   - 테스트 가능한 구조로 설계
+🎯 완료된 작업:
+1. ✅ Event Emitter 단위 테스트 작성
+   - lib/realtime/__tests__/event-emitter.test.ts (428 lines)
+   - 50+ 테스트 케이스 (로컬/Redis 이벤트 발행, 구독 관리, 와일드카드, 필터링)
 
-2. ✅ Route Handler 단순화 (app/api/members/route.ts)
-   - GET: 120+ 줄 → 14줄 (92% 감소)
-   - POST: 70+ 줄 → 17줄 (76% 감소)
-   - Next.js 의존성 처리만 담당
-   - 비즈니스 로직은 Service Layer로 완전 위임
+2. ✅ Subscription Manager 단위 테스트 작성
+   - lib/realtime/__tests__/subscription-manager.test.ts (450 lines)
+   - 40+ 테스트 케이스 (구독/해제, 이벤트 타입 인덱싱, 사용자 ID 인덱싱, 정리)
 
-3. ✅ 코드 품질 대폭 향상
-   - 느슨한 결합 (Loose Coupling)
-   - 높은 응집도 (High Cohesion)
-   - 재사용 가능한 Service Layer
-   - 명확한 책임 분리 (SRP)
+3. ✅ WebSocket Manager 단위 테스트 작성
+   - lib/realtime/__tests__/websocket-manager.test.ts (577 lines)
+   - 45+ 테스트 케이스 (연결 처리, 인증, 메시지 핸들링, 하트비트, 브로드캐스팅)
 
-Jest 테스트 실행 불가 (기술적 한계):
-❌ Jest + Next.js 환경에서 메모리 오류 (heap exhaustion)
-   - Next.js module resolution과 Jest 충돌
-   - cookies(), headers() 런타임 의존성 문제
-   - Path alias 해석 과정에서 무한 루프
-   - 상대 경로로 변경해도 동일한 메모리 오류
+4. ✅ SSE Manager 단위 테스트 작성
+   - lib/realtime/__tests__/sse-manager.test.ts (464 lines)
+   - 40+ 테스트 케이스 (스트림 생성, 이벤트 브로드캐스팅, 메시지 포맷팅, Keep-alive)
 
-대안 접근법 필요:
-- Option A: Playwright E2E 테스트 (실제 HTTP 요청)
-- Option B: Service Layer 수동 테스트 문서화
-- Option C: Phase 4.6 (GraphQL)로 진행 후 통합 테스트
+5. ✅ SSE API 통합 테스트 작성
+   - app/api/realtime/__tests__/sse-route.test.ts (627 lines)
+   - 40+ 통합 테스트 (스트림 생성, 인증, 이벤트 필터링, 헤더, 에러 처리)
 
-결론:
-아키텍처는 크게 개선되었으나, Jest 환경의 기술적 한계로
-인해 유닛 테스트 실행은 불가능. E2E 테스트 전환 검토 필요.
+6. ✅ E2E 실시간 이벤트 플로우 테스트 작성
+   - lib/realtime/__tests__/e2e-flow.test.ts (870 lines)
+   - 20+ E2E 시나리오 (완전한 이벤트 파이프라인, 와일드카드, 사용자 필터링, 성능)
+
+7. ✅ 테스트 스크립트 구성 완료
+   - package.json: test:realtime, test:realtime:watch, test:realtime:unit
+   - test:realtime:integration, test:realtime:e2e 추가
+
+🔧 기술 스택:
+- Jest + TypeScript
+- Mock WebSocket 및 ReadableStream
+- Fake Timers (heartbeat/keep-alive 테스트)
+- Next.js App Router SSE 엔드포인트
+- E2E 이벤트 파이프라인 검증
+
+다음 단계: 전체 테스트 스위트 실행 및 결과 문서화

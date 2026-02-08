@@ -1,6 +1,5 @@
 'use client'
 
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -51,7 +50,6 @@ const upcomingExhibitions = [
 export default function UpcomingExhibitionsPage() {
   return (
     <main className="min-h-screen">
-      <Header />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-blue-50 to-background dark:from-blue-950/20 py-16">

@@ -192,7 +192,7 @@ export async function batchLoadRelated<T extends Record<string, any>, R>(
   const relatedItems = await db
     .select()
     .from(relatedTable)
-    .where(inArray(relatedTable[relatedKey], foreignIds)) as R[];
+    .where(inArray((relatedTable as any)[relatedKey], foreignIds)) as R[];
 
   // Create lookup map
   const relatedMap = new Map<any, R>();
@@ -242,7 +242,7 @@ export async function batchLoadHasMany<T extends Record<string, any>, R>(
   const relatedItems = await db
     .select()
     .from(relatedTable)
-    .where(inArray(relatedTable[foreignKey], primaryIds)) as R[];
+    .where(inArray((relatedTable as any)[foreignKey], primaryIds)) as R[];
 
   // Group by foreign key
   const groupedMap = new Map<any, R[]>();
@@ -333,7 +333,7 @@ export async function prefetchRelated<T extends Record<string, any>>(
     );
 
     items.forEach((item, index) => {
-      item[name] = relatedItems[index];
+      (item as any)[name] = relatedItems[index];
     });
   });
 

@@ -1,0 +1,847 @@
+{
+  "config": {
+    "configFile": "/Users/jaehong/Developer/Projects/ASCA/playwright.config.ts",
+    "rootDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "playwright-report/results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/jaehong/Developer/Projects/ASCA/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/jaehong/Developer/Projects/ASCA/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/jaehong/Developer/Projects/ASCA/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/jaehong/Developer/Projects/ASCA/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/jaehong/Developer/Projects/ASCA/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.57.0",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "api/members.spec.ts",
+      "file": "api/members.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Members API - GET /api/members",
+          "file": "api/members.spec.ts",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should return members list successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 220,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.267Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-e1cbd080557c186050cb",
+              "file": "api/members.spec.ts",
+              "line": 14,
+              "column": 7
+            },
+            {
+              "title": "should return dummy data in development when database is empty",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 167,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.332Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-f0d5bbd45a8a81e21fb1",
+              "file": "api/members.spec.ts",
+              "line": 40,
+              "column": 7
+            },
+            {
+              "title": "should support pagination with page and limit parameters",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 174,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.270Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-24654437c536765b60ce",
+              "file": "api/members.spec.ts",
+              "line": 62,
+              "column": 7
+            },
+            {
+              "title": "should support search query parameter",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 177,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.275Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-2e35e49ac2bbbd1f98a0",
+              "file": "api/members.spec.ts",
+              "line": 79,
+              "column": 7
+            },
+            {
+              "title": "should support status filter parameter",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 69,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.494Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-32392b71169c030ca098",
+              "file": "api/members.spec.ts",
+              "line": 94,
+              "column": 7
+            },
+            {
+              "title": "should support level filter parameter",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 107,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhonorary_mast\u001b[27mer\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7madvanced_practition\u001b[27mer\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhonorary_mast\u001b[27mer\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7madvanced_practition\u001b[27mer\"\u001b[39m\n    at forEach (/Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts:124:42)\n    at /Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts:123:23",
+                        "location": {
+                          "file": "/Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts",
+                          "column": 42,
+                          "line": 124
+                        },
+                        "snippet": "  122 |     // All returned members should have the filtered level\n  123 |     data.data.members.forEach((member: any) => {\n> 124 |       expect(member.membership_level_id).toBe(level);\n      |                                          ^\n  125 |     });\n  126 |   });\n  127 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts",
+                            "column": 42,
+                            "line": 124
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhonorary_mast\u001b[27mer\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7madvanced_practition\u001b[27mer\"\u001b[39m\n\n  122 |     // All returned members should have the filtered level\n  123 |     data.data.members.forEach((member: any) => {\n> 124 |       expect(member.membership_level_id).toBe(level);\n      |                                          ^\n  125 |     });\n  126 |   });\n  127 |\n    at forEach (/Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts:124:42)\n    at /Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts:123:23"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.498Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts",
+                        "column": 42,
+                        "line": 124
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-7256f0321529590a2148",
+              "file": "api/members.spec.ts",
+              "line": 111,
+              "column": 7
+            },
+            {
+              "title": "should support sorting with sortBy and sortOrder parameters",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 134,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.543Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-c442c76a1676300585a9",
+              "file": "api/members.spec.ts",
+              "line": 128,
+              "column": 7
+            },
+            {
+              "title": "should support multiple filters combined",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 152,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.553Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-458ba7ca7b37097b285b",
+              "file": "api/members.spec.ts",
+              "line": 147,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Members API - POST /api/members",
+          "file": "api/members.spec.ts",
+          "line": 162,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should create a new member with valid data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 167,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.584Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-3510acd7283cb00adebd",
+              "file": "api/members.spec.ts",
+              "line": 163,
+              "column": 7
+            },
+            {
+              "title": "should create a member with minimal required fields",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 60,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:40.603Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-9979f475c59dd9a938f9",
+              "file": "api/members.spec.ts",
+              "line": 192,
+              "column": 7
+            },
+            {
+              "title": "should return 400 when email is missing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 46,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.710Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-7177db88124c948928eb",
+              "file": "api/members.spec.ts",
+              "line": 216,
+              "column": 7
+            },
+            {
+              "title": "should handle duplicate email gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 111,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mtrue\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mtrue\u001b[39m\n    at /Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts:256:33",
+                        "location": {
+                          "file": "/Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts",
+                          "column": 33,
+                          "line": 256
+                        },
+                        "snippet": "  254 |\n  255 |     // Should return an error (might be 400 or 409 depending on implementation)\n> 256 |     expect(secondResponse.ok()).toBeFalsy();\n      |                                 ^\n  257 |\n  258 |     const data = await secondResponse.json();\n  259 |     expect(data.success).toBe(false);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts",
+                            "column": 33,
+                            "line": 256
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mtrue\u001b[39m\n\n  254 |\n  255 |     // Should return an error (might be 400 or 409 depending on implementation)\n> 256 |     expect(secondResponse.ok()).toBeFalsy();\n      |                                 ^\n  257 |\n  258 |     const data = await secondResponse.json();\n  259 |     expect(data.success).toBe(false);\n    at /Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts:256:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.743Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/jaehong/Developer/Projects/ASCA/e2e/api/members.spec.ts",
+                        "column": 33,
+                        "line": 256
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-5b535c1ead9619cbe797",
+              "file": "api/members.spec.ts",
+              "line": 234,
+              "column": 7
+            },
+            {
+              "title": "should set default values for optional fields",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 87,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.775Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-61977bd437286c994431",
+              "file": "api/members.spec.ts",
+              "line": 262,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Members API - Error Handling",
+          "file": "api/members.spec.ts",
+          "line": 286,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should return proper error for malformed JSON",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 67,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.774Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-8c304b50965db1def540",
+              "file": "api/members.spec.ts",
+              "line": 287,
+              "column": 7
+            },
+            {
+              "title": "should handle invalid query parameters gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 51,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.858Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-514d118e038c40cfc903",
+              "file": "api/members.spec.ts",
+              "line": 299,
+              "column": 7
+            },
+            {
+              "title": "should handle large page numbers",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 62,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:40.709Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-21b9401d490ae9397bed",
+              "file": "api/members.spec.ts",
+              "line": 308,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Members API - Performance",
+          "file": "api/members.spec.ts",
+          "line": 323,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should respond within acceptable time (< 2 seconds)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 51,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.883Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-7eb79ef8bb14b734ec84",
+              "file": "api/members.spec.ts",
+              "line": 324,
+              "column": 7
+            },
+            {
+              "title": "should handle multiple concurrent requests",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 227,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-10T12:57:39.924Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "aaaca2cf4c9484c8c845-69b0fbaa93107fdb8b0d",
+              "file": "api/members.spec.ts",
+              "line": 336,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-01-10T12:57:31.350Z",
+    "duration": 9450.746,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

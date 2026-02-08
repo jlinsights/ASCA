@@ -8,7 +8,6 @@ import {
   ArrowLeft, Calendar, Clock, MapPin, Award, Users, FileText,
   CheckCircle, AlertCircle, Share2, Facebook, Twitter, Link as LinkIcon
 } from 'lucide-react'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -110,8 +109,7 @@ export default function ContestDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-h-screen bg-transparent">
         <main className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
@@ -124,8 +122,7 @@ export default function ContestDetailPage() {
 
   if (error || !contest) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-h-screen bg-transparent">
         <main className="container mx-auto px-4 py-8">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
@@ -146,8 +143,7 @@ export default function ContestDetailPage() {
   const canApply = canApplyToContest(contest)
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen bg-transparent">
 
       <main className="container mx-auto px-4 py-8">
         {/* Navigation */}

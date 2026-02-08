@@ -19,7 +19,7 @@ export class ArtistRepository extends BaseRepository<typeof artists, Artist, New
     return this.findOne({
       where: or(
         eq(artists.name, name),
-        eq(artists.name_en, name)
+        eq(artists.nameEn, name)
       ),
     });
   }
@@ -30,19 +30,11 @@ export class ArtistRepository extends BaseRepository<typeof artists, Artist, New
   async findByNationality(nationality: string): Promise<Artist[]> {
     return this.findAll({
       where: eq(artists.nationality, nationality),
-      orderBy: desc(artists.created_at),
+      orderBy: desc(artists.createdAt),
     });
   }
 
-  /**
-   * Find artists by membership type
-   */
-  async findByMembershipType(membershipType: string): Promise<Artist[]> {
-    return this.findAll({
-      where: eq(artists.membership_type, membershipType),
-      orderBy: desc(artists.created_at),
-    });
-  }
+
 
   /**
    * Search artists by name or bio
@@ -51,10 +43,10 @@ export class ArtistRepository extends BaseRepository<typeof artists, Artist, New
     return this.findAll({
       where: or(
         like(artists.name, `%${query}%`),
-        like(artists.name_en, `%${query}%`),
+        like(artists.nameEn, `%${query}%`),
         like(artists.bio, `%${query}%`)
       ),
-      orderBy: desc(artists.created_at),
+      orderBy: desc(artists.createdAt),
     });
   }
 }

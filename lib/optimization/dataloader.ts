@@ -154,7 +154,9 @@ export class DataLoader<K, V> {
 
       // Process results
       results.forEach((result, index) => {
-        const { key, resolve, reject } = batch[index];
+        const entry = batch[index];
+        if (!entry) return;
+        const { key, resolve, reject } = entry;
         const cacheKey = this.cacheKeyFn(key);
 
         // Cache the result

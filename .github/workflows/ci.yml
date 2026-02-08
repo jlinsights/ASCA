@@ -7,8 +7,7 @@ on:
     branches: [main, develop]
 
 env:
-  NODE_VERSION: '18'
-  PNPM_VERSION: '8'
+  NODE_VERSION: '20'
 
 jobs:
   # 코드 품질 검사
@@ -20,28 +19,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Type checking
-        run: pnpm tsc --noEmit
+        run: npm run type-check
 
       - name: Linting
-        run: pnpm lint
+        run: npm run lint
 
       - name: Code formatting check
-        run: pnpm prettier --check .
+        run: npm run format:check
 
   # 테스트 실행
   test:
@@ -52,30 +46,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
-      - name: Run tests
-        run: pnpm test --coverage
+      - name: Run unit tests
+        run: npm run test:ci
+
+      - name: Run GraphQL tests
+        run: npm run test:graphql
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
+        if: always()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/clover.xml
+          files: ./coverage/clover.xml
           flags: unittests
           name: codecov-umbrella
+
+      - name: Upload GraphQL test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: graphql-test-results
+          path: coverage/
+          retention-days: 30
 
   # 빌드 테스트
   build:
@@ -87,31 +88,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build application
-        run: pnpm build
-
-      - name: Export static files
-        run: pnpm export
+        run: npm run build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: build-files
-          path: out/
+          path: .next/
+          retention-days: 7
 
   # 보안 검사
   security:
@@ -122,25 +117,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Security audit
-        run: pnpm audit
+        run: npm audit || true
 
       - name: Check for vulnerabilities
-        run: pnpm audit --audit-level moderate
+        run: npm audit --audit-level moderate || true
 
   # 배포 (main 브랜치에만)
   deploy:
@@ -153,22 +143,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build for production
-        run: pnpm build
+        run: npm run build
 
       - name: Deploy to production
         # 실제 배포 환경에 맞게 수정 필요

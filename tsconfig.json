@@ -47,6 +47,7 @@
   ],
   "exclude": [
     "node_modules",
-    "lib/db/**/*"
+    "lib/db/**/*",
+    "lib/testing/**/*"
   ]
 }

@@ -4,7 +4,7 @@
  * Adds cursor-based pagination capabilities to existing repositories.
  */
 
-import { SQL, asc, desc, gt, lt, and, or } from 'drizzle-orm';
+import { SQL, asc, desc, gt, lt, and, or, sql } from 'drizzle-orm';
 import { PgTable } from 'drizzle-orm/pg-core';
 import { db } from '@/lib/db';
 import {
@@ -91,7 +91,7 @@ export class CursorQueryBuilder<T extends Record<string, any>> {
     } = this.paginator.getParams(params);
 
     const sortField = params.sortField ?? this.defaultSortField;
-    const tableColumn = this.table[sortField];
+    const tableColumn = (this.table as any)[sortField];
 
     // Build WHERE clause
     let whereClause = where;
@@ -157,7 +157,7 @@ export class CursorQueryBuilder<T extends Record<string, any>> {
    * Count total items
    */
   async countTotal(where?: SQL): Promise<number> {
-    let query = db.select({ count: db.$count() }).from(this.table);
+    let query = db.select({ count: sql<number>`count(*)` }).from(this.table);
 
     if (where) {
       query = query.where(where) as any;

@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -199,8 +198,7 @@ export default function ContestApplyPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-h-screen bg-transparent">
         <main className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
@@ -213,8 +211,7 @@ export default function ContestApplyPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-h-screen bg-transparent">
         <main className="container mx-auto px-4 py-8">
           <Card className="max-w-2xl mx-auto">
             <CardContent className="p-12 text-center">
@@ -240,8 +237,7 @@ export default function ContestApplyPage() {
 
   if (error && !contest) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-h-screen bg-transparent">
         <main className="container mx-auto px-4 py-8">
           <Alert variant="destructive" className="max-w-2xl mx-auto">
             <AlertCircle className="h-4 w-4" />
@@ -259,8 +255,7 @@ export default function ContestApplyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen bg-transparent">
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Navigation */}

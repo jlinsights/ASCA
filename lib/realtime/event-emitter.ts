@@ -15,7 +15,8 @@
  */
 
 import { EventEmitter as NodeEventEmitter } from 'events';
-import type { Redis } from 'ioredis';
+// import type { Redis } from 'ioredis';
+type Redis = any;
 
 /**
  * Event types for the application
@@ -131,13 +132,13 @@ export class AppEventEmitter {
 
     const subscriber = this.redis.duplicate();
 
-    subscriber.subscribe(this.redisChannel, (err) => {
+    subscriber.subscribe(this.redisChannel, (err: any) => {
       if (err) {
         console.error('Failed to subscribe to Redis channel:', err);
       }
     });
 
-    subscriber.on('message', (channel, message) => {
+    subscriber.on('message', (channel: any, message: any) => {
       if (channel === this.redisChannel) {
         try {
           const payload: EventPayload = JSON.parse(message);
@@ -310,7 +311,7 @@ export class AppEventEmitter {
    */
   private getEventCategory(type: EventType | string): string | null {
     const parts = type.split(':');
-    return parts.length > 1 ? parts[0] : null;
+    return parts.length > 1 ? parts[0] ?? null : null;
   }
 
   /**

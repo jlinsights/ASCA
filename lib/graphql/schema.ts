@@ -190,7 +190,6 @@ export const typeDefs = gql`
     specializations: [String!]
     preferredStyles: [String!]
     teachingExperience: Int
-    certifications: [String!]
     achievements: [String!]
 
     # Membership Information

@@ -60,7 +60,7 @@ export default function ArtistDetailModal({
           <div className="relative">
             <div className="h-32 bg-muted rounded-lg overflow-hidden">
               <Image
-                src={artist.profile_image || "/placeholder-cover.jpg"}
+                src={artist.profileImage || "/placeholder-cover.jpg"}
                 alt={`${artist.name} cover`}
                 fill
                 className="object-cover"
@@ -71,7 +71,7 @@ export default function ArtistDetailModal({
             <div className="flex items-end gap-4 px-6 -mt-8 relative">
               <div className="w-20 h-20 bg-white rounded-full border-4 border-white overflow-hidden">
                 <Image
-                  src={artist.profile_image || "/placeholder-profile.jpg"}
+                  src={artist.profileImage || "/placeholder-profile.jpg"}
                   alt={artist.name}
                   width={80}
                   height={80}
@@ -84,7 +84,7 @@ export default function ArtistDetailModal({
                   {artist.name}
                 </h2>
                 <p className="text-muted-foreground">
-                  {artist.name_en || artist.birth_year ? `${artist.name_en || ''} ${artist.birth_year ? `(${artist.birth_year})` : ''}`.trim() : ''}
+                  {artist.nameEn || artist.birthYear ? `${artist.nameEn || ''} ${artist.birthYear ? `(${artist.birthYear})` : ''}`.trim() : ''}
                 </p>
                 <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
@@ -143,7 +143,7 @@ export default function ArtistDetailModal({
               <div>
                 <h3 className="font-semibold mb-2">{language === 'ko' ? '작가 소개' : 'Biography'}</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  {language === 'ko' ? artist.bio : (artist.bio_en || artist.bio)}
+                  {language === 'ko' ? artist.bio : (artist.bioEn || artist.bio)}
                 </p>
               </div>
               

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { logger } from '@/lib/utils/logger'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -301,8 +300,7 @@ export default function MemberProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen bg-transparent">
       
       {/* 프로필 헤더 */}
       <section className="border-b border-border bg-gradient-to-b from-muted/30 to-background">

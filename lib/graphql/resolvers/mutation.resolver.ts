@@ -1,7 +1,8 @@
+import { randomUUID } from 'crypto';
 import { eq } from 'drizzle-orm';
 import type { GraphQLContext } from '../context';
 import { requireAuth, requireAdmin } from '../context';
-import * as schema from '@/lib/db/schema-pg';
+import * as schema from '@/lib/db/schema';
 
 /**
  * Mutation Resolvers
@@ -261,6 +262,9 @@ export const mutationResolvers = {
       .returning();
 
     // Clear artist's artworks cache
+    if (!artwork) {
+      throw new Error('Failed to create artwork');
+    }
     context.loaders.artworksByArtistLoader.clear(artwork.artistId);
 
     return artwork;
@@ -359,6 +363,7 @@ export const mutationResolvers = {
     const [participant] = await context.db
       .insert(schema.eventParticipants)
       .values({
+        id: randomUUID(),
         eventId,
         userId: context.userId!,
         status: 'registered',

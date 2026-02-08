@@ -161,7 +161,9 @@ export class AuditLogger {
     // Enforce max logs limit (remove oldest)
     if (this.logs.size > this.maxLogs) {
       const oldestKey = this.logs.keys().next().value;
-      this.logs.delete(oldestKey);
+      if (oldestKey) {
+        this.logs.delete(oldestKey);
+      }
     }
 
     // Log to console in development

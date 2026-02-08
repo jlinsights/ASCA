@@ -1,7 +1,7 @@
-import type { Database } from '@/lib/supabase'
+import type { ArtistRow } from '@/lib/supabase'
 
 // 기본 Artist 타입
-export type BaseArtist = Database['public']['Tables']['artists']['Row']
+export type BaseArtist = ArtistRow
 
 // 확장된 Artist 타입 - 추가 필드 포함
 export interface ExtendedArtist extends BaseArtist {
@@ -9,7 +9,7 @@ export interface ExtendedArtist extends BaseArtist {
   location?: string
   email?: string
   phone?: string
-  website?: string
+
   
   // 학력 정보
   education?: string[]
@@ -28,12 +28,12 @@ export interface ExtendedArtist extends BaseArtist {
   artworks?: ExtendedArtwork[]
   
   // 소셜 미디어
-  socialMedia?: {
+  socialMedia: {
     instagram?: string
     facebook?: string
     twitter?: string
     youtube?: string
-  }
+  } | null
   
   // 추가 메타데이터
   metadata?: {
@@ -104,15 +104,15 @@ export function hasStats(artist: ExtendedArtist): artist is ExtendedArtist & { s
 
 // Helper functions
 export function getArtistDisplayName(artist: BaseArtist | ExtendedArtist, language: 'ko' | 'en' = 'ko'): string {
-  if (language === 'en' && artist.name_en) {
-    return artist.name_en
+  if (language === 'en' && artist.nameEn) {
+    return artist.nameEn
   }
   return artist.name
 }
 
 export function getArtistBio(artist: BaseArtist | ExtendedArtist, language: 'ko' | 'en' = 'ko'): string {
-  if (language === 'en' && artist.bio_en) {
-    return artist.bio_en
+  if (language === 'en' && artist.bioEn) {
+    return artist.bioEn
   }
   return artist.bio || ''
 }
@@ -127,7 +127,7 @@ export function formatArtistSpecialties(specialties: string[] | null): string[] 
 export function getArtistContactInfo(artist: ExtendedArtist): {
   email?: string
   phone?: string
-  website?: string
+  website?: string | null
   location?: string
 } {
   return {

@@ -395,13 +395,13 @@ export class StructuredLogger {
     // 첫 3개 라인은 이 함수와 log 함수이므로 건너뜀
     for (let i = 3; i < lines.length && i < 10; i++) {
       const line = lines[i];
-      if (!line?.includes('structured-logger')) {
+      if (line && !line.includes('structured-logger')) {
         const match = line.match(/at\s+(.+?)\s+\((.+?):(\d+):\d+\)/);
         if (match) {
           return {
             function: match[1],
             file: match[2],
-            line: parseInt(match[3], 10),
+            line: parseInt(match[3] || '0', 10),
           };
         }
       }

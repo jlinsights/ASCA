@@ -1,6 +1,5 @@
 'use client'
 
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -25,8 +24,7 @@ import {
 
 export default function CopyrightPolicyContent() {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen bg-transparent">
       
       {/* Hero Section */}
       <section className="py-12 md:py-20 bg-gradient-to-b from-blue-50/50 to-background dark:from-blue-950/20">

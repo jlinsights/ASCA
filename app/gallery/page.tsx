@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, Calendar, Users, Award, BookOpen, MapPin, Phone, Mail, Camera, Palette, Sparkles } from 'lucide-react'
 import galleryData from '@/lib/data/gallery-data.json'
 import { GalleryData } from '@/types/gallery'
-import { Header } from '@/components/header'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import '@/styles/gallery.css'
 
@@ -87,8 +86,7 @@ export default function Page() {
   const data = galleryData as unknown as GalleryData
   
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen bg-transparent">
       {/* Hero Section - 미니멀 모던 디자인 */}
       <section className="bg-background border-b border-border">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24">

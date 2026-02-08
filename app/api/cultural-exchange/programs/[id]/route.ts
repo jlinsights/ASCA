@@ -37,27 +37,51 @@ export async function GET(
     // 데이터 변환
     const formattedProgram: CulturalExchangeProgramInfo = {
       ...program,
-      startDate: new Date(Number(program.startDate) * 1000),
-      endDate: new Date(Number(program.endDate) * 1000),
-      applicationDeadline: program.applicationDeadline ? new Date(Number(program.applicationDeadline) * 1000) : undefined,
-      createdAt: new Date(Number(program.createdAt) * 1000),
-      updatedAt: new Date(Number(program.updatedAt) * 1000),
-      // JSON 필드 파싱
-      partnerOrganizations: program.partnerOrganizations ? JSON.parse(program.partnerOrganizations) : [],
-      countries: program.countries ? JSON.parse(program.countries) : [],
-      languages: program.languages ? JSON.parse(program.languages) : [],
-      requirements: program.requirements ? JSON.parse(program.requirements) : [],
-      benefits: program.benefits ? JSON.parse(program.benefits) : [],
-      schedule: program.schedule ? JSON.parse(program.schedule).map((item: any) => ({
+      titleKo: program.titleKo || undefined,
+      titleEn: program.titleEn || undefined,
+      titleCn: program.titleCn || undefined,
+      titleJp: program.titleJp || undefined,
+      description: program.description || undefined,
+      descriptionKo: program.descriptionKo || undefined,
+      descriptionEn: program.descriptionEn || undefined,
+      descriptionCn: program.descriptionCn || undefined,
+      descriptionJp: program.descriptionJp || undefined,
+      programType: program.programType,
+      duration: program.duration || 0,
+      maxParticipants: program.maxParticipants || 0,
+      currentParticipants: program.currentParticipants || 0,
+      fee: program.fee || 0,
+      currency: program.currency || 'KRW',
+      location: program.location || '', 
+      venue: program.venue || undefined,
+      accommodationProvided: program.accommodationProvided || false,
+      mealsProvided: program.mealsProvided || false,
+      transportationProvided: program.transportationProvided || false,
+      organizerId: program.organizerId || '',
+      isFeatured: program.isFeatured || false,
+      metadata: (program.metadata as Record<string, any>) || undefined,
+      startDate: new Date(program.startDate),
+      endDate: new Date(program.endDate),
+      applicationDeadline: program.applicationDeadline ? new Date(program.applicationDeadline) : undefined,
+      createdAt: new Date(program.createdAt),
+      updatedAt: new Date(program.updatedAt),
+      // JSON 필드 처리 (이미 객체임)
+      targetAudience: (program.targetAudience as unknown as number[]) || [],
+      partnerOrganizations: (program.partnerOrganizations as any[]) || [],
+      countries: (program.countries as string[]) || [],
+      languages: (program.languages as string[]) || [],
+      requirements: (program.requirements as any[]) || [],
+      benefits: (program.benefits as any[]) || [],
+      schedule: ((program.schedule as any[]) || []).map((item: any) => ({
         ...item,
         date: new Date(item.date)
-      })) : [],
-      coordinators: program.coordinators ? JSON.parse(program.coordinators) : [],
-      images: program.images ? JSON.parse(program.images) : [],
-      documents: program.documents ? JSON.parse(program.documents).map((doc: any) => ({
+      })),
+      coordinators: (program.coordinators as any[]) || [],
+      images: (program.images as string[]) || [],
+      documents: ((program.documents as any[]) || []).map((doc: any) => ({
         ...doc,
         updatedAt: new Date(doc.updatedAt)
-      })) : []
+      }))
     }
 
     return NextResponse.json({
@@ -66,9 +90,9 @@ export async function GET(
       participantsCount: participants.length,
       participants: participants.map((p: any) => ({
         ...p,
-        appliedAt: new Date(Number(p.appliedAt) * 1000),
-        approvedAt: p.approvedAt ? new Date(Number(p.approvedAt) * 1000) : undefined,
-        completedAt: p.completedAt ? new Date(Number(p.completedAt) * 1000) : undefined
+        appliedAt: new Date(p.appliedAt),
+        approvedAt: p.approvedAt ? new Date(p.approvedAt) : undefined,
+        completedAt: p.completedAt ? new Date(p.completedAt) : undefined
       }))
     })
 
@@ -112,7 +136,7 @@ export async function PUT(
 
     // 업데이트할 데이터 준비
     const updateData: any = {
-      updatedAt: Math.floor(Date.now() / 1000)
+      updatedAt: new Date()
     }
 
     // 업데이트할 필드들
@@ -130,7 +154,7 @@ export async function PUT(
       }
     })
 
-    // JSON 필드들
+    // JSON 필드들 (DB에는 객체로 저장)
     const jsonFields = [
       'targetAudience', 'partnerOrganizations', 'countries', 'languages',
       'requirements', 'benefits', 'coordinators', 'images', 'documents'
@@ -138,36 +162,33 @@ export async function PUT(
 
     jsonFields.forEach(field => {
       if (body[field] !== undefined) {
-        updateData[field] = JSON.stringify(body[field])
+        updateData[field] = body[field]
       }
     })
 
     // 날짜 필드들
     if (body.applicationDeadline !== undefined) {
       updateData.applicationDeadline = body.applicationDeadline ? 
-        Math.floor(new Date(body.applicationDeadline).getTime() / 1000) : null
+        new Date(body.applicationDeadline) : null
     }
     if (body.startDate !== undefined) {
-      updateData.startDate = Math.floor(new Date(body.startDate).getTime() / 1000)
+      updateData.startDate = new Date(body.startDate)
     }
     if (body.endDate !== undefined) {
-      updateData.endDate = Math.floor(new Date(body.endDate).getTime() / 1000)
+      updateData.endDate = new Date(body.endDate)
     }
 
     // 스케줄 처리
     if (body.schedule !== undefined) {
-      updateData.schedule = JSON.stringify(body.schedule.map((item: any) => ({
+      updateData.schedule = body.schedule.map((item: any) => ({
         ...item,
-        date: item.date instanceof Date ? item.date.toISOString() : item.date
-      })))
+        date: item.date // Keep as string or convert if needed by schema (jsonb stores whatever)
+      }))
     }
 
     // 문서 처리
     if (body.documents !== undefined) {
-      updateData.documents = JSON.stringify(body.documents.map((doc: any) => ({
-        ...doc,
-        updatedAt: doc.updatedAt instanceof Date ? doc.updatedAt.toISOString() : doc.updatedAt
-      })))
+      updateData.documents = body.documents
     }
 
     // 업데이트 실행

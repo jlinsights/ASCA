@@ -439,7 +439,7 @@ export function isValidPermission(permission: string): permission is Permission 
  * @returns Resource name
  */
 export function getPermissionResource(permission: Permission): string {
-  return permission.split(':')[0];
+  return permission.split(':')[0] || '';
 }
 
 /**
@@ -449,7 +449,7 @@ export function getPermissionResource(permission: Permission): string {
  * @returns Action name
  */
 export function getPermissionAction(permission: Permission): string {
-  return permission.split(':')[1];
+  return permission.split(':')[1] || '';
 }
 
 /**
@@ -514,7 +514,7 @@ export function assertAllPermissions(
   if (missing.length > 0) {
     throw new PermissionError(
       `Missing required permissions: ${missing.join(', ')}`,
-      missing[0],
+      missing[0] as Permission,
       userPermissions
     );
   }

@@ -8,18 +8,13 @@ import { commandBus, CommandHandler, Command, CommandResult, COMMANDS } from '..
 import { queryBus, QueryHandler, Query, QueryResult, QUERIES } from '../cqrs/query-bus';
 import { eventBus, EVENTS } from '../events/event-bus';
 import { ArtistService } from '../agents/artist-agent';
-import { safeSupabaseAdminCall, ensureSupabaseAdmin, type Database } from '../supabase';
+import { safeSupabaseAdminCall, ensureSupabaseAdmin, type ArtistRow, type ArtistInsert, type ArtistUpdate, type ArtworkRow, type ArtworkInsert, type ArtworkUpdate } from '../supabase';
 import { SecurityMiddleware, createSecurityContext, sanitizeInput } from '../security/security-middleware';
 import { auditTrail } from '../audit/audit-trail';
 import { performanceMonitor } from '../monitoring/performance-monitor';
 
-type Artist = Database['public']['Tables']['artists']['Row'];
-type ArtistInsert = Database['public']['Tables']['artists']['Insert'];
-type ArtistUpdate = Database['public']['Tables']['artists']['Update'];
-
-type Artwork = Database['public']['Tables']['artworks']['Row'];
-type ArtworkInsert = Database['public']['Tables']['artworks']['Insert'];
-type ArtworkUpdate = Database['public']['Tables']['artworks']['Update'];
+type Artist = ArtistRow;
+type Artwork = ArtworkRow;
 
 // ========== Command Handlers ==========
 
