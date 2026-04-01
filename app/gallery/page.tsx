@@ -52,7 +52,7 @@ function GalleryStats({ data }: { data: GalleryData }) {
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-12">
       {stats.map((stat, index) => {
         const IconComponent = stat.icon
         return (
@@ -183,7 +183,7 @@ export default function Page() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             <Card className="group hover-scale smooth-transition border-border">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">

@@ -223,7 +223,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
             </a>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-8" role="navigation" aria-label="주 메뉴">
+            <nav className="hidden md:flex items-center space-x-3 lg:space-x-8" role="navigation" aria-label="주 메뉴">
               {menuStructure.map((menu) => (
                 <div
                   key={menu.key}
@@ -292,14 +292,14 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
             </nav>
 
             {/* Desktop Auth & Controls */}
-            <div className="hidden lg:flex items-center space-x-3">
+            <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
               <HeaderAuthSection />
 
               <ThemeToggle onToggle={handleThemeToggle} />
             </div>
 
             {/* Mobile Controls */}
-            <div className="lg:hidden flex items-center gap-2">
+            <div className="md:hidden flex items-center gap-2">
               <ThemeToggle onToggle={handleThemeToggle} />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -316,7 +316,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div id="mobile-menu" className="lg:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg">
+          <div id="mobile-menu" className="md:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg">
             <nav className="container mx-auto px-4 py-6 space-y-2" role="navigation" aria-label="모바일 메뉴">
               {menuStructure.map((menu) => (
                 <div key={menu.key} className="space-y-1">

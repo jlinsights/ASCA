@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { sanitizeHTML } from '@/lib/security/sanitize'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -103,7 +104,7 @@ export default function BlogPage() {
 
       {/* External Channels Grid */}
       <section className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 gap-4 mb-12 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 max-w-4xl mx-auto">
             {/* Kakao Channel Card - Static Link */}
             <a 
                 href="http://pf.kakao.com/_xkchGj" 
@@ -187,7 +188,7 @@ export default function BlogPage() {
                                     </div>
                                 </div>
 
-                                <CardContent className="flex flex-col flex-1 p-6">
+                                <CardContent className="flex flex-col flex-1 p-4 md:p-6">
                                     <div className="text-xs text-muted-foreground mb-3 flex items-center gap-2">
                                         <Calendar className="w-3 h-3" />
                                         {formatDate(post.publishedAt)}
@@ -233,11 +234,8 @@ export default function BlogPage() {
                                                     <div className="mt-4 prose dark:prose-invert max-w-none">
                                                         <div 
                                                             className="whitespace-normal leading-relaxed [&>p]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-bold [&>h3]:mt-6 [&>h3]:mb-3 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4 [&_figure]:!w-full [&_figure]:!max-w-full [&_figure]:!my-8 [&_figure]:!mx-auto [&_img]:!w-full [&_img]:!max-w-full [&_img]:!h-auto [&_img]:!mx-auto [&_img]:rounded-lg [&_img]:shadow-sm [&_figcaption]:text-center [&_figcaption]:text-sm [&_figcaption]:text-muted-foreground [&_figcaption]:mt-2"
-                                                            dangerouslySetInnerHTML={{ 
-                                                                __html: (post.content || post.summary || '')
-                                                                    .replace(/style="[^"]*"/g, '') // Remove all inline styles
-                                                                    .replace(/width="[^"]*"/g, '') // Remove width attributes
-                                                                    .replace(/height="[^"]*"/g, '') // Remove height attributes
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: sanitizeHTML(post.content || post.summary || '')
                                                             }}
                                                         />
                                                     </div>
