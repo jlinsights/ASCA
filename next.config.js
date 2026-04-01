@@ -18,6 +18,7 @@ const nextConfig = {
     // ignoreBuildErrors removed to enforce type checking
   },
 
+
   // Turbopack 설정 (Next.js 16+ 호환)
   turbopack: {},
 

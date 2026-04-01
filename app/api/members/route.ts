@@ -203,7 +203,7 @@ export async function POST(request: NextRequest) {
  * Example: Enhanced member search with multiple filters
  * This could be a separate endpoint like /api/members/search
  */
-export async function searchMembers(params: MemberSearchParams) {
+async function searchMembers(params: MemberSearchParams) {
   const result = await withPerformanceLog('members.advancedSearch', async () => {
     let query = db.select().from(members);
 

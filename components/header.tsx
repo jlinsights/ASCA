@@ -146,6 +146,36 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // 모바일 메뉴 열림 시 body 스크롤 잠금 + focus trap
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+      const menu = document.getElementById('mobile-menu')
+      if (!menu) return
+      const focusable = menu.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+      if (focusable.length === 0) return
+      const first = focusable[0] as HTMLElement | undefined
+      const last = focusable[focusable.length - 1] as HTMLElement | undefined
+      if (!first || !last) return
+      const trap = (e: KeyboardEvent) => {
+        if (e.key !== 'Tab') return
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus() }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus() }
+        }
+      }
+      menu.addEventListener('keydown', trap)
+      first.focus()
+      return () => { menu.removeEventListener('keydown', trap) }
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [isMenuOpen])
+
   // ESC 키로 메뉴 닫기
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
@@ -209,7 +239,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                   >
                     {menu.title}
                     {(menu.subItems?.length ?? 0) > 0 && (
-                      <ChevronDown className="w-3 h-3 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
+                      <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === menu.key ? 'rotate-180' : ''}`} aria-hidden="true" />
                     )}
                   </Link>
 
@@ -268,23 +298,12 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
               <ThemeToggle onToggle={handleThemeToggle} />
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden flex items-center justify-center w-8 h-8 rounded text-foreground hover:bg-foreground/10 transition-colors"
-              aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-menu"
-            >
-              {isMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
-            </button>
-
             {/* Mobile Controls */}
             <div className="lg:hidden flex items-center gap-2">
               <ThemeToggle onToggle={handleThemeToggle} />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center justify-center w-8 h-8 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2"
+                className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-md text-foreground hover:bg-foreground/10 active:bg-foreground/20 transition-colors"
                 aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
@@ -341,7 +360,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                             target="_blank"
                             rel="noopener noreferrer"
                             role="menuitem"
-                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
+                            className="block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {subItem.title}
@@ -351,7 +370,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                             key={index}
                             href={subItem.href}
                             role="menuitem"
-                            className="block text-sm text-muted-foreground py-2 px-2 hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
+                            className="block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {subItem.title}
