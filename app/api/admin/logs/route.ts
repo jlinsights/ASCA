@@ -32,7 +32,7 @@ const MAX_LOGS = 10000;
 /**
  * 로그 저장 (내부 사용)
  */
-export function storeLog(entry: LogEntry): void {
+function storeLog(entry: LogEntry): void {
   logStorage.push(entry);
 
   // 최대 개수 제한
@@ -66,7 +66,7 @@ export const GET = withPermission(
       const format = searchParams.get('format') || 'json';
 
       // 로그 필터링
-      let filtered = filterLogs(logStorage, filter);
+      const filtered = filterLogs(logStorage, filter);
 
       // 정렬 (최신순)
       filtered.sort((a, b) => b.timestamp - a.timestamp);

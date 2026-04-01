@@ -3,6 +3,7 @@
 import { ReactNode, useState } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { LanguageProvider } from '@/contexts/language-context'
 
 interface ClientProvidersProps {
   children: ReactNode
@@ -27,7 +28,9 @@ export function ClientProviders({ children }: ClientProvidersProps) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )

@@ -16,6 +16,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Info } from 'lucide-react'
 import Link from 'next/link'
+import { ClientErrorBoundary } from '@/components/error-boundary'
+import { EmptyState } from '@/components/ui/empty-state'
 
 const statusColors = {
   "upcoming": "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-300 dark:border-blue-800",
@@ -349,15 +351,11 @@ export default function ExhibitionsPage() {
 
           {/* 전시회가 없는 경우 */}
           {exhibitions.length === 0 && (
-            <div className="text-center py-12">
-              <div className="bg-slate-50 dark:bg-slate-950/30 border border-slate-200 dark:border-slate-800 rounded-lg p-8 max-w-md mx-auto">
-                <Star className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-foreground mb-2">전시회가 없습니다</h3>
-                <p className="text-muted-foreground">
-                  검색 조건을 변경하거나 나중에 다시 확인해주세요.
-                </p>
-              </div>
-            </div>
+            <EmptyState
+              icon={<Star className="w-6 h-6 text-muted-foreground" />}
+              title="전시회가 없습니다"
+              description="검색 조건을 변경하거나 나중에 다시 확인해주세요."
+            />
           )}
 
           {/* 페이지네이션 */}

@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Search, FileText, Calendar, MapPin, User, Palette } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { EmptyState } from '@/components/ui/empty-state';
 import SimpleSearch from '@/components/search/SimpleSearch';
 import { searchAllContent, SearchResult } from '@/lib/supabase/search';
 import { useLanguage } from '@/contexts/language-context';
@@ -124,7 +125,7 @@ function SearchContent() {
           </div>
 
           {query && (
-            <div className="mb-6">
+            <div className="mb-6" aria-live="polite" aria-atomic="true">
               <p className="text-muted-foreground">
                 <span className="font-semibold">'{query}'</span>에 대한 검색 결과{' '}
                 <span className="font-semibold">{results.length}개</span>
@@ -166,11 +167,11 @@ function SearchContent() {
           </div>
 
           {!loading && query && results.length === 0 && (
-            <div className="text-center py-12">
-              <Search className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium text-foreground mb-2">검색 결과가 없습니다</h3>
-              <p className="text-muted-foreground">다른 검색어로 시도해보세요.</p>
-            </div>
+            <EmptyState
+              icon={<Search className="w-6 h-6 text-muted-foreground" />}
+              title="검색 결과가 없습니다"
+              description="다른 검색어로 시도해보세요."
+            />
           )}
 
           {!query && !loading && (
