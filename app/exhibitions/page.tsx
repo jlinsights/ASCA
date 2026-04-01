@@ -301,7 +301,7 @@ export default function ExhibitionsPage() {
 
               {showFilters && (
                 <div className="border-t border-border/30 pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     <div>
                       <label className="text-sm font-medium mb-2 block text-foreground">상태</label>
                       <Select value={selectedStatus} onValueChange={setSelectedStatus}>
@@ -407,7 +407,7 @@ export default function ExhibitionsPage() {
 
       {/* 전시회 상세 모달 */}
       <Dialog open={!!selectedExhibition} onOpenChange={() => setSelectedExhibition(null)}>
-        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-[95vw] md:max-w-4xl lg:max-w-6xl max-h-[90vh] overflow-y-auto">
           {selectedExhibition && (
             <>
               <DialogHeader>
@@ -455,7 +455,7 @@ export default function ExhibitionsPage() {
 
                 {/* 탭 콘텐츠 */}
                 <Tabs defaultValue="info" className="w-full">
-                  <TabsList className="grid w-full grid-cols-4">
+                  <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
                     <TabsTrigger value="info">{t("info")}</TabsTrigger>
                     <TabsTrigger value="artists">{t("artists")}</TabsTrigger>
                     <TabsTrigger value="artworks">{t("artworks")}</TabsTrigger>
@@ -560,7 +560,7 @@ export default function ExhibitionsPage() {
                     <div>
                       <h3 className="font-semibold mb-3">{t("statistics")}</h3>
                       {selectedExhibition.stats ? (
-                        <div className="grid grid-cols-4 gap-4 text-center">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-center">
                           <div className="p-3 bg-muted rounded-lg">
                             <div className="text-2xl font-bold text-celadon">{selectedExhibition.stats.total_artworks}</div>
                             <div className="text-sm text-muted-foreground">{t("artworks")}</div>

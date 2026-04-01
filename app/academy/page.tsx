@@ -243,7 +243,7 @@ export default function AcademyPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="relative h-[40vh] min-h-[400px] flex items-center justify-center overflow-hidden">
+      <div className="relative h-[40vh] min-h-[300px] md:min-h-[400px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/academy-hero.jpg"
@@ -271,7 +271,7 @@ export default function AcademyPage() {
       <div className="container mx-auto px-4 py-16 flex-1">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <div className="flex justify-center mb-12">
-            <TabsList className="grid grid-cols-2 w-full max-w-[400px]">
+            <TabsList className="grid grid-cols-2 w-full max-w-full sm:max-w-[400px]">
               <TabsTrigger value="courses">강좌소개</TabsTrigger>
               <TabsTrigger value="instructors">강사소개</TabsTrigger>
             </TabsList>
@@ -314,7 +314,7 @@ export default function AcademyPage() {
                  <p className="text-muted-foreground">현재 등록된 강좌가 없습니다.</p>
                </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 {allCourses.map((course) => (
                   <div key={course.id} className="group flex flex-col bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
                     <div className="p-6 md:p-8 flex-1 flex flex-col">
@@ -340,7 +340,7 @@ export default function AcademyPage() {
                           {course.description}
                         </p>
                         
-                        <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
                           <div className="flex items-center text-muted-foreground">
                             <User className="w-4 h-4 mr-2" />
                             {course.instructor}
