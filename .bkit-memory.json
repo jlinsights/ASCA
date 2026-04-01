@@ -1,0 +1,11 @@
+{
+  "activeFeature": null,
+  "phase": "idle",
+  "previousFeature": {
+    "name": "ui-ux-improvement",
+    "phase": "archived",
+    "completedAt": "2026-03-31",
+    "matchRate": 93,
+    "archivedTo": "docs/archive/2026-03/ui-ux-improvement/"
+  }
+}
