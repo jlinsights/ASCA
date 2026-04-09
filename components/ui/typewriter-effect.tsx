@@ -74,9 +74,8 @@ export const TypewriterEffect = ({
   }, [text, duration, isStarted]);
 
   return (
-    <div
-      className={className}
-      dangerouslySetInnerHTML={{ __html: displayedText }}
-    />
+    <div className={className} style={{ whiteSpace: 'pre-wrap' }}>
+      {displayedText.replace(/<br\s*\/?>/gi, '\n')}
+    </div>
   );
 };

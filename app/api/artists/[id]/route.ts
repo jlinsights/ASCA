@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { EnhancedAdminAPI } from '@/lib/api/enhanced-admin-api'
+import { requireAdminAuth } from '@/lib/auth/middleware'
 
 export async function GET(
   request: NextRequest,
@@ -40,9 +41,14 @@ export async function PUT(
 ) {
   try {
     const { id } = await params
+
+    // 인증 확인
+    const user = await requireAdminAuth(request)
+    if (!user) {
+      return NextResponse.json({ success: false, error: '인증이 필요합니다' }, { status: 401 })
+    }
+
     const body = await request.json()
-    // TODO: Admin Auth Check
-    // TODO: Validate body
 
     const updatedArtist = await EnhancedAdminAPI.updateArtist(id, body)
 
@@ -65,7 +71,12 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
-    // TODO: Admin Auth Check
+
+    // 인증 확인
+    const user = await requireAdminAuth(request)
+    if (!user) {
+      return NextResponse.json({ success: false, error: '인증이 필요합니다' }, { status: 401 })
+    }
 
     const success = await EnhancedAdminAPI.deleteArtist(id)
 

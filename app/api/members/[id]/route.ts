@@ -94,11 +94,14 @@ export async function PUT(
 
     // 본인 또는 관리자만 수정 가능
     if (existingMember.user_id !== user.id) {
-      // 관리자 권한 확인 로직 추가 필요
-      return NextResponse.json(
-        { success: false, error: 'Forbidden' },
-        { status: 403 }
-      );
+      const { getAuthContext } = await import('@/lib/middleware/admin-middleware')
+      const authCtx = await getAuthContext(request)
+      if (!authCtx?.isAdmin) {
+        return NextResponse.json(
+          { success: false, error: '권한이 없습니다' },
+          { status: 403 }
+        );
+      }
     }
 
     // 회원 정보 업데이트
@@ -191,10 +194,14 @@ export async function DELETE(
 
     // 본인 또는 관리자만 삭제 가능
     if (existingMember.user_id !== user.id) {
-      return NextResponse.json(
-        { success: false, error: 'Forbidden' },
-        { status: 403 }
-      );
+      const { getAuthContext } = await import('@/lib/middleware/admin-middleware')
+      const authCtx = await getAuthContext(request)
+      if (!authCtx?.isAdmin) {
+        return NextResponse.json(
+          { success: false, error: '권한이 없습니다' },
+          { status: 403 }
+        );
+      }
     }
 
     // 회원 상태를 비활성화로 변경 (실제 삭제 대신)

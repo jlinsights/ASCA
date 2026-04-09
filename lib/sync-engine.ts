@@ -12,20 +12,37 @@ import Airtable from 'airtable'
  */
 
 export class SyncEngine {
-  private supabase: any
-  private airtableBase: any
+  private _supabase: any = null
+  private _airtableBase: any = null
   private isRunning = false
   private syncInterval: NodeJS.Timeout | null = null
 
+  private get supabase() {
+    if (!this._supabase) {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+      if (!url || !key) {
+        throw new Error('SyncEngine: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required')
+      }
+      this._supabase = createClient(url, key)
+    }
+    return this._supabase
+  }
+
+  private get airtableBase() {
+    if (!this._airtableBase) {
+      const apiKey = process.env.AIRTABLE_API_KEY
+      const baseId = process.env.AIRTABLE_BASE_ID
+      if (!apiKey || !baseId) {
+        throw new Error('SyncEngine: AIRTABLE_API_KEY and AIRTABLE_BASE_ID are required')
+      }
+      this._airtableBase = new Airtable({ apiKey }).base(baseId)
+    }
+    return this._airtableBase
+  }
+
   constructor() {
-    this.supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
-    
-    this.airtableBase = new Airtable({ 
-      apiKey: process.env.AIRTABLE_API_KEY! 
-    }).base(process.env.AIRTABLE_BASE_ID!)
+    // 지연 초기화: 실제 사용 시점에 클라이언트 생성
   }
 
   /**
@@ -253,8 +270,18 @@ export class SyncEngine {
    * 스키마 변경 SQL 실행
    */
   private async executeSchemaChange(tableName: string, change: SchemaChange) {
+    if (!validateTableName(tableName)) {
+      throw new Error(`Invalid table name: ${tableName}`)
+    }
+    if (!validateColumnName(change.columnName)) {
+      throw new Error(`Invalid column name: ${change.columnName}`)
+    }
+    if (change.dataType && !validateDataType(change.dataType)) {
+      throw new Error(`Invalid data type: ${change.dataType}`)
+    }
+
     let sql = ''
-    
+
     switch (change.type) {
       case 'add_column':
         sql = `ALTER TABLE ${tableName} ADD COLUMN IF NOT EXISTS "${change.columnName}" ${change.dataType}`
@@ -475,6 +502,30 @@ export class SyncEngine {
   }
 }
 
+// SQL Injection 방어를 위한 유효성 검증
+const ALLOWED_TABLES = ['artists', 'artworks', 'exhibitions', 'events', 'news'] as const
+type AllowedTable = typeof ALLOWED_TABLES[number]
+
+const SAFE_COLUMN_PATTERN = /^[a-z][a-z0-9_]{0,62}$/
+
+const ALLOWED_DATA_TYPES = [
+  'TEXT', 'VARCHAR(255)', 'INTEGER', 'BIGINT', 'BOOLEAN',
+  'TIMESTAMP', 'TIMESTAMPTZ', 'DATE', 'JSONB', 'UUID',
+  'NUMERIC', 'REAL', 'DOUBLE PRECISION'
+] as const
+
+function validateTableName(name: string): boolean {
+  return (ALLOWED_TABLES as readonly string[]).includes(name.toLowerCase())
+}
+
+function validateColumnName(name: string): boolean {
+  return SAFE_COLUMN_PATTERN.test(name)
+}
+
+function validateDataType(type: string): boolean {
+  return (ALLOWED_DATA_TYPES as readonly string[]).includes(type.toUpperCase())
+}
+
 // 타입 정의
 interface AirtableField {
   name: string
@@ -490,5 +541,11 @@ interface SchemaChange {
   airtableField: string
 }
 
-// 싱글톤 인스턴스
-export const syncEngine = new SyncEngine() 
+// 지연 싱글톤 팩토리
+let _instance: SyncEngine | null = null
+export function getSyncEngine(): SyncEngine {
+  if (!_instance) {
+    _instance = new SyncEngine()
+  }
+  return _instance
+} 

@@ -22,8 +22,8 @@ async function secureSyncStopHandler({ user, request }: SecureAPIContext) {
     )
 
     // 동기화 엔진 중지
-    const { syncEngine } = await import('@/lib/sync-engine')
-    syncEngine.stop()
+    const { getSyncEngine } = await import('@/lib/sync-engine')
+    getSyncEngine().stop()
 
     return NextResponse.json({
       success: true,
