@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { culturalExchangePrograms, culturalExchangeParticipants } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
+import { requireAdminAuth } from '@/lib/auth/middleware'
 import type { CulturalExchangeProgramInfo } from '@/lib/types/membership'
 
 // GET - 특정 프로그램 상세 조회
@@ -112,13 +113,14 @@ export async function PUT(
 ) {
   try {
     const { id: programId } = await params
-    const body = await request.json()
 
-    // TODO: 관리자 권한 확인
-    // const user = await getCurrentUser(request)
-    // if (!user || !isAdmin(user)) {
-    //   return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
-    // }
+    // 관리자 인증 확인
+    const user = await requireAdminAuth(request)
+    if (!user) {
+      return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 403 })
+    }
+
+    const body = await request.json()
 
     // 프로그램 존재 확인
     const existingProgram = await db
@@ -225,11 +227,11 @@ export async function DELETE(
   try {
     const { id: programId } = await params
 
-    // TODO: 관리자 권한 확인
-    // const user = await getCurrentUser(request)
-    // if (!user || !isAdmin(user)) {
-    //   return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
-    // }
+    // 관리자 인증 확인
+    const user = await requireAdminAuth(request)
+    if (!user) {
+      return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 403 })
+    }
 
     // 프로그램 존재 확인
     const existingProgram = await db

@@ -308,19 +308,21 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
           listClassName="masonry-grid"
           itemClassName="gallery-card"
           components={{
-            List: React.forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>((props, ref) => (
-              <div
-                ref={ref}
-                {...props}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                  gap: '20px',
-                  gridAutoRows: 'auto',
-                  ...props.style
-                }}
-              />
-            )),
+            List: React.forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>(function MasonryGridList(props, ref) {
+              return (
+                <div
+                  ref={ref}
+                  {...props}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                    gap: '20px',
+                    gridAutoRows: 'auto',
+                    ...props.style
+                  }}
+                />
+              );
+            }),
           }}
           itemContent={(index) => {
             const item = filteredItems[index]!

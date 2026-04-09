@@ -199,6 +199,29 @@ export class ApiResponse {
   static serviceUnavailable(message: string = 'Service temporarily unavailable'): NextResponse {
     return this.error(message, 'SERVICE_UNAVAILABLE', 503);
   }
+
+  /**
+   * Safe error response - hides internal details in production
+   */
+  static safeError(
+    message: string,
+    code: string,
+    statusCode: number = 500,
+    error?: unknown
+  ): NextResponse {
+    const isDev = process.env.NODE_ENV === 'development'
+
+    if (error) {
+      console.error(`[API Error] ${code}:`, error)
+    }
+
+    return ApiResponse.error(
+      message,
+      code,
+      statusCode,
+      isDev && error instanceof Error ? error.message : undefined
+    )
+  }
 }
 
 /**

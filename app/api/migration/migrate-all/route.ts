@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// 🚨 SECURITY: This endpoint has been temporarily disabled due to security vulnerabilities
-// 🔒 REASON: No authentication check - this allows unauthorized full database migration which is dangerous.
-// 📅 DISABLED: 2025-07-12
-// 💾 BACKUP: Data backup available in api-backup/ directory
-// 🔧 TODO: Before re-enabling, implement Admin Authentication:
-//    1. Initialize Supabase Server Client
-//    2. Get authenticated user: await supabase.auth.getUser()
-//    3. Check role: if (user.role !== 'admin') return 401 Unauthorized
-//    4. Only then proceed with migration logic
+// SECURITY: Endpoint permanently disabled — migration should use CLI scripts, not HTTP endpoints.
+// Use `npm run db:migrate:run` for migrations instead.
+// Disabled: 2025-07-12 | Reviewed: 2026-03-28
 
 export async function POST(request: NextRequest) {
   return NextResponse.json(

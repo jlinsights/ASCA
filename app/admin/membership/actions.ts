@@ -134,8 +134,8 @@ export async function seedTestApplication() {
     // For simplicity in this demo environment, we'll pick the first user and member or create a mock one.
     // Ideally we assume at least one member exists. 
     
-    let member = await db.query.members.findFirst()
-    let userId = member?.userId
+    const member = await db.query.members.findFirst()
+    const userId = member?.userId
 
     if (!member) {
        // Only if db is empty - unlikely in dev but possible

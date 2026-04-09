@@ -42,7 +42,7 @@ export const GET = withPermission(
       const window = searchParams.get('window');
       const limit = parseInt(searchParams.get('limit') || '100', 10);
 
-      let data: any = {};
+      const data: any = {};
 
       // 타입에 따라 데이터 수집
       if (type === 'all' || type === 'performance') {

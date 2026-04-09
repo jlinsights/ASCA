@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getArtists } from '@/lib/api/artists'
+import { createSecureAPI } from '@/lib/security/secure-api'
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,26 +38,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    // TODO: Admin Auth Check
+export const POST = createSecureAPI(
+  { requireAuth: true, rateLimitPreset: 'strict', logActions: true },
+  async ({ request }) => {
     const body = await request.json()
-    // TODO: Validate body with createArtistSchema
-    
-    // Use Enhanced Admin API which integrates with Agents and CQRS
     const { EnhancedAdminAPI } = await import('@/lib/api/enhanced-admin-api')
     const newArtist = await EnhancedAdminAPI.createArtist(body)
-
     if (!newArtist) {
-      throw new Error('Failed to create artist via Agent')
+      return NextResponse.json({ error: '작가 생성에 실패했습니다.' }, { status: 500 })
     }
-
     return NextResponse.json(newArtist, { status: 201 })
-  } catch (error) {
-    console.error('Create Artist Error Details:', error)
-    return NextResponse.json(
-      { error: '작가 생성에 실패했습니다.', details: error instanceof Error ? error.message : String(error) },
-      { status: 500 }
-    )
   }
-}
+)

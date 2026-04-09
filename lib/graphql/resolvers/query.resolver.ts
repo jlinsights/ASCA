@@ -63,7 +63,7 @@ export const queryResolvers = {
 
 
     // Build query
-    let query = context.db.query.members.findMany({
+    const query = context.db.query.members.findMany({
       where: conditions.length > 0 ? and(...conditions) : undefined,
       limit: (first || last || 20) + 1, // Fetch one extra to determine hasNextPage
       orderBy: [desc(schema.members.createdAt)],

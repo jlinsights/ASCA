@@ -37,8 +37,8 @@ async function secureSyncStartHandler({ user, request }: SecureAPIContext) {
     )
 
     // 동기화 엔진 시작
-    const { syncEngine } = await import('@/lib/sync-engine')
-    await syncEngine.start(intervalMs)
+    const { getSyncEngine } = await import('@/lib/sync-engine')
+    await getSyncEngine().start(intervalMs)
 
     return NextResponse.json({
       success: true,

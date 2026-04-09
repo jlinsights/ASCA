@@ -19,8 +19,9 @@ async function secureSyncStatusHandler({ user, request }: SecureAPIContext) {
     )
 
     // 동기화 엔진 상태 조회
-    const { syncEngine } = await import('@/lib/sync-engine')
-    const status = (syncEngine as any).getStatus ? (syncEngine as any).getStatus() : { active: false, message: 'Status not available' }
+    const { getSyncEngine } = await import('@/lib/sync-engine')
+    const engine = getSyncEngine()
+    const status = (engine as any).getStatus ? (engine as any).getStatus() : { active: false, message: 'Status not available' }
 
     return NextResponse.json({
       success: true,

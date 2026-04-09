@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { culturalExchangeParticipants, culturalExchangePrograms, members } from '@/lib/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
-import type { 
+import { requireAdminAuth } from '@/lib/auth/middleware'
+import type {
   CulturalExchangeParticipantInfo,
   ParticipantApplicationData,
   ParticipantStatus,
@@ -17,11 +18,13 @@ export async function GET(request: NextRequest) {
     const programId = searchParams.get('programId')
     const status = searchParams.get('status') as ParticipantStatus | null
 
-    // TODO: 사용자 인증 및 권한 확인
-    // const user = await getCurrentUser(request)
-    // if (!user) {
-    //   return NextResponse.json({ success: false, error: '로그인이 필요합니다' }, { status: 401 })
-    // }
+    // memberId 없이 전체 조회 시 관리자 인증 필요
+    if (!memberId) {
+      const user = await requireAdminAuth(request)
+      if (!user) {
+        return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 401 })
+      }
+    }
 
     // 조건 구성
     const conditions = []
@@ -90,13 +93,13 @@ export async function GET(request: NextRequest) {
 // POST - 프로그램 신청
 export async function POST(request: NextRequest) {
   try {
+    // 인증 확인
+    const user = await requireAdminAuth(request)
+    if (!user) {
+      return NextResponse.json({ success: false, error: '로그인이 필요합니다' }, { status: 401 })
+    }
+
     const body = await request.json()
-    
-    // TODO: 사용자 인증
-    // const user = await getCurrentUser(request)
-    // if (!user) {
-    //   return NextResponse.json({ success: false, error: '로그인이 필요합니다' }, { status: 401 })
-    // }
 
     const {
       programId,

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { culturalExchangePrograms, culturalExchangeParticipants } from '@/lib/db/schema'
 import { eq, desc, asc, and, inArray, gte, lte, sql } from 'drizzle-orm'
-import type { 
+import { requireAdminAuth } from '@/lib/auth/middleware'
+import type {
   CulturalExchangeProgramInfo,
   CulturalProgramType,
   CulturalProgramStatus
@@ -117,13 +118,13 @@ export async function GET(request: NextRequest) {
 // POST - 새 프로그램 생성 (관리자 전용)
 export async function POST(request: NextRequest) {
   try {
+    // 관리자 인증 확인
+    const user = await requireAdminAuth(request)
+    if (!user) {
+      return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 403 })
+    }
+
     const body = await request.json()
-    
-    // TODO: 관리자 권한 확인
-    // const user = await getCurrentUser(request)
-    // if (!user || !isAdmin(user)) {
-    //   return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
-    // }
 
     const {
       title,
