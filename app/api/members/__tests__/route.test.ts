@@ -1,459 +1,357 @@
 /**
- * Members API Integration Tests
- *
- * Tests for /api/members endpoints
- *
  * @jest-environment node
+ *
+ * Members API Route Tests
+ *
+ * Tests for /api/members GET and POST endpoints
+ * Route uses Drizzle ORM (no Supabase, no authentication)
  */
 
-import { describe, test, expect, jest, beforeEach, afterEach } from '@jest/globals';
-import { NextRequest } from 'next/server';
-import type { Mock } from 'jest-mock';
-
-// Mock logger module
-jest.mock('@/lib/utils/logger', () => ({
-  logger: {
-    error: jest.fn(),
-    info: jest.fn(),
-    warn: jest.fn(),
+// Mock database module BEFORE any imports to prevent PostgresError at module load
+jest.mock('@/lib/db', () => ({
+  db: {
+    select: jest.fn(),
+    insert: jest.fn(),
   },
-}));
+  withPerformanceLog: jest.fn(),
+}))
 
-// Import modules
-import { supabaseServer } from '@/lib/supabase/server';
-import { devAuth } from '@/lib/auth/dev-auth';
+// Mock rate limiting module BEFORE imports so module-level limiters use mocks
+jest.mock('@/lib/security/rate-limit', () => ({
+  rateLimit: jest.fn().mockReturnValue({
+    check: jest.fn().mockResolvedValue(null),
+  }),
+  RateLimitPresets: {
+    moderate: { limit: 50, window: 60 },
+    strict: { limit: 10, window: 60 },
+  },
+}))
 
-// Use jest.spyOn() to create spies on the methods
-const mockCreateClient = jest.spyOn(supabaseServer, 'createClient' as any).mockResolvedValue({} as any);
-const mockIsAuthenticated = jest.spyOn(devAuth, 'isAuthenticated' as any).mockResolvedValue(false);
-const mockGetCurrentUser = jest.spyOn(devAuth, 'getCurrentUser' as any).mockResolvedValue(null);
-jest.spyOn(devAuth, 'signIn' as any).mockResolvedValue(undefined as any);
-jest.spyOn(devAuth, 'signOut' as any).mockResolvedValue(undefined);
-jest.spyOn(devAuth, 'isAdmin' as any).mockResolvedValue(false);
-jest.spyOn(devAuth, 'isMember' as any).mockResolvedValue(false);
+import { describe, test, expect, beforeEach } from '@jest/globals'
+import { NextRequest } from 'next/server'
+import { withPerformanceLog } from '@/lib/db'
+import { GET, POST } from '../route'
 
-// Import route AFTER mocks are set up
-import { GET, POST } from '../route';
+const mockWithPerformanceLog = withPerformanceLog as jest.MockedFunction<typeof withPerformanceLog>
 
 describe('GET /api/members', () => {
-  let mockSupabase: any;
-  let originalNodeEnv: string | undefined;
-
   beforeEach(() => {
-    // Set NODE_ENV to development for dev auth to work
-    originalNodeEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
+    jest.clearAllMocks()
+  })
 
-    // Setup mock Supabase client with Promise-like behavior
-    mockSupabase = {
-      from: jest.fn().mockReturnThis(),
-      select: jest.fn().mockReturnThis(),
-      or: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      order: jest.fn().mockReturnThis(),
-      range: jest.fn().mockReturnThis(),
-      // Make it thenable (Promise-like) so it can be awaited
-      then(resolve: Function, reject?: Function) {
-        return Promise.resolve(this).then(resolve, reject);
-      },
-      catch(reject: Function) {
-        return Promise.resolve(this).catch(reject);
-      },
-    };
-
-    // Setup createClient mock to return mockSupabase
-    mockCreateClient.mockImplementation(async () => mockSupabase);
-
-    // Reset devAuth mocks to default (unauthenticated)
-    mockIsAuthenticated.mockImplementation(async () => false);
-    mockGetCurrentUser.mockImplementation(async () => null);
-  });
-
-  afterEach(() => {
-    // Restore NODE_ENV
-    process.env.NODE_ENV = originalNodeEnv;
-  });
-
-test('should return 401 when not authenticated', async () => {
-    // Arrange - devAuth already set to unauthenticated in beforeEach
-    const request = new NextRequest('http://localhost:3000/api/members');
-
-    // Act
-    const response = await GET(request);
-    const data = await response.json();
-
-    // Assert
-    expect(response.status).toBe(401);
-    expect(data.success).toBe(false);
-    expect(data.error).toBe('Unauthorized');
-  });
-
-test('should return members list when authenticated', async () => {
+  test('should return paginated members list', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
-
     const mockMembers = [
-      {
-        id: 'member-1',
-        email: 'test1@example.com',
-        first_name_ko: '철수',
-        last_name_ko: '김',
-        membership_status: 'active',
-        membership_level_id: 'level-1',
-      },
-      {
-        id: 'member-2',
-        email: 'test2@example.com',
-        first_name_ko: '영희',
-        last_name_ko: '이',
-        membership_status: 'active',
-        membership_level_id: 'level-2',
-      },
-    ];
+      { id: 'member-1', fullName: '김철수', status: 'active' },
+      { id: 'member-2', fullName: '이영희', status: 'active' },
+    ]
+    mockWithPerformanceLog.mockResolvedValueOnce({ data: mockMembers, total: 2 })
 
-    // Mock the Supabase query chain to return data directly
-    Object.assign(mockSupabase, {
-      data: mockMembers,
-      error: null,
-      count: 2,
-    });
-
-    const request = new NextRequest('http://localhost:3000/api/members');
+    const request = new NextRequest('http://localhost:3000/api/members')
 
     // Act
-    const response = await GET(request);
-    const data = await response.json();
+    const response = await GET(request)
+    const data = await response.json()
 
     // Assert
-    expect(response.status).toBe(200);
-    expect(data.success).toBe(true);
-    expect(data.data.members).toBeInstanceOf(Array);
-    expect(mockSupabase.from).toHaveBeenCalledWith('members');
-  });
+    expect(response.status).toBe(200)
+    expect(data.success).toBe(true)
+    expect(data.data).toEqual(mockMembers)
+    expect(data.meta.pagination).toMatchObject({
+      page: 1,
+      limit: 20,
+      total: 2,
+      totalPages: 1,
+      hasMore: false,
+      hasPrevious: false,
+    })
+  })
 
-  test('should apply search query parameter', async () => {
+  test('should use default pagination (page=1, limit=20)', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
+    mockWithPerformanceLog.mockResolvedValueOnce({ data: [], total: 0 })
 
-    Object.assign(mockSupabase, {
-      data: [],
-      error: null,
-      count: 0,
-    });
-
-    const request = new NextRequest('http://localhost:3000/api/members?query=철수');
+    const request = new NextRequest('http://localhost:3000/api/members')
 
     // Act
-    const response = await GET(request);
+    const response = await GET(request)
+    const data = await response.json()
 
     // Assert
-    expect(mockSupabase.or).toHaveBeenCalled();
-  });
+    expect(response.status).toBe(200)
+    expect(data.meta.pagination.page).toBe(1)
+    expect(data.meta.pagination.limit).toBe(20)
+  })
 
-  test('should apply status filter', async () => {
+  test('should respect custom page and limit params', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
+    const items = Array.from({ length: 5 }, (_, i) => ({ id: `member-${i + 1}` }))
+    mockWithPerformanceLog.mockResolvedValueOnce({ data: items, total: 50 })
 
-    Object.assign(mockSupabase, {
-      data: [],
-      error: null,
-      count: 0,
-    });
-
-    const request = new NextRequest('http://localhost:3000/api/members?status=active');
+    const request = new NextRequest('http://localhost:3000/api/members?page=2&limit=5')
 
     // Act
-    const response = await GET(request);
+    const response = await GET(request)
+    const data = await response.json()
 
     // Assert
-    expect(mockSupabase.eq).toHaveBeenCalledWith('membership_status', 'active');
-  });
+    expect(response.status).toBe(200)
+    expect(data.meta.pagination.page).toBe(2)
+    expect(data.meta.pagination.limit).toBe(5)
+    expect(data.meta.pagination.total).toBe(50)
+    expect(data.meta.pagination.totalPages).toBe(10)
+    expect(data.meta.pagination.hasMore).toBe(true)
+    expect(data.meta.pagination.hasPrevious).toBe(true)
+  })
 
-  test('should apply pagination', async () => {
+  test('should return empty list with correct pagination when no members', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
+    mockWithPerformanceLog.mockResolvedValueOnce({ data: [], total: 0 })
 
-    Object.assign(mockSupabase, {
-      data: [],
-      error: null,
-      count: 100,
-    });
-
-    const request = new NextRequest('http://localhost:3000/api/members?page=2&limit=20');
+    const request = new NextRequest('http://localhost:3000/api/members')
 
     // Act
-    const response = await GET(request);
-    const data = await response.json();
+    const response = await GET(request)
+    const data = await response.json()
 
     // Assert
-    expect(mockSupabase.range).toHaveBeenCalledWith(20, 39); // (page-1)*limit to page*limit-1
-    expect(data.data.pagination.page).toBe(2);
-    expect(data.data.pagination.limit).toBe(20);
-  });
+    expect(response.status).toBe(200)
+    expect(data.data).toEqual([])
+    expect(data.meta.pagination.total).toBe(0)
+    expect(data.meta.pagination.hasMore).toBe(false)
+  })
 
-  test('should apply sorting', async () => {
+  test('should return 422 for invalid page parameter', async () => {
+    // Arrange - z.coerce.number() on "invalid" → NaN → .int() fails → ZodError
+    const request = new NextRequest('http://localhost:3000/api/members?page=invalid')
+
+    // Act
+    const response = await GET(request)
+    const data = await response.json()
+
+    // Assert
+    expect(response.status).toBe(422)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('VALIDATION_ERROR')
+  })
+
+  test('should return 422 for page out of range', async () => {
+    // Arrange - page must be between 1 and 1000
+    const request = new NextRequest('http://localhost:3000/api/members?page=0')
+
+    // Act
+    const response = await GET(request)
+    const data = await response.json()
+
+    // Assert
+    expect(response.status).toBe(422)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('VALIDATION_ERROR')
+  })
+
+  test('should call withPerformanceLog with correct operation name', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
+    mockWithPerformanceLog.mockResolvedValueOnce({ data: [], total: 0 })
 
-    Object.assign(mockSupabase, {
-      data: [],
-      error: null,
-      count: 0,
-    });
-
-    const request = new NextRequest(
-      'http://localhost:3000/api/members?sortBy=email&sortOrder=asc'
-    );
+    const request = new NextRequest('http://localhost:3000/api/members')
 
     // Act
-    const response = await GET(request);
+    await GET(request)
 
     // Assert
-    expect(mockSupabase.order).toHaveBeenCalledWith('email', { ascending: true });
-  });
-
-  test('should return dummy data in dev mode when no members', async () => {
-    // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'dev-user' }));
-
-    Object.assign(mockSupabase, {
-      data: [],
-      error: null,
-      count: 0,
-    });
-
-    const request = new NextRequest('http://localhost:3000/api/members');
-
-    // Act
-    const response = await GET(request);
-    const data = await response.json();
-
-    // Assert
-    expect(response.status).toBe(200);
-    expect(data.success).toBe(true);
-    expect(data.data.members).toBeInstanceOf(Array);
-    // In dev mode with no data, should return dummy data
-    expect(data.data.members.length).toBeGreaterThan(0);
-  });
-
-  test('should return 500 on database error', async () => {
-    // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
-
-    Object.assign(mockSupabase, {
-      data: null,
-      error: { message: 'Database error' },
-      count: 0,
-    });
-
-    const request = new NextRequest('http://localhost:3000/api/members');
-
-    // Act
-    const response = await GET(request);
-    const data = await response.json();
-
-    // Assert
-    expect(response.status).toBe(500);
-    expect(data.success).toBe(false);
-    expect(data.error).toBe('회원 조회 실패');
-  });
-});
+    expect(mockWithPerformanceLog).toHaveBeenCalledWith('members.list', expect.any(Function))
+  })
+})
 
 describe('POST /api/members', () => {
-  let mockSupabase: any;
-  let originalNodeEnv: string | undefined;
+  const validBody = {
+    email: 'newmember@example.com',
+    firstNameKo: '신규',
+    lastNameKo: '회원',
+    membershipLevelId: 'level-1',
+  }
 
   beforeEach(() => {
-    // Set NODE_ENV to development for dev auth to work
-    originalNodeEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
+    jest.clearAllMocks()
+  })
 
-    // Setup mock Supabase client with Promise-like behavior
-    mockSupabase = {
-      from: jest.fn().mockReturnThis(),
-      insert: jest.fn().mockReturnThis(),
-      select: jest.fn().mockReturnThis(),
-      single: jest.fn().mockReturnThis(),
-      // Make it thenable (Promise-like) so it can be awaited
-      then(resolve: Function, reject?: Function) {
-        return Promise.resolve(this).then(resolve, reject);
-      },
-      catch(reject: Function) {
-        return Promise.resolve(this).catch(reject);
-      },
-    };
+  test('should create member and return 201 with valid data', async () => {
+    // Arrange - checkEmail returns [] (no duplicate)
+    mockWithPerformanceLog.mockResolvedValueOnce([])
 
-    // Setup createClient mock to return mockSupabase
-    mockCreateClient.mockImplementation(async () => mockSupabase);
-
-    // Reset devAuth mocks to default (unauthenticated)
-    mockIsAuthenticated.mockImplementation(async () => false);
-    mockGetCurrentUser.mockImplementation(async () => null);
-  });
-
-  afterEach(() => {
-    // Restore NODE_ENV
-    process.env.NODE_ENV = originalNodeEnv;
-  });
-
-  test('should return 401 when not authenticated', async () => {
-    // Arrange - devAuth already set to unauthenticated in beforeEach
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
-      body: JSON.stringify({
-        email: 'newmember@example.com',
-        first_name_ko: '신규',
-        last_name_ko: '회원',
-      }),
-    });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validBody),
+    })
 
     // Act
-    const response = await POST(request);
-    const data = await response.json();
+    const response = await POST(request)
+    const data = await response.json()
 
     // Assert
-    expect(response.status).toBe(401);
-    expect(data.success).toBe(false);
-    expect(data.error).toBe('Unauthorized');
-  });
+    expect(response.status).toBe(201)
+    expect(data.success).toBe(true)
+    expect(data.data).toBeDefined()
+    expect(data.data.email).toBe(validBody.email)
+    expect(data.data.firstNameKo).toBe(validBody.firstNameKo)
+    expect(data.data.lastNameKo).toBe(validBody.lastNameKo)
+  })
 
-  test('should create member with valid data', async () => {
+  test('should return 409 when email already exists', async () => {
+    // Arrange - checkEmail returns existing member
+    mockWithPerformanceLog.mockResolvedValueOnce([{ id: 'existing-id' }])
+
+    const request = new NextRequest('http://localhost:3000/api/members', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validBody),
+    })
+
+    // Act
+    const response = await POST(request)
+    const data = await response.json()
+
+    // Assert
+    expect(response.status).toBe(409)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('CONFLICT')
+    expect(data.error.message).toBe('Email already exists')
+  })
+
+  test('should return 422 when email is missing', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
-
-    const newMemberData = {
-      email: 'newmember@example.com',
-      first_name_ko: '신규',
-      last_name_ko: '회원',
-      membership_level_id: 'level-1',
-    };
-
-    const createdMember = {
-      id: 'new-member-id',
-      ...newMemberData,
-      membership_status: 'active',
-      timezone: 'Asia/Seoul',
-      preferred_language: 'ko',
-      created_at: new Date().toISOString(),
-    };
-
-    Object.assign(mockSupabase.single(), {
-      data: createdMember,
-      error: null,
-    });
+    const { email: _email, ...bodyWithoutEmail } = validBody
 
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
-      body: JSON.stringify(newMemberData),
-    });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyWithoutEmail),
+    })
 
     // Act
-    const response = await POST(request);
-    const data = await response.json();
+    const response = await POST(request)
+    const data = await response.json()
 
     // Assert
-    expect(response.status).toBe(200);
-    expect(data.success).toBe(true);
-    expect(data.data).toBeDefined();
-    expect(mockSupabase.from).toHaveBeenCalledWith('members');
-    expect(mockSupabase.insert).toHaveBeenCalled();
-  });
+    expect(response.status).toBe(422)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('VALIDATION_ERROR')
+  })
 
-  test('should return 400 when email is missing', async () => {
+  test('should return 422 when firstNameKo is missing', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
+    const { firstNameKo: _firstName, ...bodyWithout } = validBody
 
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
-      body: JSON.stringify({
-        first_name_ko: '신규',
-        last_name_ko: '회원',
-      }),
-    });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyWithout),
+    })
 
     // Act
-    const response = await POST(request);
-    const data = await response.json();
+    const response = await POST(request)
+    const data = await response.json()
 
     // Assert
-    expect(response.status).toBe(400);
-    expect(data.success).toBe(false);
-    expect(data.error).toBe('이메일은 필수입니다');
-  });
+    expect(response.status).toBe(422)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('VALIDATION_ERROR')
+  })
 
-  test('should apply default values', async () => {
+  test('should return 422 when lastNameKo is missing', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
-
-    const newMemberData = {
-      email: 'newmember@example.com',
-      first_name_ko: '신규',
-      last_name_ko: '회원',
-    };
-
-    let insertedData: any;
-    mockSupabase.insert = jest.fn((data) => {
-      insertedData = data;
-      return mockSupabase;
-    });
-
-    Object.assign(mockSupabase.single(), {
-      data: { id: 'new-id', ...insertedData },
-      error: null,
-    });
+    const { lastNameKo: _lastName, ...bodyWithout } = validBody
 
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
-      body: JSON.stringify(newMemberData),
-    });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyWithout),
+    })
 
     // Act
-    await POST(request);
+    const response = await POST(request)
+    const data = await response.json()
 
     // Assert
-    expect(mockSupabase.insert).toHaveBeenCalled();
-    const insertCall = (mockSupabase.insert as jest.Mock).mock.calls[0][0];
-    expect(insertCall.timezone).toBe('Asia/Seoul'); // default
-    expect(insertCall.preferred_language).toBe('ko'); // default
-    expect(insertCall.membership_status).toBe('active'); // default
-  });
+    expect(response.status).toBe(422)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('VALIDATION_ERROR')
+  })
 
-  test('should return 500 on database error', async () => {
+  test('should return 422 when membershipLevelId is missing', async () => {
     // Arrange
-    mockIsAuthenticated.mockImplementation(async () => true);
-    mockGetCurrentUser.mockImplementation(async () => ({ id: 'user-1' }));
-
-    Object.assign(mockSupabase.single(), {
-      data: null,
-      error: { message: 'Database error' },
-    });
+    const { membershipLevelId: _levelId, ...bodyWithout } = validBody
 
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
-      body: JSON.stringify({
-        email: 'test@example.com',
-        first_name_ko: '테스트',
-        last_name_ko: '회원',
-      }),
-    });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyWithout),
+    })
 
     // Act
-    const response = await POST(request);
-    const data = await response.json();
+    const response = await POST(request)
+    const data = await response.json()
 
     // Assert
-    expect(response.status).toBe(500);
-    expect(data.success).toBe(false);
-    expect(data.error).toBe('회원 생성 실패');
-  });
-});
+    expect(response.status).toBe(422)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('VALIDATION_ERROR')
+  })
+
+  test('should return 422 when email is invalid format', async () => {
+    // Arrange
+    const request = new NextRequest('http://localhost:3000/api/members', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...validBody, email: 'not-an-email' }),
+    })
+
+    // Act
+    const response = await POST(request)
+    const data = await response.json()
+
+    // Assert
+    expect(response.status).toBe(422)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('VALIDATION_ERROR')
+  })
+
+  test('should call withPerformanceLog with checkEmail operation', async () => {
+    // Arrange
+    mockWithPerformanceLog.mockResolvedValueOnce([])
+
+    const request = new NextRequest('http://localhost:3000/api/members', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validBody),
+    })
+
+    // Act
+    await POST(request)
+
+    // Assert
+    expect(mockWithPerformanceLog).toHaveBeenCalledWith('members.checkEmail', expect.any(Function))
+  })
+
+  test('should include createdAt and updatedAt in created member', async () => {
+    // Arrange
+    mockWithPerformanceLog.mockResolvedValueOnce([])
+
+    const request = new NextRequest('http://localhost:3000/api/members', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validBody),
+    })
+
+    // Act
+    const response = await POST(request)
+    const data = await response.json()
+
+    // Assert
+    expect(response.status).toBe(201)
+    expect(data.data.createdAt).toBeDefined()
+    expect(data.data.updatedAt).toBeDefined()
+    expect(data.data.id).toBeDefined()
+  })
+})
