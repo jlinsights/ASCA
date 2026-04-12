@@ -1,23 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-import { supabase } from '@/lib/supabase';
-import { devAuth } from '@/lib/auth/dev-auth';
+import { requireAdminAuth } from '@/lib/auth/middleware'
+import { supabase } from '@/lib/supabase'
 
 // GET /api/admin/stats/members - 회원 통계 조회
 export async function GET(request: NextRequest) {
   try {
-    // 개발 모드에서 인증 확인
-    let userId: string | null = null;
-    const devUser = await devAuth.getCurrentUser();
-    if (devUser && devUser.role === 'admin') {
-      userId = devUser.id;
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const adminUser = await requireAdminAuth(request)
+    if (!adminUser) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
     // Supabase 클라이언트 확인
@@ -37,30 +34,30 @@ export async function GET(request: NextRequest) {
               '3': 45, // Advanced Practitioners
               '4': 52, // Students
               '5': 15, // Institutional Members
-              '6': 4   // International Associates
+              '6': 4, // International Associates
             },
             recentJoiners: 23,
             byNationality: {
-              'KR': 134,
-              'US': 8,
-              'JP': 6,
-              'CN': 4,
-              'Other': 4
-            }
-          }
-        });
+              KR: 134,
+              US: 8,
+              JP: 6,
+              CN: 4,
+              Other: 4,
+            },
+          },
+        })
       }
-      
+
       return NextResponse.json(
         { success: false, error: 'Database not configured' },
         { status: 500 }
-      );
+      )
     }
-    
+
     // 전체 회원 수
     const { count: totalMembers } = await supabase
       .from('members')
-      .select('*', { count: 'exact', head: true });
+      .select('*', { count: 'exact', head: true })
 
     // 개발 모드에서 데이터가 없으면 더미 데이터 반환
     if (process.env.NODE_ENV === 'development' && (!totalMembers || totalMembers === 0)) {
@@ -77,64 +74,76 @@ export async function GET(request: NextRequest) {
             '3': 45, // Advanced Practitioners
             '4': 52, // Students
             '5': 15, // Institutional Members
-            '6': 4   // International Associates
+            '6': 4, // International Associates
           },
           recentJoiners: 23,
           byNationality: {
-            'KR': 134,
-            'US': 8,
-            'JP': 6,
-            'CN': 4,
-            'Other': 4
-          }
-        }
-      });
+            KR: 134,
+            US: 8,
+            JP: 6,
+            CN: 4,
+            Other: 4,
+          },
+        },
+      })
     }
 
     // 상태별 회원 수
     const { data: statusStats } = await supabase
       .from('members')
       .select('membership_status')
-      .not('membership_status', 'is', null);
+      .not('membership_status', 'is', null)
 
-    const statusCounts = statusStats?.reduce((acc, member) => {
-      const status = member.membership_status;
-      acc[status] = (acc[status] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>) || {};
+    const statusCounts =
+      statusStats?.reduce(
+        (acc, member) => {
+          const status = member.membership_status
+          acc[status] = (acc[status] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>
+      ) || {}
 
     // 등급별 회원 수
     const { data: levelStats } = await supabase
       .from('members')
       .select('membership_level_id')
-      .not('membership_level_id', 'is', null);
+      .not('membership_level_id', 'is', null)
 
-    const levelCounts = levelStats?.reduce((acc, member) => {
-      const levelId = member.membership_level_id;
-      acc[levelId] = (acc[levelId] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>) || {};
+    const levelCounts =
+      levelStats?.reduce(
+        (acc, member) => {
+          const levelId = member.membership_level_id
+          acc[levelId] = (acc[levelId] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>
+      ) || {}
 
     // 최근 30일 가입자 수
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
     const { count: recentJoiners } = await supabase
       .from('members')
       .select('*', { count: 'exact', head: true })
-      .gte('created_at', thirtyDaysAgo.toISOString());
+      .gte('created_at', thirtyDaysAgo.toISOString())
 
     // 국적별 통계
     const { data: nationalityStats } = await supabase
       .from('members')
       .select('nationality')
-      .not('nationality', 'is', null);
+      .not('nationality', 'is', null)
 
-    const nationalityCounts = nationalityStats?.reduce((acc, member) => {
-      const nationality = member.nationality;
-      acc[nationality] = (acc[nationality] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>) || {};
+    const nationalityCounts =
+      nationalityStats?.reduce(
+        (acc, member) => {
+          const nationality = member.nationality
+          acc[nationality] = (acc[nationality] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>
+      ) || {}
 
     return NextResponse.json({
       success: true,
@@ -145,13 +154,10 @@ export async function GET(request: NextRequest) {
         suspended: statusCounts.suspended || 0,
         byLevel: levelCounts,
         recentJoiners: recentJoiners || 0,
-        byNationality: nationalityCounts
-      }
-    });
+        byNationality: nationalityCounts,
+      },
+    })
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: '서버 오류' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: '서버 오류' }, { status: 500 })
   }
-} 
+}

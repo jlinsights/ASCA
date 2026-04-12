@@ -14,12 +14,12 @@ type ExhibitionType = '개인전' | '공모전' | '회원전' | '추천작가전
 // 전시 분류별 색상 및 아이콘 매핑
 const getExhibitionTypeStyle = (type: ExhibitionType) => {
   const styles = {
-    '개인전': { color: 'bg-blue-600', label: '개인전' },
-    '공모전': { color: 'bg-purple-600', label: '공모전' },
-    '회원전': { color: 'bg-green-600', label: '회원전' },
-    '추천작가전': { color: 'bg-orange-600', label: '추천작가전' },
-    '초대작가전': { color: 'bg-red-600', label: '초대작가전' },
-    '온라인전시': { color: 'bg-indigo-600', label: '온라인전시' }
+    개인전: { color: 'bg-blue-600', label: '개인전' },
+    공모전: { color: 'bg-purple-600', label: '공모전' },
+    회원전: { color: 'bg-green-600', label: '회원전' },
+    추천작가전: { color: 'bg-orange-600', label: '추천작가전' },
+    초대작가전: { color: 'bg-red-600', label: '초대작가전' },
+    온라인전시: { color: 'bg-indigo-600', label: '온라인전시' },
   }
   return styles[type]
 }
@@ -37,8 +37,8 @@ const pastExhibitions = [
     participatingArtists: 52,
     artworks: 156,
     visitors: 15420,
-    image: '/placeholder.svg',
-    hasCatalog: true
+    image: '/images/exhibitions/poster-16th.avif',
+    hasCatalog: true,
   },
   {
     id: 7,
@@ -52,43 +52,40 @@ const pastExhibitions = [
     participatingArtists: 30,
     artworks: 90,
     visitors: 12800,
-    image: '/placeholder.svg',
-    hasCatalog: true
-  }
+    image: '/images/exhibitions/poster-17th.avif',
+    hasCatalog: true,
+  },
 ]
 
 export default function PastExhibitionsPage() {
   return (
-    <main className="min-h-screen bg-transparent">
-      
-      <section className="bg-transparent py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge className="mb-4 bg-amber-600 text-white">지난 전시</Badge>
-            <h1 className="text-4xl md:text-5xl font-normal mb-6">
-              지난 전시 아카이브
-            </h1>
-            <p className="text-lg text-muted-foreground">
+    <main className='min-h-screen bg-transparent'>
+      <section className='bg-transparent py-16'>
+        <div className='container mx-auto px-4'>
+          <div className='max-w-3xl mx-auto text-center'>
+            <Badge className='mb-4 bg-amber-600 text-white'>지난 전시</Badge>
+            <h1 className='text-4xl md:text-5xl font-normal mb-6'>지난 전시 아카이브</h1>
+            <p className='text-lg text-muted-foreground'>
               동양서예협회의 소중한 전시 기록들을 만나보세요
             </p>
           </div>
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {pastExhibitions.map((exhibition) => (
-            <Card key={exhibition.id} className="overflow-hidden">
-              <div className="relative aspect-[9/16]">
+      <section className='container mx-auto px-4 py-16'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+          {pastExhibitions.map(exhibition => (
+            <Card key={exhibition.id} className='overflow-hidden'>
+              <div className='relative aspect-[9/16]'>
                 <Image
                   src={exhibition.image}
                   alt={exhibition.title}
                   fill
-                  className="object-cover"
+                  className='object-cover'
                 />
-                <div className="absolute top-4 left-4 flex flex-col gap-2">
-                  <Badge className="bg-amber-600 text-white">
-                    <Archive className="w-3 h-3 mr-1" />
+                <div className='absolute top-4 left-4 flex flex-col gap-2'>
+                  <Badge className='bg-amber-600 text-white'>
+                    <Archive className='w-3 h-3 mr-1' />
                     완료
                   </Badge>
                   <Badge className={`${getExhibitionTypeStyle(exhibition.type).color} text-white`}>
@@ -96,25 +93,25 @@ export default function PastExhibitionsPage() {
                   </Badge>
                 </div>
               </div>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-medium mb-2">{exhibition.title}</h3>
-                <p className="text-muted-foreground mb-4">{exhibition.subtitle}</p>
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span>{exhibition.startDate} ~ {exhibition.endDate}</span>
+              <CardContent className='p-6'>
+                <h3 className='text-xl font-medium mb-2'>{exhibition.title}</h3>
+                <p className='text-muted-foreground mb-4'>{exhibition.subtitle}</p>
+                <div className='space-y-2 mb-4'>
+                  <div className='flex items-center gap-2 text-sm'>
+                    <Calendar className='w-4 h-4 text-muted-foreground' />
+                    <span>
+                      {exhibition.startDate} ~ {exhibition.endDate}
+                    </span>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <Button asChild variant="outline" className="flex-1">
-                    <Link href={`/exhibitions/${exhibition.id}`}>
-                      전시 기록 보기
-                    </Link>
+                <div className='flex gap-2'>
+                  <Button asChild variant='outline' className='flex-1'>
+                    <Link href={`/exhibitions/${exhibition.id}`}>전시 기록 보기</Link>
                   </Button>
                   {exhibition.hasCatalog && (
-                    <Button asChild variant="outline" className="flex-1">
+                    <Button asChild variant='outline' className='flex-1'>
                       <Link href={`/catalog/${exhibition.id}`}>
-                        <BookOpen className="w-4 h-4 mr-2" />
+                        <BookOpen className='w-4 h-4 mr-2' />
                         도록
                       </Link>
                     </Button>

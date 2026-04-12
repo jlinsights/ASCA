@@ -1,108 +1,82 @@
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-// Type for authenticated user
 export interface AuthUser {
   id: string
+  clerkId: string
   email?: string
-  user_metadata?: Record<string, any>
-  app_metadata?: Record<string, any>
+  firstName?: string
+  lastName?: string
   role?: string
   permissions?: string[]
 }
 
+export async function getAuthUser(): Promise<AuthUser | null> {
+  try {
+    const { userId } = await auth()
+    if (!userId) return null
+
+    const user = await currentUser()
+    if (!user) return null
+
+    const supabase = await createClient()
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('role')
+      .eq('clerk_user_id', userId)
+      .single()
+
+    return {
+      id: userId,
+      clerkId: userId,
+      email: user.emailAddresses[0]?.emailAddress,
+      firstName: user.firstName ?? undefined,
+      lastName: user.lastName ?? undefined,
+      role: profile?.role || 'member',
+      permissions: profile?.role === 'admin' ? ['admin'] : [],
+    }
+  } catch {
+    return null
+  }
+}
+
 export async function withAuth(
-  request: NextRequest,
+  _request: NextRequest,
   handler: (request: NextRequest) => Promise<NextResponse>
 ) {
-  try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+  const { userId } = await auth()
 
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    return handler(request)
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Authentication failed' },
-      { status: 500 }
-    )
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  return handler(_request)
 }
 
 export async function withAdminAuth(
   request: NextRequest,
   handler: (request: NextRequest) => Promise<NextResponse>
 ) {
-  try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+  const user = await getAuthUser()
 
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    // Check if user has admin role
-    const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile || profile.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Forbidden - Admin access required' },
-        { status: 403 }
-      )
-    }
-
-    return handler(request)
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Authentication failed' },
-      { status: 500 }
-    )
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  if (user.role !== 'admin') {
+    return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
+  }
+
+  return handler(request)
 }
 
-// Helper function for admin auth (alternative to withAdminAuth)
-export async function requireAdminAuth(request: NextRequest): Promise<AuthUser | null> {
-  try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+export async function requireAdminAuth(_request: NextRequest): Promise<AuthUser | null> {
+  const user = await getAuthUser()
 
-    if (!user) {
-      return null
-    }
-
-    // Check if user has admin role
-    const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile || profile.role !== 'admin') {
-      return null
-    }
-
-    return {
-      id: user.id,
-      email: user.email,
-      user_metadata: user.user_metadata,
-      app_metadata: user.app_metadata,
-      role: profile.role,
-      permissions: ['admin'] // Admin users have all permissions
-    }
-  } catch (error) {
+  if (!user || user.role !== 'admin') {
     return null
   }
+
+  return user
 }

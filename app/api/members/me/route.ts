@@ -1,33 +1,26 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { auth, currentUser } from '@clerk/nextjs/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-import { supabase } from '@/lib/supabase';
-import { devAuth } from '@/lib/auth/dev-auth';
-import { Member, ArtisticProfile, Achievement, Certification, ApiResponse } from '@/types/membership';
+import { supabase } from '@/lib/supabase'
+import { Member, ArtisticProfile, Achievement, Certification } from '@/types/membership'
 
 // GET /api/members/me - 현재 로그인한 사용자의 프로필 조회
 export async function GET(request: NextRequest) {
   try {
-    // 개발 모드에서 인증 확인
-    let userId: string | null = null;
-    const devUser = await devAuth.getCurrentUser();
-    if (devUser) {
-      userId = devUser.id;
-    }
+    const { userId } = await auth()
 
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
     // Supabase 클라이언트 확인
     if (!supabase) {
       // 개발 모드에서 더미 데이터 반환
+      const clerkUser = await currentUser()
       const dummyMember: Member = {
         id: userId,
         clerk_user_id: userId,
-        email: (await devAuth.getCurrentUser())?.email || 'test@example.com',
+        email: clerkUser?.emailAddresses[0]?.emailAddress ?? 'test@example.com',
         first_name_ko: '김',
         last_name_ko: '예술',
         first_name_en: 'Art',
@@ -52,8 +45,8 @@ export async function GET(request: NextRequest) {
         is_verified: true,
         is_public: true,
         created_at: '2024-01-01T00:00:00Z',
-        updated_at: new Date().toISOString()
-      };
+        updated_at: new Date().toISOString(),
+      }
 
       const dummyArtisticProfile: ArtisticProfile = {
         id: '1',
@@ -63,27 +56,29 @@ export async function GET(request: NextRequest) {
         years_of_experience: 5,
         education_background: {
           degree: '서예학과',
-          institution: '한국예술종합학교'
+          institution: '한국예술종합학교',
         },
         teaching_experience: {
           years: 2,
-          students: 15
+          students: 15,
         },
         exhibition_history: {
           solo_exhibitions: 2,
-          group_exhibitions: 8
+          group_exhibitions: 8,
         },
         awards_and_recognition: {
-          awards: ['서예대전 우수상', '전통예술상']
+          awards: ['서예대전 우수상', '전통예술상'],
         },
-        artistic_statement_ko: '한국 전통 서예의 아름다움을 현대적으로 재해석하여 새로운 예술적 가치를 창조하고 있습니다.',
-        artistic_statement_en: 'I reinterpret the beauty of Korean traditional calligraphy in a modern way to create new artistic values.',
+        artistic_statement_ko:
+          '한국 전통 서예의 아름다움을 현대적으로 재해석하여 새로운 예술적 가치를 창조하고 있습니다.',
+        artistic_statement_en:
+          'I reinterpret the beauty of Korean traditional calligraphy in a modern way to create new artistic values.',
         portfolio_url: undefined,
         preferred_style: '전통 서예',
         materials_specialty: ['한지', '먹', '붓'],
         created_at: '2024-01-01T00:00:00Z',
-        updated_at: new Date().toISOString()
-      };
+        updated_at: new Date().toISOString(),
+      }
 
       const dummyAchievements: Achievement[] = [
         {
@@ -102,9 +97,9 @@ export async function GET(request: NextRequest) {
           verified_by: 'admin',
           verified_at: '2023-12-01T00:00:00Z',
           created_at: '2023-12-01T00:00:00Z',
-          updated_at: new Date().toISOString()
-        }
-      ];
+          updated_at: new Date().toISOString(),
+        },
+      ]
 
       const dummyCertifications: Certification[] = [
         {
@@ -123,9 +118,9 @@ export async function GET(request: NextRequest) {
           verified_by: 'admin',
           verified_at: '2022-06-01T00:00:00Z',
           created_at: '2022-06-01T00:00:00Z',
-          updated_at: new Date().toISOString()
-        }
-      ];
+          updated_at: new Date().toISOString(),
+        },
+      ]
 
       return NextResponse.json({
         success: true,
@@ -133,9 +128,9 @@ export async function GET(request: NextRequest) {
           member: dummyMember,
           artistic_profile: dummyArtisticProfile,
           achievements: dummyAchievements,
-          certifications: dummyCertifications
-        }
-      });
+          certifications: dummyCertifications,
+        },
+      })
     }
 
     // 실제 Supabase에서 데이터 조회
@@ -143,13 +138,10 @@ export async function GET(request: NextRequest) {
       .from('members')
       .select('*')
       .eq('clerk_user_id', userId)
-      .single();
+      .single()
 
     if (memberError || !member) {
-      return NextResponse.json(
-        { success: false, error: 'Member not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'Member not found' }, { status: 404 })
     }
 
     // 예술 프로필 조회
@@ -157,21 +149,21 @@ export async function GET(request: NextRequest) {
       .from('artistic_profiles')
       .select('*')
       .eq('member_id', member.id)
-      .single();
+      .single()
 
     // 성과 조회
     const { data: achievements } = await supabase
       .from('achievements')
       .select('*')
       .eq('member_id', member.id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
 
     // 자격증 조회
     const { data: certifications } = await supabase
       .from('certifications')
       .select('*')
       .eq('member_id', member.id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
 
     return NextResponse.json({
       success: true,
@@ -179,14 +171,10 @@ export async function GET(request: NextRequest) {
         member,
         artistic_profile: artisticProfile,
         achievements: achievements || [],
-        certifications: certifications || []
-      }
-    });
-
+        certifications: certifications || [],
+      },
+    })
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
   }
-} 
+}

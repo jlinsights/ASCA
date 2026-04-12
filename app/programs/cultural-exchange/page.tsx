@@ -187,7 +187,7 @@ const mockPrograms: CulturalExchangeProgramInfo[] = [
       },
     ],
 
-    images: ['/placeholder.svg'],
+    images: ['/images/programs/cultural-exchange-1.avif'],
     documents: [
       {
         title: '참가 신청서',
@@ -269,7 +269,7 @@ const mockPrograms: CulturalExchangeProgramInfo[] = [
     organizerId: 'admin1',
     coordinators: [],
 
-    images: ['/placeholder.svg'],
+    images: ['/images/programs/cultural-exchange-2.avif'],
     documents: [],
 
     isFeatured: false,
@@ -475,7 +475,7 @@ export default function CulturalExchangePage() {
                     {/* 프로그램 이미지 */}
                     <div className='relative h-48 overflow-hidden'>
                       <Image
-                        src={program.images[0] || '/placeholder.svg'}
+                        src={program.images[0] || '/images/programs/cultural-exchange-1.avif'}
                         alt={program.title}
                         fill
                         className='object-cover'

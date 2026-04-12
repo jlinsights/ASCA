@@ -1,26 +1,26 @@
+import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
+import { requireAdminAuth } from '@/lib/auth/middleware'
 import { supabase } from '@/lib/supabase'
-import { devAuth } from '@/lib/auth/dev-auth'
 
 // GET /api/admin/stats - 관리자 통계 조회
 export async function GET(request: NextRequest) {
   try {
-    // 개발 모드에서 인증 확인
-    let userId: string | null = null;
-    let isAdmin = false;
-    
-    const devUser = await devAuth.getCurrentUser();
-    if (devUser && devUser.role === 'admin') {
-      userId = devUser.id;
-      isAdmin = true;
-    }
-
-    if (!userId || !isAdmin) {
+    const { userId } = await auth()
+    if (!userId) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized - Admin access required' },
         { status: 401 }
-      );
+      )
+    }
+
+    const adminUser = await requireAdminAuth(request)
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Admin access required' },
+        { status: 401 }
+      )
     }
 
     // Supabase 클라이언트 확인
@@ -38,15 +38,15 @@ export async function GET(request: NextRequest) {
             advanced: 25,
             students: 89,
             institutional: 18,
-            international: 13
+            international: 13,
           },
           recentActivity: {
             newRegistrations: 5,
             levelUpgrades: 3,
-            achievements: 12
-          }
-        }
-      });
+            achievements: 12,
+          },
+        },
+      })
     }
 
     // 실제 Supabase 쿼리 (구현 예정)
@@ -67,20 +67,16 @@ export async function GET(request: NextRequest) {
           advanced: 25,
           students: 89,
           institutional: 18,
-          international: 13
+          international: 13,
         },
         recentActivity: {
           newRegistrations: 5,
           levelUpgrades: 3,
-          achievements: 12
-        }
-      }
-    });
-
+          achievements: 12,
+        },
+      },
+    })
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
   }
 }
