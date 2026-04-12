@@ -1,14 +1,12 @@
-'use server'
-
 import { db } from '@/lib/db'
-import { 
-  membershipApplications, 
-  members, 
-  users, 
+import {
+  membershipApplications,
+  members,
+  users,
   membershipTiers,
-  memberActivities
+  memberActivities,
 } from '@/lib/db/schema'
-import { eq, desc, and } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
 export type PendingApplication = {
@@ -32,7 +30,7 @@ export async function getPendingApplications(): Promise<PendingApplication[]> {
         application: membershipApplications,
         member: members,
         user: users,
-        tier: membershipTiers
+        tier: membershipTiers,
       })
       .from(membershipApplications)
       .leftJoin(members, eq(membershipApplications.memberId, members.id))
@@ -52,7 +50,7 @@ export async function getPendingApplications(): Promise<PendingApplication[]> {
       applicationType: row.application.applicationType,
       status: row.application.status,
       submittedAt: row.application.submittedAt,
-      reason: row.application.applicationReason
+      reason: row.application.applicationReason,
     }))
   } catch (error) {
     console.error('Failed to fetch pending applications:', error)
@@ -62,89 +60,89 @@ export async function getPendingApplications(): Promise<PendingApplication[]> {
 
 export async function approveApplication(applicationId: string, reviewerId?: string) {
   try {
-    // 1. Get application details
     const app = await db.query.membershipApplications.findFirst({
-      where: eq(membershipApplications.id, applicationId)
+      where: eq(membershipApplications.id, applicationId),
     })
 
     if (!app) throw new Error('Application not found')
 
-    // 2. Update application status
-    await db.update(membershipApplications)
+    await db
+      .update(membershipApplications)
       .set({
         status: 'approved',
         reviewedAt: new Date(),
         decidedAt: new Date(),
-        reviewerId: reviewerId
+        reviewerId: reviewerId,
       })
       .where(eq(membershipApplications.id, applicationId))
 
-    // 3. Update member status and tier
-    await db.update(members)
+    await db
+      .update(members)
       .set({
         status: 'active',
         tierLevel: app.requestedTierLevel,
         tierId: app.requestedTierId,
         updatedAt: new Date(),
-        lastActivityDate: new Date()
+        lastActivityDate: new Date(),
       })
       .where(eq(members.id, app.memberId))
 
-    // 4. Log activity
     await db.insert(memberActivities).values({
       id: crypto.randomUUID(),
       memberId: app.memberId,
       activityType: 'profile_update',
       description: `Membership application approved. Tier upgraded to level ${app.requestedTierLevel}`,
-      timestamp: new Date()
+      timestamp: new Date(),
     })
 
     revalidatePath('/admin/membership')
-    return { success: true }
+    return { success: true as const }
   } catch (error) {
     console.error('Failed to approve application:', error)
-    return { success: false, error: 'Failed to approve application' }
+    return { success: false as const, error: 'Failed to approve application' }
   }
 }
 
-export async function rejectApplication(applicationId: string, reason: string, reviewerId?: string) {
+export async function rejectApplication(
+  applicationId: string,
+  reason: string,
+  reviewerId?: string
+) {
   try {
-    await db.update(membershipApplications)
+    await db
+      .update(membershipApplications)
       .set({
         status: 'rejected',
         reviewedAt: new Date(),
         decidedAt: new Date(),
         reviewComments: reason,
-        reviewerId: reviewerId
+        reviewerId: reviewerId,
       })
       .where(eq(membershipApplications.id, applicationId))
 
     revalidatePath('/admin/membership')
-    return { success: true }
+    return { success: true as const }
   } catch (error) {
     console.error('Failed to reject application:', error)
-    return { success: false, error: 'Failed to reject application' }
+    return { success: false as const, error: 'Failed to reject application' }
   }
 }
 
-// Helper to seed a dummy application for testing
 export async function seedTestApplication() {
   try {
-    // Check if we have a test user, if not create one or use existing
-    // For simplicity in this demo environment, we'll pick the first user and member or create a mock one.
-    // Ideally we assume at least one member exists. 
-    
     const member = await db.query.members.findFirst()
-    const userId = member?.userId
-
     if (!member) {
-       // Only if db is empty - unlikely in dev but possible
-       return { success: false, error: 'No members found to attach application to.' }
+      return {
+        success: false as const,
+        error: 'No members found to attach application to.',
+      }
     }
-    
-    const targetTierId = (await db.query.membershipTiers.findFirst({
-        where: eq(membershipTiers.level, 2)
-    }))?.id
+
+    const targetTierId = (
+      await db.query.membershipTiers.findFirst({
+        where: eq(membershipTiers.level, 2),
+      })
+    )?.id
 
     await db.insert(membershipApplications).values({
       id: crypto.randomUUID(),
@@ -154,13 +152,13 @@ export async function seedTestApplication() {
       applicationType: 'tier_upgrade',
       status: 'pending',
       applicationReason: 'I have completed the advanced calligraphy course.',
-      submittedAt: new Date()
+      submittedAt: new Date(),
     })
 
     revalidatePath('/admin/membership')
-    return { success: true }
+    return { success: true as const }
   } catch (error) {
-      console.error('Seeding failed:', error)
-      return { success: false, error: String(error) }
+    console.error('Seeding failed:', error)
+    return { success: false as const, error: String(error) }
   }
 }

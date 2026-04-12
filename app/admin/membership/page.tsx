@@ -45,13 +45,7 @@ import type {
   MembershipDashboardStats,
   MembershipTierInfo,
 } from '@/lib/types/membership'
-import {
-  getPendingApplications,
-  approveApplication,
-  rejectApplication,
-  seedTestApplication,
-  type PendingApplication,
-} from './actions'
+import type { PendingApplication } from '@/lib/membership/admin-application-service'
 
 // Mock data - 실제 구현시 API에서 가져올 데이터
 const mockStats: MembershipDashboardStats = {
@@ -301,8 +295,22 @@ export default function AdminMembershipPage() {
   const loadApplications = useCallback(async () => {
     setAppsLoading(true)
     try {
-      const data = await getPendingApplications()
-      setApplications(data)
+      const res = await fetch('/api/admin/membership/applications', {
+        method: 'GET',
+        credentials: 'include',
+      })
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+      const json = (await res.json()) as {
+        success: boolean
+        data: Array<Omit<PendingApplication, 'submittedAt'> & { submittedAt: string }>
+      }
+      const rows = (json.data ?? []).map(row => ({
+        ...row,
+        submittedAt: new Date(row.submittedAt),
+      }))
+      setApplications(rows)
     } catch (error) {
       console.error('Failed to load applications', error)
     } finally {
@@ -316,8 +324,14 @@ export default function AdminMembershipPage() {
 
   const handleApprove = async (id: string) => {
     if (!confirm('승인하시겠습니까?')) return
-    const res = await approveApplication(id)
-    if (res.success) {
+    const res = await fetch('/api/admin/membership/applications', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ op: 'approve', applicationId: id }),
+    })
+    const data = (await res.json()) as { success: boolean }
+    if (res.ok && data.success) {
       alert('승인되었습니다.')
       loadApplications()
     } else {
@@ -328,8 +342,18 @@ export default function AdminMembershipPage() {
   const handleReject = async (id: string) => {
     const reason = prompt('거절 사유를 입력하세요:')
     if (reason === null) return
-    const res = await rejectApplication(id, reason || 'No reason provided')
-    if (res.success) {
+    const res = await fetch('/api/admin/membership/applications', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        op: 'reject',
+        applicationId: id,
+        reason: reason || 'No reason provided',
+      }),
+    })
+    const data = (await res.json()) as { success: boolean }
+    if (res.ok && data.success) {
       alert('거절되었습니다.')
       loadApplications()
     } else {
@@ -338,12 +362,18 @@ export default function AdminMembershipPage() {
   }
 
   const handleSeed = async () => {
-    const res = await seedTestApplication()
-    if (res.success) {
+    const res = await fetch('/api/admin/membership/applications', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ op: 'seed-test' }),
+    })
+    const data = (await res.json()) as { success: boolean; error?: string }
+    if (res.ok && data.success) {
       alert('테스트 신청서가 생성되었습니다.')
       loadApplications()
     } else {
-      alert('생성 실패: ' + res.error)
+      alert('생성 실패: ' + (data.error ?? res.statusText))
     }
   }
   // ----------------------------------
