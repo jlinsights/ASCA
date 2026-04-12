@@ -2,10 +2,17 @@
   "activeFeature": null,
   "phase": "idle",
   "previousFeature": {
-    "name": "ui-ux-improvement",
-    "phase": "archived",
-    "completedAt": "2026-03-31",
-    "matchRate": 93,
-    "archivedTo": "docs/archive/2026-03/ui-ux-improvement/"
+    "name": "asca-deploy-2026-04-09",
+    "phase": "completed",
+    "completedAt": "2026-04-09",
+    "matchRate": 100,
+    "reportPath": "docs/04-report/features/asca-deploy-2026-04-09.report.md"
+  },
+  "lastDeploy": {
+    "date": "2026-04-09",
+    "commit": "799a4d41",
+    "branch": "main",
+    "buildTime": "23.4s",
+    "status": "success"
   }
 }

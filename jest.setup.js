@@ -6,6 +6,20 @@ import path from 'path'
 
 config({ path: path.resolve(process.cwd(), '.env.test') })
 
+// Polyfill crypto.randomUUID for jsdom environment (pg-mem requires it)
+if (
+  typeof globalThis.crypto === 'undefined' ||
+  typeof globalThis.crypto.randomUUID === 'undefined'
+) {
+  const nodeCrypto = require('crypto')
+  if (!globalThis.crypto) {
+    globalThis.crypto = nodeCrypto.webcrypto || {}
+  }
+  if (!globalThis.crypto.randomUUID) {
+    globalThis.crypto.randomUUID = () => nodeCrypto.randomUUID()
+  }
+}
+
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -23,7 +37,7 @@ jest.mock('next/navigation', () => ({
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props) => {
+  default: props => {
     // eslint-disable-next-line @next/next/no-img-element
     return <img {...props} />
   },
@@ -47,7 +61,7 @@ if (typeof window !== 'undefined') {
   })
 
   // Mock IntersectionObserver
-  global.IntersectionObserver = jest.fn().mockImplementation((callback) => ({
+  global.IntersectionObserver = jest.fn().mockImplementation(callback => ({
     observe: jest.fn(),
     unobserve: jest.fn(),
     disconnect: jest.fn(),
@@ -77,10 +91,7 @@ if (typeof window !== 'undefined') {
   const originalConsoleWarn = console.warn
   beforeAll(() => {
     console.warn = (...args) => {
-      if (
-        typeof args[0] === 'string' &&
-        args[0].includes('React does not recognize')
-      ) {
+      if (typeof args[0] === 'string' && args[0].includes('React does not recognize')) {
         return
       }
       originalConsoleWarn.call(console, ...args)

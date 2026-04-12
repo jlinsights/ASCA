@@ -1,1 +1,1 @@
-📱 태블릿/모바일 반응형 최적화: 그리드 점프 수정, 헤더 md breakpoint, 모달/통계 반응형, 푸터 sm 단계 추가
+🗄️ Supabase 스키마 확장: contest_results, partners 테이블 추가 및 시드 데이터/API 라우트 구현

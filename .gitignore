@@ -43,3 +43,9 @@ coverage/
 .eslintcache
 .vercel
 ops/venv/
+
+# Webflow migration assets (large static files, keep originals in zip)
+public/webflow/orientalcalligraphy/images/
+public/webflow/orientalcalligraphy/js/
+public/webflow/orientalcalligraphy/fonts/
+public/webflow/orientalcalligraphy/documents/
