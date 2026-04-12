@@ -7,9 +7,9 @@
     "npm": ">=8.0.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "dev:turbo": "next dev --turbo",
-    "dev:debug": "NODE_OPTIONS='--inspect' next dev",
+    "dev:debug": "NODE_OPTIONS='--inspect' next dev --webpack",
     "dev:clean": "npm run clean && npm run dev",
     "dev:fresh": "npm run clean && npm install && npm run dev",
     "dev:type-check": "npm run type-check && npm run dev",

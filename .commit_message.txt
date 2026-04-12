@@ -1,1 +1,1 @@
-👤 프로필 관련 5개 클라이언트에서 Supabase auth를 Clerk useUser로 전환 (/sign-in 리다이렉트)
+🔧 next dev를 Webpack으로 고정 (Clerk + Turbopack ESM controlComponents 오류 회피)
