@@ -1,1 +1,1 @@
-🔧 next dev를 Webpack으로 고정 (Clerk + Turbopack ESM controlComponents 오류 회피)
+🔧 Clerk/React useContext 오류 완화: serverExternalPackages 제거 + 클라이언트 단일 React alias

@@ -1,3 +1,5 @@
+const path = require('path')
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
@@ -47,8 +49,13 @@ const nextConfig = {
 
   // Webpack configuration to fix RSC issues
   webpack: (config, { isServer }) => {
-    // Fix for react-server-dom-webpack issues
+    // 클라이언트 번들만 단일 React 강제 (서버 번들에는 Next 내장 React 유지)
     if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        react: path.resolve(__dirname, 'node_modules/react'),
+        'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
+      }
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
@@ -92,8 +99,7 @@ const nextConfig = {
     gzipSize: true,
   },
 
-  // Server external packages
-  serverExternalPackages: ['@clerk/nextjs'],
+  // @clerk/nextjs는 번들에 포함해야 React 컨텍스트가 일치함 (serverExternalPackages 제외)
 
   // 보안 헤더 설정
   async headers() {
