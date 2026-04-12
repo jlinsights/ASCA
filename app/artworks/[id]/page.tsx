@@ -6,18 +6,18 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { PageHero } from "@/components/layout/page-hero"
+import { PageHero } from '@/components/layout/page-hero'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { 
-  ArrowLeft, 
-  Heart, 
-  Share2, 
-  Eye, 
+import {
+  ArrowLeft,
+  Heart,
+  Share2,
+  Eye,
   Download,
   ZoomIn,
   MessageCircle,
@@ -30,7 +30,7 @@ import {
   Award,
   Star,
   Info,
-  ImageIcon
+  ImageIcon,
 } from 'lucide-react'
 
 // 서체 타입 정의
@@ -51,7 +51,19 @@ interface Artwork {
   artistEn: string
   artistJa: string
   artistZh: string
-  category: '한글서예' | '한자서예' | '문인화' | '수묵화' | '동양화' | '민화' | '현대서예' | '캘리그라피' | '전각' | '서각' | '사진' | '영상'
+  category:
+    | '한글서예'
+    | '한자서예'
+    | '문인화'
+    | '수묵화'
+    | '동양화'
+    | '민화'
+    | '현대서예'
+    | '캘리그라피'
+    | '전각'
+    | '서각'
+    | '사진'
+    | '영상'
   style: '전통' | '현대'
   font?: HangeulFont | HanjaFont // 서체 (서예 작품에만 적용)
   paperSize?: CalligraphySize // 서예 작품 규격 (서예 작품에만 적용)
@@ -105,22 +117,27 @@ const sampleArtworks: Artwork[] = [
     year: 2023,
     price: 1200000,
     currency: 'KRW',
-    description: '전통 산수화 기법으로 표현한 봄의 아름다운 풍경입니다. 작가는 자연의 생명력과 계절의 변화를 섬세한 붓터치로 담아냈습니다. 화면 전체에 흐르는 조화로운 구성과 깊이 있는 먹색의 농담 변화가 인상적입니다.',
-    descriptionEn: 'Beautiful spring landscape expressed with traditional landscape painting techniques. The artist captured the vitality of nature and seasonal changes with delicate brushstrokes.',
-    descriptionJa: '伝統的な山水画技法で表現した春の美しい風景です。作家は自然の生命力と季節の変化を繊細な筆のタッチで込めました。',
-    descriptionZh: '用传统山水画技法表现的春天美丽风景。艺术家用细腻的笔触捕捉了自然的生命力和季节的变化。',
-    imageUrl: '/placeholder.svg',
+    description:
+      '전통 산수화 기법으로 표현한 봄의 아름다운 풍경입니다. 작가는 자연의 생명력과 계절의 변화를 섬세한 붓터치로 담아냈습니다. 화면 전체에 흐르는 조화로운 구성과 깊이 있는 먹색의 농담 변화가 인상적입니다.',
+    descriptionEn:
+      'Beautiful spring landscape expressed with traditional landscape painting techniques. The artist captured the vitality of nature and seasonal changes with delicate brushstrokes.',
+    descriptionJa:
+      '伝統的な山水画技法で表現した春の美しい風景です。作家は自然の生命力と季節の変化を繊細な筆のタッチで込めました。',
+    descriptionZh:
+      '用传统山水画技法表现的春天美丽风景。艺术家用细腻的笔触捕捉了自然的生命力和季节的变化。',
+    imageUrl: '/images/artworks/hwangjeguk-chode.avif',
     images: [
-      '/placeholder.svg',
-      '/placeholder.svg',
-      '/placeholder.svg'
+      '/images/artworks/hwangjeguk-chode.avif',
+      '/images/artworks/choinanju-chode.avif',
+      '/images/artworks/limhyeongi-chode.avif',
     ],
     isAvailable: true,
     isFeatured: true,
     tags: ['봄', '산수', '전통', '수묵'],
     views: 156,
     likes: 23,
-    artistBio: '김한수는 30년 경력의 전통 산수화 전문가로, 동양화 특유의 정신세계를 현대적 감각으로 재해석하는 작업을 지속하고 있습니다.',
+    artistBio:
+      '김한수는 30년 경력의 전통 산수화 전문가로, 동양화 특유의 정신세계를 현대적 감각으로 재해석하는 작업을 지속하고 있습니다.',
     technique: '전통 수묵화법, 선염기법, 점묘법',
     provenance: '작가 작업실, 개인 컬렉션',
     exhibition: '2023 봄 풍경전, 서울 갤러리',
@@ -130,7 +147,7 @@ const sampleArtworks: Artwork[] = [
     weight: '0.5kg',
     materials: ['한지', '먹', '안료'],
     significance: '작가의 대표작 중 하나로, 전통 산수화의 현대적 해석을 보여주는 중요한 작품',
-    collectionHistory: '2023년 작가 작업실에서 직접 구입'
+    collectionHistory: '2023년 작가 작업실에서 직접 구입',
   },
   {
     id: '2',
@@ -156,8 +173,8 @@ const sampleArtworks: Artwork[] = [
     descriptionEn: 'Traditional calligraphy reinterpreted with modern sensibility.',
     descriptionJa: '現代的感覚で再解釈した伝統書道作品です。',
     descriptionZh: '用现代感觉重新诠释的传统书法作品。',
-    imageUrl: '/placeholder.svg',
-    images: ['/placeholder.svg'],
+    imageUrl: '/images/artworks/joyeongrang-chode.avif',
+    images: ['/images/artworks/joyeongrang-chode.avif'],
     isAvailable: true,
     isFeatured: false,
     tags: ['서예', '현대', '먹향'],
@@ -167,7 +184,7 @@ const sampleArtworks: Artwork[] = [
     technique: '현대 서예기법',
     condition: '우수',
     certification: false,
-    artistId: '2'
+    artistId: '2',
   },
   {
     id: '3',
@@ -190,11 +207,12 @@ const sampleArtworks: Artwork[] = [
     price: 600000,
     currency: 'KRW',
     description: '한글의 아름다움을 전통 서예 기법으로 표현한 작품입니다.',
-    descriptionEn: 'A work expressing the beauty of Hangeul with traditional calligraphy techniques.',
+    descriptionEn:
+      'A work expressing the beauty of Hangeul with traditional calligraphy techniques.',
     descriptionJa: 'ハングルの美しさを伝統書道技法で表現した作品です。',
     descriptionZh: '用传统书法技法表现韩文之美的作品。',
-    imageUrl: '/placeholder.svg',
-    images: ['/placeholder.svg'],
+    imageUrl: '/images/artworks/minmunja-hancho.avif',
+    images: ['/images/artworks/minmunja-hancho.avif'],
     isAvailable: true,
     isFeatured: false,
     tags: ['한글', '서예', '전통'],
@@ -202,7 +220,7 @@ const sampleArtworks: Artwork[] = [
     likes: 15,
     condition: '최상급',
     certification: true,
-    artistId: '3'
+    artistId: '3',
   },
   {
     id: '4',
@@ -222,12 +240,13 @@ const sampleArtworks: Artwork[] = [
     year: 2024,
     price: 900000,
     currency: 'KRW',
-    description: '전통 민화 기법으로 그린 모란꽃 그림입니다. 부귀영화를 상징하는 모란의 화려함을 섬세하게 표현했습니다.',
+    description:
+      '전통 민화 기법으로 그린 모란꽃 그림입니다. 부귀영화를 상징하는 모란의 화려함을 섬세하게 표현했습니다.',
     descriptionEn: 'A peony painting drawn with traditional folk painting techniques.',
     descriptionJa: '伝統民画技法で描いた牡丹の絵です。',
     descriptionZh: '用传统民画技法绘制的牡丹花画。',
-    imageUrl: '/placeholder.svg',
-    images: ['/placeholder.svg'],
+    imageUrl: '/images/artworks/sojeonga-hancho.avif',
+    images: ['/images/artworks/sojeonga-hancho.avif'],
     isAvailable: true,
     isFeatured: true,
     tags: ['민화', '모란', '전통', '채색'],
@@ -235,7 +254,7 @@ const sampleArtworks: Artwork[] = [
     likes: 28,
     condition: '최상급',
     certification: true,
-    artistId: '4'
+    artistId: '4',
   },
   {
     id: '5',
@@ -255,12 +274,13 @@ const sampleArtworks: Artwork[] = [
     year: 2024,
     price: 1500000,
     currency: 'KRW',
-    description: '현대적 감각으로 재해석한 캘리그라피 작품입니다. 희망이라는 단어를 역동적이고 현대적인 표현으로 담아냈습니다.',
+    description:
+      '현대적 감각으로 재해석한 캘리그라피 작품입니다. 희망이라는 단어를 역동적이고 현대적인 표현으로 담아냈습니다.',
     descriptionEn: 'A calligraphy work reinterpreted with modern sensibility.',
     descriptionJa: '現代的感覚で再解釈したカリグラフィー作品です。',
     descriptionZh: '用现代感觉重新诠释的书法艺术作品。',
-    imageUrl: '/placeholder.svg',
-    images: ['/placeholder.svg'],
+    imageUrl: '/images/artworks/sojeonga-chode.avif',
+    images: ['/images/artworks/sojeonga-chode.avif'],
     isAvailable: true,
     isFeatured: false,
     tags: ['캘리그라피', '현대', '희망', '아크릴'],
@@ -268,7 +288,7 @@ const sampleArtworks: Artwork[] = [
     likes: 18,
     condition: '최상급',
     certification: false,
-    artistId: '5'
+    artistId: '5',
   },
   {
     id: '6',
@@ -290,12 +310,13 @@ const sampleArtworks: Artwork[] = [
     year: 2023,
     price: 750000,
     currency: 'KRW',
-    description: '정통 해서체로 쓴 한자 서예 작품입니다. 단정하고 균형 잡힌 글자 형태가 특징입니다.',
+    description:
+      '정통 해서체로 쓴 한자 서예 작품입니다. 단정하고 균형 잡힌 글자 형태가 특징입니다.',
     descriptionEn: 'Chinese calligraphy written in authentic regular script.',
     descriptionJa: '正統楷書で書いた漢字書道作品です。',
     descriptionZh: '用正统楷书书写的汉字书法作品。',
-    imageUrl: '/placeholder.svg',
-    images: ['/placeholder.svg'],
+    imageUrl: '/images/artworks/contest-cover.avif',
+    images: ['/images/artworks/contest-cover.avif'],
     isAvailable: true,
     isFeatured: false,
     tags: ['한자서예', '해서', '전통'],
@@ -303,7 +324,7 @@ const sampleArtworks: Artwork[] = [
     likes: 11,
     condition: '최상급',
     certification: true,
-    artistId: '6'
+    artistId: '6',
   },
   {
     id: '7',
@@ -325,12 +346,13 @@ const sampleArtworks: Artwork[] = [
     year: 2024,
     price: 850000,
     currency: 'KRW',
-    description: '한글 흘림체의 유려한 아름다움을 보여주는 작품입니다. 자연스러운 필획의 흐름이 인상적입니다.',
+    description:
+      '한글 흘림체의 유려한 아름다움을 보여주는 작품입니다. 자연스러운 필획의 흐름이 인상적입니다.',
     descriptionEn: 'A work showing the graceful beauty of Korean cursive calligraphy.',
     descriptionJa: 'ハングル草書体の流麗な美しさを見せる作品です。',
     descriptionZh: '展现韩文草书体优美之美的作品。',
-    imageUrl: '/placeholder.svg',
-    images: ['/placeholder.svg'],
+    imageUrl: '/images/artworks/contest-page5.avif',
+    images: ['/images/artworks/contest-page5.avif'],
     isAvailable: true,
     isFeatured: true,
     tags: ['한글서예', '흘림체', '전통', '유려함'],
@@ -338,7 +360,7 @@ const sampleArtworks: Artwork[] = [
     likes: 31,
     condition: '최상급',
     certification: true,
-    artistId: '7'
+    artistId: '7',
   },
   {
     id: '8',
@@ -360,12 +382,14 @@ const sampleArtworks: Artwork[] = [
     year: 2023,
     price: 950000,
     currency: 'KRW',
-    description: '고대 전서체의 고풍스러운 멋을 현대에 재현한 작품입니다. 장중하고 위엄 있는 글자체가 특징입니다.',
-    descriptionEn: 'A work that recreates the antique charm of ancient seal script in modern times.',
+    description:
+      '고대 전서체의 고풍스러운 멋을 현대에 재현한 작품입니다. 장중하고 위엄 있는 글자체가 특징입니다.',
+    descriptionEn:
+      'A work that recreates the antique charm of ancient seal script in modern times.',
     descriptionJa: '古代篆書の古風な趣を現代に再現した作品です。',
     descriptionZh: '在现代重现古代篆书古朴韵味的作品。',
-    imageUrl: '/placeholder.svg',
-    images: ['/placeholder.svg'],
+    imageUrl: '/images/artworks/nakjiron-baeogyeong.avif',
+    images: ['/images/artworks/nakjiron-baeogyeong.avif'],
     isAvailable: true,
     isFeatured: false,
     tags: ['한자서예', '전서', '전통', '고풍'],
@@ -373,7 +397,7 @@ const sampleArtworks: Artwork[] = [
     likes: 19,
     condition: '최상급',
     certification: true,
-    artistId: '8'
+    artistId: '8',
   },
   {
     id: '9',
@@ -395,12 +419,13 @@ const sampleArtworks: Artwork[] = [
     year: 2024,
     price: 1200000,
     currency: 'KRW',
-    description: '국전지 규격(70×200cm)의 대형 초서체 작품입니다. 역동적이고 자유로운 필획이 화면 전체에 펼쳐져 웅장한 기운을 자아냅니다.',
+    description:
+      '국전지 규격(70×200cm)의 대형 초서체 작품입니다. 역동적이고 자유로운 필획이 화면 전체에 펼쳐져 웅장한 기운을 자아냅니다.',
     descriptionEn: 'A large-scale cursive script work in exhibition paper size (70×200cm).',
     descriptionJa: '国展紙規格(70×200cm)の大型草書作品です。',
     descriptionZh: '国展纸规格(70×200cm)的大型草书作品。',
-    imageUrl: '/placeholder.svg',
-    images: ['/placeholder.svg'],
+    imageUrl: '/images/artworks/calligraphy-scene-1.jpg',
+    images: ['/images/artworks/calligraphy-scene-1.jpg'],
     isAvailable: true,
     isFeatured: true,
     tags: ['한자서예', '초서', '국전지', '대형작품'],
@@ -408,8 +433,8 @@ const sampleArtworks: Artwork[] = [
     likes: 45,
     condition: '최상급',
     certification: true,
-    artistId: '9'
-  }
+    artistId: '9',
+  },
 ]
 
 export default function ArtworkDetailPage() {
@@ -426,16 +451,15 @@ export default function ArtworkDetailPage() {
       try {
         setLoading(true)
         setError(null)
-        
-    // 실제로는 API 호출
-    const foundArtwork = sampleArtworks.find(art => art.id === params.id)
+
+        // 실제로는 API 호출
+        const foundArtwork = sampleArtworks.find(art => art.id === params.id)
         if (!foundArtwork) {
           notFound()
           return
         }
         setArtwork(foundArtwork)
       } catch (err) {
-        
         setError('작품 정보를 불러오는데 실패했습니다.')
       } finally {
         setLoading(false)
@@ -465,7 +489,7 @@ export default function ArtworkDetailPage() {
   // 서체가 해당 카테고리에 적합한지 확인하는 함수
   const isValidFont = (category: string, style: string, font?: string) => {
     if (!font) return true
-    
+
     if (style === '전통') {
       if (category === '한글서예') {
         return ['궁채', '판본체', '고체', '흘림체', '민체'].includes(font)
@@ -474,19 +498,19 @@ export default function ArtworkDetailPage() {
         return ['해서', '행서', '예서', '전서', '초서', '행초서'].includes(font)
       }
     }
-    
+
     return false
   }
 
   // 서예 작품 규격이 유효한지 확인하는 함수
   const isValidPaperSize = (category: string, paperSize?: string) => {
     if (!paperSize) return true
-    
+
     const calligraphyCategories = ['한글서예', '한자서예', '현대서예']
     if (calligraphyCategories.includes(category)) {
       return ['반절지(35×135cm)', '전지(70×135cm)', '국전지(70×200cm)', '기타'].includes(paperSize)
     }
-    
+
     return false
   }
 
@@ -496,18 +520,17 @@ export default function ArtworkDetailPage() {
       '반절지(35×135cm)': '전통 서예에서 가장 많이 사용되는 기본 규격',
       '전지(70×135cm)': '반절지의 2배 크기로 대작에 사용되는 규격',
       '국전지(70×200cm)': '국전 및 대형 전시회에서 사용되는 특대 규격 (70×200cm)',
-      '기타': '작가가 특별히 선택한 맞춤 규격'
+      기타: '작가가 특별히 선택한 맞춤 규격',
     }
     return descriptions[paperSize as keyof typeof descriptions] || ''
   }
 
   if (loading) {
     return (
-      <main className="min-h-screen">
-
-        <div className="container mx-auto px-4 py-16 text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto"></div>
-          <p className="mt-4 text-sm text-muted-foreground">작품 정보를 불러오는 중...</p>
+      <main className='min-h-screen'>
+        <div className='container mx-auto px-4 py-16 text-center'>
+          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto'></div>
+          <p className='mt-4 text-sm text-muted-foreground'>작품 정보를 불러오는 중...</p>
         </div>
         <LayoutFooter />
       </main>
@@ -516,14 +539,11 @@ export default function ArtworkDetailPage() {
 
   if (error || !artwork) {
     return (
-      <main className="min-h-screen">
-
-        <div className="container mx-auto px-4 py-16 text-center">
-          <p className="text-red-500">{error || '작품을 찾을 수 없습니다.'}</p>
-          <Link href="/artworks">
-            <Button className="mt-4">
-              작품 목록으로 돌아가기
-            </Button>
+      <main className='min-h-screen'>
+        <div className='container mx-auto px-4 py-16 text-center'>
+          <p className='text-red-500'>{error || '작품을 찾을 수 없습니다.'}</p>
+          <Link href='/artworks'>
+            <Button className='mt-4'>작품 목록으로 돌아가기</Button>
           </Link>
         </div>
         <LayoutFooter />
@@ -531,69 +551,71 @@ export default function ArtworkDetailPage() {
     )
   }
 
-  const relatedArtworks = sampleArtworks.filter(art => 
-    art.id !== artwork.id && 
-    (art.artist === artwork.artist || art.category === artwork.category)
-  ).slice(0, 3)
+  const relatedArtworks = sampleArtworks
+    .filter(
+      art =>
+        art.id !== artwork.id &&
+        (art.artist === artwork.artist || art.category === artwork.category)
+    )
+    .slice(0, 3)
 
   return (
-    <main className="min-h-screen">
-      <PageHero title="작품 상세" subtitle={artwork?.title} />
-      
+    <main className='min-h-screen'>
+      <PageHero title='작품 상세' subtitle={artwork?.title} />
+
       {/* Back Button */}
-      <div className="container mx-auto px-4 pt-8">
-        <Link 
-          href="/artworks"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+      <div className='container mx-auto px-4 pt-8'>
+        <Link
+          href='/artworks'
+          className='inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors'
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className='w-4 h-4 mr-2' />
           작품 목록으로 돌아가기
         </Link>
-        </div>
+      </div>
 
       {/* Artwork Detail */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          
+      <section className='container mx-auto px-4 py-8'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
           {/* Image Gallery */}
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {/* Main Image */}
-            <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-muted">
+            <div className='relative aspect-[4/5] overflow-hidden rounded-lg bg-muted'>
               <Image
                 src={artwork.images[currentImageIndex] || artwork.imageUrl}
                 alt={artwork.title}
                 fill
-                className="object-cover"
+                className='object-cover'
               />
-              
+
               {/* Image Controls */}
-              <div className="absolute top-4 right-4 flex gap-2">
+              <div className='absolute top-4 right-4 flex gap-2'>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
-                      <ZoomIn className="h-4 w-4" />
+                    <Button size='sm' variant='secondary' className='h-8 w-8 p-0'>
+                      <ZoomIn className='h-4 w-4' />
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-4xl">
-                    <div className="relative aspect-[4/5] overflow-hidden rounded-lg">
+                  <DialogContent className='max-w-4xl'>
+                    <div className='relative aspect-[4/5] overflow-hidden rounded-lg'>
                       <Image
                         src={artwork.images[currentImageIndex] || artwork.imageUrl}
                         alt={artwork.title}
                         fill
-                        className="object-contain"
+                        className='object-contain'
                       />
                     </div>
                   </DialogContent>
                 </Dialog>
-                
-                <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
-                  <Download className="h-4 w-4" />
+
+                <Button size='sm' variant='secondary' className='h-8 w-8 p-0'>
+                  <Download className='h-4 w-4' />
                 </Button>
               </div>
 
               {/* Image Navigation */}
               {artwork.images.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2'>
                   {artwork.images.map((_, index) => (
                     <button
                       key={index}
@@ -609,7 +631,7 @@ export default function ArtworkDetailPage() {
 
             {/* Thumbnail Images */}
             {artwork.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
+              <div className='grid grid-cols-4 gap-2'>
                 {artwork.images.map((image, index) => (
                   <button
                     key={index}
@@ -622,7 +644,7 @@ export default function ArtworkDetailPage() {
                       src={image}
                       alt={`${artwork.title} ${index + 1}`}
                       fill
-                      className="object-cover"
+                      className='object-cover'
                     />
                   </button>
                 ))}
@@ -631,239 +653,235 @@ export default function ArtworkDetailPage() {
           </div>
 
           {/* Artwork Information */}
-          <div className="space-y-6">
+          <div className='space-y-6'>
             {/* Header */}
             <div>
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="flex flex-wrap gap-2 mb-3">
+              <div className='flex items-start justify-between mb-4'>
+                <div className='flex-1'>
+                  <div className='flex flex-wrap gap-2 mb-3'>
                     {artwork.isFeatured && (
-                      <Badge className="bg-red-600 text-white">
-                        <Star className="w-3 h-3 mr-1" />
+                      <Badge className='bg-red-600 text-white'>
+                        <Star className='w-3 h-3 mr-1' />
                         추천작품
                       </Badge>
                     )}
-                    <Badge variant="outline" className="border-blue-200 text-blue-800">
+                    <Badge variant='outline' className='border-blue-200 text-blue-800'>
                       {getCategoryLabel(artwork.category)}
                     </Badge>
-                    <Badge variant="outline" className="border-green-200 text-green-800">
+                    <Badge variant='outline' className='border-green-200 text-green-800'>
                       {getStyleLabel(artwork.style)}
                     </Badge>
                     {artwork.font && (
-                      <Badge variant="outline" className="border-purple-200 text-purple-800">
+                      <Badge variant='outline' className='border-purple-200 text-purple-800'>
                         {artwork.font}
                       </Badge>
                     )}
                     {artwork.paperSize && (
-                      <Badge variant="outline" className="border-orange-200 text-orange-800">
+                      <Badge variant='outline' className='border-orange-200 text-orange-800'>
                         {artwork.paperSize}
                       </Badge>
                     )}
-                    {!artwork.isAvailable && (
-                      <Badge variant="secondary">판매완료</Badge>
-                    )}
+                    {!artwork.isAvailable && <Badge variant='secondary'>판매완료</Badge>}
                   </div>
-                  
-                  <h1 className="text-3xl md:text-4xl font-normal mb-2">
-                    {artwork.title}
-                  </h1>
-                  
-                  <Link 
+
+                  <h1 className='text-3xl md:text-4xl font-normal mb-2'>{artwork.title}</h1>
+
+                  <Link
                     href={`/artists/${artwork.artistId || artwork.artist}`}
-                    className="text-lg text-muted-foreground hover:text-foreground transition-colors"
+                    className='text-lg text-muted-foreground hover:text-foreground transition-colors'
                   >
                     by {artwork.artist}
                   </Link>
                 </div>
-                
-                <div className="flex gap-2">
+
+                <div className='flex gap-2'>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => setIsLiked(!isLiked)}
-                    className="flex items-center gap-2"
+                    className='flex items-center gap-2'
                   >
                     <Heart className={`h-4 w-4 ${isLiked ? 'fill-current text-red-500' : ''}`} />
                     {artwork.likes + (isLiked ? 1 : 0)}
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Share2 className="h-4 w-4" />
+                  <Button variant='outline' size='sm'>
+                    <Share2 className='h-4 w-4' />
                   </Button>
                 </div>
               </div>
 
               {/* Basic Info */}
-              <div className="flex flex-wrap gap-4 mb-6 text-sm text-muted-foreground">
-                <div className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-2" />
+              <div className='flex flex-wrap gap-4 mb-6 text-sm text-muted-foreground'>
+                <div className='flex items-center'>
+                  <Calendar className='w-4 h-4 mr-2' />
                   {artwork.year}년
                 </div>
-                <div className="flex items-center">
-                  <Eye className="w-4 h-4 mr-2" />
+                <div className='flex items-center'>
+                  <Eye className='w-4 h-4 mr-2' />
                   {artwork.views} 조회
                 </div>
-                <div className="flex items-center">
-                  <Ruler className="w-4 h-4 mr-2" />
+                <div className='flex items-center'>
+                  <Ruler className='w-4 h-4 mr-2' />
                   {artwork.dimensions}
                 </div>
               </div>
             </div>
 
             {/* Price Section */}
-            <Card className="p-6">
-              <div className="flex items-center justify-between">
+            <Card className='p-6'>
+              <div className='flex items-center justify-between'>
                 <div>
-                  <div className="text-2xl font-bold mb-1">
+                  <div className='text-2xl font-bold mb-1'>
                     {formatPrice(artwork.price, artwork.currency)}
                   </div>
-                  <p className="text-sm text-muted-foreground">작품 가격</p>
+                  <p className='text-sm text-muted-foreground'>작품 가격</p>
                 </div>
-                <div className="flex gap-2">
-                  <Button 
-                    size="lg" 
+                <div className='flex gap-2'>
+                  <Button
+                    size='lg'
                     disabled={!artwork.isAvailable}
-                    className="flex items-center gap-2"
+                    className='flex items-center gap-2'
                   >
-                    <MessageCircle className="h-4 w-4" />
+                    <MessageCircle className='h-4 w-4' />
                     {artwork.isAvailable ? '구매 문의' : '판매완료'}
                   </Button>
-                  <Button variant="outline" size="lg">
-                    <ShoppingCart className="h-4 w-4" />
+                  <Button variant='outline' size='lg'>
+                    <ShoppingCart className='h-4 w-4' />
                   </Button>
                 </div>
               </div>
             </Card>
 
             {/* Quick Info Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <Palette className="h-5 w-5 text-blue-600" />
-                <div>
-                  <p className="text-xs text-muted-foreground">재료</p>
-                  <p className="text-sm font-medium">{artwork.medium}</p>
+            <div className='grid grid-cols-2 gap-4'>
+              <Card className='p-4'>
+                <div className='flex items-center gap-3'>
+                  <Palette className='h-5 w-5 text-blue-600' />
+                  <div>
+                    <p className='text-xs text-muted-foreground'>재료</p>
+                    <p className='text-sm font-medium'>{artwork.medium}</p>
+                  </div>
                 </div>
-              </div>
               </Card>
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <Info className="h-5 w-5 text-green-600" />
-                <div>
-                    <p className="text-xs text-muted-foreground">상태</p>
-                    <p className="text-sm font-medium">{artwork.condition || '우수'}</p>
+              <Card className='p-4'>
+                <div className='flex items-center gap-3'>
+                  <Info className='h-5 w-5 text-green-600' />
+                  <div>
+                    <p className='text-xs text-muted-foreground'>상태</p>
+                    <p className='text-sm font-medium'>{artwork.condition || '우수'}</p>
                   </div>
                 </div>
               </Card>
             </div>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-2">
+            <div className='flex flex-wrap gap-2'>
               {artwork.tags.map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
+                <Badge key={index} variant='outline' className='text-xs'>
                   #{tag}
                 </Badge>
               ))}
             </div>
 
             {/* Tabs */}
-            <Tabs defaultValue="description" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="description">작품설명</TabsTrigger>
-                <TabsTrigger value="details">세부정보</TabsTrigger>
-                <TabsTrigger value="artist">작가정보</TabsTrigger>
+            <Tabs defaultValue='description' className='w-full'>
+              <TabsList className='grid w-full grid-cols-3'>
+                <TabsTrigger value='description'>작품설명</TabsTrigger>
+                <TabsTrigger value='details'>세부정보</TabsTrigger>
+                <TabsTrigger value='artist'>작가정보</TabsTrigger>
               </TabsList>
-              
-              <TabsContent value="description" className="space-y-4 mt-6">
-                <div className="prose prose-sm max-w-none">
-                  <p className="leading-relaxed">{artwork.description}</p>
+
+              <TabsContent value='description' className='space-y-4 mt-6'>
+                <div className='prose prose-sm max-w-none'>
+                  <p className='leading-relaxed'>{artwork.description}</p>
                   {artwork.significance && (
-                    <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-                      <h4 className="font-medium mb-2">작품의 의미</h4>
-                      <p className="text-sm text-muted-foreground">{artwork.significance}</p>
-                </div>
+                    <div className='mt-4 p-4 bg-muted/50 rounded-lg'>
+                      <h4 className='font-medium mb-2'>작품의 의미</h4>
+                      <p className='text-sm text-muted-foreground'>{artwork.significance}</p>
+                    </div>
                   )}
                 </div>
               </TabsContent>
-              
-              <TabsContent value="details" className="space-y-4 mt-6">
-                <div className="space-y-3">
-                  <div className="flex justify-between py-3 border-b">
-                    <span className="text-muted-foreground">카테고리</span>
-                    <span className="font-medium">{getCategoryLabel(artwork.category)}</span>
+
+              <TabsContent value='details' className='space-y-4 mt-6'>
+                <div className='space-y-3'>
+                  <div className='flex justify-between py-3 border-b'>
+                    <span className='text-muted-foreground'>카테고리</span>
+                    <span className='font-medium'>{getCategoryLabel(artwork.category)}</span>
                   </div>
-                  <div className="flex justify-between py-3 border-b">
-                    <span className="text-muted-foreground">스타일</span>
-                    <span className="font-medium">{getStyleLabel(artwork.style)}</span>
+                  <div className='flex justify-between py-3 border-b'>
+                    <span className='text-muted-foreground'>스타일</span>
+                    <span className='font-medium'>{getStyleLabel(artwork.style)}</span>
                   </div>
                   {artwork.font && (
-                    <div className="flex justify-between py-3 border-b">
-                      <span className="text-muted-foreground">서체</span>
-                      <span className="font-medium">{artwork.font}</span>
+                    <div className='flex justify-between py-3 border-b'>
+                      <span className='text-muted-foreground'>서체</span>
+                      <span className='font-medium'>{artwork.font}</span>
                     </div>
                   )}
                   {artwork.paperSize && (
-                    <div className="flex justify-between py-3 border-b">
-                      <span className="text-muted-foreground">규격</span>
-                      <span className="font-medium">{artwork.paperSize}</span>
+                    <div className='flex justify-between py-3 border-b'>
+                      <span className='text-muted-foreground'>규격</span>
+                      <span className='font-medium'>{artwork.paperSize}</span>
                     </div>
                   )}
-                  <div className="flex justify-between py-3 border-b">
-                    <span className="text-muted-foreground">제작기법</span>
-                    <span className="font-medium">{artwork.technique || artwork.medium}</span>
+                  <div className='flex justify-between py-3 border-b'>
+                    <span className='text-muted-foreground'>제작기법</span>
+                    <span className='font-medium'>{artwork.technique || artwork.medium}</span>
                   </div>
-                  <div className="flex justify-between py-3 border-b">
-                    <span className="text-muted-foreground">크기</span>
-                    <span className="font-medium">{artwork.dimensions}</span>
+                  <div className='flex justify-between py-3 border-b'>
+                    <span className='text-muted-foreground'>크기</span>
+                    <span className='font-medium'>{artwork.dimensions}</span>
                   </div>
                   {artwork.weight && (
-                    <div className="flex justify-between py-3 border-b">
-                      <span className="text-muted-foreground">무게</span>
-                      <span className="font-medium">{artwork.weight}</span>
+                    <div className='flex justify-between py-3 border-b'>
+                      <span className='text-muted-foreground'>무게</span>
+                      <span className='font-medium'>{artwork.weight}</span>
                     </div>
                   )}
                   {artwork.materials && artwork.materials.length > 0 && (
-                    <div className="flex justify-between py-3 border-b">
-                      <span className="text-muted-foreground">사용재료</span>
-                      <span className="font-medium">{artwork.materials.join(', ')}</span>
+                    <div className='flex justify-between py-3 border-b'>
+                      <span className='text-muted-foreground'>사용재료</span>
+                      <span className='font-medium'>{artwork.materials.join(', ')}</span>
                     </div>
                   )}
                   {artwork.certification && (
-                    <div className="flex justify-between py-3 border-b">
-                      <span className="text-muted-foreground">진품보증</span>
-                      <Badge variant="outline" className="text-green-600 border-green-600">
-                        <Award className="w-3 h-3 mr-1" />
+                    <div className='flex justify-between py-3 border-b'>
+                      <span className='text-muted-foreground'>진품보증</span>
+                      <Badge variant='outline' className='text-green-600 border-green-600'>
+                        <Award className='w-3 h-3 mr-1' />
                         인증완료
                       </Badge>
                     </div>
                   )}
                   {artwork.exhibition && (
-                    <div className="py-3 border-b">
-                      <span className="text-muted-foreground block mb-1">전시이력</span>
-                      <span className="text-sm">{artwork.exhibition}</span>
+                    <div className='py-3 border-b'>
+                      <span className='text-muted-foreground block mb-1'>전시이력</span>
+                      <span className='text-sm'>{artwork.exhibition}</span>
                     </div>
                   )}
                   {artwork.provenance && (
-                    <div className="py-3 border-b">
-                      <span className="text-muted-foreground block mb-1">소장이력</span>
-                      <span className="text-sm">{artwork.provenance}</span>
+                    <div className='py-3 border-b'>
+                      <span className='text-muted-foreground block mb-1'>소장이력</span>
+                      <span className='text-sm'>{artwork.provenance}</span>
                     </div>
                   )}
                 </div>
               </TabsContent>
-              
-              <TabsContent value="artist" className="space-y-4 mt-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center">
-                    <User className="h-8 w-8 text-muted-foreground" />
+
+              <TabsContent value='artist' className='space-y-4 mt-6'>
+                <div className='flex items-start gap-4'>
+                  <div className='w-16 h-16 bg-muted rounded-full flex items-center justify-center'>
+                    <User className='h-8 w-8 text-muted-foreground' />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-2">{artwork.artist}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  <div className='flex-1'>
+                    <h3 className='font-semibold text-lg mb-2'>{artwork.artist}</h3>
+                    <p className='text-sm text-muted-foreground leading-relaxed mb-4'>
                       {artwork.artistBio || '작가 정보가 준비 중입니다.'}
                     </p>
-                    <Link 
-                      href={`/artists/${artwork.artistId || artwork.artist}`} 
-                      className="inline-flex items-center text-sm text-primary hover:underline"
+                    <Link
+                      href={`/artists/${artwork.artistId || artwork.artist}`}
+                      className='inline-flex items-center text-sm text-primary hover:underline'
                     >
                       작가 페이지 보기 →
                     </Link>
@@ -875,48 +893,51 @@ export default function ArtworkDetailPage() {
         </div>
       </section>
 
-        {/* Related Artworks */}
-        {relatedArtworks.length > 0 && (
-        <section className="container mx-auto px-4 py-8 border-t">
-          <h2 className="text-3xl font-normal uppercase mb-8">관련 작품</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {relatedArtworks.map((relatedArtwork) => (
-                <Card key={relatedArtwork.id} className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300">
-                  <Link href={`/artworks/${relatedArtwork.id}`}>
-                    <div className="relative aspect-[3/4] overflow-hidden">
-                      <Image
-                        src={relatedArtwork.imageUrl}
-                        alt={relatedArtwork.title}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
+      {/* Related Artworks */}
+      {relatedArtworks.length > 0 && (
+        <section className='container mx-auto px-4 py-8 border-t'>
+          <h2 className='text-3xl font-normal uppercase mb-8'>관련 작품</h2>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {relatedArtworks.map(relatedArtwork => (
+              <Card
+                key={relatedArtwork.id}
+                className='group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300'
+              >
+                <Link href={`/artworks/${relatedArtwork.id}`}>
+                  <div className='relative aspect-[3/4] overflow-hidden'>
+                    <Image
+                      src={relatedArtwork.imageUrl}
+                      alt={relatedArtwork.title}
+                      fill
+                      className='object-cover transition-transform duration-300 group-hover:scale-105'
+                    />
                     {relatedArtwork.isFeatured && (
-                      <div className="absolute top-2 right-2">
-                        <Badge className="bg-red-600 text-white">추천</Badge>
+                      <div className='absolute top-2 right-2'>
+                        <Badge className='bg-red-600 text-white'>추천</Badge>
                       </div>
                     )}
-                    </div>
-                  </Link>
-                  <CardContent className="p-4">
-                  <h3 className="font-medium text-sm line-clamp-1 mb-1">{relatedArtwork.title}</h3>
-                  <p className="text-xs text-muted-foreground mb-2">{relatedArtwork.artist}</p>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">
+                  </div>
+                </Link>
+                <CardContent className='p-4'>
+                  <h3 className='font-medium text-sm line-clamp-1 mb-1'>{relatedArtwork.title}</h3>
+                  <p className='text-xs text-muted-foreground mb-2'>{relatedArtwork.artist}</p>
+                  <div className='flex items-center justify-between'>
+                    <p className='text-sm font-semibold'>
                       {formatPrice(relatedArtwork.price, relatedArtwork.currency)}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Eye className="w-3 h-3" />
+                    <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+                      <Eye className='w-3 h-3' />
                       {relatedArtwork.views}
                     </div>
                   </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+      )}
 
       <LayoutFooter />
     </main>
   )
-} 
+}

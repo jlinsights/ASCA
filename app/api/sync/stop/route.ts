@@ -1,25 +1,25 @@
+import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
-import { devAuth } from '@/lib/auth/dev-auth'
+import { requireAdminAuth } from '@/lib/auth/middleware'
 
 // POST /api/sync/stop - 동기화 중지
 export async function POST(request: NextRequest) {
   try {
-    // 개발 모드에서 인증 확인
-    let userId: string | null = null;
-    let isAdmin = false;
-    
-    const devUser = await devAuth.getCurrentUser();
-    if (devUser && devUser.role === 'admin') {
-      userId = devUser.id;
-      isAdmin = true;
-    }
-
-    if (!userId || !isAdmin) {
+    const { userId } = await auth()
+    if (!userId) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized - Admin access required' },
         { status: 401 }
-      );
+      )
+    }
+
+    const adminUser = await requireAdminAuth(request)
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Admin access required' },
+        { status: 401 }
+      )
     }
 
     // 동기화 중지 로직 (구현 예정)
@@ -29,36 +29,31 @@ export async function POST(request: NextRequest) {
       data: {
         status: 'stopped',
         stoppedAt: new Date().toISOString(),
-        stoppedBy: userId
-      }
-    });
-
+        stoppedBy: adminUser.id,
+      },
+    })
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
   }
 }
 
 // GET /api/sync/stop - 동기화 상태 확인
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // 개발 모드에서 인증 확인
-    let userId: string | null = null;
-    let isAdmin = false;
-    
-    const devUser = await devAuth.getCurrentUser();
-    if (devUser && devUser.role === 'admin') {
-      userId = devUser.id;
-      isAdmin = true;
-    }
-
-    if (!userId || !isAdmin) {
+    const { userId } = await auth()
+    if (!userId) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized - Admin access required' },
         { status: 401 }
-      );
+      )
+    }
+
+    const adminUser = await requireAdminAuth(request)
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Admin access required' },
+        { status: 401 }
+      )
     }
 
     return NextResponse.json({
@@ -67,14 +62,10 @@ export async function GET() {
       data: {
         status: 'stopped',
         lastSync: null,
-        nextSync: null
-      }
-    });
-
+        nextSync: null,
+      },
+    })
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
   }
-} 
+}

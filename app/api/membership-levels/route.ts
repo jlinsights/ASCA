@@ -1,24 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-import { supabase } from '@/lib/supabase';
-import { devAuth } from '@/lib/auth/dev-auth';
-import { MembershipLevel, ApiResponse } from '@/types/membership';
+import { requireAdminAuth } from '@/lib/auth/middleware'
+import { supabase } from '@/lib/supabase'
 
 // GET /api/membership-levels - 등급 목록 조회
 export async function GET(request: NextRequest) {
   try {
-    // 개발 모드에서 인증 확인
-    let userId: string | null = null;
-    const devUser = await devAuth.getCurrentUser();
-    if (devUser) {
-      userId = devUser.id;
-    }
+    const { userId } = await auth()
 
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
     // Supabase 클라이언트 확인
@@ -42,7 +34,7 @@ export async function GET(request: NextRequest) {
               annual_fee: 0,
               max_members: 10,
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
+              updated_at: new Date().toISOString(),
             },
             {
               id: '2',
@@ -50,7 +42,8 @@ export async function GET(request: NextRequest) {
               display_name_ko: '인증 마스터',
               display_name_en: 'Certified Master',
               description_ko: '서예 분야에서 뛰어난 실력과 경험을 인정받은 마스터',
-              description_en: 'Masters recognized for exceptional skill and experience in calligraphy',
+              description_en:
+                'Masters recognized for exceptional skill and experience in calligraphy',
               requirements_ko: '최소 15년 경력, 마스터 작품 제출',
               requirements_en: 'Minimum 15 years experience, master work submission',
               privileges_ko: '강의, 심사, 전시 참여',
@@ -58,7 +51,7 @@ export async function GET(request: NextRequest) {
               annual_fee: 500000,
               max_members: 50,
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
+              updated_at: new Date().toISOString(),
             },
             {
               id: '3',
@@ -66,7 +59,8 @@ export async function GET(request: NextRequest) {
               display_name_ko: '고급 실습자',
               display_name_en: 'Advanced Practitioner',
               description_ko: '서예 실력이 뛰어나고 지속적으로 발전하는 실습자',
-              description_en: 'Practitioners with excellent calligraphy skills and continuous development',
+              description_en:
+                'Practitioners with excellent calligraphy skills and continuous development',
               requirements_ko: '최소 8년 경력, 정기 작품 제출',
               requirements_en: 'Minimum 8 years experience, regular work submission',
               privileges_ko: '전시 참여, 워크샵 참가',
@@ -74,7 +68,7 @@ export async function GET(request: NextRequest) {
               annual_fee: 300000,
               max_members: 200,
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
+              updated_at: new Date().toISOString(),
             },
             {
               id: '4',
@@ -90,7 +84,7 @@ export async function GET(request: NextRequest) {
               annual_fee: 150000,
               max_members: 1000,
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
+              updated_at: new Date().toISOString(),
             },
             {
               id: '5',
@@ -106,7 +100,7 @@ export async function GET(request: NextRequest) {
               annual_fee: 1000000,
               max_members: 100,
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
+              updated_at: new Date().toISOString(),
             },
             {
               id: '6',
@@ -122,28 +116,22 @@ export async function GET(request: NextRequest) {
               annual_fee: 200000,
               max_members: 300,
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            }
-          ]
-        });
+              updated_at: new Date().toISOString(),
+            },
+          ],
+        })
       }
-      
+
       return NextResponse.json(
         { success: false, error: 'Database not configured' },
         { status: 500 }
-      );
+      )
     }
-    
-    const { data: levels, error } = await supabase
-      .from('membership_levels')
-      .select('*')
-      .order('id');
+
+    const { data: levels, error } = await supabase.from('membership_levels').select('*').order('id')
 
     if (error) {
-      return NextResponse.json(
-        { success: false, error: '등급 조회 실패' },
-        { status: 500 }
-      );
+      return NextResponse.json({ success: false, error: '등급 조회 실패' }, { status: 500 })
     }
 
     // 개발 모드에서 데이터가 없으면 더미 데이터 반환
@@ -165,7 +153,7 @@ export async function GET(request: NextRequest) {
             annual_fee: 0,
             max_members: 10,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           },
           {
             id: '2',
@@ -173,7 +161,8 @@ export async function GET(request: NextRequest) {
             display_name_ko: '인증 마스터',
             display_name_en: 'Certified Master',
             description_ko: '서예 분야에서 뛰어난 실력과 경험을 인정받은 마스터',
-            description_en: 'Masters recognized for exceptional skill and experience in calligraphy',
+            description_en:
+              'Masters recognized for exceptional skill and experience in calligraphy',
             requirements_ko: '최소 15년 경력, 마스터 작품 제출',
             requirements_en: 'Minimum 15 years experience, master work submission',
             privileges_ko: '강의, 심사, 전시 참여',
@@ -181,7 +170,7 @@ export async function GET(request: NextRequest) {
             annual_fee: 500000,
             max_members: 50,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           },
           {
             id: '3',
@@ -189,7 +178,8 @@ export async function GET(request: NextRequest) {
             display_name_ko: '고급 실습자',
             display_name_en: 'Advanced Practitioner',
             description_ko: '서예 실력이 뛰어나고 지속적으로 발전하는 실습자',
-            description_en: 'Practitioners with excellent calligraphy skills and continuous development',
+            description_en:
+              'Practitioners with excellent calligraphy skills and continuous development',
             requirements_ko: '최소 8년 경력, 정기 작품 제출',
             requirements_en: 'Minimum 8 years experience, regular work submission',
             privileges_ko: '전시 참여, 워크샵 참가',
@@ -197,7 +187,7 @@ export async function GET(request: NextRequest) {
             annual_fee: 300000,
             max_members: 200,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           },
           {
             id: '4',
@@ -213,7 +203,7 @@ export async function GET(request: NextRequest) {
             annual_fee: 150000,
             max_members: 1000,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           },
           {
             id: '5',
@@ -229,7 +219,7 @@ export async function GET(request: NextRequest) {
             annual_fee: 1000000,
             max_members: 100,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           },
           {
             id: '6',
@@ -245,72 +235,59 @@ export async function GET(request: NextRequest) {
             annual_fee: 200000,
             max_members: 300,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }
-        ]
-      });
+            updated_at: new Date().toISOString(),
+          },
+        ],
+      })
     }
 
     return NextResponse.json({
       success: true,
-      data: levels
-    });
+      data: levels,
+    })
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: '서버 오류' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: '서버 오류' }, { status: 500 })
   }
 }
 
 // POST /api/membership-levels - 새 등급 생성
 export async function POST(request: NextRequest) {
   try {
-    // 개발 모드에서 인증 확인
-    let userId: string | null = null;
-    const devUser = await devAuth.getCurrentUser();
-    if (devUser && devUser.role === 'admin') {
-      userId = devUser.id;
-    }
-
+    const { userId } = await auth()
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json();
-    
+    const adminUser = await requireAdminAuth(request)
+    if (!adminUser) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const body = await request.json()
+
     // Supabase 클라이언트 확인
     if (!supabase) {
       return NextResponse.json(
         { success: false, error: 'Database not configured' },
         { status: 500 }
-      );
+      )
     }
 
     const { data, error } = await supabase
       .from('membership_levels')
       .insert([body])
       .select()
-      .single();
+      .single()
 
     if (error) {
-      return NextResponse.json(
-        { success: false, error: '등급 생성 실패' },
-        { status: 500 }
-      );
+      return NextResponse.json({ success: false, error: '등급 생성 실패' }, { status: 500 })
     }
 
     return NextResponse.json({
       success: true,
-      data
-    });
+      data,
+    })
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: '서버 오류' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: '서버 오류' }, { status: 500 })
   }
-} 
+}

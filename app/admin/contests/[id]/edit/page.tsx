@@ -6,11 +6,13 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ContestForm } from '@/components/admin/contest-form'
+import { useUser } from '@clerk/nextjs'
 import { fetchContestById } from '@/lib/api/contests'
 import { getSupabaseClient } from '@/lib/supabase'
 import type { Contest } from '@/types/contest-new'
 
 export default function AdminContestEditPage() {
+  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
   const params = useParams()
   const router = useRouter()
   const contestId = params.id as string
@@ -20,28 +22,28 @@ export default function AdminContestEditPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!isLoaded) return
+
     const loadContest = async () => {
       try {
+        if (!isSignedIn || !clerkUser) {
+          router.push('/sign-in')
+          return
+        }
+
         const supabase = getSupabaseClient()
         if (!supabase) {
           router.push('/sign-in')
           return
         }
 
-        // Check admin
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          router.push('/sign-in')
-          return
-        }
-
         const { data: profile } = await supabase
-          .from('profiles')
+          .from('user_profiles')
           .select('role')
-          .eq('id', user.id)
+          .eq('clerk_user_id', clerkUser.id)
           .single()
 
-        if (!profile || (profile.role !== 'admin' && profile.role !== 'moderator')) {
+        if (!profile || !['admin', 'moderator'].includes(profile.role)) {
           router.push('/')
           return
         }
@@ -61,14 +63,14 @@ export default function AdminContestEditPage() {
     }
 
     loadContest()
-  }, [contestId, router])
+  }, [contestId, router, isLoaded, isSignedIn, clerkUser?.id])
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <main className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent"></div>
+      <div className='min-h-screen bg-background'>
+        <main className='container mx-auto px-4 py-8'>
+          <div className='flex items-center justify-center py-12'>
+            <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
         </main>
       </div>
@@ -77,11 +79,11 @@ export default function AdminContestEditPage() {
 
   if (error || !contest) {
     return (
-      <div className="min-h-screen bg-background">
-        <main className="container mx-auto px-4 py-8 max-w-4xl">
-          <div className="text-center py-12">
-            <p className="text-scholar-red mb-4">{error || '공모전을 찾을 수 없습니다'}</p>
-            <Link href="/admin/contests">
+      <div className='min-h-screen bg-background'>
+        <main className='container mx-auto px-4 py-8 max-w-4xl'>
+          <div className='text-center py-12'>
+            <p className='text-scholar-red mb-4'>{error || '공모전을 찾을 수 없습니다'}</p>
+            <Link href='/admin/contests'>
               <Button>공모전 목록으로</Button>
             </Link>
           </div>
@@ -91,21 +93,17 @@ export default function AdminContestEditPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="mb-8">
-          <Link href="/admin/contests">
-            <Button variant="ghost" className="mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
+    <div className='min-h-screen bg-background'>
+      <main className='container mx-auto px-4 py-8 max-w-4xl'>
+        <div className='mb-8'>
+          <Link href='/admin/contests'>
+            <Button variant='ghost' className='mb-4'>
+              <ArrowLeft className='w-4 h-4 mr-2' />
               공모전 목록
             </Button>
           </Link>
-          <h1 className="text-3xl font-serif font-bold text-foreground">
-            공모전 수정
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            {contest.title}
-          </p>
+          <h1 className='text-3xl font-serif font-bold text-foreground'>공모전 수정</h1>
+          <p className='text-muted-foreground mt-2'>{contest.title}</p>
         </div>
 
         <ContestForm contest={contest} />

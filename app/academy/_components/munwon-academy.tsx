@@ -79,7 +79,7 @@ export function MunwonAcademy() {
           <div className='p-4'>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src='/webflow/orientalcalligraphy/images/서예교육과정-수강연한별-수료-제도.avif'
+              src='/images/programs/calligraphy-curriculum.avif'
               alt='서예교육과정 수강연한별 수료 제도 인포그래픽'
               className='rounded-lg w-full max-w-3xl mx-auto'
               loading='lazy'

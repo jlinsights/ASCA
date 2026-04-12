@@ -11,7 +11,7 @@ import type {
   ApplicationFormData,
   ContestFilters,
   ApplicationFilters,
-  ArtistApplicationSummary
+  ArtistApplicationSummary,
 } from '@/types/contest-new'
 
 // ==================================================================
@@ -27,10 +27,7 @@ export async function fetchContests(filters?: ContestFilters) {
     return { data: null, error: 'Supabase client not available' }
   }
 
-  let query = supabase
-    .from('contests')
-    .select('*')
-    .order('end_date', { ascending: false })
+  let query = supabase.from('contests').select('*').order('end_date', { ascending: false })
 
   // Apply filters
   if (filters?.status) {
@@ -58,7 +55,9 @@ export async function fetchContests(filters?: ContestFilters) {
   }
 
   if (filters?.search) {
-    query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%,organizer.ilike.%${filters.search}%`)
+    query = query.or(
+      `title.ilike.%${filters.search}%,description.ilike.%${filters.search}%,organizer.ilike.%${filters.search}%`
+    )
   }
 
   if (filters?.startDate?.from) {
@@ -93,10 +92,12 @@ export async function fetchContestById(id: string) {
 
   const { data, error } = await supabase
     .from('contests')
-    .select(`
+    .select(
+      `
       *,
       contest_applications(count)
-    `)
+    `
+    )
     .eq('id', id)
     .single()
 
@@ -106,14 +107,13 @@ export async function fetchContestById(id: string) {
 /**
  * Create new contest (admin only)
  */
-export async function createContest(contestData: ContestFormData) {
+export async function createContest(contestData: ContestFormData, userId: string) {
   const supabase = getSupabaseClient()
   if (!supabase) {
     return { data: null, error: 'Supabase client not available' }
   }
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
+  if (!userId) {
     return { data: null, error: 'User not authenticated' }
   }
 
@@ -140,7 +140,7 @@ export async function createContest(contestData: ContestFormData) {
       poster_image_url: contestData.posterImageUrl,
       gallery_images: contestData.galleryImages,
       is_featured: contestData.isFeatured,
-      created_by: user.id
+      created_by: userId,
     })
     .select()
     .single()
@@ -158,25 +158,31 @@ export async function updateContest(id: string, contestData: Partial<ContestForm
   }
 
   const updateData: any = { ...contestData }
-  
+
   // Map camelCase to snake_case for database
   if (contestData.contestType) updateData.contest_type = contestData.contestType
   if (contestData.titleEn) updateData.title_en = contestData.titleEn
   if (contestData.descriptionEn) updateData.description_en = contestData.descriptionEn
-  if (contestData.announcementDate !== undefined) updateData.announcement_date = contestData.announcementDate
+  if (contestData.announcementDate !== undefined)
+    updateData.announcement_date = contestData.announcementDate
   if (contestData.startDate) updateData.start_date = contestData.startDate
   if (contestData.endDate) updateData.end_date = contestData.endDate
   if (contestData.resultDate !== undefined) updateData.result_date = contestData.resultDate
-  if (contestData.exhibitionDate !== undefined) updateData.exhibition_date = contestData.exhibitionDate
+  if (contestData.exhibitionDate !== undefined)
+    updateData.exhibition_date = contestData.exhibitionDate
   if (contestData.contactEmail !== undefined) updateData.contact_email = contestData.contactEmail
   if (contestData.contactPhone !== undefined) updateData.contact_phone = contestData.contactPhone
   if (contestData.websiteUrl !== undefined) updateData.website_url = contestData.websiteUrl
-  if (contestData.artworkRequirements !== undefined) updateData.artwork_requirements = contestData.artworkRequirements
+  if (contestData.artworkRequirements !== undefined)
+    updateData.artwork_requirements = contestData.artworkRequirements
   if (contestData.maxSubmissions) updateData.max_submissions = contestData.maxSubmissions
-  if (contestData.totalPrizeAmount !== undefined) updateData.total_prize_amount = contestData.totalPrizeAmount
+  if (contestData.totalPrizeAmount !== undefined)
+    updateData.total_prize_amount = contestData.totalPrizeAmount
   if (contestData.entryFee !== undefined) updateData.entry_fee = contestData.entryFee
-  if (contestData.paymentMethods !== undefined) updateData.payment_methods = contestData.paymentMethods
-  if (contestData.posterImageUrl !== undefined) updateData.poster_image_url = contestData.posterImageUrl
+  if (contestData.paymentMethods !== undefined)
+    updateData.payment_methods = contestData.paymentMethods
+  if (contestData.posterImageUrl !== undefined)
+    updateData.poster_image_url = contestData.posterImageUrl
   if (contestData.galleryImages !== undefined) updateData.gallery_images = contestData.galleryImages
   if (contestData.isFeatured !== undefined) updateData.is_featured = contestData.isFeatured
 
@@ -220,10 +226,7 @@ export async function deleteContest(id: string) {
     return { error: 'Supabase client not available' }
   }
 
-  const { error } = await supabase
-    .from('contests')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('contests').delete().eq('id', id)
 
   return { error }
 }
@@ -240,7 +243,7 @@ export async function incrementContestViews(id: string) {
   const { error } = await supabase.rpc('increment', {
     table_name: 'contests',
     row_id: id,
-    column_name: 'view_count'
+    column_name: 'view_count',
   })
 
   // Fallback if RPC doesn't exist
@@ -269,14 +272,16 @@ export async function incrementContestViews(id: string) {
 /**
  * Submit contest application
  */
-export async function submitContestApplication(applicationData: ApplicationFormData) {
+export async function submitContestApplication(
+  applicationData: ApplicationFormData,
+  userId: string
+) {
   const supabase = getSupabaseClient()
   if (!supabase) {
     return { data: null, error: 'Supabase client not available' }
   }
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
+  if (!userId) {
     return { data: null, error: 'User not authenticated' }
   }
 
@@ -299,7 +304,7 @@ export async function submitContestApplication(applicationData: ApplicationFormD
     .from('contest_applications')
     .insert({
       contest_id: applicationData.contestId,
-      artist_id: user.id,
+      artist_id: userId,
       artwork_ids: applicationData.artworkIds,
       artist_name: applicationData.artistName,
       artist_email: applicationData.artistEmail,
@@ -308,7 +313,7 @@ export async function submitContestApplication(applicationData: ApplicationFormD
       artist_statement: applicationData.artistStatement,
       notes: applicationData.notes,
       payment_status: applicationData.paymentStatus || 'pending',
-      payment_receipt_url: applicationData.paymentReceiptUrl
+      payment_receipt_url: applicationData.paymentReceiptUrl,
     })
     .select()
     .single()
@@ -327,10 +332,12 @@ export async function fetchMyApplications(artistId: string) {
 
   const { data, error } = await supabase
     .from('contest_applications')
-    .select(`
+    .select(
+      `
       *,
       contests(*)
-    `)
+    `
+    )
     .eq('artist_id', artistId)
     .order('submitted_at', { ascending: false })
 
@@ -348,10 +355,12 @@ export async function fetchApplicationById(id: string) {
 
   const { data, error } = await supabase
     .from('contest_applications')
-    .select(`
+    .select(
+      `
       *,
       contests(*)
-    `)
+    `
+    )
     .eq('id', id)
     .single()
 
@@ -368,16 +377,20 @@ export async function updateApplication(id: string, applicationData: Partial<App
   }
 
   const updateData: any = {}
-  
+
   if (applicationData.artworkIds) updateData.artwork_ids = applicationData.artworkIds
   if (applicationData.artistName) updateData.artist_name = applicationData.artistName
   if (applicationData.artistEmail) updateData.artist_email = applicationData.artistEmail
-  if (applicationData.artistPhone !== undefined) updateData.artist_phone = applicationData.artistPhone
-  if (applicationData.artistAddress !== undefined) updateData.artist_address = applicationData.artistAddress
-  if (applicationData.artistStatement !== undefined) updateData.artist_statement = applicationData.artistStatement
+  if (applicationData.artistPhone !== undefined)
+    updateData.artist_phone = applicationData.artistPhone
+  if (applicationData.artistAddress !== undefined)
+    updateData.artist_address = applicationData.artistAddress
+  if (applicationData.artistStatement !== undefined)
+    updateData.artist_statement = applicationData.artistStatement
   if (applicationData.notes !== undefined) updateData.notes = applicationData.notes
   if (applicationData.paymentStatus) updateData.payment_status = applicationData.paymentStatus
-  if (applicationData.paymentReceiptUrl !== undefined) updateData.payment_receipt_url = applicationData.paymentReceiptUrl
+  if (applicationData.paymentReceiptUrl !== undefined)
+    updateData.payment_receipt_url = applicationData.paymentReceiptUrl
 
   const { data, error } = await supabase
     .from('contest_applications')
@@ -398,10 +411,7 @@ export async function withdrawApplication(id: string) {
     return { error: 'Supabase client not available' }
   }
 
-  const { error } = await supabase
-    .from('contest_applications')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('contest_applications').delete().eq('id', id)
 
   return { error }
 }
@@ -451,15 +461,15 @@ export async function reviewApplication(
     status: string
     result?: string
     judgeNotes?: string
-  }
+  },
+  userId: string
 ) {
   const supabase = getSupabaseClient()
   if (!supabase) {
     return { data: null, error: 'Supabase client not available' }
   }
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
+  if (!userId) {
     return { data: null, error: 'User not authenticated' }
   }
 
@@ -470,7 +480,7 @@ export async function reviewApplication(
       result: review.result,
       judge_notes: review.judgeNotes,
       reviewed_at: new Date().toISOString(),
-      reviewed_by: user.id
+      reviewed_by: userId,
     })
     .eq('id', id)
     .select()
@@ -489,7 +499,7 @@ export async function getArtistApplicationSummary(artistId: string) {
   }
 
   const { data, error } = await supabase.rpc('get_artist_application_summary', {
-    artist_uuid: artistId
+    artist_uuid: artistId,
   })
 
   if (error || !data) {
@@ -502,11 +512,11 @@ export async function getArtistApplicationSummary(artistId: string) {
     if (applications) {
       const summary: ArtistApplicationSummary = {
         totalApplications: applications.length,
-        pendingApplications: applications.filter(a => 
-          a.status === 'submitted' || a.status === 'under_review'
+        pendingApplications: applications.filter(
+          a => a.status === 'submitted' || a.status === 'under_review'
         ).length,
         acceptedApplications: applications.filter(a => a.status === 'accepted').length,
-        winnerCount: applications.filter(a => a.status === 'winner').length
+        winnerCount: applications.filter(a => a.status === 'winner').length,
       }
       return { data: summary, error: null }
     }

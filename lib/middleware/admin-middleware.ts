@@ -13,59 +13,68 @@
  * @module lib/middleware/admin-middleware
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getRoleManager } from '../admin/role-manager';
-import { Permission, Role } from '../admin/permissions';
+import { NextRequest, NextResponse } from 'next/server'
+import { getAuthUser } from '@/lib/auth/middleware'
+import { getRoleManager } from '../admin/role-manager'
+import { Permission, Role, getPermissionsForRole } from '../admin/permissions'
 
 /**
  * Authentication context
  */
 export interface AuthContext {
-  userId: string;
-  email?: string;
-  roles: Role[];
-  permissions: Permission[];
-  isAuthenticated: boolean;
-  isAdmin: boolean;
+  userId: string
+  email?: string
+  roles: Role[]
+  permissions: Permission[]
+  isAuthenticated: boolean
+  isAdmin: boolean
 }
 
 /**
  * Admin middleware options
  */
 export interface AdminMiddlewareOptions {
-  requiredPermission?: Permission;
-  requiredPermissions?: Permission[];
-  requiredRole?: Role;
-  requiredRoles?: Role[];
-  requireAdmin?: boolean;
-  requireSuperAdmin?: boolean;
-  skipAuth?: boolean;
+  requiredPermission?: Permission
+  requiredPermissions?: Permission[]
+  requiredRole?: Role
+  requiredRoles?: Role[]
+  requireAdmin?: boolean
+  requireSuperAdmin?: boolean
+  skipAuth?: boolean
 }
 
-export async function getAuthContext(request: NextRequest): Promise<AuthContext | null> {
-  // Use Supabase server client to get current user
-  const { createClient } = await import('@/lib/supabase/server');
-  const supabase = await createClient();
-  const { data: { user }, error } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    return null;
+export async function getAuthContext(_request: NextRequest): Promise<AuthContext | null> {
+  const authUser = await getAuthUser()
+  if (!authUser?.clerkId) {
+    return null
   }
 
-  const userId = user.id;
-  const roleManager = getRoleManager();
-  const roles = roleManager.getUserRoles(userId);
-  const permissions = roleManager.getUserPermissions(userId);
-  const isAdmin = roleManager.isAdmin(userId);
+  const userId = authUser.clerkId
+  const roleManager = getRoleManager()
+  const rolesFromRm = roleManager.getUserRoles(userId)
+  const isDbAdmin = authUser.role === 'admin'
+
+  const roles =
+    isDbAdmin && !rolesFromRm.includes(Role.ADMIN) && !rolesFromRm.includes(Role.SUPER_ADMIN)
+      ? [...rolesFromRm, Role.ADMIN]
+      : rolesFromRm
+
+  let permissions = roleManager.getUserPermissions(userId)
+  if (isDbAdmin) {
+    const adminPerms = getPermissionsForRole(Role.ADMIN)
+    permissions = [...new Set([...permissions, ...adminPerms])]
+  }
+
+  const isAdmin = isDbAdmin || roleManager.isAdmin(userId)
 
   return {
     userId,
-    email: user.email,
+    email: authUser.email,
     roles,
     permissions,
     isAuthenticated: true,
     isAdmin,
-  };
+  }
 }
 
 /**
@@ -83,11 +92,11 @@ export async function adminMiddleware(
 ): Promise<NextResponse | null> {
   // Skip auth if configured
   if (options.skipAuth) {
-    return null;
+    return null
   }
 
   // Get auth context
-  const auth = await getAuthContext(request);
+  const auth = await getAuthContext(request)
 
   // Check authentication
   if (!auth) {
@@ -97,12 +106,12 @@ export async function adminMiddleware(
         message: 'Authentication required',
       },
       { status: 401 }
-    );
+    )
   }
 
   // Check super admin requirement
   if (options.requireSuperAdmin) {
-    const roleManager = getRoleManager();
+    const roleManager = getRoleManager()
     if (!roleManager.isSuperAdmin(auth.userId)) {
       return NextResponse.json(
         {
@@ -110,9 +119,9 @@ export async function adminMiddleware(
           message: 'Super admin access required',
         },
         { status: 403 }
-      );
+      )
     }
-    return null; // Authorized
+    return null // Authorized
   }
 
   // Check admin requirement
@@ -124,9 +133,9 @@ export async function adminMiddleware(
           message: 'Admin access required',
         },
         { status: 403 }
-      );
+      )
     }
-    return null; // Authorized
+    return null // Authorized
   }
 
   // Check role requirement
@@ -138,13 +147,13 @@ export async function adminMiddleware(
           message: `Required role: ${options.requiredRole}`,
         },
         { status: 403 }
-      );
+      )
     }
   }
 
   // Check multiple roles (any)
   if (options.requiredRoles && options.requiredRoles.length > 0) {
-    const hasAnyRole = options.requiredRoles.some((role) => auth.roles.includes(role));
+    const hasAnyRole = options.requiredRoles.some(role => auth.roles.includes(role))
     if (!hasAnyRole) {
       return NextResponse.json(
         {
@@ -152,13 +161,13 @@ export async function adminMiddleware(
           message: `Required one of: ${options.requiredRoles.join(', ')}`,
         },
         { status: 403 }
-      );
+      )
     }
   }
 
   // Check permission requirement
   if (options.requiredPermission) {
-    const roleManager = getRoleManager();
+    const roleManager = getRoleManager()
     if (!roleManager.can(auth.userId, options.requiredPermission)) {
       return NextResponse.json(
         {
@@ -166,13 +175,13 @@ export async function adminMiddleware(
           message: `Required permission: ${options.requiredPermission}`,
         },
         { status: 403 }
-      );
+      )
     }
   }
 
   // Check multiple permissions (all required)
   if (options.requiredPermissions && options.requiredPermissions.length > 0) {
-    const roleManager = getRoleManager();
+    const roleManager = getRoleManager()
     if (!roleManager.canAll(auth.userId, options.requiredPermissions)) {
       return NextResponse.json(
         {
@@ -180,12 +189,12 @@ export async function adminMiddleware(
           message: `Required permissions: ${options.requiredPermissions.join(', ')}`,
         },
         { status: 403 }
-      );
+      )
     }
   }
 
   // All checks passed
-  return null;
+  return null
 }
 
 /**
@@ -204,13 +213,13 @@ export async function adminMiddleware(
  * @throws Error if not authenticated
  */
 export async function requireAuth(request: NextRequest): Promise<AuthContext> {
-  const auth = await getAuthContext(request);
+  const auth = await getAuthContext(request)
 
   if (!auth) {
-    throw new Error('Unauthorized: Authentication required');
+    throw new Error('Unauthorized: Authentication required')
   }
 
-  return auth;
+  return auth
 }
 
 /**
@@ -221,13 +230,13 @@ export async function requireAuth(request: NextRequest): Promise<AuthContext> {
  * @throws Error if not admin
  */
 export async function requireAdminAuth(request: NextRequest): Promise<AuthContext> {
-  const auth = await requireAuth(request);
+  const auth = await requireAuth(request)
 
   if (!auth.isAdmin) {
-    throw new Error('Forbidden: Admin access required');
+    throw new Error('Forbidden: Admin access required')
   }
 
-  return auth;
+  return auth
 }
 
 /**
@@ -242,14 +251,14 @@ export async function requirePermissionAuth(
   request: NextRequest,
   permission: Permission
 ): Promise<AuthContext> {
-  const auth = await requireAuth(request);
+  const auth = await requireAuth(request)
 
-  const roleManager = getRoleManager();
+  const roleManager = getRoleManager()
   if (!roleManager.can(auth.userId, permission)) {
-    throw new Error(`Forbidden: Required permission: ${permission}`);
+    throw new Error(`Forbidden: Required permission: ${permission}`)
   }
 
-  return auth;
+  return auth
 }
 
 /**
@@ -260,17 +269,14 @@ export async function requirePermissionAuth(
  * @returns Auth context
  * @throws Error if role not assigned
  */
-export async function requireRoleAuth(
-  request: NextRequest,
-  role: Role
-): Promise<AuthContext> {
-  const auth = await requireAuth(request);
+export async function requireRoleAuth(request: NextRequest, role: Role): Promise<AuthContext> {
+  const auth = await requireAuth(request)
 
   if (!auth.roles.includes(role)) {
-    throw new Error(`Forbidden: Required role: ${role}`);
+    throw new Error(`Forbidden: Required role: ${role}`)
   }
 
-  return auth;
+  return auth
 }
 
 /**
@@ -299,28 +305,25 @@ export function withAuth(
 ) {
   return async (request: NextRequest): Promise<Response> => {
     // Run middleware
-    const middlewareResponse = await adminMiddleware(request, options);
+    const middlewareResponse = await adminMiddleware(request, options)
 
     // If middleware returned a response (error), return it
     if (middlewareResponse) {
-      return middlewareResponse;
+      return middlewareResponse
     }
 
     // Get auth context (guaranteed to exist after middleware)
-    const auth = await getAuthContext(request);
+    const auth = await getAuthContext(request)
 
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     try {
       // Call the handler
-      return await handler(request, auth);
+      return await handler(request, auth)
     } catch (error) {
-      console.error('Route handler error:', error);
+      console.error('Route handler error:', error)
 
       // Handle permission errors
       if (error instanceof Error) {
@@ -328,14 +331,11 @@ export function withAuth(
           return NextResponse.json(
             { error: 'Unauthorized', message: error.message },
             { status: 401 }
-          );
+          )
         }
 
         if (error.message.includes('Forbidden')) {
-          return NextResponse.json(
-            { error: 'Forbidden', message: error.message },
-            { status: 403 }
-          );
+          return NextResponse.json({ error: 'Forbidden', message: error.message }, { status: 403 })
         }
       }
 
@@ -346,9 +346,9 @@ export function withAuth(
           message: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
-      );
+      )
     }
-  };
+  }
 }
 
 /**
@@ -364,7 +364,7 @@ export function withAdmin(
   handler: (request: NextRequest, auth: AuthContext) => Promise<Response>,
   options: Omit<AdminMiddlewareOptions, 'requireAdmin'> = {}
 ) {
-  return withAuth(handler, { ...options, requireAdmin: true });
+  return withAuth(handler, { ...options, requireAdmin: true })
 }
 
 /**
@@ -380,7 +380,7 @@ export function withPermission(
   handler: (request: NextRequest, auth: AuthContext) => Promise<Response>,
   options: Omit<AdminMiddlewareOptions, 'requiredPermission'> = {}
 ) {
-  return withAuth(handler, { ...options, requiredPermission: permission });
+  return withAuth(handler, { ...options, requiredPermission: permission })
 }
 
 /**
@@ -396,5 +396,5 @@ export function withRole(
   handler: (request: NextRequest, auth: AuthContext) => Promise<Response>,
   options: Omit<AdminMiddlewareOptions, 'requiredRole'> = {}
 ) {
-  return withAuth(handler, { ...options, requiredRole: role });
+  return withAuth(handler, { ...options, requiredRole: role })
 }

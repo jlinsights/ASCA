@@ -1,106 +1,82 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { logger } from '@/lib/utils/logger';
-import { UpdateMemberRequest, ApiResponse, Member } from '@/types/membership';
+import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
+import { createClient } from '@/lib/supabase/server'
+import { getAuthUser } from '@/lib/auth/middleware'
+import { logger } from '@/lib/utils/logger'
+import { UpdateMemberRequest } from '@/types/membership'
 
 // GET /api/members/[id] - 특정 회원 조회
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params;
+    const supabase = await createClient()
+    const { id } = await params
 
     // 회원 정보 조회 (관계 데이터 포함)
     const { data: member, error } = await supabase
       .from('members')
-      .select(`
+      .select(
+        `
         *,
         membership_level:membership_levels(*),
         artistic_profile:artistic_profiles(*),
         achievements:achievements(*),
         certifications:certifications(*),
         cultural_background:cultural_backgrounds(*)
-      `)
+      `
+      )
       .eq('id', id)
-      .single();
+      .single()
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return NextResponse.json(
-          { success: false, error: 'Member not found' },
-          { status: 404 }
-        );
+        return NextResponse.json({ success: false, error: 'Member not found' }, { status: 404 })
       }
-      return NextResponse.json(
-        { success: false, error: 'Failed to fetch member' },
-        { status: 500 }
-      );
+      return NextResponse.json({ success: false, error: 'Failed to fetch member' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true, data: member });
-
+    return NextResponse.json({ success: true, data: member })
   } catch (error) {
-    logger.error('Error in GET /api/members/[id]', error instanceof Error ? error : new Error(String(error)));
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    logger.error(
+      'Error in GET /api/members/[id]',
+      error instanceof Error ? error : new Error(String(error))
+    )
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
   }
 }
 
 // PUT /api/members/[id] - 회원 정보 수정
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params;
-    const body: UpdateMemberRequest = await request.json();
+    const supabase = await createClient()
+    const { id } = await params
+    const body: UpdateMemberRequest = await request.json()
 
     // 회원 존재 확인 및 권한 검증
     const { data: existingMember } = await supabase
       .from('members')
-      .select('user_id, membership_level_id')
+      .select('clerk_user_id, membership_level_id')
       .eq('id', id)
-      .single();
+      .single()
 
     if (!existingMember) {
-      return NextResponse.json(
-        { success: false, error: 'Member not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'Member not found' }, { status: 404 })
     }
 
     // 본인 또는 관리자만 수정 가능
-    if (existingMember.user_id !== user.id) {
-      const { getAuthContext } = await import('@/lib/middleware/admin-middleware')
-      const authCtx = await getAuthContext(request)
-      if (!authCtx?.isAdmin) {
-        return NextResponse.json(
-          { success: false, error: '권한이 없습니다' },
-          { status: 403 }
-        );
+    if (existingMember.clerk_user_id !== userId) {
+      const adminUser = await getAuthUser()
+      if (!adminUser || adminUser.role !== 'admin') {
+        return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
       }
     }
 
@@ -128,35 +104,39 @@ export async function PUT(
         website_url: body.website_url,
         social_media: body.social_media,
         is_public: body.is_public,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
-      .select(`
+      .select(
+        `
         *,
         membership_level:membership_levels(*)
-      `)
-      .single();
+      `
+      )
+      .single()
 
     if (error) {
-      logger.error('Error updating member', error instanceof Error ? error : new Error(String(error)));
+      logger.error(
+        'Error updating member',
+        error instanceof Error ? error : new Error(String(error))
+      )
       return NextResponse.json(
         { success: false, error: 'Failed to update member' },
         { status: 500 }
-      );
+      )
     }
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       data: updatedMember,
-      message: '회원 정보가 성공적으로 업데이트되었습니다.'
-    });
-
+      message: '회원 정보가 성공적으로 업데이트되었습니다.',
+    })
   } catch (error) {
-    logger.error('Error in PUT /api/members/[id]', error instanceof Error ? error : new Error(String(error)));
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    logger.error(
+      'Error in PUT /api/members/[id]',
+      error instanceof Error ? error : new Error(String(error))
+    )
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
   }
 }
 
@@ -166,41 +146,30 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params;
+    const supabase = await createClient()
+    const { id } = await params
 
     // 회원 존재 확인
     const { data: existingMember } = await supabase
       .from('members')
-      .select('user_id')
+      .select('clerk_user_id')
       .eq('id', id)
-      .single();
+      .single()
 
     if (!existingMember) {
-      return NextResponse.json(
-        { success: false, error: 'Member not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'Member not found' }, { status: 404 })
     }
 
     // 본인 또는 관리자만 삭제 가능
-    if (existingMember.user_id !== user.id) {
-      const { getAuthContext } = await import('@/lib/middleware/admin-middleware')
-      const authCtx = await getAuthContext(request)
-      if (!authCtx?.isAdmin) {
-        return NextResponse.json(
-          { success: false, error: '권한이 없습니다' },
-          { status: 403 }
-        );
+    if (existingMember.clerk_user_id !== userId) {
+      const adminUser = await getAuthUser()
+      if (!adminUser || adminUser.role !== 'admin') {
+        return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
       }
     }
 
@@ -209,28 +178,30 @@ export async function DELETE(
       .from('members')
       .update({
         membership_status: 'inactive',
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
-      .eq('id', id);
+      .eq('id', id)
 
     if (error) {
-      logger.error('Error deactivating member', error instanceof Error ? error : new Error(String(error)));
+      logger.error(
+        'Error deactivating member',
+        error instanceof Error ? error : new Error(String(error))
+      )
       return NextResponse.json(
         { success: false, error: 'Failed to deactivate member' },
         { status: 500 }
-      );
+      )
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      message: '회원이 성공적으로 비활성화되었습니다.'
-    });
-
+      message: '회원이 성공적으로 비활성화되었습니다.',
+    })
   } catch (error) {
-    logger.error('Error in DELETE /api/members/[id]', error instanceof Error ? error : new Error(String(error)));
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    logger.error(
+      'Error in DELETE /api/members/[id]',
+      error instanceof Error ? error : new Error(String(error))
+    )
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
   }
-} 
+}

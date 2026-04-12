@@ -16,23 +16,23 @@ const CAREER = [
 
 const ARTWORKS = [
   {
-    src: '/webflow/orientalcalligraphy/images/낙지론_아남-배옥영_1.avif',
+    src: '/images/artworks/nakjiron-baeogyeong.avif',
     alt: '낙지론 - 아남 배옥영',
   },
   {
-    src: '/webflow/orientalcalligraphy/images/척탕_아남-배옥영_1.avif',
+    src: '/images/artworks/cheoktang-baeogyeong.avif',
     alt: '척탕 - 아남 배옥영',
   },
   {
-    src: '/webflow/orientalcalligraphy/images/천지부부도덕가_아남-배옥영.jpg',
+    src: '/images/artworks/cheonjibubudo-baeogyeong.jpg',
     alt: '천지부부도덕가 - 아남 배옥영',
   },
   {
-    src: '/webflow/orientalcalligraphy/images/횡간_아남-배옥영.jpg',
+    src: '/images/artworks/hoenggan-baeogyeong.jpg',
     alt: '횡간 - 아남 배옥영',
   },
   {
-    src: '/webflow/orientalcalligraphy/images/퇴필여산_아남-배옥영.jpg',
+    src: '/images/artworks/toepilyeosan-baeogyeong.jpg',
     alt: '퇴필여산 - 아남 배옥영',
   },
 ]
@@ -58,7 +58,7 @@ export function InstructorAnam() {
             <div className='shrink-0'>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src='/webflow/orientalcalligraphy/images/배옥영_AVATAR-270-×-270px.png'
+                src='/images/artists/baeogyeong.png'
                 alt='아남 배옥영'
                 className='w-24 h-24 rounded-lg object-cover border'
                 loading='lazy'

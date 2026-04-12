@@ -68,7 +68,7 @@ const countryArtists: Record<
       title: '이사',
       awards: 5,
       bio: '전통 해서와 행서를 중심으로 활동하며, 정법의 계승을 위해 후학 양성에 힘쓰고 있습니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/kimjeongrye.png',
     },
     {
       id: 'kr2',
@@ -80,7 +80,7 @@ const countryArtists: Record<
       artistType: '추천작가',
       awards: 3,
       bio: '초서를 기반으로 현대적 감각의 서예 작품을 선보이고 있으며, 다수의 국제 전시에 참여했습니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/leekwonjae.avif',
     },
     {
       id: 'kr3',
@@ -93,7 +93,7 @@ const countryArtists: Record<
       title: '심사위원',
       awards: 7,
       bio: '전각과 전서 분야에서 40년 이상의 경력을 가진 대한민국 대표 전각 작가입니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/parkseongho.avif',
     },
     {
       id: 'kr4',
@@ -105,7 +105,7 @@ const countryArtists: Record<
       artistType: '청년작가',
       awards: 2,
       bio: '한글 궁체와 행서를 결합한 새로운 한글 서예의 가능성을 탐구하고 있습니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/yungyeonghee.avif',
     },
     {
       id: 'kr5',
@@ -117,7 +117,7 @@ const countryArtists: Record<
       artistType: '공모작가',
       awards: 4,
       bio: '해서와 예서에 대한 깊은 이해를 바탕으로 고전 임서와 창작을 병행하고 있습니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/choieunju.png',
     },
   ],
   china: [
@@ -132,7 +132,7 @@ const countryArtists: Record<
       title: '고문',
       awards: 12,
       bio: '중국서법가협회 회원으로, 한·중·일 동양서예대전에 다수 참가하였습니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/kangdaehee.avif',
     },
     {
       id: 'cn2',
@@ -144,7 +144,7 @@ const countryArtists: Record<
       artistType: '추천작가',
       awards: 6,
       bio: '전서와 예서를 전공하며, 고대 금석문 연구에도 깊은 조예를 가지고 있습니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/kimhyeongseok.png',
     },
     {
       id: 'cn3',
@@ -156,7 +156,7 @@ const countryArtists: Record<
       artistType: '공모작가',
       awards: 3,
       bio: '현대 서법의 새로운 방향을 모색하며, 서양 현대미술과의 접점을 탐구합니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/kimjeonghee.png',
     },
   ],
   japan: [
@@ -171,7 +171,7 @@ const countryArtists: Record<
       title: '자문위원',
       awards: 9,
       bio: '일본서도원 소속으로, 한·일 서예 교류에 30년 이상 헌신해 왔습니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/mingyeongbae.png',
     },
     {
       id: 'jp2',
@@ -183,7 +183,7 @@ const countryArtists: Record<
       artistType: '추천작가',
       awards: 5,
       bio: '전통 초서와 현대 서도의 융합을 통해 독자적인 예술 세계를 구축하고 있습니다.',
-      profileImage: '/placeholder.svg',
+      profileImage: '/images/artists/baeogyeong.png',
     },
   ],
 }

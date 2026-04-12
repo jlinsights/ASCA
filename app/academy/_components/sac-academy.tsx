@@ -255,7 +255,7 @@ export function SacAcademy() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src='/webflow/orientalcalligraphy/images/예술의전당-서화아카데미-포스터.webp'
+            src='/images/programs/sac-academy-poster.webp'
             alt='예술의전당 서화아카데미 포스터'
             className='w-full object-contain'
             loading='lazy'

@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
 import { useState, useEffect } from 'react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { PageHero } from "@/components/layout/page-hero"
+import { PageHero } from '@/components/layout/page-hero'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -52,10 +52,10 @@ export default function ArtistPage() {
         setArtworks(artistArtworks)
         */
         setArtworks([]) // 임시로 빈 배열 설정
-        
       } catch (err) {
-
-        setError(`작가 정보를 불러오는데 실패했습니다. 오류: ${err instanceof Error ? err.message : String(err)}`)
+        setError(
+          `작가 정보를 불러오는데 실패했습니다. 오류: ${err instanceof Error ? err.message : String(err)}`
+        )
       } finally {
         setLoading(false)
       }
@@ -110,10 +110,10 @@ export default function ArtistPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-transparent">
-        <div className="container mx-auto px-4 py-16 text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto"></div>
-          <p className="mt-4 text-sm text-muted-foreground">작가 정보를 불러오는 중...</p>
+      <main className='min-h-screen bg-transparent'>
+        <div className='container mx-auto px-4 py-16 text-center'>
+          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto'></div>
+          <p className='mt-4 text-sm text-muted-foreground'>작가 정보를 불러오는 중...</p>
         </div>
         <LayoutFooter />
       </main>
@@ -122,13 +122,11 @@ export default function ArtistPage() {
 
   if (error || !artist) {
     return (
-      <main className="min-h-screen bg-transparent">
-        <div className="container mx-auto px-4 py-16 text-center">
-          <p className="text-red-500">{error || '작가를 찾을 수 없습니다.'}</p>
-          <Link href="/artists">
-            <Button className="mt-4">
-              작가 목록으로 돌아가기
-            </Button>
+      <main className='min-h-screen bg-transparent'>
+        <div className='container mx-auto px-4 py-16 text-center'>
+          <p className='text-red-500'>{error || '작가를 찾을 수 없습니다.'}</p>
+          <Link href='/artists'>
+            <Button className='mt-4'>작가 목록으로 돌아가기</Button>
           </Link>
         </div>
         <LayoutFooter />
@@ -137,71 +135,71 @@ export default function ArtistPage() {
   }
 
   return (
-    <main className="min-h-screen bg-transparent">
-      <PageHero title="작가 프로필" subtitle={artist?.name} />
+    <main className='min-h-screen bg-transparent'>
+      <PageHero title='작가 프로필' subtitle={artist?.name} />
 
       {/* Back Button */}
-      <div className="container mx-auto px-4 pt-8">
-        <Link 
-          href="/artists"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+      <div className='container mx-auto px-4 pt-8'>
+        <Link
+          href='/artists'
+          className='inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors'
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className='w-4 h-4 mr-2' />
           작가 목록으로 돌아가기
         </Link>
       </div>
 
       {/* Artist Profile */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <section className='container mx-auto px-4 py-8'>
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Profile Image */}
-          <div className="lg:col-span-1">
-            <div className="relative aspect-square rounded-lg overflow-hidden">
+          <div className='lg:col-span-1'>
+            <div className='relative aspect-square rounded-lg overflow-hidden'>
               {artist.profileImage ? (
                 <Image
                   src={artist.profileImage}
                   alt={getArtistName(artist)}
                   fill
-                  className="object-cover"
+                  className='object-cover'
                 />
               ) : (
-                <div className="w-full h-full bg-muted flex items-center justify-center">
-                  <User className="w-24 h-24 text-muted-foreground" />
+                <div className='w-full h-full bg-muted flex items-center justify-center'>
+                  <User className='w-24 h-24 text-muted-foreground' />
                 </div>
               )}
             </div>
           </div>
 
           {/* Artist Info */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className='lg:col-span-2 space-y-6'>
             <div>
-              <h1 className="text-4xl md:text-5xl font-normal uppercase mb-4">
+              <h1 className='text-4xl md:text-5xl font-normal uppercase mb-4'>
                 {getArtistName(artist)}
               </h1>
-              
+
               {/* Basic Info */}
-              <div className="flex flex-wrap gap-4 mb-6">
+              <div className='flex flex-wrap gap-4 mb-6'>
                 {artist.birthYear && (
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Calendar className="w-4 h-4 mr-2" />
+                  <div className='flex items-center text-sm text-muted-foreground'>
+                    <Calendar className='w-4 h-4 mr-2' />
                     {artist.birthYear}년 출생
                   </div>
                 )}
                 {artist.nationality && (
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <MapPin className="w-4 h-4 mr-2" />
+                  <div className='flex items-center text-sm text-muted-foreground'>
+                    <MapPin className='w-4 h-4 mr-2' />
                     {artist.nationality}
                   </div>
                 )}
               </div>
 
               {/* Membership, Artist Type, and Title */}
-              <div className="flex flex-wrap gap-3 mb-6">
-                <Badge variant="default" className="bg-blue-100 text-blue-800 hover:bg-blue-200">
+              <div className='flex flex-wrap gap-3 mb-6'>
+                <Badge variant='default' className='bg-blue-100 text-blue-800 hover:bg-blue-200'>
                   {/* artist.membershipType placeholder */}
                   Member
                 </Badge>
-                <Badge variant="outline" className="border-green-200 text-green-800">
+                <Badge variant='outline' className='border-green-200 text-green-800'>
                   {/* artist.artistType placeholder */}
                   Artist
                 </Badge>
@@ -214,9 +212,9 @@ export default function ArtistPage() {
 
               {/* Specialties */}
               {artist.specialties && artist.specialties.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div className='flex flex-wrap gap-2 mb-6'>
                   {artist.specialties.map((specialty, index) => (
-                    <Badge key={index} variant="secondary">
+                    <Badge key={index} variant='secondary'>
                       {specialty}
                     </Badge>
                   ))}
@@ -226,22 +224,20 @@ export default function ArtistPage() {
 
             {/* Bio */}
             <div>
-              <h2 className="text-xl font-medium mb-4">작가 소개</h2>
-              <p className="text-sm leading-relaxed whitespace-pre-line">
-                {getArtistBio(artist)}
-              </p>
+              <h2 className='text-xl font-medium mb-4'>작가 소개</h2>
+              <p className='text-sm leading-relaxed whitespace-pre-line'>{getArtistBio(artist)}</p>
             </div>
 
             {/* Awards */}
             {artist.awards && artist.awards.length > 0 && (
               <div>
-                <h2 className="text-xl font-medium mb-4 flex items-center">
-                  <Award className="w-5 h-5 mr-2" />
+                <h2 className='text-xl font-medium mb-4 flex items-center'>
+                  <Award className='w-5 h-5 mr-2' />
                   주요 수상 경력
                 </h2>
-                <ul className="space-y-2">
+                <ul className='space-y-2'>
                   {artist.awards.map((award, index) => (
-                    <li key={index} className="text-sm text-muted-foreground">
+                    <li key={index} className='text-sm text-muted-foreground'>
                       • {award}
                     </li>
                   ))}
@@ -252,13 +248,13 @@ export default function ArtistPage() {
             {/* Exhibitions */}
             {artist.exhibitions && artist.exhibitions.length > 0 && (
               <div>
-                <h2 className="text-xl font-medium mb-4 flex items-center">
-                  <Eye className="w-5 h-5 mr-2" />
+                <h2 className='text-xl font-medium mb-4 flex items-center'>
+                  <Eye className='w-5 h-5 mr-2' />
                   주요 전시
                 </h2>
-                <ul className="space-y-2">
+                <ul className='space-y-2'>
                   {artist.exhibitions.map((exhibition, index) => (
-                    <li key={index} className="text-sm text-muted-foreground">
+                    <li key={index} className='text-sm text-muted-foreground'>
                       • {exhibition}
                     </li>
                   ))}
@@ -270,58 +266,55 @@ export default function ArtistPage() {
       </section>
 
       {/* Artist's Artworks */}
-      <section className="container mx-auto px-4 py-8 border-t">
-        <h2 className="text-3xl font-normal uppercase mb-8">작품</h2>
-        
+      <section className='container mx-auto px-4 py-8 border-t'>
+        <h2 className='text-3xl font-normal uppercase mb-8'>작품</h2>
+
         {artworks.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-lg font-medium mb-2">작품이 없습니다</p>
-            <p className="text-sm text-muted-foreground">
+          <div className='text-center py-12'>
+            <p className='text-lg font-medium mb-2'>작품이 없습니다</p>
+            <p className='text-sm text-muted-foreground'>
               이 작가의 작품이 아직 등록되지 않았습니다.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {artworks.map((artwork) => (
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+            {artworks.map(artwork => (
               <Link key={artwork.id} href={`/artworks/${artwork.id}`}>
-                <div className="group cursor-pointer">
-                  <div className="relative aspect-square mb-4 overflow-hidden rounded-lg">
+                <div className='group cursor-pointer'>
+                  <div className='relative aspect-square mb-4 overflow-hidden rounded-lg'>
                     <Image
-                      src={artwork.thumbnail || '/placeholder.jpg'}
+                      src={artwork.thumbnail || '/images/artists/kangdaehee.avif'}
                       alt={getArtworkTitle(artwork)}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className='object-cover transition-transform group-hover:scale-105'
                     />
                     {artwork.featured && (
-                      <div className="absolute top-2 right-2">
-                        <Badge className="bg-red-600 text-white">추천</Badge>
+                      <div className='absolute top-2 right-2'>
+                        <Badge className='bg-red-600 text-white'>추천</Badge>
                       </div>
                     )}
                   </div>
-                  <div className="space-y-2">
-                    <h3 className="font-medium line-clamp-2">
-                      {getArtworkTitle(artwork)}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {artwork.year}년
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-xs">
+                  <div className='space-y-2'>
+                    <h3 className='font-medium line-clamp-2'>{getArtworkTitle(artwork)}</h3>
+                    <p className='text-sm text-muted-foreground'>{artwork.year}년</p>
+                    <div className='flex items-center justify-between'>
+                      <Badge variant='outline' className='text-xs'>
                         {artwork.category}
                       </Badge>
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        artwork.availability === 'available' 
-                          ? 'bg-green-100 text-green-800' 
+                      <span
+                        className={`text-xs px-2 py-1 rounded ${
+                          artwork.availability === 'available'
+                            ? 'bg-green-100 text-green-800'
+                            : artwork.availability === 'sold'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
+                        {artwork.availability === 'available'
+                          ? '판매 가능'
                           : artwork.availability === 'sold'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {artwork.availability === 'available' 
-                          ? '판매 가능' 
-                          : artwork.availability === 'sold'
-                          ? '판매 완료'
-                          : '예약됨'
-                        }
+                            ? '판매 완료'
+                            : '예약됨'}
                       </span>
                     </div>
                   </div>
@@ -335,4 +328,4 @@ export default function ArtistPage() {
       <LayoutFooter />
     </main>
   )
-} 
+}

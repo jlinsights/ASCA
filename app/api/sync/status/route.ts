@@ -1,25 +1,25 @@
+import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
-import { devAuth } from '@/lib/auth/dev-auth'
+import { requireAdminAuth } from '@/lib/auth/middleware'
 import { createClient } from '@supabase/supabase-js'
 
 export async function GET(request: NextRequest) {
   try {
-    // 개발 모드에서 인증 확인
-    let userId: string | null = null;
-    let isAdmin = false;
-    
-    const devUser = await devAuth.getCurrentUser();
-    if (devUser && devUser.role === 'admin') {
-      userId = devUser.id;
-      isAdmin = true;
-    }
-
-    if (!userId || !isAdmin) {
+    const { userId } = await auth()
+    if (!userId) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized - Admin access required' },
         { status: 401 }
-      );
+      )
+    }
+
+    const adminUser = await requireAdminAuth(request)
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Admin access required' },
+        { status: 401 }
+      )
     }
 
     // Supabase 연결
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       total: stats?.length || 0,
       success: stats?.filter(log => log.status === 'success').length || 0,
       failed: stats?.filter(log => log.status === 'failed').length || 0,
-      pending: stats?.filter(log => log.status === 'pending').length || 0
+      pending: stats?.filter(log => log.status === 'pending').length || 0,
     }
 
     // 테이블별 레코드 수 확인
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       },
       data_counts: {
         artists: artistsCount || 0,
-        artworks: artworksCount || 0
+        artworks: artworksCount || 0,
       },
       engine_info: {
         message: '동기화 엔진 상태 정보',
@@ -82,19 +82,18 @@ export async function GET(request: NextRequest) {
           'POST /api/sync/start - 동기화 시작',
           'POST /api/sync/stop - 동기화 중지',
           'POST /api/sync/force-sync - 강제 동기화',
-          'GET /api/sync/logs - 동기화 로그 조회'
-        ]
-      }
+          'GET /api/sync/logs - 동기화 로그 조회',
+        ],
+      },
     })
-
   } catch (error) {
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: '동기화 상태 확인에 실패했습니다.',
-        details: error instanceof Error ? error.message : String(error)
+        details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }
     )
   }
-} 
+}
