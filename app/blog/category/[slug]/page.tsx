@@ -176,8 +176,13 @@ export function generateStaticParams() {
   return categories.map(cat => ({ slug: cat.slug }))
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const category = categories.find(c => c.slug === params.slug)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const category = categories.find(c => c.slug === slug)
   if (!category) {
     return { title: '카테고리를 찾을 수 없습니다 - ASCA' }
   }
@@ -200,8 +205,9 @@ function formatDate(dateString: string) {
   })
 }
 
-export default function BlogCategoryPage({ params }: { params: { slug: string } }) {
-  const category = categories.find(c => c.slug === params.slug)
+export default async function BlogCategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const category = categories.find(c => c.slug === slug)
 
   if (!category) {
     notFound()

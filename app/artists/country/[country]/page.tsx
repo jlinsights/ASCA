@@ -194,26 +194,32 @@ export function generateStaticParams() {
   return validCountries.map(country => ({ country }))
 }
 
-export function generateMetadata({ params }: { params: { country: string } }): Metadata {
-  const country = countryData[params.country]
-  if (!country) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ country: string }>
+}): Promise<Metadata> {
+  const { country } = await params
+  const countryInfo = countryData[country]
+  if (!countryInfo) {
     return { title: '국가를 찾을 수 없습니다 | 동양서예협회' }
   }
   return {
-    title: `${country.flag} ${country.name} 작가 | 동양서예협회`,
-    description: country.description,
+    title: `${countryInfo.flag} ${countryInfo.name} 작가 | 동양서예협회`,
+    description: countryInfo.description,
     openGraph: {
-      title: `${country.name} 작가 | 동양서예협회`,
-      description: country.description,
+      title: `${countryInfo.name} 작가 | 동양서예협회`,
+      description: countryInfo.description,
     },
   }
 }
 
-export default function CountryPage({ params }: { params: { country: string } }) {
-  const country = countryData[params.country]
-  if (!country) return notFound()
+export default async function CountryPage({ params }: { params: Promise<{ country: string }> }) {
+  const { country } = await params
+  const countryInfo = countryData[country]
+  if (!countryInfo) return notFound()
 
-  const artists = countryArtists[params.country] ?? []
+  const artists = countryArtists[country] ?? []
 
   return (
     <div className='min-h-screen bg-transparent'>
@@ -226,17 +232,17 @@ export default function CountryPage({ params }: { params: { country: string } })
             <span>/</span>
             <span className='text-foreground'>국가별</span>
             <span>/</span>
-            <span className='text-foreground'>{country.name}</span>
+            <span className='text-foreground'>{countryInfo.name}</span>
           </div>
           <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            {country.nameEn}
+            {countryInfo.nameEn}
           </p>
           <h1 className='text-3xl md:text-5xl font-bold mb-2'>
-            <span className='mr-3 text-4xl md:text-6xl'>{country.flag}</span>
-            {country.name} 작가
+            <span className='mr-3 text-4xl md:text-6xl'>{countryInfo.flag}</span>
+            {countryInfo.name} 작가
           </h1>
           <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed mt-4'>
-            {country.description}
+            {countryInfo.description}
           </p>
           <p className='text-sm text-muted-foreground mt-4'>총 {artists.length}명의 작가</p>
         </div>
@@ -254,7 +260,7 @@ export default function CountryPage({ params }: { params: { country: string } })
             <div className='flex items-center gap-2'>
               <MapPin className='h-4 w-4 text-scholar-red' />
               <span className='text-sm font-medium'>
-                {country.flag} {country.name}
+                {countryInfo.flag} {countryInfo.name}
               </span>
             </div>
           </div>
@@ -345,13 +351,13 @@ export default function CountryPage({ params }: { params: { country: string } })
           <h2 className='text-lg md:text-xl font-semibold mb-6 text-center'>다른 국가 둘러보기</h2>
           <div className='grid grid-cols-3 gap-3 md:gap-4 max-w-lg mx-auto'>
             {validCountries.map(key => {
-              const c = countryData[key]
+              const c = countryData[key]!
               return (
                 <Link
                   key={key}
                   href={`/artists/country/${key}`}
                   className={`p-4 text-center rounded-lg border transition-all hover:shadow-md ${
-                    key === params.country
+                    key === country
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-card hover:bg-muted'
                   }`}

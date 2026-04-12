@@ -1,1 +1,1 @@
-🗄️ Supabase 스키마 확장: contest_results, partners 테이블 추가 및 시드 데이터/API 라우트 구현
+🎨 브랜드 가이드라인 기반 디자인 시스템 전면 개편 - 시인성/가시성 대폭 향상

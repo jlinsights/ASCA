@@ -5,7 +5,7 @@ export function BylawsContent() {
   return (
     <main className='flex-1 min-w-0 space-y-12'>
       {/* 1. 정관 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[0]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[0]!}>
         <h2>제1장 총 칙</h2>
         <h3>제1조 (명칭)</h3>
         <p>이 법인은 &quot;사단법인 동양서예협회&quot; (이하 &quot;본회&quot; 라 한다)라 한다.</p>
@@ -307,7 +307,7 @@ export function BylawsContent() {
       </BylawsSectionCard>
 
       {/* 2. 회원 및 회비 규정 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[1]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[1]!}>
         <h3>제1조 (목적)</h3>
         <p>
           본 규정은 동양서예협회(이하 &quot;협회&quot;라 한다)의 회원 자격, 회비 체계 및 납부 절차
@@ -406,7 +406,7 @@ export function BylawsContent() {
       </BylawsSectionCard>
 
       {/* 3. 운영 및 심사 규정 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[2]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[2]!}>
         <h3>제1조 (목적)</h3>
         <p>
           이 규정은 정관 제41조에 따라 사단법인 동양서예협회의 운영위원 및 심사위원 위촉과 심사방법
@@ -475,7 +475,7 @@ export function BylawsContent() {
       </BylawsSectionCard>
 
       {/* 4. 전시 관리 및 운영 규정 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[3]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[3]!}>
         <h2>제1장 총 칙</h2>
         <h3>제1조 (목적)</h3>
         <p>
@@ -522,7 +522,7 @@ export function BylawsContent() {
       </BylawsSectionCard>
 
       {/* 5. 추천ㆍ초대작가 선임 규정 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[4]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[4]!}>
         <h2>제1장 총칙</h2>
         <h3>제1조 (목적)</h3>
         <p>
@@ -561,7 +561,7 @@ export function BylawsContent() {
       </BylawsSectionCard>
 
       {/* 6. 작품 감정 및 보증서 발행 규정 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[5]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[5]!}>
         <h2>제1장 총칙</h2>
         <h3>제1조 (목적)</h3>
         <p>
@@ -605,7 +605,7 @@ export function BylawsContent() {
       </BylawsSectionCard>
 
       {/* 7. 지부 및 지회 설치·운영 규정 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[6]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[6]!}>
         <h2>제1장 총칙</h2>
         <h3>제1조 (목적)</h3>
         <p>
@@ -653,7 +653,7 @@ export function BylawsContent() {
       </BylawsSectionCard>
 
       {/* 8. 이의제기 처리 규정 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[7]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[7]!}>
         <h3>제1조 (목적)</h3>
         <p>
           본 규정은 (사)동양서예협회가 주관하는 모든 공모 및 전시 절차에서 발생할 수 있는 이의제기를
@@ -704,7 +704,7 @@ export function BylawsContent() {
       </BylawsSectionCard>
 
       {/* 9. 자격 및 요건 */}
-      <BylawsSectionCard section={BYLAWS_SECTIONS[8]}>
+      <BylawsSectionCard section={BYLAWS_SECTIONS[8]!}>
         <h3>회원과 임원의 자격</h3>
         <ol>
           <li>

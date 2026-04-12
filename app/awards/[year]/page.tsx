@@ -525,9 +525,14 @@ export function generateStaticParams() {
   return validYears.map(year => ({ year: year.toString() }))
 }
 
-export function generateMetadata({ params }: { params: { year: string } }): Metadata {
-  const year = parseInt(params.year, 10)
-  const data = contestDataByYear[year]
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ year: string }>
+}): Promise<Metadata> {
+  const { year } = await params
+  const yearNum = parseInt(year, 10)
+  const data = contestDataByYear[yearNum]
   if (!data) {
     return { title: '수상 내역을 찾을 수 없습니다 - ASCA' }
   }
@@ -570,9 +575,10 @@ function mergeDbResults(
   })
 }
 
-export default async function AwardYearPage({ params }: { params: { year: string } }) {
-  const year = parseInt(params.year, 10)
-  const data = contestDataByYear[year]
+export default async function AwardYearPage({ params }: { params: Promise<{ year: string }> }) {
+  const { year } = await params
+  const yearNum = parseInt(year, 10)
+  const data = contestDataByYear[yearNum]
 
   if (!data) {
     notFound()
@@ -580,7 +586,7 @@ export default async function AwardYearPage({ params }: { params: { year: string
 
   let dbGrouped: Record<string, ContestResult[]> = {}
   try {
-    dbGrouped = await getContestResultsByYearGrouped(year)
+    dbGrouped = await getContestResultsByYearGrouped(yearNum)
   } catch {
     // DB 연결 실패 시 mock 데이터 사용
   }
@@ -780,9 +786,9 @@ export default async function AwardYearPage({ params }: { params: { year: string
               .map(y => (
                 <Link key={y} href={`/awards/${y}`}>
                   <Button
-                    variant={y === year ? 'default' : 'outline'}
+                    variant={y === yearNum ? 'default' : 'outline'}
                     size='sm'
-                    className={y === year ? 'bg-scholar-red hover:bg-scholar-red/90' : ''}
+                    className={y === yearNum ? 'bg-scholar-red hover:bg-scholar-red/90' : ''}
                   >
                     {y}
                   </Button>
