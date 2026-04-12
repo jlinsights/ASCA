@@ -365,26 +365,32 @@ export function generateStaticParams() {
   return validGenres.map(genre => ({ genre }))
 }
 
-export function generateMetadata({ params }: { params: { genre: string } }): Metadata {
-  const genre = genreData[params.genre]
-  if (!genre) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ genre: string }>
+}): Promise<Metadata> {
+  const { genre } = await params
+  const genreInfo = genreData[genre]
+  if (!genreInfo) {
     return { title: '서체를 찾을 수 없습니다 | 동양서예협회' }
   }
   return {
-    title: `${genre.name}(${genre.chinese}) 작품 | 동양서예협회`,
-    description: genre.description,
+    title: `${genreInfo.name}(${genreInfo.chinese}) 작품 | 동양서예협회`,
+    description: genreInfo.description,
     openGraph: {
-      title: `${genre.name}(${genre.chinese}) 작품 | 동양서예협회`,
-      description: genre.description,
+      title: `${genreInfo.name}(${genreInfo.chinese}) 작품 | 동양서예협회`,
+      description: genreInfo.description,
     },
   }
 }
 
-export default function GenrePage({ params }: { params: { genre: string } }) {
-  const genre = genreData[params.genre]
-  if (!genre) return notFound()
+export default async function GenrePage({ params }: { params: Promise<{ genre: string }> }) {
+  const { genre } = await params
+  const genreInfo = genreData[genre]
+  if (!genreInfo) return notFound()
 
-  const artworks = genreArtworks[params.genre] ?? []
+  const artworks = genreArtworks[genre] ?? []
 
   return (
     <div className='min-h-screen bg-transparent'>
@@ -397,17 +403,19 @@ export default function GenrePage({ params }: { params: { genre: string } }) {
             <span>/</span>
             <span className='text-foreground'>서체별</span>
             <span>/</span>
-            <span className='text-foreground'>{genre.name}</span>
+            <span className='text-foreground'>{genreInfo.name}</span>
           </div>
           <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            {genre.nameEn}
+            {genreInfo.nameEn}
           </p>
           <h1 className='text-3xl md:text-5xl font-bold mb-2'>
-            {genre.name}
-            <span className='text-xl md:text-3xl text-muted-foreground ml-3'>{genre.chinese}</span>
+            {genreInfo.name}
+            <span className='text-xl md:text-3xl text-muted-foreground ml-3'>
+              {genreInfo.chinese}
+            </span>
           </h1>
           <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed mt-4'>
-            {genre.description}
+            {genreInfo.description}
           </p>
           <p className='text-sm text-muted-foreground mt-4'>총 {artworks.length}개 작품</p>
         </div>
@@ -424,7 +432,7 @@ export default function GenrePage({ params }: { params: { genre: string } }) {
             </Link>
             <div className='flex items-center gap-2'>
               <Brush className='h-4 w-4 text-scholar-red' />
-              <span className='text-sm font-medium'>{genre.name}</span>
+              <span className='text-sm font-medium'>{genreInfo.name}</span>
             </div>
           </div>
         </div>
@@ -481,7 +489,7 @@ export default function GenrePage({ params }: { params: { genre: string } }) {
                 <CardFooter className='px-4 pb-4 pt-0'>
                   <div className='flex items-center justify-between w-full'>
                     <Badge variant='outline' className='text-xs'>
-                      {genre.name}
+                      {genreInfo.name}
                     </Badge>
                     <span className='text-xs text-muted-foreground'>{artwork.dimensions}</span>
                   </div>
@@ -497,15 +505,13 @@ export default function GenrePage({ params }: { params: { genre: string } }) {
           <h2 className='text-lg md:text-xl font-semibold mb-6 text-center'>다른 서체 둘러보기</h2>
           <div className='grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4'>
             {validGenres.map(key => {
-              const g = genreData[key]
+              const g = genreData[key]!
               return (
                 <Link
                   key={key}
                   href={`/artworks/genre/${key}`}
                   className={`p-3 md:p-4 text-center rounded-lg border transition-all hover:shadow-md ${
-                    key === params.genre
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card hover:bg-muted'
+                    key === genre ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-muted'
                   }`}
                 >
                   <h3 className='font-medium text-sm'>{g.name}</h3>

@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { partners } from '@/lib/db/schema'
-import { eq, asc } from 'drizzle-orm'
+import { eq, asc, and } from 'drizzle-orm'
 
 export async function getAllPartners() {
   return db
@@ -16,7 +16,16 @@ export async function getPartnerById(id: string) {
   return results[0] ?? null
 }
 
-export async function getPartnersByCategory(category: string) {
+type PartnerCategory =
+  | 'government'
+  | 'museum'
+  | 'gallery'
+  | 'publication'
+  | 'education'
+  | 'partner'
+  | 'sponsor'
+
+export async function getPartnersByCategory(category: PartnerCategory) {
   return db
     .select()
     .from(partners)

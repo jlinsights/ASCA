@@ -248,17 +248,22 @@ export function generateStaticParams() {
   return validTypes.map(type => ({ type }))
 }
 
-export function generateMetadata({ params }: { params: { type: string } }): Metadata {
-  const type = typeData[params.type]
-  if (!type) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ type: string }>
+}): Promise<Metadata> {
+  const { type } = await params
+  const typeInfo = typeData[type]
+  if (!typeInfo) {
     return { title: '유형을 찾을 수 없습니다 | 동양서예협회' }
   }
   return {
-    title: `${type.name}(${type.nameEn}) 작품 | 동양서예협회`,
-    description: type.description,
+    title: `${typeInfo.name}(${typeInfo.nameEn}) 작품 | 동양서예협회`,
+    description: typeInfo.description,
     openGraph: {
-      title: `${type.name} 작품 | 동양서예협회`,
-      description: type.description,
+      title: `${typeInfo.name} 작품 | 동양서예협회`,
+      description: typeInfo.description,
     },
   }
 }
@@ -268,11 +273,12 @@ function formatPrice(price: number): string {
   return `₩${price.toLocaleString()}`
 }
 
-export default function TypePage({ params }: { params: { type: string } }) {
-  const type = typeData[params.type]
-  if (!type) return notFound()
+export default async function TypePage({ params }: { params: Promise<{ type: string }> }) {
+  const { type } = await params
+  const typeInfo = typeData[type]
+  if (!typeInfo) return notFound()
 
-  const artworks = typeArtworks[params.type] ?? []
+  const artworks = typeArtworks[type] ?? []
 
   return (
     <div className='min-h-screen bg-transparent'>
@@ -285,14 +291,14 @@ export default function TypePage({ params }: { params: { type: string } }) {
             <span>/</span>
             <span className='text-foreground'>유형별</span>
             <span>/</span>
-            <span className='text-foreground'>{type.name}</span>
+            <span className='text-foreground'>{typeInfo.name}</span>
           </div>
           <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            {type.nameEn}
+            {typeInfo.nameEn}
           </p>
-          <h1 className='text-3xl md:text-5xl font-bold mb-2'>{type.name} 작품</h1>
+          <h1 className='text-3xl md:text-5xl font-bold mb-2'>{typeInfo.name} 작품</h1>
           <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed mt-4'>
-            {type.description}
+            {typeInfo.description}
           </p>
           <p className='text-sm text-muted-foreground mt-4'>총 {artworks.length}개 작품</p>
         </div>
@@ -309,7 +315,7 @@ export default function TypePage({ params }: { params: { type: string } }) {
             </Link>
             <div className='flex items-center gap-2'>
               <Layers className='h-4 w-4 text-scholar-red' />
-              <span className='text-sm font-medium'>{type.name}</span>
+              <span className='text-sm font-medium'>{typeInfo.name}</span>
             </div>
           </div>
         </div>
@@ -385,15 +391,13 @@ export default function TypePage({ params }: { params: { type: string } }) {
           <h2 className='text-lg md:text-xl font-semibold mb-6 text-center'>다른 유형 둘러보기</h2>
           <div className='grid grid-cols-3 gap-3 md:gap-4 max-w-lg mx-auto'>
             {validTypes.map(key => {
-              const t = typeData[key]
+              const t = typeData[key]!
               return (
                 <Link
                   key={key}
                   href={`/artworks/type/${key}`}
                   className={`p-3 md:p-4 text-center rounded-lg border transition-all hover:shadow-md ${
-                    key === params.type
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card hover:bg-muted'
+                    key === type ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-muted'
                   }`}
                 >
                   <h3 className='font-medium text-sm'>{t.name}</h3>

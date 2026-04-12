@@ -163,8 +163,13 @@ export function generateStaticParams() {
   return validPartnerIds.map(id => ({ id }))
 }
 
-export function generateMetadata({ params }: { params: { id: string } }): Metadata {
-  const partner = partnerDetails[params.id]
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const partner = partnerDetails[id]
   if (!partner) {
     return { title: '유관단체를 찾을 수 없습니다 | 동양서예협회' }
   }
@@ -198,12 +203,13 @@ const categoryToIconKey: Record<string, string> = {
   sponsor: 'partners',
 }
 
-export default async function PartnerDetailPage({ params }: { params: { id: string } }) {
-  let partner = partnerDetails[params.id] ?? null
+export default async function PartnerDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  let partner = partnerDetails[id] ?? null
 
   if (!partner) {
     try {
-      const dbPartner = await getPartnerById(params.id)
+      const dbPartner = await getPartnerById(id)
       if (dbPartner) {
         partner = {
           id: dbPartner.id,
