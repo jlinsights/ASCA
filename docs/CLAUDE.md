@@ -102,6 +102,13 @@ Use the established pattern for all content:
 - Page components follow Next.js App Router structure
 - Admin components separated in `app/admin/`
 
+### Large File Refactoring Process
+If a single code file exceeds **500 lines**, proactively trigger optimization and refactor using this standardized process:
+1. **Component Extraction**: Split large monolithic UI components into smaller independent sub-components (e.g., create an `_components/` directory).
+2. **Logic Separation**: Move complex state management and business logic into custom hooks (e.g., `use[Feature].ts`).
+3. **Data Externalization**: Extract redundant hardcoded mock data, large configuration objects, or literal constants into separate files (e.g., `mock-data.ts`).
+4. **Validation Focus**: Ensure TypeScript types are strictly preserved. Always verify syntax matching and run `npm run type-check` to fix any `implicit any` or JSX closing tag errors caused by component separation.
+
 ## Critical Development Guidelines
 
 ### Database Changes
