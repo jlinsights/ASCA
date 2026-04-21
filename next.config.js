@@ -20,7 +20,6 @@ const nextConfig = {
     // ignoreBuildErrors removed to enforce type checking
   },
 
-
   // Turbopack 설정 (Next.js 16+ 호환)
   turbopack: {},
 
@@ -109,29 +108,30 @@ const nextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            value: 'on',
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            value: '1; mode=block',
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'SAMEORIGIN',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           {
             key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
+            value: 'strict-origin-when-cross-origin',
           },
           {
             key: 'Content-Security-Policy',
-            value: process.env.NODE_ENV === 'development'
-              ? "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data: blob:; font-src * data:; connect-src *; frame-src *;"
-              : "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.curator.io https://*.curator.io; style-src 'self' 'unsafe-inline' https://cdn.curator.io; img-src 'self' data: blob: https://cdn.curator.io https://*.curator.io; font-src 'self' data:; connect-src 'self' https://cdn.curator.io https://*.curator.io; frame-src 'self' https://cdn.curator.io https://*.curator.io; object-src 'none'; base-uri 'self'; form-action 'self';"
+            value:
+              process.env.NODE_ENV === 'development'
+                ? "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data: blob:; font-src * data:; connect-src *; frame-src *;"
+                : "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.curator.io https://*.curator.io; style-src 'self' 'unsafe-inline' https://cdn.curator.io; img-src 'self' data: blob: https://cdn.curator.io https://*.curator.io; font-src 'self' data:; connect-src 'self' https://cdn.curator.io https://*.curator.io; frame-src 'self' https://cdn.curator.io https://*.curator.io; object-src 'none'; base-uri 'self'; form-action 'self';",
           },
         ],
       },

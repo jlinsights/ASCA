@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-04-21T14:03:05.873Z",
+  "reason": "compaction",
+  "status": {
+    "version": "2.0",
+    "lastUpdated": "2026-02-08T02:11:55.283Z",
+    "activeFeatures": [],
+    "primaryFeature": null,
+    "features": {},
+    "pipeline": {
+      "currentPhase": 1,
+      "level": "Dynamic",
+      "phaseHistory": []
+    },
+    "session": {
+      "startedAt": "2026-02-08T02:11:55.283Z",
+      "onboardingCompleted": false,
+      "lastActivity": "2026-02-08T02:11:55.283Z"
+    },
+    "history": []
+  }
+}

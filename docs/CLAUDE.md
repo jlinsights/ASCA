@@ -15,8 +15,8 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 
 ### Development
 ```bash
-npm run dev              # Development server (localhost:3000)
-npm run dev:turbo        # Turbo mode development  
+npm run dev              # Development server using Webpack (Recommended)
+npm run dev:turbo        # Turbo mode development (May have ESM issues with Clerk)
 npm run build            # Production build
 npm run start            # Start production server
 npm run pre-commit       # Full quality check before commits
@@ -54,6 +54,10 @@ npm run test:coverage    # Generate test coverage report
 - `exhibitions` - Exhibition management
 - `events`, `news` - Content management
 - Junction tables for many-to-many relationships
+
+### Authentication
+- **Clerk** handles all authentication (Supabase Auth is fully removed)
+- Server Actions for admin/membership are being replaced by secure API routes
 
 ### Multi-language Pattern
 All content tables use consistent multilingual structure:
@@ -122,10 +126,10 @@ Use the established pattern for all content:
 
 - **Database Schema**: `lib/db/schema.ts` (primary SQLite schema)
 - **Database Config**: `drizzle.config.ts` (points to PostgreSQL)
-- **Admin Auth**: `contexts/AuthContext.tsx`
+- **Admin Auth**: Clerk Authentication integration
 - **Multi-language**: `lib/i18n/` directory
 - **Sync Logic**: `lib/sync-engine.ts`
-- **API Routes**: `app/api/` (artists, migration, sync endpoints)
+- **API Routes**: `app/api/` (admin, membership, artists, migration, sync)
 
 ## Testing Strategy
 

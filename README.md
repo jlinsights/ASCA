@@ -3,7 +3,7 @@
 > 전통 동양 서예의 아름다움을 현대적인 웹 기술로 구현한 종합 문화 플랫폼
 
 [![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat&logo=vercel)](https://asca-gallery.vercel.app)
-[![Next.js](https://img.shields.io/badge/Built%20with-Next.js%2015-black?style=flat&logo=next.js)](https://nextjs.org)
+[![Next.js](https://img.shields.io/badge/Built%20with-Next.js%2016-black?style=flat&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Styled%20with-Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss)](https://tailwindcss.com)
 
@@ -37,11 +37,11 @@
 
 ## 🚀 갤러리 시스템 하이라이트
 
-### 📈 통계 (2025년 기준)
+### 📈 통계 (2026년 기준)
 - **총 이미지**: 265장
 - **카테고리**: 9개 (심사위원회, 휘호대회, 전시회, 시상식 등)
 - **자동 태그**: 계절, 연도, 카테고리별 특화 태그
-- **연도 지원**: 2025년 (향후 확장 가능)
+- **연도 지원**: 2026년 (향후 지속 탑재 관리)
 
 ### 🎯 핵심 갤러리 기능
 - **지능형 분류**: 폴더 구조 기반 자동 카테고리 감지
@@ -55,7 +55,7 @@
 
 ### 프론트엔드
 
-- **Framework**: Next.js 15.2.4 (App Router)
+- **Framework**: Next.js 16.0.10 (App Router)
 - **Language**: TypeScript 5
 - **Styling**: Tailwind CSS 3.4.17
 - **UI Components**: Radix UI + Shadcn/ui
@@ -578,28 +578,25 @@ git commit -m "i18n: 헤더 메뉴 한국어 현지화 완료"
 
 ## 🎉 프로젝트 현황
 
-### 📊 현재 통계 (2024년 10월 기준)
+### 📊 현재 통계 (2026년 4월 기준)
 
 - **✅ 프로덕션 배포**: https://asca-gallery.vercel.app
 - **📸 갤러리 이미지**: 265장 (9개 카테고리)
-- **🎨 UI 구성요소**: 50+ 재사용 컴포넌트
-- **🗄️ 데이터베이스**: 12개 테이블, 완전한 타입 안전성
+- **🎨 UI 구성요소**: 브랜드 가이드라인 적용 최적화된 컴포넌트
+- **🗄️ 데이터베이스**: Supabase 기반 Drizzle ORM 완전한 타입 안전성
+- **🔐 인증 시스템**: Clerk 기반 강화된 관리자 시스템 통합
 - **🌙 다크모드**: 완전 최적화 완료
 - **🇰🇷 현지화**: 100% 한국어 UI 완성
 - **📱 반응형**: 모든 디바이스 지원
 
 ### 🚀 최근 업데이트
 
-**2024.10.12**:
-- ✅ 헤더 한국어 현지화 완료
-- ✅ 다국어 버튼 제거
-- ✅ 갤러리 다크모드 색상 최적화
-- ✅ 프로덕션 배포 완료
-
-**2024.10.11**:
-- ✅ 갤러리 연도별 시스템 구축
-- ✅ 265개 이미지 자동 분류 완료
-- ✅ 고급 태그 시스템 구현
+**2026.04**:
+- ✅ Clerk 인증 시스템 통합 완료 및 Supabase Auth 전면 제거
+- ✅ Webflow 컨텐츠 마이그레이션 완료 및 스키마 확장
+- ✅ 브랜드 가이드라인 기반 디자인 시스템 전면 개편
+- ✅ Turbopack ESM 충돌 회피를 위한 Webpack 모드 dev 서버 안정성 강화
+- ✅ API 응답 통일성 및 보안 강화 (Server Actions 일부 대체)
 
 ## 📄 라이선스
 

@@ -1,0 +1,15 @@
+    5336 ./ops/venv/lib/python3.10/site-packages/streamlit/static/static/js/index.DATGLwZn.js
+    3909 ./ops/venv/lib/python3.10/site-packages/plotly/package_data/widgetbundle.js
+    3881 ./ops/venv/lib/python3.10/site-packages/plotly/package_data/plotly.min.js
+    3789 ./ops/venv/lib/python3.10/site-packages/streamlit/static/static/js/index.DmaExHyk.js
+    3702 ./ops/venv/share/jupyter/nbextensions/pydeck/index.js
+    3702 ./ops/venv/lib/python3.10/site-packages/pydeck/nbextension/static/index.js
+    1086 ./app/profile/membership/page.tsx
+    1018 ./components/gallery/AdvancedGallerySearch.tsx
+     953 ./components/gallery/GalleryManagementDashboard.tsx
+     943 ./app/artworks/[id]/page.tsx
+     910 ./lib/graphql/schema.ts
+     908 ./lib/services/image-service.ts
+     905 ./app/admin/membership/page.tsx
+     897 ./components/gallery/StrokeAnimationPlayer.tsx
+     854 ./lib/types/membership.ts
