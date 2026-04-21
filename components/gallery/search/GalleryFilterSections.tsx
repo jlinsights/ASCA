@@ -31,7 +31,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
           }}
           className="w-full p-2 border border-celadon-green/20 rounded-md bg-rice-paper text-sm h-24"
         >
-          {availableFilters.artists.map(artist => (
+          {availableFilters.artists.map((artist: any) => (
             <option key={artist.id} value={artist.id}>
               {artist.name}
             </option>
@@ -92,7 +92,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
           }}
           className="w-full p-2 border border-celadon-green/20 rounded-md bg-rice-paper text-sm h-20"
         >
-          {availableFilters.dynasties.map(dynasty => (
+          {availableFilters.dynasties.map((dynasty: any) => (
             <option key={dynasty} value={dynasty}>
               {dynasty}
             </option>
@@ -111,7 +111,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
           }}
           className="w-full p-2 border border-celadon-green/20 rounded-md bg-rice-paper text-sm h-20"
         >
-          {availableFilters.regions.map(region => (
+          {availableFilters.regions.map((region: any) => (
             <option key={region} value={region}>
               {region}
             </option>
@@ -126,7 +126,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
       <div>
         <label className="block text-sm font-medium text-ink-black mb-2">Calligraphy Styles</label>
         <div className="space-y-2 max-h-32 overflow-y-auto">
-          {availableFilters.styles.map(style => (
+          {availableFilters.styles.map((style: any) => (
             <label key={style} className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -136,7 +136,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
                   if (e.target.checked) {
                     updateFilter('styles', [...currentStyles, style]);
                   } else {
-                    updateFilter('styles', currentStyles.filter(s => s !== style));
+                    updateFilter('styles', currentStyles.filter((s: any) => s !== style));
                   }
                 }}
                 className="rounded border-celadon-green/30"
@@ -150,7 +150,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
       <div>
         <label className="block text-sm font-medium text-ink-black mb-2">Techniques</label>
         <div className="space-y-2 max-h-32 overflow-y-auto">
-          {availableFilters.techniques.map(technique => (
+          {availableFilters.techniques.map((technique: any) => (
             <label key={technique} className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -160,7 +160,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
                   if (e.target.checked) {
                     updateFilter('techniques', [...currentTechniques, technique]);
                   } else {
-                    updateFilter('techniques', currentTechniques.filter(t => t !== technique));
+                    updateFilter('techniques', currentTechniques.filter((t: any) => t !== technique));
                   }
                 }}
                 className="rounded border-celadon-green/30"
@@ -182,7 +182,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
           }}
           className="w-full p-2 border border-celadon-green/20 rounded-md bg-rice-paper text-sm h-20"
         >
-          {availableFilters.mediums.map(medium => (
+          {availableFilters.mediums.map((medium: any) => (
             <option key={medium} value={medium}>
               {medium}
             </option>
@@ -405,7 +405,7 @@ export const BasicSearch = ({ filters, updateFilter, availableFilters }: any) =>
           }}
           className="w-full p-2 border border-celadon-green/20 rounded-md bg-rice-paper text-sm h-24"
         >
-          {availableFilters.collections.map(collection => (
+          {availableFilters.collections.map((collection: any) => (
             <option key={collection.id} value={collection.id}>
               {collection.name}
             </option>

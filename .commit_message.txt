@@ -1,1 +1,1 @@
-🔧 Clerk/React useContext 오류 완화: serverExternalPackages 제거 + 클라이언트 단일 React alias
+🔒 관리자 멤버십 API: as PostBody 타입 캐스트 → Zod discriminatedUnion 입력 검증

@@ -6,6 +6,15 @@
     "no-console": "warn",
     "react-hooks/exhaustive-deps": "warn",
     "prefer-const": "error",
-    "no-var": "error"
-  }
+    "no-var": "error",
+    "max-lines": ["warn", { "max": 500, "skipBlankLines": true, "skipComments": true }]
+  },
+  "overrides": [
+    {
+      "files": ["app/admin/**/*.tsx", "app/admin/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["**/app/profile/membership/_components/*", "**/components/gallery/dashboard/*"] }]
+      }
+    }
+  ]
 } 
