@@ -1,5 +1,6 @@
 import { db } from '@/lib/db';
 import { createIdLoader, DataLoader } from '@/lib/optimization/dataloader';
+import { error as logError } from '@/lib/logging';
 import { eq, inArray } from 'drizzle-orm';
 import * as schema from '@/lib/db/schema';
 import type { User } from '@/lib/db/schema';
@@ -123,7 +124,7 @@ async function authenticateUser(authHeader: string | null): Promise<User | null>
     // });
     // return user || null;
   } catch (error) {
-    console.error('Authentication error:', error);
+    logError('Authentication error', error instanceof Error ? error : undefined);
     return null;
   }
 }

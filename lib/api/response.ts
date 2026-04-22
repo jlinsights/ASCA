@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { error as logError } from '@/lib/logging';
 
 /**
  * Standard API response structure
@@ -212,7 +213,7 @@ export class ApiResponse {
     const isDev = process.env.NODE_ENV === 'development'
 
     if (error) {
-      console.error(`[API Error] ${code}:`, error)
+      logError(`[API Error] ${code}`, error instanceof Error ? error : undefined)
     }
 
     return ApiResponse.error(
@@ -246,7 +247,7 @@ export class ApiError extends Error {
  */
 export function handleApiError(error: unknown): NextResponse {
   // Log error for monitoring
-  console.error('API Error:', error);
+  logError('API Error', error instanceof Error ? error : undefined);
 
   // Handle ApiError
   if (error instanceof ApiError) {

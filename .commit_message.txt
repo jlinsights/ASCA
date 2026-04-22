@@ -1,1 +1,1 @@
-🧹 warning-cleanup Do 착수 — Stage 1/6 완료, 2 부분 진행 (182→102 warnings)
+🧹 warning-cleanup Stage 2 이어서 — lib/ 13파일 logger 치환 (102→61)

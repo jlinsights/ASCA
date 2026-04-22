@@ -7,6 +7,7 @@
 import { eq, inArray, SQL } from 'drizzle-orm';
 import { PgTable } from 'drizzle-orm/pg-core';
 import { db } from '@/lib/db';
+import { info, warn } from '@/lib/logging';
 import { DataLoader, createIdLoader } from './dataloader';
 
 /**
@@ -288,7 +289,7 @@ export function withQueryTracking(requestId: string) {
     end: () => {
       const report = queryOptimizer.getReport(requestId);
       if (process.env.NODE_ENV === 'development') {
-        console.log(report);
+        info(typeof report === 'string' ? report : JSON.stringify(report));
       }
       queryOptimizer.clearMetrics(requestId);
     },
@@ -357,7 +358,7 @@ export async function executeQuery<T>(
     queryOptimizer.recordQuery(requestId, queryName, duration);
 
     if (duration > 1000) {
-      console.warn(`⚠️  Slow query detected (${duration}ms): ${queryName}`);
+      warn(`⚠️  Slow query detected (${duration}ms): ${queryName}`);
     }
 
     return result;

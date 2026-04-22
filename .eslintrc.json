@@ -31,7 +31,7 @@
       }
     },
     {
-      "files": ["lib/logging/**/*"],
+      "files": ["lib/logging/**/*", "lib/config/env.ts"],
       "rules": {
         "no-console": "off"
       }

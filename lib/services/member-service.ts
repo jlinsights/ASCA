@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { CreateMemberRequest, MemberSearchParams } from '../types/membership';
+import { info } from '@/lib/logging';
 
 /**
  * Member Service
@@ -132,7 +133,7 @@ export class MemberService {
 
       // 개발/테스트 환경에서 데이터베이스 오류 시 더미 데이터 제공
       if (error && isDev) {
-        console.log('[Dev Mode] Supabase error, returning dummy data:', error.message);
+        info(`[Dev Mode] Supabase error, returning dummy data: ${error.message}`);
         const dummyMembers: Member[] = [
           {
             id: 'dev-1',
@@ -316,7 +317,7 @@ export class MemberService {
 
       // 개발/테스트 환경에서 데이터베이스 오류 시 모의 응답 제공
       if (error && isDev) {
-        console.log('[Dev Mode] Supabase error on member creation, returning mock data:', error.message);
+        info(`[Dev Mode] Supabase error on member creation, returning mock data: ${error.message}`);
         const mockMember: Member = {
           id: `dev-${Date.now()}`,
           ...memberData,

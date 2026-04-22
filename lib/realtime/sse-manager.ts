@@ -20,6 +20,7 @@
  */
 
 import type { NextResponse } from 'next/server';
+import { info, error as logError } from '@/lib/logging';
 import { getEventEmitter, type EventPayload } from './event-emitter';
 import {
   getSubscriptionManager,
@@ -142,7 +143,7 @@ export class SSEManager {
           },
         });
 
-        console.log(`SSE client connected: ${clientId} (total: ${this.clients.size})`);
+        info(`SSE client connected: ${clientId} (total: ${this.clients.size})`);
       },
 
       cancel: () => {
@@ -169,7 +170,7 @@ export class SSEManager {
       client.controller.enqueue(client.encoder.encode(formatted));
       client.lastMessageAt = new Date();
     } catch (error) {
-      console.error(`Failed to send to SSE client ${client.id}:`, error);
+      logError(`Failed to send to SSE client ${client.id}`, error instanceof Error ? error : undefined);
       this.handleDisconnect(client.id);
     }
   }
@@ -203,13 +204,13 @@ export class SSEManager {
         });
         successCount++;
       } catch (error) {
-        console.error(`Failed to send event to SSE client ${clientId}:`, error);
+        logError(`Failed to send event to SSE client ${clientId}`, error instanceof Error ? error : undefined);
         errorCount++;
       }
     }
 
     if (successCount > 0 || errorCount > 0) {
-      console.log(`Broadcast event ${payload.type}: ${successCount} sent, ${errorCount} failed`);
+      info(`Broadcast event ${payload.type}: ${successCount} sent, ${errorCount} failed`);
     }
   }
 
@@ -275,7 +276,7 @@ export class SSEManager {
 
     // Disconnect inactive clients
     for (const clientId of disconnectList) {
-      console.log(`Disconnecting inactive SSE client: ${clientId}`);
+      info(`Disconnecting inactive SSE client: ${clientId}`);
       this.handleDisconnect(clientId);
     }
   }
@@ -314,7 +315,7 @@ export class SSEManager {
     // Remove client
     this.clients.delete(clientId);
 
-    console.log(`SSE client disconnected: ${clientId} (total: ${this.clients.size})`);
+    info(`SSE client disconnected: ${clientId} (total: ${this.clients.size})`);
   }
 
   /**
@@ -364,7 +365,7 @@ export class SSEManager {
       this.handleDisconnect(clientId);
     }
 
-    console.log('SSE manager shutdown complete');
+    info('SSE manager shutdown complete');
   }
 }
 

@@ -15,6 +15,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthUser } from '@/lib/auth/middleware'
+import { error as logError } from '@/lib/logging'
 import { getRoleManager } from '../admin/role-manager'
 import { Permission, Role, getPermissionsForRole } from '../admin/permissions'
 
@@ -323,7 +324,7 @@ export function withAuth(
       // Call the handler
       return await handler(request, auth)
     } catch (error) {
-      console.error('Route handler error:', error)
+      logError('Route handler error', error instanceof Error ? error : undefined)
 
       // Handle permission errors
       if (error instanceof Error) {
