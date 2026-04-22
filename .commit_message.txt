@@ -1,1 +1,1 @@
-📐 warning-cleanup-cycle-2 Design — 파일 분리 맵 + barrel 규칙 + 25+ commit 전략
+🔨 Cycle #2 Stage 3 — lib/types/gallery, membership 도메인별 분리 (30→28 warnings)
