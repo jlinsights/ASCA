@@ -15,6 +15,39 @@
       "rules": {
         "no-restricted-imports": ["error", { "patterns": ["**/app/profile/membership/_components/*", "**/components/gallery/dashboard/*"] }]
       }
+    },
+    {
+      "files": ["**/__tests__/**/*", "**/*.test.ts", "**/*.test.tsx", "e2e/**/*"],
+      "rules": {
+        "max-lines": "off",
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["scripts/**/*", "tools/**/*", "ops/**/*"],
+      "rules": {
+        "no-console": "off",
+        "max-lines": "off"
+      }
+    },
+    {
+      "files": ["lib/logging/**/*"],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["lib/db/schema.ts", "lib/db/schema-pg.ts"],
+      "rules": {
+        "max-lines": "off"
+      }
+    },
+    {
+      "files": ["lib/db/seed/**/*", "lib/db/seed*.ts"],
+      "rules": {
+        "no-console": "off",
+        "max-lines": "off"
+      }
     }
   ]
-} 
+}

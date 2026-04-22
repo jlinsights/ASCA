@@ -63,7 +63,7 @@ export default function AdminContestEditPage() {
     }
 
     loadContest()
-  }, [contestId, router, isLoaded, isSignedIn, clerkUser?.id])
+  }, [contestId, router, isLoaded, isSignedIn, clerkUser])
 
   if (loading) {
     return (

@@ -96,7 +96,7 @@ export default function AdminContestApplicationsPage() {
     }
 
     loadData()
-  }, [contestId, router, isLoaded, isSignedIn, clerkUser?.id])
+  }, [contestId, router, isLoaded, isSignedIn, clerkUser])
 
   useEffect(() => {
     let filtered = applications

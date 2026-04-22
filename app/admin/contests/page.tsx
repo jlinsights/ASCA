@@ -92,7 +92,7 @@ export default function AdminContestsPage() {
     }
 
     checkAdminAndLoad()
-  }, [router, isLoaded, isSignedIn, clerkUser?.id])
+  }, [router, isLoaded, isSignedIn, clerkUser])
 
   useEffect(() => {
     let filtered = contests

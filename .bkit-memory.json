@@ -1,8 +1,33 @@
 {
   "activeFeature": "warning-cleanup",
-  "phase": "plan",
+  "phase": "do",
   "startedAt": "2026-04-22",
   "planPath": "docs/01-plan/features/warning-cleanup.plan.md",
+  "designPath": "docs/02-design/features/warning-cleanup.design.md",
+  "doProgress": {
+    "initialWarnings": 182,
+    "currentWarnings": 102,
+    "stageStatus": {
+      "stage1_eslint_override": "completed",
+      "stage2_logger_replacement": "in_progress (2/25 files)",
+      "stage3_types_split": "pending",
+      "stage4_services_split": "pending",
+      "stage5_component_extraction": "pending",
+      "stage6_minor_fixes": "completed",
+      "stage7_final_verification": "pending"
+    },
+    "filesModified": [
+      ".eslintrc.json",
+      "drizzle.config.ts",
+      "components/gallery/SocialShare.tsx",
+      "components/ui/image-uploader.tsx",
+      "app/admin/contests/[id]/applications/page.tsx",
+      "app/admin/contests/[id]/edit/page.tsx",
+      "app/admin/contests/page.tsx",
+      "lib/cache/redis-cache.ts",
+      "lib/db/index.ts"
+    ]
+  },
   "previousFeature": {
     "name": "asca-deploy-2026-04-09",
     "phase": "completed",

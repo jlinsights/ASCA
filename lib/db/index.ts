@@ -1,8 +1,9 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import { sql } from 'drizzle-orm';
-import postgres from 'postgres';
-import * as schema from './schema';
-import { env, isProduction, isDevelopment } from '@/lib/config/env';
+import { drizzle } from 'drizzle-orm/postgres-js'
+import { sql } from 'drizzle-orm'
+import postgres from 'postgres'
+import * as schema from './schema'
+import { env, isProduction, isDevelopment } from '@/lib/config/env'
+import { info, warn, error as logError } from '@/lib/logging'
 
 /**
  * Database connection configuration
@@ -17,23 +18,23 @@ const connectionConfig = {
   prepare: false,
 
   // Enable SSL in production
-  ssl: (isProduction || (env.DATABASE_URL && env.DATABASE_URL.includes('supabase')) ? 'require' : false) as any,
+  ssl: (isProduction || (env.DATABASE_URL && env.DATABASE_URL.includes('supabase'))
+    ? 'require'
+    : false) as any,
 
   // Connection lifecycle hooks
-  onnotice: isDevelopment
-    ? (notice: any) => console.log('[DB Notice]:', notice)
-    : undefined,
-};
+  onnotice: isDevelopment ? (notice: any) => info('[DB Notice]', { notice }) : undefined,
+}
 
 /**
  * Create database client with connection pooling
  */
-const client = postgres(env.DATABASE_URL, connectionConfig);
+const client = postgres(env.DATABASE_URL, connectionConfig)
 
 /**
  * Drizzle ORM instance with schema
  */
-export const db = drizzle(client, { schema });
+export const db = drizzle(client, { schema })
 
 /**
  * Optional: Create read replica connection for scaling
@@ -41,14 +42,14 @@ export const db = drizzle(client, { schema });
  */
 export const readDb = env.DATABASE_REPLICA_URL
   ? drizzle(postgres(env.DATABASE_REPLICA_URL, connectionConfig), { schema })
-  : db; // Fallback to primary if no replica configured
+  : db // Fallback to primary if no replica configured
 
 /**
  * Get database instance based on operation type
  * @param readonly - If true, use read replica for better performance
  */
 export function getDb(options: { readonly?: boolean } = {}) {
-  return options.readonly ? readDb : db;
+  return options.readonly ? readDb : db
 }
 
 /**
@@ -56,30 +57,30 @@ export function getDb(options: { readonly?: boolean } = {}) {
  * Tests if the database connection is working
  */
 export async function checkDbHealth(): Promise<{
-  healthy: boolean;
-  message: string;
-  latency?: number;
+  healthy: boolean
+  message: string
+  latency?: number
 }> {
-  const startTime = Date.now();
+  const startTime = Date.now()
 
   try {
     // Simple ping query
-    await db.execute(sql`SELECT 1`);
+    await db.execute(sql`SELECT 1`)
 
-    const latency = Date.now() - startTime;
+    const latency = Date.now() - startTime
 
     return {
       healthy: true,
       message: 'Database connection is healthy',
       latency,
-    };
-  } catch (error) {
-    console.error('❌ Database health check failed:', error);
+    }
+  } catch (err) {
+    logError('❌ Database health check failed', err instanceof Error ? err : undefined)
 
     return {
       healthy: false,
-      message: error instanceof Error ? error.message : 'Unknown database error',
-    };
+      message: err instanceof Error ? err.message : 'Unknown database error',
+    }
   }
 }
 
@@ -88,22 +89,22 @@ export async function checkDbHealth(): Promise<{
  */
 export async function testConnection(): Promise<boolean> {
   if (!isDevelopment) {
-    return true; // Skip in production to avoid cold start delays
+    return true // Skip in production to avoid cold start delays
   }
 
   try {
-    const health = await checkDbHealth();
+    const health = await checkDbHealth()
 
     if (health.healthy) {
-      console.log(`✅ Database connected successfully (${health.latency}ms)`);
-      return true;
+      info(`✅ Database connected successfully (${health.latency}ms)`)
+      return true
     } else {
-      console.error('❌ Database connection failed:', health.message);
-      return false;
+      logError(`❌ Database connection failed: ${health.message}`)
+      return false
     }
-  } catch (error) {
-    console.error('❌ Database connection test failed:', error);
-    return false;
+  } catch (err) {
+    logError('❌ Database connection test failed', err instanceof Error ? err : undefined)
+    return false
   }
 }
 
@@ -113,10 +114,10 @@ export async function testConnection(): Promise<boolean> {
  */
 export async function closeConnection(): Promise<void> {
   try {
-    await client.end();
-    console.log('✅ Database connection closed');
-  } catch (error) {
-    console.error('❌ Error closing database connection:', error);
+    await client.end()
+    info('✅ Database connection closed')
+  } catch (err) {
+    logError('❌ Error closing database connection', err instanceof Error ? err : undefined)
   }
 }
 
@@ -124,12 +125,10 @@ export async function closeConnection(): Promise<void> {
  * Transaction helper
  * Wraps operations in a database transaction
  */
-export async function withTransaction<T>(
-  callback: (tx: typeof db) => Promise<T>
-): Promise<T> {
-  return await db.transaction(async (tx) => {
-    return await callback(tx as unknown as typeof db);
-  });
+export async function withTransaction<T>(callback: (tx: typeof db) => Promise<T>): Promise<T> {
+  return await db.transaction(async tx => {
+    return await callback(tx as unknown as typeof db)
+  })
 }
 
 /**
@@ -142,7 +141,7 @@ export async function logSlowQuery(
   threshold: number = 1000
 ): Promise<void> {
   if (duration > threshold) {
-    console.warn(`⚠️ Slow query detected: ${queryName} took ${duration}ms`);
+    warn(`⚠️ Slow query detected: ${queryName} took ${duration}ms`)
 
     // In production, you might want to send this to a monitoring service
     // e.g., Sentry, DataDog, or store in a performance_metrics table
@@ -157,23 +156,23 @@ export async function withPerformanceLog<T>(
   queryFn: () => Promise<T>,
   threshold?: number
 ): Promise<T> {
-  const startTime = Date.now();
+  const startTime = Date.now()
 
   try {
-    const result = await queryFn();
-    const duration = Date.now() - startTime;
+    const result = await queryFn()
+    const duration = Date.now() - startTime
 
-    await logSlowQuery(queryName, duration, threshold);
+    await logSlowQuery(queryName, duration, threshold)
 
-    return result;
-  } catch (error) {
-    console.error(`❌ Query failed: ${queryName}`, error);
-    throw error;
+    return result
+  } catch (err) {
+    logError(`❌ Query failed: ${queryName}`, err instanceof Error ? err : undefined)
+    throw err
   }
 }
 
 // Export schema for convenience
-export { schema };
+export { schema }
 
 // Export types from schema
-export type * from './schema';
+export type * from './schema'

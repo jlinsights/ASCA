@@ -1,1 +1,1 @@
-📝 warning-cleanup plan 작성 완료
+🧹 warning-cleanup Do 착수 — Stage 1/6 완료, 2 부분 진행 (182→102 warnings)
