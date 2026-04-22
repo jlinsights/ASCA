@@ -13,6 +13,7 @@
  * @module lib/admin/audit-logger
  */
 
+import { info } from '@/lib/logging';
 import type { Permission, Role } from './permissions';
 
 /**
@@ -168,7 +169,7 @@ export class AuditLogger {
 
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
-      console.log('[AUDIT]', {
+      info('[AUDIT]', {
         action: auditLog.action,
         userId: auditLog.userId,
         success: auditLog.success,

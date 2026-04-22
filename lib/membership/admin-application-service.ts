@@ -8,6 +8,7 @@ import {
 } from '@/lib/db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
+import { error as logError } from '@/lib/logging'
 
 export type PendingApplication = {
   id: string
@@ -53,7 +54,7 @@ export async function getPendingApplications(): Promise<PendingApplication[]> {
       reason: row.application.applicationReason,
     }))
   } catch (error) {
-    console.error('Failed to fetch pending applications:', error)
+    logError('Failed to fetch pending applications', error instanceof Error ? error : undefined)
     return []
   }
 }
@@ -98,7 +99,7 @@ export async function approveApplication(applicationId: string, reviewerId?: str
     revalidatePath('/admin/membership')
     return { success: true as const }
   } catch (error) {
-    console.error('Failed to approve application:', error)
+    logError('Failed to approve application', error instanceof Error ? error : undefined)
     return { success: false as const, error: 'Failed to approve application' }
   }
 }
@@ -123,7 +124,7 @@ export async function rejectApplication(
     revalidatePath('/admin/membership')
     return { success: true as const }
   } catch (error) {
-    console.error('Failed to reject application:', error)
+    logError('Failed to reject application', error instanceof Error ? error : undefined)
     return { success: false as const, error: 'Failed to reject application' }
   }
 }
@@ -158,7 +159,7 @@ export async function seedTestApplication() {
     revalidatePath('/admin/membership')
     return { success: true as const }
   } catch (error) {
-    console.error('Seeding failed:', error)
+    logError('Seeding failed', error instanceof Error ? error : undefined)
     return { success: false as const, error: String(error) }
   }
 }

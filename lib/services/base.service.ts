@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ApiError } from '@/lib/api/response';
+import { info as logInfo, warn as logWarn, error as logError } from '@/lib/logging';
 import type { BaseRepository } from '@/lib/repositories/base.repository';
 
 /**
@@ -158,7 +159,7 @@ export abstract class BaseService<
         throw error;
       }
 
-      console.error(`Service error: ${errorMessage}`, error);
+      logError(`Service error: ${errorMessage}`, error instanceof Error ? error : undefined);
 
       throw new ApiError(
         errorMessage,
@@ -179,8 +180,14 @@ export abstract class BaseService<
   ): void {
     const timestamp = new Date().toISOString();
     const logData = data ? JSON.stringify(data) : '';
-
-    console[level](`[${timestamp}] [${this.constructor.name}] ${message}`, logData);
+    const line = `[${timestamp}] [${this.constructor.name}] ${message} ${logData}`.trim();
+    if (level === 'error') {
+      logError(line);
+    } else if (level === 'warn') {
+      logWarn(line);
+    } else {
+      logInfo(line);
+    }
   }
 
   /**

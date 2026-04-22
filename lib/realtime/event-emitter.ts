@@ -15,6 +15,7 @@
  */
 
 import { EventEmitter as NodeEventEmitter } from 'events';
+import { error as logError } from '@/lib/logging';
 // import type { Redis } from 'ioredis';
 type Redis = any;
 
@@ -134,7 +135,7 @@ export class AppEventEmitter {
 
     subscriber.subscribe(this.redisChannel, (err: any) => {
       if (err) {
-        console.error('Failed to subscribe to Redis channel:', err);
+        logError('Failed to subscribe to Redis channel', err instanceof Error ? err : undefined);
       }
     });
 
@@ -145,7 +146,7 @@ export class AppEventEmitter {
           // Emit to local listeners without re-publishing to Redis
           this.emitLocal(payload);
         } catch (error) {
-          console.error('Failed to parse Redis message:', error);
+          logError('Failed to parse Redis message', error instanceof Error ? error : undefined);
         }
       }
     });
@@ -176,7 +177,7 @@ export class AppEventEmitter {
       try {
         await this.redis.publish(this.redisChannel, JSON.stringify(payload));
       } catch (error) {
-        console.error('Failed to publish event to Redis:', error);
+        logError('Failed to publish event to Redis', error instanceof Error ? error : undefined);
         // Fallback to local emit
         this.emitLocal(payload);
       }
@@ -375,7 +376,7 @@ export class AppEventEmitter {
       try {
         await this.redis.quit();
       } catch (error) {
-        console.error('Failed to quit Redis connection:', error);
+        logError('Failed to quit Redis connection', error instanceof Error ? error : undefined);
       }
     }
   }

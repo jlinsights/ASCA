@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, handleApiError } from '@/lib/api/response';
+import { info } from '@/lib/logging';
 import { z } from 'zod';
 
 /**
@@ -155,7 +156,7 @@ export function withLogging(): MiddlewareFunction {
     const { method, url } = request;
     const timestamp = new Date().toISOString();
 
-    console.log(`[${timestamp}] ${method} ${url} - Started`);
+    info(`[${timestamp}] ${method} ${url} - Started`);
 
     // Continue to next middleware/handler
     // Note: This doesn't log response time as it doesn't have access to response

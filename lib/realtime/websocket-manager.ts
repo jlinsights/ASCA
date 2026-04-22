@@ -16,6 +16,7 @@
 
 import type { IncomingMessage } from 'http';
 import type { WebSocket as WSType } from 'ws';
+import { info, error as logError } from '@/lib/logging';
 import { getEventEmitter, EventType, type EventPayload } from './event-emitter';
 import {
   getSubscriptionManager,
@@ -154,7 +155,7 @@ export class WebSocketManager {
       });
     }
 
-    console.log(`WebSocket client connected: ${clientId} (total: ${this.clients.size})`);
+    info(`WebSocket client connected: ${clientId} (total: ${this.clients.size})`);
   }
 
   /**
@@ -188,7 +189,7 @@ export class WebSocketManager {
 
     // Handle error
     socket.on('error', (error) => {
-      console.error(`WebSocket error for client ${id}:`, error);
+      logError(`WebSocket error for client ${id}`, error instanceof Error ? error : undefined);
       this.handleDisconnect(id);
     });
   }
@@ -275,9 +276,9 @@ export class WebSocketManager {
         payload: { userId: authResult.userId },
       });
 
-      console.log(`Client ${id} authenticated as user ${authResult.userId}`);
+      info(`Client ${id} authenticated as user ${authResult.userId}`);
     } catch (error) {
-      console.error(`Authentication error for client ${id}:`, error);
+      logError(`Authentication error for client ${id}`, error instanceof Error ? error : undefined);
       this.sendError(socket, 'Authentication failed');
       socket.close(1008, 'Authentication failed');
     }
@@ -307,7 +308,7 @@ export class WebSocketManager {
         payload: { eventTypes: filter.eventTypes },
       });
 
-      console.log(`Client ${id} subscribed to:`, filter.eventTypes);
+      info(`Client ${id} subscribed to: ${JSON.stringify(filter.eventTypes)}`);
     } catch (error) {
       this.sendError(socket, 'Invalid subscribe payload');
     }
@@ -328,7 +329,7 @@ export class WebSocketManager {
       type: WSMessageType.UNSUBSCRIBED,
     });
 
-    console.log(`Client ${id} unsubscribed`);
+    info(`Client ${id} unsubscribed`);
   }
 
   /**
@@ -346,7 +347,7 @@ export class WebSocketManager {
     // Remove client
     this.clients.delete(clientId);
 
-    console.log(`WebSocket client disconnected: ${clientId} (total: ${this.clients.size})`);
+    info(`WebSocket client disconnected: ${clientId} (total: ${this.clients.size})`);
   }
 
   /**
@@ -378,13 +379,13 @@ export class WebSocketManager {
         });
         successCount++;
       } catch (error) {
-        console.error(`Failed to send event to client ${clientId}:`, error);
+        logError(`Failed to send event to client ${clientId}`, error instanceof Error ? error : undefined);
         errorCount++;
       }
     }
 
     if (successCount > 0 || errorCount > 0) {
-      console.log(
+      info(
         `Broadcast event ${payload.type}: ${successCount} sent, ${errorCount} failed`
       );
     }
@@ -479,7 +480,7 @@ export class WebSocketManager {
     for (const clientId of disconnectList) {
       const client = this.clients.get(clientId);
       if (client) {
-        console.log(`Disconnecting inactive client: ${clientId}`);
+        info(`Disconnecting inactive client: ${clientId}`);
         client.socket.terminate();
         this.handleDisconnect(clientId);
       }
@@ -542,7 +543,7 @@ export class WebSocketManager {
     // Clear subscriptions
     this.subscriptionManager.clear();
 
-    console.log('WebSocket manager shutdown complete');
+    info('WebSocket manager shutdown complete');
   }
 }
 
