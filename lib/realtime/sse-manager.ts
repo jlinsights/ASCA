@@ -19,45 +19,45 @@
  * @module lib/realtime/sse-manager
  */
 
-import type { NextResponse } from 'next/server';
-import { info, error as logError } from '@/lib/logging';
-import { getEventEmitter, type EventPayload } from './event-emitter';
+import type { NextResponse } from 'next/server'
+import { info, error as logError } from '@/lib/logging'
+import { getEventEmitter, type EventPayload } from './event-emitter'
 import {
   getSubscriptionManager,
   ConnectionType,
   type SubscriptionFilter,
-} from './subscription-manager';
+} from './subscription-manager'
 
 /**
  * SSE client info
  */
 interface SSEClient {
-  id: string;
-  controller: ReadableStreamDefaultController;
-  encoder: TextEncoder;
-  userId?: string;
-  connectedAt: Date;
-  lastMessageAt: Date;
-  isClosed: boolean;
+  id: string
+  controller: ReadableStreamDefaultController
+  encoder: TextEncoder
+  userId?: string
+  connectedAt: Date
+  lastMessageAt: Date
+  isClosed: boolean
 }
 
 /**
  * SSE manager options
  */
 export interface SSEManagerOptions {
-  keepAliveInterval?: number;
-  clientTimeout?: number;
-  maxClients?: number;
+  keepAliveInterval?: number
+  clientTimeout?: number
+  maxClients?: number
 }
 
 /**
  * SSE message format
  */
 export interface SSEMessage {
-  id?: string;
-  event?: string;
-  data: any;
-  retry?: number;
+  id?: string
+  event?: string
+  data: any
+  retry?: number
 }
 
 /**
@@ -66,21 +66,21 @@ export interface SSEMessage {
  * Manages Server-Sent Events connections and event streaming.
  */
 export class SSEManager {
-  private clients: Map<string, SSEClient>;
-  private eventEmitter = getEventEmitter();
-  private subscriptionManager = getSubscriptionManager();
-  private keepAliveInterval: NodeJS.Timeout | null = null;
-  private clientIdCounter = 0;
+  private clients: Map<string, SSEClient>
+  private eventEmitter = getEventEmitter()
+  private subscriptionManager = getSubscriptionManager()
+  private keepAliveInterval: NodeJS.Timeout | null = null
+  private clientIdCounter = 0
 
-  private options: Required<SSEManagerOptions>;
+  private options: Required<SSEManagerOptions>
 
   constructor(options: SSEManagerOptions = {}) {
-    this.clients = new Map();
+    this.clients = new Map()
     this.options = {
       keepAliveInterval: options.keepAliveInterval || 30000, // 30 seconds
       clientTimeout: options.clientTimeout || 300000, // 5 minutes
       maxClients: options.maxClients || 1000,
-    };
+    }
   }
 
   /**
@@ -88,12 +88,12 @@ export class SSEManager {
    */
   initialize(): void {
     // Start keep-alive sender
-    this.startKeepAlive();
+    this.startKeepAlive()
 
     // Subscribe to all events for broadcasting
-    this.eventEmitter.on('*', async (payload) => {
-      await this.broadcastEvent(payload);
-    });
+    this.eventEmitter.on('*', async payload => {
+      await this.broadcastEvent(payload)
+    })
   }
 
   /**
@@ -106,14 +106,14 @@ export class SSEManager {
   createStream(filter?: SubscriptionFilter, userId?: string): ReadableStream {
     // Check max clients limit
     if (this.clients.size >= this.options.maxClients) {
-      throw new Error('Max clients limit reached');
+      throw new Error('Max clients limit reached')
     }
 
-    const clientId = this.generateClientId();
-    const encoder = new TextEncoder();
+    const clientId = this.generateClientId()
+    const encoder = new TextEncoder()
 
     const stream = new ReadableStream({
-      start: (controller) => {
+      start: controller => {
         // Create client object
         const client: SSEClient = {
           id: clientId,
@@ -123,16 +123,16 @@ export class SSEManager {
           connectedAt: new Date(),
           lastMessageAt: new Date(),
           isClosed: false,
-        };
+        }
 
         // Store client
-        this.clients.set(clientId, client);
+        this.clients.set(clientId, client)
 
         // Subscribe to events
         this.subscriptionManager.subscribe(clientId, ConnectionType.SSE, {
           ...filter,
           userId,
-        });
+        })
 
         // Send initial connection message
         this.sendToClient(client, {
@@ -141,17 +141,17 @@ export class SSEManager {
             clientId,
             timestamp: new Date(),
           },
-        });
+        })
 
-        info(`SSE client connected: ${clientId} (total: ${this.clients.size})`);
+        info(`SSE client connected: ${clientId} (total: ${this.clients.size})`)
       },
 
       cancel: () => {
-        this.handleDisconnect(clientId);
+        this.handleDisconnect(clientId)
       },
-    });
+    })
 
-    return stream;
+    return stream
   }
 
   /**
@@ -162,16 +162,19 @@ export class SSEManager {
    */
   private sendToClient(client: SSEClient, message: SSEMessage): void {
     if (client.isClosed) {
-      return;
+      return
     }
 
     try {
-      const formatted = this.formatSSEMessage(message);
-      client.controller.enqueue(client.encoder.encode(formatted));
-      client.lastMessageAt = new Date();
+      const formatted = this.formatSSEMessage(message)
+      client.controller.enqueue(client.encoder.encode(formatted))
+      client.lastMessageAt = new Date()
     } catch (error) {
-      logError(`Failed to send to SSE client ${client.id}`, error instanceof Error ? error : undefined);
-      this.handleDisconnect(client.id);
+      logError(
+        `Failed to send to SSE client ${client.id}`,
+        error instanceof Error ? error : undefined
+      )
+      this.handleDisconnect(client.id)
     }
   }
 
@@ -182,18 +185,18 @@ export class SSEManager {
    */
   private async broadcastEvent(payload: EventPayload): Promise<void> {
     // Get clients subscribed to this event type
-    const subscribedClients = this.subscriptionManager.getClientsByEventType(payload.type);
+    const subscribedClients = this.subscriptionManager.getClientsByEventType(payload.type)
 
-    let successCount = 0;
-    let errorCount = 0;
+    let successCount = 0
+    let errorCount = 0
 
     for (const clientId of subscribedClients) {
-      const client = this.clients.get(clientId);
-      if (!client) continue;
+      const client = this.clients.get(clientId)
+      if (!client) continue
 
       // Check if client should receive this event
       if (!this.subscriptionManager.shouldReceiveEvent(clientId, payload)) {
-        continue;
+        continue
       }
 
       // Send event to client
@@ -201,16 +204,19 @@ export class SSEManager {
         this.sendToClient(client, {
           event: payload.type,
           data: payload,
-        });
-        successCount++;
+        })
+        successCount++
       } catch (error) {
-        logError(`Failed to send event to SSE client ${clientId}`, error instanceof Error ? error : undefined);
-        errorCount++;
+        logError(
+          `Failed to send event to SSE client ${clientId}`,
+          error instanceof Error ? error : undefined
+        )
+        errorCount++
       }
     }
 
     if (successCount > 0 || errorCount > 0) {
-      info(`Broadcast event ${payload.type}: ${successCount} sent, ${errorCount} failed`);
+      info(`Broadcast event ${payload.type}: ${successCount} sent, ${errorCount} failed`)
     }
   }
 
@@ -221,63 +227,62 @@ export class SSEManager {
    * @returns Formatted SSE message string
    */
   private formatSSEMessage(message: SSEMessage): string {
-    let formatted = '';
+    let formatted = ''
 
     if (message.id) {
-      formatted += `id: ${message.id}\n`;
+      formatted += `id: ${message.id}\n`
     }
 
     if (message.event) {
-      formatted += `event: ${message.event}\n`;
+      formatted += `event: ${message.event}\n`
     }
 
     if (message.retry) {
-      formatted += `retry: ${message.retry}\n`;
+      formatted += `retry: ${message.retry}\n`
     }
 
     // Data can be multi-line
-    const dataString = typeof message.data === 'string'
-      ? message.data
-      : JSON.stringify(message.data);
+    const dataString =
+      typeof message.data === 'string' ? message.data : JSON.stringify(message.data)
 
-    const dataLines = dataString.split('\n');
+    const dataLines = dataString.split('\n')
     for (const line of dataLines) {
-      formatted += `data: ${line}\n`;
+      formatted += `data: ${line}\n`
     }
 
     // Double newline marks end of message
-    formatted += '\n';
+    formatted += '\n'
 
-    return formatted;
+    return formatted
   }
 
   /**
    * Send keep-alive to all clients
    */
   private sendKeepAlive(): void {
-    const now = Date.now();
-    const disconnectList: string[] = [];
+    const now = Date.now()
+    const disconnectList: string[] = []
 
     for (const [clientId, client] of this.clients) {
       // Check if client timed out
-      const idleTime = now - client.lastMessageAt.getTime();
+      const idleTime = now - client.lastMessageAt.getTime()
       if (idleTime > this.options.clientTimeout) {
-        disconnectList.push(clientId);
-        continue;
+        disconnectList.push(clientId)
+        continue
       }
 
       // Send keep-alive comment (keeps connection open)
       try {
-        client.controller.enqueue(client.encoder.encode(': keep-alive\n\n'));
+        client.controller.enqueue(client.encoder.encode(': keep-alive\n\n'))
       } catch (error) {
-        disconnectList.push(clientId);
+        disconnectList.push(clientId)
       }
     }
 
     // Disconnect inactive clients
     for (const clientId of disconnectList) {
-      info(`Disconnecting inactive SSE client: ${clientId}`);
-      this.handleDisconnect(clientId);
+      info(`Disconnecting inactive SSE client: ${clientId}`)
+      this.handleDisconnect(clientId)
     }
   }
 
@@ -286,8 +291,8 @@ export class SSEManager {
    */
   private startKeepAlive(): void {
     this.keepAliveInterval = setInterval(() => {
-      this.sendKeepAlive();
-    }, this.options.keepAliveInterval);
+      this.sendKeepAlive()
+    }, this.options.keepAliveInterval)
   }
 
   /**
@@ -296,26 +301,26 @@ export class SSEManager {
    * @param clientId - Client ID
    */
   private handleDisconnect(clientId: string): void {
-    const client = this.clients.get(clientId);
-    if (!client) return;
+    const client = this.clients.get(clientId)
+    if (!client) return
 
     // Mark as closed
-    client.isClosed = true;
+    client.isClosed = true
 
     // Close the stream
     try {
-      client.controller.close();
+      client.controller.close()
     } catch (error) {
       // Already closed
     }
 
     // Remove subscription
-    this.subscriptionManager.unsubscribe(clientId);
+    this.subscriptionManager.unsubscribe(clientId)
 
     // Remove client
-    this.clients.delete(clientId);
+    this.clients.delete(clientId)
 
-    info(`SSE client disconnected: ${clientId} (total: ${this.clients.size})`);
+    info(`SSE client disconnected: ${clientId} (total: ${this.clients.size})`)
   }
 
   /**
@@ -324,7 +329,7 @@ export class SSEManager {
    * @returns Client ID
    */
   private generateClientId(): string {
-    return `sse_${Date.now()}_${++this.clientIdCounter}`;
+    return `sse_${Date.now()}_${++this.clientIdCounter}`
   }
 
   /**
@@ -333,7 +338,7 @@ export class SSEManager {
    * @returns Number of connected clients
    */
   getClientCount(): number {
-    return this.clients.size;
+    return this.clients.size
   }
 
   /**
@@ -342,12 +347,12 @@ export class SSEManager {
    * @returns Manager statistics
    */
   getStats() {
-    const subscriptionStats = this.subscriptionManager.getStats();
+    const subscriptionStats = this.subscriptionManager.getStats()
 
     return {
       connectedClients: this.clients.size,
       subscriptions: subscriptionStats,
-    };
+    }
   }
 
   /**
@@ -356,23 +361,23 @@ export class SSEManager {
   async shutdown(): Promise<void> {
     // Stop keep-alive
     if (this.keepAliveInterval) {
-      clearInterval(this.keepAliveInterval);
-      this.keepAliveInterval = null;
+      clearInterval(this.keepAliveInterval)
+      this.keepAliveInterval = null
     }
 
     // Close all client connections
     for (const clientId of Array.from(this.clients.keys())) {
-      this.handleDisconnect(clientId);
+      this.handleDisconnect(clientId)
     }
 
-    info('SSE manager shutdown complete');
+    info('SSE manager shutdown complete')
   }
 }
 
 /**
  * Global SSE manager instance (singleton)
  */
-let globalSSEManager: SSEManager | null = null;
+let globalSSEManager: SSEManager | null = null
 
 /**
  * Get or create global SSE manager instance
@@ -382,10 +387,10 @@ let globalSSEManager: SSEManager | null = null;
  */
 export function getSSEManager(options?: SSEManagerOptions): SSEManager {
   if (!globalSSEManager) {
-    globalSSEManager = new SSEManager(options);
-    globalSSEManager.initialize();
+    globalSSEManager = new SSEManager(options)
+    globalSSEManager.initialize()
   }
-  return globalSSEManager;
+  return globalSSEManager
 }
 
 /**
@@ -395,9 +400,9 @@ export function getSSEManager(options?: SSEManagerOptions): SSEManager {
  * @returns New SSE manager instance
  */
 export function createSSEManager(options?: SSEManagerOptions): SSEManager {
-  const manager = new SSEManager(options);
-  manager.initialize();
-  return manager;
+  const manager = new SSEManager(options)
+  manager.initialize()
+  return manager
 }
 
 /**
@@ -413,8 +418,8 @@ export function createSSEResponse(stream: ReadableStream): Response {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
       'X-Accel-Buffering': 'no', // Disable nginx buffering
     },
-  });
+  })
 }

@@ -1,10 +1,10 @@
-import { ApolloServer } from '@apollo/server';
-import { startServerAndCreateNextHandler } from '@as-integrations/next';
-import { typeDefs } from '@/lib/graphql/schema';
-import { resolvers } from '@/lib/graphql/resolvers';
-import { createGraphQLContext, type GraphQLContext } from '@/lib/graphql/context';
-import { info, warn, error as logError } from '@/lib/logging';
-import { NextRequest, NextResponse } from 'next/server';
+import { ApolloServer } from '@apollo/server'
+import { startServerAndCreateNextHandler } from '@as-integrations/next'
+import { typeDefs } from '@/lib/graphql/schema'
+import { resolvers } from '@/lib/graphql/resolvers'
+import { createGraphQLContext, type GraphQLContext } from '@/lib/graphql/context'
+import { info, warn, error as logError } from '@/lib/logging'
+import { NextRequest, NextResponse } from 'next/server'
 
 /**
  * GraphQL API Endpoint
@@ -26,10 +26,10 @@ const server = new ApolloServer<GraphQLContext>({
   typeDefs,
   resolvers,
   introspection: process.env.NODE_ENV !== 'production', // Enable GraphQL Playground in development
-  formatError: (error) => {
+  formatError: error => {
     // Log errors in development
     if (process.env.NODE_ENV === 'development') {
-      logError('GraphQL Error', error instanceof Error ? error : undefined);
+      logError('GraphQL Error', error instanceof Error ? error : undefined)
     }
 
     // Don't expose internal errors in production
@@ -41,58 +41,52 @@ const server = new ApolloServer<GraphQLContext>({
           extensions: {
             code: 'INTERNAL_SERVER_ERROR',
           },
-        };
+        }
       }
     }
 
-    return error;
+    return error
   },
   plugins: [
     // Add performance monitoring plugin
     {
       async requestDidStart() {
-        const startTime = Date.now();
+        const startTime = Date.now()
 
         return {
           async willSendResponse(requestContext) {
-            const duration = Date.now() - startTime;
+            const duration = Date.now() - startTime
 
             // Log slow queries in development
             if (process.env.NODE_ENV === 'development' && duration > 1000) {
-              warn(`Slow GraphQL query: ${duration}ms`);
-              info(`Operation: ${requestContext.request.operationName ?? 'unknown'}`);
+              warn(`Slow GraphQL query: ${duration}ms`)
+              info(`Operation: ${requestContext.request.operationName ?? 'unknown'}`)
             }
 
             // Add performance headers
             if (requestContext.response.http) {
-              requestContext.response.http.headers.set(
-                'X-GraphQL-Duration',
-                `${duration}ms`
-              );
+              requestContext.response.http.headers.set('X-GraphQL-Duration', `${duration}ms`)
             }
           },
-        };
+        }
       },
     },
   ],
-});
+})
 
 // Create Next.js handler
-const handler = startServerAndCreateNextHandler<NextRequest, GraphQLContext>(
-  server,
-  {
-    context: async (req) => {
-      return createGraphQLContext(req);
-    },
-  }
-);
+const handler = startServerAndCreateNextHandler<NextRequest, GraphQLContext>(server, {
+  context: async req => {
+    return createGraphQLContext(req)
+  },
+})
 
 /**
  * POST /api/graphql
  * Main GraphQL endpoint
  */
 export async function POST(request: NextRequest) {
-  return handler(request);
+  return handler(request)
 }
 
 /**
@@ -101,7 +95,7 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   if (process.env.NODE_ENV !== 'production') {
-    return handler(request);
+    return handler(request)
   }
 
   // In production, return error
@@ -111,7 +105,7 @@ export async function GET(request: NextRequest) {
       message: 'Use POST method to query GraphQL API',
     },
     { status: 403 }
-  );
+  )
 }
 
 /**
@@ -127,12 +121,12 @@ export async function OPTIONS() {
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Max-Age': '86400',
     },
-  });
+  })
 }
 
 /**
  * Route segment config
  */
-export const runtime = 'nodejs'; // Use Node.js runtime for GraphQL
-export const dynamic = 'force-dynamic'; // Disable static optimization
-export const fetchCache = 'force-no-store'; // Disable fetch caching
+export const runtime = 'nodejs' // Use Node.js runtime for GraphQL
+export const dynamic = 'force-dynamic' // Disable static optimization
+export const fetchCache = 'force-no-store' // Disable fetch caching

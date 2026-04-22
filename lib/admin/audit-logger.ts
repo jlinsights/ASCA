@@ -13,8 +13,8 @@
  * @module lib/admin/audit-logger
  */
 
-import { info } from '@/lib/logging';
-import type { Permission, Role } from './permissions';
+import { info } from '@/lib/logging'
+import type { Permission, Role } from './permissions'
 
 /**
  * Audit action types
@@ -90,36 +90,36 @@ export enum AuditSeverity {
  * Audit log entry
  */
 export interface AuditLog {
-  id: string;
-  timestamp: Date;
-  action: AuditAction;
-  severity: AuditSeverity;
-  userId: string;
-  userEmail?: string;
-  userRole?: Role;
-  targetId?: string;
-  targetType?: string;
-  details: Record<string, any>;
-  ipAddress?: string;
-  userAgent?: string;
-  success: boolean;
-  errorMessage?: string;
-  metadata?: Record<string, any>;
+  id: string
+  timestamp: Date
+  action: AuditAction
+  severity: AuditSeverity
+  userId: string
+  userEmail?: string
+  userRole?: Role
+  targetId?: string
+  targetType?: string
+  details: Record<string, any>
+  ipAddress?: string
+  userAgent?: string
+  success: boolean
+  errorMessage?: string
+  metadata?: Record<string, any>
 }
 
 /**
  * Audit log filter
  */
 export interface AuditLogFilter {
-  userId?: string;
-  action?: AuditAction | AuditAction[];
-  severity?: AuditSeverity;
-  startDate?: Date;
-  endDate?: Date;
-  success?: boolean;
-  targetId?: string;
-  targetType?: string;
-  search?: string;
+  userId?: string
+  action?: AuditAction | AuditAction[]
+  severity?: AuditSeverity
+  startDate?: Date
+  endDate?: Date
+  success?: boolean
+  targetId?: string
+  targetType?: string
+  search?: string
 }
 
 /**
@@ -128,14 +128,14 @@ export interface AuditLogFilter {
  * Tracks all admin actions for compliance and security.
  */
 export class AuditLogger {
-  private logs: Map<string, AuditLog>;
-  private logCounter: number;
-  private maxLogs: number;
+  private logs: Map<string, AuditLog>
+  private logCounter: number
+  private maxLogs: number
 
   constructor(maxLogs: number = 10000) {
-    this.logs = new Map();
-    this.logCounter = 0;
-    this.maxLogs = maxLogs;
+    this.logs = new Map()
+    this.logCounter = 0
+    this.maxLogs = maxLogs
   }
 
   /**
@@ -144,26 +144,24 @@ export class AuditLogger {
    * @param entry - Audit log entry (without id and timestamp)
    * @returns Created audit log
    */
-  log(
-    entry: Omit<AuditLog, 'id' | 'timestamp'>
-  ): AuditLog {
-    const id = `audit_${Date.now()}_${++this.logCounter}`;
-    const timestamp = new Date();
+  log(entry: Omit<AuditLog, 'id' | 'timestamp'>): AuditLog {
+    const id = `audit_${Date.now()}_${++this.logCounter}`
+    const timestamp = new Date()
 
     const auditLog: AuditLog = {
       id,
       timestamp,
       ...entry,
-    };
+    }
 
     // Store log
-    this.logs.set(id, auditLog);
+    this.logs.set(id, auditLog)
 
     // Enforce max logs limit (remove oldest)
     if (this.logs.size > this.maxLogs) {
-      const oldestKey = this.logs.keys().next().value;
+      const oldestKey = this.logs.keys().next().value
       if (oldestKey) {
-        this.logs.delete(oldestKey);
+        this.logs.delete(oldestKey)
       }
     }
 
@@ -174,10 +172,10 @@ export class AuditLogger {
         userId: auditLog.userId,
         success: auditLog.success,
         details: auditLog.details,
-      });
+      })
     }
 
-    return auditLog;
+    return auditLog
   }
 
   /**
@@ -194,12 +192,12 @@ export class AuditLogger {
     userId: string,
     details: Record<string, any>,
     metadata?: {
-      userEmail?: string;
-      userRole?: Role;
-      targetId?: string;
-      targetType?: string;
-      ipAddress?: string;
-      userAgent?: string;
+      userEmail?: string
+      userRole?: Role
+      targetId?: string
+      targetType?: string
+      ipAddress?: string
+      userAgent?: string
     }
   ): AuditLog {
     return this.log({
@@ -209,7 +207,7 @@ export class AuditLogger {
       success: true,
       details,
       ...metadata,
-    });
+    })
   }
 
   /**
@@ -228,12 +226,12 @@ export class AuditLogger {
     error: string,
     details: Record<string, any>,
     metadata?: {
-      userEmail?: string;
-      severity?: AuditSeverity;
-      targetId?: string;
-      targetType?: string;
-      ipAddress?: string;
-      userAgent?: string;
+      userEmail?: string
+      severity?: AuditSeverity
+      targetId?: string
+      targetType?: string
+      ipAddress?: string
+      userAgent?: string
     }
   ): AuditLog {
     return this.log({
@@ -248,7 +246,7 @@ export class AuditLogger {
       targetType: metadata?.targetType,
       ipAddress: metadata?.ipAddress,
       userAgent: metadata?.userAgent,
-    });
+    })
   }
 
   /**
@@ -258,7 +256,7 @@ export class AuditLogger {
    * @returns Audit log or undefined
    */
   getLog(id: string): AuditLog | undefined {
-    return this.logs.get(id);
+    return this.logs.get(id)
   }
 
   /**
@@ -268,63 +266,63 @@ export class AuditLogger {
    * @returns Array of audit logs
    */
   getLogs(filter?: AuditLogFilter): AuditLog[] {
-    let logs = Array.from(this.logs.values());
+    let logs = Array.from(this.logs.values())
 
     if (!filter) {
-      return logs.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      return logs.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
     }
 
     // Apply filters
     if (filter.userId) {
-      logs = logs.filter((log) => log.userId === filter.userId);
+      logs = logs.filter(log => log.userId === filter.userId)
     }
 
     if (filter.action) {
-      const actions = Array.isArray(filter.action) ? filter.action : [filter.action];
-      logs = logs.filter((log) => actions.includes(log.action));
+      const actions = Array.isArray(filter.action) ? filter.action : [filter.action]
+      logs = logs.filter(log => actions.includes(log.action))
     }
 
     if (filter.severity) {
-      logs = logs.filter((log) => log.severity === filter.severity);
+      logs = logs.filter(log => log.severity === filter.severity)
     }
 
     if (filter.success !== undefined) {
-      logs = logs.filter((log) => log.success === filter.success);
+      logs = logs.filter(log => log.success === filter.success)
     }
 
     if (filter.targetId) {
-      logs = logs.filter((log) => log.targetId === filter.targetId);
+      logs = logs.filter(log => log.targetId === filter.targetId)
     }
 
     if (filter.targetType) {
-      logs = logs.filter((log) => log.targetType === filter.targetType);
+      logs = logs.filter(log => log.targetType === filter.targetType)
     }
 
     if (filter.startDate) {
-      logs = logs.filter((log) => log.timestamp >= filter.startDate!);
+      logs = logs.filter(log => log.timestamp >= filter.startDate!)
     }
 
     if (filter.endDate) {
-      logs = logs.filter((log) => log.timestamp <= filter.endDate!);
+      logs = logs.filter(log => log.timestamp <= filter.endDate!)
     }
 
     if (filter.search) {
-      const searchLower = filter.search.toLowerCase();
-      logs = logs.filter((log) => {
+      const searchLower = filter.search.toLowerCase()
+      logs = logs.filter(log => {
         const searchableText = JSON.stringify({
           action: log.action,
           userId: log.userId,
           userEmail: log.userEmail,
           details: log.details,
           errorMessage: log.errorMessage,
-        }).toLowerCase();
+        }).toLowerCase()
 
-        return searchableText.includes(searchLower);
-      });
+        return searchableText.includes(searchLower)
+      })
     }
 
     // Sort by timestamp (newest first)
-    return logs.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    return logs.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
   }
 
   /**
@@ -335,7 +333,7 @@ export class AuditLogger {
    * @returns Array of audit logs
    */
   getUserActivity(userId: string, limit: number = 100): AuditLog[] {
-    return this.getLogs({ userId }).slice(0, limit);
+    return this.getLogs({ userId }).slice(0, limit)
   }
 
   /**
@@ -345,7 +343,7 @@ export class AuditLogger {
    * @returns Array of failed audit logs
    */
   getRecentFailures(limit: number = 100): AuditLog[] {
-    return this.getLogs({ success: false }).slice(0, limit);
+    return this.getLogs({ success: false }).slice(0, limit)
   }
 
   /**
@@ -355,36 +353,36 @@ export class AuditLogger {
    * @returns Audit statistics
    */
   getStats(filter?: AuditLogFilter) {
-    const logs = filter ? this.getLogs(filter) : Array.from(this.logs.values());
+    const logs = filter ? this.getLogs(filter) : Array.from(this.logs.values())
 
-    const actionCounts: Record<string, number> = {};
+    const actionCounts: Record<string, number> = {}
     const severityCounts: Record<AuditSeverity, number> = {
       [AuditSeverity.INFO]: 0,
       [AuditSeverity.WARNING]: 0,
       [AuditSeverity.ERROR]: 0,
       [AuditSeverity.CRITICAL]: 0,
-    };
+    }
 
-    let successCount = 0;
-    let failureCount = 0;
-    const userActivity: Record<string, number> = {};
+    let successCount = 0
+    let failureCount = 0
+    const userActivity: Record<string, number> = {}
 
     for (const log of logs) {
       // Count by action
-      actionCounts[log.action] = (actionCounts[log.action] || 0) + 1;
+      actionCounts[log.action] = (actionCounts[log.action] || 0) + 1
 
       // Count by severity
-      severityCounts[log.severity]++;
+      severityCounts[log.severity]++
 
       // Count success/failure
       if (log.success) {
-        successCount++;
+        successCount++
       } else {
-        failureCount++;
+        failureCount++
       }
 
       // Count by user
-      userActivity[log.userId] = (userActivity[log.userId] || 0) + 1;
+      userActivity[log.userId] = (userActivity[log.userId] || 0) + 1
     }
 
     return {
@@ -398,7 +396,7 @@ export class AuditLogger {
         .sort(([, a], [, b]) => b - a)
         .slice(0, 10)
         .map(([userId, count]) => ({ userId, count })),
-    };
+    }
   }
 
   /**
@@ -408,16 +406,16 @@ export class AuditLogger {
    * @returns Number of logs deleted
    */
   clearOldLogs(beforeDate: Date): number {
-    let deletedCount = 0;
+    let deletedCount = 0
 
     for (const [id, log] of this.logs) {
       if (log.timestamp < beforeDate) {
-        this.logs.delete(id);
-        deletedCount++;
+        this.logs.delete(id)
+        deletedCount++
       }
     }
 
-    return deletedCount;
+    return deletedCount
   }
 
   /**
@@ -427,8 +425,8 @@ export class AuditLogger {
    * @returns JSON string
    */
   exportLogs(filter?: AuditLogFilter): string {
-    const logs = this.getLogs(filter);
-    return JSON.stringify(logs, null, 2);
+    const logs = this.getLogs(filter)
+    return JSON.stringify(logs, null, 2)
   }
 
   /**
@@ -438,10 +436,10 @@ export class AuditLogger {
    * @returns CSV string
    */
   exportLogsCSV(filter?: AuditLogFilter): string {
-    const logs = this.getLogs(filter);
+    const logs = this.getLogs(filter)
 
     if (logs.length === 0) {
-      return '';
+      return ''
     }
 
     // CSV header
@@ -457,9 +455,9 @@ export class AuditLogger {
       'Target ID',
       'Target Type',
       'Details',
-    ];
+    ]
 
-    const rows = logs.map((log) => [
+    const rows = logs.map(log => [
       log.id,
       log.timestamp.toISOString(),
       log.action,
@@ -471,24 +469,22 @@ export class AuditLogger {
       log.targetId || '',
       log.targetType || '',
       JSON.stringify(log.details),
-    ]);
+    ])
 
     const csvContent = [
       headers.join(','),
-      ...rows.map((row) =>
-        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
-      ),
-    ].join('\n');
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
+    ].join('\n')
 
-    return csvContent;
+    return csvContent
   }
 
   /**
    * Clear all logs
    */
   clearAll(): void {
-    this.logs.clear();
-    this.logCounter = 0;
+    this.logs.clear()
+    this.logCounter = 0
   }
 
   /**
@@ -497,14 +493,14 @@ export class AuditLogger {
    * @returns Number of logs
    */
   getCount(): number {
-    return this.logs.size;
+    return this.logs.size
   }
 }
 
 /**
  * Global audit logger instance (singleton)
  */
-let globalAuditLogger: AuditLogger | null = null;
+let globalAuditLogger: AuditLogger | null = null
 
 /**
  * Get or create global audit logger instance
@@ -513,9 +509,9 @@ let globalAuditLogger: AuditLogger | null = null;
  */
 export function getAuditLogger(): AuditLogger {
   if (!globalAuditLogger) {
-    globalAuditLogger = new AuditLogger();
+    globalAuditLogger = new AuditLogger()
   }
-  return globalAuditLogger;
+  return globalAuditLogger
 }
 
 /**
@@ -525,7 +521,7 @@ export function getAuditLogger(): AuditLogger {
  * @returns New audit logger instance
  */
 export function createAuditLogger(maxLogs?: number): AuditLogger {
-  return new AuditLogger(maxLogs);
+  return new AuditLogger(maxLogs)
 }
 
 /**
@@ -541,15 +537,15 @@ export function logAdminAction(
   userId: string,
   details: Record<string, any>,
   options?: {
-    success?: boolean;
-    error?: string;
-    userEmail?: string;
-    targetId?: string;
-    targetType?: string;
-    severity?: AuditSeverity;
+    success?: boolean
+    error?: string
+    userEmail?: string
+    targetId?: string
+    targetType?: string
+    severity?: AuditSeverity
   }
 ): void {
-  const auditLogger = getAuditLogger();
+  const auditLogger = getAuditLogger()
 
   if (options?.success === false && options?.error) {
     auditLogger.logError(action, userId, options.error, details, {
@@ -557,12 +553,12 @@ export function logAdminAction(
       targetId: options.targetId,
       targetType: options.targetType,
       severity: options.severity,
-    });
+    })
   } else {
     auditLogger.logSuccess(action, userId, details, {
       userEmail: options?.userEmail,
       targetId: options?.targetId,
       targetType: options?.targetType,
-    });
+    })
   }
 }
