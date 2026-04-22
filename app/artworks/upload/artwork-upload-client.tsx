@@ -23,6 +23,7 @@ import { useUser } from '@clerk/nextjs'
 import { createArtwork } from '@/lib/api/artworks'
 import type { ArtworkCategory, ArtworkStatus } from '@/types/artwork'
 import { ARTWORK_CATEGORY_LABELS } from '@/types/artwork'
+import { error as logError } from '@/lib/logging'
 
 import {
   Dialog,
@@ -120,14 +121,14 @@ export function ArtworkUploadClient() {
 
       if (error) {
         alert('작품 등록에 실패했습니다.')
-        console.error(error)
+        logError('Artwork create failed', error instanceof Error ? error : undefined)
       } else {
         alert('작품이 성공적으로 등록되었습니다!')
         router.push('/artworks')
       }
     } catch (error) {
       alert('작품 등록 중 오류가 발생했습니다.')
-      console.error(error)
+      logError('Artwork upload error', error instanceof Error ? error : undefined)
     } finally {
       setLoading(false)
     }

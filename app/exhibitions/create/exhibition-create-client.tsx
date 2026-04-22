@@ -15,6 +15,7 @@ import { fetchArtworksByArtist } from '@/lib/api/artworks'
 import { createExhibition } from '@/lib/api/exhibitions'
 import type { Artwork } from '@/types/artwork'
 import type { ExhibitionFormData } from '@/types/exhibition'
+import { error as logError } from '@/lib/logging'
 
 interface SelectedArtwork extends Artwork {
   displayOrder: number
@@ -99,7 +100,7 @@ export function ExhibitionCreateClient() {
       const { data, error } = await createExhibition(exhibitionData)
 
       if (error) {
-        console.error('Exhibition creation error:', error)
+        logError('Exhibition creation error', error instanceof Error ? error : undefined)
         alert('전시 생성 중 오류가 발생했습니다.')
         return
       }
@@ -107,7 +108,7 @@ export function ExhibitionCreateClient() {
       alert('전시가 성공적으로 생성되었습니다!')
       router.push(`/exhibitions/${data?.id}`)
     } catch (err) {
-      console.error('Unexpected error:', err)
+      logError('Unexpected error', err instanceof Error ? err : undefined)
       alert('예상치 못한 오류가 발생했습니다.')
     } finally {
       setLoading(false)

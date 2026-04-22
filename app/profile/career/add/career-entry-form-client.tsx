@@ -20,6 +20,7 @@ import { ArrowLeft, Save } from 'lucide-react'
 import { createCareerEntry } from '@/lib/api/career'
 import type { CareerEntryType, CareerEntryFormData } from '@/types/career'
 import { CAREER_ENTRY_TYPE_LABELS } from '@/types/career'
+import { error as logError } from '@/lib/logging'
 
 export function CareerEntryFormClient() {
   const router = useRouter()
@@ -58,14 +59,14 @@ export function CareerEntryFormClient() {
 
       if (error) {
         alert('이력 등록에 실패했습니다.')
-        console.error(error)
+        logError('Career entry create failed', error instanceof Error ? error : undefined)
       } else {
         alert('이력이 성공적으로 등록되었습니다!')
         router.push('/profile/career')
       }
     } catch (error) {
       alert('이력 등록 중 오류가 발생했습니다.')
-      console.error(error)
+      logError('Career entry error', error instanceof Error ? error : undefined)
     } finally {
       setLoading(false)
     }

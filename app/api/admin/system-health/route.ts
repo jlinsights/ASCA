@@ -11,6 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withPermission } from '@/lib/middleware/admin-middleware';
 import { Permission } from '@/lib/admin/permissions';
+import { error as logError } from '@/lib/logging';
 
 /**
  * GET /api/admin/system-health
@@ -50,7 +51,7 @@ export const GET = withPermission(
         },
       });
     } catch (error) {
-      console.error('System health API error:', error);
+      logError('System health API error', error instanceof Error ? error : undefined);
 
       return NextResponse.json(
         {

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { academyInstructors } from '@/lib/db/schema';
 import { desc } from 'drizzle-orm';
+import { error as logError } from '@/lib/logging';
 
 export async function GET() {
   try {
@@ -12,7 +13,7 @@ export async function GET() {
 
     return NextResponse.json(instructors);
   } catch (error) {
-    console.error('Failed to fetch instructors:', error);
+    logError('Failed to fetch instructors', error instanceof Error ? error : undefined);
     return NextResponse.json({ error: 'Failed to fetch instructors' }, { status: 500 });
   }
 }

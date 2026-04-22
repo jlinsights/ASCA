@@ -46,6 +46,7 @@ import type {
   MembershipTierInfo,
 } from '@/lib/types/membership'
 import type { PendingApplication } from '@/lib/membership/admin-application-service'
+import { error as logError } from '@/lib/logging'
 
 // Mock data - 실제 구현시 API에서 가져올 데이터
 const mockStats: MembershipDashboardStats = {
@@ -312,7 +313,7 @@ export default function AdminMembershipPage() {
       }))
       setApplications(rows)
     } catch (error) {
-      console.error('Failed to load applications', error)
+      logError('Failed to load applications', error instanceof Error ? error : undefined)
     } finally {
       setAppsLoading(false)
     }

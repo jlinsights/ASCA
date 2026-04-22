@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPartnerById } from '@/lib/db/queries/partners'
+import { error as logError } from '@/lib/logging'
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -10,7 +11,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     }
     return NextResponse.json(partner)
   } catch (error) {
-    console.error('Failed to fetch partner:', error)
+    logError('Failed to fetch partner', error instanceof Error ? error : undefined)
     return NextResponse.json({ error: 'Failed to fetch partner' }, { status: 500 })
   }
 }
