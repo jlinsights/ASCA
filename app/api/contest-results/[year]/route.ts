@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getContestResultsByYearGrouped } from '@/lib/db/queries/contest-results'
+import { error as logError } from '@/lib/logging'
 
 export async function GET(
   _request: NextRequest,
@@ -15,7 +16,7 @@ export async function GET(
     const grouped = await getContestResultsByYearGrouped(year)
     return NextResponse.json(grouped)
   } catch (error) {
-    console.error('Failed to fetch contest results:', error)
+    logError('Failed to fetch contest results', error instanceof Error ? error : undefined)
     return NextResponse.json({ error: 'Failed to fetch contest results' }, { status: 500 })
   }
 }

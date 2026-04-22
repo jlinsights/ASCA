@@ -24,6 +24,7 @@ import { withPermission } from '@/lib/middleware/admin-middleware';
 import { Permission } from '@/lib/admin/permissions';
 import { performanceMonitor } from '@/lib/monitoring/performance-monitor';
 import { metricsCollector, TimeWindow } from '@/lib/monitoring/metrics-collector';
+import { error as logError } from '@/lib/logging';
 import { slowQueryDetector, getSlowQueryReport } from '@/lib/monitoring/slow-query-detector';
 
 /**
@@ -91,7 +92,7 @@ export const GET = withPermission(
           });
       }
     } catch (error) {
-      console.error('Metrics API error:', error);
+      logError('Metrics API error', error instanceof Error ? error : undefined);
 
       return NextResponse.json(
         {
@@ -151,7 +152,7 @@ export async function POST(request: NextRequest) {
             );
         }
       } catch (error) {
-        console.error('Metrics action error:', error);
+        logError('Metrics action error', error instanceof Error ? error : undefined);
 
         return NextResponse.json(
           {

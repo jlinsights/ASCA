@@ -14,6 +14,7 @@ import { getAuditLogger } from '@/lib/admin/audit-logger';
 import { getRoleManager } from '@/lib/admin/role-manager';
 import { getEventEmitter } from '@/lib/realtime/event-emitter';
 import { getSubscriptionManager } from '@/lib/realtime/subscription-manager';
+import { error as logError } from '@/lib/logging';
 
 /**
  * GET /api/admin/dashboard
@@ -83,7 +84,7 @@ export const GET = withAdmin(async (request, auth) => {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Dashboard API error:', error);
+    logError('Dashboard API error', error instanceof Error ? error : undefined);
 
     return NextResponse.json(
       {

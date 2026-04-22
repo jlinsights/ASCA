@@ -6,27 +6,18 @@
   "designPath": "docs/02-design/features/warning-cleanup.design.md",
   "doProgress": {
     "initialWarnings": 182,
-    "currentWarnings": 102,
+    "currentWarnings": 30,
     "stageStatus": {
       "stage1_eslint_override": "completed",
-      "stage2_logger_replacement": "in_progress (2/25 files)",
+      "stage2_logger_replacement": "completed",
       "stage3_types_split": "pending",
       "stage4_services_split": "pending",
       "stage5_component_extraction": "pending",
       "stage6_minor_fixes": "completed",
       "stage7_final_verification": "pending"
     },
-    "filesModified": [
-      ".eslintrc.json",
-      "drizzle.config.ts",
-      "components/gallery/SocialShare.tsx",
-      "components/ui/image-uploader.tsx",
-      "app/admin/contests/[id]/applications/page.tsx",
-      "app/admin/contests/[id]/edit/page.tsx",
-      "app/admin/contests/page.tsx",
-      "lib/cache/redis-cache.ts",
-      "lib/db/index.ts"
-    ]
+    "remainingMaxLinesFiles": 30,
+    "note": "남은 30 warnings는 모두 max-lines (파일 분리 필요). Stage 3~5 작업 범위."
   },
   "previousFeature": {
     "name": "asca-deploy-2026-04-09",

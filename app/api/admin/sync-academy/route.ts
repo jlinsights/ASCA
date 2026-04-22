@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio';
 import { db } from '@/lib/db'; // Ensure you have this exported in lib/db/index.ts or similar
 import { academyCourses, academyInstructors } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { error as logError } from '@/lib/logging';
 
 // Define types for scraped data
 interface ScrapedCourse {
@@ -97,7 +98,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, results });
 
   } catch (error: any) {
-    console.error('Sync failed:', error);
+    logError('Sync failed', error instanceof Error ? error : undefined);
     return new NextResponse(`Internal Error: ${error.message}`, { status: 500 });
   }
 }

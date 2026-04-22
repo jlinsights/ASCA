@@ -16,6 +16,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withPermission } from '@/lib/middleware/admin-middleware';
 import { Permission } from '@/lib/admin/permissions';
 import { getAuditLogger } from '@/lib/admin/audit-logger';
+import { error as logError } from '@/lib/logging';
 
 /**
  * GET /api/admin/analytics
@@ -121,7 +122,7 @@ export const GET = withPermission(
         data: analytics,
       });
     } catch (error) {
-      console.error('Analytics API error:', error);
+      logError('Analytics API error', error instanceof Error ? error : undefined);
 
       return NextResponse.json(
         {

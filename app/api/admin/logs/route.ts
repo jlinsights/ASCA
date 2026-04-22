@@ -22,7 +22,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withPermission } from '@/lib/middleware/admin-middleware';
 import { Permission } from '@/lib/admin/permissions';
-import { LogLevel, LOG_LEVEL_NAMES } from '@/lib/logging/structured-logger';
+import { LogLevel, LOG_LEVEL_NAMES, error as logError } from '@/lib/logging/structured-logger';
 import type { LogEntry } from '@/lib/logging/structured-logger';
 
 // 메모리에 로그 저장 (실제 프로덕션에서는 데이터베이스 사용)
@@ -111,7 +111,7 @@ export const GET = withPermission(
           });
       }
     } catch (error) {
-      console.error('Logs API error:', error);
+      logError('Logs API error', error instanceof Error ? error : undefined);
 
       return NextResponse.json(
         {
@@ -280,7 +280,7 @@ export async function POST(request: NextRequest) {
           },
         });
       } catch (error) {
-        console.error('Logs query API error:', error);
+        logError('Logs query API error', error instanceof Error ? error : undefined);
 
         return NextResponse.json(
           {

@@ -29,6 +29,7 @@
 import { NextRequest } from 'next/server';
 import { getSSEManager, createSSEResponse } from '@/lib/realtime/sse-manager';
 import { EventType } from '@/lib/realtime/event-emitter';
+import { error as logError } from '@/lib/logging';
 
 /**
  * GET /api/realtime/sse
@@ -69,7 +70,7 @@ export async function GET(request: NextRequest) {
     // Return SSE response
     return createSSEResponse(stream);
   } catch (error) {
-    console.error('SSE connection error:', error);
+    logError('SSE connection error', error instanceof Error ? error : undefined);
 
     // Return error as SSE stream
     const errorStream = new ReadableStream({

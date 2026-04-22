@@ -19,6 +19,7 @@ import {
 } from '@/lib/api/profiles'
 import type { ArtistProfile, ArtistProfileFormData } from '@/types/profile'
 import Image from 'next/image'
+import { error as logError } from '@/lib/logging'
 
 export function ProfileEditClient() {
   const router = useRouter()
@@ -114,14 +115,14 @@ export function ProfileEditClient() {
 
       if (error) {
         alert('프로필 저장에 실패했습니다.')
-        console.error(error)
+        logError('Profile update failed', error instanceof Error ? error : undefined)
       } else {
         alert('프로필이 성공적으로 저장되었습니다!')
         setProfile(data)
       }
     } catch (error) {
       alert('프로필 저장 중 오류가 발생했습니다.')
-      console.error(error)
+      logError('Profile save error', error instanceof Error ? error : undefined)
     } finally {
       setSaving(false)
     }

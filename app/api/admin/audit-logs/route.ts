@@ -23,6 +23,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withPermission } from '@/lib/middleware/admin-middleware';
 import { Permission } from '@/lib/admin/permissions';
 import { getAuditLogger, type AuditLogFilter } from '@/lib/admin/audit-logger';
+import { error as logError } from '@/lib/logging';
 
 /**
  * GET /api/admin/audit-logs
@@ -98,7 +99,7 @@ export const GET = withPermission(
         },
       });
     } catch (error) {
-      console.error('Audit logs API error:', error);
+      logError('Audit logs API error', error instanceof Error ? error : undefined);
 
       return NextResponse.json(
         {

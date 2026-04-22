@@ -3,6 +3,7 @@ import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { typeDefs } from '@/lib/graphql/schema';
 import { resolvers } from '@/lib/graphql/resolvers';
 import { createGraphQLContext, type GraphQLContext } from '@/lib/graphql/context';
+import { info, warn, error as logError } from '@/lib/logging';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -28,7 +29,7 @@ const server = new ApolloServer<GraphQLContext>({
   formatError: (error) => {
     // Log errors in development
     if (process.env.NODE_ENV === 'development') {
-      console.error('GraphQL Error:', error);
+      logError('GraphQL Error', error instanceof Error ? error : undefined);
     }
 
     // Don't expose internal errors in production
@@ -58,8 +59,8 @@ const server = new ApolloServer<GraphQLContext>({
 
             // Log slow queries in development
             if (process.env.NODE_ENV === 'development' && duration > 1000) {
-              console.warn(`Slow GraphQL query: ${duration}ms`);
-              console.log('Operation:', requestContext.request.operationName);
+              warn(`Slow GraphQL query: ${duration}ms`);
+              info(`Operation: ${requestContext.request.operationName ?? 'unknown'}`);
             }
 
             // Add performance headers

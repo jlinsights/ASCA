@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { error as logError } from '@/lib/logging'
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,7 +14,7 @@ export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
 
   if (!WEBHOOK_SECRET) {
-    console.error('CLERK_WEBHOOK_SECRET is not set')
+    logError('CLERK_WEBHOOK_SECRET is not set')
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
   }
 
@@ -39,7 +40,7 @@ export async function POST(req: Request) {
       'svix-signature': svixSignature,
     }) as WebhookEvent
   } catch (err) {
-    console.error('Webhook verification failed:', err)
+    logError('Webhook verification failed', err instanceof Error ? err : undefined)
     return NextResponse.json({ error: 'Webhook verification failed' }, { status: 400 })
   }
 
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
     )
 
     if (error) {
-      console.error('Failed to sync user to Supabase:', error)
+      logError('Failed to sync user to Supabase', error instanceof Error ? error : undefined)
       return NextResponse.json({ error: 'Failed to sync user' }, { status: 500 })
     }
   }
