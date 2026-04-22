@@ -1,8 +1,9 @@
 {
   "activeFeature": "warning-cleanup-cycle-2",
-  "phase": "plan",
+  "phase": "design",
   "startedAt": "2026-04-22",
   "planPath": "docs/01-plan/features/warning-cleanup-cycle-2.plan.md",
+  "designPath": "docs/02-design/features/warning-cleanup-cycle-2.design.md",
   "cycleNumber": 2,
   "parentCycle": {
     "name": "warning-cleanup",
