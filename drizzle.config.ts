@@ -1,7 +1,9 @@
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+import * as dotenv from 'dotenv'
+import type { Config } from 'drizzle-kit'
 
-export default {
+dotenv.config({ path: '.env.local' })
+
+const config: Config = {
   schema: './lib/db/schema.ts',
   out: './drizzle',
   dialect: 'postgresql',
@@ -10,4 +12,6 @@ export default {
   },
   verbose: true,
   strict: true,
-};
+}
+
+export default config
