@@ -155,7 +155,7 @@ If a single code file exceeds **500 lines**, proactively trigger optimization an
 5. Update sync system if Airtable integration needed
 
 ### Database Debugging
-1. Use `npm run db:studio` for visual inspection
+1. Use `npm run b:studio` for visual inspection
 2. Check schema with `scripts/check-supabase-schema.js`
 3. Test connections with `scripts/test-supabase-artworks.js`
 4. Monitor sync status via admin dashboard

@@ -1,6 +1,8 @@
 {
-  "activeFeature": null,
-  "phase": "idle",
+  "activeFeature": "warning-cleanup",
+  "phase": "plan",
+  "startedAt": "2026-04-22",
+  "planPath": "docs/01-plan/features/warning-cleanup.plan.md",
   "previousFeature": {
     "name": "asca-deploy-2026-04-09",
     "phase": "completed",
