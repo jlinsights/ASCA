@@ -1,1 +1,1 @@
-📝 warning-cleanup-cycle-2 Plan 작성 — Stage 3/4/5/7, 30→0 warnings, 예상 13시간
+📐 warning-cleanup-cycle-2 Design — 파일 분리 맵 + barrel 규칙 + 25+ commit 전략
