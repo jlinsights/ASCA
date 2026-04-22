@@ -1,1 +1,1 @@
-🔒 관리자 멤버십 API: as PostBody 타입 캐스트 → Zod discriminatedUnion 입력 검증
+📝 warning-cleanup plan 작성 완료

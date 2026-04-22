@@ -52,9 +52,24 @@ const CATEGORY_METADATA = {
     icon: '🏅'
   },
   ceremony: {
-    name: '시상식',
-    description: '시상식 및 기념식 행사',
+    name: '개막식 및 시상식',
+    description: '개막식, 시상식 및 기념식 행사',
     icon: '🎉'
+  },
+  event: {
+    name: '행사 이모저모',
+    description: '개막식 및 전시 연계 행사 스케치',
+    icon: '📸'
+  },
+  people: {
+    name: '인물/참석자',
+    description: '행사 주요 참석자 및 인물',
+    icon: '👤'
+  },
+  sac: {
+    name: '전시장 풍경',
+    description: '예술의전당 전시장 이모저모',
+    icon: '🏛️'
   }
 };
 
@@ -90,7 +105,16 @@ function getCategorySpecificTags(category, year) {
       tags.push('시상', '수상', '기념', '포상');
       break;
     case 'ceremony':
-      tags.push('시상식', '기념식', '행사', '의례');
+      tags.push('시상식', '개막식', '기념식', '행사', '의례');
+      break;
+    case 'event':
+      tags.push('행사', '이모저모', '스케치', '현장');
+      break;
+    case 'people':
+      tags.push('인물', '참석자', '회원', '작가');
+      break;
+    case 'sac':
+      tags.push('예술의전당', '전시장', '풍경', '작품설치');
       break;
     case 'exhibition':
       tags.push('전시회', '작품전시', '갤러리', '전람회');
@@ -241,16 +265,52 @@ function extractMetadata(imageFile) {
       category = 'workshop';
     } else if (part.includes('group')) {
       category = 'group';
-      const yearMatch = part.match(/(\d{4})/);
-      if (yearMatch) eventDate = yearMatch[1];
+      const dateMatch = part.match(/(\d{4}-\d{2}-\d{2})/);
+      if (dateMatch) eventDate = dateMatch[1];
+      else {
+        const yearMatch = part.match(/(\d{4})/);
+        if (yearMatch) eventDate = yearMatch[1];
+      }
     } else if (part.includes('award')) {
       category = 'award';
-      const yearMatch = part.match(/(\d{4})/);
-      if (yearMatch) eventDate = yearMatch[1];
+      const dateMatch = part.match(/(\d{4}-\d{2}-\d{2})/);
+      if (dateMatch) eventDate = dateMatch[1];
+      else {
+        const yearMatch = part.match(/(\d{4})/);
+        if (yearMatch) eventDate = yearMatch[1];
+      }
     } else if (part.includes('ceremony')) {
       category = 'ceremony';
-      const yearMatch = part.match(/(\d{4})/);
-      if (yearMatch) eventDate = yearMatch[1];
+      const dateMatch = part.match(/(\d{4}-\d{2}-\d{2})/);
+      if (dateMatch) eventDate = dateMatch[1];
+      else {
+        const yearMatch = part.match(/(\d{4})/);
+        if (yearMatch) eventDate = yearMatch[1];
+      }
+    } else if (part.includes('event')) {
+      category = 'event';
+      const dateMatch = part.match(/(\d{4}-\d{2}-\d{2})/);
+      if (dateMatch) eventDate = dateMatch[1];
+      else {
+        const yearMatch = part.match(/(\d{4})/);
+        if (yearMatch) eventDate = yearMatch[1];
+      }
+    } else if (part.includes('people')) {
+      category = 'people';
+      const dateMatch = part.match(/(\d{4}-\d{2}-\d{2})/);
+      if (dateMatch) eventDate = dateMatch[1];
+      else {
+        const yearMatch = part.match(/(\d{4})/);
+        if (yearMatch) eventDate = yearMatch[1];
+      }
+    } else if (part.includes('sac')) {
+      category = 'sac';
+      const dateMatch = part.match(/(\d{4}-\d{2}-\d{2})/);
+      if (dateMatch) eventDate = dateMatch[1];
+      else {
+        const yearMatch = part.match(/(\d{4})/);
+        if (yearMatch) eventDate = yearMatch[1];
+      }
     }
   }
   
@@ -305,11 +365,35 @@ function extractMetadata(imageFile) {
     if (filename.includes('JTL')) {
       const numberMatch = filename.match(/JTL(\d+)/);
       const num = numberMatch ? numberMatch[1] : '1';
-      title = `${eventYear}년 시상식 순간 ${num}`;
+      title = `${eventYear}년 개막식/시상식 순간 ${num}`;
     } else {
       const numberMatch = filename.match(/(\d+)/);
       const num = numberMatch ? numberMatch[1] : '1';
-      title = `${eventYear}년 시상식 ${num}`;
+      title = `${eventYear}년 개막식/시상식 ${num}`;
+    }
+  } else if (category === 'event') {
+    if (filename.includes('JTL')) {
+      const numberMatch = filename.match(/JTL(\d+)/);
+      const num = numberMatch ? numberMatch[1] : '1';
+      title = `${eventYear}년 행사 이모저모 ${num}`;
+    } else {
+      title = `${eventYear}년 행사 현장`;
+    }
+  } else if (category === 'people') {
+    if (filename.includes('JTL')) {
+      const numberMatch = filename.match(/JTL(\d+)/);
+      const num = numberMatch ? numberMatch[1] : '1';
+      title = `${eventYear}년 행사 참석자 ${num}`;
+    } else {
+      title = `${eventYear}년 인물 사진`;
+    }
+  } else if (category === 'sac') {
+    if (filename.includes('JTL')) {
+      const numberMatch = filename.match(/JTL(\d+)/);
+      const num = numberMatch ? numberMatch[1] : '1';
+      title = `${eventYear}년 전시장 풍경 ${num}`;
+    } else {
+      title = `${eventYear}년 예술의전당 현장`;
     }
   } else if (category === 'exhibition') {
     // 전시회 사진 - 날짜 기반 제목
@@ -333,7 +417,13 @@ function extractMetadata(imageFile) {
     } else if (category === 'award') {
       description = `${year}년 시상 및 수상 기념사진`;
     } else if (category === 'ceremony') {
-      description = `${year}년 시상식 및 기념식 현장`;
+      description = `${year}년 개막식 및 시상식 현장`;
+    } else if (category === 'event') {
+      description = `${year}년 행사 이모저모`;
+    } else if (category === 'people') {
+      description = `${year}년 행사 주요 참석자`;
+    } else if (category === 'sac') {
+      description = `${year}년 예술의전당 전시장 풍경`;
     } else if (category === 'exhibition') {
       description = `${year}년 정기 전시회 현장 사진`;
     } else {

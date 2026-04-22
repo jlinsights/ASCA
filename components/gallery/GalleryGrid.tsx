@@ -30,7 +30,10 @@ const getCategoryIcon = (category: string) => {
     workshop: '📚',
     group: '👨‍👩‍👧‍👦',
     award: '🏅',
-    ceremony: '🎉'
+    ceremony: '🎉',
+    event: '📸',
+    people: '👤',
+    sac: '🏛️'
   }
   return icons[category as keyof typeof icons] || '📷'
 }
@@ -45,7 +48,10 @@ const getCategoryName = (category: string) => {
     workshop: '워크샵',
     group: '단체사진',
     award: '시상기념',
-    ceremony: '시상식'
+    ceremony: '개막식 및 시상식',
+    event: '행사 이모저모',
+    people: '인물/참석자',
+    sac: '전시장 풍경'
   }
   return names[category as keyof typeof names] || '기타'
 }
@@ -57,12 +63,12 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
   const [isLoading, setIsLoading] = useState(false)
   const [shareItem, setShareItem] = useState<GalleryItem | null>(null)
   
-  // 이미지 로딩 상태 - 기본값을 true로 설정하여 캐시된 이미지도 표시
+  // 이미지 로딩 상태 - 스켈레톤 로더를 표시하기 위해 false로 초기화
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>(() => {
-    // 초기 렌더링 시 모든 이미지를 로드된 것으로 간주
+    // 초기 렌더링 시 이미지를 아직 로드하지 않은 상태로 설정
     const initialState: Record<string, boolean> = {}
     items.forEach(item => {
-      initialState[item.id] = true
+      initialState[item.id] = false
     })
     return initialState
   })
@@ -388,12 +394,13 @@ export default function GalleryGrid({ items, categories, className = '', onEvent
                     src={item.src}
                     alt={`${item.title} - ${getCategoryName(item.category)} - ${item.description}`}
                     fill
-                    className="object-cover group-hover:scale-110 group-hover:brightness-110 transition-transform duration-300"
+                    className={`object-cover group-hover:scale-110 group-hover:brightness-110 transition-all duration-700 ease-in-out ${isImageLoaded ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
                     sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw"
                     quality={85}
                     priority={index < 6}
                     loading={index < 6 ? undefined : 'lazy'}
                     unoptimized={false}
+                    onLoad={() => handleImageLoad(item.id)}
                     onError={() => handleImageError(item.id)}
                   />
                   {/* 그라디언트 오버레이 */}
