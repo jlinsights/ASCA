@@ -1,6 +1,6 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-import { CreateMemberRequest, MemberSearchParams } from '../types/membership';
-import { info } from '@/lib/logging';
+import { SupabaseClient } from '@supabase/supabase-js'
+import { CreateMemberRequest, MemberSearchParams } from '../types/membership'
+import { info } from '@/lib/logging'
 
 /**
  * Member Service
@@ -13,54 +13,54 @@ import { info } from '@/lib/logging';
 
 // API Response Types
 export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
+  success: boolean
+  data?: T
+  error?: string
+  message?: string
 }
 
 export interface PaginatedResponse<T> {
-  members: T[];
+  members: T[]
   pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
 }
 
 // Member Type
 export interface Member {
-  id: string;
-  email: string;
-  first_name_ko: string;
-  last_name_ko: string;
-  membership_status: 'active' | 'inactive' | 'suspended' | 'pending_approval' | 'expelled';
-  membership_level_id: string;
-  timezone: string;
-  preferred_language: string;
-  created_at: string;
-  updated_at: string;
-  joined_date: string;
-  last_active: string;
-  social_media?: Record<string, string>;
-  is_verified: boolean;
-  is_public: boolean;
+  id: string
+  email: string
+  first_name_ko: string
+  last_name_ko: string
+  membership_status: 'active' | 'inactive' | 'suspended' | 'pending_approval' | 'expelled'
+  membership_level_id: string
+  timezone: string
+  preferred_language: string
+  created_at: string
+  updated_at: string
+  joined_date: string
+  last_active: string
+  social_media?: Record<string, string>
+  is_verified: boolean
+  is_public: boolean
 }
 
 // Service Parameters
 export interface GetMembersParams {
-  supabase: SupabaseClient;
-  userId: string | null;
-  searchParams: URLSearchParams;
-  isDev?: boolean;
+  supabase: SupabaseClient
+  userId: string | null
+  searchParams: URLSearchParams
+  isDev?: boolean
 }
 
 export interface CreateMemberParams {
-  supabase: SupabaseClient;
-  userId: string | null;
-  data: CreateMemberRequest;
-  isDev?: boolean;
+  supabase: SupabaseClient
+  userId: string | null
+  data: CreateMemberRequest
+  isDev?: boolean
 }
 
 /**
@@ -77,33 +77,31 @@ export class MemberService {
    * @returns PaginatedResponse with members list
    */
   async getMembers(params: GetMembersParams): Promise<ApiResponse<PaginatedResponse<Member>>> {
-    const { supabase, userId, searchParams, isDev = false } = params;
+    const { supabase, userId, searchParams, isDev = false } = params
 
     // 인증 확인
     if (!userId) {
       return {
         success: false,
         error: 'Unauthorized',
-      };
+      }
     }
 
     try {
       // 검색 파라미터 파싱
-      const query = searchParams.get('query');
-      const page = parseInt(searchParams.get('page') || '1');
-      const limit = parseInt(searchParams.get('limit') || '20');
-      const status = searchParams.get('status');
-      const level = searchParams.get('level');
-      const sortBy = searchParams.get('sortBy') || 'created_at';
-      const sortOrder = searchParams.get('sortOrder') || 'desc';
+      const query = searchParams.get('query')
+      const page = parseInt(searchParams.get('page') || '1')
+      const limit = parseInt(searchParams.get('limit') || '20')
+      const status = searchParams.get('status')
+      const level = searchParams.get('level')
+      const sortBy = searchParams.get('sortBy') || 'created_at'
+      const sortOrder = searchParams.get('sortOrder') || 'desc'
 
       // 기본 쿼리 구성
-      let supabaseQuery = supabase
-        .from('members')
-        .select(`
+      let supabaseQuery = supabase.from('members').select(`
           *,
           membership_level:membership_levels(*)
-        `);
+        `)
 
       // 검색 조건 추가
       if (query) {
@@ -113,27 +111,27 @@ export class MemberService {
           first_name_en.ilike.%${query}%,
           last_name_en.ilike.%${query}%,
           email.ilike.%${query}%
-        `);
+        `)
       }
 
       if (status) {
-        supabaseQuery = supabaseQuery.eq('membership_status', status);
+        supabaseQuery = supabaseQuery.eq('membership_status', status)
       }
 
       if (level) {
-        supabaseQuery = supabaseQuery.eq('membership_level_id', level);
+        supabaseQuery = supabaseQuery.eq('membership_level_id', level)
       }
 
       // 정렬 및 페이지네이션
       supabaseQuery = supabaseQuery
         .order(sortBy, { ascending: sortOrder === 'asc' })
-        .range((page - 1) * limit, page * limit - 1);
+        .range((page - 1) * limit, page * limit - 1)
 
-      const { data: members, error, count } = await supabaseQuery;
+      const { data: members, error, count } = await supabaseQuery
 
       // 개발/테스트 환경에서 데이터베이스 오류 시 더미 데이터 제공
       if (error && isDev) {
-        info(`[Dev Mode] Supabase error, returning dummy data: ${error.message}`);
+        info(`[Dev Mode] Supabase error, returning dummy data: ${error.message}`)
         const dummyMembers: Member[] = [
           {
             id: 'dev-1',
@@ -169,7 +167,7 @@ export class MemberService {
             is_verified: true,
             is_public: true,
           },
-        ];
+        ]
 
         return {
           success: true,
@@ -182,14 +180,14 @@ export class MemberService {
               totalPages: 1,
             },
           },
-        };
+        }
       }
 
       if (error) {
         return {
           success: false,
           error: '회원 조회 실패',
-        };
+        }
       }
 
       // 개발 환경에서는 빈 결과일 때도 더미 데이터 제공
@@ -229,7 +227,7 @@ export class MemberService {
             is_verified: true,
             is_public: true,
           },
-        ];
+        ]
 
         return {
           success: true,
@@ -242,7 +240,7 @@ export class MemberService {
               totalPages: 1,
             },
           },
-        };
+        }
       }
 
       return {
@@ -256,12 +254,12 @@ export class MemberService {
             totalPages: Math.ceil((count || 0) / limit),
           },
         },
-      };
+      }
     } catch (error) {
       return {
         success: false,
         error: '서버 오류',
-      };
+      }
     }
   }
 
@@ -272,14 +270,14 @@ export class MemberService {
    * @returns Created member data
    */
   async createMember(params: CreateMemberParams): Promise<ApiResponse<Member>> {
-    const { supabase, userId, data, isDev = false } = params;
+    const { supabase, userId, data, isDev = false } = params
 
     // 인증 확인
     if (!userId) {
       return {
         success: false,
         error: 'Unauthorized',
-      };
+      }
     }
 
     try {
@@ -288,7 +286,7 @@ export class MemberService {
         return {
           success: false,
           error: '이메일은 필수입니다',
-        };
+        }
       }
 
       const memberData = {
@@ -307,17 +305,17 @@ export class MemberService {
         preferred_language: data.preferred_language || 'ko',
         membership_level_id: data.membership_level_id,
         membership_status: data.membership_status || 'active',
-      };
+      }
 
       const { data: member, error } = await supabase
         .from('members')
         .insert(memberData)
         .select()
-        .single();
+        .single()
 
       // 개발/테스트 환경에서 데이터베이스 오류 시 모의 응답 제공
       if (error && isDev) {
-        info(`[Dev Mode] Supabase error on member creation, returning mock data: ${error.message}`);
+        info(`[Dev Mode] Supabase error on member creation, returning mock data: ${error.message}`)
         const mockMember: Member = {
           id: `dev-${Date.now()}`,
           ...memberData,
@@ -330,34 +328,34 @@ export class MemberService {
           social_media: {},
           is_verified: false,
           is_public: false,
-        };
+        }
 
         return {
           success: true,
           data: mockMember,
           message: '[Dev Mode] Mock member created',
-        };
+        }
       }
 
       if (error) {
         return {
           success: false,
           error: '회원 생성 실패',
-        };
+        }
       }
 
       return {
         success: true,
         data: member,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         error: '서버 오류',
-      };
+      }
     }
   }
 }
 
 // Singleton instance
-export const memberService = new MemberService();
+export const memberService = new MemberService()

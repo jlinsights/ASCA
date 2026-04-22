@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ApiResponse, handleApiError } from '@/lib/api/response';
-import { info } from '@/lib/logging';
-import { z } from 'zod';
+import { NextRequest, NextResponse } from 'next/server'
+import { ApiResponse, handleApiError } from '@/lib/api/response'
+import { info } from '@/lib/logging'
+import { z } from 'zod'
 
 /**
  * Middleware function type
@@ -9,15 +9,12 @@ import { z } from 'zod';
 export type MiddlewareFunction = (
   request: NextRequest,
   context?: any
-) => Promise<NextResponse | null>;
+) => Promise<NextResponse | null>
 
 /**
  * API Handler type
  */
-export type ApiHandler = (
-  request: NextRequest,
-  context?: any
-) => Promise<NextResponse>;
+export type ApiHandler = (request: NextRequest, context?: any) => Promise<NextResponse>
 
 /**
  * Compose multiple middleware functions
@@ -25,13 +22,13 @@ export type ApiHandler = (
 export function composeMiddleware(...middlewares: MiddlewareFunction[]): MiddlewareFunction {
   return async (request: NextRequest, context?: any) => {
     for (const middleware of middlewares) {
-      const result = await middleware(request, context);
+      const result = await middleware(request, context)
       if (result) {
-        return result; // Middleware returned a response, stop chain
+        return result // Middleware returned a response, stop chain
       }
     }
-    return null; // All middleware passed
-  };
+    return null // All middleware passed
+  }
 }
 
 /**
@@ -43,19 +40,19 @@ export function withMiddleware(
 ): ApiHandler {
   return async (request: NextRequest, context?: any) => {
     // Run middleware chain
-    const middlewareResult = await composeMiddleware(...middlewares)(request, context);
+    const middlewareResult = await composeMiddleware(...middlewares)(request, context)
 
     if (middlewareResult) {
-      return middlewareResult; // Middleware returned early response
+      return middlewareResult // Middleware returned early response
     }
 
     // Run actual handler
     try {
-      return await handler(request, context);
+      return await handler(request, context)
     } catch (error) {
-      return handleApiError(error);
+      return handleApiError(error)
     }
-  };
+  }
 }
 
 /**
@@ -65,21 +62,19 @@ export function withMiddleware(
 export function withAuth(getUserId?: (request: NextRequest) => string | null): MiddlewareFunction {
   return async (request: NextRequest, context?: any) => {
     // Get user ID from request (customize based on your auth system)
-    const userId = getUserId
-      ? getUserId(request)
-      : request.headers.get('x-user-id');
+    const userId = getUserId ? getUserId(request) : request.headers.get('x-user-id')
 
     if (!userId) {
-      return ApiResponse.unauthorized('Authentication required');
+      return ApiResponse.unauthorized('Authentication required')
     }
 
     // Attach user ID to context for use in handler
     if (context) {
-      context.userId = userId;
+      context.userId = userId
     }
 
-    return null; // Authentication passed
-  };
+    return null // Authentication passed
+  }
 }
 
 /**
@@ -91,23 +86,21 @@ export function withPermission(
   checkPermission?: (userId: string, permission: string) => Promise<boolean>
 ): MiddlewareFunction {
   return async (request: NextRequest, context?: any) => {
-    const userId = request.headers.get('x-user-id');
+    const userId = request.headers.get('x-user-id')
 
     if (!userId) {
-      return ApiResponse.unauthorized('Authentication required');
+      return ApiResponse.unauthorized('Authentication required')
     }
 
     // Check permission (customize based on your permission system)
-    const hasPermission = checkPermission
-      ? await checkPermission(userId, requiredPermission)
-      : true; // Default: allow if no check function provided
+    const hasPermission = checkPermission ? await checkPermission(userId, requiredPermission) : true // Default: allow if no check function provided
 
     if (!hasPermission) {
-      return ApiResponse.forbidden('Insufficient permissions');
+      return ApiResponse.forbidden('Insufficient permissions')
     }
 
-    return null; // Permission check passed
-  };
+    return null // Permission check passed
+  }
 }
 
 /**
@@ -120,30 +113,30 @@ export function withValidation<T>(
 ): MiddlewareFunction {
   return async (request: NextRequest, context?: any) => {
     try {
-      let data: any;
+      let data: any
 
       if (target === 'body') {
-        data = await request.json();
+        data = await request.json()
       } else {
-        const { searchParams } = new URL(request.url);
-        data = Object.fromEntries(searchParams.entries());
+        const { searchParams } = new URL(request.url)
+        data = Object.fromEntries(searchParams.entries())
       }
 
-      const validatedData = schema.parse(data);
+      const validatedData = schema.parse(data)
 
       // Attach validated data to context
       if (context) {
-        context.validatedData = validatedData;
+        context.validatedData = validatedData
       }
 
-      return null; // Validation passed
+      return null // Validation passed
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return ApiResponse.validationError('Invalid request data', error.format());
+        return ApiResponse.validationError('Invalid request data', error.format())
       }
-      return handleApiError(error);
+      return handleApiError(error)
     }
-  };
+  }
 }
 
 /**
@@ -152,18 +145,18 @@ export function withValidation<T>(
  */
 export function withLogging(): MiddlewareFunction {
   return async (request: NextRequest) => {
-    const start = Date.now();
-    const { method, url } = request;
-    const timestamp = new Date().toISOString();
+    const start = Date.now()
+    const { method, url } = request
+    const timestamp = new Date().toISOString()
 
-    info(`[${timestamp}] ${method} ${url} - Started`);
+    info(`[${timestamp}] ${method} ${url} - Started`)
 
     // Continue to next middleware/handler
     // Note: This doesn't log response time as it doesn't have access to response
     // For full request/response logging, use Next.js middleware
 
-    return null;
-  };
+    return null
+  }
 }
 
 /**
@@ -174,27 +167,21 @@ export function withCORS(allowedOrigins: string[] = ['*']): MiddlewareFunction {
   return async (request: NextRequest) => {
     // Handle preflight requests
     if (request.method === 'OPTIONS') {
-      const response = new NextResponse(null, { status: 200 });
+      const response = new NextResponse(null, { status: 200 })
 
-      response.headers.set(
-        'Access-Control-Allow-Origin',
-        allowedOrigins[0] || '*'
-      );
-      response.headers.set(
-        'Access-Control-Allow-Methods',
-        'GET, POST, PUT, DELETE, OPTIONS, PATCH'
-      );
+      response.headers.set('Access-Control-Allow-Origin', allowedOrigins[0] || '*')
+      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
       response.headers.set(
         'Access-Control-Allow-Headers',
         'Content-Type, Authorization, X-API-Key, X-User-ID'
-      );
-      response.headers.set('Access-Control-Max-Age', '86400');
+      )
+      response.headers.set('Access-Control-Max-Age', '86400')
 
-      return response;
+      return response
     }
 
-    return null; // Not a preflight request, continue
-  };
+    return null // Not a preflight request, continue
+  }
 }
 
 /**
@@ -205,8 +192,8 @@ export function withErrorBoundary(): MiddlewareFunction {
   return async (request: NextRequest, context?: any) => {
     // This middleware doesn't do anything itself
     // It's meant to be used with withMiddleware which handles errors
-    return null;
-  };
+    return null
+  }
 }
 
 /**
@@ -216,15 +203,11 @@ export function withErrorBoundary(): MiddlewareFunction {
 export function withMethods(...allowedMethods: string[]): MiddlewareFunction {
   return async (request: NextRequest) => {
     if (!allowedMethods.includes(request.method)) {
-      return ApiResponse.error(
-        `Method ${request.method} not allowed`,
-        'METHOD_NOT_ALLOWED',
-        405
-      );
+      return ApiResponse.error(`Method ${request.method} not allowed`, 'METHOD_NOT_ALLOWED', 405)
     }
 
-    return null; // Method is allowed
-  };
+    return null // Method is allowed
+  }
 }
 
 /**
@@ -233,19 +216,18 @@ export function withMethods(...allowedMethods: string[]): MiddlewareFunction {
  */
 export function withContentType(contentType: string = 'application/json'): MiddlewareFunction {
   return async (request: NextRequest) => {
-    const requestContentType = request.headers.get('content-type');
+    const requestContentType = request.headers.get('content-type')
 
     if (request.method !== 'GET' && request.method !== 'DELETE') {
       if (!requestContentType?.includes(contentType)) {
-        return ApiResponse.badRequest(
-          `Content-Type must be ${contentType}`,
-          { received: requestContentType }
-        );
+        return ApiResponse.badRequest(`Content-Type must be ${contentType}`, {
+          received: requestContentType,
+        })
       }
     }
 
-    return null; // Content-Type is valid
-  };
+    return null // Content-Type is valid
+  }
 }
 
 /**

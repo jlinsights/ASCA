@@ -14,10 +14,10 @@
  * @module lib/realtime/event-emitter
  */
 
-import { EventEmitter as NodeEventEmitter } from 'events';
-import { error as logError } from '@/lib/logging';
+import { EventEmitter as NodeEventEmitter } from 'events'
+import { error as logError } from '@/lib/logging'
 // import type { Redis } from 'ioredis';
-type Redis = any;
+type Redis = any
 
 /**
  * Event types for the application
@@ -63,38 +63,38 @@ export enum EventType {
  * Event payload interface
  */
 export interface EventPayload<T = any> {
-  type: EventType;
-  data: T;
-  timestamp: Date;
-  userId?: string;
-  metadata?: Record<string, any>;
+  type: EventType
+  data: T
+  timestamp: Date
+  userId?: string
+  metadata?: Record<string, any>
 }
 
 /**
  * Event listener callback
  */
-export type EventListener<T = any> = (payload: EventPayload<T>) => void | Promise<void>;
+export type EventListener<T = any> = (payload: EventPayload<T>) => void | Promise<void>
 
 /**
  * Subscription object
  */
 export interface Subscription {
-  id: string;
-  unsubscribe: () => void;
+  id: string
+  unsubscribe: () => void
 }
 
 /**
  * Event filter function
  */
-export type EventFilter<T = any> = (payload: EventPayload<T>) => boolean;
+export type EventFilter<T = any> = (payload: EventPayload<T>) => boolean
 
 /**
  * Event emitter options
  */
 export interface EventEmitterOptions {
-  redis?: Redis;
-  redisChannel?: string;
-  maxListeners?: number;
+  redis?: Redis
+  redisChannel?: string
+  maxListeners?: number
 }
 
 /**
@@ -103,25 +103,25 @@ export interface EventEmitterOptions {
  * Centralized event system with Redis support for distributed environments.
  */
 export class AppEventEmitter {
-  private emitter: NodeEventEmitter;
-  private redis?: Redis;
-  private redisChannel: string;
-  private subscriptions: Map<string, Set<EventListener>>;
-  private subscriptionCounter: number;
+  private emitter: NodeEventEmitter
+  private redis?: Redis
+  private redisChannel: string
+  private subscriptions: Map<string, Set<EventListener>>
+  private subscriptionCounter: number
 
   constructor(options: EventEmitterOptions = {}) {
-    this.emitter = new NodeEventEmitter();
-    this.redis = options.redis;
-    this.redisChannel = options.redisChannel || 'asca:events';
-    this.subscriptions = new Map();
-    this.subscriptionCounter = 0;
+    this.emitter = new NodeEventEmitter()
+    this.redis = options.redis
+    this.redisChannel = options.redisChannel || 'asca:events'
+    this.subscriptions = new Map()
+    this.subscriptionCounter = 0
 
     // Set max listeners to prevent memory leak warnings
-    this.emitter.setMaxListeners(options.maxListeners || 100);
+    this.emitter.setMaxListeners(options.maxListeners || 100)
 
     // Setup Redis subscriber if Redis is available
     if (this.redis) {
-      this.setupRedisSubscriber();
+      this.setupRedisSubscriber()
     }
   }
 
@@ -129,27 +129,27 @@ export class AppEventEmitter {
    * Setup Redis subscriber for distributed events
    */
   private setupRedisSubscriber(): void {
-    if (!this.redis) return;
+    if (!this.redis) return
 
-    const subscriber = this.redis.duplicate();
+    const subscriber = this.redis.duplicate()
 
     subscriber.subscribe(this.redisChannel, (err: any) => {
       if (err) {
-        logError('Failed to subscribe to Redis channel', err instanceof Error ? err : undefined);
+        logError('Failed to subscribe to Redis channel', err instanceof Error ? err : undefined)
       }
-    });
+    })
 
     subscriber.on('message', (channel: any, message: any) => {
       if (channel === this.redisChannel) {
         try {
-          const payload: EventPayload = JSON.parse(message);
+          const payload: EventPayload = JSON.parse(message)
           // Emit to local listeners without re-publishing to Redis
-          this.emitLocal(payload);
+          this.emitLocal(payload)
         } catch (error) {
-          logError('Failed to parse Redis message', error instanceof Error ? error : undefined);
+          logError('Failed to parse Redis message', error instanceof Error ? error : undefined)
         }
       }
-    });
+    })
   }
 
   /**
@@ -170,20 +170,20 @@ export class AppEventEmitter {
       timestamp: new Date(),
       userId: metadata?.userId,
       metadata,
-    };
+    }
 
     // Publish to Redis if available
     if (this.redis) {
       try {
-        await this.redis.publish(this.redisChannel, JSON.stringify(payload));
+        await this.redis.publish(this.redisChannel, JSON.stringify(payload))
       } catch (error) {
-        logError('Failed to publish event to Redis', error instanceof Error ? error : undefined);
+        logError('Failed to publish event to Redis', error instanceof Error ? error : undefined)
         // Fallback to local emit
-        this.emitLocal(payload);
+        this.emitLocal(payload)
       }
     } else {
       // Local emit only
-      this.emitLocal(payload);
+      this.emitLocal(payload)
     }
   }
 
@@ -194,16 +194,16 @@ export class AppEventEmitter {
    */
   private emitLocal<T = any>(payload: EventPayload<T>): void {
     // Emit to specific event listeners
-    this.emitter.emit(payload.type, payload);
+    this.emitter.emit(payload.type, payload)
 
     // Emit to wildcard listeners (e.g., 'member:*')
-    const category = this.getEventCategory(payload.type);
+    const category = this.getEventCategory(payload.type)
     if (category) {
-      this.emitter.emit(`${category}:*`, payload);
+      this.emitter.emit(`${category}:*`, payload)
     }
 
     // Emit to all listeners
-    this.emitter.emit('*', payload);
+    this.emitter.emit('*', payload)
   }
 
   /**
@@ -219,31 +219,31 @@ export class AppEventEmitter {
     listener: EventListener<T>,
     filter?: EventFilter<T>
   ): Subscription {
-    const subscriptionId = `sub_${++this.subscriptionCounter}`;
+    const subscriptionId = `sub_${++this.subscriptionCounter}`
 
     // Wrap listener with filter if provided
-    const wrappedListener: EventListener<T> = async (payload) => {
+    const wrappedListener: EventListener<T> = async payload => {
       if (filter && !filter(payload)) {
-        return;
+        return
       }
-      await listener(payload);
-    };
+      await listener(payload)
+    }
 
     // Store subscription
     if (!this.subscriptions.has(type)) {
-      this.subscriptions.set(type, new Set());
+      this.subscriptions.set(type, new Set())
     }
-    this.subscriptions.get(type)!.add(wrappedListener);
+    this.subscriptions.get(type)!.add(wrappedListener)
 
     // Add listener to EventEmitter
-    this.emitter.on(type, wrappedListener);
+    this.emitter.on(type, wrappedListener)
 
     return {
       id: subscriptionId,
       unsubscribe: () => {
-        this.off(type, wrappedListener);
+        this.off(type, wrappedListener)
       },
-    };
+    }
   }
 
   /**
@@ -254,21 +254,21 @@ export class AppEventEmitter {
    * @returns Subscription object
    */
   once<T = any>(type: EventType | string, listener: EventListener<T>): Subscription {
-    const subscriptionId = `sub_${++this.subscriptionCounter}`;
+    const subscriptionId = `sub_${++this.subscriptionCounter}`
 
-    const wrappedListener: EventListener<T> = async (payload) => {
-      await listener(payload);
-      this.off(type, wrappedListener);
-    };
+    const wrappedListener: EventListener<T> = async payload => {
+      await listener(payload)
+      this.off(type, wrappedListener)
+    }
 
-    this.emitter.once(type, wrappedListener);
+    this.emitter.once(type, wrappedListener)
 
     return {
       id: subscriptionId,
       unsubscribe: () => {
-        this.off(type, wrappedListener);
+        this.off(type, wrappedListener)
       },
-    };
+    }
   }
 
   /**
@@ -278,13 +278,13 @@ export class AppEventEmitter {
    * @param listener - Event listener to remove
    */
   off<T = any>(type: EventType | string, listener: EventListener<T>): void {
-    this.emitter.off(type, listener);
+    this.emitter.off(type, listener)
 
-    const listeners = this.subscriptions.get(type);
+    const listeners = this.subscriptions.get(type)
     if (listeners) {
-      listeners.delete(listener);
+      listeners.delete(listener)
       if (listeners.size === 0) {
-        this.subscriptions.delete(type);
+        this.subscriptions.delete(type)
       }
     }
   }
@@ -296,11 +296,11 @@ export class AppEventEmitter {
    */
   removeAllListeners(type?: EventType | string): void {
     if (type) {
-      this.emitter.removeAllListeners(type);
-      this.subscriptions.delete(type);
+      this.emitter.removeAllListeners(type)
+      this.subscriptions.delete(type)
     } else {
-      this.emitter.removeAllListeners();
-      this.subscriptions.clear();
+      this.emitter.removeAllListeners()
+      this.subscriptions.clear()
     }
   }
 
@@ -311,8 +311,8 @@ export class AppEventEmitter {
    * @returns Event category (e.g., 'member' from 'member:created')
    */
   private getEventCategory(type: EventType | string): string | null {
-    const parts = type.split(':');
-    return parts.length > 1 ? parts[0] ?? null : null;
+    const parts = type.split(':')
+    return parts.length > 1 ? (parts[0] ?? null) : null
   }
 
   /**
@@ -322,7 +322,7 @@ export class AppEventEmitter {
    * @returns Number of listeners
    */
   listenerCount(type: EventType | string): number {
-    return this.emitter.listenerCount(type);
+    return this.emitter.listenerCount(type)
   }
 
   /**
@@ -331,7 +331,7 @@ export class AppEventEmitter {
    * @returns Array of event types
    */
   eventNames(): Array<EventType | string> {
-    return this.emitter.eventNames() as Array<EventType | string>;
+    return this.emitter.eventNames() as Array<EventType | string>
   }
 
   /**
@@ -341,42 +341,39 @@ export class AppEventEmitter {
    * @param timeout - Optional timeout in milliseconds
    * @returns Promise that resolves with event payload
    */
-  async waitFor<T = any>(
-    type: EventType | string,
-    timeout?: number
-  ): Promise<EventPayload<T>> {
+  async waitFor<T = any>(type: EventType | string, timeout?: number): Promise<EventPayload<T>> {
     return new Promise((resolve, reject) => {
-      let timeoutId: NodeJS.Timeout | undefined;
+      let timeoutId: NodeJS.Timeout | undefined
 
-      const listener: EventListener<T> = (payload) => {
+      const listener: EventListener<T> = payload => {
         if (timeoutId) {
-          clearTimeout(timeoutId);
+          clearTimeout(timeoutId)
         }
-        resolve(payload);
-      };
+        resolve(payload)
+      }
 
-      this.once(type, listener);
+      this.once(type, listener)
 
       if (timeout) {
         timeoutId = setTimeout(() => {
-          this.off(type, listener);
-          reject(new Error(`Timeout waiting for event: ${type}`));
-        }, timeout);
+          this.off(type, listener)
+          reject(new Error(`Timeout waiting for event: ${type}`))
+        }, timeout)
       }
-    });
+    })
   }
 
   /**
    * Shutdown event emitter and cleanup resources
    */
   async shutdown(): Promise<void> {
-    this.removeAllListeners();
+    this.removeAllListeners()
 
     if (this.redis) {
       try {
-        await this.redis.quit();
+        await this.redis.quit()
       } catch (error) {
-        logError('Failed to quit Redis connection', error instanceof Error ? error : undefined);
+        logError('Failed to quit Redis connection', error instanceof Error ? error : undefined)
       }
     }
   }
@@ -385,7 +382,7 @@ export class AppEventEmitter {
 /**
  * Global event emitter instance (singleton)
  */
-let globalEventEmitter: AppEventEmitter | null = null;
+let globalEventEmitter: AppEventEmitter | null = null
 
 /**
  * Get or create global event emitter instance
@@ -395,9 +392,9 @@ let globalEventEmitter: AppEventEmitter | null = null;
  */
 export function getEventEmitter(options?: EventEmitterOptions): AppEventEmitter {
   if (!globalEventEmitter) {
-    globalEventEmitter = new AppEventEmitter(options);
+    globalEventEmitter = new AppEventEmitter(options)
   }
-  return globalEventEmitter;
+  return globalEventEmitter
 }
 
 /**
@@ -407,7 +404,7 @@ export function getEventEmitter(options?: EventEmitterOptions): AppEventEmitter 
  * @returns New event emitter instance
  */
 export function createEventEmitter(options?: EventEmitterOptions): AppEventEmitter {
-  return new AppEventEmitter(options);
+  return new AppEventEmitter(options)
 }
 
 /**
@@ -429,5 +426,5 @@ export function createEventPayload<T = any>(
     timestamp: new Date(),
     userId: metadata?.userId,
     metadata,
-  };
+  }
 }

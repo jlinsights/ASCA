@@ -26,10 +26,10 @@
  * @module app/api/realtime/sse
  */
 
-import { NextRequest } from 'next/server';
-import { getSSEManager, createSSEResponse } from '@/lib/realtime/sse-manager';
-import { EventType } from '@/lib/realtime/event-emitter';
-import { error as logError } from '@/lib/logging';
+import { NextRequest } from 'next/server'
+import { getSSEManager, createSSEResponse } from '@/lib/realtime/sse-manager'
+import { EventType } from '@/lib/realtime/event-emitter'
+import { error as logError } from '@/lib/logging'
 
 /**
  * GET /api/realtime/sse
@@ -39,17 +39,15 @@ import { error as logError } from '@/lib/logging';
 export async function GET(request: NextRequest) {
   try {
     // Get query parameters
-    const { searchParams } = new URL(request.url);
-    const eventTypesParam = searchParams.get('eventTypes');
-    const token = searchParams.get('token');
+    const { searchParams } = new URL(request.url)
+    const eventTypesParam = searchParams.get('eventTypes')
+    const token = searchParams.get('token')
 
     // Parse event types
-    const eventTypes = eventTypesParam
-      ? eventTypesParam.split(',').map((type) => type.trim())
-      : ['*'];
+    const eventTypes = eventTypesParam ? eventTypesParam.split(',').map(type => type.trim()) : ['*']
 
     // Verify token (optional - implement your auth logic)
-    let userId: string | undefined;
+    let userId: string | undefined
     if (token) {
       // TODO: Implement token verification
       // const authResult = await verifyToken(token);
@@ -57,7 +55,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get SSE manager
-    const sseManager = getSSEManager();
+    const sseManager = getSSEManager()
 
     // Create SSE stream
     const stream = sseManager.createStream(
@@ -65,32 +63,32 @@ export async function GET(request: NextRequest) {
         eventTypes,
       },
       userId
-    );
+    )
 
     // Return SSE response
-    return createSSEResponse(stream);
+    return createSSEResponse(stream)
   } catch (error) {
-    logError('SSE connection error', error instanceof Error ? error : undefined);
+    logError('SSE connection error', error instanceof Error ? error : undefined)
 
     // Return error as SSE stream
     const errorStream = new ReadableStream({
       start(controller) {
-        const encoder = new TextEncoder();
+        const encoder = new TextEncoder()
         controller.enqueue(
           encoder.encode(
             `event: error\ndata: ${JSON.stringify({ error: 'Failed to establish SSE connection' })}\n\n`
           )
-        );
-        controller.close();
+        )
+        controller.close()
       },
-    });
+    })
 
-    return createSSEResponse(errorStream);
+    return createSSEResponse(errorStream)
   }
 }
 
 /**
  * Runtime configuration
  */
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'

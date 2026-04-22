@@ -1,9 +1,9 @@
-import { db } from '@/lib/db';
-import { createIdLoader, DataLoader } from '@/lib/optimization/dataloader';
-import { error as logError } from '@/lib/logging';
-import { eq, inArray } from 'drizzle-orm';
-import * as schema from '@/lib/db/schema';
-import type { User } from '@/lib/db/schema';
+import { db } from '@/lib/db'
+import { createIdLoader, DataLoader } from '@/lib/optimization/dataloader'
+import { error as logError } from '@/lib/logging'
+import { eq, inArray } from 'drizzle-orm'
+import * as schema from '@/lib/db/schema'
+import type { User } from '@/lib/db/schema'
 
 /**
  * GraphQL Context
@@ -17,49 +17,49 @@ import type { User } from '@/lib/db/schema';
 
 export interface GraphQLContext {
   // Database
-  db: typeof db;
+  db: typeof db
 
   // User authentication
-  user: User | null;
-  userId: string | null;
+  user: User | null
+  userId: string | null
 
   // DataLoaders for N+1 query prevention
   loaders: {
     // User & Member loaders
-    userLoader: DataLoader<string, User>;
-    memberLoader: DataLoader<string, any>;
-    memberByUserIdLoader: DataLoader<string, any>;
+    userLoader: DataLoader<string, User>
+    memberLoader: DataLoader<string, any>
+    memberByUserIdLoader: DataLoader<string, any>
 
     // Membership tier loader
-    membershipTierLoader: DataLoader<string, any>;
+    membershipTierLoader: DataLoader<string, any>
 
     // Artist & Artwork loaders
-    artistLoader: DataLoader<string, any>;
-    artworkLoader: DataLoader<string, any>;
-    artworksByArtistLoader: DataLoader<string, any[]>;
+    artistLoader: DataLoader<string, any>
+    artworkLoader: DataLoader<string, any>
+    artworksByArtistLoader: DataLoader<string, any[]>
 
     // Exhibition loaders
-    exhibitionLoader: DataLoader<string, any>;
-    exhibitionArtworkLoader: DataLoader<string, any>;
-    exhibitionArtistLoader: DataLoader<string, any>;
+    exhibitionLoader: DataLoader<string, any>
+    exhibitionArtworkLoader: DataLoader<string, any>
+    exhibitionArtistLoader: DataLoader<string, any>
 
     // Event loaders
-    eventLoader: DataLoader<string, any>;
-    eventParticipantLoader: DataLoader<string, any>;
+    eventLoader: DataLoader<string, any>
+    eventParticipantLoader: DataLoader<string, any>
 
     // Gallery loaders
-    galleryLoader: DataLoader<string, any>;
-    galleryArtworkLoader: DataLoader<string, any>;
+    galleryLoader: DataLoader<string, any>
+    galleryArtworkLoader: DataLoader<string, any>
 
     // News loader
-    newsLoader: DataLoader<string, any>;
-  };
+    newsLoader: DataLoader<string, any>
+  }
 
   // Request metadata
   request: {
-    ip: string | null;
-    userAgent: string | null;
-  };
+    ip: string | null
+    userAgent: string | null
+  }
 }
 
 /**
@@ -70,17 +70,15 @@ export interface GraphQLContext {
  */
 export async function createGraphQLContext(req: Request): Promise<GraphQLContext> {
   // Extract authentication from headers
-  const authHeader = req.headers.get('authorization');
-  const user = await authenticateUser(authHeader);
+  const authHeader = req.headers.get('authorization')
+  const user = await authenticateUser(authHeader)
 
   // Extract request metadata
-  const ip = req.headers.get('x-forwarded-for') ||
-             req.headers.get('x-real-ip') ||
-             null;
-  const userAgent = req.headers.get('user-agent') || null;
+  const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || null
+  const userAgent = req.headers.get('user-agent') || null
 
   // Create DataLoaders
-  const loaders = createDataLoaders();
+  const loaders = createDataLoaders()
 
   return {
     db,
@@ -91,7 +89,7 @@ export async function createGraphQLContext(req: Request): Promise<GraphQLContext
       ip,
       userAgent,
     },
-  };
+  }
 }
 
 /**
@@ -102,10 +100,10 @@ export async function createGraphQLContext(req: Request): Promise<GraphQLContext
  */
 async function authenticateUser(authHeader: string | null): Promise<User | null> {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return null;
+    return null
   }
 
-  const token = authHeader.substring(7);
+  const token = authHeader.substring(7)
 
   try {
     // TODO: Implement actual token verification
@@ -116,7 +114,7 @@ async function authenticateUser(authHeader: string | null): Promise<User | null>
     // const userId = decoded.sub;
 
     // For now, return null until auth is properly implemented
-    return null;
+    return null
 
     // When implemented, fetch user from database:
     // const user = await db.query.users.findFirst({
@@ -124,8 +122,8 @@ async function authenticateUser(authHeader: string | null): Promise<User | null>
     // });
     // return user || null;
   } catch (error) {
-    logError('Authentication error', error instanceof Error ? error : undefined);
-    return null;
+    logError('Authentication error', error instanceof Error ? error : undefined)
+    return null
   }
 }
 
@@ -139,28 +137,28 @@ function createDataLoaders() {
     userLoader: createIdLoader(async (ids: readonly string[]) => {
       const users = await db.query.users.findMany({
         where: inArray(schema.users.id, [...ids]),
-      });
-      return users;
+      })
+      return users
     }),
 
     memberLoader: createIdLoader(async (ids: readonly string[]) => {
       const members = await db.query.members.findMany({
         where: inArray(schema.members.id, [...ids]),
-      });
-      return members;
+      })
+      return members
     }),
 
     memberByUserIdLoader: new DataLoader<string, any>({
       batchLoadFn: async (userIds: readonly string[]) => {
         const members = await db.query.members.findMany({
           where: inArray(schema.members.userId, [...userIds]),
-        });
+        })
 
-        const memberMap = new Map(members.map(m => [m.userId, m]));
+        const memberMap = new Map(members.map(m => [m.userId, m]))
 
-        return userIds.map(userId =>
-          memberMap.get(userId) ?? new Error(`Member for user ${userId} not found`)
-        );
+        return userIds.map(
+          userId => memberMap.get(userId) ?? new Error(`Member for user ${userId} not found`)
+        )
       },
     }),
 
@@ -169,8 +167,8 @@ function createDataLoaders() {
     membershipTierLoader: createIdLoader(async (ids: readonly string[]) => {
       const tiers = await db.query.membershipTiers.findMany({
         where: inArray(schema.membershipTiers.id, [...ids]),
-      });
-      return tiers;
+      })
+      return tiers
     }),
 
     // ===== Artist & Artwork Loaders =====
@@ -178,33 +176,33 @@ function createDataLoaders() {
     artistLoader: createIdLoader(async (ids: readonly string[]) => {
       const artists = await db.query.artists.findMany({
         where: inArray(schema.artists.id, [...ids]),
-      });
-      return artists;
+      })
+      return artists
     }),
 
     artworkLoader: createIdLoader(async (ids: readonly string[]) => {
       const artworks = await db.query.artworks.findMany({
         where: inArray(schema.artworks.id, [...ids]),
-      });
-      return artworks;
+      })
+      return artworks
     }),
 
     artworksByArtistLoader: new DataLoader<string, any[]>({
       batchLoadFn: async (artistIds: readonly string[]) => {
         const artworks = await db.query.artworks.findMany({
           where: inArray(schema.artworks.artistId, [...artistIds]),
-        });
+        })
 
         // Group artworks by artistId
-        const artworksByArtist = new Map<string, any[]>();
+        const artworksByArtist = new Map<string, any[]>()
         artworks.forEach(artwork => {
           if (!artworksByArtist.has(artwork.artistId)) {
-            artworksByArtist.set(artwork.artistId, []);
+            artworksByArtist.set(artwork.artistId, [])
           }
-          artworksByArtist.get(artwork.artistId)!.push(artwork);
-        });
+          artworksByArtist.get(artwork.artistId)!.push(artwork)
+        })
 
-        return artistIds.map(artistId => artworksByArtist.get(artistId) ?? []);
+        return artistIds.map(artistId => artworksByArtist.get(artistId) ?? [])
       },
     }),
 
@@ -213,22 +211,22 @@ function createDataLoaders() {
     exhibitionLoader: createIdLoader(async (ids: readonly string[]) => {
       const exhibitions = await db.query.exhibitions.findMany({
         where: inArray(schema.exhibitions.id, [...ids]),
-      });
-      return exhibitions;
+      })
+      return exhibitions
     }),
 
     exhibitionArtworkLoader: createIdLoader(async (ids: readonly string[]) => {
       const exhibitionArtworks = await db.query.exhibitionArtworks.findMany({
         where: inArray(schema.exhibitionArtworks.id, [...ids]),
-      });
-      return exhibitionArtworks;
+      })
+      return exhibitionArtworks
     }),
 
     exhibitionArtistLoader: createIdLoader(async (ids: readonly string[]) => {
       const exhibitionArtists = await db.query.exhibitionArtists.findMany({
         where: inArray(schema.exhibitionArtists.id, [...ids]),
-      });
-      return exhibitionArtists;
+      })
+      return exhibitionArtists
     }),
 
     // ===== Event Loaders =====
@@ -236,15 +234,15 @@ function createDataLoaders() {
     eventLoader: createIdLoader(async (ids: readonly string[]) => {
       const events = await db.query.events.findMany({
         where: inArray(schema.events.id, [...ids]),
-      });
-      return events;
+      })
+      return events
     }),
 
     eventParticipantLoader: createIdLoader(async (ids: readonly string[]) => {
       const participants = await db.query.eventParticipants.findMany({
         where: inArray(schema.eventParticipants.id, [...ids]),
-      });
-      return participants;
+      })
+      return participants
     }),
 
     // ===== Gallery Loaders =====
@@ -252,15 +250,15 @@ function createDataLoaders() {
     galleryLoader: createIdLoader(async (ids: readonly string[]) => {
       const galleries = await db.query.galleries.findMany({
         where: inArray(schema.galleries.id, [...ids]),
-      });
-      return galleries;
+      })
+      return galleries
     }),
 
     galleryArtworkLoader: createIdLoader(async (ids: readonly string[]) => {
       const galleryArtworks = await db.query.galleryArtworks.findMany({
         where: inArray(schema.galleryArtworks.id, [...ids]),
-      });
-      return galleryArtworks;
+      })
+      return galleryArtworks
     }),
 
     // ===== News Loader =====
@@ -268,18 +266,20 @@ function createDataLoaders() {
     newsLoader: createIdLoader(async (ids: readonly string[]) => {
       const newsItems = await db.query.news.findMany({
         where: inArray(schema.news.id, [...ids]),
-      });
-      return newsItems;
+      })
+      return newsItems
     }),
-  };
+  }
 }
 
 /**
  * Type guard to check if user is authenticated
  */
-export function requireAuth(context: GraphQLContext): asserts context is GraphQLContext & { user: User; userId: string } {
+export function requireAuth(
+  context: GraphQLContext
+): asserts context is GraphQLContext & { user: User; userId: string } {
   if (!context.user || !context.userId) {
-    throw new Error('Authentication required');
+    throw new Error('Authentication required')
   }
 }
 
@@ -287,10 +287,10 @@ export function requireAuth(context: GraphQLContext): asserts context is GraphQL
  * Type guard to check if user has specific role
  */
 export function requireRole(context: GraphQLContext, role: User['role']) {
-  requireAuth(context);
+  requireAuth(context)
 
   if (context.user.role !== role && context.user.role !== 'admin') {
-    throw new Error(`Requires ${role} role`);
+    throw new Error(`Requires ${role} role`)
   }
 }
 
@@ -298,5 +298,5 @@ export function requireRole(context: GraphQLContext, role: User['role']) {
  * Type guard to check if user is admin
  */
 export function requireAdmin(context: GraphQLContext) {
-  requireRole(context, 'admin');
+  requireRole(context, 'admin')
 }

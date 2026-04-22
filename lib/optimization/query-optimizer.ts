@@ -4,95 +4,91 @@
  * Utilities for detecting and fixing N+1 queries and other common performance issues.
  */
 
-import { eq, inArray, SQL } from 'drizzle-orm';
-import { PgTable } from 'drizzle-orm/pg-core';
-import { db } from '@/lib/db';
-import { info, warn } from '@/lib/logging';
-import { DataLoader, createIdLoader } from './dataloader';
+import { eq, inArray, SQL } from 'drizzle-orm'
+import { PgTable } from 'drizzle-orm/pg-core'
+import { db } from '@/lib/db'
+import { info, warn } from '@/lib/logging'
+import { DataLoader, createIdLoader } from './dataloader'
 
 /**
  * Query performance tracking
  */
 interface QueryMetrics {
-  queryCount: number;
-  totalDuration: number;
+  queryCount: number
+  totalDuration: number
   queries: Array<{
-    sql: string;
-    duration: number;
-    timestamp: number;
-  }>;
+    sql: string
+    duration: number
+    timestamp: number
+  }>
 }
 
 class QueryOptimizer {
-  private metrics: Map<string, QueryMetrics> = new Map();
-  private enabled = process.env.NODE_ENV === 'development';
+  private metrics: Map<string, QueryMetrics> = new Map()
+  private enabled = process.env.NODE_ENV === 'development'
 
   /**
    * Start tracking queries for a request
    */
   startTracking(requestId: string): void {
-    if (!this.enabled) return;
+    if (!this.enabled) return
 
     this.metrics.set(requestId, {
       queryCount: 0,
       totalDuration: 0,
       queries: [],
-    });
+    })
   }
 
   /**
    * Record a query execution
    */
   recordQuery(requestId: string, sql: string, duration: number): void {
-    if (!this.enabled) return;
+    if (!this.enabled) return
 
-    const metrics = this.metrics.get(requestId);
-    if (!metrics) return;
+    const metrics = this.metrics.get(requestId)
+    if (!metrics) return
 
-    metrics.queryCount++;
-    metrics.totalDuration += duration;
+    metrics.queryCount++
+    metrics.totalDuration += duration
     metrics.queries.push({
       sql,
       duration,
       timestamp: Date.now(),
-    });
+    })
   }
 
   /**
    * Detect N+1 queries
    */
   detectN1(requestId: string): {
-    hasN1: boolean;
+    hasN1: boolean
     suspiciousQueries: Array<{
-      pattern: string;
-      count: number;
-      totalDuration: number;
-    }>;
+      pattern: string
+      count: number
+      totalDuration: number
+    }>
   } {
-    const metrics = this.metrics.get(requestId);
+    const metrics = this.metrics.get(requestId)
     if (!metrics) {
-      return { hasN1: false, suspiciousQueries: [] };
+      return { hasN1: false, suspiciousQueries: [] }
     }
 
     // Group similar queries
-    const queryPatterns = new Map<string, { count: number; totalDuration: number }>();
+    const queryPatterns = new Map<string, { count: number; totalDuration: number }>()
 
     metrics.queries.forEach(({ sql, duration }) => {
       // Normalize query by removing specific values
-      const pattern = sql
-        .replace(/'\w+'/g, '?')
-        .replace(/\d+/g, '?')
-        .replace(/\s+/g, ' ')
-        .trim();
+      const pattern = sql.replace(/'\w+'/g, '?').replace(/\d+/g, '?').replace(/\s+/g, ' ').trim()
 
-      const existing = queryPatterns.get(pattern);
+      const existing = queryPatterns.get(pattern)
       if (existing) {
-        existing.count++;
-        existing.totalDuration += duration;
+        existing.count++
+        existing.totalDuration += duration
       } else {
-        queryPatterns.set(pattern, { count: 1, totalDuration: duration });
+        queryPatterns.set(pattern, { count: 1, totalDuration: duration })
       }
-    });
+    })
 
     // Find suspicious patterns (queries executed >5 times)
     const suspiciousQueries = Array.from(queryPatterns.entries())
@@ -102,55 +98,55 @@ class QueryOptimizer {
         count: stats.count,
         totalDuration: stats.totalDuration,
       }))
-      .sort((a, b) => b.count - a.count);
+      .sort((a, b) => b.count - a.count)
 
     return {
       hasN1: suspiciousQueries.length > 0,
       suspiciousQueries,
-    };
+    }
   }
 
   /**
    * Get metrics for a request
    */
   getMetrics(requestId: string): QueryMetrics | undefined {
-    return this.metrics.get(requestId);
+    return this.metrics.get(requestId)
   }
 
   /**
    * Clear metrics for a request
    */
   clearMetrics(requestId: string): void {
-    this.metrics.delete(requestId);
+    this.metrics.delete(requestId)
   }
 
   /**
    * Get performance report
    */
   getReport(requestId: string): string {
-    const metrics = this.metrics.get(requestId);
-    if (!metrics) return 'No metrics available';
+    const metrics = this.metrics.get(requestId)
+    if (!metrics) return 'No metrics available'
 
-    const n1Detection = this.detectN1(requestId);
+    const n1Detection = this.detectN1(requestId)
 
-    let report = `\n=== Query Performance Report ===\n`;
-    report += `Total Queries: ${metrics.queryCount}\n`;
-    report += `Total Duration: ${metrics.totalDuration.toFixed(2)}ms\n`;
-    report += `Average Duration: ${(metrics.totalDuration / metrics.queryCount).toFixed(2)}ms\n`;
+    let report = `\n=== Query Performance Report ===\n`
+    report += `Total Queries: ${metrics.queryCount}\n`
+    report += `Total Duration: ${metrics.totalDuration.toFixed(2)}ms\n`
+    report += `Average Duration: ${(metrics.totalDuration / metrics.queryCount).toFixed(2)}ms\n`
 
     if (n1Detection.hasN1) {
-      report += `\n⚠️  Potential N+1 Queries Detected:\n`;
+      report += `\n⚠️  Potential N+1 Queries Detected:\n`
       n1Detection.suspiciousQueries.forEach(({ pattern, count, totalDuration }) => {
-        report += `  - Executed ${count} times (${totalDuration.toFixed(2)}ms total)\n`;
-        report += `    Pattern: ${pattern.substring(0, 100)}...\n`;
-      });
+        report += `  - Executed ${count} times (${totalDuration.toFixed(2)}ms total)\n`
+        report += `    Pattern: ${pattern.substring(0, 100)}...\n`
+      })
     }
 
-    return report;
+    return report
   }
 }
 
-export const queryOptimizer = new QueryOptimizer();
+export const queryOptimizer = new QueryOptimizer()
 
 /**
  * Batch load related entities
@@ -182,27 +178,27 @@ export async function batchLoadRelated<T extends Record<string, any>, R>(
   relatedTable: PgTable,
   relatedKey: string = 'id'
 ): Promise<(R | null)[]> {
-  if (items.length === 0) return [];
+  if (items.length === 0) return []
 
-  const foreignIds = items.map(item => item[foreignKey]).filter(Boolean);
+  const foreignIds = items.map(item => item[foreignKey]).filter(Boolean)
   if (foreignIds.length === 0) {
-    return items.map(() => null);
+    return items.map(() => null)
   }
 
   // Execute single batched query
-  const relatedItems = await db
+  const relatedItems = (await db
     .select()
     .from(relatedTable)
-    .where(inArray((relatedTable as any)[relatedKey], foreignIds)) as R[];
+    .where(inArray((relatedTable as any)[relatedKey], foreignIds))) as R[]
 
   // Create lookup map
-  const relatedMap = new Map<any, R>();
+  const relatedMap = new Map<any, R>()
   relatedItems.forEach(item => {
-    relatedMap.set((item as any)[relatedKey], item);
-  });
+    relatedMap.set((item as any)[relatedKey], item)
+  })
 
   // Return results in same order as input
-  return items.map(item => relatedMap.get(item[foreignKey]) ?? null);
+  return items.map(item => relatedMap.get(item[foreignKey]) ?? null)
 }
 
 /**
@@ -235,28 +231,28 @@ export async function batchLoadHasMany<T extends Record<string, any>, R>(
   relatedTable: PgTable,
   foreignKey: string
 ): Promise<R[][]> {
-  if (items.length === 0) return [];
+  if (items.length === 0) return []
 
-  const primaryIds = items.map(item => item[primaryKey]);
+  const primaryIds = items.map(item => item[primaryKey])
 
   // Execute single batched query
-  const relatedItems = await db
+  const relatedItems = (await db
     .select()
     .from(relatedTable)
-    .where(inArray((relatedTable as any)[foreignKey], primaryIds)) as R[];
+    .where(inArray((relatedTable as any)[foreignKey], primaryIds))) as R[]
 
   // Group by foreign key
-  const groupedMap = new Map<any, R[]>();
+  const groupedMap = new Map<any, R[]>()
   relatedItems.forEach(item => {
-    const fk = (item as any)[foreignKey];
+    const fk = (item as any)[foreignKey]
     if (!groupedMap.has(fk)) {
-      groupedMap.set(fk, []);
+      groupedMap.set(fk, [])
     }
-    groupedMap.get(fk)!.push(item);
-  });
+    groupedMap.get(fk)!.push(item)
+  })
 
   // Return results in same order as input
-  return items.map(item => groupedMap.get(item[primaryKey]) ?? []);
+  return items.map(item => groupedMap.get(item[primaryKey]) ?? [])
 }
 
 /**
@@ -277,7 +273,7 @@ export function createRequestLoaders() {
     // membershipLevel: createIdLoader(async (ids) => { ... }),
     // artist: createIdLoader(async (ids) => { ... }),
     // artwork: createIdLoader(async (ids) => { ... }),
-  };
+  }
 }
 
 /**
@@ -287,13 +283,13 @@ export function withQueryTracking(requestId: string) {
   return {
     start: () => queryOptimizer.startTracking(requestId),
     end: () => {
-      const report = queryOptimizer.getReport(requestId);
+      const report = queryOptimizer.getReport(requestId)
       if (process.env.NODE_ENV === 'development') {
-        info(typeof report === 'string' ? report : JSON.stringify(report));
+        info(typeof report === 'string' ? report : JSON.stringify(report))
       }
-      queryOptimizer.clearMetrics(requestId);
+      queryOptimizer.clearMetrics(requestId)
     },
-  };
+  }
 }
 
 /**
@@ -317,28 +313,26 @@ export function withQueryTracking(requestId: string) {
  */
 export async function prefetchRelated<T extends Record<string, any>>(
   items: T[],
-  relations: Record<string, {
-    table: PgTable;
-    foreignKey: keyof T;
-    targetKey?: string;
-  }>
+  relations: Record<
+    string,
+    {
+      table: PgTable
+      foreignKey: keyof T
+      targetKey?: string
+    }
+  >
 ): Promise<void> {
   const promises = Object.entries(relations).map(async ([name, config]) => {
-    const { table, foreignKey, targetKey = 'id' } = config;
+    const { table, foreignKey, targetKey = 'id' } = config
 
-    const relatedItems = await batchLoadRelated(
-      items,
-      foreignKey,
-      table,
-      targetKey
-    );
+    const relatedItems = await batchLoadRelated(items, foreignKey, table, targetKey)
 
     items.forEach((item, index) => {
-      (item as any)[name] = relatedItems[index];
-    });
-  });
+      ;(item as any)[name] = relatedItems[index]
+    })
+  })
 
-  await Promise.all(promises);
+  await Promise.all(promises)
 }
 
 /**
@@ -349,22 +343,22 @@ export async function executeQuery<T>(
   queryName: string,
   queryFn: () => Promise<T>
 ): Promise<T> {
-  const startTime = Date.now();
+  const startTime = Date.now()
 
   try {
-    const result = await queryFn();
-    const duration = Date.now() - startTime;
+    const result = await queryFn()
+    const duration = Date.now() - startTime
 
-    queryOptimizer.recordQuery(requestId, queryName, duration);
+    queryOptimizer.recordQuery(requestId, queryName, duration)
 
     if (duration > 1000) {
-      warn(`⚠️  Slow query detected (${duration}ms): ${queryName}`);
+      warn(`⚠️  Slow query detected (${duration}ms): ${queryName}`)
     }
 
-    return result;
+    return result
   } catch (error) {
-    const duration = Date.now() - startTime;
-    queryOptimizer.recordQuery(requestId, `${queryName} (FAILED)`, duration);
-    throw error;
+    const duration = Date.now() - startTime
+    queryOptimizer.recordQuery(requestId, `${queryName} (FAILED)`, duration)
+    throw error
   }
 }

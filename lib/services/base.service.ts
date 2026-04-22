@@ -1,22 +1,20 @@
-import { z } from 'zod';
-import { ApiError } from '@/lib/api/response';
-import { info as logInfo, warn as logWarn, error as logError } from '@/lib/logging';
-import type { BaseRepository } from '@/lib/repositories/base.repository';
+import { z } from 'zod'
+import { ApiError } from '@/lib/api/response'
+import { info as logInfo, warn as logWarn, error as logError } from '@/lib/logging'
+import type { BaseRepository } from '@/lib/repositories/base.repository'
 
 /**
  * Service result type for operations that can fail
  */
-export type ServiceResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: ServiceError };
+export type ServiceResult<T> = { success: true; data: T } | { success: false; error: ServiceError }
 
 /**
  * Service error structure
  */
 export interface ServiceError {
-  message: string;
-  code: string;
-  details?: any;
+  message: string
+  code: string
+  details?: any
 }
 
 /**
@@ -32,7 +30,7 @@ export abstract class BaseService<
   TRepository extends BaseRepository<any, any, any>,
   TEntity = any,
   TCreateDTO = any,
-  TUpdateDTO = any
+  TUpdateDTO = any,
 > {
   /**
    * @param repository - The repository instance for data access
@@ -44,17 +42,12 @@ export abstract class BaseService<
    */
   protected validate<T>(schema: z.ZodSchema<T>, data: unknown): T {
     try {
-      return schema.parse(data);
+      return schema.parse(data)
     } catch (error) {
       if (error instanceof z.ZodError) {
-        throw new ApiError(
-          'Validation failed',
-          400,
-          'VALIDATION_ERROR',
-          error.format()
-        );
+        throw new ApiError('Validation failed', 400, 'VALIDATION_ERROR', error.format())
       }
-      throw error;
+      throw error
     }
   }
 
@@ -62,66 +55,42 @@ export abstract class BaseService<
    * Throw a not found error
    */
   protected throwNotFound(resource: string, id: string): never {
-    throw new ApiError(
-      `${resource} not found`,
-      404,
-      'NOT_FOUND',
-      { resource, id }
-    );
+    throw new ApiError(`${resource} not found`, 404, 'NOT_FOUND', { resource, id })
   }
 
   /**
    * Throw a conflict error
    */
   protected throwConflict(message: string, details?: any): never {
-    throw new ApiError(
-      message,
-      409,
-      'CONFLICT',
-      details
-    );
+    throw new ApiError(message, 409, 'CONFLICT', details)
   }
 
   /**
    * Throw a forbidden error
    */
   protected throwForbidden(message: string, details?: any): never {
-    throw new ApiError(
-      message,
-      403,
-      'FORBIDDEN',
-      details
-    );
+    throw new ApiError(message, 403, 'FORBIDDEN', details)
   }
 
   /**
    * Throw an unauthorized error
    */
   protected throwUnauthorized(message: string = 'Unauthorized'): never {
-    throw new ApiError(
-      message,
-      401,
-      'UNAUTHORIZED'
-    );
+    throw new ApiError(message, 401, 'UNAUTHORIZED')
   }
 
   /**
    * Throw a bad request error
    */
   protected throwBadRequest(message: string, details?: any): never {
-    throw new ApiError(
-      message,
-      400,
-      'BAD_REQUEST',
-      details
-    );
+    throw new ApiError(message, 400, 'BAD_REQUEST', details)
   }
 
   /**
    * Create a success result
    */
   protected success<T>(data: T): ServiceResult<T> {
-    return { success: true, data };
+    return { success: true, data }
   }
 
   /**
@@ -131,18 +100,18 @@ export abstract class BaseService<
     return {
       success: false,
       error: { message, code, details },
-    };
+    }
   }
 
   /**
    * Check if entity exists by ID
    */
   protected async ensureExists(id: string, resourceName: string): Promise<TEntity> {
-    const entity = await this.repository.findById(id);
+    const entity = await this.repository.findById(id)
     if (!entity) {
-      this.throwNotFound(resourceName, id);
+      this.throwNotFound(resourceName, id)
     }
-    return entity as TEntity;
+    return entity as TEntity
   }
 
   /**
@@ -153,40 +122,36 @@ export abstract class BaseService<
     errorMessage: string = 'Operation failed'
   ): Promise<T> {
     try {
-      return await operation();
+      return await operation()
     } catch (error) {
       if (error instanceof ApiError) {
-        throw error;
+        throw error
       }
 
-      logError(`Service error: ${errorMessage}`, error instanceof Error ? error : undefined);
+      logError(`Service error: ${errorMessage}`, error instanceof Error ? error : undefined)
 
       throw new ApiError(
         errorMessage,
         500,
         'INTERNAL_ERROR',
         process.env.NODE_ENV === 'development' ? error : undefined
-      );
+      )
     }
   }
 
   /**
    * Log service operation
    */
-  protected log(
-    level: 'info' | 'warn' | 'error',
-    message: string,
-    data?: any
-  ): void {
-    const timestamp = new Date().toISOString();
-    const logData = data ? JSON.stringify(data) : '';
-    const line = `[${timestamp}] [${this.constructor.name}] ${message} ${logData}`.trim();
+  protected log(level: 'info' | 'warn' | 'error', message: string, data?: any): void {
+    const timestamp = new Date().toISOString()
+    const logData = data ? JSON.stringify(data) : ''
+    const line = `[${timestamp}] [${this.constructor.name}] ${message} ${logData}`.trim()
     if (level === 'error') {
-      logError(line);
+      logError(line)
     } else if (level === 'warn') {
-      logWarn(line);
+      logWarn(line)
     } else {
-      logInfo(line);
+      logInfo(line)
     }
   }
 
@@ -197,7 +162,7 @@ export abstract class BaseService<
     return {
       page: page || 1,
       limit: Math.min(limit || 20, 100), // Max 100 items per page
-    };
+    }
   }
 
   /**
@@ -207,11 +172,11 @@ export abstract class BaseService<
     data: T,
     fieldsToRemove: (keyof T)[]
   ): Omit<T, keyof T> {
-    const sanitized = { ...data };
-    fieldsToRemove.forEach((field) => {
-      delete sanitized[field];
-    });
-    return sanitized;
+    const sanitized = { ...data }
+    fieldsToRemove.forEach(field => {
+      delete sanitized[field]
+    })
+    return sanitized
   }
 
   /**
@@ -221,34 +186,34 @@ export abstract class BaseService<
     items: TInput[],
     operation: (item: TInput) => Promise<TOutput>,
     options: {
-      concurrency?: number;
-      continueOnError?: boolean;
+      concurrency?: number
+      continueOnError?: boolean
     } = {}
   ): Promise<{ results: TOutput[]; errors: Error[] }> {
-    const { concurrency = 5, continueOnError = false } = options;
-    const results: TOutput[] = [];
-    const errors: Error[] = [];
+    const { concurrency = 5, continueOnError = false } = options
+    const results: TOutput[] = []
+    const errors: Error[] = []
 
     // Process in batches for concurrency control
     for (let i = 0; i < items.length; i += concurrency) {
-      const batch = items.slice(i, i + concurrency);
+      const batch = items.slice(i, i + concurrency)
 
-      const batchPromises = batch.map(async (item) => {
+      const batchPromises = batch.map(async item => {
         try {
-          const result = await operation(item);
-          results.push(result);
+          const result = await operation(item)
+          results.push(result)
         } catch (error) {
-          errors.push(error as Error);
+          errors.push(error as Error)
           if (!continueOnError) {
-            throw error;
+            throw error
           }
         }
-      });
+      })
 
-      await Promise.all(batchPromises);
+      await Promise.all(batchPromises)
     }
 
-    return { results, errors };
+    return { results, errors }
   }
 
   /**
@@ -257,41 +222,37 @@ export abstract class BaseService<
   protected async retry<T>(
     operation: () => Promise<T>,
     options: {
-      maxAttempts?: number;
-      delayMs?: number;
-      backoffMultiplier?: number;
+      maxAttempts?: number
+      delayMs?: number
+      backoffMultiplier?: number
     } = {}
   ): Promise<T> {
-    const {
-      maxAttempts = 3,
-      delayMs = 1000,
-      backoffMultiplier = 2,
-    } = options;
+    const { maxAttempts = 3, delayMs = 1000, backoffMultiplier = 2 } = options
 
-    let lastError: Error;
+    let lastError: Error
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        return await operation();
+        return await operation()
       } catch (error) {
-        lastError = error as Error;
+        lastError = error as Error
 
         if (attempt === maxAttempts) {
-          break;
+          break
         }
 
         // Calculate delay with exponential backoff
-        const delay = delayMs * Math.pow(backoffMultiplier, attempt - 1);
-        await new Promise((resolve) => setTimeout(resolve, delay));
+        const delay = delayMs * Math.pow(backoffMultiplier, attempt - 1)
+        await new Promise(resolve => setTimeout(resolve, delay))
 
         this.log('warn', `Retry attempt ${attempt}/${maxAttempts}`, {
           error: lastError.message,
           delay,
-        });
+        })
       }
     }
 
-    throw lastError!;
+    throw lastError!
   }
 
   /**
@@ -304,6 +265,6 @@ export abstract class BaseService<
   ): Promise<T> {
     // Default implementation just executes the operation
     // Override this in child classes to add actual caching
-    return await operation();
+    return await operation()
   }
 }

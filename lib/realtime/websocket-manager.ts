@@ -14,15 +14,15 @@
  * @module lib/realtime/websocket-manager
  */
 
-import type { IncomingMessage } from 'http';
-import type { WebSocket as WSType } from 'ws';
-import { info, error as logError } from '@/lib/logging';
-import { getEventEmitter, EventType, type EventPayload } from './event-emitter';
+import type { IncomingMessage } from 'http'
+import type { WebSocket as WSType } from 'ws'
+import { info, error as logError } from '@/lib/logging'
+import { getEventEmitter, EventType, type EventPayload } from './event-emitter'
 import {
   getSubscriptionManager,
   ConnectionType,
   type SubscriptionFilter,
-} from './subscription-manager';
+} from './subscription-manager'
 
 /**
  * WebSocket message types
@@ -47,33 +47,33 @@ export enum WSMessageType {
  * WebSocket message structure
  */
 export interface WSMessage {
-  type: WSMessageType;
-  payload?: any;
-  timestamp?: Date;
+  type: WSMessageType
+  payload?: any
+  timestamp?: Date
 }
 
 /**
  * WebSocket client info
  */
 interface WSClient {
-  id: string;
-  socket: WSType;
-  userId?: string;
-  isAuthenticated: boolean;
-  isAlive: boolean;
-  connectedAt: Date;
-  lastMessageAt: Date;
+  id: string
+  socket: WSType
+  userId?: string
+  isAuthenticated: boolean
+  isAlive: boolean
+  connectedAt: Date
+  lastMessageAt: Date
 }
 
 /**
  * WebSocket manager options
  */
 export interface WebSocketManagerOptions {
-  heartbeatInterval?: number;
-  clientTimeout?: number;
-  maxClients?: number;
-  requireAuth?: boolean;
-  verifyToken?: (token: string) => Promise<{ userId: string } | null>;
+  heartbeatInterval?: number
+  clientTimeout?: number
+  maxClients?: number
+  requireAuth?: boolean
+  verifyToken?: (token: string) => Promise<{ userId: string } | null>
 }
 
 /**
@@ -82,23 +82,23 @@ export interface WebSocketManagerOptions {
  * Manages WebSocket connections and event broadcasting.
  */
 export class WebSocketManager {
-  private clients: Map<string, WSClient>;
-  private eventEmitter = getEventEmitter();
-  private subscriptionManager = getSubscriptionManager();
-  private heartbeatInterval: NodeJS.Timeout | null = null;
-  private clientIdCounter = 0;
+  private clients: Map<string, WSClient>
+  private eventEmitter = getEventEmitter()
+  private subscriptionManager = getSubscriptionManager()
+  private heartbeatInterval: NodeJS.Timeout | null = null
+  private clientIdCounter = 0
 
-  private options: Required<WebSocketManagerOptions>;
+  private options: Required<WebSocketManagerOptions>
 
   constructor(options: WebSocketManagerOptions = {}) {
-    this.clients = new Map();
+    this.clients = new Map()
     this.options = {
       heartbeatInterval: options.heartbeatInterval || 30000, // 30 seconds
       clientTimeout: options.clientTimeout || 60000, // 60 seconds
       maxClients: options.maxClients || 1000,
       requireAuth: options.requireAuth || false,
       verifyToken: options.verifyToken || (async () => null),
-    };
+    }
   }
 
   /**
@@ -106,12 +106,12 @@ export class WebSocketManager {
    */
   initialize(): void {
     // Start heartbeat checker
-    this.startHeartbeat();
+    this.startHeartbeat()
 
     // Subscribe to all events for broadcasting
-    this.eventEmitter.on('*', async (payload) => {
-      await this.broadcastEvent(payload);
-    });
+    this.eventEmitter.on('*', async payload => {
+      await this.broadcastEvent(payload)
+    })
   }
 
   /**
@@ -123,13 +123,13 @@ export class WebSocketManager {
   async handleConnection(socket: WSType, request: IncomingMessage): Promise<void> {
     // Check max clients limit
     if (this.clients.size >= this.options.maxClients) {
-      this.sendError(socket, 'Max clients limit reached');
-      socket.close(1008, 'Max clients limit reached');
-      return;
+      this.sendError(socket, 'Max clients limit reached')
+      socket.close(1008, 'Max clients limit reached')
+      return
     }
 
     // Generate client ID
-    const clientId = this.generateClientId();
+    const clientId = this.generateClientId()
 
     // Create client object
     const client: WSClient = {
@@ -140,22 +140,22 @@ export class WebSocketManager {
       isAlive: true,
       connectedAt: new Date(),
       lastMessageAt: new Date(),
-    };
+    }
 
     // Store client
-    this.clients.set(clientId, client);
+    this.clients.set(clientId, client)
 
     // Setup socket event handlers
-    this.setupSocketHandlers(client);
+    this.setupSocketHandlers(client)
 
     // Subscribe to all events by default (can be customized later)
     if (client.isAuthenticated) {
       this.subscriptionManager.subscribe(clientId, ConnectionType.WEBSOCKET, {
         eventTypes: ['*'],
-      });
+      })
     }
 
-    info(`WebSocket client connected: ${clientId} (total: ${this.clients.size})`);
+    info(`WebSocket client connected: ${clientId} (total: ${this.clients.size})`)
   }
 
   /**
@@ -164,34 +164,34 @@ export class WebSocketManager {
    * @param client - Client info
    */
   private setupSocketHandlers(client: WSClient): void {
-    const { socket, id } = client;
+    const { socket, id } = client
 
     // Handle incoming messages
-    socket.on('message', async (data) => {
+    socket.on('message', async data => {
       try {
-        const message = this.parseMessage(data);
-        await this.handleMessage(client, message);
+        const message = this.parseMessage(data)
+        await this.handleMessage(client, message)
       } catch (error) {
-        this.sendError(socket, 'Invalid message format');
+        this.sendError(socket, 'Invalid message format')
       }
-    });
+    })
 
     // Handle pong (heartbeat response)
     socket.on('pong', () => {
-      client.isAlive = true;
-      client.lastMessageAt = new Date();
-    });
+      client.isAlive = true
+      client.lastMessageAt = new Date()
+    })
 
     // Handle close
     socket.on('close', () => {
-      this.handleDisconnect(id);
-    });
+      this.handleDisconnect(id)
+    })
 
     // Handle error
-    socket.on('error', (error) => {
-      logError(`WebSocket error for client ${id}`, error instanceof Error ? error : undefined);
-      this.handleDisconnect(id);
-    });
+    socket.on('error', error => {
+      logError(`WebSocket error for client ${id}`, error instanceof Error ? error : undefined)
+      this.handleDisconnect(id)
+    })
   }
 
   /**
@@ -201,38 +201,38 @@ export class WebSocketManager {
    * @param message - WebSocket message
    */
   private async handleMessage(client: WSClient, message: WSMessage): Promise<void> {
-    const { socket, id, isAuthenticated } = client;
+    const { socket, id, isAuthenticated } = client
 
     // Update last message time
-    client.lastMessageAt = new Date();
+    client.lastMessageAt = new Date()
 
     switch (message.type) {
       case WSMessageType.AUTH:
-        await this.handleAuth(client, message.payload);
-        break;
+        await this.handleAuth(client, message.payload)
+        break
 
       case WSMessageType.SUBSCRIBE:
         if (!isAuthenticated) {
-          this.sendError(socket, 'Authentication required');
-          return;
+          this.sendError(socket, 'Authentication required')
+          return
         }
-        this.handleSubscribe(client, message.payload);
-        break;
+        this.handleSubscribe(client, message.payload)
+        break
 
       case WSMessageType.UNSUBSCRIBE:
         if (!isAuthenticated) {
-          this.sendError(socket, 'Authentication required');
-          return;
+          this.sendError(socket, 'Authentication required')
+          return
         }
-        this.handleUnsubscribe(client, message.payload);
-        break;
+        this.handleUnsubscribe(client, message.payload)
+        break
 
       case WSMessageType.PING:
-        this.send(socket, { type: WSMessageType.PONG });
-        break;
+        this.send(socket, { type: WSMessageType.PONG })
+        break
 
       default:
-        this.sendError(socket, `Unknown message type: ${message.type}`);
+        this.sendError(socket, `Unknown message type: ${message.type}`)
     }
   }
 
@@ -243,44 +243,44 @@ export class WebSocketManager {
    * @param payload - Auth payload containing token
    */
   private async handleAuth(client: WSClient, payload: any): Promise<void> {
-    const { socket, id } = client;
+    const { socket, id } = client
 
     try {
-      const { token } = payload;
+      const { token } = payload
       if (!token) {
-        this.sendError(socket, 'Token required');
-        return;
+        this.sendError(socket, 'Token required')
+        return
       }
 
       // Verify token
-      const authResult = await this.options.verifyToken(token);
+      const authResult = await this.options.verifyToken(token)
       if (!authResult) {
-        this.sendError(socket, 'Invalid token');
-        socket.close(1008, 'Authentication failed');
-        return;
+        this.sendError(socket, 'Invalid token')
+        socket.close(1008, 'Authentication failed')
+        return
       }
 
       // Update client
-      client.userId = authResult.userId;
-      client.isAuthenticated = true;
+      client.userId = authResult.userId
+      client.isAuthenticated = true
 
       // Subscribe to all events by default
       this.subscriptionManager.subscribe(id, ConnectionType.WEBSOCKET, {
         eventTypes: ['*'],
         userId: authResult.userId,
-      });
+      })
 
       // Send success response
       this.send(socket, {
         type: WSMessageType.AUTHENTICATED,
         payload: { userId: authResult.userId },
-      });
+      })
 
-      info(`Client ${id} authenticated as user ${authResult.userId}`);
+      info(`Client ${id} authenticated as user ${authResult.userId}`)
     } catch (error) {
-      logError(`Authentication error for client ${id}`, error instanceof Error ? error : undefined);
-      this.sendError(socket, 'Authentication failed');
-      socket.close(1008, 'Authentication failed');
+      logError(`Authentication error for client ${id}`, error instanceof Error ? error : undefined)
+      this.sendError(socket, 'Authentication failed')
+      socket.close(1008, 'Authentication failed')
     }
   }
 
@@ -291,26 +291,26 @@ export class WebSocketManager {
    * @param payload - Subscribe payload
    */
   private handleSubscribe(client: WSClient, payload: any): void {
-    const { socket, id, userId } = client;
+    const { socket, id, userId } = client
 
     try {
-      const { eventTypes } = payload as { eventTypes?: string[] };
+      const { eventTypes } = payload as { eventTypes?: string[] }
 
       const filter: SubscriptionFilter = {
         eventTypes: eventTypes || ['*'],
         userId,
-      };
+      }
 
-      this.subscriptionManager.subscribe(id, ConnectionType.WEBSOCKET, filter);
+      this.subscriptionManager.subscribe(id, ConnectionType.WEBSOCKET, filter)
 
       this.send(socket, {
         type: WSMessageType.SUBSCRIBED,
         payload: { eventTypes: filter.eventTypes },
-      });
+      })
 
-      info(`Client ${id} subscribed to: ${JSON.stringify(filter.eventTypes)}`);
+      info(`Client ${id} subscribed to: ${JSON.stringify(filter.eventTypes)}`)
     } catch (error) {
-      this.sendError(socket, 'Invalid subscribe payload');
+      this.sendError(socket, 'Invalid subscribe payload')
     }
   }
 
@@ -321,15 +321,15 @@ export class WebSocketManager {
    * @param payload - Unsubscribe payload
    */
   private handleUnsubscribe(client: WSClient, payload: any): void {
-    const { socket, id } = client;
+    const { socket, id } = client
 
-    this.subscriptionManager.unsubscribe(id);
+    this.subscriptionManager.unsubscribe(id)
 
     this.send(socket, {
       type: WSMessageType.UNSUBSCRIBED,
-    });
+    })
 
-    info(`Client ${id} unsubscribed`);
+    info(`Client ${id} unsubscribed`)
   }
 
   /**
@@ -338,16 +338,16 @@ export class WebSocketManager {
    * @param clientId - Client ID
    */
   private handleDisconnect(clientId: string): void {
-    const client = this.clients.get(clientId);
-    if (!client) return;
+    const client = this.clients.get(clientId)
+    if (!client) return
 
     // Remove subscription
-    this.subscriptionManager.unsubscribe(clientId);
+    this.subscriptionManager.unsubscribe(clientId)
 
     // Remove client
-    this.clients.delete(clientId);
+    this.clients.delete(clientId)
 
-    info(`WebSocket client disconnected: ${clientId} (total: ${this.clients.size})`);
+    info(`WebSocket client disconnected: ${clientId} (total: ${this.clients.size})`)
   }
 
   /**
@@ -357,18 +357,18 @@ export class WebSocketManager {
    */
   private async broadcastEvent(payload: EventPayload): Promise<void> {
     // Get clients subscribed to this event type
-    const subscribedClients = this.subscriptionManager.getClientsByEventType(payload.type);
+    const subscribedClients = this.subscriptionManager.getClientsByEventType(payload.type)
 
-    let successCount = 0;
-    let errorCount = 0;
+    let successCount = 0
+    let errorCount = 0
 
     for (const clientId of subscribedClients) {
-      const client = this.clients.get(clientId);
-      if (!client) continue;
+      const client = this.clients.get(clientId)
+      if (!client) continue
 
       // Check if client should receive this event
       if (!this.subscriptionManager.shouldReceiveEvent(clientId, payload)) {
-        continue;
+        continue
       }
 
       // Send event to client
@@ -376,18 +376,19 @@ export class WebSocketManager {
         this.send(client.socket, {
           type: WSMessageType.EVENT,
           payload,
-        });
-        successCount++;
+        })
+        successCount++
       } catch (error) {
-        logError(`Failed to send event to client ${clientId}`, error instanceof Error ? error : undefined);
-        errorCount++;
+        logError(
+          `Failed to send event to client ${clientId}`,
+          error instanceof Error ? error : undefined
+        )
+        errorCount++
       }
     }
 
     if (successCount > 0 || errorCount > 0) {
-      info(
-        `Broadcast event ${payload.type}: ${successCount} sent, ${errorCount} failed`
-      );
+      info(`Broadcast event ${payload.type}: ${successCount} sent, ${errorCount} failed`)
     }
   }
 
@@ -400,7 +401,7 @@ export class WebSocketManager {
   private send(socket: WSType, message: WSMessage): void {
     if (socket.readyState !== 1) {
       // WebSocket.OPEN
-      return;
+      return
     }
 
     socket.send(
@@ -408,7 +409,7 @@ export class WebSocketManager {
         ...message,
         timestamp: new Date(),
       })
-    );
+    )
   }
 
   /**
@@ -421,7 +422,7 @@ export class WebSocketManager {
     this.send(socket, {
       type: WSMessageType.ERROR,
       payload: { error },
-    });
+    })
   }
 
   /**
@@ -431,14 +432,14 @@ export class WebSocketManager {
    * @returns Parsed message
    */
   private parseMessage(data: any): WSMessage {
-    const raw = data.toString();
-    const parsed = JSON.parse(raw);
+    const raw = data.toString()
+    const parsed = JSON.parse(raw)
 
     if (!parsed.type) {
-      throw new Error('Message type required');
+      throw new Error('Message type required')
     }
 
-    return parsed as WSMessage;
+    return parsed as WSMessage
   }
 
   /**
@@ -446,43 +447,43 @@ export class WebSocketManager {
    */
   private startHeartbeat(): void {
     this.heartbeatInterval = setInterval(() => {
-      this.checkHeartbeat();
-    }, this.options.heartbeatInterval);
+      this.checkHeartbeat()
+    }, this.options.heartbeatInterval)
   }
 
   /**
    * Check client heartbeats
    */
   private checkHeartbeat(): void {
-    const now = Date.now();
-    const disconnectList: string[] = [];
+    const now = Date.now()
+    const disconnectList: string[] = []
 
     for (const [clientId, client] of this.clients) {
       // Check if client is alive
       if (!client.isAlive) {
-        disconnectList.push(clientId);
-        continue;
+        disconnectList.push(clientId)
+        continue
       }
 
       // Check timeout
-      const idleTime = now - client.lastMessageAt.getTime();
+      const idleTime = now - client.lastMessageAt.getTime()
       if (idleTime > this.options.clientTimeout) {
-        disconnectList.push(clientId);
-        continue;
+        disconnectList.push(clientId)
+        continue
       }
 
       // Send ping
-      client.isAlive = false;
-      client.socket.ping();
+      client.isAlive = false
+      client.socket.ping()
     }
 
     // Disconnect inactive clients
     for (const clientId of disconnectList) {
-      const client = this.clients.get(clientId);
+      const client = this.clients.get(clientId)
       if (client) {
-        info(`Disconnecting inactive client: ${clientId}`);
-        client.socket.terminate();
-        this.handleDisconnect(clientId);
+        info(`Disconnecting inactive client: ${clientId}`)
+        client.socket.terminate()
+        this.handleDisconnect(clientId)
       }
     }
   }
@@ -493,7 +494,7 @@ export class WebSocketManager {
    * @returns Client ID
    */
   private generateClientId(): string {
-    return `ws_${Date.now()}_${++this.clientIdCounter}`;
+    return `ws_${Date.now()}_${++this.clientIdCounter}`
   }
 
   /**
@@ -502,7 +503,7 @@ export class WebSocketManager {
    * @returns Number of connected clients
    */
   getClientCount(): number {
-    return this.clients.size;
+    return this.clients.size
   }
 
   /**
@@ -511,15 +512,13 @@ export class WebSocketManager {
    * @returns Manager statistics
    */
   getStats() {
-    const subscriptionStats = this.subscriptionManager.getStats();
+    const subscriptionStats = this.subscriptionManager.getStats()
 
     return {
       connectedClients: this.clients.size,
-      authenticatedClients: Array.from(this.clients.values()).filter(
-        (c) => c.isAuthenticated
-      ).length,
+      authenticatedClients: Array.from(this.clients.values()).filter(c => c.isAuthenticated).length,
       subscriptions: subscriptionStats,
-    };
+    }
   }
 
   /**
@@ -528,29 +527,29 @@ export class WebSocketManager {
   async shutdown(): Promise<void> {
     // Stop heartbeat
     if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval);
-      this.heartbeatInterval = null;
+      clearInterval(this.heartbeatInterval)
+      this.heartbeatInterval = null
     }
 
     // Close all client connections
     for (const client of this.clients.values()) {
-      client.socket.close(1001, 'Server shutting down');
+      client.socket.close(1001, 'Server shutting down')
     }
 
     // Clear clients
-    this.clients.clear();
+    this.clients.clear()
 
     // Clear subscriptions
-    this.subscriptionManager.clear();
+    this.subscriptionManager.clear()
 
-    info('WebSocket manager shutdown complete');
+    info('WebSocket manager shutdown complete')
   }
 }
 
 /**
  * Global WebSocket manager instance (singleton)
  */
-let globalWebSocketManager: WebSocketManager | null = null;
+let globalWebSocketManager: WebSocketManager | null = null
 
 /**
  * Get or create global WebSocket manager instance
@@ -558,14 +557,12 @@ let globalWebSocketManager: WebSocketManager | null = null;
  * @param options - WebSocket manager options
  * @returns Global WebSocket manager instance
  */
-export function getWebSocketManager(
-  options?: WebSocketManagerOptions
-): WebSocketManager {
+export function getWebSocketManager(options?: WebSocketManagerOptions): WebSocketManager {
   if (!globalWebSocketManager) {
-    globalWebSocketManager = new WebSocketManager(options);
-    globalWebSocketManager.initialize();
+    globalWebSocketManager = new WebSocketManager(options)
+    globalWebSocketManager.initialize()
   }
-  return globalWebSocketManager;
+  return globalWebSocketManager
 }
 
 /**
@@ -574,10 +571,8 @@ export function getWebSocketManager(
  * @param options - WebSocket manager options
  * @returns New WebSocket manager instance
  */
-export function createWebSocketManager(
-  options?: WebSocketManagerOptions
-): WebSocketManager {
-  const manager = new WebSocketManager(options);
-  manager.initialize();
-  return manager;
+export function createWebSocketManager(options?: WebSocketManagerOptions): WebSocketManager {
+  const manager = new WebSocketManager(options)
+  manager.initialize()
+  return manager
 }
