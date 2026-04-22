@@ -1,1 +1,1 @@
-🧹 warning-cleanup Stage 2 완료 — app/ 21파일 logger 치환 (61→30, no-console 소진)
+📊 warning-cleanup Gap 분석 — 57% (Stage 43%, Warning 83.5%)

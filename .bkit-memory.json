@@ -1,9 +1,12 @@
 {
   "activeFeature": "warning-cleanup",
-  "phase": "do",
+  "phase": "check",
   "startedAt": "2026-04-22",
   "planPath": "docs/01-plan/features/warning-cleanup.plan.md",
   "designPath": "docs/02-design/features/warning-cleanup.design.md",
+  "analysisPath": "docs/03-analysis/warning-cleanup.analysis.md",
+  "matchRate": 57,
+  "matchRateNote": "Stage 기준 43%, Warning 기준 83.5%. 평균/종합 57% — 90% 미달이므로 iterate 또는 수동 Stage 3~5 진행 필요",
   "doProgress": {
     "initialWarnings": 182,
     "currentWarnings": 30,
@@ -15,9 +18,7 @@
       "stage5_component_extraction": "pending",
       "stage6_minor_fixes": "completed",
       "stage7_final_verification": "pending"
-    },
-    "remainingMaxLinesFiles": 30,
-    "note": "남은 30 warnings는 모두 max-lines (파일 분리 필요). Stage 3~5 작업 범위."
+    }
   },
   "previousFeature": {
     "name": "asca-deploy-2026-04-09",
