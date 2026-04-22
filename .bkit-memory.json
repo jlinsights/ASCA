@@ -1,43 +1,41 @@
 {
-  "activeFeature": "warning-cleanup",
-  "phase": "completed-partial",
+  "activeFeature": "warning-cleanup-cycle-2",
+  "phase": "plan",
   "startedAt": "2026-04-22",
-  "completedAt": "2026-04-22",
-  "planPath": "docs/01-plan/features/warning-cleanup.plan.md",
-  "designPath": "docs/02-design/features/warning-cleanup.design.md",
-  "analysisPath": "docs/03-analysis/warning-cleanup.analysis.md",
-  "reportPath": "docs/04-report/features/warning-cleanup.report.md",
-  "matchRate": 57,
-  "warningReduction": 83.5,
-  "cycleNumber": 1,
-  "cycleStatus": "partial",
-  "nextCycleScope": "Stage 3 (Types) + Stage 4 (Services) + Stage 5 (Components) + Stage 7 (Final verify)",
-  "doProgress": {
-    "initialWarnings": 182,
-    "currentWarnings": 30,
-    "stageStatus": {
-      "stage1_eslint_override": "completed",
-      "stage2_logger_replacement": "completed",
-      "stage3_types_split": "deferred",
-      "stage4_services_split": "deferred",
-      "stage5_component_extraction": "deferred",
-      "stage6_minor_fixes": "completed",
-      "stage7_final_verification": "deferred"
-    }
+  "planPath": "docs/01-plan/features/warning-cleanup-cycle-2.plan.md",
+  "cycleNumber": 2,
+  "parentCycle": {
+    "name": "warning-cleanup",
+    "status": "completed-partial",
+    "matchRate": 57,
+    "warningReduction": 83.5,
+    "reportPath": "docs/04-report/features/warning-cleanup.report.md"
   },
-  "commits": [
-    "e638b3e2",
-    "eaa68391",
-    "742d811d",
-    "09633eca"
+  "baselineWarnings": 30,
+  "targetWarnings": 0,
+  "estimatedHours": 13,
+  "stages": [
+    "Stage 3 — Types 분리",
+    "Stage 4 — Services/Schema/Icons 분리",
+    "Stage 5 — Page/Component 추출",
+    "Stage 7 — Final verification"
   ],
-  "previousFeature": {
-    "name": "asca-deploy-2026-04-09",
-    "phase": "completed",
-    "completedAt": "2026-04-09",
-    "matchRate": 100,
-    "reportPath": "docs/04-report/features/asca-deploy-2026-04-09.report.md"
-  },
+  "previousFeatures": [
+    {
+      "name": "warning-cleanup",
+      "phase": "completed-partial",
+      "completedAt": "2026-04-22",
+      "matchRate": 57,
+      "reportPath": "docs/04-report/features/warning-cleanup.report.md"
+    },
+    {
+      "name": "asca-deploy-2026-04-09",
+      "phase": "completed",
+      "completedAt": "2026-04-09",
+      "matchRate": 100,
+      "reportPath": "docs/04-report/features/asca-deploy-2026-04-09.report.md"
+    }
+  ],
   "lastDeploy": {
     "date": "2026-04-09",
     "commit": "799a4d41",
