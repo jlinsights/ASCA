@@ -21,16 +21,9 @@ import {
   Users,
   Instagram,
 } from 'lucide-react'
-import {
-  EXHIBITION_STATUS_LABELS,
-  EXHIBITION_ARTIST_ROLE_LABELS,
-} from '@/types/exhibition'
+import { EXHIBITION_STATUS_LABELS, EXHIBITION_ARTIST_ROLE_LABELS } from '@/types/exhibition'
 import type { ExhibitionWithDetails } from '@/types/exhibition'
-import {
-  statusColors,
-  formatExhibitionDate,
-  getRemainingDays,
-} from './exhibition-detail-meta'
+import { statusColors, formatExhibitionDate, getRemainingDays } from './exhibition-detail-meta'
 
 interface ExhibitionDetailBodyProps {
   exhibition: ExhibitionWithDetails
@@ -211,9 +204,7 @@ export function ExhibitionDetailBody({ exhibition }: ExhibitionDetailBodyProps) 
 
             {/* Description */}
             <div className='prose prose-slate dark:prose-invert max-w-none'>
-              <h3 className='text-xl font-serif font-semibold text-foreground mb-4'>
-                전시 소개
-              </h3>
+              <h3 className='text-xl font-serif font-semibold text-foreground mb-4'>전시 소개</h3>
               <div className='whitespace-pre-wrap text-foreground leading-relaxed'>
                 {exhibition.description}
               </div>
