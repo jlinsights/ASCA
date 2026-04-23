@@ -13,10 +13,15 @@
     "reportPath": "docs/04-report/features/warning-cleanup.report.md"
   },
   "baselineWarnings": 30,
-  "currentWarnings": 28,
+  "currentWarnings": 24,
   "targetWarnings": 0,
   "estimatedHours": 13,
   "stage3Status": "completed",
+  "stage4aStatus": "completed",
+  "stage4bStatus": "completed",
+  "stage4cStatus": "completed",
+  "stage4dStatus": "completed",
+  "stage4Status": "completed",
   "stages": [
     "Stage 3 — Types 분리",
     "Stage 4 — Services/Schema/Icons 분리",
