@@ -6,11 +6,7 @@ import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, AlertCircle, Loader2 } from 'lucide-react'
-import {
-  getEventById,
-  incrementEventViews,
-  getRelatedEvents,
-} from '@/lib/supabase/cms'
+import { getEventById, incrementEventViews, getRelatedEvents } from '@/lib/supabase/cms'
 import type { Event } from '@/types/cms'
 import { EventDetailBody } from './_components/event-detail-body'
 
