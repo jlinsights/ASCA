@@ -213,9 +213,7 @@ export function EventDetailBody({ event, relatedEvents }: EventDetailBodyProps) 
                   <MapPin className='h-5 w-5 text-muted-foreground mt-0.5' />
                   <div>
                     <p className='font-medium text-foreground'>{event.location}</p>
-                    {event.venue && (
-                      <p className='text-sm text-muted-foreground'>{event.venue}</p>
-                    )}
+                    {event.venue && <p className='text-sm text-muted-foreground'>{event.venue}</p>}
                   </div>
                 </div>
 
