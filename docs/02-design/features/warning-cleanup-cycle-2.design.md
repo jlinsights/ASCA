@@ -227,6 +227,39 @@ After:
 | `profile/membership/_components/profile-tabs.tsx` | ProfileTab (탭별 콘텐츠를 각각 파일로), ProfileTabList, ProfileTabContent |
 | `academy/_components/sac-academy.tsx` | AcademyHero, AcademyCourses, AcademyInstructors, AcademyCTA |
 
+### 3.3.1 Stage 5a — Implementation Status (2026-04-24)
+
+**실제 진행 순서 (Design과 다름):**
+
+| # | Commit | 파일 | Before → After | Warning Δ |
+|---|--------|------|----------------|-----------|
+| 5a-1/1 | `82eb14b9` | `events/page.tsx` | 557 → 307 | 24 → 23 |
+| 5a-1/2 | `575017a8` | `events/[id]/page.tsx` | 620 → 123 | 23 → 22 |
+| 5a-1/3 | `4bcf9f84` | `exhibitions/page.tsx` | 766 → 280 | 22 → 21 |
+| 5a-1/4 | `0a14bc2d` | `exhibitions/[id]/page.tsx` | 617 → 206 | 21 → 20 |
+| 5a-1/5 | `5987e33e` | `artists/page.tsx` | 827 → 201 | 20 → 19 |
+| 5a-1/6 | `1282e599` | `artworks/[id]/page.tsx` | 943 → 115 | 19 → 18 |
+| 5a-1/7 | `90129b66` | `profile/membership/_components/profile-tabs.tsx` | 974 → 84 | 18 → 17 |
+
+**Design과의 차이점:**
+
+1. **순서 변경**: Design은 `artists → artworks/[id] → genre → upload → awards`였으나, 실제로는 **영향 범위가 작은 페이지 먼저** (events → exhibitions) → 큰 페이지 (artworks/[id], profile-tabs) 순으로 진행. 이유: 패턴 검증 후 대형 파일 안전 진행.
+2. **`profile-tabs` 위치**: Design상 Stage 5a-2였으나 Stage 5a-1에 포함됨. 이유: 916줄 최대 파일 선제 해결.
+3. **Dead code 제거 부가 이득**: `profile-tabs.tsx`에서 미사용 mock 데이터 (mockMemberProfile 등) 제거 — 향후 `profile-header.tsx`에도 동일 중복 존재함을 발견.
+
+**진행 중 (Stage 5a-1 후속 / Stage 5a-2):**
+
+| 파일 | 줄수 | 우선순위 |
+|------|------|----------|
+| `admin/membership/page.tsx` | 854 | HIGH (관리자, 내부) |
+| `awards/[year]/page.tsx` | 786 | HIGH (공개) |
+| `bylaws-content.tsx` | 745 | MEDIUM |
+| `programs/cultural-exchange/page.tsx` | 686 | MEDIUM |
+| `academy/_components/sac-academy.tsx` | 572 | LOW |
+| `artworks/upload/artwork-upload-client.tsx` | 514 | LOW (marginal) |
+| `artworks/genre/[genre]/page.tsx` | 517 | LOW (marginal) |
+| `history/page.tsx` | 527 | LOW (marginal) |
+
 ### 3.4 Stage 5b — Component Decomposition
 
 | Component | Sub-components / Hooks |
@@ -563,3 +596,4 @@ npx jscodeshift -t <transform.js> <path>
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
 | 0.1 | 2026-04-22 | Initial Cycle #2 design — 파일별 분리 맵, barrel 규칙, Server/Client 경계, 25+ commit plan | jhlim725 |
+| 0.2 | 2026-04-24 | Stage 5a-1 실제 진행 반영 (§3.3.1 추가) — 7개 페이지 완료, 30→17 warnings (-43.3%), Match Rate 71.4%. 순서 변경(events 선행), profile-tabs Stage 5a-1 포함. | jhlim725 |

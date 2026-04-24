@@ -13,8 +13,9 @@
     "reportPath": "docs/04-report/features/warning-cleanup.report.md"
   },
   "baselineWarnings": 30,
-  "currentWarnings": 24,
+  "currentWarnings": 17,
   "targetWarnings": 0,
+  "warningReduction": 43.3,
   "estimatedHours": 13,
   "stage3Status": "completed",
   "stage4aStatus": "completed",
@@ -22,6 +23,27 @@
   "stage4cStatus": "completed",
   "stage4dStatus": "completed",
   "stage4Status": "completed",
+  "stage5a1Status": "in-progress",
+  "stage5a1Progress": {
+    "completed": [
+      "events/page.tsx",
+      "events/[id]/page.tsx",
+      "exhibitions/page.tsx",
+      "exhibitions/[id]/page.tsx",
+      "artists/page.tsx",
+      "artworks/[id]/page.tsx",
+      "profile/membership/_components/profile-tabs.tsx"
+    ],
+    "pending": [
+      "admin/membership/page.tsx",
+      "awards/[year]/page.tsx",
+      "bylaws-content.tsx",
+      "programs/cultural-exchange/page.tsx",
+      "academy/_components/sac-academy.tsx"
+    ]
+  },
+  "midCheckMatchRate": 71.4,
+  "midCheckDate": "2026-04-24",
   "stages": [
     "Stage 3 — Types 분리",
     "Stage 4 — Services/Schema/Icons 분리",
