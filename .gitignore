@@ -49,3 +49,6 @@ public/webflow/orientalcalligraphy/images/
 public/webflow/orientalcalligraphy/js/
 public/webflow/orientalcalligraphy/fonts/
 public/webflow/orientalcalligraphy/documents/
+
+# HyperFrames 브랜드 인트로 프로젝트 (별도 빌드 산출물)
+videos/
