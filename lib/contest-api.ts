@@ -6,7 +6,7 @@ import type {
   JudgeScore,
   ContestStatus,
   SubmissionStatus 
-} from '@/types/contest'
+} from '@/lib/types/contest-legacy'
 
 export class ContestAPI {
   

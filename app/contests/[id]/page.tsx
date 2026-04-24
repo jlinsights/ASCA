@@ -35,7 +35,7 @@ import {
   getContestDeadlineInfo,
   getContestStatusColor,
   canApplyToContest,
-} from '@/types/contest-new'
+} from '@/lib/types/contest-new-legacy'
 
 export default function ContestDetailPage() {
   const params = useParams()

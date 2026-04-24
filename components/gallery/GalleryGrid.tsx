@@ -4,7 +4,7 @@ import React, { useState, useMemo, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { VirtuosoGrid } from 'react-virtuoso'
-import { GalleryItem, GalleryCategory } from '@/types/gallery'
+import { GalleryItem, GalleryCategory } from '@/lib/types/gallery/gallery-legacy'
 import SocialShare from './SocialShare'
 
 interface GalleryGridProps {

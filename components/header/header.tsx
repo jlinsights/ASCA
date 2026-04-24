@@ -6,10 +6,10 @@ import { Menu, X, ChevronDown, Settings } from "lucide-react"
 
 import { HeaderAuthSection } from "./header-auth-section"
 import { HeaderMobileAuth } from "./header-mobile-auth"
-import { ThemeToggle } from "./theme-toggle"
-import { ThemeTransition } from "./theme-transition"
-import { LanguageSelector } from "./language-selector"
-import { Logo } from "./logo"
+import { ThemeToggle } from "../theme-toggle"
+import { ThemeTransition } from "../theme-transition"
+import { LanguageSelector } from "../language-selector"
+import { Logo } from "../brand/logo"
 import { useLanguage } from "@/contexts/language-context"
 
 // 메뉴 구조 정의

@@ -25,7 +25,7 @@ import type {
   ContestCategory,
   ContestType,
   ContestStatus,
-} from '@/types/contest-new'
+} from '@/lib/types/contest-new-legacy'
 import { createContest, updateContest } from '@/lib/api/contests'
 
 const contestSchema = z

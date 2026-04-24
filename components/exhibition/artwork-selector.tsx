@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import type { Artwork } from '@/types/artwork'
+import type { Artwork } from '@/lib/types/artwork-legacy'
 
 interface SelectedArtwork extends Artwork {
   displayOrder: number

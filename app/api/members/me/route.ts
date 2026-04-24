@@ -2,7 +2,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { supabase } from '@/lib/supabase'
-import { Member, ArtisticProfile, Achievement, Certification } from '@/types/membership'
+import { Member, ArtisticProfile, Achievement, Certification } from '@/lib/types/membership-legacy'
 
 // GET /api/members/me - 현재 로그인한 사용자의 프로필 조회
 export async function GET(request: NextRequest) {

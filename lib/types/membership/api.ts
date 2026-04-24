@@ -85,6 +85,12 @@ export interface UpdateMemberRequest {
   preferred_language?: string
   membership_level_id?: string
   membership_status?: 'active' | 'inactive' | 'suspended' | 'pending_approval' | 'expelled'
+  profile_image_url?: string
+  bio_ko?: string
+  bio_en?: string
+  website_url?: string
+  social_media?: Record<string, any>
+  is_public?: boolean
 }
 
 export interface MemberSearchParams {

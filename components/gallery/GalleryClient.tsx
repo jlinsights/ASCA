@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import GalleryGrid from './GalleryGrid'
-import { GalleryData } from '@/types/gallery'
+import { GalleryData } from '@/lib/types/gallery/gallery-legacy'
 
 interface GalleryClientProps {
   data: GalleryData

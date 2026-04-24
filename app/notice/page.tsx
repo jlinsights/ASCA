@@ -12,7 +12,7 @@ import { Calendar, Pin, Eye, MessageCircle, Search, Filter, ChevronLeft, Chevron
 import { getNotices } from "@/lib/supabase/cms"
 import { searchNotices, AdvancedSearchFilters } from "@/lib/supabase/search"
 import SimpleSearch from "@/components/search/SimpleSearch"
-import type { Notice, SearchFilters, PaginationParams } from "@/types/cms"
+import type { Notice, SearchFilters, PaginationParams } from "@/lib/types/cms-legacy"
 import Link from "next/link"
 
 const categoryColors = {

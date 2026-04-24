@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar, MapPin, Eye, Star, Ticket, User, Users, ExternalLink } from 'lucide-react'
-import type { Exhibition } from '@/types/cms'
+import type { Exhibition } from '@/lib/types/cms-legacy'
 import { statusColors, statusLabels, formatExhibitionDate } from './exhibitions-meta'
 
 interface ExhibitionCardProps {

@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/select'
 import { Search, Filter, ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { getExhibitions } from '@/lib/supabase/cms'
-import type { Exhibition, SearchFilters, PaginationParams } from '@/types/cms'
+import type { Exhibition, SearchFilters, PaginationParams } from '@/lib/types/cms-legacy'
 import { EmptyState } from '@/components/ui/empty-state'
 import { ExhibitionCard } from './_components/exhibition-card'
 import { ExhibitionDetailDialog } from './_components/exhibition-detail-dialog'

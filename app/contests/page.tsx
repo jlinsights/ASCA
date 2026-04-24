@@ -23,7 +23,7 @@ import {
   CONTEST_CATEGORY_LABELS,
   getContestDeadlineInfo,
   getContestStatusColor
-} from '@/types/contest-new'
+} from '@/lib/types/contest-new-legacy'
 
 export default function ContestsPage() {
   const [contests, setContests] = useState<Contest[]>([])

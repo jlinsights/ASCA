@@ -2,7 +2,7 @@ import { AirtableService, AirtableArtist, AirtableArtwork, AirtableExhibition, A
 import { createArtist, createArtwork, type ArtistInsert, type ArtworkInsert } from './admin-api';
 import { randomUUID } from 'crypto';
 import { createExhibition } from './supabase/cms';
-import type { ExhibitionFormData } from '@/types/cms';
+import type { ExhibitionFormData } from '@/lib/types/cms-legacy';
 import { ensureSupabase } from './supabase';
 
 // Airtable → Supabase 데이터 변환 함수들

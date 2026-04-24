@@ -6,7 +6,7 @@ import type {
   CareerEntryFormData,
   TimelineFilters,
   CareerEntryType
-} from '@/types/career'
+} from '@/lib/types/career-legacy'
 
 /**
  * Fetch career entries for an artist

@@ -21,8 +21,8 @@ import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, Save, Eye } from 'lucide-react'
 import { useUser } from '@clerk/nextjs'
 import { createArtwork } from '@/lib/api/artworks'
-import type { ArtworkCategory, ArtworkStatus } from '@/types/artwork'
-import { ARTWORK_CATEGORY_LABELS } from '@/types/artwork'
+import type { ArtworkCategory, ArtworkStatus } from '@/lib/types/artwork-legacy'
+import { ARTWORK_CATEGORY_LABELS } from '@/lib/types/artwork-legacy'
 import { error as logError } from '@/lib/logging'
 
 import {

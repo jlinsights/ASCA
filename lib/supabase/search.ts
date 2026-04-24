@@ -5,7 +5,7 @@ import type {
   Event,
   SearchFilters,
   PaginationParams
-} from '@/types/cms'
+} from '@/lib/types/cms-legacy'
 
 // 통합 검색 결과 타입 (작가와 작품 포함)
 export interface SearchResult {

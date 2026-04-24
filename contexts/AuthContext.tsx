@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useUser, useClerk } from '@clerk/nextjs'
-import type { AdminUser, AuthContextType } from '@/types/auth'
+import type { AdminUser, AuthContextType } from '@/lib/types/auth-legacy'
 import { log } from '@/lib/utils/logger'
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)

@@ -37,7 +37,7 @@ import { constructMetadata } from '@/lib/seo'
 import { JsonLd } from '@/components/json-ld'
 import { KakaoScript } from '@/components/seo/kakao-script'
 import { VideoBackground } from '@/components/layout/video-background'
-import { Header } from '@/components/header'
+import { Header } from '@/components/header/header'
 
 export const dynamic = 'force-dynamic'
 

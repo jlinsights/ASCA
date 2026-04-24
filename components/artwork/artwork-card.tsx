@@ -22,8 +22,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { Artwork } from '@/types/artwork'
-import { ARTWORK_CATEGORY_LABELS, ARTWORK_STATUS_LABELS } from '@/types/artwork'
+import type { Artwork } from '@/lib/types/artwork-legacy'
+import { ARTWORK_CATEGORY_LABELS, ARTWORK_STATUS_LABELS } from '@/lib/types/artwork-legacy'
 
 interface ArtworkCardProps {
   artwork: Artwork

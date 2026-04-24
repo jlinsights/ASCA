@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { GalleryItem, GalleryCategory, GalleryFilterState, GalleryViewState, GalleryEvent } from '@/types/gallery'
+import { GalleryItem, GalleryCategory, GalleryFilterState, GalleryViewState, GalleryEvent } from '@/lib/types/gallery/gallery-legacy'
 
 interface UseGalleryProps {
   items: GalleryItem[]

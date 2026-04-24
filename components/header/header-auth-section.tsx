@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useUser, useClerk, SignInButton, SignUpButton } from '@clerk/nextjs'
-import { Button } from './ui/button'
+import { Button } from "../ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +10,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+} from "../ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { LogOut, User as UserIcon, Settings } from 'lucide-react'
 
 export function HeaderAuthSection() {

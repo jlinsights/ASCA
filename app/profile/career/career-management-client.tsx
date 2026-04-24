@@ -32,8 +32,8 @@ import {
   toggleCareerFeatured,
   getCareerSummary,
 } from '@/lib/api/career'
-import type { CareerEntry, TimelineFilters, TimelineView, CareerEntryType } from '@/types/career'
-import { CAREER_ENTRY_TYPE_LABELS } from '@/types/career'
+import type { CareerEntry, TimelineFilters, TimelineView, CareerEntryType } from '@/lib/types/career-legacy'
+import { CAREER_ENTRY_TYPE_LABELS } from '@/lib/types/career-legacy'
 
 export function CareerManagementClient() {
   const router = useRouter()

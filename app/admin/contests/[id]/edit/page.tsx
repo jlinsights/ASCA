@@ -9,7 +9,7 @@ import { ContestForm } from '@/components/admin/contest-form'
 import { useUser } from '@clerk/nextjs'
 import { fetchContestById } from '@/lib/api/contests'
 import { getSupabaseClient } from '@/lib/supabase'
-import type { Contest } from '@/types/contest-new'
+import type { Contest } from '@/lib/types/contest-new-legacy'
 
 export default function AdminContestEditPage() {
   const { isLoaded, isSignedIn, user: clerkUser } = useUser()

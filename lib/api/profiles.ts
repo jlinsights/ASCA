@@ -1,7 +1,7 @@
 // Artist Profile API functions
 
 import { getSupabaseClient } from '@/lib/supabase'
-import type { ArtistProfile, ArtistProfileFormData, PortfolioConfigFormData, PublicPortfolio, ArtistStats } from '@/types/profile'
+import type { ArtistProfile, ArtistProfileFormData, PortfolioConfigFormData, PublicPortfolio, ArtistStats } from '@/lib/types/profile-legacy'
 
 /**
  * Fetch artist profile by ID

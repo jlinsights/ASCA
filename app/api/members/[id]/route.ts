@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@/lib/supabase/server'
 import { getAuthUser } from '@/lib/auth/middleware'
 import { logger } from '@/lib/utils/logger'
-import { UpdateMemberRequest } from '@/types/membership'
+import { UpdateMemberRequest } from '@/lib/types/membership-legacy'
 
 // GET /api/members/[id] - 특정 회원 조회
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

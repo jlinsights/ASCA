@@ -23,7 +23,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { getEvents } from '@/lib/supabase/cms'
-import { Event } from '@/types/cms'
+import { Event } from '@/lib/types/cms-legacy'
 import { useLanguage } from '@/contexts/language-context'
 import { EventCard } from './_components/event-card'
 import { getCategories, getStatusOptions } from './_components/events-meta'

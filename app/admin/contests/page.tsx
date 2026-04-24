@@ -32,7 +32,7 @@ import { Badge } from '@/components/ui/badge'
 import { useUser } from '@clerk/nextjs'
 import { getSupabaseClient } from '@/lib/supabase'
 import { fetchContests, deleteContest } from '@/lib/api/contests'
-import { Contest, CONTEST_STATUS_LABELS, getContestStatusColor } from '@/types/contest-new'
+import { Contest, CONTEST_STATUS_LABELS, getContestStatusColor } from '@/lib/types/contest-new-legacy'
 
 export default function AdminContestsPage() {
   const { isLoaded, isSignedIn, user: clerkUser } = useUser()

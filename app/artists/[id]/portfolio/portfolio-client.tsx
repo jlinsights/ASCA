@@ -22,8 +22,8 @@ import { fetchPublicPortfolio } from '@/lib/api/profiles'
 import { fetchCareerEntries } from '@/lib/api/career'
 import { ArtworkCard } from '@/components/artwork/artwork-card'
 import { Timeline } from '@/components/career/timeline'
-import type { PublicPortfolio } from '@/types/profile'
-import type { CareerEntry } from '@/types/career'
+import type { PublicPortfolio } from '@/lib/types/profile-legacy'
+import type { CareerEntry } from '@/lib/types/career-legacy'
 
 interface PortfolioClientProps {
   artistId: string

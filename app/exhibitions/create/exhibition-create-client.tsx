@@ -13,8 +13,8 @@ import { ArtworkSelector } from '@/components/exhibition/artwork-selector'
 import { useUser } from '@clerk/nextjs'
 import { fetchArtworksByArtist } from '@/lib/api/artworks'
 import { createExhibition } from '@/lib/api/exhibitions'
-import type { Artwork } from '@/types/artwork'
-import type { ExhibitionFormData } from '@/types/exhibition'
+import type { Artwork } from '@/lib/types/artwork-legacy'
+import type { ExhibitionFormData } from '@/lib/types/exhibition-legacy'
 import { error as logError } from '@/lib/logging'
 
 interface SelectedArtwork extends Artwork {
