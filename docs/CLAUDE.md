@@ -102,6 +102,14 @@ Use the established pattern for all content:
 - Page components follow Next.js App Router structure
 - Admin components separated in `app/admin/`
 
+### Design System (DESIGN.md)
+**UI 작업 시 `docs/02-design/DESIGN.md`를 먼저 참조한다.**
+- 색상·타이포·간격·반경·모션·컴포넌트 토큰의 단일 진실 공급원(SSOT)
+- YAML 프론트매터 = 기계 참조용 토큰 (`{colors.primary}` 등)
+- 마크다운 본문 = Do's/Don'ts + 문화 맥락
+- 토큰이 없으면 임의 값을 만들지 말고 DESIGN.md를 먼저 수정한다
+- Feature 단위 design 문서(`docs/02-design/features/*.design.md`)는 DESIGN.md 토큰을 참조
+
 ### Large File Refactoring Process
 If a single code file exceeds **500 lines**, proactively trigger optimization and refactor using this standardized process:
 1. **Component Extraction**: Split large monolithic UI components into smaller independent sub-components (e.g., create an `_components/` directory).
