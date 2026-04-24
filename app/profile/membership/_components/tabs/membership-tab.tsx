@@ -39,9 +39,7 @@ export function MembershipTab({ profile, tierInfo }: MembershipTabProps) {
                 <div className='text-xs text-muted-foreground'>멤버십 등급</div>
               </div>
               <div className='p-3 border border-border rounded-lg'>
-                <div className='text-lg font-bold'>
-                  ₩{tierInfo.annualFee.toLocaleString()}
-                </div>
+                <div className='text-lg font-bold'>₩{tierInfo.annualFee.toLocaleString()}</div>
                 <div className='text-xs text-muted-foreground'>연회비</div>
               </div>
             </div>
@@ -103,9 +101,7 @@ export function MembershipTab({ profile, tierInfo }: MembershipTabProps) {
                 </div>
                 <div className='text-right'>
                   <div className='font-bold'>₩{payment.amount.toLocaleString()}</div>
-                  <Badge
-                    className={cn('text-xs', resolveStatusColor(payment.status))}
-                  >
+                  <Badge className={cn('text-xs', resolveStatusColor(payment.status))}>
                     {resolveStatusLabel(payment.status)}
                   </Badge>
                 </div>

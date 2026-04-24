@@ -21,9 +21,7 @@ export function PrivacyTab({ profile, parsedPrivacySettings }: PrivacyTabProps) 
     <Card>
       <CardHeader>
         <CardTitle>프라이버시 설정</CardTitle>
-        <p className='text-sm text-muted-foreground'>
-          다른 회원들에게 공개할 정보를 선택하세요.
-        </p>
+        <p className='text-sm text-muted-foreground'>다른 회원들에게 공개할 정보를 선택하세요.</p>
       </CardHeader>
       <CardContent className='space-y-6'>
         <div className='space-y-4'>

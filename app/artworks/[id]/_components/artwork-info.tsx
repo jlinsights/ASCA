@@ -126,11 +126,7 @@ function ArtworkPrice({ artwork }: { artwork: Artwork }) {
           <p className='text-sm text-muted-foreground'>작품 가격</p>
         </div>
         <div className='flex gap-2'>
-          <Button
-            size='lg'
-            disabled={!artwork.isAvailable}
-            className='flex items-center gap-2'
-          >
+          <Button size='lg' disabled={!artwork.isAvailable} className='flex items-center gap-2'>
             <MessageCircle className='h-4 w-4' />
             {artwork.isAvailable ? '구매 문의' : '판매완료'}
           </Button>
