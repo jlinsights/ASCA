@@ -9,7 +9,7 @@ import type {
   ExhibitionSummary,
   ArtworkOrderUpdate,
   ExhibitionArtistRole,
-} from '@/types/exhibition'
+} from '@/lib/types/exhibition-legacy'
 
 /**
  * Fetch exhibitions with optional filters

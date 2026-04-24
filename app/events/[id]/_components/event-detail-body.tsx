@@ -21,7 +21,7 @@ import {
   UserPlus,
   CheckCircle,
 } from 'lucide-react'
-import type { Event } from '@/types/cms'
+import type { Event } from '@/lib/types/cms-legacy'
 import {
   statusColors,
   statusLabels,

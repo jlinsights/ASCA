@@ -10,7 +10,7 @@ import type {
   NoticeFormData,
   ExhibitionFormData,
   EventFormData
-} from '@/types/cms'
+} from '@/lib/types/cms-legacy'
 
 // Notice functions
 export async function getNotices(

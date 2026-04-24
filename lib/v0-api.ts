@@ -3,7 +3,7 @@
  * Vercel의 V0 AI 디자인 도구 API를 사용하기 위한 유틸리티입니다.
  */
 
-import { getEnvVar } from '@/types/env';
+import { getEnvVar } from '@/lib/types/env-legacy';
 
 /**
  * V0 API 기본 설정

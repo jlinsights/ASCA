@@ -33,7 +33,7 @@ import {
   APPLICATION_STATUS_LABELS,
   getApplicationStatusColor,
   ApplicationStatus,
-} from '@/types/contest-new'
+} from '@/lib/types/contest-new-legacy'
 
 export default function AdminContestApplicationsPage() {
   const { isLoaded, isSignedIn, user: clerkUser } = useUser()

@@ -25,7 +25,7 @@ import {
   ContestApplicationWithDetails,
   APPLICATION_STATUS_LABELS,
   getApplicationStatusColor,
-} from '@/types/contest-new'
+} from '@/lib/types/contest-new-legacy'
 
 export default function MyApplicationsPage() {
   const router = useRouter()

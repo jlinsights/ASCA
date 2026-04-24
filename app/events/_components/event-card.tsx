@@ -24,7 +24,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Event } from '@/types/cms'
+import { Event } from '@/lib/types/cms-legacy'
 import { useLanguage } from '@/contexts/language-context'
 import {
   statusColors,

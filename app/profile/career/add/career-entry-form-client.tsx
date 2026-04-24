@@ -18,8 +18,8 @@ import {
 } from '@/components/ui/select'
 import { ArrowLeft, Save } from 'lucide-react'
 import { createCareerEntry } from '@/lib/api/career'
-import type { CareerEntryType, CareerEntryFormData } from '@/types/career'
-import { CAREER_ENTRY_TYPE_LABELS } from '@/types/career'
+import type { CareerEntryType, CareerEntryFormData } from '@/lib/types/career-legacy'
+import { CAREER_ENTRY_TYPE_LABELS } from '@/lib/types/career-legacy'
 import { error as logError } from '@/lib/logging'
 
 export function CareerEntryFormClient() {

@@ -31,7 +31,7 @@ import {
   createNoticeComment,
   getRelatedNotices
 } from '@/lib/supabase/cms'
-import type { Notice, NoticeComment } from '@/types/cms'
+import type { Notice, NoticeComment } from '@/lib/types/cms-legacy'
 import Link from 'next/link'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'

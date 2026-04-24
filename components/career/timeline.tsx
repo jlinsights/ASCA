@@ -16,8 +16,8 @@ import {
   ExternalLink,
   Star
 } from 'lucide-react'
-import type { CareerEntry, TimelineView } from '@/types/career'
-import { CAREER_ENTRY_TYPE_LABELS } from '@/types/career'
+import type { CareerEntry, TimelineView } from '@/lib/types/career-legacy'
+import { CAREER_ENTRY_TYPE_LABELS } from '@/lib/types/career-legacy'
 import Image from 'next/image'
 
 interface TimelineProps {

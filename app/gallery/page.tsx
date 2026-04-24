@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRight, Calendar, Users, Award, BookOpen, MapPin, Phone, Mail, Camera, Palette, Sparkles } from 'lucide-react'
 import galleryData from '@/lib/data/gallery-data.json'
-import { GalleryData } from '@/types/gallery'
+import { GalleryData } from '@/lib/types/gallery/gallery-legacy'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import '@/styles/gallery.css'
 

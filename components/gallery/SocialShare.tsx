@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { GalleryItem } from '@/types/gallery'
+import { GalleryItem } from '@/lib/types/gallery/gallery-legacy'
 import {
   shareToKakao,
   shareToFacebook,

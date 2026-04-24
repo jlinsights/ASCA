@@ -8,7 +8,7 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { useUser } from '@clerk/nextjs'
 import { fetchExhibitionById, deleteExhibition } from '@/lib/api/exhibitions'
-import type { ExhibitionWithDetails } from '@/types/exhibition'
+import type { ExhibitionWithDetails } from '@/lib/types/exhibition-legacy'
 import { ExhibitionDetailBody } from './_components/exhibition-detail-body'
 
 export default function ExhibitionDetailPage() {

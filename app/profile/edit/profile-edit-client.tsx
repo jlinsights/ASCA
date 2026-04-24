@@ -17,7 +17,7 @@ import {
   toggleProfileVisibility,
   uploadProfileImage,
 } from '@/lib/api/profiles'
-import type { ArtistProfile, ArtistProfileFormData } from '@/types/profile'
+import type { ArtistProfile, ArtistProfileFormData } from '@/lib/types/profile-legacy'
 import Image from 'next/image'
 import { error as logError } from '@/lib/logging'
 

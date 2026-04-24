@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Calendar, MapPin, Clock, Ticket, Star, Heart, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
-import type { Exhibition } from '@/types/cms'
+import type { Exhibition } from '@/lib/types/cms-legacy'
 import { statusColors, statusLabels, formatExhibitionDate, formatPrice } from './exhibitions-meta'
 
 interface ExhibitionDetailDialogProps {

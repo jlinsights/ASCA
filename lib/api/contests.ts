@@ -12,7 +12,7 @@ import type {
   ContestFilters,
   ApplicationFilters,
   ArtistApplicationSummary,
-} from '@/types/contest-new'
+} from '@/lib/types/contest-new-legacy'
 
 // ==================================================================
 // CONTEST CRUD OPERATIONS

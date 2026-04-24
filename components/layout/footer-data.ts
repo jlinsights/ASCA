@@ -1,0 +1,56 @@
+export const footerLinks = {
+  exhibitions: [
+    { title: '현재 전시', href: '/exhibitions/current' },
+    { title: '예정 전시', href: '/exhibitions/upcoming' },
+    { title: '지난 전시', href: '/exhibitions/past' },
+    { title: '온라인 전시', href: '/exhibitions/online' },
+  ],
+  artworks: [
+    { title: '한글서예', href: '/artworks?category=한글서예' },
+    { title: '한자서예', href: '/artworks?category=한자서예' },
+    { title: '문인화', href: '/artworks?category=문인화' },
+    { title: '수묵화', href: '/artworks?category=수묵화' },
+    { title: '민화', href: '/artworks?category=민화' },
+    { title: '현대서예', href: '/artworks?category=현대서예' },
+    { title: '캘리그라피', href: '/artworks?category=캘리그라피' },
+    { title: '전각', href: '/artworks?category=전각' },
+    { title: '서각', href: '/artworks?category=서각' },
+  ],
+  artists: [
+    { title: '공모작가', href: '/artists?type=공모작가' },
+    { title: '청년작가', href: '/artists?type=청년작가' },
+    { title: '추천작가', href: '/artists?type=추천작가' },
+    { title: '초대작가', href: '/artists?type=초대작가' },
+  ],
+  about: [
+    { title: '개요', href: '/about' },
+    { title: '정관', href: 'https://docs.google.com/document/d/1on5DqNNLBXvr_wvvapz5zhWFPR1dPlHKaZ6y3bgIWuE/edit?usp=sharing', external: true },
+    { title: '회칙', href: 'https://docs.google.com/document/d/1LqwokChxq-7qgus7B3ntAKl2skP-Ch31co7kyDs4RDE/edit?usp=sharing', external: true },
+    { title: '운영 및 심사 규정', href: 'https://docs.google.com/document/d/1x65nBE0Auk-_8UMF0sWpBpbyyI3aKmYKwGGo_Htvenw/edit?usp=sharing', external: true },
+    { title: '추천ㆍ초대작가 선임 규정', href: 'https://docs.google.com/document/d/1dOtCRVEsBZ0dW87lynU-ZulnvaxThhD6vU-28i9tBPY/edit?usp=sharing', external: true },
+    { title: '작품 감정 및 보증서 발행 규정', href: 'https://docs.google.com/document/d/1zyRHlG-PqJ2QqAHVqzUNHX5I0ztp4uzIP_YCkAuUrOk/edit?usp=sharing', external: true },
+    { title: '전시 관리 및 운영 규정', href: 'https://docs.google.com/document/d/1PCt1HOOuilplQg47c5GrK6nHbWozkzrJWJhLUVnOtOQ/edit?usp=sharing', external: true },
+    { title: '연혁', href: '/about/history' },
+    { title: '조직도', href: '/organization' },
+    { title: '브랜드', href: '/brand' },
+  ],
+  news: [
+    { title: '공지사항', href: '/notice' },
+    { title: '행사', href: '/events' },
+    { title: '뉴스', href: '/news' },
+    { title: '갤러리', href: '/gallery' },
+  ],
+  legal: [
+    { title: '이용약관', href: '/terms-of-service' },
+    { title: '개인정보처리방침', href: '/privacy-policy' },
+    { title: '저작권 정책', href: '/copyright-policy' },
+    { title: '이메일 무단수집 거부', href: '/email-refuse' },
+  ],
+  sponsors: [
+    { title: '삼성금융네트웍스', href: 'https://familyoffices.vip/', external: true },
+    { title: '예술의전당', href: 'https://www.sac.or.kr/site/main/home', external: true },
+    { title: '대한검정회', href: 'https://www.hanja.ne.kr/index_original.asp', external: true },
+    { title: '서울특별시', href: 'https://www.seoul.go.kr/main/index.jsp', external: true },
+    { title: '문화체육관광부', href: 'https://www.mcst.go.kr/kor/main.jsp', external: true },
+  ]
+}

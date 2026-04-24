@@ -17,8 +17,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { fetchArtistExhibitions, deleteExhibition } from '@/lib/api/exhibitions'
-import type { Exhibition } from '@/types/exhibition'
-import { EXHIBITION_STATUS_LABELS } from '@/types/exhibition'
+import type { Exhibition } from '@/lib/types/exhibition-legacy'
+import { EXHIBITION_STATUS_LABELS } from '@/lib/types/exhibition-legacy'
 
 export function ExhibitionManagementClient() {
   const router = useRouter()

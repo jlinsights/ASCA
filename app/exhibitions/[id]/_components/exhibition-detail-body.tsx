@@ -21,8 +21,8 @@ import {
   Users,
   Instagram,
 } from 'lucide-react'
-import { EXHIBITION_STATUS_LABELS, EXHIBITION_ARTIST_ROLE_LABELS } from '@/types/exhibition'
-import type { ExhibitionWithDetails } from '@/types/exhibition'
+import { EXHIBITION_STATUS_LABELS, EXHIBITION_ARTIST_ROLE_LABELS } from '@/lib/types/exhibition-legacy'
+import type { ExhibitionWithDetails } from '@/lib/types/exhibition-legacy'
 import { statusColors, formatExhibitionDate, getRemainingDays } from './exhibition-detail-meta'
 
 interface ExhibitionDetailBodyProps {

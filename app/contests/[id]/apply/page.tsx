@@ -17,8 +17,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { fetchContestById, submitContestApplication } from '@/lib/api/contests'
 import { getSupabaseClient } from '@/lib/supabase'
 import { useUser } from '@clerk/nextjs'
-import { Contest, canApplyToContest } from '@/types/contest-new'
-import type { Artwork } from '@/types/artwork'
+import { Contest, canApplyToContest } from '@/lib/types/contest-new-legacy'
+import type { Artwork } from '@/lib/types/artwork-legacy'
 
 export default function ContestApplyPage() {
   const params = useParams()

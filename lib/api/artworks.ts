@@ -10,7 +10,7 @@ import type {
   ArtworkStatus,
   ArtworkWithArtist,
   ArtworkCategory,
-} from '@/types/artwork'
+} from '@/lib/types/artwork-legacy'
 
 // Re-export ArtworkWithArtist for convenience
 export type { ArtworkWithArtist }

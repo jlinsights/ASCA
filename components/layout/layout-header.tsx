@@ -5,12 +5,12 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, X, ChevronDown } from "lucide-react"
 
-import { HeaderAuthSection } from "../header-auth-section"
-import { HeaderMobileAuth } from "../header-mobile-auth"
+import { HeaderAuthSection } from "../header/header-auth-section"
+import { HeaderMobileAuth } from "../header/header-mobile-auth"
 import { ThemeToggle } from "../theme-toggle"
 import { ThemeTransition } from "../theme-transition"
 import { LanguageSelector } from "../language-selector"
-import { Logo } from "../logo"
+import { Logo } from "../brand/logo"
 import { useLanguage } from "@/contexts/language-context"
 
 interface LayoutHeaderProps {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { AdminNavigation } from '@/components/admin-navigation'
-import AdminProtectedRoute from '@/components/admin-protected-route'
+import { AdminNavigation } from '@/components/admin/admin-navigation'
+import AdminProtectedRoute from '@/components/admin/admin-protected-route'
 
 interface AdminLayoutProps {
   children: React.ReactNode
