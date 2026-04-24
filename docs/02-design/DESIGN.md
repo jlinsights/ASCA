@@ -1,6 +1,6 @@
 ---
 name: ASCA Design System
-version: 1.1.0-alpha
+version: 1.2.0-alpha
 description: >-
   사단법인 동양서예협회(ASCA) 웹사이트의 디자인 시스템 명세.
   전통 동아시아 예술의 색채·서체·질감을 현대 디지털 인터페이스 언어로 재해석한 토큰 집합.
@@ -16,12 +16,16 @@ references:
 # ─────────────────────────────────────────────
 colors:
   # Semantic (UI 의도) — 일반 UI 작업은 이 레이어만 사용
+  # 주의: shadcn 규약에 따라 `accent` 는 hover/selected 배경용 부드러운 색.
+  # "프리미엄 강조"는 별도 `highlight` 슬롯을 사용한다.
   primary: '#88A891'            # Celadon Green — 청자 녹색, 브랜드 주색
   primary-foreground: '#1a1a1a'
   secondary: '#af2626'          # Scholar Red — 선비 홍색, 보조 강조
   secondary-foreground: '#f5f5f0'
-  accent: '#ffcc00'             # Brand Gold — 브랜드 공식 금색 (수상·기념·프리미엄)
+  accent: '#88A891'             # Celadon Green (OKLCH 변환) — hover/selected 배경
   accent-foreground: '#1a1a1a'
+  highlight: '#ffcc00'          # Brand Gold — 수상·기념·프리미엄. bg-brand-gold 로 접근
+  highlight-foreground: '#1a1a1a'
   destructive: '#dc2626'
   destructive-foreground: '#f5f5f0'
   success: '#4a7c59'            # East Wood — 동방목
@@ -224,7 +228,8 @@ UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials
 |---|---|---|---|
 | `{colors.primary}` | `#88A891` | 주요 CTA, 링크, 포커스 링 | Celadon Green — 청자의 은은함, 브랜드 중심 |
 | `{colors.secondary}` | `#af2626` | 보조 강조, 섹션 구분선, 인용 | Scholar Red — 선비의 단호함 |
-| `{colors.accent}` | `#ffcc00` | 프리미엄·수상·기념 강조 | Brand Gold — 브랜드 공식 금색, 과용 금지 |
+| `{colors.accent}` | `#88A891` | hover 배경, 선택 상태, 메뉴 하이라이트 | shadcn 규약 — `bg-accent`/`hover:bg-accent` (Celadon Green) |
+| `{colors.highlight}` | `#ffcc00` | 수상·기념·프리미엄 배지 | Brand Gold — `bg-brand-gold`/`text-brand-gold` 로 접근, 과용 금지 |
 | `{colors.destructive}` | `#dc2626` | 삭제·오류 | 일반 destructive, Scholar Red와 분리 |
 | `{colors.success}` | `#4a7c59` | 완료·승인 | East Wood (봄·생명) |
 | `{colors.warning}` | `#fdb462` | 주의·임박 | Autumn Gold (풍요 속 경계) |
@@ -253,7 +258,7 @@ UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials
 
 | 토큰 | HEX | Tier | 허용 사용처 |
 |---|---|---|---|
-| `{colors.brand-gold}` | `#ffcc00` | **Semantic** | `accent` 로 승격 — 수상·프리미엄·기념 요소 |
+| `{colors.brand-gold}` | `#ffcc00` | **Semantic** | `highlight` 슬롯 — 수상·프리미엄·기념. `bg-brand-gold` / `text-brand-gold` 사용 |
 | `{colors.terra-red}` | `#9b4444` | Cultural | Scholar Red 대비 차분한 보조 강조 (인용 블록, 섹션 헤더 밑줄) |
 | `{colors.sage-green}` | `#b7c4b7` | Cultural | Celadon Green 의 저채도 변형 (배경 틴트, 메타 정보) |
 | `{colors.spring-green}` | `#09f557` | Decorative | **UI 금지** — 브랜드 가이드·문화 캠페인 장식에만 |
@@ -267,12 +272,16 @@ UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials
 
 **Temple Gold vs Brand Gold 혼동 방지:**
 
-| 토큰 | HEX | 성격 | 언제 |
-|---|---|---|---|
-| `{colors.accent}` = `{colors.brand-gold}` | `#ffcc00` | 선명, 채도 높음 | 수상·NEW·프리미엄 배지 등 **알림성 강조** |
-| `{colors.temple-gold}` | `#d4af37` | 차분, 올리브 기미 | 전통·유물·장식 프레임 등 **고전적 깊이** |
+| 토큰 | Tailwind 클래스 | HEX | 성격 | 언제 |
+|---|---|---|---|---|
+| `{colors.highlight}` = `{colors.brand-gold}` | `bg-brand-gold` | `#ffcc00` | 선명, 채도 높음 | 수상·NEW·프리미엄 배지 등 **알림성 강조** |
+| `{colors.temple-gold}` | `bg-temple-gold` | `#d4af37` | 차분, 올리브 기미 | 전통·유물·장식 프레임 등 **고전적 깊이** |
 
 둘을 같은 화면에서 동시에 쓰지 않는다.
+
+**주의 — `bg-accent` 는 Gold 가 아니다:**
+`bg-accent` / `hover:bg-accent` 는 shadcn 규약상 **Celadon Green** 기반 부드러운 배경
+(드롭다운 hover, 메뉴 선택 상태 등). 프리미엄 강조에는 반드시 `bg-brand-gold` 를 쓴다.
 
 ### 2.6 WCAG 검증 쌍
 
@@ -281,10 +290,13 @@ UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials
 - `{colors.foreground}` on `{colors.background}` — 15.8:1 ✅
 - `{colors.primary-foreground}` on `{colors.primary}` — 5.2:1 ✅
 - `{colors.secondary-foreground}` on `{colors.secondary}` — 6.1:1 ✅
-- `{colors.accent-foreground}` on `{colors.accent}` (`#1a1a1a` on `#ffcc00`) — 14.1:1 ✅
-- `{colors.terra-red}` 흰 배경 — 6.8:1 ✅
-- ⚠️ `{colors.sage-green}` 흰 배경 — 1.9:1 ❌ (텍스트 금지, 배경 틴트/보더만)
-- ⚠️ `{colors.spring-green}` 흰 배경 — 1.5:1 ❌ (텍스트 절대 금지)
+- `{colors.accent-foreground}` on `{colors.accent}` (`#1a1a1a` on `#88A891`) — 5.2:1 ✅
+- `{colors.highlight-foreground}` on `{colors.highlight}` (`#1a1a1a` on `#ffcc00`) — 14.1:1 ✅
+- `{colors.terra-red}` (`#9b4444`) on `{colors.rice-paper}` (`#f5f5f0`) — 6.8:1 ✅
+- ⚠️ `{colors.sage-green}` (`#b7c4b7`) 흰 배경 — 약 2.1:1 ❌ (텍스트 금지, 배경 틴트/보더만)
+- ⚠️ `{colors.spring-green}` (`#09f557`) 흰 배경 — 약 1.5:1 ❌ (텍스트 절대 금지)
+
+> 새 조합 추가 시 [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) 로 재측정 후 업데이트.
 
 ## 3. Typography
 
@@ -417,6 +429,7 @@ UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials
 - Decorative 티어(`spring-green`, `medium-orchid`, `royal-blue`)를 UI에 쓰지 않는다
 - `sage-green`·`spring-green`을 텍스트 색상으로 쓰지 않는다 (WCAG 미달)
 - `brand-gold`와 `temple-gold`를 같은 화면에서 동시에 쓰지 않는다
+- **프리미엄 강조에 `bg-accent` 를 쓰지 않는다** (accent 는 shadcn hover 배경, Celadon Green). 반드시 `bg-brand-gold` 사용
 - `brush` 폰트를 본문·네비게이션에 쓰지 않는다 (히어로 외 금지)
 - 섀도우를 순수 `#000` opacity로 만들지 않는다 (먹색 hsl 사용)
 - `scale(1.05)` 이상의 호버 스케일은 금지 (1.02 한계)
@@ -446,10 +459,14 @@ UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials
 
 ### Changelog
 
-- **1.1.0-alpha** (2026-04-24) — Brand Extended Palette 추가 (§2.5). `accent` 를
-  Temple Gold `#d4af37` → Brand Gold `#ffcc00` 로 승격. globals.css `--celadon`
-  을 `--celadon-green` 으로 rename. `app/brand/_components/brand-data.ts` 와
-  정렬 완료.
+- **1.2.0-alpha** (2026-04-24) — 🔴 **Critical fix** (design-validator 발견).
+  shadcn `accent` 는 Celadon Green 기반 hover 배경이므로 Brand Gold 로 승격 불가.
+  새 `highlight` Semantic 슬롯을 신설해 Brand Gold (`#ffcc00`, `bg-brand-gold`)
+  전용으로 분리. globals.css 의 미사용 `--color-*` semantic mapping 변수 8개를
+  dead code 로 제거. WCAG 검증 쌍 재측정.
+- **1.1.0-alpha** (2026-04-24) — Brand Extended Palette 추가 (§2.5). globals.css
+  `--celadon` 을 `--celadon-green` 으로 rename. `app/brand/_components/brand-data.ts`
+  와 정렬 완료. (accent 승격은 1.2.0 에서 철회됨)
 - **1.0.0-alpha** (2026-04-24) — 초판. 기존 `tailwind.config.ts` + `app/globals.css`
   토큰 정형화.
 
