@@ -83,6 +83,15 @@ const config = {
         'temple-gold': '#d4af37', // Temple decoration
         'moon-silver': '#c0c0c0', // Moonlight reflection
         'plum-purple': '#8e4585', // Plum blossom
+
+        // Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정렬)
+        // Source of truth: app/brand/_components/brand-data.ts
+        'terra-red': '#9b4444', // 전통 도장 주홍 (Scholar Red 보조)
+        'sage-green': '#b7c4b7', // 문인화 절제된 초록 (Celadon Green 보조)
+        'spring-green': '#09f557', // 생동감·새 시작 (장식 악센트 한정)
+        'brand-gold': '#ffcc00', // 브랜드 공식 금색 (Temple Gold #d4af37 과 구분)
+        'medium-orchid': '#c14af2', // 동양 난초 기품 (장식 악센트 한정)
+        'royal-blue': '#275eea', // 청화백자 청색 (장식 악센트 한정)
       },
       borderRadius: {
         lg: 'var(--radius)',

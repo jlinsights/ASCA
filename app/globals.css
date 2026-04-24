@@ -180,7 +180,7 @@
     --sage-green: #b7c4b7;
     --terra-red: #9b4444;
     --stone-gray: #707070;
-    --celadon: #88a891;
+    --celadon-green: #88a891;
     --spring-green: #09f557;
     --gold: #ffcc00;
     --medium-orchid: #c14af2;
@@ -188,7 +188,7 @@
     --scholar-red: #af2626;
 
     /* 시맨틱 색상 매핑 (전통 색상 → 의미적 용도) */
-    --color-primary: var(--celadon); /* 주요 브랜드 색상 - 청자 녹색 */
+    --color-primary: var(--celadon-green); /* 주요 브랜드 색상 - 청자 녹색 */
     --color-secondary: var(--scholar-red); /* 보조 색상 - 선비 홍색 */
     --color-accent: #d4af37; /* 강조 색상 - 사찰 금색 (temple-gold) */
     --color-success: #4a7c59; /* 성공 상태 - 동방목 (east-wood) */
@@ -299,7 +299,7 @@
     /* 다크모드에서 더 좋은 대비를 위한 색상 조정 */
     --rice-paper: #f8f8f5;
     --sage-green: #c5d2c5;
-    --celadon: #96b69f;
+    --celadon-green: #96b69f;
     --chart-1: oklch(0.58 0.14 25);
     --chart-2: oklch(0.74 0.04 155);
     --chart-3: oklch(0.60 0 0);
@@ -983,7 +983,7 @@
 }
 
 .color-swatch.celadon {
-  background-color: var(--celadon);
+  background-color: var(--celadon-green);
   color: var(--ink-black);
 }
 
@@ -1373,7 +1373,7 @@
 
 .strategy-card:hover {
   background: rgba(245, 245, 240, 0.08);
-  border-color: var(--celadon);
+  border-color: var(--celadon-green);
   transform: translateY(-2px);
 }
 
@@ -1410,7 +1410,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--celadon);
+  color: var(--celadon-green);
 }
 
 .personality-card p {
@@ -1479,7 +1479,7 @@
 .logo-placeholder {
   width: 120px;
   height: 40px;
-  background: var(--celadon);
+  background: var(--celadon-green);
   border-radius: 4px;
   margin: 20px;
 }
@@ -1508,7 +1508,7 @@
 
 .size-item h4 {
   font-weight: 600;
-  color: var(--celadon);
+  color: var(--celadon-green);
   margin-bottom: 1rem;
 }
 
@@ -1562,7 +1562,7 @@
 
 .contrast-item h4 {
   font-weight: 600;
-  color: var(--celadon);
+  color: var(--celadon-green);
   margin-bottom: 1rem;
 }
 
@@ -1603,7 +1603,7 @@
 
 .font-details h4 {
   font-weight: 600;
-  color: var(--celadon);
+  color: var(--celadon-green);
   margin-bottom: 0.5rem;
 }
 
@@ -1671,7 +1671,7 @@
 
 .spectrum-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--celadon), var(--sage-green));
+  background: linear-gradient(90deg, var(--celadon-green), var(--sage-green));
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -1748,7 +1748,7 @@
 
 .example-item h4 {
   font-weight: 600;
-  color: var(--celadon);
+  color: var(--celadon-green);
   margin-bottom: 0.5rem;
 }
 
@@ -1770,7 +1770,7 @@
 }
 
 .checklist-section h4 {
-  color: var(--celadon);
+  color: var(--celadon-green);
 }
 
 /* Audience Segments */
@@ -1822,14 +1822,14 @@
 .guidelines-nav-centered .nav-link:hover {
   color: var(--rice-paper);
   background: rgba(136, 168, 145, 0.2);
-  border-color: var(--celadon);
+  border-color: var(--celadon-green);
   transform: translateY(-2px);
 }
 
 .guidelines-nav-centered .nav-link.active {
   color: var(--rice-paper);
-  background: var(--celadon);
-  border-color: var(--celadon);
+  background: var(--celadon-green);
+  border-color: var(--celadon-green);
 }
 
 .guidelines-nav-centered .nav-link.active::after {
@@ -1914,7 +1914,7 @@
 
 .example-card:hover {
   background: rgba(245, 245, 240, 0.04);
-  border-color: var(--celadon);
+  border-color: var(--celadon-green);
 }
 
 .component-specs {
@@ -2008,9 +2008,9 @@
 
 /* Enhanced Button Variants for Brand */
 .btn-celadon {
-  background-color: var(--celadon);
+  background-color: var(--celadon-green);
   color: var(--ink-black);
-  border: 1px solid var(--celadon);
+  border: 1px solid var(--celadon-green);
   transition: all 0.3s ease;
 }
 
@@ -2029,8 +2029,8 @@
 }
 
 .btn-sage:hover {
-  background-color: var(--celadon);
-  border-color: var(--celadon);
+  background-color: var(--celadon-green);
+  border-color: var(--celadon-green);
   transform: translateY(-1px);
 }
 
@@ -2069,14 +2069,14 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--celadon), var(--sage-green));
+  background: linear-gradient(90deg, var(--celadon-green), var(--sage-green));
 }
 
 /* Enhanced Badge Variants */
 .badge-traditional {
-  background-color: var(--celadon);
+  background-color: var(--celadon-green);
   color: var(--ink-black);
-  border: 1px solid var(--celadon);
+  border: 1px solid var(--celadon-green);
 }
 
 .badge-innovation {
@@ -2120,7 +2120,7 @@
 }
 
 .component-focus-ring:focus-visible {
-  outline: 2px solid var(--celadon);
+  outline: 2px solid var(--celadon-green);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(136, 168, 145, 0.2);
 }
@@ -2254,7 +2254,7 @@
 
 .checklist-category:hover {
   background: rgba(245, 245, 240, 0.04);
-  border-color: var(--celadon);
+  border-color: var(--celadon-green);
   transform: translateY(-2px);
 }
 
