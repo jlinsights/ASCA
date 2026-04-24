@@ -1,12 +1,7 @@
 const HANGEUL_FONTS = ['궁채', '판본체', '고체', '흘림체', '민체']
 const HANJA_FONTS = ['해서', '행서', '예서', '전서', '초서', '행초서']
 const CALLIGRAPHY_CATEGORIES = ['한글서예', '한자서예', '현대서예']
-const VALID_PAPER_SIZES = [
-  '반절지(35×135cm)',
-  '전지(70×135cm)',
-  '국전지(70×200cm)',
-  '기타',
-]
+const VALID_PAPER_SIZES = ['반절지(35×135cm)', '전지(70×135cm)', '국전지(70×200cm)', '기타']
 
 export function formatPrice(price: number, currency: string): string {
   if (currency === 'KRW') {

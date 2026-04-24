@@ -12,11 +12,7 @@ interface ArtworkGalleryProps {
   onImageSelect: (index: number) => void
 }
 
-export function ArtworkGallery({
-  artwork,
-  currentImageIndex,
-  onImageSelect,
-}: ArtworkGalleryProps) {
+export function ArtworkGallery({ artwork, currentImageIndex, onImageSelect }: ArtworkGalleryProps) {
   const currentImage = artwork.images[currentImageIndex] || artwork.imageUrl
 
   return (
@@ -35,12 +31,7 @@ export function ArtworkGallery({
             </DialogTrigger>
             <DialogContent className='max-w-4xl'>
               <div className='relative aspect-[4/5] overflow-hidden rounded-lg'>
-                <Image
-                  src={currentImage}
-                  alt={artwork.title}
-                  fill
-                  className='object-contain'
-                />
+                <Image src={currentImage} alt={artwork.title} fill className='object-contain' />
               </div>
             </DialogContent>
           </Dialog>

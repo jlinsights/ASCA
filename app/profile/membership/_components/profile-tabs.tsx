@@ -1,11 +1,7 @@
 'use client'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import type {
-  MemberProfile,
-  MembershipTierInfo,
-  MemberActivityLog,
-} from '@/lib/types/membership'
+import type { MemberProfile, MembershipTierInfo, MemberActivityLog } from '@/lib/types/membership'
 import { OverviewTab } from './tabs/overview-tab'
 import { PersonalTab } from './tabs/personal-tab'
 import { CalligraphyTab } from './tabs/calligraphy-tab'

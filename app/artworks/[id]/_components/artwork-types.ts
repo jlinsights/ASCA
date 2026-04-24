@@ -1,11 +1,7 @@
 export type HangeulFont = '궁채' | '판본체' | '고체' | '흘림체' | '민체'
 export type HanjaFont = '해서' | '행서' | '예서' | '전서' | '초서' | '행초서'
 
-export type CalligraphySize =
-  | '반절지(35×135cm)'
-  | '전지(70×135cm)'
-  | '국전지(70×200cm)'
-  | '기타'
+export type CalligraphySize = '반절지(35×135cm)' | '전지(70×135cm)' | '국전지(70×200cm)' | '기타'
 
 export type ArtworkCategory =
   | '한글서예'

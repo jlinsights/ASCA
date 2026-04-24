@@ -28,7 +28,8 @@ export function ActivitiesTab({ activities }: ActivitiesTabProps) {
               <div className='flex-1'>
                 <div className='font-medium text-sm'>{activity.description}</div>
                 <div className='text-xs text-muted-foreground'>
-                  {activity.timestamp.toLocaleDateString()} {activity.timestamp.toLocaleTimeString()}
+                  {activity.timestamp.toLocaleDateString()}{' '}
+                  {activity.timestamp.toLocaleTimeString()}
                 </div>
               </div>
               <Badge variant='secondary' className='text-xs'>
