@@ -1,1 +1,1 @@
-✨ chore: prettier auto-format (S5 post-hook 결과 통합)
+📋 chore: bkit-memory 갱신 — asca-api-security-hardening phase=do, 7 commits 기록
