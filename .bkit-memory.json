@@ -5,11 +5,12 @@
   "parallelFeatures": [
     {
       "feature": "asca-api-security-hardening",
-      "phase": "plan",
+      "phase": "design",
       "startedAt": "2026-04-25",
       "planPath": "docs/01-plan/features/asca-api-security-hardening.plan.md",
       "branch": "security-hardening-2026-04",
-      "sourceReview": "gstack /review (2026-04-25): C1+C2 CRITICAL, H1-H4 HIGH"
+      "sourceReview": "gstack /review (2026-04-25): C1+C2 CRITICAL, H1-H4 HIGH",
+      "designPath": "docs/02-design/features/asca-api-security-hardening.design.md"
     },
     {
       "feature": "asca-design-system-finalize",
