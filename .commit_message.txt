@@ -1,1 +1,1 @@
-🔐 fix(security): H2 dashboard error.message 응답 제거 (정보 누설 차단)
+🔐 fix(security): H3 GraphQL CORS 화이트리스트 (ALLOWED_ORIGINS env 기반)
