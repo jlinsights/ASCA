@@ -1,1 +1,1 @@
-🙈 chore: .gitignore — gallery responsive image variants 제외 (build artifact)
+🧹 chore: .gitignore에 public/images/gallery/ 추가 — git history filter-repo 정리 후 향후 자동 무시 (3.8GB → 0)
