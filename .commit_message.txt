@@ -1,1 +1,1 @@
-📦 pdca archive: asca-design-system-finalize — 4개 PDCA 문서(plan/design/analysis/report)를 docs/archive/2026-04/asca-design-system-finalize/로 이동, _INDEX.md 신설(98% Highlights 포함). .bkit-memory.json phase=archived 갱신
+🙈 chore: .gitignore — gallery responsive image variants 제외 (build artifact)

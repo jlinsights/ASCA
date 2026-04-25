@@ -52,3 +52,8 @@ public/webflow/orientalcalligraphy/documents/
 
 # HyperFrames 브랜드 인트로 프로젝트 (별도 빌드 산출물)
 videos/
+
+# Responsive image variants (build artifact: {원본}-{640~2560}w.{webp,avif})
+# 원본 .jpg가 SSoT, webp/avif는 Next.js Image 또는 변환 스크립트가 자동 생성
+public/images/gallery/**/*-[0-9]*w.webp
+public/images/gallery/**/*-[0-9]*w.avif
