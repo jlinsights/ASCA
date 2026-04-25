@@ -5,7 +5,7 @@
   "parallelFeatures": [
     {
       "feature": "asca-api-security-hardening",
-      "phase": "check",
+      "phase": "completed",
       "startedAt": "2026-04-25",
       "planPath": "docs/01-plan/features/asca-api-security-hardening.plan.md",
       "branch": "security-hardening-2026-04",
@@ -24,7 +24,9 @@
       "matchRate": 92,
       "analysisPath": "docs/03-analysis/asca-api-security-hardening.analysis.md",
       "gapItems": [],
-      "recommendation": "report-ready (>=90%)"
+      "recommendation": "report-ready (>=90%)",
+      "completedAt": "2026-04-25",
+      "reportPath": "docs/04-report/features/asca-api-security-hardening.report.md"
     },
     {
       "feature": "asca-design-system-finalize",
