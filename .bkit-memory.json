@@ -5,12 +5,22 @@
   "parallelFeatures": [
     {
       "feature": "asca-api-security-hardening",
-      "phase": "design",
+      "phase": "do",
       "startedAt": "2026-04-25",
       "planPath": "docs/01-plan/features/asca-api-security-hardening.plan.md",
       "branch": "security-hardening-2026-04",
       "sourceReview": "gstack /review (2026-04-25): C1+C2 CRITICAL, H1-H4 HIGH",
-      "designPath": "docs/02-design/features/asca-api-security-hardening.design.md"
+      "designPath": "docs/02-design/features/asca-api-security-hardening.design.md",
+      "doCommits": [
+        "11a651db S1 C1 GraphQL Clerk auth",
+        "53ac8626 S2 C2 SSE Clerk auth + cosmetic context.ts",
+        "6c70a23e S3 H1 members/[id] GET IDOR",
+        "f2ed8829 S4 H2 dashboard error.message removed",
+        "c32e449a S5 H3 GraphQL CORS allowlist",
+        "89a2ad0f S6 H4 members/me prod fail-closed",
+        "7c525ec5 chore: prettier auto-format"
+      ],
+      "verificationStatus": "tsc clean (1 pre-existing layout-footer.tsx unrelated), eslint clean (6 changed files), npm run build PASS (0 errors 0 warnings)"
     },
     {
       "feature": "asca-design-system-finalize",
