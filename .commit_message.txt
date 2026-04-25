@@ -1,1 +1,1 @@
-📊 analyze: asca-api-security-hardening — gap-detector Match 92% (1 정당화된 편차, gap 0건) → report-ready
+📋 report: asca-api-security-hardening 완료 보고서 — Match 92%, 6 fix 전부 해소, P2 8건 별도 사이클
