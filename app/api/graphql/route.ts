@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
  */
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? '')
   .split(',')
-  .map((s) => s.trim())
+  .map(s => s.trim())
   .filter(Boolean)
 
 function corsHeaders(origin: string | null): HeadersInit {
