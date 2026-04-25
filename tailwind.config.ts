@@ -92,6 +92,15 @@ const config = {
         'brand-gold': '#ffcc00', // 브랜드 공식 금색 (Temple Gold #d4af37 과 구분)
         'medium-orchid': '#c14af2', // 동양 난초 기품 (장식 악센트 한정)
         'royal-blue': '#275eea', // 청화백자 청색 (장식 악센트 한정)
+
+        // Semantic literals (DESIGN.md SSoT) — bg-highlight, text-success 등 직접 접근용
+        // shadcn semantic 슬롯(primary/secondary/...)은 var(--*) 경로 유지, 본 5개는
+        // hex 직결로 design-diff 대상이 된다
+        highlight: '#ffcc00', // = brand-gold alias, 수상·기념·프리미엄
+        'highlight-foreground': '#1a1a1a',
+        success: '#4a7c59', // = east-wood
+        warning: '#fdb462', // = autumn-gold
+        info: '#1e3a8a', // = north-water
       },
       borderRadius: {
         lg: 'var(--radius)',

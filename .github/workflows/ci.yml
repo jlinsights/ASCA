@@ -37,6 +37,15 @@ jobs:
       - name: Code formatting check
         run: npm run format:check
 
+      - name: Design lint (advisory — alpha CLI)
+        run: npm run design:lint || true
+
+      - name: Design diff (DESIGN.md ↔ tailwind, hard fail)
+        run: npm run design:diff
+
+      - name: WCAG contrast lint (hard fail)
+        run: npm run design:wcag
+
   # 테스트 실행
   test:
     runs-on: ubuntu-latest
