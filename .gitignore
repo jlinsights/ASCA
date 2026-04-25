@@ -57,3 +57,4 @@ videos/
 # 원본 .jpg가 SSoT, webp/avif는 Next.js Image 또는 변환 스크립트가 자동 생성
 public/images/gallery/**/*-[0-9]*w.webp
 public/images/gallery/**/*-[0-9]*w.avif
+public/images/gallery/
