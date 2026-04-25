@@ -1,1 +1,1 @@
-📦 docs(report): jest-infra-debt PDCA 완료 보고서 — Match 100%, F1-F5 해결, Phase 6 split-cycle (PR #3 unblock 경로 확보)
+📝 plan: asca-api-security-hardening — gstack /review 발견 6 이슈(C1·C2 인증 우회 + H1-H4) PDCA Plan 작성 (security-hardening-2026-04 branch)
