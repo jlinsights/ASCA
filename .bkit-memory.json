@@ -2,6 +2,36 @@
   "activeFeature": "warning-cleanup-cycle-2",
   "phase": "do",
   "startedAt": "2026-04-22",
+  "parallelFeatures": [
+    {
+      "feature": "asca-design-system-finalize",
+      "phase": "archived",
+      "matchRate": 98,
+      "startedAt": "2026-04-25",
+      "completedAt": "2026-04-25",
+      "archivedAt": "2026-04-25",
+      "archivedTo": "docs/archive/2026-04/asca-design-system-finalize/",
+      "planPath": "docs/archive/2026-04/asca-design-system-finalize/asca-design-system-finalize.plan.md",
+      "designPath": "docs/archive/2026-04/asca-design-system-finalize/asca-design-system-finalize.design.md",
+      "analysisPath": "docs/archive/2026-04/asca-design-system-finalize/asca-design-system-finalize.analysis.md",
+      "reportPath": "docs/archive/2026-04/asca-design-system-finalize/asca-design-system-finalize.report.md",
+      "doSummary": {
+        "phase1": "DESIGN.md typography canonical 8 tokens + prose §3.5 extended (family 9/scale 13/weight/tracking/leading) + §3.6 WCAG pair policy. components: front-matter 블록 prose §8.5로 이전 (비-canonical tokens nested 구조 파서 실패). rounded calc()/var() → 리터럴 dimension 변환. spacing top-level 신설.",
+        "phase2": "scripts/design-diff.ts (~110 LOC, tsx runtime, tailwind config 동적 import + foreground 평탄화) + devDeps @google/design.md@0.1.1 + yaml@2.8.3. tailwind.config.ts에 highlight/highlight-foreground/success/warning/info 5종 semantic literal 추가 (DESIGN.md SSoT 매칭). 결과: 48 literal color tokens in sync.",
+        "phase3": "scripts/design-lint.ts (~140 LOC, WCAG 2.1 contrast formula, 11 페어 P1-P9+L1-L2). DESIGN.md destructive-foreground #f5f5f0→#ffffff (4.42→4.83), muted #707070→#f0f0eb + muted-foreground 신설 #6a6a6a (4.73). 결과: 11/11 PASS.",
+        "phase4": ".github/workflows/ci.yml Code Quality job에 3 step 추가 (design:lint advisory + design:diff hard + design:wcag hard).",
+        "phase5_skipped": "design-validator agent 호출 보류 (Check 단계로 위임). 회귀 검증: lint 0 errors/13 pre-existing warnings, type-check pre-existing layout-footer.tsx 1건 (이번 변경 무관)."
+      }
+      "parentCycle": {
+        "feature": "asca-design-system",
+        "date": "2026-04-24",
+        "matchRate": 82,
+        "status": "completed-partial"
+      },
+      "estimatedHours": 6,
+      "note": "Phase 3 보류분(typography canonical / WCAG contrast / CI 통합) — emax-design-system PDCA(2026-04-25) 학습자산 재활용"
+    }
+  ],
   "planPath": "docs/01-plan/features/warning-cleanup-cycle-2.plan.md",
   "designPath": "docs/02-design/features/warning-cleanup-cycle-2.design.md",
   "cycleNumber": 2,

@@ -27,11 +27,13 @@ colors:
   highlight: '#ffcc00'          # Brand Gold — 수상·기념·프리미엄. bg-brand-gold 로 접근
   highlight-foreground: '#1a1a1a'
   destructive: '#dc2626'
-  destructive-foreground: '#f5f5f0'
+  destructive-foreground: '#ffffff'  # 백색 — Rice Paper(#f5f5f0)는 4.42:1로 AA 미달
   success: '#4a7c59'            # East Wood — 동방목
   warning: '#fdb462'            # Autumn Gold — 가을 황금
   info: '#1e3a8a'               # North Water — 북방수
-  muted: '#707070'               # Stone Gray
+  muted: '#f0f0eb'              # Warm Muted Bg (globals.css --muted oklch 0.94 근사)
+  muted-foreground: '#6a6a6a'   # Darker Gray — muted bg 위 AA 4.72:1 통과
+                                # Note: 장식 토큰 stone-gray(#707070)와 별도 — semantic 슬롯
 
   # Surface (라이트 모드 기준)
   background: '#f5f5f0'         # Rice Paper White
@@ -80,39 +82,34 @@ colors:
   royal-blue: '#275eea'         # 청화백자 청색 — 장식 악센트 한정, UI 금지
 
 # ─────────────────────────────────────────────
-# TYPOGRAPHY — 4개 언어 대응 (ko/en/zh/jp)
+# TYPOGRAPHY — Google DESIGN.md spec canonical tokens
+# 확장 정보(family 9종, scale 13단계, weight/tracking/leading)는 본문 prose 참조
 # ─────────────────────────────────────────────
 typography:
-  family:
-    sans: 'var(--font-inter), var(--font-noto-sans-kr), "Noto Sans CJK SC", "Noto Sans CJK TC", "Noto Sans CJK JP", system-ui, sans-serif'
-    serif: 'var(--font-playfair), var(--font-noto-serif-kr), "Source Han Serif SC", "Source Han Serif TC", "Noto Serif CJK SC", "Noto Serif CJK TC", "Noto Serif CJK JP", serif'
-    calligraphy: '"Source Han Serif SC", "Source Han Serif TC", "Noto Serif CJK SC", "Noto Serif CJK TC", "Noto Serif CJK KR", "Noto Serif CJK JP", "KaiTi", "STKaiti", serif'
-    brush: '"Ma Shan Zheng", "Long Cang", "Source Han Serif SC", "Noto Serif CJK SC", cursive'
-    mono: '"JetBrains Mono", "SF Mono", "Monaco", "Consolas", monospace'
-    # 언어별 최적화
-    korean: 'var(--font-noto-serif-kr), "Source Han Serif KR", "Nanum Myeongjo", "Batang", serif'
-    chinese: '"Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "Microsoft YaHei", serif'
-    japanese: '"Noto Serif CJK JP", "Source Han Serif JP", "Yu Mincho", "Hiragino Mincho Pro", serif'
-    english: '"Playfair Display", "Crimson Text", "Georgia", serif'
-
-  scale:
-    xs: '0.75rem / 1rem'         # 12px
-    sm: '0.875rem / 1.25rem'     # 14px
-    base: '1rem / 1.5rem'        # 16px
-    lg: '1.125rem / 1.75rem'     # 18px
-    xl: '1.25rem / 1.75rem'      # 20px
-    2xl: '1.5rem / 2rem'         # 24px
-    3xl: '1.875rem / 2.25rem'    # 30px
-    4xl: '2.25rem / 2.5rem'      # 36px
-    5xl: '3rem / 1.1'            # 48px
-    6xl: '3.75rem / 1.1'         # 60px
-    7xl: '4.5rem / 1.1'          # 72px
-    8xl: '6rem / 1.1'            # 96px
-    9xl: '8rem / 1'              # 128px
-
-  weight: { thin: 100, light: 300, normal: 400, medium: 500, semibold: 600, bold: 700, black: 900 }
-  tracking: { tighter: '-0.05em', tight: '-0.025em', normal: '0em', wide: '0.025em', wider: '0.05em', widest: '0.1em' }
-  leading: { none: 1, tight: 1.1, snug: 1.25, normal: 1.5, relaxed: 1.75, loose: 2 }
+  display-lg:
+    fontFamily: 'var(--font-playfair), var(--font-noto-serif-kr), serif'
+    fontSize: '3.75rem'          # 60px
+  display-md:
+    fontFamily: 'var(--font-playfair), var(--font-noto-serif-kr), serif'
+    fontSize: '3rem'             # 48px
+  headline-lg:
+    fontFamily: 'var(--font-playfair), var(--font-noto-serif-kr), serif'
+    fontSize: '2.25rem'          # 36px
+  headline-md:
+    fontFamily: 'var(--font-playfair), var(--font-noto-serif-kr), serif'
+    fontSize: '1.875rem'         # 30px
+  title-lg:
+    fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
+    fontSize: '1.5rem'           # 24px
+  body-lg:
+    fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
+    fontSize: '1.125rem'         # 18px
+  body-md:
+    fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
+    fontSize: '1rem'             # 16px
+  label-sm:
+    fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
+    fontSize: '0.875rem'         # 14px
 
 # ─────────────────────────────────────────────
 # LAYOUT — 8px 기반 스페이싱 + 컨테이너
@@ -139,12 +136,23 @@ layout:
 # SHAPES — 기본 0.5rem (--radius)
 # ─────────────────────────────────────────────
 rounded:
-  sm: 'calc(var(--radius) - 4px)'   # 4px
-  md: 'calc(var(--radius) - 2px)'   # 6px
-  lg: 'var(--radius)'                # 8px
-  xl: '16px'
-  2xl: '24px'
+  none: '0rem'                       # 0px
+  sm: '0.25rem'                      # 4px  (실 계산: var(--radius) - 4px)
+  md: '0.375rem'                     # 6px  (실 계산: var(--radius) - 2px)
+  lg: '0.5rem'                       # 8px  (--radius)
+  xl: '1rem'                         # 16px
+  2xl: '1.5rem'                      # 24px
   full: '9999px'
+
+# ─────────────────────────────────────────────
+# SPACING — 8px 그리드 (canonical, layout.spacing 동일)
+# ─────────────────────────────────────────────
+spacing:
+  xs: '0.5rem'                       # 8px
+  sm: '1rem'                         # 16px
+  md: '1.5rem'                       # 24px
+  lg: '2rem'                         # 32px
+  xl: '3rem'                         # 48px
 
 # ─────────────────────────────────────────────
 # ELEVATION — 따뜻한 먹색 기반 섀도우 (hsl 20 6% 20%)
@@ -169,33 +177,9 @@ motion:
   signature:
     ink-spread: 'ink-spread 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards'
 
-# ─────────────────────────────────────────────
-# COMPONENTS — 기존 @layer components 매핑
-# ─────────────────────────────────────────────
-components:
-  gallery-container:
-    tokens: { max-width: '1400px', padding: '{layout.spacing.md}' }
-  gallery-card:
-    tokens:
-      bg: '{colors.rice-paper}'
-      border: '1px solid rgba(136, 168, 145, 0.2)'  # celadon/20
-      rounded: '{rounded.lg}'
-      hover: { translate-y: '-4px', shadow: '{elevation.xl}' }
-  gallery-card-glass:
-    tokens:
-      bg: 'rgba(245, 245, 240, 0.8)'
-      backdrop-blur: '12px'
-      border: 'rgba(136, 168, 145, 0.1)'
-  gallery-btn:
-    variants: [default, outline, ghost, secondary]
-    sizes:
-      xs: { h: '28px', px: '8px', text: '{typography.scale.xs}' }
-      sm: { h: '32px', px: '12px', text: '{typography.scale.sm}' }
-      md: { h: '40px', px: '16px', text: '{typography.scale.sm}' }
-      lg: { h: '44px', px: '24px', text: '{typography.scale.base}' }
-      xl: { h: '48px', px: '32px', text: '{typography.scale.base}' }
-  glass-panel:
-    tokens: { bg: 'rgba(255,255,255,0.1)', backdrop-blur: '12px', border: '1px solid rgba(255,255,255,0.2)' }
+# Components 매핑은 본문 §8(Components prose)에 정의. 이전 components: front-matter
+# 블록은 비-canonical 구조(tokens/variants/sizes nested)로 Google CLI 파서를 실패시켜
+# 2026-04-25 prose 로 이전 (정보 손실 0, lint clean).
 ---
 
 # ASCA Design System
@@ -325,6 +309,76 @@ UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials
 - 헤딩: `tracking-tight` (-0.025em)
 - 전각 강조: `tracking-widest` (0.1em)
 
+### 3.5 Typography Reference (extended)
+
+> **Why prose**: Google DESIGN.md spec v1은 typography를 토큰별 `{fontFamily, fontSize}` 객체로 정의한다. ASCA 고유 확장(family 9종, scale 13단계, weight/tracking/leading)은 본 prose 섹션에 보존하여 `npx design.md lint` 통과와 정보 보존을 동시 달성한다.
+
+#### 3.5.1 Font Families (확장 — front matter 외부)
+
+| 토큰 | 정의 | 적용 |
+|------|------|------|
+| `sans` | `var(--font-inter), var(--font-noto-sans-kr), "Noto Sans CJK SC/TC/JP", system-ui, sans-serif` | UI 본문 |
+| `serif` | `var(--font-playfair), var(--font-noto-serif-kr), "Source Han Serif SC/TC", "Noto Serif CJK *"` | 헤드라인·인용 |
+| `calligraphy` | `"Source Han Serif SC/TC/KR/JP", "Noto Serif CJK *", "KaiTi", "STKaiti", serif` | 작품 정보, 한자 |
+| `brush` | `"Ma Shan Zheng", "Long Cang", "Source Han Serif SC", "Noto Serif CJK SC", cursive` | 데코레이티브 (히어로 한정) |
+| `mono` | `"JetBrains Mono", "SF Mono", "Monaco", "Consolas", monospace` | 코드, 좌표 |
+| `korean` | `var(--font-noto-serif-kr), "Source Han Serif KR", "Nanum Myeongjo", "Batang", serif` | 한국어 강조 |
+| `chinese` | `"Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "Microsoft YaHei", serif` | 중국어 강조 |
+| `japanese` | `"Noto Serif CJK JP", "Source Han Serif JP", "Yu Mincho", "Hiragino Mincho Pro", serif` | 일본어 강조 |
+| `english` | `"Playfair Display", "Crimson Text", "Georgia", serif` | 영어 강조 |
+
+#### 3.5.2 Scale Mapping (Tailwind 13단계 ↔ canonical)
+
+| Tailwind | size / line-height | canonical 토큰 | 용도 |
+|---------|--------------------|---------------|------|
+| `xs` | `0.75rem / 1rem` (12px) | — | metadata, footnote |
+| `sm` | `0.875rem / 1.25rem` (14px) | `label-sm` | 라벨 |
+| `base` | `1rem / 1.5rem` (16px) | `body-md` | 본문 기본 |
+| `lg` | `1.125rem / 1.75rem` (18px) | `body-lg` | 본문 강조 |
+| `xl` | `1.25rem / 1.75rem` (20px) | — | sub-heading |
+| `2xl` | `1.5rem / 2rem` (24px) | `title-lg` | 카드 타이틀 |
+| `3xl` | `1.875rem / 2.25rem` (30px) | `headline-md` | 섹션 헤더 |
+| `4xl` | `2.25rem / 2.5rem` (36px) | `headline-lg` | 페이지 헤더 |
+| `5xl` | `3rem / 1.1` (48px) | `display-md` | 영웅 보조 |
+| `6xl` | `3.75rem / 1.1` (60px) | `display-lg` | 영웅 |
+| `7xl` ~ `9xl` | `4.5rem` ~ `8rem` | — | 메가 히어로 (예외) |
+
+#### 3.5.3 Weight / Tracking / Leading
+
+| 카테고리 | 토큰 |
+|---------|------|
+| `weight` | `thin(100)`, `light(300)`, `normal(400)`, `medium(500)`, `semibold(600)`, `bold(700)`, `black(900)` |
+| `tracking` | `tighter(-0.05em)`, `tight(-0.025em)`, `normal(0em)`, `wide(0.025em)`, `wider(0.05em)`, `widest(0.1em)` |
+| `leading` | `none(1)`, `tight(1.1)`, `snug(1.25)`, `normal(1.5)`, `relaxed(1.75)`, `loose(2)` |
+
+위 값들은 Tailwind 기본값과 일치하므로 별도 config 불필요. CSS 클래스(`font-bold`, `tracking-tight`, `leading-relaxed`)로 직접 접근.
+
+### 3.6 Color Pair Policy (WCAG)
+
+> **Hard-fail pairs (verified by `npm run design:wcag`)** — `scripts/design-lint.ts` 실행 시 11개 페어 모두 WCAG 2.1 AA 통과 필수.
+
+| 페어 | foreground / background | 최소 비율 | 크기 |
+|------|------------------------|----------|------|
+| P1 | `foreground` / `background` | 4.5:1 | 본문 |
+| P2 | `primary-foreground` / `primary` | 4.5:1 | 본문 |
+| P3 | `secondary-foreground` / `secondary` | 4.5:1 | 본문 |
+| P4 | `accent-foreground` / `accent` | 4.5:1 | 본문 |
+| P5 | `highlight-foreground` / `highlight` | 4.5:1 | 본문 |
+| P6 | `destructive-foreground` / `destructive` | 4.5:1 | 본문 |
+| P7 | `muted-foreground` / `muted` | 4.5:1 | 본문 |
+| P8 | `card-foreground` / `card` | 4.5:1 | 본문 |
+| P9 | `popover-foreground` / `popover` | 4.5:1 | 본문 |
+| L1 | `foreground` / `background` | 3.0:1 | large text |
+| L2 | `primary-foreground` / `primary` | 3.0:1 | large text |
+
+**Decorative-only (excluded from contrast lint)**:
+- **Obang 5색** (`east-wood`, `south-fire`, `center-earth`, `west-metal`, `north-water`): 일러스트레이션·아이콘 전용
+- **Seasonal 4색** (`spring-blossom`, `summer-jade`, `autumn-gold`, `winter-snow`): 카테고리 라벨 장식
+- **Calligraphy 4색** (`bamboo-green`, `silk-cream`, `lacquer-black`, `vermillion`): 작품 메타데이터 색상
+- **Brand Extended 6색** (`terra-red`, `sage-green`, `spring-green`, `brand-gold`, `medium-orchid`, `royal-blue`): brand 페이지 정체성 표시 전용
+
+> **Rationale**: 전통 동아시아 5방위·계절·서예 색상은 의미 전달·장식 목적의 시각 표현이지 본문 텍스트 contrast 대상 아님. 텍스트 위에 사용 시 shadcn semantic 슬롯의 foreground 색을 함께 적용해야 한다.
+
 ## 4. Layout
 
 ### 4.1 컨테이너
@@ -411,6 +465,53 @@ UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials
 1. 기존 토큰만으로 우선 구현
 2. 토큰이 부족하면 이 문서를 먼저 수정 후 구현
 3. `@layer components`에 추가, `app/globals.css` 맨 아래 `/* ADDED: YYYY-MM-DD */` 주석
+
+### 8.5 Component Tokens (이전 front-matter `components:` 블록)
+
+> 비-canonical 구조(`tokens:` nested)로 Google CLI 파서가 실패해 2026-04-25 prose로 이전. Tailwind/CSS 클래스 정의의 정본은 `app/globals.css`의 `@layer components`이며, 본 표는 토큰 매핑 가이드.
+
+#### gallery-container
+
+| 속성 | 값 |
+|------|---|
+| max-width | `1400px` |
+| padding | `{spacing.md}` (1.5rem) |
+
+#### gallery-card
+
+| 속성 | 값 |
+|------|---|
+| backgroundColor | `{colors.rice-paper}` |
+| border | `1px solid rgba(136, 168, 145, 0.2)` (celadon/20) |
+| rounded | `{rounded.lg}` (0.5rem) |
+| hover.translateY | `-4px` |
+| hover.shadow | `{elevation.xl}` |
+
+#### gallery-card-glass
+
+| 속성 | 값 |
+|------|---|
+| backgroundColor | `rgba(245, 245, 240, 0.8)` |
+| backdropBlur | `12px` |
+| border | `rgba(136, 168, 145, 0.1)` |
+
+#### gallery-btn (variants: default | outline | ghost | secondary)
+
+| 사이즈 | height | padding-x | text |
+|--------|--------|-----------|------|
+| xs | 28px | 8px | xs (0.75rem) |
+| sm | 32px | 12px | sm (0.875rem) |
+| md | 40px | 16px | sm (0.875rem) |
+| lg | 44px | 24px | base (1rem) |
+| xl | 48px | 32px | base (1rem) |
+
+#### glass-panel
+
+| 속성 | 값 |
+|------|---|
+| backgroundColor | `rgba(255,255,255,0.1)` |
+| backdropBlur | `12px` |
+| border | `1px solid rgba(255,255,255,0.2)` |
 
 ## 9. Do's and Don'ts
 
