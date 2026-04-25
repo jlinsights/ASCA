@@ -109,18 +109,39 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * OPTIONS /api/graphql
- * CORS preflight
+ * Allowed CORS origins (env-driven). 빈 값/미설정 시 same-origin only.
+ *
+ * 설정 예시:
+ *   ALLOWED_ORIGINS=https://asca.kr,https://www.asca.kr
+ *   ALLOWED_ORIGINS=http://localhost:3000  # dev
  */
-export async function OPTIONS() {
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
+
+function corsHeaders(origin: string | null): HeadersInit {
+  const headers: Record<string, string> = {
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Max-Age': '86400',
+  }
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin
+    headers['Vary'] = 'Origin'
+  }
+  return headers
+}
+
+/**
+ * OPTIONS /api/graphql
+ * CORS preflight (화이트리스트 origin만 허용)
+ */
+export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get('origin')
   return new NextResponse(null, {
     status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      'Access-Control-Max-Age': '86400',
-    },
+    headers: corsHeaders(origin),
   })
 }
 
