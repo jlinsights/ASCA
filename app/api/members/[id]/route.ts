@@ -5,7 +5,7 @@ import { getAuthUser } from '@/lib/auth/middleware'
 import { logger } from '@/lib/utils/logger'
 import { UpdateMemberRequest } from '@/lib/types/membership-legacy'
 
-// GET /api/members/[id] - 특정 회원 조회
+// GET /api/members/[id] - 특정 회원 조회 (본인 또는 admin만)
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { userId } = await auth()
@@ -37,6 +37,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({ success: false, error: 'Member not found' }, { status: 404 })
       }
       return NextResponse.json({ success: false, error: 'Failed to fetch member' }, { status: 500 })
+    }
+
+    // 본인 또는 admin만 조회 가능 (PUT 권한 분기와 동일 패턴)
+    if (member.clerk_user_id !== userId) {
+      const adminUser = await getAuthUser()
+      if (!adminUser || adminUser.role !== 'admin') {
+        return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
+      }
     }
 
     return NextResponse.json({ success: true, data: member })
