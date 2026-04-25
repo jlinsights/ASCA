@@ -2,6 +2,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { supabase } from '@/lib/supabase'
+import { error as logError } from '@/lib/logging'
 import { Member, ArtisticProfile, Achievement, Certification } from '@/lib/types/membership-legacy'
 
 // GET /api/members/me - 현재 로그인한 사용자의 프로필 조회
@@ -15,7 +16,16 @@ export async function GET(request: NextRequest) {
 
     // Supabase 클라이언트 확인
     if (!supabase) {
-      // 개발 모드에서 더미 데이터 반환
+      // prod에서는 dummy 데이터 절대 반환 금지 — fail closed
+      if (process.env.NODE_ENV === 'production') {
+        logError('Supabase client not initialized in production — check env vars')
+        return NextResponse.json(
+          { success: false, error: 'Service temporarily unavailable' },
+          { status: 503 }
+        )
+      }
+
+      // dev/test 환경에서만 dummy 데이터 반환
       const clerkUser = await currentUser()
       const dummyMember: Member = {
         id: userId,
