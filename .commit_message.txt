@@ -1,1 +1,1 @@
-🔐 fix(security): H3 GraphQL CORS 화이트리스트 (ALLOWED_ORIGINS env 기반)
+🔐 fix(security): H4 members/me — prod에서 Supabase 미초기화 시 503 (dummy data fail-closed)
