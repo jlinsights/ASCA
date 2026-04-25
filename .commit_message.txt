@@ -1,1 +1,1 @@
-📐 design: asca-api-security-hardening — 6 fix before/after 코드 + 회귀 시나리오 + Stage S1-S7 구현 순서 (566줄)
+🔐 fix(security): C1 GraphQL Clerk session auth 구현 — Bearer token stub 제거, server-side auth() 통합
