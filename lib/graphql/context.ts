@@ -1,3 +1,4 @@
+import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { createIdLoader, DataLoader } from '@/lib/optimization/dataloader'
 import { error as logError } from '@/lib/logging'
@@ -69,9 +70,8 @@ export interface GraphQLContext {
  * with new DataLoader instances (per-request caching)
  */
 export async function createGraphQLContext(req: Request): Promise<GraphQLContext> {
-  // Extract authentication from headers
-  const authHeader = req.headers.get('authorization')
-  const user = await authenticateUser(authHeader)
+  // Authenticate via Clerk session cookie (server-side)
+  const { user, userId } = await authenticateUser()
 
   // Extract request metadata
   const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || null
@@ -83,7 +83,7 @@ export async function createGraphQLContext(req: Request): Promise<GraphQLContext
   return {
     db,
     user,
-    userId: user?.id || null,
+    userId,
     loaders,
     request: {
       ip,
@@ -93,37 +93,31 @@ export async function createGraphQLContext(req: Request): Promise<GraphQLContext
 }
 
 /**
- * Authenticate user from authorization header
+ * Authenticate user via Clerk session cookie (server-side).
  *
- * @param authHeader - Authorization header value (e.g., "Bearer token")
- * @returns Authenticated user or null
+ * Returns both `user` (Drizzle row, may be null if not yet synced) and
+ * `userId` (Clerk session id, always set when authenticated). Resolvers
+ * that only need identity should rely on `userId`; resolvers that need
+ * Drizzle relations should null-check `user`.
+ *
+ * External Bearer tokens (mobile/3rd-party) are out of scope for this
+ * cycle — see plan asca-api-security-hardening §2.2 (M2 backlog).
  */
-async function authenticateUser(authHeader: string | null): Promise<User | null> {
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return null
-  }
-
-  const token = authHeader.substring(7)
-
+async function authenticateUser(): Promise<{ user: User | null; userId: string | null }> {
   try {
-    // TODO: Implement actual token verification
-    // This is a placeholder - integrate with your auth system (Clerk, Supabase, etc.)
+    const { userId } = await auth()
+    if (!userId) return { user: null, userId: null }
 
-    // Example: Decode JWT and extract userId
-    // const decoded = verifyJWT(token);
-    // const userId = decoded.sub;
-
-    // For now, return null until auth is properly implemented
-    return null
-
-    // When implemented, fetch user from database:
-    // const user = await db.query.users.findFirst({
-    //   where: eq(schema.users.id, userId),
-    // });
-    // return user || null;
+    const user = await db.query.users.findFirst({
+      where: eq(schema.users.id, userId),
+    })
+    return { user: user ?? null, userId }
   } catch (error) {
-    logError('Authentication error', error instanceof Error ? error : undefined)
-    return null
+    logError(
+      'GraphQL authentication error',
+      error instanceof Error ? error : undefined
+    )
+    return { user: null, userId: null }
   }
 }
 
