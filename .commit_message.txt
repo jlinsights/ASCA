@@ -1,1 +1,1 @@
-📝 plan: asca-api-security-hardening — gstack /review 발견 6 이슈(C1·C2 인증 우회 + H1-H4) PDCA Plan 작성 (security-hardening-2026-04 branch)
+📐 design: asca-api-security-hardening — 6 fix before/after 코드 + 회귀 시나리오 + Stage S1-S7 구현 순서 (566줄)
