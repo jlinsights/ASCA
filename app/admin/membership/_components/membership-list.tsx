@@ -110,9 +110,7 @@ export function MembershipList({
                     <div className='space-y-1'>
                       <div className='flex items-center gap-2'>
                         <h3 className='font-semibold'>{member.fullName}</h3>
-                        <Badge
-                          className={cn('text-xs px-2 py-0', getStatusBadge(member.status))}
-                        >
+                        <Badge className={cn('text-xs px-2 py-0', getStatusBadge(member.status))}>
                           {getStatusText(member.status)}
                         </Badge>
                       </div>
@@ -149,9 +147,7 @@ export function MembershipList({
                     </div>
 
                     <div className='text-center min-w-[80px]'>
-                      <div className='text-sm font-medium mb-1'>
-                        {member.profileCompleteness}%
-                      </div>
+                      <div className='text-sm font-medium mb-1'>{member.profileCompleteness}%</div>
                       <Progress value={member.profileCompleteness} className='h-2 w-16' />
                     </div>
 

@@ -1,36 +1,45 @@
-import { AirtableService, AirtableArtist, AirtableArtwork, AirtableExhibition, AirtableEvent, AirtableNotice } from './airtable';
-import { createArtist, createArtwork, type ArtistInsert, type ArtworkInsert } from './admin-api';
-import { randomUUID } from 'crypto';
-import { createExhibition } from './supabase/cms';
-import type { ExhibitionFormData } from '@/lib/types/cms-legacy';
-import { ensureSupabase } from './supabase';
+import {
+  AirtableService,
+  AirtableArtist,
+  AirtableArtwork,
+  AirtableExhibition,
+  AirtableEvent,
+  AirtableNotice,
+} from './airtable'
+import { createArtist, createArtwork, type ArtistInsert, type ArtworkInsert } from './admin-api'
+import { randomUUID } from 'crypto'
+import { createExhibition } from './supabase/cms'
+import type { ExhibitionFormData } from '@/lib/types/cms-legacy'
+import { ensureSupabase } from './supabase'
 
 // Airtable → Supabase 데이터 변환 함수들
 export class AirtableMigration {
-  
   // 다중 라인 필드 파싱 유틸리티
   private static parseMultiLineField(field: string | undefined): string[] {
-    if (!field) return [];
-    return field.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+    if (!field) return []
+    return field
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0)
   }
 
   // Artist 데이터 변환
   private static transformAirtableArtist(record: any): ArtistInsert {
-    const fields = record.fields;
-    
+    const fields = record.fields
+
     // DOB 날짜 포맷 변환 함수
     const parseDOB = (dobString: string | undefined): string | null => {
-      if (!dobString) return null;
+      if (!dobString) return null
       try {
         // YYYY-MM-DD 형식으로 변환
-        const date = new Date(dobString);
-        const dateString = date.toISOString().split('T')[0];
-        return dateString || null;
+        const date = new Date(dobString)
+        const dateString = date.toISOString().split('T')[0]
+        return dateString || null
       } catch {
-        return null;
+        return null
       }
-    };
-    
+    }
+
     return {
       id: randomUUID(),
       name: fields['Name (Korean)'] || '',
@@ -49,21 +58,23 @@ export class AirtableMigration {
       profileImage: fields['Profile Image']?.[0]?.url || null,
       // Removed fields not in schema: membershipType, artistType, title
       // Also ensuring nameKo is populated if name is Korean
-      nameKo: fields['Name (Korean)'] || null
-    };
+      nameKo: fields['Name (Korean)'] || null,
+    }
   }
 
   // Artwork 데이터 변환 (artist_id는 나중에 매핑)
-  private static transformAirtableArtwork(record: any, artistIdMap: Map<string, string>): ArtworkInsert | null {
-    const fields = record.fields;
-    
+  private static transformAirtableArtwork(
+    record: any,
+    artistIdMap: Map<string, string>
+  ): ArtworkInsert | null {
+    const fields = record.fields
+
     // 작가 ID 매핑 확인
-    const airtableArtistId = fields['Artist']?.[0]; // Airtable 링크 필드
+    const airtableArtistId = fields['Artist']?.[0] // Airtable 링크 필드
     if (!airtableArtistId || !artistIdMap.has(airtableArtistId)) {
-      
-      return null;
+      return null
     }
-    
+
     return {
       id: randomUUID(),
       title: fields['Title (Korean)'] || '',
@@ -79,40 +90,43 @@ export class AirtableMigration {
       // materials is typically text or string array? Schema says text('medium')?
       // Schema: medium: text('medium').
       // Airtable 'Materials' might be array. Join if so.
-      medium: Array.isArray(fields['Materials']) ? fields['Materials'].join(', ') : fields['Materials'] || null, 
-      
+      medium: Array.isArray(fields['Materials'])
+        ? fields['Materials'].join(', ')
+        : fields['Materials'] || null,
+
       // Schema dimensions: text. Format it.
-      dimensions: fields['Width (cm)'] && fields['Height (cm)'] 
-        ? `${fields['Width (cm)']}x${fields['Height (cm)']}${fields['Depth (cm)'] ? 'x'+fields['Depth (cm)'] : ''} cm` 
-        : null,
-        
+      dimensions:
+        fields['Width (cm)'] && fields['Height (cm)']
+          ? `${fields['Width (cm)']}x${fields['Height (cm)']}${fields['Depth (cm)'] ? 'x' + fields['Depth (cm)'] : ''} cm`
+          : null,
+
       // Schema price: real.
       price: fields['Price Amount'] || null,
-      
+
       // availability: schema has isForSale (boolean). Airtable has 'Availability' string.
       isForSale: fields['Availability'] === 'available' || fields['Availability'] === 'for_sale',
-      
+
       isFeatured: fields['Featured'] || false,
       tags: fields['Tags'] || [],
-      
+
       // imageUrl: text, imageUrls: jsonb string array
       imageUrl: fields['Images']?.[0]?.url || null,
       imageUrls: fields['Images']?.map((img: any) => img.url) || [],
-      
+
       // metadata for extra fields
       metadata: {
         condition: fields['Condition'],
         technique: fields['Technique'],
         authenticityCertificate: fields['Authenticity Certificate'],
-        materials: fields['Materials'] // Store original array in metadata
-      }
-    };
+        materials: fields['Materials'], // Store original array in metadata
+      },
+    }
   }
 
   // Exhibition 데이터 변환
   private static transformAirtableExhibition(record: any): ExhibitionFormData {
-    const fields = record.fields;
-    
+    const fields = record.fields
+
     return {
       title: fields['Title (Korean)'] || '',
       description: fields['Description (Korean)'] || '',
@@ -135,14 +149,14 @@ export class AirtableMigration {
       admission_fee: fields['Ticket Price'] || null,
       opening_hours: fields['Opening Hours'] || null,
       contact: fields['Contact'] || null,
-      website: fields['Website'] || null
-    };
+      website: fields['Website'] || null,
+    }
   }
 
   // Event 데이터 변환
   private static transformAirtableEvent(record: any): any {
-    const fields = record.fields;
-    
+    const fields = record.fields
+
     return {
       title: fields['Title (Korean)'] || '',
       title_en: fields['Title (English)'] || null,
@@ -175,14 +189,14 @@ export class AirtableMigration {
       tags: fields['Tags'] || [],
       requirements: fields['Requirements'] || null,
       notes: fields['Notes'] || null,
-      airtable_id: record.id
-    };
+      airtable_id: record.id,
+    }
   }
 
   // Notice 데이터 변환
   private static transformAirtableNotice(record: any): any {
-    const fields = record.fields;
-    
+    const fields = record.fields
+
     return {
       title: fields['Title (Korean)'] || '',
       title_en: fields['Title (English)'] || null,
@@ -201,253 +215,251 @@ export class AirtableMigration {
       published_at: fields['Published At'] || null,
       expires_at: fields['Expires At'] || null,
       effective_date: fields['Effective Date'] || null,
-      attachments: fields['Attachments']?.map((att: any) => ({
-        id: att.id,
-        url: att.url,
-        filename: att.filename
-      })) || [],
+      attachments:
+        fields['Attachments']?.map((att: any) => ({
+          id: att.id,
+          url: att.url,
+          filename: att.filename,
+        })) || [],
       featured_image_url: fields['Featured Image']?.[0]?.url || null,
       target_audience: fields['Target Audience'] || [],
       tags: fields['Tags'] || [],
       external_link: fields['External Link'] || null,
       download_url: fields['Download URL'] || null,
-      airtable_id: record.id
-    };
+      airtable_id: record.id,
+    }
   }
 
   // 순차적 마이그레이션 (외래키 관계 고려)
-  static async migrateArtists(): Promise<{ success: number; failed: number; artistIdMap: Map<string, string> }> {
-    const airtableArtists = await AirtableService.getAllArtists();
-    
-    let success = 0;
-    let failed = 0;
-    const artistIdMap = new Map<string, string>();
-    
+  static async migrateArtists(): Promise<{
+    success: number
+    failed: number
+    artistIdMap: Map<string, string>
+  }> {
+    const airtableArtists = await AirtableService.getAllArtists()
+
+    let success = 0
+    let failed = 0
+    const artistIdMap = new Map<string, string>()
+
     for (const airtableArtist of airtableArtists) {
       try {
-        const artistData = this.transformAirtableArtist(airtableArtist);
-        const result = await createArtist(artistData);
-        artistIdMap.set(airtableArtist.id, result.id);
-        success++;
+        const artistData = this.transformAirtableArtist(airtableArtist)
+        const result = await createArtist(artistData)
+        artistIdMap.set(airtableArtist.id, result.id)
+        success++
       } catch (error) {
-        
-        failed++;
+        failed++
       }
     }
-    
-    return { success, failed, artistIdMap };
+
+    return { success, failed, artistIdMap }
   }
 
-  static async migrateArtworks(artistIdMap: Map<string, string>): Promise<{ success: number; failed: number }> {
-    const airtableArtworks = await AirtableService.getAllArtworks();
-    
-    let success = 0;
-    let failed = 0;
-    
+  static async migrateArtworks(
+    artistIdMap: Map<string, string>
+  ): Promise<{ success: number; failed: number }> {
+    const airtableArtworks = await AirtableService.getAllArtworks()
+
+    let success = 0
+    let failed = 0
+
     for (const airtableArtwork of airtableArtworks) {
       try {
-        const artworkData = this.transformAirtableArtwork(airtableArtwork, artistIdMap);
+        const artworkData = this.transformAirtableArtwork(airtableArtwork, artistIdMap)
         if (artworkData) {
-          await createArtwork(artworkData);
-          success++;
+          await createArtwork(artworkData)
+          success++
         } else {
-          failed++;
+          failed++
         }
       } catch (error) {
-        
-        failed++;
+        failed++
       }
     }
-    
-    return { success, failed };
+
+    return { success, failed }
   }
 
   static async migrateExhibitions(): Promise<{ success: number; failed: number }> {
-    const airtableExhibitions = await AirtableService.getAllExhibitions();
-    
-    let success = 0;
-    let failed = 0;
-    
+    const airtableExhibitions = await AirtableService.getAllExhibitions()
+
+    let success = 0
+    let failed = 0
+
     for (const airtableExhibition of airtableExhibitions) {
       try {
-        const exhibitionData = this.transformAirtableExhibition(airtableExhibition);
-        await createExhibition(exhibitionData);
-        success++;
+        const exhibitionData = this.transformAirtableExhibition(airtableExhibition)
+        await createExhibition(exhibitionData)
+        success++
       } catch (error) {
-        
-        failed++;
+        failed++
       }
     }
-    
-    return { success, failed };
+
+    return { success, failed }
   }
 
   static async migrateEvents(): Promise<{ success: number; failed: number }> {
-    const airtableEvents = await AirtableService.getAllEvents();
-    const supabase = ensureSupabase();
-    if (!supabase) throw new Error('Supabase client not available');
-    
-    let success = 0;
-    let failed = 0;
-    
+    const airtableEvents = await AirtableService.getAllEvents()
+    const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
+
+    let success = 0
+    let failed = 0
+
     for (const airtableEvent of airtableEvents) {
       try {
-        const eventData = this.transformAirtableEvent(airtableEvent);
-        const { error } = await supabase.from('events').insert(eventData);
-        
+        const eventData = this.transformAirtableEvent(airtableEvent)
+        const { error } = await supabase.from('events').insert(eventData)
+
         if (error) {
-          throw error;
+          throw error
         }
-        
-        success++;
+
+        success++
       } catch (error) {
-        
-        failed++;
+        failed++
       }
     }
-    
-    return { success, failed };
+
+    return { success, failed }
   }
 
   static async migrateNotices(): Promise<{ success: number; failed: number }> {
-    const airtableNotices = await AirtableService.getAllNotices();
-    const supabase = ensureSupabase();
-    if (!supabase) throw new Error('Supabase client not available');
-    
-    let success = 0;
-    let failed = 0;
-    
+    const airtableNotices = await AirtableService.getAllNotices()
+    const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
+
+    let success = 0
+    let failed = 0
+
     for (const airtableNotice of airtableNotices) {
       try {
-        const noticeData = this.transformAirtableNotice(airtableNotice);
-        const { error } = await supabase.from('notices').insert(noticeData);
-        
+        const noticeData = this.transformAirtableNotice(airtableNotice)
+        const { error } = await supabase.from('notices').insert(noticeData)
+
         if (error) {
-          throw error;
+          throw error
         }
-        
-        success++;
+
+        success++
       } catch (error) {
-        
-        failed++;
+        failed++
       }
     }
-    
-    return { success, failed };
+
+    return { success, failed }
   }
 
   // 전체 마이그레이션 실행
   static async migrateAll(): Promise<{
-    artists: { success: number; failed: number; total: number };
-    artworks: { success: number; failed: number; total: number };
-    exhibitions: { success: number; failed: number; total: number };
-    events: { success: number; failed: number; total: number };
-    notices: { success: number; failed: number; total: number };
+    artists: { success: number; failed: number; total: number }
+    artworks: { success: number; failed: number; total: number }
+    exhibitions: { success: number; failed: number; total: number }
+    events: { success: number; failed: number; total: number }
+    notices: { success: number; failed: number; total: number }
   }> {
-
     // 1. Artists 마이그레이션 (배치 처리)
-    
-    const artistResults = await this.migrateArtistsInBatches();
+
+    const artistResults = await this.migrateArtistsInBatches()
 
     // 아티스트 ID 매핑 생성
-    const artistIdMap = await this.createArtistIdMap();
-    
+    const artistIdMap = await this.createArtistIdMap()
+
     // 2. Artworks 마이그레이션
-    
-    const artworkResults = await this.migrateArtworks(artistIdMap);
+
+    const artworkResults = await this.migrateArtworks(artistIdMap)
 
     // 3. Exhibitions 마이그레이션
-    
-    const exhibitionResults = await this.migrateExhibitions();
+
+    const exhibitionResults = await this.migrateExhibitions()
 
     // 4. Events 마이그레이션
-    
-    const eventResults = await this.migrateEvents();
+
+    const eventResults = await this.migrateEvents()
 
     // 5. Notices 마이그레이션
-    
-    const noticeResults = await this.migrateNotices();
+
+    const noticeResults = await this.migrateNotices()
 
     return {
       artists: { ...artistResults, total: artistResults.success + artistResults.failed },
       artworks: { ...artworkResults, total: artworkResults.success + artworkResults.failed },
-      exhibitions: { ...exhibitionResults, total: exhibitionResults.success + exhibitionResults.failed },
+      exhibitions: {
+        ...exhibitionResults,
+        total: exhibitionResults.success + exhibitionResults.failed,
+      },
       events: { ...eventResults, total: eventResults.success + eventResults.failed },
-      notices: { ...noticeResults, total: noticeResults.success + noticeResults.failed }
-    };
+      notices: { ...noticeResults, total: noticeResults.success + noticeResults.failed },
+    }
   }
 
   // 배치 처리를 통한 Artists 마이그레이션
-  static async migrateArtistsInBatches(batchSize: number = 50): Promise<{ success: number; failed: number }> {
-    let totalSuccess = 0;
-    let totalFailed = 0;
+  static async migrateArtistsInBatches(
+    batchSize: number = 50
+  ): Promise<{ success: number; failed: number }> {
+    let totalSuccess = 0
+    let totalFailed = 0
 
     try {
-      const result = await AirtableService.processAllArtistsInBatches(
-        async (batch) => {
-          for (const airtableArtist of batch) {
-            try {
-              const artistData = this.transformAirtableArtist(airtableArtist);
-              await createArtist(artistData);
-              totalSuccess++;
-            } catch (error) {
-              
-              totalFailed++;
-            }
+      const result = await AirtableService.processAllArtistsInBatches(async batch => {
+        for (const airtableArtist of batch) {
+          try {
+            const artistData = this.transformAirtableArtist(airtableArtist)
+            await createArtist(artistData)
+            totalSuccess++
+          } catch (error) {
+            totalFailed++
           }
-        },
-        batchSize
-      );
+        }
+      }, batchSize)
 
       return {
         success: totalSuccess,
-        failed: totalFailed
-      };
+        failed: totalFailed,
+      }
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
 
   // Airtable ID → Supabase ID 매핑 생성
   static async createArtistIdMap(): Promise<Map<string, string>> {
-    const supabase = ensureSupabase();
-    if (!supabase) throw new Error('Supabase client not available');
-    const map = new Map<string, string>();
+    const supabase = ensureSupabase()
+    if (!supabase) throw new Error('Supabase client not available')
+    const map = new Map<string, string>()
 
     try {
       // Supabase에서 모든 작가 조회 (이름 기준으로 매핑)
       const { data: supabaseArtists, error } = await supabase
         .from('artists')
-        .select('id, name, name_en');
+        .select('id, name, name_en')
 
       if (error) {
-        
-        throw error;
+        throw error
       }
 
       // Airtable에서 모든 작가 조회
-      const airtableArtists = await AirtableService.getAllArtists();
+      const airtableArtists = await AirtableService.getAllArtists()
 
       // 이름 기준으로 매핑 생성
       for (const airtableArtist of airtableArtists) {
-        const airtableName = airtableArtist.fields['Name (Korean)'];
-        const airtableNameEn = airtableArtist.fields['Name (English)'];
+        const airtableName = airtableArtist.fields['Name (Korean)']
+        const airtableNameEn = airtableArtist.fields['Name (English)']
 
-        const matchedSupabaseArtist = supabaseArtists?.find(sa => 
-          sa.name === airtableName || 
-          (airtableNameEn && sa.name_en === airtableNameEn)
-        );
+        const matchedSupabaseArtist = supabaseArtists?.find(
+          sa => sa.name === airtableName || (airtableNameEn && sa.name_en === airtableNameEn)
+        )
 
         if (matchedSupabaseArtist) {
-          map.set(airtableArtist.id, matchedSupabaseArtist.id);
+          map.set(airtableArtist.id, matchedSupabaseArtist.id)
         }
       }
 
-      return map;
+      return map
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
-} 
+}

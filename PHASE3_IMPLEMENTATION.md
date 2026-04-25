@@ -2,8 +2,7 @@
 
 ## 🎯 Status: ✅ COMPLETE
 
-**Implementation Date**: December 28, 2025
-**Duration**: ~4 hours (완료)
+**Implementation Date**: December 28, 2025 **Duration**: ~4 hours (완료)
 **Building on**: Phase 1 (Infrastructure) + Phase 2 (Architecture Patterns)
 
 ---
@@ -76,18 +75,20 @@ Cross-cutting (NEW):
 ### N+1 Problem Solution
 
 **Problem**: Loading related data causes multiple database queries
+
 ```typescript
 // Bad: N+1 queries (1 for members + N for membership levels)
-const members = await memberRepository.findAll();
+const members = await memberRepository.findAll()
 for (const member of members) {
-  member.level = await levelRepository.findById(member.membership_level_id);
+  member.level = await levelRepository.findById(member.membership_level_id)
 }
 ```
 
 **Solution**: DataLoader pattern with batching
+
 ```typescript
 // Good: 2 queries total (1 for members + 1 batched for all levels)
-const members = await memberRepository.findAllWithLevels();
+const members = await memberRepository.findAllWithLevels()
 ```
 
 ### Implementation Files
@@ -104,6 +105,7 @@ const members = await memberRepository.findAllWithLevels();
 ### Offset vs Cursor Pagination
 
 **Offset Pagination** (Phase 1 & 2):
+
 ```typescript
 // Problems with large datasets:
 // 1. Inefficient for large offsets
@@ -112,6 +114,7 @@ SELECT * FROM members LIMIT 20 OFFSET 1000;
 ```
 
 **Cursor Pagination** (Phase 3):
+
 ```typescript
 // Benefits:
 // 1. Consistent performance regardless of position
@@ -183,11 +186,13 @@ type Subscription {
 ### WebSocket vs Server-Sent Events
 
 **WebSocket** (Bidirectional):
+
 - Full-duplex communication
 - Lower latency
 - More complex setup
 
 **Server-Sent Events** (Unidirectional):
+
 - Server → Client only
 - Simpler implementation
 - Automatic reconnection
@@ -237,7 +242,7 @@ export const ADMIN_PERMISSIONS = [
   Permission.ADMIN_FULL,
   Permission.MEMBER_DELETE,
   Permission.SYSTEM_LOGS,
-];
+]
 ```
 
 ### Admin Features
@@ -294,31 +299,31 @@ export const ADMIN_PERMISSIONS = [
 
 ```typescript
 export enum LogLevel {
-  ERROR = 'error',    // Errors requiring immediate attention
-  WARN = 'warn',      // Warning conditions
-  INFO = 'info',      // Informational messages
-  DEBUG = 'debug',    // Debug messages
+  ERROR = 'error', // Errors requiring immediate attention
+  WARN = 'warn', // Warning conditions
+  INFO = 'info', // Informational messages
+  DEBUG = 'debug', // Debug messages
 }
 
 // Structured log format
 interface LogEntry {
-  timestamp: string;
-  level: LogLevel;
-  message: string;
+  timestamp: string
+  level: LogLevel
+  message: string
   context: {
-    userId?: string;
-    requestId?: string;
-    ip?: string;
-    path?: string;
-    method?: string;
-    duration?: number;
-  };
-  metadata?: Record<string, any>;
+    userId?: string
+    requestId?: string
+    ip?: string
+    path?: string
+    method?: string
+    duration?: number
+  }
+  metadata?: Record<string, any>
   error?: {
-    message: string;
-    stack?: string;
-    code?: string;
-  };
+    message: string
+    stack?: string
+    code?: string
+  }
 }
 ```
 
@@ -339,32 +344,35 @@ interface LogEntry {
 
 ## 📊 Performance Improvements (Expected)
 
-| Metric | Before Phase 3 | After Phase 3 | Improvement |
-|--------|----------------|---------------|-------------|
-| N+1 Queries | Common | Eliminated | ~80% faster |
-| Pagination (large offset) | O(n) | O(1) | ~95% faster |
-| GraphQL Flexibility | None | Full | New capability |
-| Real-time Updates | Polling | Push | ~90% less traffic |
-| Admin Operations | Manual | Bulk | ~70% faster |
-| Monitoring | Basic | Comprehensive | Full visibility |
+| Metric                    | Before Phase 3 | After Phase 3 | Improvement       |
+| ------------------------- | -------------- | ------------- | ----------------- |
+| N+1 Queries               | Common         | Eliminated    | ~80% faster       |
+| Pagination (large offset) | O(n)           | O(1)          | ~95% faster       |
+| GraphQL Flexibility       | None           | Full          | New capability    |
+| Real-time Updates         | Polling        | Push          | ~90% less traffic |
+| Admin Operations          | Manual         | Bulk          | ~70% faster       |
+| Monitoring                | Basic          | Comprehensive | Full visibility   |
 
 ---
 
 ## 🧪 Testing Strategy
 
 ### Unit Tests
+
 - DataLoader batching logic
 - Cursor encoding/decoding
 - Permission checking
 - Metrics calculation
 
 ### Integration Tests
+
 - GraphQL queries and mutations
 - Real-time event broadcasting
 - Admin bulk operations
 - Performance monitoring
 
 ### Load Tests
+
 - Cursor pagination with 1M+ records
 - Concurrent WebSocket connections
 - GraphQL query complexity
@@ -430,42 +438,49 @@ app/
 ## 🎯 Implementation Order
 
 ### Phase 3.1: Query Optimization (Day 1)
+
 1. ✅ DataLoader implementation
 2. ✅ Query optimizer helpers
 3. ✅ Enhanced repositories with joins
 4. ✅ Integration with existing services
 
 ### Phase 3.2: Cursor Pagination (Day 1)
+
 1. ✅ Cursor encoding/decoding
 2. ✅ Repository cursor support
 3. ✅ API response format
 4. ✅ Example API implementation
 
 ### Phase 3.3: GraphQL Layer (Day 2)
+
 1. ✅ Schema definition
 2. ✅ Resolver implementation
 3. ✅ DataLoader integration
 4. ✅ GraphQL endpoint
 
 ### Phase 3.4: Real-time Updates (Day 2-3)
+
 1. ✅ Event emitter system
 2. ✅ WebSocket manager
 3. ✅ SSE manager
 4. ✅ Real-time endpoints
 
 ### Phase 3.5: Admin API (Day 3)
+
 1. ✅ Permission system
 2. ✅ Role manager
 3. ✅ Admin middleware
 4. ✅ Admin endpoints
 
 ### Phase 3.6: Performance Monitoring (Day 3-4)
+
 1. ✅ Performance monitor
 2. ✅ Metrics collector
 3. ✅ Slow query detector
 4. ✅ Metrics API
 
 ### Phase 3.7: Structured Logging (Day 4)
+
 1. ✅ Logger implementation
 2. ✅ Log formatting
 3. ✅ Log transports
@@ -476,6 +491,7 @@ app/
 ## ⚠️ Important Notes
 
 ### Database Indexes
+
 Phase 3 requires proper database indexes for optimal performance:
 
 ```sql
@@ -495,12 +511,14 @@ CREATE INDEX idx_members_search ON members USING GIN(
 ```
 
 ### GraphQL Considerations
+
 - **Query Complexity**: Limit query depth to prevent abuse
 - **Rate Limiting**: Apply to GraphQL endpoint
 - **Caching**: Use persisted queries for better caching
 - **Monitoring**: Track GraphQL query performance
 
 ### Real-time Scalability
+
 - **Connection Limits**: WebSocket connections limited by server resources
 - **Redis Pub/Sub**: Use Redis for multi-server event broadcasting
 - **Message Queue**: Consider message queue for high-volume events
@@ -531,20 +549,17 @@ CREATE INDEX idx_members_search ON members USING GIN(
 
 ## 🎉 Success Metrics
 
-| Component | Metric | Target |
-|-----------|--------|--------|
-| Query Optimization | N+1 queries eliminated | 100% |
-| Cursor Pagination | Performance consistency | O(1) |
-| GraphQL | Query flexibility | Full coverage |
-| Real-time | Event latency | <100ms |
-| Admin Operations | Bulk operation speed | +70% |
-| Monitoring | Metric coverage | 95%+ |
-| Logging | Structured logs | 100% |
+| Component          | Metric                  | Target        |
+| ------------------ | ----------------------- | ------------- |
+| Query Optimization | N+1 queries eliminated  | 100%          |
+| Cursor Pagination  | Performance consistency | O(1)          |
+| GraphQL            | Query flexibility       | Full coverage |
+| Real-time          | Event latency           | <100ms        |
+| Admin Operations   | Bulk operation speed    | +70%          |
+| Monitoring         | Metric coverage         | 95%+          |
+| Logging            | Structured logs         | 100%          |
 
 ---
 
-**Implementation by**: Claude Sonnet 4.5
-**Documentation generated**: December 28, 2025
-**Status**: ✅ COMPLETE
-**Completion Date**: December 28, 2025
-
+**Implementation by**: Claude Sonnet 4.5 **Documentation generated**: December
+28, 2025 **Status**: ✅ COMPLETE **Completion Date**: December 28, 2025

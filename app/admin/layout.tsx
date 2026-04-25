@@ -10,11 +10,9 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <AdminProtectedRoute>
-      <div className="min-h-screen bg-transparent">
+      <div className='min-h-screen bg-transparent'>
         <AdminNavigation />
-        <main className="container mx-auto px-4 py-8">
-          {children}
-        </main>
+        <main className='container mx-auto px-4 py-8'>{children}</main>
         <LayoutFooter />
       </div>
     </AdminProtectedRoute>

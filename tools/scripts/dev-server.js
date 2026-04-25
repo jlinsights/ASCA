@@ -22,18 +22,18 @@ const colors = {
 }
 
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ${colors.reset} ${msg}`),
-  success: (msg) => console.log(`${colors.green}✅${colors.reset} ${msg}`),
-  warning: (msg) => console.log(`${colors.yellow}⚠️${colors.reset} ${msg}`),
-  error: (msg) => console.log(`${colors.red}❌${colors.reset} ${msg}`),
-  step: (msg) => console.log(`${colors.cyan}🔄${colors.reset} ${msg}`),
+  info: msg => console.log(`${colors.blue}ℹ${colors.reset} ${msg}`),
+  success: msg => console.log(`${colors.green}✅${colors.reset} ${msg}`),
+  warning: msg => console.log(`${colors.yellow}⚠️${colors.reset} ${msg}`),
+  error: msg => console.log(`${colors.red}❌${colors.reset} ${msg}`),
+  step: msg => console.log(`${colors.cyan}🔄${colors.reset} ${msg}`),
 }
 
 class DevServer {
   constructor() {
     this.processes = []
     this.isShuttingDown = false
-    
+
     // 프로세스 종료 시 정리
     process.on('SIGINT', () => this.shutdown())
     process.on('SIGTERM', () => this.shutdown())
@@ -65,7 +65,6 @@ class DevServer {
       await this.startServices()
 
       log.success('개발 서버가 성공적으로 시작되었습니다!')
-      
     } catch (error) {
       log.error(`개발 서버 시작 실패: ${error.message}`)
       process.exit(1)
@@ -74,12 +73,12 @@ class DevServer {
 
   async checkEnvironment() {
     log.step('환경 변수 검증 중...')
-    
+
     // .env.local 파일 존재 확인
     const envPath = path.join(process.cwd(), '.env.local')
     if (!fs.existsSync(envPath)) {
       log.warning('.env.local 파일이 없습니다.')
-      
+
       const envExamplePath = path.join(process.cwd(), '.env.example')
       if (fs.existsSync(envExamplePath)) {
         log.info('.env.example을 .env.local로 복사합니다...')
@@ -99,7 +98,7 @@ class DevServer {
 
   async checkDependencies() {
     log.step('의존성 확인 중...')
-    
+
     return new Promise((resolve, reject) => {
       exec('npm ls --depth=0', (error, stdout, stderr) => {
         if (error) {
@@ -115,9 +114,8 @@ class DevServer {
 
   async checkDatabase() {
     log.step('데이터베이스 연결 확인 중...')
-    
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || 
-        !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
       log.warning('Supabase 설정이 없습니다. 모의 데이터 모드로 실행됩니다.')
       return
     }
@@ -133,11 +131,11 @@ class DevServer {
 
   async checkPort() {
     const port = process.env.DEV_SERVER_PORT || 3000
-    
-    return new Promise((resolve) => {
+
+    return new Promise(resolve => {
       const net = require('net')
       const server = net.createServer()
-      
+
       server.listen(port, () => {
         server.once('close', () => {
           log.success(`포트 ${port}가 사용 가능합니다.`)
@@ -145,8 +143,8 @@ class DevServer {
         })
         server.close()
       })
-      
-      server.on('error', (err) => {
+
+      server.on('error', err => {
         if (err.code === 'EADDRINUSE') {
           log.warning(`포트 ${port}가 이미 사용 중입니다.`)
           log.info('다른 포트를 사용하거나 기존 프로세스를 종료하세요.')
@@ -158,7 +156,7 @@ class DevServer {
 
   async startServices() {
     log.step('개발 서비스 시작 중...')
-    
+
     const services = []
 
     // 1. Next.js 개발 서버
@@ -205,36 +203,38 @@ class DevServer {
   }
 
   shouldStartDbStudio() {
-    return process.argv.includes('--with-db') && 
-           process.env.NEXT_PUBLIC_SUPABASE_URL &&
-           !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')
+    return (
+      process.argv.includes('--with-db') &&
+      process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')
+    )
   }
 
   async startService(service) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       log.info(`${service.name} 서비스 시작 중...`)
-      
+
       const process = spawn(service.command, service.args, {
         stdio: ['inherit', 'pipe', 'pipe'],
         shell: true,
       })
 
       // 출력 처리
-      process.stdout.on('data', (data) => {
+      process.stdout.on('data', data => {
         const output = data.toString().trim()
         if (output) {
           console.log(`${service.color}[${service.name}]${colors.reset} ${output}`)
         }
       })
 
-      process.stderr.on('data', (data) => {
+      process.stderr.on('data', data => {
         const output = data.toString().trim()
         if (output && !output.includes('warn')) {
           console.log(`${service.color}[${service.name}]${colors.reset} ${output}`)
         }
       })
 
-      process.on('close', (code) => {
+      process.on('close', code => {
         if (code !== 0 && !this.isShuttingDown) {
           log.error(`${service.name} 서비스가 종료되었습니다. (코드: ${code})`)
         }
@@ -253,32 +253,32 @@ class DevServer {
   printServerInfo() {
     const host = process.env.DEV_SERVER_HOST || 'localhost'
     const port = process.env.DEV_SERVER_PORT || 3000
-    
+
     console.log('\n' + '='.repeat(60))
     console.log(`${colors.green}🚀 개발 서버가 실행 중입니다!${colors.reset}`)
     console.log('='.repeat(60))
     console.log(`${colors.cyan}📍 메인 사이트:${colors.reset} http://${host}:${port}`)
     console.log(`${colors.cyan}🛡️  관리자 페이지:${colors.reset} http://${host}:${port}/admin`)
     console.log(`${colors.cyan}🔧 API 엔드포인트:${colors.reset} http://${host}:${port}/api`)
-    
+
     if (this.shouldStartDbStudio()) {
       console.log(`${colors.cyan}💾 DB 스튜디오:${colors.reset} http://localhost:4983`)
     }
-    
+
     console.log('='.repeat(60))
     console.log(`${colors.yellow}⚡ 개발 팁:${colors.reset}`)
     console.log('  • Ctrl+C: 서버 종료')
     console.log('  • 파일 수정 시 자동 새로고침')
     console.log('  • 환경변수 변경 시 서버 재시작 필요')
-    
+
     if (process.env.DEV_ADMIN_MODE === 'true') {
       console.log(`${colors.red}⚠️  경고: 개발 관리자 모드가 활성화됨${colors.reset}`)
     }
-    
+
     if (process.env.USE_MOCK_DATA === 'true') {
       console.log(`${colors.blue}🎭 모의 데이터 모드로 실행 중${colors.reset}`)
     }
-    
+
     console.log('='.repeat(60) + '\n')
   }
 
@@ -329,4 +329,4 @@ if (require.main === module) {
   devServer.start()
 }
 
-module.exports = DevServer 
+module.exports = DevServer

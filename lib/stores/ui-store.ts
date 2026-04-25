@@ -43,51 +43,75 @@ export const useUIStore = create<UIState>()(
 
         // 액션 구현
         openModal: (type: string, data?: any) => {
-          set({
-            isModalOpen: true,
-            modalType: type,
-            modalData: data,
-          }, false, 'ui/openModal')
+          set(
+            {
+              isModalOpen: true,
+              modalType: type,
+              modalData: data,
+            },
+            false,
+            'ui/openModal'
+          )
         },
 
         closeModal: () => {
-          set({
-            isModalOpen: false,
-            modalType: null,
-            modalData: null,
-          }, false, 'ui/closeModal')
+          set(
+            {
+              isModalOpen: false,
+              modalType: null,
+              modalData: null,
+            },
+            false,
+            'ui/closeModal'
+          )
         },
 
         setLoading: (loading: boolean, message?: string) => {
-          set({
-            isLoading: loading,
-            loadingMessage: message,
-          }, false, 'ui/setLoading')
+          set(
+            {
+              isLoading: loading,
+              loadingMessage: message,
+            },
+            false,
+            'ui/setLoading'
+          )
         },
 
         toggleSidebar: () => {
           const { isSidebarOpen } = get()
-          set({
-            isSidebarOpen: !isSidebarOpen,
-          }, false, 'ui/toggleSidebar')
+          set(
+            {
+              isSidebarOpen: !isSidebarOpen,
+            },
+            false,
+            'ui/toggleSidebar'
+          )
         },
 
         setSidebarOpen: (open: boolean) => {
-          set({
-            isSidebarOpen: open,
-          }, false, 'ui/setSidebarOpen')
+          set(
+            {
+              isSidebarOpen: open,
+            },
+            false,
+            'ui/setSidebarOpen'
+          )
         },
 
         setThemeTransitioning: (transitioning: boolean) => {
-          set({
-            isThemeTransitioning: transitioning,
-          }, false, 'ui/setThemeTransitioning')
+          set(
+            {
+              isThemeTransitioning: transitioning,
+            },
+            false,
+            'ui/setThemeTransitioning'
+          )
         },
       }),
       {
         name: 'ui-store',
         // 특정 상태만 persist (민감하지 않은 UI 상태만)
-        partialize: (state) => ({
+        partialize: state => ({
           isSidebarOpen: state.isSidebarOpen,
         }),
       }
@@ -99,17 +123,20 @@ export const useUIStore = create<UIState>()(
 )
 
 // 선택자 함수들 (성능 최적화를 위해)
-export const useModalState = () => useUIStore((state) => ({
-  isModalOpen: state.isModalOpen,
-  modalType: state.modalType,
-  modalData: state.modalData,
-}))
+export const useModalState = () =>
+  useUIStore(state => ({
+    isModalOpen: state.isModalOpen,
+    modalType: state.modalType,
+    modalData: state.modalData,
+  }))
 
-export const useLoadingState = () => useUIStore((state) => ({
-  isLoading: state.isLoading,
-  loadingMessage: state.loadingMessage,
-}))
+export const useLoadingState = () =>
+  useUIStore(state => ({
+    isLoading: state.isLoading,
+    loadingMessage: state.loadingMessage,
+  }))
 
-export const useSidebarState = () => useUIStore((state) => ({
-  isSidebarOpen: state.isSidebarOpen,
-})) 
+export const useSidebarState = () =>
+  useUIStore(state => ({
+    isSidebarOpen: state.isSidebarOpen,
+  }))

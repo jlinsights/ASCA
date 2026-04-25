@@ -37,7 +37,7 @@ export function AdaptiveImage({
   onError,
   showPlaceholder = true,
   aspectRatio = 'auto',
-  blur = true
+  blur = true,
 }: AdaptiveImageProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
@@ -48,7 +48,7 @@ export function AdaptiveImage({
   // 썸네일 생성 (저품질 이미지)
   const generateThumbnail = (originalSrc: string) => {
     if (originalSrc.includes('placeholder.svg')) return originalSrc
-    
+
     // 실제 환경에서는 이미지 처리 서비스나 Next.js Image Optimization을 사용
     const thumbnailSrc = originalSrc.replace(/\.(jpg|jpeg|png|webp)$/i, '_thumb.$1')
     return thumbnailSrc
@@ -57,7 +57,7 @@ export function AdaptiveImage({
   // 반응형 sizes 자동 생성
   const getResponsiveSizes = () => {
     if (sizes) return sizes
-    
+
     switch (aspectRatio) {
       case 'square':
         return '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
@@ -82,7 +82,7 @@ export function AdaptiveImage({
         }
       },
       {
-        rootMargin: '50px'
+        rootMargin: '50px',
       }
     )
 
@@ -105,7 +105,7 @@ export function AdaptiveImage({
         if (blur && showPlaceholder) {
           setCurrentSrc(generateThumbnail(src))
         }
-        
+
         // 원본 이미지 프리로드
         const img = new window.Image()
         img.onload = () => {
@@ -132,19 +132,19 @@ export function AdaptiveImage({
   // 에러 처리
   if (isError) {
     return (
-      <div 
+      <div
         ref={imgRef}
         className={cn(
-          "flex items-center justify-center bg-muted text-muted-foreground",
+          'flex items-center justify-center bg-muted text-muted-foreground',
           aspectRatio === 'square' && 'aspect-square',
           aspectRatio === 'portrait' && 'aspect-[3/4]',
           aspectRatio === 'landscape' && 'aspect-[4/3]',
           className
         )}
       >
-        <div className="text-center p-4">
-          <Eye className="w-8 h-8 mx-auto mb-2 opacity-50" />
-          <p className="text-sm">이미지를 불러올 수 없습니다</p>
+        <div className='text-center p-4'>
+          <Eye className='w-8 h-8 mx-auto mb-2 opacity-50' />
+          <p className='text-sm'>이미지를 불러올 수 없습니다</p>
         </div>
       </div>
     )
@@ -153,10 +153,10 @@ export function AdaptiveImage({
   // 로딩 중일 때 스켈레톤 표시
   if (!isVisible || isLoading) {
     return (
-      <div 
+      <div
         ref={imgRef}
         className={cn(
-          "relative overflow-hidden",
+          'relative overflow-hidden',
           aspectRatio === 'square' && 'aspect-square',
           aspectRatio === 'portrait' && 'aspect-[3/4]',
           aspectRatio === 'landscape' && 'aspect-[4/3]',
@@ -165,11 +165,11 @@ export function AdaptiveImage({
         )}
       >
         {showPlaceholder ? (
-          <Skeleton className="w-full h-full" />
+          <Skeleton className='w-full h-full' />
         ) : (
-          <div className="w-full h-full bg-muted animate-pulse" />
+          <div className='w-full h-full bg-muted animate-pulse' />
         )}
-        
+
         {/* 블러 처리된 썸네일 */}
         {currentSrc && currentSrc !== src && (
           <Image
@@ -178,11 +178,7 @@ export function AdaptiveImage({
             fill={fill}
             width={fill ? undefined : width}
             height={fill ? undefined : height}
-            className={cn(
-              "transition-opacity duration-300",
-              blur && "blur-sm",
-              className
-            )}
+            className={cn('transition-opacity duration-300', blur && 'blur-sm', className)}
             quality={30}
             priority={priority}
           />
@@ -193,10 +189,10 @@ export function AdaptiveImage({
 
   // 메인 이미지 렌더링
   return (
-    <div 
+    <div
       ref={imgRef}
       className={cn(
-        "relative overflow-hidden",
+        'relative overflow-hidden',
         aspectRatio === 'square' && 'aspect-square',
         aspectRatio === 'portrait' && 'aspect-[3/4]',
         aspectRatio === 'landscape' && 'aspect-[4/3]',
@@ -210,15 +206,11 @@ export function AdaptiveImage({
         fill={fill}
         width={fill ? undefined : width}
         height={fill ? undefined : height}
-        className={cn(
-          "transition-all duration-500 ease-out",
-          "hover:scale-105",
-          className
-        )}
+        className={cn('transition-all duration-500 ease-out', 'hover:scale-105', className)}
         quality={quality}
         sizes={getResponsiveSizes()}
         priority={priority}
-        placeholder={blur ? "blur" : undefined}
+        placeholder={blur ? 'blur' : undefined}
         blurDataURL={blur ? generateThumbnail(src) : undefined}
       />
     </div>
@@ -230,48 +222,44 @@ interface ArtworkImageProps extends Omit<AdaptiveImageProps, 'aspectRatio'> {
   variant?: 'thumbnail' | 'card' | 'hero' | 'detail' | 'calligraphy'
 }
 
-export function ArtworkImage({ 
-  variant = 'card',
-  quality,
-  ...props 
-}: ArtworkImageProps) {
+export function ArtworkImage({ variant = 'card', quality, ...props }: ArtworkImageProps) {
   const getConfig = () => {
     switch (variant) {
       case 'thumbnail':
         return {
           aspectRatio: 'square' as const,
           quality: 60,
-          sizes: '(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw'
+          sizes: '(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw',
         }
       case 'card':
         return {
           aspectRatio: 'portrait' as const,
           quality: 75,
-          sizes: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
+          sizes: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw',
         }
       case 'hero':
         return {
           aspectRatio: 'landscape' as const,
           quality: 90,
           sizes: '100vw',
-          priority: true
+          priority: true,
         }
       case 'detail':
         return {
           aspectRatio: 'auto' as const,
           quality: 100,
-          sizes: '(max-width: 640px) 100vw, 80vw'
+          sizes: '(max-width: 640px) 100vw, 80vw',
         }
       case 'calligraphy':
         return {
           aspectRatio: 'calligraphy' as const,
           quality: 85,
-          sizes: '(max-width: 640px) 40vw, (max-width: 1024px) 30vw, 20vw'
+          sizes: '(max-width: 640px) 40vw, (max-width: 1024px) 30vw, 20vw',
         }
       default:
         return {
           aspectRatio: 'auto' as const,
-          quality: 75
+          quality: 75,
         }
     }
   }
@@ -294,11 +282,7 @@ interface ArtistImageProps extends Omit<AdaptiveImageProps, 'aspectRatio'> {
   size?: 'sm' | 'md' | 'lg' | 'xl'
 }
 
-export function ArtistImage({ 
-  size = 'md',
-  className,
-  ...props 
-}: ArtistImageProps) {
+export function ArtistImage({ size = 'md', className, ...props }: ArtistImageProps) {
   const getSizeClass = () => {
     switch (size) {
       case 'sm':
@@ -315,19 +299,17 @@ export function ArtistImage({
   }
 
   return (
-    <div className={cn(
-      "relative rounded-full overflow-hidden bg-muted",
-      getSizeClass(),
-      className
-    )}>
+    <div
+      className={cn('relative rounded-full overflow-hidden bg-muted', getSizeClass(), className)}
+    >
       <AdaptiveImage
         {...props}
-        aspectRatio="square"
+        aspectRatio='square'
         quality={80}
         fill={true}
-        className="object-cover"
-        sizes="96px"
+        className='object-cover'
+        sizes='96px'
       />
     </div>
   )
-} 
+}

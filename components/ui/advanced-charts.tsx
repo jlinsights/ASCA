@@ -55,20 +55,17 @@ interface CustomTooltipProps {
 function CustomTooltip({ active, payload, label, formatter, labelFormatter }: CustomTooltipProps) {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-background border border-border rounded-lg shadow-lg p-3 text-sm">
+      <div className='bg-background border border-border rounded-lg shadow-lg p-3 text-sm'>
         {label && (
-          <p className="font-medium text-foreground mb-2">
+          <p className='font-medium text-foreground mb-2'>
             {labelFormatter ? labelFormatter(label) : label}
           </p>
         )}
         {payload.map((entry, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: entry.color }}
-            />
-            <span className="text-muted-foreground">{entry.name}:</span>
-            <span className="font-medium text-foreground">
+          <div key={index} className='flex items-center gap-2'>
+            <div className='w-3 h-3 rounded-full' style={{ backgroundColor: entry.color }} />
+            <span className='text-muted-foreground'>{entry.name}:</span>
+            <span className='font-medium text-foreground'>
               {formatter ? formatter(entry.value, entry.name)[0] : entry.value}
             </span>
           </div>
@@ -122,30 +119,21 @@ export function EnhancedAreaChart({
         </CardHeader>
       )}
       <CardContent>
-        <ResponsiveContainer width="100%" height={height}>
+        <ResponsiveContainer width='100%' height={height}>
           <AreaChart data={data}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" opacity={0.3} />}
-            <XAxis 
-              dataKey={xDataKey} 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <Tooltip 
+            {showGrid && <CartesianGrid strokeDasharray='3 3' opacity={0.3} />}
+            <XAxis dataKey={xDataKey} axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+            <Tooltip
               content={<CustomTooltip formatter={formatter} labelFormatter={labelFormatter} />}
             />
             {showLegend && <Legend />}
             {yDataKeys.map((key, index) => (
               <Area
                 key={key}
-                type="monotone"
+                type='monotone'
                 dataKey={key}
-                stackId="1"
+                stackId='1'
                 stroke={colors[index % colors.length]}
                 fill={colors[index % colors.length]}
                 fillOpacity={fillOpacity}
@@ -202,21 +190,12 @@ export function EnhancedBarChart({
         </CardHeader>
       )}
       <CardContent>
-        <ResponsiveContainer width="100%" height={height}>
+        <ResponsiveContainer width='100%' height={height}>
           <BarChart data={data} layout={layout}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" opacity={0.3} />}
-            <XAxis 
-              dataKey={xDataKey} 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <Tooltip 
+            {showGrid && <CartesianGrid strokeDasharray='3 3' opacity={0.3} />}
+            <XAxis dataKey={xDataKey} axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+            <Tooltip
               content={<CustomTooltip formatter={formatter} labelFormatter={labelFormatter} />}
             />
             {showLegend && <Legend />}
@@ -255,11 +234,11 @@ export function PerformanceMetricCard({ metric, className }: PerformanceMetricCa
   const getTrendIcon = () => {
     switch (metric.trend) {
       case 'up':
-        return <TrendingUp className="w-4 h-4 text-green-500" />
+        return <TrendingUp className='w-4 h-4 text-green-500' />
       case 'down':
-        return <TrendingDown className="w-4 h-4 text-red-500" />
+        return <TrendingDown className='w-4 h-4 text-red-500' />
       default:
-        return <div className="w-4 h-4" />
+        return <div className='w-4 h-4' />
     }
   }
 
@@ -292,38 +271,39 @@ export function PerformanceMetricCard({ metric, className }: PerformanceMetricCa
 
   return (
     <Card className={className}>
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">{metric.name}</p>
-            <div className="flex items-baseline space-x-2">
-              <span className="text-2xl font-bold">{formatValue(metric.value)}</span>
+      <CardContent className='p-6'>
+        <div className='flex items-center justify-between'>
+          <div className='space-y-2'>
+            <p className='text-sm font-medium text-muted-foreground'>{metric.name}</p>
+            <div className='flex items-baseline space-x-2'>
+              <span className='text-2xl font-bold'>{formatValue(metric.value)}</span>
               {metric.unit && !formatValue(metric.value).includes(metric.unit) && (
-                <span className="text-sm text-muted-foreground">{metric.unit}</span>
+                <span className='text-sm text-muted-foreground'>{metric.unit}</span>
               )}
             </div>
-            <div className="flex items-center space-x-1">
+            <div className='flex items-center space-x-1'>
               {getTrendIcon()}
               <span className={cn('text-xs font-medium', getTrendColor())}>
-                {metric.change > 0 ? '+' : ''}{metric.change.toFixed(1)}%
+                {metric.change > 0 ? '+' : ''}
+                {metric.change.toFixed(1)}%
               </span>
-              <span className="text-xs text-muted-foreground">vs last period</span>
+              <span className='text-xs text-muted-foreground'>vs last period</span>
             </div>
           </div>
-          
+
           {metric.target && (
-            <div className="text-right">
-              <p className="text-xs text-muted-foreground">Target</p>
-              <p className="text-sm font-medium">{formatValue(metric.target)}</p>
-              <div className="mt-2">
-                <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
+            <div className='text-right'>
+              <p className='text-xs text-muted-foreground'>Target</p>
+              <p className='text-sm font-medium'>{formatValue(metric.target)}</p>
+              <div className='mt-2'>
+                <div className='w-16 h-2 bg-muted rounded-full overflow-hidden'>
                   <div
                     className={cn(
                       'h-full transition-all duration-300',
                       metric.value >= metric.target ? 'bg-green-500' : 'bg-yellow-500'
                     )}
                     style={{
-                      width: `${Math.min((metric.value / metric.target) * 100, 100)}%`
+                      width: `${Math.min((metric.value / metric.target) * 100, 100)}%`,
                     }}
                   />
                 </div>
@@ -351,11 +331,7 @@ interface MultiChartDashboardProps {
   columns?: number
 }
 
-export function MultiChartDashboard({ 
-  charts, 
-  className, 
-  columns = 2 
-}: MultiChartDashboardProps) {
+export function MultiChartDashboard({ charts, className, columns = 2 }: MultiChartDashboardProps) {
   const [selectedChart, setSelectedChart] = React.useState<number | null>(null)
   const [refreshKey, setRefreshKey] = React.useState(0)
 
@@ -365,7 +341,7 @@ export function MultiChartDashboard({
 
   const renderChart = (chart: ChartConfig, index: number) => {
     const isFullscreen = selectedChart === index
-    
+
     const chartProps = {
       ...chart.config,
       title: chart.title,
@@ -376,29 +352,20 @@ export function MultiChartDashboard({
     }
 
     const actions = (
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleRefresh}
-          className="h-8 w-8 p-0"
-        >
-          <RefreshCw className="h-4 w-4" />
+      <div className='flex items-center gap-2'>
+        <Button variant='ghost' size='sm' onClick={handleRefresh} className='h-8 w-8 p-0'>
+          <RefreshCw className='h-4 w-4' />
         </Button>
         <Button
-          variant="ghost"
-          size="sm"
+          variant='ghost'
+          size='sm'
           onClick={() => setSelectedChart(isFullscreen ? null : index)}
-          className="h-8 w-8 p-0"
+          className='h-8 w-8 p-0'
         >
-          {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          {isFullscreen ? <Minimize2 className='h-4 w-4' /> : <Maximize2 className='h-4 w-4' />}
         </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 w-8 p-0"
-        >
-          <Download className="h-4 w-4" />
+        <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
+          <Download className='h-4 w-4' />
         </Button>
       </div>
     )
@@ -407,11 +374,11 @@ export function MultiChartDashboard({
       case 'area':
         return (
           <div key={index} className={isFullscreen ? 'col-span-full' : ''}>
-            <div className="flex items-center justify-between mb-4">
+            <div className='flex items-center justify-between mb-4'>
               <div>
-                <h3 className="text-lg font-semibold">{chart.title}</h3>
+                <h3 className='text-lg font-semibold'>{chart.title}</h3>
                 {chart.description && (
-                  <p className="text-sm text-muted-foreground">{chart.description}</p>
+                  <p className='text-sm text-muted-foreground'>{chart.description}</p>
                 )}
               </div>
               {actions}
@@ -422,11 +389,11 @@ export function MultiChartDashboard({
       case 'bar':
         return (
           <div key={index} className={isFullscreen ? 'col-span-full' : ''}>
-            <div className="flex items-center justify-between mb-4">
+            <div className='flex items-center justify-between mb-4'>
               <div>
-                <h3 className="text-lg font-semibold">{chart.title}</h3>
+                <h3 className='text-lg font-semibold'>{chart.title}</h3>
                 {chart.description && (
-                  <p className="text-sm text-muted-foreground">{chart.description}</p>
+                  <p className='text-sm text-muted-foreground'>{chart.description}</p>
                 )}
               </div>
               {actions}
@@ -441,19 +408,23 @@ export function MultiChartDashboard({
 
   return (
     <div className={cn('space-y-6', className)}>
-      <div 
+      <div
         className={cn(
           'grid gap-6',
-          selectedChart !== null ? 'grid-cols-1' : 
-          columns === 1 ? 'grid-cols-1' :
-          columns === 2 ? 'grid-cols-1 lg:grid-cols-2' :
-          'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          selectedChart !== null
+            ? 'grid-cols-1'
+            : columns === 1
+              ? 'grid-cols-1'
+              : columns === 2
+                ? 'grid-cols-1 lg:grid-cols-2'
+                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
         )}
       >
-        {selectedChart !== null 
-          ? (charts[selectedChart] ? renderChart(charts[selectedChart], selectedChart) : null)
-          : charts.map((chart, index) => renderChart(chart, index))
-        }
+        {selectedChart !== null
+          ? charts[selectedChart]
+            ? renderChart(charts[selectedChart], selectedChart)
+            : null
+          : charts.map((chart, index) => renderChart(chart, index))}
       </div>
     </div>
   )
@@ -482,16 +453,16 @@ export function AnalyticsSummary({
 
   return (
     <div className={cn('space-y-6', className)}>
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-2xl font-bold">Analytics Summary</h2>
-          <p className="text-muted-foreground">
+          <h2 className='text-2xl font-bold'>Analytics Summary</h2>
+          <p className='text-muted-foreground'>
             Performance metrics and insights for your calligraphy platform
           </p>
         </div>
-        
+
         <Select value={timeRange} onValueChange={onTimeRangeChange}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className='w-40'>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -504,7 +475,7 @@ export function AnalyticsSummary({
         </Select>
       </div>
 
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'>
         {metrics.map((metric, index) => (
           <PerformanceMetricCard key={index} metric={metric} />
         ))}

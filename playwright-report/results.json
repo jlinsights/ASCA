@@ -27,10 +27,7 @@
           "outputFile": "playwright-report/results.json"
         }
       ],
-      [
-        "list",
-        null
-      ]
+      ["list", null]
     ],
     "reportSlowTests": {
       "max": 5,
@@ -49,9 +46,7 @@
         "name": "chromium",
         "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       },
       {
@@ -65,9 +60,7 @@
         "name": "firefox",
         "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       },
       {
@@ -81,9 +74,7 @@
         "name": "webkit",
         "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       },
       {
@@ -97,9 +88,7 @@
         "name": "Mobile Chrome",
         "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       },
       {
@@ -113,9 +102,7 @@
         "name": "Mobile Safari",
         "testDir": "/Users/jaehong/Developer/Projects/ASCA/e2e",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       }
     ],

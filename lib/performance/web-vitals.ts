@@ -6,12 +6,12 @@ import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals'
 export const PERFORMANCE_THRESHOLDS = {
   // Core Web Vitals
   LCP: { good: 2500, needsImprovement: 4000 }, // Largest Contentful Paint
-  INP: { good: 200, needsImprovement: 500 },   // Interaction to Next Paint
-  CLS: { good: 0.1, needsImprovement: 0.25 },  // Cumulative Layout Shift
-  
+  INP: { good: 200, needsImprovement: 500 }, // Interaction to Next Paint
+  CLS: { good: 0.1, needsImprovement: 0.25 }, // Cumulative Layout Shift
+
   // Additional Web Vitals
   FCP: { good: 1800, needsImprovement: 3000 }, // First Contentful Paint
-  TTFB: { good: 800, needsImprovement: 1800 }  // Time to First Byte
+  TTFB: { good: 800, needsImprovement: 1800 }, // Time to First Byte
 } as const
 
 export type PerformanceMetricName = keyof typeof PERFORMANCE_THRESHOLDS
@@ -55,7 +55,7 @@ const DEFAULT_CONFIG: PerformanceConfig = {
   enableConsoleLogging: process.env.NODE_ENV === 'development',
   enableLocalStorage: true,
   sampleRate: 1.0,
-  maxMetrics: 100
+  maxMetrics: 100,
 }
 
 // Performance monitor class
@@ -75,7 +75,7 @@ export class PerformanceMonitor {
       renderTime: 0,
       interactionTime: 0,
       errors: [],
-      warnings: []
+      warnings: [],
     }
 
     // Initialize monitoring if sampling allows
@@ -93,14 +93,14 @@ export class PerformanceMonitor {
     onCLS(this.handleMetric.bind(this))
     onINP(this.handleMetric.bind(this))
     onLCP(this.handleMetric.bind(this))
-    
+
     // Additional metrics
     onFCP(this.handleMetric.bind(this))
     onTTFB(this.handleMetric.bind(this))
 
     // Page performance monitoring
     this.monitorPagePerformance()
-    
+
     // Resource loading monitoring
     this.monitorResourceLoading()
 
@@ -120,7 +120,7 @@ export class PerformanceMonitor {
       userAgent: navigator.userAgent,
       connectionType: this.getConnectionType(),
       deviceMemory: this.getDeviceMemory(),
-      isFirstVisit: this.isFirstVisit()
+      isFirstVisit: this.isFirstVisit(),
     }
 
     this.analytics.metrics.push(enhancedMetric)
@@ -193,7 +193,7 @@ export class PerformanceMonitor {
     // Monitor resource loading times
     window.addEventListener('load', () => {
       const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[]
-      
+
       resources.forEach(resource => {
         if (resource.name && resource.duration > 0) {
           const resourceName = this.getResourceName(resource.name)
@@ -216,7 +216,7 @@ export class PerformanceMonitor {
 
   private monitorUserInteractions(): void {
     const interactionStart = performance.now()
-    
+
     // First meaningful interaction
     const events = ['click', 'keydown', 'scroll', 'touchstart']
     const handleFirstInteraction = () => {
@@ -233,29 +233,36 @@ export class PerformanceMonitor {
 
   private monitorErrors(): void {
     // JavaScript errors
-    window.addEventListener('error', (event) => {
+    window.addEventListener('error', event => {
       this.analytics.errors.push(`JS Error: ${event.message} at ${event.filename}:${event.lineno}`)
     })
 
     // Promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener('unhandledrejection', event => {
       this.analytics.errors.push(`Unhandled Promise Rejection: ${event.reason}`)
     })
 
     // Resource loading errors
-    window.addEventListener('error', (event) => {
-      if (event.target && event.target !== window) {
-        const target = event.target as HTMLElement
-        this.analytics.errors.push(`Resource Error: Failed to load ${target.tagName}`)
-      }
-    }, true)
+    window.addEventListener(
+      'error',
+      event => {
+        if (event.target && event.target !== window) {
+          const target = event.target as HTMLElement
+          this.analytics.errors.push(`Resource Error: Failed to load ${target.tagName}`)
+        }
+      },
+      true
+    )
   }
 
   private logMetricToConsole(metric: EnhancedMetric): void {
     if (process.env.NODE_ENV === 'development') {
-      const emoji = metric.score === 'good' ? '🟢' : metric.score === 'needs-improvement' ? '🟡' : '🔴'
+      const emoji =
+        metric.score === 'good' ? '🟢' : metric.score === 'needs-improvement' ? '🟡' : '🔴'
       // eslint-disable-next-line no-console
-      console.log(`${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === 'CLS' ? '' : 'ms'} (${metric.score})`)
+      console.log(
+        `${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === 'CLS' ? '' : 'ms'} (${metric.score})`
+      )
     }
   }
 
@@ -268,18 +275,16 @@ export class PerformanceMonitor {
         value: metric.value,
         score: metric.score,
         timestamp: metric.timestamp,
-        url: metric.url
+        url: metric.url,
       })
-      
+
       // Keep only last 50 metrics
       if (metrics.length > 50) {
         metrics.splice(0, metrics.length - 50)
       }
-      
-      localStorage.setItem('performance_metrics', JSON.stringify(metrics))
-    } catch (error) {
 
-    }
+      localStorage.setItem('performance_metrics', JSON.stringify(metrics))
+    } catch (error) {}
   }
 
   private async reportMetric(metric: EnhancedMetric): Promise<void> {
@@ -294,12 +299,10 @@ export class PerformanceMonitor {
         body: JSON.stringify({
           sessionId: this.analytics.sessionId,
           metric,
-          analytics: this.analytics
-        })
+          analytics: this.analytics,
+        }),
       })
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
   // Public methods
@@ -311,7 +314,10 @@ export class PerformanceMonitor {
     return this.analytics.metrics.filter(m => m.name === name)
   }
 
-  public getPerformanceScore(): { overall: PerformanceScore; breakdown: Record<string, PerformanceScore> } {
+  public getPerformanceScore(): {
+    overall: PerformanceScore
+    breakdown: Record<string, PerformanceScore>
+  } {
     const breakdown: Record<string, PerformanceScore> = {}
     const scoreValues = { good: 3, 'needs-improvement': 2, poor: 1 }
     let totalScore = 0
@@ -330,7 +336,8 @@ export class PerformanceMonitor {
 
     // Calculate overall score
     const averageScore = metricCount > 0 ? totalScore / metricCount : 1
-    const overall: PerformanceScore = averageScore >= 2.5 ? 'good' : averageScore >= 1.5 ? 'needs-improvement' : 'poor'
+    const overall: PerformanceScore =
+      averageScore >= 2.5 ? 'good' : averageScore >= 1.5 ? 'needs-improvement' : 'poor'
 
     return { overall, breakdown }
   }
@@ -352,7 +359,9 @@ export class PerformanceMonitor {
 // Global performance monitor instance
 let globalPerformanceMonitor: PerformanceMonitor | null = null
 
-export function initializePerformanceMonitoring(config?: Partial<PerformanceConfig>): PerformanceMonitor {
+export function initializePerformanceMonitoring(
+  config?: Partial<PerformanceConfig>
+): PerformanceMonitor {
   if (!globalPerformanceMonitor) {
     globalPerformanceMonitor = new PerformanceMonitor(config)
   }
@@ -366,11 +375,11 @@ export function getPerformanceMonitor(): PerformanceMonitor | null {
 // React hook for performance monitoring
 export function usePerformanceMonitoring(config?: Partial<PerformanceConfig>) {
   if (typeof window === 'undefined') return null
-  
+
   if (!globalPerformanceMonitor) {
     globalPerformanceMonitor = new PerformanceMonitor(config)
   }
-  
+
   return globalPerformanceMonitor
 }
 
@@ -391,9 +400,13 @@ export function formatMetricValue(name: string, value: number): string {
 
 export function getMetricColor(score: PerformanceScore): string {
   switch (score) {
-    case 'good': return '#10B981' // green-500
-    case 'needs-improvement': return '#F59E0B' // amber-500
-    case 'poor': return '#EF4444' // red-500
-    default: return '#6B7280' // gray-500
+    case 'good':
+      return '#10B981' // green-500
+    case 'needs-improvement':
+      return '#F59E0B' // amber-500
+    case 'poor':
+      return '#EF4444' // red-500
+    default:
+      return '#6B7280' // gray-500
   }
 }

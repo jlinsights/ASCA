@@ -1,6 +1,7 @@
 # 동양서예협회 데이터베이스 설정 가이드
 
-이 문서는 Drizzle ORM과 PostgreSQL(Supabase)을 사용한 동양서예협회 웹사이트의 데이터베이스 설정 방법을 설명합니다.
+이 문서는 Drizzle ORM과 PostgreSQL(Supabase)을 사용한 동양서예협회 웹사이트의
+데이터베이스 설정 방법을 설명합니다.
 
 ## 📋 목차
 

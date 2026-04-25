@@ -10,23 +10,23 @@ import { ComponentType } from 'react'
 
 // 로딩 스피너 컴포넌트
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center p-8">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-    <span className="ml-2 text-sm text-muted-foreground">로딩 중...</span>
+  <div className='flex items-center justify-center p-8'>
+    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+    <span className='ml-2 text-sm text-muted-foreground'>로딩 중...</span>
   </div>
 )
 
 // 에러 폴백 컴포넌트
 const ErrorFallback = ({ error, retry }: { error?: Error; retry?: () => void }) => (
-  <div className="flex flex-col items-center justify-center p-8 text-center">
-    <div className="text-red-500 mb-2">❌</div>
-    <p className="text-sm text-muted-foreground mb-4">
+  <div className='flex flex-col items-center justify-center p-8 text-center'>
+    <div className='text-red-500 mb-2'>❌</div>
+    <p className='text-sm text-muted-foreground mb-4'>
       컴포넌트를 불러오는 중 오류가 발생했습니다.
     </p>
     {retry && (
-      <button 
+      <button
         onClick={retry}
-        className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm"
+        className='px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm'
       >
         다시 시도
       </button>
@@ -98,13 +98,10 @@ export const DynamicCulturalAccessibility = dynamic(
   }
 )
 
-export const DynamicLearningHub = dynamic(
-  () => import('@/components/cultural/LearningHub'),
-  {
-    loading: () => <LoadingSpinner />,
-    ssr: false,
-  }
-)
+export const DynamicLearningHub = dynamic(() => import('@/components/cultural/LearningHub'), {
+  loading: () => <LoadingSpinner />,
+  ssr: false,
+})
 
 // ==============================================================
 // 검색 및 필터 관련 동적 컴포넌트들
@@ -152,8 +149,8 @@ export const DynamicPerformanceMonitor = dynamic(
 
 // TODO: Fix Recharts dynamic import - currently causing TypeScript compilation errors
 // export const DynamicRecharts = dynamic(
-//   () => import('recharts').then(mod => ({ 
-//     default: { 
+//   () => import('recharts').then(mod => ({
+//     default: {
 //       LineChart: mod.LineChart,
 //       AreaChart: mod.AreaChart,
 //       BarChart: mod.BarChart,
@@ -184,7 +181,7 @@ export const DynamicPerformanceMonitor = dynamic(
 // Radix UI 컴포넌트들의 동적 로딩 (필요시에만)
 // TODO: Fix Dialog dynamic import - currently causing TypeScript compilation errors
 // export const DynamicDialog = dynamic(
-//   () => import('@radix-ui/react-dialog').then(mod => ({ 
+//   () => import('@radix-ui/react-dialog').then(mod => ({
 //     default: {
 //       Dialog: mod.Dialog,
 //       DialogTrigger: mod.DialogTrigger,
@@ -208,7 +205,7 @@ export const createConditionalImport = <T extends ComponentType<any>>(
   if (!condition()) {
     return () => null
   }
-  
+
   return dynamic(importFn, {
     loading: () => <LoadingSpinner />,
     ssr: false,
@@ -231,7 +228,7 @@ export const createIntersectionImport = <T extends ComponentType<any>>(
 ) => {
   return dynamic(importFn, {
     loading: () => (
-      <div className="h-64 flex items-center justify-center">
+      <div className='h-64 flex items-center justify-center'>
         <LoadingSpinner />
       </div>
     ),
@@ -245,23 +242,23 @@ const DynamicComponents = {
   GalleryManagementDashboard: DynamicGalleryManagementDashboard,
   ArtworkComparison: DynamicArtworkComparison,
   AdvancedGallerySearch: DynamicAdvancedGallerySearch,
-  
+
   // 문화
   CulturalCalendar: DynamicCulturalCalendar,
   CalligraphyHero: DynamicCalligraphyHero,
   CulturalAccessibility: DynamicCulturalAccessibility,
   LearningHub: DynamicLearningHub,
-  
+
   // 검색
   SearchComponents: DynamicSearchComponents,
   AdvancedFilters: DynamicAdvancedFilters,
-  
+
   // 성능
   PerformanceDashboard: DynamicPerformanceDashboard,
   PerformanceMonitor: DynamicPerformanceMonitor,
-  
+
   // 차트 (commented out due to TypeScript compilation issues)
   // Charts: DynamicRecharts,
 }
 
-export default DynamicComponents;
+export default DynamicComponents

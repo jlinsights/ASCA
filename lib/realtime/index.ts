@@ -18,7 +18,7 @@ export {
   type Subscription,
   type EventFilter,
   type EventEmitterOptions,
-} from './event-emitter';
+} from './event-emitter'
 
 // Subscription Manager
 export {
@@ -28,7 +28,7 @@ export {
   createSubscriptionManager,
   type ClientSubscription,
   type SubscriptionFilter,
-} from './subscription-manager';
+} from './subscription-manager'
 
 // WebSocket Manager
 export {
@@ -38,7 +38,7 @@ export {
   createWebSocketManager,
   type WSMessage,
   type WebSocketManagerOptions,
-} from './websocket-manager';
+} from './websocket-manager'
 
 // SSE Manager
 export {
@@ -48,4 +48,4 @@ export {
   createSSEResponse,
   type SSEMessage,
   type SSEManagerOptions,
-} from './sse-manager';
+} from './sse-manager'

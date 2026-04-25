@@ -5,30 +5,30 @@
 reviews:
   # Assertive profile for comprehensive analysis of complex system
   profile: assertive
-  
+
   # Enable request changes workflow for critical cultural platform
   request_changes_workflow: true
-  
+
   # Detailed high-level summaries for complex features
   high_level_summary: true
-  
+
   # Poetry disabled for professional focus
   poem: false
-  
+
   # Critical focus areas for cultural heritage platform
   focus:
-    - security          # Sensitive cultural data protection
-    - performance       # AI vision processing optimization
-    - accessibility     # Cultural inclusivity (WCAG 2.1 AA)
+    - security # Sensitive cultural data protection
+    - performance # AI vision processing optimization
+    - accessibility # Cultural inclusivity (WCAG 2.1 AA)
     - internationalization # Multi-language support (KO/EN/JA/CN)
-    - data-integrity    # Cultural artifacts preservation
-    - ai-ethics         # Responsible AI vision analysis
+    - data-integrity # Cultural artifacts preservation
+    - ai-ethics # Responsible AI vision analysis
 
 # Chat settings
 chat:
   # Enable automatic responses for development guidance
   auto_reply: true
-  
+
 # Primary language with international consideration
 language: ko
 
@@ -44,7 +44,7 @@ rules:
     privacy_compliance: true
     # Authentication flow validation (Clerk integration)
     auth_validation: true
-    
+
   # AI Vision system performance requirements
   performance:
     # Critical for real-time calligraphy analysis
@@ -57,7 +57,7 @@ rules:
     bundle_analysis: true
     # Memory management for AI processing
     memory_optimization: true
-    
+
   # Code quality for complex architecture
   quality:
     # Strict TypeScript for type safety
@@ -68,7 +68,7 @@ rules:
     async_patterns: true
     # Component architecture validation
     component_architecture: true
-    
+
   # Cultural platform specific
   cultural:
     # Multi-language content validation
@@ -77,7 +77,7 @@ rules:
     cultural_sensitivity: true
     # Traditional art terminology accuracy
     terminology_accuracy: true
-    
+
   # Advanced Next.js patterns
   nextjs:
     # App Router best practices
@@ -88,7 +88,7 @@ rules:
     seo_optimization: true
     # Image optimization for artworks
     image_optimization: true
-    
+
   # Database integrity (Airtable + Supabase)
   database:
     # Dual-database sync validation
@@ -100,29 +100,29 @@ rules:
 
 # Comprehensive file inclusion for complex architecture
 include:
-  - "**/*.ts"
-  - "**/*.tsx"
-  - "**/*.js"
-  - "**/*.jsx"
-  - "app/**/*"
-  - "components/**/*"
-  - "lib/**/*"
-  - "contexts/**/*"
-  - "hooks/**/*"
-  - "types/**/*"
+  - '**/*.ts'
+  - '**/*.tsx'
+  - '**/*.js'
+  - '**/*.jsx'
+  - 'app/**/*'
+  - 'components/**/*'
+  - 'lib/**/*'
+  - 'contexts/**/*'
+  - 'hooks/**/*'
+  - 'types/**/*'
 
 # Exclude build artifacts and dependencies
 exclude:
-  - "node_modules/**"
-  - ".next/**"
-  - "out/**"
-  - "coverage/**"
-  - "*.config.js"
-  - "*.config.ts"
-  - "*.config.mjs"
-  - "public/**"
-  - "drizzle/**"
-  - ".drizzle/**"
+  - 'node_modules/**'
+  - '.next/**'
+  - 'out/**'
+  - 'coverage/**'
+  - '*.config.js'
+  - '*.config.ts'
+  - '*.config.mjs'
+  - 'public/**'
+  - 'drizzle/**'
+  - '.drizzle/**'
 
 # Domain-specific prompts for cultural platform
 prompts:
@@ -135,7 +135,7 @@ prompts:
     - Memory management for image processing
     - Error handling for invalid image inputs
     - Privacy considerations for user artwork uploads
-    
+
   cultural_data_integrity: |
     This platform preserves and manages Korean cultural heritage.
     Pay attention to:
@@ -145,7 +145,7 @@ prompts:
     - Cultural sensitivity in UI/UX design
     - Historical accuracy in educational content
     - Respectful presentation of traditional arts
-    
+
   dual_database_architecture: |
     Complex dual-database system with Airtable and Supabase.
     Review for:
@@ -155,7 +155,7 @@ prompts:
     - Conflict resolution strategies
     - Performance optimization for dual queries
     - Backup and recovery procedures
-    
+
   membership_system: |
     Sophisticated 6-tier membership hierarchy system.
     Consider:
@@ -165,7 +165,7 @@ prompts:
     - Activity tracking integrity
     - Certification management
     - International member support
-    
+
   performance_optimization: |
     High-performance requirements for AI processing and cultural content.
     Focus on:
@@ -184,7 +184,7 @@ integrations:
     create_issues: true
     auto_assign_security: true
     auto_assign_performance: true
-    
+
   # Development workflow integration
   development:
     # Pre-commit hook integration
@@ -193,29 +193,29 @@ integrations:
     ci_cd_integration: true
     # Database migration validation
     migration_checks: true
-    
+
 # Custom severity levels for cultural platform
 severity:
   # Critical issues that must be addressed immediately
   critical:
-    - "cultural_data_corruption"
-    - "ai_bias_detection"
-    - "security_vulnerability"
-    - "data_loss_risk"
-    
+    - 'cultural_data_corruption'
+    - 'ai_bias_detection'
+    - 'security_vulnerability'
+    - 'data_loss_risk'
+
   # High priority issues
   high:
-    - "performance_degradation" 
-    - "accessibility_violation"
-    - "i18n_inconsistency"
-    - "database_sync_failure"
-    
+    - 'performance_degradation'
+    - 'accessibility_violation'
+    - 'i18n_inconsistency'
+    - 'database_sync_failure'
+
   # Medium priority improvements
   medium:
-    - "code_quality"
-    - "documentation_gaps"
-    - "ui_ux_improvements"
-    - "test_coverage"
+    - 'code_quality'
+    - 'documentation_gaps'
+    - 'ui_ux_improvements'
+    - 'test_coverage'
 
 # AI-specific validation rules
 ai_validation:
@@ -224,7 +224,7 @@ ai_validation:
     - bias_detection: true
     - fairness_validation: true
     - transparency_requirements: true
-    
+
   # Model performance
   model_performance:
     - accuracy_thresholds: true

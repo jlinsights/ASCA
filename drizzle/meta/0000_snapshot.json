@@ -102,9 +102,7 @@
         "academy_courses_course_id_unique": {
           "name": "academy_courses_course_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "course_id"
-          ]
+          "columns": ["course_id"]
         }
       },
       "policies": {},
@@ -241,12 +239,8 @@
           "name": "admin_permissions_user_id_users_id_fk",
           "tableFrom": "admin_permissions",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -254,12 +248,8 @@
           "name": "admin_permissions_granted_by_users_id_fk",
           "tableFrom": "admin_permissions",
           "tableTo": "users",
-          "columnsFrom": [
-            "granted_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["granted_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -422,12 +412,8 @@
           "name": "artists_user_id_users_id_fk",
           "tableFrom": "artists",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -616,12 +602,8 @@
           "name": "artworks_artist_id_artists_id_fk",
           "tableFrom": "artworks",
           "tableTo": "artists",
-          "columnsFrom": [
-            "artist_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["artist_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -730,12 +712,8 @@
           "name": "cultural_exchange_participants_program_id_cultural_exchange_programs_id_fk",
           "tableFrom": "cultural_exchange_participants",
           "tableTo": "cultural_exchange_programs",
-          "columnsFrom": [
-            "program_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["program_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -743,12 +721,8 @@
           "name": "cultural_exchange_participants_member_id_members_id_fk",
           "tableFrom": "cultural_exchange_participants",
           "tableTo": "members",
-          "columnsFrom": [
-            "member_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["member_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1025,12 +999,8 @@
           "name": "cultural_exchange_programs_organizer_id_users_id_fk",
           "tableFrom": "cultural_exchange_programs",
           "tableTo": "users",
-          "columnsFrom": [
-            "organizer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organizer_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1090,12 +1060,8 @@
           "name": "event_participants_event_id_events_id_fk",
           "tableFrom": "event_participants",
           "tableTo": "events",
-          "columnsFrom": [
-            "event_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["event_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1103,12 +1069,8 @@
           "name": "event_participants_user_id_users_id_fk",
           "tableFrom": "event_participants",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1322,12 +1284,8 @@
           "name": "events_organizer_id_users_id_fk",
           "tableFrom": "events",
           "tableTo": "users",
-          "columnsFrom": [
-            "organizer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organizer_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1381,12 +1339,8 @@
           "name": "exhibition_artists_exhibition_id_exhibitions_id_fk",
           "tableFrom": "exhibition_artists",
           "tableTo": "exhibitions",
-          "columnsFrom": [
-            "exhibition_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exhibition_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1394,12 +1348,8 @@
           "name": "exhibition_artists_artist_id_artists_id_fk",
           "tableFrom": "exhibition_artists",
           "tableTo": "artists",
-          "columnsFrom": [
-            "artist_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["artist_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1459,12 +1409,8 @@
           "name": "exhibition_artworks_exhibition_id_exhibitions_id_fk",
           "tableFrom": "exhibition_artworks",
           "tableTo": "exhibitions",
-          "columnsFrom": [
-            "exhibition_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exhibition_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1472,12 +1418,8 @@
           "name": "exhibition_artworks_artwork_id_artworks_id_fk",
           "tableFrom": "exhibition_artworks",
           "tableTo": "artworks",
-          "columnsFrom": [
-            "artwork_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["artwork_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1835,12 +1777,8 @@
           "name": "file_storage_user_id_users_id_fk",
           "tableFrom": "file_storage",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2026,12 +1964,8 @@
           "name": "gallery_artworks_gallery_id_galleries_id_fk",
           "tableFrom": "gallery_artworks",
           "tableTo": "galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2039,12 +1973,8 @@
           "name": "gallery_artworks_artwork_id_artworks_id_fk",
           "tableFrom": "gallery_artworks",
           "tableTo": "artworks",
-          "columnsFrom": [
-            "artwork_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["artwork_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2122,12 +2052,8 @@
           "name": "member_activities_member_id_members_id_fk",
           "tableFrom": "member_activities",
           "tableTo": "members",
-          "columnsFrom": [
-            "member_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["member_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2296,12 +2222,8 @@
           "name": "member_certifications_member_id_members_id_fk",
           "tableFrom": "member_certifications",
           "tableTo": "members",
-          "columnsFrom": [
-            "member_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["member_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2311,9 +2233,7 @@
         "member_certifications_certificate_number_unique": {
           "name": "member_certifications_certificate_number_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "certificate_number"
-          ]
+          "columns": ["certificate_number"]
         }
       },
       "policies": {},
@@ -2655,12 +2575,8 @@
           "name": "members_user_id_users_id_fk",
           "tableFrom": "members",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2668,12 +2584,8 @@
           "name": "members_tier_id_membership_tiers_id_fk",
           "tableFrom": "members",
           "tableTo": "membership_tiers",
-          "columnsFrom": [
-            "tier_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["tier_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2683,16 +2595,12 @@
         "members_user_id_unique": {
           "name": "members_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
+          "columns": ["user_id"]
         },
         "members_membership_number_unique": {
           "name": "members_membership_number_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "membership_number"
-          ]
+          "columns": ["membership_number"]
         }
       },
       "policies": {},
@@ -2820,12 +2728,8 @@
           "name": "membership_applications_member_id_members_id_fk",
           "tableFrom": "membership_applications",
           "tableTo": "members",
-          "columnsFrom": [
-            "member_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["member_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2833,12 +2737,8 @@
           "name": "membership_applications_requested_tier_id_membership_tiers_id_fk",
           "tableFrom": "membership_applications",
           "tableTo": "membership_tiers",
-          "columnsFrom": [
-            "requested_tier_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["requested_tier_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2846,12 +2746,8 @@
           "name": "membership_applications_reviewer_id_users_id_fk",
           "tableFrom": "membership_applications",
           "tableTo": "users",
-          "columnsFrom": [
-            "reviewer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reviewer_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3181,12 +3077,8 @@
           "name": "news_author_id_users_id_fk",
           "tableFrom": "news",
           "tableTo": "users",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3260,9 +3152,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
