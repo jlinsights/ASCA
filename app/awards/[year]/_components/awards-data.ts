@@ -1,10 +1,4 @@
-import {
-  Trophy,
-  Medal,
-  Star,
-  Crown,
-  CheckCircle,
-} from 'lucide-react'
+import { Trophy, Medal, Star, Crown, CheckCircle } from 'lucide-react'
 
 export interface AwardCategory {
   id: string

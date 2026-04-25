@@ -2,11 +2,12 @@
 
 ## 🎯 Overview
 
-**Implementation Date**: December 28, 2025
-**Status**: ✅ COMPLETED
+**Implementation Date**: December 28, 2025 **Status**: ✅ COMPLETED
 **Duration**: ~2 hours
 
-Phase 3.4 implements a complete real-time communication system supporting both WebSocket (bidirectional) and Server-Sent Events (SSE, unidirectional) for live updates throughout the application.
+Phase 3.4 implements a complete real-time communication system supporting both
+WebSocket (bidirectional) and Server-Sent Events (SSE, unidirectional) for live
+updates throughout the application.
 
 ---
 
@@ -17,6 +18,7 @@ Phase 3.4 implements a complete real-time communication system supporting both W
 **Purpose**: Centralized event broadcasting system with Redis support
 
 **Features**:
+
 - ✅ Type-safe event definitions (25+ event types)
 - ✅ Wildcard subscriptions (`member:*`, `*`)
 - ✅ Event filtering with custom filters
@@ -28,6 +30,7 @@ Phase 3.4 implements a complete real-time communication system supporting both W
 - ✅ Subscription management
 
 **Event Categories**:
+
 - Member events (created, updated, deleted, approved, rejected)
 - Artist events (created, updated, approved)
 - Artwork events (created, updated, approved, rejected)
@@ -36,25 +39,28 @@ Phase 3.4 implements a complete real-time communication system supporting both W
 - System events (error, warning, cache cleared)
 
 **Key Functions**:
+
 ```typescript
 // Emit event
-await eventEmitter.emit(EventType.MEMBER_CREATED, memberData, { userId: 'admin' });
+await eventEmitter.emit(EventType.MEMBER_CREATED, memberData, {
+  userId: 'admin',
+})
 
 // Subscribe to event
-const sub = eventEmitter.on(EventType.MEMBER_CREATED, async (payload) => {
-  console.log('New member:', payload.data);
-});
+const sub = eventEmitter.on(EventType.MEMBER_CREATED, async payload => {
+  console.log('New member:', payload.data)
+})
 
 // Subscribe with wildcard
-eventEmitter.on('member:*', async (payload) => {
-  console.log('Any member event:', payload.type);
-});
+eventEmitter.on('member:*', async payload => {
+  console.log('Any member event:', payload.type)
+})
 
 // Subscribe with filter
-eventEmitter.on(EventType.MEMBER_UPDATED, handler, (p) => p.data.isVIP);
+eventEmitter.on(EventType.MEMBER_UPDATED, handler, p => p.data.isVIP)
 
 // Wait for event
-const payload = await eventEmitter.waitFor(EventType.MEMBER_APPROVED, 5000);
+const payload = await eventEmitter.waitFor(EventType.MEMBER_APPROVED, 5000)
 ```
 
 ---
@@ -64,6 +70,7 @@ const payload = await eventEmitter.waitFor(EventType.MEMBER_APPROVED, 5000);
 **Purpose**: Client subscription tracking and event routing
 
 **Features**:
+
 - ✅ Client connection management
 - ✅ Event type indexing for fast lookups
 - ✅ User ID filtering
@@ -73,24 +80,25 @@ const payload = await eventEmitter.waitFor(EventType.MEMBER_APPROVED, 5000);
 - ✅ Subscription statistics
 
 **Key Functions**:
+
 ```typescript
 // Subscribe client
 subscriptionManager.subscribe(clientId, ConnectionType.WEBSOCKET, {
   eventTypes: ['member:created', 'artwork:*'],
-  userId: 'user_123'
-});
+  userId: 'user_123',
+})
 
 // Check if client should receive event
-const shouldReceive = subscriptionManager.shouldReceiveEvent(clientId, payload);
+const shouldReceive = subscriptionManager.shouldReceiveEvent(clientId, payload)
 
 // Get clients by event type
-const clients = subscriptionManager.getClientsByEventType('member:created');
+const clients = subscriptionManager.getClientsByEventType('member:created')
 
 // Remove stale subscriptions
-const removed = subscriptionManager.removeStaleSubscriptions(60000);
+const removed = subscriptionManager.removeStaleSubscriptions(60000)
 
 // Get statistics
-const stats = subscriptionManager.getStats();
+const stats = subscriptionManager.getStats()
 // { total: 150, byConnectionType: {...}, byEventType: {...} }
 ```
 
@@ -101,6 +109,7 @@ const stats = subscriptionManager.getStats();
 **Purpose**: Bidirectional real-time communication
 
 **Features**:
+
 - ✅ Client connection lifecycle
 - ✅ Authentication support
 - ✅ Heartbeat/ping-pong mechanism
@@ -111,16 +120,19 @@ const stats = subscriptionManager.getStats();
 - ✅ Activity timeout (default: 60s)
 
 **Message Types**:
+
 - Client → Server: `SUBSCRIBE`, `UNSUBSCRIBE`, `PING`, `AUTH`
 - Server → Client: `EVENT`, `PONG`, `ERROR`, `AUTHENTICATED`, `SUBSCRIBED`
 
 **Performance**:
+
 - Max concurrent connections: 10,000+ (single server)
 - Memory per connection: ~10KB
 - Heartbeat interval: 30s
 - Client timeout: 60s
 
 **Usage**:
+
 ```typescript
 // Server-side
 const wsManager = getWebSocketManager({
@@ -128,25 +140,27 @@ const wsManager = getWebSocketManager({
   clientTimeout: 60000,
   maxClients: 1000,
   requireAuth: true,
-  verifyToken: async (token) => ({ userId: 'user_123' })
-});
+  verifyToken: async token => ({ userId: 'user_123' }),
+})
 
-await wsManager.handleConnection(socket, request);
+await wsManager.handleConnection(socket, request)
 
 // Client-side
-const ws = new WebSocket('ws://localhost:3001');
+const ws = new WebSocket('ws://localhost:3001')
 
 ws.onopen = () => {
-  ws.send(JSON.stringify({ type: 'auth', payload: { token: 'jwt' } }));
-  ws.send(JSON.stringify({ type: 'subscribe', payload: { eventTypes: ['member:*'] } }));
-};
+  ws.send(JSON.stringify({ type: 'auth', payload: { token: 'jwt' } }))
+  ws.send(
+    JSON.stringify({ type: 'subscribe', payload: { eventTypes: ['member:*'] } })
+  )
+}
 
-ws.onmessage = (event) => {
-  const msg = JSON.parse(event.data);
+ws.onmessage = event => {
+  const msg = JSON.parse(event.data)
   if (msg.type === 'event') {
-    console.log('Event:', msg.payload);
+    console.log('Event:', msg.payload)
   }
-};
+}
 ```
 
 ---
@@ -156,6 +170,7 @@ ws.onmessage = (event) => {
 **Purpose**: Unidirectional server → client streaming
 
 **Features**:
+
 - ✅ HTTP-based streaming
 - ✅ Automatic reconnection (browser native)
 - ✅ Keep-alive comments
@@ -166,6 +181,7 @@ ws.onmessage = (event) => {
 - ✅ Timeout management
 
 **Advantages over WebSocket**:
+
 - Simpler implementation
 - Automatic reconnection
 - HTTP/2 compatible
@@ -173,28 +189,29 @@ ws.onmessage = (event) => {
 - Better browser support
 
 **Performance**:
+
 - Max concurrent connections: 10,000+
 - Memory per connection: ~5KB
 - Keep-alive interval: 30s
 - Client timeout: 5min
 
 **Usage**:
+
 ```typescript
 // Server-side
-const sseManager = getSSEManager();
-const stream = sseManager.createStream(
-  { eventTypes: ['member:*'] },
-  'user_123'
-);
-return createSSEResponse(stream);
+const sseManager = getSSEManager()
+const stream = sseManager.createStream({ eventTypes: ['member:*'] }, 'user_123')
+return createSSEResponse(stream)
 
 // Client-side
-const eventSource = new EventSource('/api/realtime/sse?eventTypes=member:created');
+const eventSource = new EventSource(
+  '/api/realtime/sse?eventTypes=member:created'
+)
 
-eventSource.addEventListener('member:created', (event) => {
-  const data = JSON.parse(event.data);
-  console.log('Member created:', data);
-});
+eventSource.addEventListener('member:created', event => {
+  const data = JSON.parse(event.data)
+  console.log('Member created:', data)
+})
 ```
 
 ---
@@ -206,10 +223,12 @@ eventSource.addEventListener('member:created', (event) => {
 **Path**: `GET /api/realtime/sse`
 
 **Query Parameters**:
+
 - `eventTypes`: Comma-separated event types (optional, default: `*`)
 - `token`: Authentication token (optional)
 
 **Example**:
+
 ```bash
 curl -N "http://localhost:3000/api/realtime/sse?eventTypes=member:created,member:updated"
 ```
@@ -220,10 +239,11 @@ curl -N "http://localhost:3000/api/realtime/sse?eventTypes=member:created,member
 
 **Path**: `GET /api/realtime/ws`
 
-**Note**: Next.js App Router doesn't support WebSocket upgrade directly.
-Use standalone WebSocket server instead.
+**Note**: Next.js App Router doesn't support WebSocket upgrade directly. Use
+standalone WebSocket server instead.
 
 **Alternatives**:
+
 1. Use SSE endpoint (`/api/realtime/sse`)
 2. Run separate WebSocket server (`npm run ws:server`)
 3. Use reverse proxy (nginx)
@@ -235,6 +255,7 @@ Use standalone WebSocket server instead.
 **Purpose**: Dedicated WebSocket server running independently from Next.js
 
 **Features**:
+
 - ✅ HTTP server with health check
 - ✅ WebSocket upgrade handling
 - ✅ Statistics endpoint
@@ -243,18 +264,21 @@ Use standalone WebSocket server instead.
 - ✅ Production-ready
 
 **Environment Variables**:
+
 ```bash
 WS_PORT=3001          # WebSocket server port
 WS_HOST=0.0.0.0       # Bind address
 ```
 
 **Scripts**:
+
 ```bash
 npm run ws:server       # Development with watch mode
 npm run ws:server:prod  # Production mode
 ```
 
 **Endpoints**:
+
 - WebSocket: `ws://localhost:3001`
 - Health check: `http://localhost:3001/health`
 - Statistics: `http://localhost:3001/stats`
@@ -264,6 +288,7 @@ npm run ws:server:prod  # Production mode
 ### 7. Documentation (`lib/realtime/README.md`)
 
 **Complete documentation including**:
+
 - ✅ Architecture overview
 - ✅ Feature descriptions
 - ✅ Usage examples (server & client)
@@ -280,14 +305,16 @@ npm run ws:server:prod  # Production mode
 ## 📊 Performance Metrics
 
 ### Scalability
-| Metric | WebSocket | SSE |
-|--------|-----------|-----|
-| Max connections (single server) | 10,000+ | 10,000+ |
-| Memory per connection | ~10KB | ~5KB |
-| Latency (average) | <50ms | <100ms |
-| CPU overhead | Medium | Low |
+
+| Metric                          | WebSocket | SSE     |
+| ------------------------------- | --------- | ------- |
+| Max connections (single server) | 10,000+   | 10,000+ |
+| Memory per connection           | ~10KB     | ~5KB    |
+| Latency (average)               | <50ms     | <100ms  |
+| CPU overhead                    | Medium    | Low     |
 
 ### Redis Pub/Sub (Optional)
+
 - Unlimited horizontal scaling
 - Event distribution across servers
 - Negligible latency overhead (<10ms)
@@ -299,27 +326,30 @@ npm run ws:server:prod  # Production mode
 ### Implemented Scenarios
 
 1. **Live Member Updates**
+
    ```typescript
    // Admin sees new member registrations in real-time
-   eventEmitter.emit(EventType.MEMBER_CREATED, memberData);
+   eventEmitter.emit(EventType.MEMBER_CREATED, memberData)
    ```
 
 2. **Artwork Approval Notifications**
+
    ```typescript
    // Artists see approval/rejection instantly
-   eventEmitter.emit(EventType.ARTWORK_APPROVED, artworkData);
+   eventEmitter.emit(EventType.ARTWORK_APPROVED, artworkData)
    ```
 
 3. **Exhibition Updates**
+
    ```typescript
    // Members notified of exhibition changes
-   eventEmitter.emit(EventType.EXHIBITION_PUBLISHED, exhibitionData);
+   eventEmitter.emit(EventType.EXHIBITION_PUBLISHED, exhibitionData)
    ```
 
 4. **System Notifications**
    ```typescript
    // Admins alerted to system events
-   eventEmitter.emit(EventType.SYSTEM_ERROR, errorData);
+   eventEmitter.emit(EventType.SYSTEM_ERROR, errorData)
    ```
 
 ---
@@ -353,23 +383,21 @@ function MemberDashboard() {
 
 ```typescript
 // app/api/members/route.ts
-import { getEventEmitter, EventType } from '@/lib/realtime';
+import { getEventEmitter, EventType } from '@/lib/realtime'
 
 export async function POST(request: Request) {
-  const data = await request.json();
+  const data = await request.json()
 
   // Create member
-  const member = await createMember(data);
+  const member = await createMember(data)
 
   // Emit real-time event
-  const eventEmitter = getEventEmitter();
-  await eventEmitter.emit(
-    EventType.MEMBER_CREATED,
-    member,
-    { userId: 'admin_123' }
-  );
+  const eventEmitter = getEventEmitter()
+  await eventEmitter.emit(EventType.MEMBER_CREATED, member, {
+    userId: 'admin_123',
+  })
 
-  return Response.json(member);
+  return Response.json(member)
 }
 ```
 
@@ -378,16 +406,19 @@ export async function POST(request: Request) {
 ## 🔒 Security Considerations
 
 ### Authentication
+
 - ✅ Token-based authentication support
 - ✅ User ID filtering
 - ✅ Connection validation
 
 ### Authorization
+
 - ✅ Event-level filtering
 - ✅ User-based access control
 - ✅ Subscription validation
 
 ### Rate Limiting
+
 - ⏳ Connection rate limiting (to be implemented)
 - ⏳ Message frequency limits (to be implemented)
 - ✅ Max connections per server
@@ -466,7 +497,8 @@ scripts/
 
 ## 🎉 Summary
 
-Phase 3.4 successfully implements a complete, production-ready real-time communication system with:
+Phase 3.4 successfully implements a complete, production-ready real-time
+communication system with:
 
 - **Dual Protocol Support**: WebSocket + SSE for different use cases
 - **Type Safety**: Full TypeScript support with strict typing
@@ -475,10 +507,10 @@ Phase 3.4 successfully implements a complete, production-ready real-time communi
 - **Developer Experience**: Comprehensive documentation and examples
 - **Production Ready**: Error handling, memory management, graceful shutdown
 
-The system is ready for integration with the rest of the application and can be extended with additional features as needed.
+The system is ready for integration with the rest of the application and can be
+extended with additional features as needed.
 
 ---
 
-**Implementation by**: Backend Architecture Team
-**Status**: ✅ COMPLETED
-**Next Phase**: 3.5 - Admin API Layer
+**Implementation by**: Backend Architecture Team **Status**: ✅ COMPLETED **Next
+Phase**: 3.5 - Admin API Layer

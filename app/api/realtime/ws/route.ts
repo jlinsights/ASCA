@@ -15,7 +15,7 @@
  * @module app/api/realtime/ws
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server'
 
 /**
  * GET /api/realtime/ws
@@ -24,7 +24,7 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(request: NextRequest) {
   // Check if upgrade header is present
-  const upgrade = request.headers.get('upgrade');
+  const upgrade = request.headers.get('upgrade')
 
   if (upgrade !== 'websocket') {
     return NextResponse.json(
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
         hint: 'Connect using WebSocket client: new WebSocket("ws://localhost:3000/api/realtime/ws")',
       },
       { status: 426 } // Upgrade Required
-    );
+    )
   }
 
   // Note: Next.js App Router doesn't support WebSocket upgrades directly
@@ -51,11 +51,11 @@ export async function GET(request: NextRequest) {
       ],
     },
     { status: 501 } // Not Implemented
-  );
+  )
 }
 
 /**
  * Runtime configuration
  */
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'

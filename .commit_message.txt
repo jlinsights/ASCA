@@ -1,1 +1,1 @@
-📋 report: asca-api-security-hardening 완료 보고서 — Match 92%, 6 fix 전부 해소, P2 8건 별도 사이클
+🎨 prettier 일괄 포맷 + footer-data 타입 명시 (FooterLink/Record) — type-check·format:check·design 3 hard gate 모두 통과

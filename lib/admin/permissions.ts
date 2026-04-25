@@ -247,7 +247,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     Permission.EVENT_READ,
     Permission.CONTENT_READ,
   ],
-};
+}
 
 /**
  * Permission hierarchy
@@ -327,7 +327,7 @@ const PERMISSION_HIERARCHY: Map<string, string[]> = new Map([
   ['content:update', ['content:*', '*']],
   ['content:delete', ['content:*', '*']],
   ['content:publish', ['content:*', '*']],
-]);
+])
 
 /**
  * Check if user has permission
@@ -342,14 +342,12 @@ export function hasPermission(
 ): boolean {
   // Check for exact permission match
   if (userPermissions.includes(requiredPermission)) {
-    return true;
+    return true
   }
 
   // Check for wildcard permissions
-  const hierarchy = PERMISSION_HIERARCHY.get(requiredPermission) || [];
-  return hierarchy.some((wildcardPerm) =>
-    userPermissions.includes(wildcardPerm as Permission)
-  );
+  const hierarchy = PERMISSION_HIERARCHY.get(requiredPermission) || []
+  return hierarchy.some(wildcardPerm => userPermissions.includes(wildcardPerm as Permission))
 }
 
 /**
@@ -363,7 +361,7 @@ export function hasAllPermissions(
   userPermissions: Permission[],
   requiredPermissions: Permission[]
 ): boolean {
-  return requiredPermissions.every((perm) => hasPermission(userPermissions, perm));
+  return requiredPermissions.every(perm => hasPermission(userPermissions, perm))
 }
 
 /**
@@ -377,7 +375,7 @@ export function hasAnyPermission(
   userPermissions: Permission[],
   requiredPermissions: Permission[]
 ): boolean {
-  return requiredPermissions.some((perm) => hasPermission(userPermissions, perm));
+  return requiredPermissions.some(perm => hasPermission(userPermissions, perm))
 }
 
 /**
@@ -387,7 +385,7 @@ export function hasAnyPermission(
  * @returns Array of permissions
  */
 export function getPermissionsForRole(role: Role): Permission[] {
-  return ROLE_PERMISSIONS[role] || [];
+  return ROLE_PERMISSIONS[role] || []
 }
 
 /**
@@ -397,29 +395,29 @@ export function getPermissionsForRole(role: Role): Permission[] {
  * @returns Expanded permissions
  */
 export function getEffectivePermissions(permissions: Permission[]): Permission[] {
-  const effective = new Set<Permission>();
+  const effective = new Set<Permission>()
 
   for (const perm of permissions) {
     if (perm === Permission.ALL) {
       // Add all permissions
-      return Object.values(Permission);
+      return Object.values(Permission)
     }
 
     // Add the permission itself
-    effective.add(perm);
+    effective.add(perm)
 
     // If it's a wildcard, expand it
     if (perm.endsWith(':*')) {
-      const resource = perm.split(':')[0];
-      Object.values(Permission).forEach((p) => {
+      const resource = perm.split(':')[0]
+      Object.values(Permission).forEach(p => {
         if (p.startsWith(`${resource}:`) && !p.endsWith(':*')) {
-          effective.add(p);
+          effective.add(p)
         }
-      });
+      })
     }
   }
 
-  return Array.from(effective);
+  return Array.from(effective)
 }
 
 /**
@@ -429,7 +427,7 @@ export function getEffectivePermissions(permissions: Permission[]): Permission[]
  * @returns True if valid
  */
 export function isValidPermission(permission: string): permission is Permission {
-  return Object.values(Permission).includes(permission as Permission);
+  return Object.values(Permission).includes(permission as Permission)
 }
 
 /**
@@ -439,7 +437,7 @@ export function isValidPermission(permission: string): permission is Permission 
  * @returns Resource name
  */
 export function getPermissionResource(permission: Permission): string {
-  return permission.split(':')[0] || '';
+  return permission.split(':')[0] || ''
 }
 
 /**
@@ -449,7 +447,7 @@ export function getPermissionResource(permission: Permission): string {
  * @returns Action name
  */
 export function getPermissionAction(permission: Permission): string {
-  return permission.split(':')[1] || '';
+  return permission.split(':')[1] || ''
 }
 
 /**
@@ -459,7 +457,7 @@ export function getPermissionAction(permission: Permission): string {
  * @returns True if wildcard
  */
 export function isWildcardPermission(permission: Permission): boolean {
-  return permission.endsWith(':*') || permission === Permission.ALL;
+  return permission.endsWith(':*') || permission === Permission.ALL
 }
 
 /**
@@ -471,8 +469,8 @@ export class PermissionError extends Error {
     public requiredPermission: Permission,
     public userPermissions: Permission[]
   ) {
-    super(message);
-    this.name = 'PermissionError';
+    super(message)
+    this.name = 'PermissionError'
   }
 }
 
@@ -492,7 +490,7 @@ export function assertPermission(
       `Missing required permission: ${requiredPermission}`,
       requiredPermission,
       userPermissions
-    );
+    )
   }
 }
 
@@ -507,16 +505,14 @@ export function assertAllPermissions(
   userPermissions: Permission[],
   requiredPermissions: Permission[]
 ): void {
-  const missing = requiredPermissions.filter(
-    (perm) => !hasPermission(userPermissions, perm)
-  );
+  const missing = requiredPermissions.filter(perm => !hasPermission(userPermissions, perm))
 
   if (missing.length > 0) {
     throw new PermissionError(
       `Missing required permissions: ${missing.join(', ')}`,
       missing[0] as Permission,
       userPermissions
-    );
+    )
   }
 }
 
@@ -524,9 +520,9 @@ export function assertAllPermissions(
  * Permission check result
  */
 export interface PermissionCheckResult {
-  allowed: boolean;
-  reason?: string;
-  missingPermissions?: Permission[];
+  allowed: boolean
+  reason?: string
+  missingPermissions?: Permission[]
 }
 
 /**
@@ -540,17 +536,17 @@ export function checkPermission(
   userPermissions: Permission[],
   requiredPermission: Permission
 ): PermissionCheckResult {
-  const allowed = hasPermission(userPermissions, requiredPermission);
+  const allowed = hasPermission(userPermissions, requiredPermission)
 
   if (allowed) {
-    return { allowed: true };
+    return { allowed: true }
   }
 
   return {
     allowed: false,
     reason: `Missing required permission: ${requiredPermission}`,
     missingPermissions: [requiredPermission],
-  };
+  }
 }
 
 /**
@@ -585,7 +581,7 @@ export function getPermissionDescription(permission: Permission): string {
     [Permission.SYSTEM_CACHE]: 'Manage cache',
 
     [Permission.ALL]: 'Full system access',
-  };
+  }
 
-  return descriptions[permission] || permission;
+  return descriptions[permission] || permission
 }

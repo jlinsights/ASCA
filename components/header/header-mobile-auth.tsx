@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useUser, useClerk, SignInButton, SignUpButton } from '@clerk/nextjs'
-import { Button } from "../ui/button"
+import { Button } from '../ui/button'
 import { LogOut } from 'lucide-react'
 
 interface HeaderMobileAuthProps {

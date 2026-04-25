@@ -26,7 +26,7 @@ export function MembershipStats({ stats }: MembershipStatsProps) {
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>승인 대기</CardTitle>
@@ -82,9 +82,7 @@ export function MembershipStats({ stats }: MembershipStatsProps) {
                     </div>
                     <div className='text-right'>
                       <span className='font-medium'>{count}</span>
-                      <span className='text-muted-foreground ml-1'>
-                        ({percentage.toFixed(1)}%)
-                      </span>
+                      <span className='text-muted-foreground ml-1'>({percentage.toFixed(1)}%)</span>
                     </div>
                   </div>
                   <Progress
@@ -113,9 +111,7 @@ export function MembershipStats({ stats }: MembershipStatsProps) {
                   </div>
                   <div className='text-right'>
                     <span className='font-medium'>{count}</span>
-                    <span className='text-muted-foreground ml-1'>
-                      ({percentage.toFixed(1)}%)
-                    </span>
+                    <span className='text-muted-foreground ml-1'>({percentage.toFixed(1)}%)</span>
                   </div>
                 </div>
               )

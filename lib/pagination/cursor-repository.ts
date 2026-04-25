@@ -4,9 +4,9 @@
  * Adds cursor-based pagination capabilities to existing repositories.
  */
 
-import { SQL, asc, desc, gt, lt, and, or, sql } from 'drizzle-orm';
-import { PgTable } from 'drizzle-orm/pg-core';
-import { db } from '@/lib/db';
+import { SQL, asc, desc, gt, lt, and, or, sql } from 'drizzle-orm'
+import { PgTable } from 'drizzle-orm/pg-core'
+import { db } from '@/lib/db'
 import {
   CursorPaginationParams,
   Connection,
@@ -14,17 +14,17 @@ import {
   validateCursorParams,
   decodeCursor,
   getCursorComparison,
-} from './cursor';
+} from './cursor'
 
 /**
  * Cursor pagination result
  */
 export interface CursorPaginationResult<T> {
-  connection: Connection<T>;
+  connection: Connection<T>
   hasMore: {
-    hasPreviousPage: boolean;
-    hasNextPage: boolean;
-  };
+    hasPreviousPage: boolean
+    hasNextPage: boolean
+  }
 }
 
 /**
@@ -34,38 +34,35 @@ export interface ICursorRepository<T extends Record<string, any>> {
   /**
    * Find items with cursor pagination
    */
-  findWithCursor(
-    params: CursorPaginationParams,
-    where?: SQL
-  ): Promise<Connection<T>>;
+  findWithCursor(params: CursorPaginationParams, where?: SQL): Promise<Connection<T>>
 
   /**
    * Count total items (optional, can be expensive)
    */
-  countTotal(where?: SQL): Promise<number>;
+  countTotal(where?: SQL): Promise<number>
 }
 
 /**
  * Create a cursor-paginated query builder
  */
 export class CursorQueryBuilder<T extends Record<string, any>> {
-  private table: PgTable;
-  private paginator: CursorPaginator<T>;
-  private defaultSortField: string;
+  private table: PgTable
+  private paginator: CursorPaginator<T>
+  private defaultSortField: string
 
   constructor(
     table: PgTable,
     options: {
-      sortField?: string;
-      defaultLimit?: number;
+      sortField?: string
+      defaultLimit?: number
     } = {}
   ) {
-    this.table = table;
-    this.defaultSortField = options.sortField ?? 'id';
+    this.table = table
+    this.defaultSortField = options.sortField ?? 'id'
     this.paginator = new CursorPaginator<T>({
       sortField: this.defaultSortField,
       defaultLimit: options.defaultLimit ?? 20,
-    });
+    })
   }
 
   /**
@@ -75,11 +72,11 @@ export class CursorQueryBuilder<T extends Record<string, any>> {
     params: CursorPaginationParams,
     where?: SQL,
     options?: {
-      includeTotalCount?: boolean;
+      includeTotalCount?: boolean
     }
   ): Promise<Connection<T>> {
     // Validate parameters
-    validateCursorParams(params);
+    validateCursorParams(params)
 
     // Get pagination params
     const {
@@ -88,61 +85,55 @@ export class CursorQueryBuilder<T extends Record<string, any>> {
       cursor: cursorData,
       sortDirection,
       comparison,
-    } = this.paginator.getParams(params);
+    } = this.paginator.getParams(params)
 
-    const sortField = params.sortField ?? this.defaultSortField;
-    const tableColumn = (this.table as any)[sortField];
+    const sortField = params.sortField ?? this.defaultSortField
+    const tableColumn = (this.table as any)[sortField]
 
     // Build WHERE clause
-    let whereClause = where;
+    let whereClause = where
 
     if (cursorData) {
-      const cursorCondition = comparison === '>'
-        ? gt(tableColumn, cursorData.sortValue ?? cursorData.id)
-        : lt(tableColumn, cursorData.sortValue ?? cursorData.id);
+      const cursorCondition =
+        comparison === '>'
+          ? gt(tableColumn, cursorData.sortValue ?? cursorData.id)
+          : lt(tableColumn, cursorData.sortValue ?? cursorData.id)
 
-      whereClause = where
-        ? and(where, cursorCondition)
-        : cursorCondition;
+      whereClause = where ? and(where, cursorCondition) : cursorCondition
     }
 
     // Build ORDER BY clause
-    const orderBy = sortDirection === 'asc'
-      ? asc(tableColumn)
-      : desc(tableColumn);
+    const orderBy = sortDirection === 'asc' ? asc(tableColumn) : desc(tableColumn)
 
     // Execute query (fetch limit + 1 to check if there are more)
-    let query = db
-      .select()
-      .from(this.table)
-      .limit(limit);
+    let query = db.select().from(this.table).limit(limit)
 
     if (whereClause) {
-      query = query.where(whereClause) as any;
+      query = query.where(whereClause) as any
     }
 
-    query = query.orderBy(orderBy) as any;
+    query = query.orderBy(orderBy) as any
 
-    const results = await query as T[];
+    const results = (await query) as T[]
 
     // Check if there are more items
-    const hasMore = results.length > (limit - 1);
-    const items = hasMore ? results.slice(0, -1) : results;
+    const hasMore = results.length > limit - 1
+    const items = hasMore ? results.slice(0, -1) : results
 
     // Reverse if backward pagination
     if (!isForward) {
-      items.reverse();
+      items.reverse()
     }
 
     // Get total count if requested
-    let totalCount: number | undefined;
+    let totalCount: number | undefined
     if (options?.includeTotalCount) {
-      totalCount = await this.countTotal(where);
+      totalCount = await this.countTotal(where)
     }
 
     // Determine page info
-    const hasPreviousPage = isForward ? !!params.after : hasMore;
-    const hasNextPage = isForward ? hasMore : !!params.before;
+    const hasPreviousPage = isForward ? !!params.after : hasMore
+    const hasNextPage = isForward ? hasMore : !!params.before
 
     // Create connection
     return this.paginator.createConnection(
@@ -150,21 +141,21 @@ export class CursorQueryBuilder<T extends Record<string, any>> {
       params,
       { hasPreviousPage, hasNextPage },
       totalCount
-    );
+    )
   }
 
   /**
    * Count total items
    */
   async countTotal(where?: SQL): Promise<number> {
-    let query = db.select({ count: sql<number>`count(*)` }).from(this.table);
+    let query = db.select({ count: sql<number>`count(*)` }).from(this.table)
 
     if (where) {
-      query = query.where(where) as any;
+      query = query.where(where) as any
     }
 
-    const result = await query;
-    return Number(result[0]?.count ?? 0);
+    const result = await query
+    return Number(result[0]?.count ?? 0)
   }
 }
 
@@ -180,11 +171,9 @@ export class CursorQueryBuilder<T extends Record<string, any>> {
  * }
  * ```
  */
-export function CursorRepositoryMixin<TBase extends new (...args: any[]) => any>(
-  Base: TBase
-) {
+export function CursorRepositoryMixin<TBase extends new (...args: any[]) => any>(Base: TBase) {
   return class extends Base implements ICursorRepository<any> {
-    protected cursorBuilder?: CursorQueryBuilder<any>;
+    protected cursorBuilder?: CursorQueryBuilder<any>
 
     /**
      * Initialize cursor builder
@@ -194,28 +183,25 @@ export function CursorRepositoryMixin<TBase extends new (...args: any[]) => any>
         this.cursorBuilder = new CursorQueryBuilder(this.table, {
           sortField,
           defaultLimit: 20,
-        });
+        })
       }
-      return this.cursorBuilder;
+      return this.cursorBuilder
     }
 
     /**
      * Find items with cursor pagination
      */
-    async findWithCursor(
-      params: CursorPaginationParams,
-      where?: SQL
-    ): Promise<Connection<any>> {
-      const builder = this.initCursorBuilder(params.sortField);
-      return builder.execute(params, where);
+    async findWithCursor(params: CursorPaginationParams, where?: SQL): Promise<Connection<any>> {
+      const builder = this.initCursorBuilder(params.sortField)
+      return builder.execute(params, where)
     }
 
     /**
      * Count total items
      */
     async countTotal(where?: SQL): Promise<number> {
-      const builder = this.initCursorBuilder();
-      return builder.countTotal(where);
+      const builder = this.initCursorBuilder()
+      return builder.countTotal(where)
     }
 
     /**
@@ -227,10 +213,7 @@ export function CursorRepositoryMixin<TBase extends new (...args: any[]) => any>
       where?: SQL,
       sortField?: string
     ): Promise<Connection<any>> {
-      return this.findWithCursor(
-        { first, after, sortField },
-        where
-      );
+      return this.findWithCursor({ first, after, sortField }, where)
     }
 
     /**
@@ -242,55 +225,41 @@ export function CursorRepositoryMixin<TBase extends new (...args: any[]) => any>
       where?: SQL,
       sortField?: string
     ): Promise<Connection<any>> {
-      return this.findWithCursor(
-        { last, before, sortField },
-        where
-      );
+      return this.findWithCursor({ last, before, sortField }, where)
     }
-  };
+  }
 }
 
 /**
  * Standalone cursor repository for direct use
  */
 export class CursorRepository<T extends Record<string, any>> implements ICursorRepository<T> {
-  protected cursorBuilder: CursorQueryBuilder<T>;
+  protected cursorBuilder: CursorQueryBuilder<T>
 
   constructor(
     protected table: PgTable,
     options: {
-      sortField?: string;
-      defaultLimit?: number;
+      sortField?: string
+      defaultLimit?: number
     } = {}
   ) {
-    this.cursorBuilder = new CursorQueryBuilder<T>(table, options);
+    this.cursorBuilder = new CursorQueryBuilder<T>(table, options)
   }
 
-  async findWithCursor(
-    params: CursorPaginationParams,
-    where?: SQL
-  ): Promise<Connection<T>> {
-    return this.cursorBuilder.execute(params, where);
+  async findWithCursor(params: CursorPaginationParams, where?: SQL): Promise<Connection<T>> {
+    return this.cursorBuilder.execute(params, where)
   }
 
   async countTotal(where?: SQL): Promise<number> {
-    return this.cursorBuilder.countTotal(where);
+    return this.cursorBuilder.countTotal(where)
   }
 
-  async paginateForward(
-    first: number,
-    after?: string,
-    where?: SQL
-  ): Promise<Connection<T>> {
-    return this.findWithCursor({ first, after }, where);
+  async paginateForward(first: number, after?: string, where?: SQL): Promise<Connection<T>> {
+    return this.findWithCursor({ first, after }, where)
   }
 
-  async paginateBackward(
-    last: number,
-    before?: string,
-    where?: SQL
-  ): Promise<Connection<T>> {
-    return this.findWithCursor({ last, before }, where);
+  async paginateBackward(last: number, before?: string, where?: SQL): Promise<Connection<T>> {
+    return this.findWithCursor({ last, before }, where)
   }
 }
 
@@ -346,4 +315,4 @@ export const PaginationPerformance = {
       'Performance is critical',
     ],
   },
-};
+}

@@ -3,7 +3,7 @@ import Airtable from 'airtable'
 
 /**
  * Airtable ↔ Supabase 실시간 동기화 엔진
- * 
+ *
  * 주요 기능:
  * 1. 스키마 동기화 (필드 추가/삭제)
  * 2. 데이터 동기화 (레코드 생성/수정/삭제)
@@ -22,7 +22,9 @@ export class SyncEngine {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL
       const key = process.env.SUPABASE_SERVICE_ROLE_KEY
       if (!url || !key) {
-        throw new Error('SyncEngine: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required')
+        throw new Error(
+          'SyncEngine: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required'
+        )
       }
       this._supabase = createClient(url, key)
     }
@@ -50,7 +52,6 @@ export class SyncEngine {
    */
   async start(intervalMs: number = 60000) {
     if (this.isRunning) {
-      
       return
     }
 
@@ -63,7 +64,6 @@ export class SyncEngine {
     this.syncInterval = setInterval(async () => {
       await this.processPendingChanges()
     }, intervalMs)
-
   }
 
   /**
@@ -75,23 +75,19 @@ export class SyncEngine {
       this.syncInterval = null
     }
     this.isRunning = false
-    
   }
 
   /**
    * 전체 동기화 수행
    */
   async performFullSync() {
-
     try {
       // 1. 스키마 동기화
       await this.syncSchemas()
-      
+
       // 2. 데이터 동기화
       await this.syncAllData()
-
     } catch (error) {
-      
       throw error
     }
   }
@@ -100,15 +96,12 @@ export class SyncEngine {
    * 스키마 동기화 (Airtable → Supabase)
    */
   async syncSchemas() {
-
     const tables = ['Artists', 'Artworks', 'Exhibitions']
-    
+
     for (const tableName of tables) {
       try {
         await this.syncTableSchema(tableName)
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     }
   }
 
@@ -117,25 +110,22 @@ export class SyncEngine {
    */
   async syncTableSchema(airtableTableName: string) {
     const supabaseTableName = airtableTableName.toLowerCase()
-    
+
     try {
       // Airtable 필드 구조 가져오기
       const airtableFields = await this.getAirtableFields(airtableTableName)
-      
+
       // Supabase 컬럼 구조 가져오기
       const { data: supabaseColumns } = await this.supabase.rpc('get_table_columns', {
-        table_name: supabaseTableName
+        table_name: supabaseTableName,
       })
 
       // 스키마 차이점 분석
       const differences = this.analyzeSchemaChanges(airtableFields, supabaseColumns || [])
-      
+
       // 필요한 스키마 변경 적용
       await this.applySchemaChanges(supabaseTableName, differences)
-
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   /**
@@ -144,9 +134,11 @@ export class SyncEngine {
   async getAirtableFields(tableName: string): Promise<AirtableField[]> {
     try {
       // 샘플 레코드를 가져와서 필드 구조 파악
-      const records = await this.airtableBase(tableName).select({
-        maxRecords: 10
-      }).firstPage()
+      const records = await this.airtableBase(tableName)
+        .select({
+          maxRecords: 10,
+        })
+        .firstPage()
 
       const fieldMap = new Map<string, AirtableField>()
 
@@ -156,7 +148,7 @@ export class SyncEngine {
             fieldMap.set(fieldName, {
               name: fieldName,
               type: this.inferAirtableFieldType(value),
-              required: false
+              required: false,
             })
           }
         })
@@ -164,7 +156,6 @@ export class SyncEngine {
 
       return Array.from(fieldMap.values())
     } catch (error) {
-      
       return []
     }
   }
@@ -193,24 +184,24 @@ export class SyncEngine {
    * 스키마 변경사항 분석
    */
   private analyzeSchemaChanges(
-    airtableFields: AirtableField[], 
+    airtableFields: AirtableField[],
     supabaseColumns: any[]
   ): SchemaChange[] {
     const changes: SchemaChange[] = []
-    
+
     // Airtable 필드를 Supabase 컬럼명으로 매핑
     const fieldMapping = this.getFieldMapping()
-    
+
     airtableFields.forEach(field => {
       const supabaseColumnName = fieldMapping[field.name] || this.sanitizeColumnName(field.name)
       const existingColumn = supabaseColumns.find(col => col.column_name === supabaseColumnName)
-      
+
       if (!existingColumn) {
         changes.push({
           type: 'add_column',
           columnName: supabaseColumnName,
           dataType: this.mapAirtableToPostgres(field.type),
-          airtableField: field.name
+          airtableField: field.name,
         })
       } else {
         // 타입 체크 및 필요시 수정
@@ -221,7 +212,7 @@ export class SyncEngine {
             columnName: supabaseColumnName,
             dataType: expectedType,
             currentType: existingColumn.data_type,
-            airtableField: field.name
+            airtableField: field.name,
           })
         }
       }
@@ -237,7 +228,7 @@ export class SyncEngine {
     for (const change of changes) {
       try {
         await this.executeSchemaChange(tableName, change)
-        
+
         // 로그 기록
         await this.supabase.from('sync_logs').insert({
           sync_type: 'schema',
@@ -246,11 +237,9 @@ export class SyncEngine {
           table_name: tableName,
           operation: change.type,
           changes: change,
-          status: 'success'
+          status: 'success',
         })
-
       } catch (error) {
-
         // 에러 로그 기록
         await this.supabase.from('sync_logs').insert({
           sync_type: 'schema',
@@ -260,7 +249,7 @@ export class SyncEngine {
           operation: change.type,
           changes: change,
           status: 'failed',
-          error_message: error instanceof Error ? error.message : String(error)
+          error_message: error instanceof Error ? error.message : String(error),
         })
       }
     }
@@ -304,15 +293,12 @@ export class SyncEngine {
    * 모든 데이터 동기화
    */
   async syncAllData() {
-
     const tables = ['Artists', 'Artworks', 'Exhibitions']
-    
+
     for (const tableName of tables) {
       try {
         await this.syncTableData(tableName)
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     }
   }
 
@@ -321,19 +307,16 @@ export class SyncEngine {
    */
   async syncTableData(airtableTableName: string) {
     const supabaseTableName = airtableTableName.toLowerCase()
-    
+
     try {
       // Airtable 데이터 가져오기
       const airtableRecords = await this.airtableBase(airtableTableName).select().all()
-      
+
       // Supabase 데이터와 비교하여 동기화
       for (const record of airtableRecords) {
         await this.syncSingleRecord(airtableTableName, record)
       }
-
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   /**
@@ -342,33 +325,31 @@ export class SyncEngine {
   private async syncSingleRecord(tableName: string, airtableRecord: any) {
     const supabaseTableName = tableName.toLowerCase()
     const mappedData = this.mapAirtableToSupabase(airtableRecord.fields, tableName)
-    
+
     try {
       // Supabase에서 기존 레코드 찾기
       const { data: existingRecords } = await this.supabase
         .from(supabaseTableName)
         .select('*')
         .eq('airtable_id', airtableRecord.id)
-      
+
       if (existingRecords && existingRecords.length > 0) {
         // 업데이트
         const { error } = await this.supabase
           .from(supabaseTableName)
           .update(mappedData)
           .eq('airtable_id', airtableRecord.id)
-        
+
         if (error) throw error
       } else {
         // 새로 삽입
         const { error } = await this.supabase
           .from(supabaseTableName)
           .insert({ ...mappedData, airtable_id: airtableRecord.id })
-        
+
         if (error) throw error
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   /**
@@ -386,9 +367,7 @@ export class SyncEngine {
       for (const log of pendingLogs || []) {
         await this.processSyncLog(log)
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   /**
@@ -405,20 +384,19 @@ export class SyncEngine {
       // 성공 상태로 업데이트
       await this.supabase
         .from('sync_logs')
-        .update({ 
-          status: 'success', 
-          completed_at: new Date().toISOString() 
+        .update({
+          status: 'success',
+          completed_at: new Date().toISOString(),
         })
         .eq('id', log.id)
-
     } catch (error) {
       // 실패 상태로 업데이트
       await this.supabase
         .from('sync_logs')
-        .update({ 
-          status: 'failed', 
+        .update({
+          status: 'failed',
           error_message: error instanceof Error ? error.message : String(error),
-          completed_at: new Date().toISOString() 
+          completed_at: new Date().toISOString(),
         })
         .eq('id', log.id)
     }
@@ -429,7 +407,6 @@ export class SyncEngine {
    */
   private async syncToAirtable(log: any) {
     // 구현 예정: Supabase 변경사항을 Airtable에 반영
-    
   }
 
   /**
@@ -437,7 +414,6 @@ export class SyncEngine {
    */
   private async syncToSupabase(log: any) {
     // 구현 예정: Airtable 변경사항을 Supabase에 반영
-    
   }
 
   /**
@@ -448,12 +424,12 @@ export class SyncEngine {
       'Name (Korean)': 'name_korean',
       'Name (Chinese)': 'name_chinese',
       'Membership Type': 'membership_type',
-      'Phone': 'phone',
-      'Email': 'email',
-      'DOB': 'date_of_birth',
+      Phone: 'phone',
+      Email: 'email',
+      DOB: 'date_of_birth',
       'Date of Birth': 'date_of_birth',
-      'Nationality': 'nationality',
-      'Artist Type': 'artist_type'
+      Nationality: 'nationality',
+      'Artist Type': 'artist_type',
     }
   }
 
@@ -473,16 +449,16 @@ export class SyncEngine {
    */
   private mapAirtableToPostgres(airtableType: string): string {
     const typeMap: Record<string, string> = {
-      'text': 'text',
-      'email': 'text',
-      'phone': 'text',
-      'number': 'numeric',
-      'boolean': 'boolean',
-      'date': 'timestamp with time zone',
-      'array': 'jsonb',
-      'json': 'jsonb'
+      text: 'text',
+      email: 'text',
+      phone: 'text',
+      number: 'numeric',
+      boolean: 'boolean',
+      date: 'timestamp with time zone',
+      array: 'jsonb',
+      json: 'jsonb',
     }
-    
+
     return typeMap[airtableType] || 'text'
   }
 
@@ -492,26 +468,36 @@ export class SyncEngine {
   private mapAirtableToSupabase(fields: any, tableName: string): any {
     const mapping = this.getFieldMapping()
     const result: any = {}
-    
+
     Object.entries(fields).forEach(([airtableField, value]) => {
       const supabaseField = mapping[airtableField] || this.sanitizeColumnName(airtableField)
       result[supabaseField] = value
     })
-    
+
     return result
   }
 }
 
 // SQL Injection 방어를 위한 유효성 검증
 const ALLOWED_TABLES = ['artists', 'artworks', 'exhibitions', 'events', 'news'] as const
-type AllowedTable = typeof ALLOWED_TABLES[number]
+type AllowedTable = (typeof ALLOWED_TABLES)[number]
 
 const SAFE_COLUMN_PATTERN = /^[a-z][a-z0-9_]{0,62}$/
 
 const ALLOWED_DATA_TYPES = [
-  'TEXT', 'VARCHAR(255)', 'INTEGER', 'BIGINT', 'BOOLEAN',
-  'TIMESTAMP', 'TIMESTAMPTZ', 'DATE', 'JSONB', 'UUID',
-  'NUMERIC', 'REAL', 'DOUBLE PRECISION'
+  'TEXT',
+  'VARCHAR(255)',
+  'INTEGER',
+  'BIGINT',
+  'BOOLEAN',
+  'TIMESTAMP',
+  'TIMESTAMPTZ',
+  'DATE',
+  'JSONB',
+  'UUID',
+  'NUMERIC',
+  'REAL',
+  'DOUBLE PRECISION',
 ] as const
 
 function validateTableName(name: string): boolean {
@@ -548,4 +534,4 @@ export function getSyncEngine(): SyncEngine {
     _instance = new SyncEngine()
   }
   return _instance
-} 
+}

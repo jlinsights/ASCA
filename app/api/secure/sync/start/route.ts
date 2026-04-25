@@ -18,14 +18,17 @@ async function secureSyncStartHandler({ user, request }: SecureAPIContext) {
       auditLogger.logSuspiciousActivity(request, 'Invalid sync interval attempted', {
         userId: user?.id,
         requestedInterval: intervalMs,
-        validRange: '60000-3600000ms'
+        validRange: '60000-3600000ms',
       })
 
-      return NextResponse.json({
-        success: false,
-        message: 'Invalid sync interval. Must be between 1 minute and 1 hour.',
-        code: 'INVALID_SYNC_INTERVAL'
-      }, { status: 400 })
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Invalid sync interval. Must be between 1 minute and 1 hour.',
+          code: 'INVALID_SYNC_INTERVAL',
+        },
+        { status: 400 }
+      )
     }
 
     // 관리자 액션 로깅
@@ -47,23 +50,25 @@ async function secureSyncStartHandler({ user, request }: SecureAPIContext) {
         interval: intervalMs,
         startedBy: user?.email,
         timestamp: new Date().toISOString(),
-        status: 'running'
-      }
+        status: 'running',
+      },
     })
-
   } catch (error) {
     // 에러 감사 로깅
     auditLogger.logSuspiciousActivity(request, 'Sync engine start failed', {
       userId: user?.id,
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
 
-    return NextResponse.json({
-      success: false,
-      message: 'Failed to start sync engine',
-      error: error instanceof Error ? error.message : 'Unknown error',
-      code: 'SYNC_START_FAILED'
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Failed to start sync engine',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        code: 'SYNC_START_FAILED',
+      },
+      { status: 500 }
+    )
   }
 }
 
@@ -74,13 +79,13 @@ async function syncStartInfoHandler({ user, request }: SecureAPIContext) {
       method: 'POST',
       body: { intervalMs: 60000 },
       authentication: 'Required (Admin role)',
-      permissions: ['admin']
+      permissions: ['admin'],
     },
     validIntervals: {
       minimum: '60000ms (1 minute)',
       maximum: '3600000ms (1 hour)',
-      recommended: '300000ms (5 minutes)'
-    }
+      recommended: '300000ms (5 minutes)',
+    },
   })
 }
 

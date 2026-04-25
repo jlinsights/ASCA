@@ -115,11 +115,7 @@ export default function CulturalExchangePage() {
 
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
               {filteredPrograms.map(program => (
-                <ProgramCard
-                  key={program.id}
-                  program={program}
-                  onSelect={setSelectedProgram}
-                />
+                <ProgramCard key={program.id} program={program} onSelect={setSelectedProgram} />
               ))}
             </div>
           </TabsContent>
@@ -167,10 +163,7 @@ export default function CulturalExchangePage() {
         </Tabs>
       </div>
 
-      <ProgramDetailModal
-        program={selectedProgram}
-        onClose={() => setSelectedProgram(null)}
-      />
+      <ProgramDetailModal program={selectedProgram} onClose={() => setSelectedProgram(null)} />
 
       <LayoutFooter />
     </div>

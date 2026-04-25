@@ -1,50 +1,50 @@
 import { ensureSupabase } from '../supabase'
-import type { 
-  Notice, 
-  Exhibition, 
+import type {
+  Notice,
+  Exhibition,
   Event,
   SearchFilters,
-  PaginationParams
+  PaginationParams,
 } from '@/lib/types/cms-legacy'
 
 // 통합 검색 결과 타입 (작가와 작품 포함)
 export interface SearchResult {
-  id: string;
-  title: string;
-  contentType: 'notice' | 'exhibition' | 'event' | 'artist' | 'artwork';
-  excerpt: string;
-  url: string;
-  createdAt: string;
-  rank: number;
+  id: string
+  title: string
+  contentType: 'notice' | 'exhibition' | 'event' | 'artist' | 'artwork'
+  excerpt: string
+  url: string
+  createdAt: string
+  rank: number
 }
 
 // 고급 검색 필터
 export interface AdvancedSearchFilters {
-  query?: string;
-  category?: string;
-  status?: string;
-  dateFrom?: Date;
-  dateTo?: Date;
-  contentTypes?: ('notice' | 'exhibition' | 'event' | 'artist' | 'artwork')[];
+  query?: string
+  category?: string
+  status?: string
+  dateFrom?: Date
+  dateTo?: Date
+  contentTypes?: ('notice' | 'exhibition' | 'event' | 'artist' | 'artwork')[]
 }
 
 // 작가 검색 필터
 export interface ArtistSearchFilters {
-  query?: string;
-  nationality?: string;
-  artistType?: string;
-  membershipType?: string;
+  query?: string
+  nationality?: string
+  artistType?: string
+  membershipType?: string
 }
 
 // 작품 검색 필터
 export interface ArtworkSearchFilters {
-  query?: string;
-  category?: string;
-  style?: string;
-  availability?: string;
-  artistId?: string;
-  yearFrom?: number;
-  yearTo?: number;
+  query?: string
+  category?: string
+  style?: string
+  availability?: string
+  artistId?: string
+  yearFrom?: number
+  yearTo?: number
 }
 
 export interface GlobalSearchParams {
@@ -90,7 +90,7 @@ export async function searchNotices(
     date_from: filters.dateFrom,
     date_to: filters.dateTo,
     page_num: pagination.page,
-    page_size: pagination.limit
+    page_size: pagination.limit,
   })
 
   if (error) throw error
@@ -111,14 +111,14 @@ export async function searchExhibitions(
     date_from: filters.dateFrom,
     date_to: filters.dateTo,
     page_num: pagination.page,
-    page_size: pagination.limit
+    page_size: pagination.limit,
   })
 
   if (error) throw error
   return data
 }
 
-// Event 검색  
+// Event 검색
 export async function searchEvents(
   query: string,
   filters: any = {},
@@ -132,7 +132,7 @@ export async function searchEvents(
     date_from: filters.dateFrom,
     date_to: filters.dateTo,
     page_num: pagination.page,
-    page_size: pagination.limit
+    page_size: pagination.limit,
   })
 
   if (error) throw error
@@ -152,7 +152,7 @@ export async function searchArtists(
     nationality_filter: filters.nationality,
     specialty_filter: filters.specialty,
     page_num: pagination.page,
-    page_size: pagination.limit
+    page_size: pagination.limit,
   })
 
   if (error) throw error
@@ -173,7 +173,7 @@ export async function searchArtworks(
     style_filter: filters.style,
     artist_filter: filters.artist_id,
     page_num: pagination.page,
-    page_size: pagination.limit
+    page_size: pagination.limit,
   })
 
   if (error) throw error
@@ -189,10 +189,16 @@ export async function searchAllContent(
   if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase.rpc('search_all_content', {
     search_query: query,
-    content_types: params.contentTypes || ['notices', 'exhibitions', 'events', 'artists', 'artworks'],
+    content_types: params.contentTypes || [
+      'notices',
+      'exhibitions',
+      'events',
+      'artists',
+      'artworks',
+    ],
     date_from: params.dateRange?.from,
     date_to: params.dateRange?.to,
-    result_limit: params.limit || 20
+    result_limit: params.limit || 20,
   })
 
   if (error) throw error
@@ -208,31 +214,27 @@ export async function simpleSearch(
   try {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
-    let searchQuery = supabase
-      .from(table)
-      .select('*')
-      .limit(limit);
+    let searchQuery = supabase.from(table).select('*').limit(limit)
 
     // 상태 필터링 (해당하는 테이블만)
     if (table === 'notices' || table === 'exhibitions' || table === 'events') {
-      searchQuery = searchQuery.eq('status', 'published');
+      searchQuery = searchQuery.eq('status', 'published')
     }
 
     // 작품의 경우 구매 가능한 것만
     if (table === 'artworks') {
-      searchQuery = searchQuery.eq('availability', 'available');
+      searchQuery = searchQuery.eq('availability', 'available')
     }
 
     if (query) {
-      searchQuery = searchQuery.textSearch('search_vector', query);
+      searchQuery = searchQuery.textSearch('search_vector', query)
     }
 
-    const { data, error } = await searchQuery;
-    if (error) throw error;
-    return { data: data || [], error: null };
+    const { data, error } = await searchQuery
+    if (error) throw error
+    return { data: data || [], error: null }
   } catch (error) {
-    
-    return { data: [], error };
+    return { data: [], error }
   }
 }
 
@@ -241,25 +243,24 @@ export async function searchArtworksByArtist(artistId: string, query?: string, l
   try {
     const filters = {
       artist_id: artistId,
-    };
-    
-    return await searchArtworks(query || '', filters);
+    }
+
+    return await searchArtworks(query || '', filters)
   } catch (error) {
-    
-    return { data: [], error };
+    return { data: [], error }
   }
 }
 
 // 인기 검색어 (추후 구현을 위한 스켈레톤)
 export async function getPopularSearchTerms(limit = 10) {
   // TODO: 검색 로그 테이블을 만들어서 인기 검색어 추적
-  return { data: [], error: null };
+  return { data: [], error: null }
 }
 
 // 검색 제안 (추후 구현을 위한 스켈레톤)
 export async function getSearchSuggestions(query: string, limit = 5) {
   // TODO: 자동완성 기능 구현
-  return { data: [], error: null };
+  return { data: [], error: null }
 }
 
 // 고급 검색 (다중 테이블 조인)
@@ -300,6 +301,6 @@ export async function advancedSearch(params: GlobalSearchParams): Promise<Search
     results: data || [],
     total: data?.length || 0,
     query: params.query,
-    facets: {} // 추후 구현
+    facets: {}, // 추후 구현
   }
 }

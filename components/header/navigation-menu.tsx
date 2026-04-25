@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import Link from "next/link"
-import { ChevronDown } from "lucide-react"
-import { useLanguage } from "@/contexts/language-context"
+import Link from 'next/link'
+import { ChevronDown } from 'lucide-react'
+import { useLanguage } from '@/contexts/language-context'
 
 interface NavigationMenuProps {
   onItemClick?: () => void
@@ -17,8 +17,8 @@ const menuStructure = [
       { key: 'currentExhibitions', href: '/exhibitions' },
       { key: 'upcomingExhibitions', href: '/exhibitions?status=upcoming' },
       { key: 'pastExhibitions', href: '/exhibitions?status=past' },
-      { key: 'onlineExhibitions', href: '/exhibitions?type=online' }
-    ]
+      { key: 'onlineExhibitions', href: '/exhibitions?type=online' },
+    ],
   },
   {
     key: 'artworks',
@@ -33,8 +33,8 @@ const menuStructure = [
       { key: 'modernCalligraphy', href: '/artworks?category=modern' },
       { key: 'calligraphyArt', href: '/artworks?category=calligraphy-art' },
       { key: 'sealEngraving', href: '/artworks?category=seal' },
-      { key: 'woodEngraving', href: '/artworks?category=wood' }
-    ]
+      { key: 'woodEngraving', href: '/artworks?category=wood' },
+    ],
   },
   {
     key: 'artists',
@@ -43,8 +43,8 @@ const menuStructure = [
       { key: 'openCallArtists', href: '/artists?type=open-call' },
       { key: 'youngArtists', href: '/artists?type=young' },
       { key: 'recommendedArtists', href: '/artists?type=recommended' },
-      { key: 'invitedArtists', href: '/artists?type=invited' }
-    ]
+      { key: 'invitedArtists', href: '/artists?type=invited' },
+    ],
   },
   {
     key: 'about',
@@ -56,36 +56,36 @@ const menuStructure = [
       { key: 'operationJudging', href: '/about/operation' },
       { key: 'history', href: '/about/history' },
       { key: 'organizationChart', href: '/about/organization' },
-      { key: 'brandGuidelines', href: '/brand' }
-    ]
-  }
+      { key: 'brandGuidelines', href: '/brand' },
+    ],
+  },
 ]
 
 export function NavigationMenu({ onItemClick }: NavigationMenuProps) {
   const { t } = useLanguage()
 
   return (
-    <nav className="py-4">
-      {menuStructure.map((menu) => (
-        <div key={menu.key} className="border-b border-border/50 last:border-b-0">
+    <nav className='py-4'>
+      {menuStructure.map(menu => (
+        <div key={menu.key} className='border-b border-border/50 last:border-b-0'>
           {/* 메인 메뉴 아이템 */}
-          <Link 
+          <Link
             href={menu.href}
-            className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
+            className='flex items-center justify-between p-4 hover:bg-muted/50 transition-colors'
             {...(onItemClick && { onClick: onItemClick })}
           >
-            <span className="font-medium">{t(menu.key)}</span>
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            <span className='font-medium'>{t(menu.key)}</span>
+            <ChevronDown className='h-4 w-4 text-muted-foreground' />
           </Link>
-          
+
           {/* 서브메뉴 */}
           {menu.submenu && (
-            <div className="bg-muted/30">
-              {menu.submenu.map((subItem) => (
+            <div className='bg-muted/30'>
+              {menu.submenu.map(subItem => (
                 <Link
                   key={subItem.key}
                   href={subItem.href}
-                  className="block py-3 px-6 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                  className='block py-3 px-6 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors'
                   {...(onItemClick && { onClick: onItemClick })}
                 >
                   {t(subItem.key)}
@@ -97,4 +97,4 @@ export function NavigationMenu({ onItemClick }: NavigationMenuProps) {
       ))}
     </nav>
   )
-} 
+}

@@ -61,7 +61,8 @@ export const mockArtists = [
     name_ja: 'ワン・メイリン',
     name_zh: '王美玲',
     bio: '중국 전통 서법의 정신을 현대적으로 재해석하는 작업을 하고 있는 서예가입니다.',
-    bio_en: 'A calligrapher who reinterprets the spirit of traditional Chinese calligraphy in a modern context.',
+    bio_en:
+      'A calligrapher who reinterprets the spirit of traditional Chinese calligraphy in a modern context.',
     profile_image: '/placeholder-user.jpg',
     birth_year: 1970,
     nationality: '중국',
@@ -84,7 +85,8 @@ export const mockArtworks = [
     title_en: 'Spring Day Poem',
     title_ja: '春の日の詩',
     title_zh: '春日詩',
-    description: '봄의 정취를 담은 한국 전통 서예 작품입니다. 유려한 필선과 조화로운 구성이 돋보입니다.',
+    description:
+      '봄의 정취를 담은 한국 전통 서예 작품입니다. 유려한 필선과 조화로운 구성이 돋보입니다.',
     description_en: 'A traditional Korean calligraphy work capturing the essence of spring.',
     artist_id: 'mock-artist-1',
     category: 'calligraphy' as const,
@@ -312,4 +314,4 @@ export const getMockDataStatus = () => {
     artworkCount: mockArtworks.length,
     exhibitionCount: mockExhibitions.length,
   }
-} 
+}

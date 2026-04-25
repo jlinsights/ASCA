@@ -26,7 +26,7 @@ export {
   checkPermission,
   getPermissionDescription,
   type PermissionCheckResult,
-} from './permissions';
+} from './permissions'
 
 // Role Manager
 export {
@@ -39,7 +39,7 @@ export {
   requireAdmin,
   type UserRole,
   type RoleAssignment,
-} from './role-manager';
+} from './role-manager'
 
 // Audit Logger
 export {
@@ -51,4 +51,4 @@ export {
   logAdminAction,
   type AuditLog,
   type AuditLogFilter,
-} from './audit-logger';
+} from './audit-logger'

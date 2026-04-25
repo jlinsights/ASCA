@@ -7,7 +7,7 @@ import type {
   CulturalExchangeParticipantInfo,
   ParticipantApplicationData,
   ParticipantStatus,
-  PaymentStatus
+  PaymentStatus,
 } from '@/lib/types/membership'
 
 // GET - 신청 내역 조회 (본인 또는 관리자)
@@ -22,21 +22,24 @@ export async function GET(request: NextRequest) {
     if (!memberId) {
       const user = await requireAdminAuth(request)
       if (!user) {
-        return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 401 })
+        return NextResponse.json(
+          { success: false, error: '관리자 인증이 필요합니다' },
+          { status: 401 }
+        )
       }
     }
 
     // 조건 구성
     const conditions = []
-    
+
     if (memberId) {
       conditions.push(eq(culturalExchangeParticipants.memberId, memberId))
     }
-    
+
     if (programId) {
       conditions.push(eq(culturalExchangeParticipants.programId, programId))
     }
-    
+
     if (status) {
       conditions.push(eq(culturalExchangeParticipants.status, status))
     }
@@ -46,10 +49,13 @@ export async function GET(request: NextRequest) {
       .select({
         participant: culturalExchangeParticipants,
         program: culturalExchangePrograms,
-        member: members
+        member: members,
       })
       .from(culturalExchangeParticipants)
-      .leftJoin(culturalExchangePrograms, eq(culturalExchangeParticipants.programId, culturalExchangePrograms.id))
+      .leftJoin(
+        culturalExchangePrograms,
+        eq(culturalExchangeParticipants.programId, culturalExchangePrograms.id)
+      )
       .leftJoin(members, eq(culturalExchangeParticipants.memberId, members.id))
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(desc(culturalExchangeParticipants.appliedAt))
@@ -57,32 +63,50 @@ export async function GET(request: NextRequest) {
     // 데이터 변환 (안전한 null 처리 추가)
     const formattedApplications = applications.map((app: any) => ({
       ...app.participant,
-      appliedAt: app.participant?.appliedAt ? new Date(Number(app.participant.appliedAt) * 1000) : new Date(),
-      approvedAt: app.participant?.approvedAt ? new Date(Number(app.participant.approvedAt) * 1000) : undefined,
-      completedAt: app.participant?.completedAt ? new Date(Number(app.participant.completedAt) * 1000) : undefined,
-      applicationData: app.participant?.applicationData ? JSON.parse(app.participant.applicationData) : {},
-      emergencyContact: app.participant?.emergencyContact ? JSON.parse(app.participant.emergencyContact) : {},
+      appliedAt: app.participant?.appliedAt
+        ? new Date(Number(app.participant.appliedAt) * 1000)
+        : new Date(),
+      approvedAt: app.participant?.approvedAt
+        ? new Date(Number(app.participant.approvedAt) * 1000)
+        : undefined,
+      completedAt: app.participant?.completedAt
+        ? new Date(Number(app.participant.completedAt) * 1000)
+        : undefined,
+      applicationData: app.participant?.applicationData
+        ? JSON.parse(app.participant.applicationData)
+        : {},
+      emergencyContact: app.participant?.emergencyContact
+        ? JSON.parse(app.participant.emergencyContact)
+        : {},
       feedback: app.participant?.feedback ? JSON.parse(app.participant.feedback) : undefined,
-      program: app.program ? {
-        ...app.program,
-        startDate: app.program.startDate ? new Date(Number(app.program.startDate) * 1000) : new Date(),
-        endDate: app.program.endDate ? new Date(Number(app.program.endDate) * 1000) : new Date(),
-        applicationDeadline: app.program.applicationDeadline ? new Date(Number(app.program.applicationDeadline) * 1000) : undefined
-      } : undefined,
-      member: app.member ? {
-        ...app.member,
-        fullName: app.member.fullName || '',
-        membershipNumber: app.member.membershipNumber || ''
-      } : undefined
+      program: app.program
+        ? {
+            ...app.program,
+            startDate: app.program.startDate
+              ? new Date(Number(app.program.startDate) * 1000)
+              : new Date(),
+            endDate: app.program.endDate
+              ? new Date(Number(app.program.endDate) * 1000)
+              : new Date(),
+            applicationDeadline: app.program.applicationDeadline
+              ? new Date(Number(app.program.applicationDeadline) * 1000)
+              : undefined,
+          }
+        : undefined,
+      member: app.member
+        ? {
+            ...app.member,
+            fullName: app.member.fullName || '',
+            membershipNumber: app.member.membershipNumber || '',
+          }
+        : undefined,
     }))
 
     return NextResponse.json({
       success: true,
-      applications: formattedApplications
+      applications: formattedApplications,
     })
-
   } catch (error) {
-
     return NextResponse.json(
       { success: false, error: '신청 내역을 가져오는 중 오류가 발생했습니다' },
       { status: 500 }
@@ -101,13 +125,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
 
-    const {
-      programId,
-      memberId,
-      applicationData,
-      specialRequests,
-      emergencyContact
-    } = body
+    const { programId, memberId, applicationData, specialRequests, emergencyContact } = body
 
     // 프로그램 존재 및 모집 중 확인
     const program = await db
@@ -133,8 +151,10 @@ export async function POST(request: NextRequest) {
     }
 
     // 마감일 확인
-    if (selectedProgram.applicationDeadline && 
-        Date.now() > Number(selectedProgram.applicationDeadline) * 1000) {
+    if (
+      selectedProgram.applicationDeadline &&
+      Date.now() > Number(selectedProgram.applicationDeadline) * 1000
+    ) {
       return NextResponse.json(
         { success: false, error: '신청 마감일이 지났습니다' },
         { status: 400 }
@@ -142,7 +162,10 @@ export async function POST(request: NextRequest) {
     }
 
     // 정원 확인
-    if (selectedProgram.maxParticipants && (selectedProgram.currentParticipants || 0) >= selectedProgram.maxParticipants) {
+    if (
+      selectedProgram.maxParticipants &&
+      (selectedProgram.currentParticipants || 0) >= selectedProgram.maxParticipants
+    ) {
       return NextResponse.json(
         { success: false, error: '모집 정원이 마감되었습니다' },
         { status: 400 }
@@ -153,10 +176,12 @@ export async function POST(request: NextRequest) {
     const existingApplication = await db
       .select()
       .from(culturalExchangeParticipants)
-      .where(and(
-        eq(culturalExchangeParticipants.programId, programId),
-        eq(culturalExchangeParticipants.memberId, memberId)
-      ))
+      .where(
+        and(
+          eq(culturalExchangeParticipants.programId, programId),
+          eq(culturalExchangeParticipants.memberId, memberId)
+        )
+      )
       .limit(1)
 
     if (existingApplication[0]) {
@@ -167,11 +192,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 회원 정보 확인
-    const member = await db
-      .select()
-      .from(members)
-      .where(eq(members.id, memberId))
-      .limit(1)
+    const member = await db.select().from(members).where(eq(members.id, memberId)).limit(1)
 
     if (!member[0]) {
       return NextResponse.json(
@@ -187,9 +208,9 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       requirements = []
     }
-    
+
     const memberTierLevel = member[0].tierLevel || 1
-    
+
     for (const req of requirements) {
       if (req?.mandatory) {
         if (req.type === 'membership_level' && req.details?.minimumLevel) {
@@ -200,7 +221,7 @@ export async function POST(request: NextRequest) {
             )
           }
         }
-        
+
         if (req.type === 'experience' && req.details?.minimumYears) {
           const memberExperience = member[0].calligraphyExperience || 0
           if (memberExperience < req.details.minimumYears) {
@@ -224,7 +245,7 @@ export async function POST(request: NextRequest) {
       status: 'applied' as ParticipantStatus,
       paymentStatus: 'pending' as PaymentStatus,
       appliedAt: new Date(),
-      metadata: JSON.stringify({})
+      metadata: JSON.stringify({}),
     }
 
     const result = await db
@@ -239,9 +260,9 @@ export async function POST(request: NextRequest) {
     // 프로그램 참가자 수 업데이트
     await db
       .update(culturalExchangePrograms)
-      .set({ 
+      .set({
         currentParticipants: (selectedProgram.currentParticipants || 0) + 1,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       })
       .where(eq(culturalExchangePrograms.id, programId))
 
@@ -253,13 +274,11 @@ export async function POST(request: NextRequest) {
         ...result[0],
         appliedAt: new Date(result[0].appliedAt),
         applicationData: result[0].applicationData || {},
-        emergencyContact: result[0].emergencyContact || {}
+        emergencyContact: result[0].emergencyContact || {},
       },
-      message: '프로그램 신청이 완료되었습니다'
+      message: '프로그램 신청이 완료되었습니다',
     })
-
   } catch (error) {
-
     return NextResponse.json(
       { success: false, error: '신청 처리 중 오류가 발생했습니다' },
       { status: 500 }

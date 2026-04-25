@@ -3,28 +3,28 @@
  * 아티스트 관련 작업 처리 전담 Agent
  */
 
-import { SubAgent, AgentTask, createTask, agentPool } from './sub-agent';
-export { agentPool };
-import { agentMonitor } from '../monitoring/agent-monitor';
-import { commandBus, COMMANDS } from '../cqrs/command-bus';
-import { queryBus, QUERIES } from '../cqrs/query-bus';
-import { eventBus, EVENTS } from '../events/event-bus';
-import type { ArtistInsert, ArtistUpdate } from '../supabase';
+import { SubAgent, AgentTask, createTask, agentPool } from './sub-agent'
+export { agentPool }
+import { agentMonitor } from '../monitoring/agent-monitor'
+import { commandBus, COMMANDS } from '../cqrs/command-bus'
+import { queryBus, QUERIES } from '../cqrs/query-bus'
+import { eventBus, EVENTS } from '../events/event-bus'
+import type { ArtistInsert, ArtistUpdate } from '../supabase'
 
 export interface ArtistTaskInput {
-  action: 'create' | 'update' | 'delete' | 'search' | 'validate';
-  data?: ArtistInsert | ArtistUpdate;
-  id?: string;
-  searchQuery?: string;
-  validationRules?: string[];
+  action: 'create' | 'update' | 'delete' | 'search' | 'validate'
+  data?: ArtistInsert | ArtistUpdate
+  id?: string
+  searchQuery?: string
+  validationRules?: string[]
 }
 
 export interface ArtistTaskOutput {
-  artist?: any;
-  artists?: any[];
-  validationErrors?: string[];
-  success: boolean;
-  message?: string;
+  artist?: any
+  artists?: any[]
+  validationErrors?: string[]
+  success: boolean
+  message?: string
 }
 
 /**
@@ -32,39 +32,42 @@ export interface ArtistTaskOutput {
  */
 export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
   constructor(id: string = 'artist-agent') {
-    super(id, 'artist');
+    super(id, 'artist')
   }
 
   async execute(task: AgentTask<ArtistTaskInput>): Promise<ArtistTaskOutput> {
-    const startTime = Date.now();
-    const { action } = task.input;
-    
+    const startTime = Date.now()
+    const { action } = task.input
+
     try {
-      let result: ArtistTaskOutput;
-      
+      let result: ArtistTaskOutput
+
       switch (action) {
         case 'create':
-          result = await this.createArtist(task.input.data as ArtistInsert);
-          break;
-        
+          result = await this.createArtist(task.input.data as ArtistInsert)
+          break
+
         case 'update':
-          result = await this.updateArtist(task.input.id!, task.input.data as ArtistUpdate);
-          break;
-        
+          result = await this.updateArtist(task.input.id!, task.input.data as ArtistUpdate)
+          break
+
         case 'delete':
-          result = await this.deleteArtist(task.input.id!);
-          break;
-        
+          result = await this.deleteArtist(task.input.id!)
+          break
+
         case 'search':
-          result = await this.searchArtists(task.input.searchQuery!);
-          break;
-        
+          result = await this.searchArtists(task.input.searchQuery!)
+          break
+
         case 'validate':
-          result = await this.validateArtist(task.input.data as ArtistInsert, task.input.validationRules);
-          break;
-        
+          result = await this.validateArtist(
+            task.input.data as ArtistInsert,
+            task.input.validationRules
+          )
+          break
+
         default:
-          throw new Error(`Unknown action: ${action}`);
+          throw new Error(`Unknown action: ${action}`)
       }
 
       // Track successful execution (or logical failure if result.success is false)
@@ -74,11 +77,10 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
         status: result.success ? 'success' : 'failure',
         executionTime: Date.now() - startTime,
         timestamp: Date.now(),
-        error: result.success ? undefined : result.message
-      });
+        error: result.success ? undefined : result.message,
+      })
 
-      return result;
-
+      return result
     } catch (error) {
       // Track exception
       agentMonitor.trackExecution({
@@ -87,18 +89,18 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
         status: 'failure',
         executionTime: Date.now() - startTime,
         timestamp: Date.now(),
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-      throw error;
+        error: error instanceof Error ? error.message : 'Unknown error',
+      })
+      throw error
     }
   }
 
   private async createArtist(data: ArtistInsert): Promise<ArtistTaskOutput> {
     try {
       // 1. 데이터 검증
-      const validation = await this.validateArtist(data);
+      const validation = await this.validateArtist(data)
       if (!validation.success) {
-        return validation;
+        return validation
       }
 
       // 2. Command 실행
@@ -106,31 +108,30 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
         type: COMMANDS.CREATE_ARTIST,
         payload: data,
         metadata: {
-          timestamp: Date.now()
-        }
-      });
+          timestamp: Date.now(),
+        },
+      })
 
       if (!result.success) {
-        throw new Error(result.error);
+        throw new Error(result.error)
       }
 
       // 3. 이벤트 발행
       await eventBus.emit(EVENTS.ARTIST_CREATED, {
         artistId: result.data?.id,
-        artistData: data
-      });
+        artistData: data,
+      })
 
       return {
         artist: result.data,
         success: true,
-        message: 'Artist created successfully'
-      };
-
+        message: 'Artist created successfully',
+      }
     } catch (error) {
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Failed to create artist'
-      };
+        message: error instanceof Error ? error.message : 'Failed to create artist',
+      }
     }
   }
 
@@ -139,14 +140,14 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
       // 기존 아티스트 확인
       const existingResult = await queryBus.execute({
         type: QUERIES.GET_ARTIST_BY_ID,
-        params: { id }
-      });
+        params: { id },
+      })
 
       if (!existingResult.success || !existingResult.data) {
         return {
           success: false,
-          message: 'Artist not found'
-        };
+          message: 'Artist not found',
+        }
       }
 
       // Command 실행
@@ -154,32 +155,31 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
         type: COMMANDS.UPDATE_ARTIST,
         payload: { id, data },
         metadata: {
-          timestamp: Date.now()
-        }
-      });
+          timestamp: Date.now(),
+        },
+      })
 
       if (!result.success) {
-        throw new Error(result.error);
+        throw new Error(result.error)
       }
 
       // 이벤트 발행
       await eventBus.emit(EVENTS.ARTIST_UPDATED, {
         artistId: id,
         oldData: existingResult.data,
-        newData: data
-      });
+        newData: data,
+      })
 
       return {
         artist: result.data,
         success: true,
-        message: 'Artist updated successfully'
-      };
-
+        message: 'Artist updated successfully',
+      }
     } catch (error) {
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Failed to update artist'
-      };
+        message: error instanceof Error ? error.message : 'Failed to update artist',
+      }
     }
   }
 
@@ -190,29 +190,28 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
         type: COMMANDS.DELETE_ARTIST,
         payload: { id },
         metadata: {
-          timestamp: Date.now()
-        }
-      });
+          timestamp: Date.now(),
+        },
+      })
 
       if (!result.success) {
-        throw new Error(result.error);
+        throw new Error(result.error)
       }
 
       // 이벤트 발행
       await eventBus.emit(EVENTS.ARTIST_DELETED, {
-        artistId: id
-      });
+        artistId: id,
+      })
 
       return {
         success: true,
-        message: 'Artist deleted successfully'
-      };
-
+        message: 'Artist deleted successfully',
+      }
     } catch (error) {
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Failed to delete artist'
-      };
+        message: error instanceof Error ? error.message : 'Failed to delete artist',
+      }
     }
   }
 
@@ -223,49 +222,48 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
         params: { query },
         metadata: {
           cacheKey: `search_artists_${query}`,
-          cacheTTL: 300000 // 5분 캐시
-        }
-      });
+          cacheTTL: 300000, // 5분 캐시
+        },
+      })
 
       if (!result.success) {
-        throw new Error(result.error);
+        throw new Error(result.error)
       }
 
       return {
         artists: result.data,
         success: true,
-        message: `Found ${result.data?.length || 0} artists`
-      };
-
+        message: `Found ${result.data?.length || 0} artists`,
+      }
     } catch (error) {
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Search failed'
-      };
+        message: error instanceof Error ? error.message : 'Search failed',
+      }
     }
   }
 
   private async validateArtist(
-    data: ArtistInsert, 
+    data: ArtistInsert,
     rules: string[] = ['required', 'format']
   ): Promise<ArtistTaskOutput> {
-    const validationErrors: string[] = [];
+    const validationErrors: string[] = []
 
     if (rules.includes('required')) {
       if (!data.name || data.name.trim().length === 0) {
-        validationErrors.push('Artist name is required');
+        validationErrors.push('Artist name is required')
       }
       if (!data.bio || data.bio.trim().length === 0) {
-        validationErrors.push('Artist bio is required');
+        validationErrors.push('Artist bio is required')
       }
     }
 
     if (rules.includes('format')) {
       if (data.name && data.name.length > 100) {
-        validationErrors.push('Artist name must be less than 100 characters');
+        validationErrors.push('Artist name must be less than 100 characters')
       }
       if (data.bio && data.bio.length > 1000) {
-        validationErrors.push('Artist bio must be less than 1000 characters');
+        validationErrors.push('Artist bio must be less than 1000 characters')
       }
     }
 
@@ -273,15 +271,15 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
       // 이름 중복 확인
       const existingResult = await queryBus.execute({
         type: QUERIES.SEARCH_ARTISTS,
-        params: { query: data.name }
-      });
+        params: { query: data.name },
+      })
 
       if (existingResult.success && existingResult.data?.length > 0) {
-        const duplicate = existingResult.data.find((artist: any) => 
-          artist.name.toLowerCase() === data.name.toLowerCase()
-        );
+        const duplicate = existingResult.data.find(
+          (artist: any) => artist.name.toLowerCase() === data.name.toLowerCase()
+        )
         if (duplicate) {
-          validationErrors.push('Artist name already exists');
+          validationErrors.push('Artist name already exists')
         }
       }
     }
@@ -289,10 +287,11 @@ export class ArtistAgent extends SubAgent<ArtistTaskInput, ArtistTaskOutput> {
     return {
       success: validationErrors.length === 0,
       validationErrors: validationErrors.length > 0 ? validationErrors : undefined,
-      message: validationErrors.length > 0 
-        ? `Validation failed: ${validationErrors.join(', ')}`
-        : 'Validation passed'
-    };
+      message:
+        validationErrors.length > 0
+          ? `Validation failed: ${validationErrors.join(', ')}`
+          : 'Validation passed',
+    }
   }
 }
 
@@ -308,66 +307,66 @@ export function createArtistTask(
     {
       priority: action === 'create' || action === 'update' ? 10 : 5,
       timeout: 30000, // 30초
-      ...taskOptions
+      ...taskOptions,
     }
-  );
+  )
 }
 
 // Artist Agent 헬퍼 함수들
 export class ArtistService {
   static async createArtist(data: ArtistInsert): Promise<ArtistTaskOutput> {
-    const task = createArtistTask('create', { data });
-    agentPool.addTask(task);
-    
+    const task = createArtistTask('create', { data })
+    agentPool.addTask(task)
+
     // 결과 대기 (실제 구현에서는 Promise 기반으로 개선 필요)
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const checkResult = () => {
-        const result = agentPool.getResult(task.id);
+        const result = agentPool.getResult(task.id)
         if (result) {
-          resolve(result.output as ArtistTaskOutput);
+          resolve(result.output as ArtistTaskOutput)
         } else {
-          setTimeout(checkResult, 100);
+          setTimeout(checkResult, 100)
         }
-      };
-      checkResult();
-    });
+      }
+      checkResult()
+    })
   }
 
   static async updateArtist(id: string, data: ArtistUpdate): Promise<ArtistTaskOutput> {
-    const task = createArtistTask('update', { id, data });
-    agentPool.addTask(task);
-    
-    return new Promise((resolve) => {
+    const task = createArtistTask('update', { id, data })
+    agentPool.addTask(task)
+
+    return new Promise(resolve => {
       const checkResult = () => {
-        const result = agentPool.getResult(task.id);
+        const result = agentPool.getResult(task.id)
         if (result) {
-          resolve(result.output as ArtistTaskOutput);
+          resolve(result.output as ArtistTaskOutput)
         } else {
-          setTimeout(checkResult, 100);
+          setTimeout(checkResult, 100)
         }
-      };
-      checkResult();
-    });
+      }
+      checkResult()
+    })
   }
 
   static async searchArtists(query: string): Promise<ArtistTaskOutput> {
-    const task = createArtistTask('search', { searchQuery: query });
-    agentPool.addTask(task);
-    
-    return new Promise((resolve) => {
+    const task = createArtistTask('search', { searchQuery: query })
+    agentPool.addTask(task)
+
+    return new Promise(resolve => {
       const checkResult = () => {
-        const result = agentPool.getResult(task.id);
+        const result = agentPool.getResult(task.id)
         if (result) {
-          resolve(result.output as ArtistTaskOutput);
+          resolve(result.output as ArtistTaskOutput)
         } else {
-          setTimeout(checkResult, 100);
+          setTimeout(checkResult, 100)
         }
-      };
-      checkResult();
-    });
+      }
+      checkResult()
+    })
   }
 }
 
 // Artist Agent 인스턴스 생성 및 등록
-export const artistAgent = new ArtistAgent();
-agentPool.registerAgent(artistAgent);
+export const artistAgent = new ArtistAgent()
+agentPool.registerAgent(artistAgent)

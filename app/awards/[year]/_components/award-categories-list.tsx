@@ -9,11 +9,7 @@ interface AwardCategoriesListProps {
   hasDbData: boolean
 }
 
-export function AwardCategoriesList({
-  categories,
-  status,
-  hasDbData,
-}: AwardCategoriesListProps) {
+export function AwardCategoriesList({ categories, status, hasDbData }: AwardCategoriesListProps) {
   return (
     <section className='py-8'>
       <h2 className='text-2xl font-semibold text-foreground mb-6'>수상 부문별 결과</h2>
@@ -87,8 +83,8 @@ export function AwardCategoriesList({
             <div>
               <p className='font-medium text-amber-800 dark:text-amber-300 mb-1'>데이터 안내</p>
               <p className='text-sm text-amber-700 dark:text-amber-400'>
-                현재 표시되는 수상자 정보는 일부 샘플 데이터입니다. 전체 수상자 명단은
-                데이터베이스 시딩 후 자동으로 업데이트됩니다.
+                현재 표시되는 수상자 정보는 일부 샘플 데이터입니다. 전체 수상자 명단은 데이터베이스
+                시딩 후 자동으로 업데이트됩니다.
               </p>
             </div>
           </CardContent>

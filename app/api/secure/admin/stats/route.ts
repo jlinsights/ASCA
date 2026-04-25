@@ -12,12 +12,7 @@ import { NextResponse } from 'next/server'
 async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
   try {
     // 관리자 액션 로깅
-    auditLogger.logAdminAction(
-      request,
-      user!,
-      'ADMIN_STATS_ACCESS',
-      'Admin statistics accessed'
-    )
+    auditLogger.logAdminAction(request, user!, 'ADMIN_STATS_ACCESS', 'Admin statistics accessed')
 
     const supabase = ensureSupabase()
     if (!supabase) {
@@ -33,18 +28,18 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
     // 각 테이블의 데이터 수 조회 (병렬 처리)
     const [
       { count: noticesCount },
-      { count: exhibitionsCount }, 
+      { count: exhibitionsCount },
       { count: eventsCount },
       { count: artistsCount },
       { count: artworksCount },
-      { count: filesCount }
+      { count: filesCount },
     ] = await Promise.all([
       supabase.from('notices').select('*', { count: 'exact', head: true }),
       supabase.from('exhibitions').select('*', { count: 'exact', head: true }),
       supabase.from('events').select('*', { count: 'exact', head: true }),
       supabase.from('artists').select('*', { count: 'exact', head: true }),
       supabase.from('artworks').select('*', { count: 'exact', head: true }),
-      supabase.from('files').select('*', { count: 'exact', head: true })
+      supabase.from('files').select('*', { count: 'exact', head: true }),
     ])
 
     // 최근 활동 조회 (민감한 정보 제외)
@@ -55,7 +50,7 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
       .limit(3)
 
     const { data: recentArtworks } = await supabase
-      .from('artworks') 
+      .from('artworks')
       .select('id, title, created_at')
       .order('created_at', { ascending: false })
       .limit(3)
@@ -71,7 +66,7 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
 
     // 최근 활동 데이터 구성 (개선된 버전)
     const recentActivity: any[] = []
-    
+
     // 전시회 활동
     recentExhibitions?.forEach(exhibition => {
       recentActivity.push({
@@ -80,34 +75,36 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
         action: 'created',
         title: exhibition.title,
         timestamp: exhibition.created_at,
-        category: 'content'
+        category: 'content',
       })
     })
 
     // 작가 활동
     recentArtists?.forEach((artist, index) => {
-      if (index < 2) { // 최대 2개만
+      if (index < 2) {
+        // 최대 2개만
         recentActivity.push({
           id: `artist-${artist.id}`,
           type: 'artist',
           action: 'created',
           title: artist.name,
           timestamp: artist.created_at,
-          category: 'content'
+          category: 'content',
         })
       }
     })
 
     // 작품 활동
     recentArtworks?.forEach((artwork, index) => {
-      if (index < 2) { // 최대 2개만
+      if (index < 2) {
+        // 최대 2개만
         recentActivity.push({
           id: `artwork-${artwork.id}`,
           type: 'artwork',
           action: 'created',
           title: artwork.title,
           timestamp: artwork.created_at,
-          category: 'content'
+          category: 'content',
         })
       }
     })
@@ -123,7 +120,7 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
         totalEvents: eventsCount || 0,
         totalArtists: artistsCount || 0,
         totalArtworks: artworksCount || 0,
-        totalFiles: filesCount || 0
+        totalFiles: filesCount || 0,
       },
 
       // 최근 활동
@@ -134,7 +131,7 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
         authEvents: securityStats.byType,
         criticalEvents: securityStats.bySeverity.critical || 0,
         recentEvents: securityStats.lastHour,
-        topIPs: securityStats.topIPs.slice(0, 3) // 상위 3개 IP만
+        topIPs: securityStats.topIPs.slice(0, 3), // 상위 3개 IP만
       },
 
       // 시스템 정보
@@ -142,29 +139,31 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
         accessedBy: user?.email,
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV,
-        permissions: user?.permissions
-      }
+        permissions: user?.permissions,
+      },
     }
 
     return NextResponse.json({
       success: true,
       message: 'Admin statistics retrieved successfully',
-      data: enhancedStats
+      data: enhancedStats,
     })
-
   } catch (error) {
     // 에러 감사 로깅
     auditLogger.logSuspiciousActivity(request, 'Admin stats access failed', {
       userId: user?.id,
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
 
-    return NextResponse.json({
-      success: false,
-      message: 'Failed to retrieve admin statistics',
-      error: error instanceof Error ? error.message : 'Database error',
-      code: 'ADMIN_STATS_FAILED'
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Failed to retrieve admin statistics',
+        error: error instanceof Error ? error.message : 'Database error',
+        code: 'ADMIN_STATS_FAILED',
+      },
+      { status: 500 }
+    )
   }
 }
 

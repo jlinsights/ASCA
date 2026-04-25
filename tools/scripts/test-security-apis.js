@@ -17,7 +17,7 @@ const colors = {
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
-  cyan: '\x1b[36m'
+  cyan: '\x1b[36m',
 }
 
 class SecurityTester {
@@ -35,7 +35,7 @@ class SecurityTester {
     return new Promise((resolve, reject) => {
       const url = new URL(path, BASE_URL)
       const client = url.protocol === 'https:' ? https : http
-      
+
       const requestOptions = {
         hostname: url.hostname,
         port: url.port,
@@ -44,13 +44,13 @@ class SecurityTester {
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': 'ASCA-Security-Tester/1.0',
-          ...options.headers
-        }
+          ...options.headers,
+        },
       }
 
-      const req = client.request(requestOptions, (res) => {
+      const req = client.request(requestOptions, res => {
         let data = ''
-        res.on('data', chunk => data += chunk)
+        res.on('data', chunk => (data += chunk))
         res.on('end', () => {
           try {
             const json = JSON.parse(data)
@@ -62,11 +62,11 @@ class SecurityTester {
       })
 
       req.on('error', reject)
-      
+
       if (options.body) {
         req.write(JSON.stringify(options.body))
       }
-      
+
       req.end()
     })
   }
@@ -74,7 +74,7 @@ class SecurityTester {
   async runTest(name, testFunction) {
     this.totalTests++
     this.log(`\\n🧪 Testing: ${name}`, 'blue')
-    
+
     try {
       const result = await testFunction()
       if (result.success) {
@@ -94,18 +94,21 @@ class SecurityTester {
   async testDisabledEndpoints() {
     const disabledEndpoints = [
       '/api/migration/migrate-all',
-      '/api/sync/start', 
+      '/api/sync/start',
       '/api/sync/stop',
-      '/api/admin/stats'
+      '/api/admin/stats',
     ]
 
     for (const endpoint of disabledEndpoints) {
       const response = await this.makeRequest(endpoint, { method: 'POST' })
-      
+
       if (response.status === 503 && response.data.message?.includes('disabled')) {
         return { success: true, message: `${endpoint} correctly disabled` }
       } else {
-        return { success: false, message: `${endpoint} should be disabled but returned ${response.status}` }
+        return {
+          success: false,
+          message: `${endpoint} should be disabled but returned ${response.status}`,
+        }
       }
     }
   }
@@ -116,16 +119,19 @@ class SecurityTester {
       '/api/secure/migration/migrate-all',
       '/api/secure/sync/start',
       '/api/secure/sync/stop',
-      '/api/secure/admin/stats'
+      '/api/secure/admin/stats',
     ]
 
     for (const endpoint of secureEndpoints) {
       const response = await this.makeRequest(endpoint, { method: 'GET' })
-      
+
       if (response.status === 401) {
         return { success: true, message: `${endpoint} correctly requires authentication` }
       } else {
-        return { success: false, message: `${endpoint} should require auth but returned ${response.status}` }
+        return {
+          success: false,
+          message: `${endpoint} should require auth but returned ${response.status}`,
+        }
       }
     }
   }
@@ -134,24 +140,24 @@ class SecurityTester {
   async testRateLimiting() {
     const endpoint = '/api/test/secure'
     const requests = []
-    
+
     // 빠른 연속 요청 (15개)
     for (let i = 0; i < 15; i++) {
       requests.push(this.makeRequest(endpoint))
     }
-    
+
     const responses = await Promise.all(requests)
     const rateLimitedResponses = responses.filter(r => r.status === 429)
-    
+
     if (rateLimitedResponses.length > 0) {
-      return { 
-        success: true, 
-        message: `Rate limiting working: ${rateLimitedResponses.length} requests blocked` 
+      return {
+        success: true,
+        message: `Rate limiting working: ${rateLimitedResponses.length} requests blocked`,
       }
     } else {
-      return { 
-        success: false, 
-        message: 'Rate limiting not working - all requests succeeded' 
+      return {
+        success: false,
+        message: 'Rate limiting not working - all requests succeeded',
       }
     }
   }
@@ -160,22 +166,22 @@ class SecurityTester {
   async testSecurityHeaders() {
     const response = await this.makeRequest('/')
     const headers = response.headers
-    
+
     const requiredHeaders = [
       'x-content-type-options',
-      'x-frame-options', 
+      'x-frame-options',
       'x-xss-protection',
-      'referrer-policy'
+      'referrer-policy',
     ]
-    
+
     const missingHeaders = requiredHeaders.filter(header => !headers[header])
-    
+
     if (missingHeaders.length === 0) {
       return { success: true, message: 'All security headers present' }
     } else {
-      return { 
-        success: false, 
-        message: `Missing security headers: ${missingHeaders.join(', ')}` 
+      return {
+        success: false,
+        message: `Missing security headers: ${missingHeaders.join(', ')}`,
       }
     }
   }
@@ -184,17 +190,17 @@ class SecurityTester {
   async testCorsPolicy() {
     const response = await this.makeRequest('/api/test/secure', {
       headers: {
-        'Origin': 'https://malicious-site.com',
-        'Access-Control-Request-Method': 'POST'
-      }
+        Origin: 'https://malicious-site.com',
+        'Access-Control-Request-Method': 'POST',
+      },
     })
-    
+
     const allowOrigin = response.headers['access-control-allow-origin']
-    
+
     if (!allowOrigin || allowOrigin === 'https://malicious-site.com') {
-      return { 
-        success: false, 
-        message: 'CORS policy too permissive - allows malicious origins' 
+      return {
+        success: false,
+        message: 'CORS policy too permissive - allows malicious origins',
       }
     } else {
       return { success: true, message: 'CORS policy correctly restrictive' }
@@ -209,10 +215,10 @@ class SecurityTester {
 
     const response = await this.makeRequest('/api/test/secure', {
       headers: {
-        'Authorization': 'Bearer dev-admin-token-change-in-production'
-      }
+        Authorization: 'Bearer dev-admin-token-change-in-production',
+      },
     })
-    
+
     if (response.status === 200) {
       return { success: true, message: 'Dev token authentication working' }
     } else {
@@ -225,13 +231,13 @@ class SecurityTester {
     this.log('\\n' + '='.repeat(60), 'cyan')
     this.log('🔐 ASCA SECURITY TEST REPORT', 'cyan')
     this.log('='.repeat(60), 'cyan')
-    
+
     this.log(`\\n📊 Overall Results:`, 'bright')
     this.log(`   Total Tests: ${this.totalTests}`)
     this.log(`   Passed: ${this.passedTests}`, 'green')
     this.log(`   Failed: ${this.totalTests - this.passedTests}`, 'red')
     this.log(`   Success Rate: ${Math.round((this.passedTests / this.totalTests) * 100)}%`)
-    
+
     this.log(`\\n📋 Detailed Results:`, 'bright')
     this.testResults.forEach((result, index) => {
       const status = result.success ? '✅' : '❌'
@@ -239,7 +245,7 @@ class SecurityTester {
       this.log(`   ${index + 1}. ${status} ${result.name}`, color)
       this.log(`      ${result.message}`, 'reset')
     })
-    
+
     // 보안 권장사항
     this.log(`\\n🛡️  Security Recommendations:`, 'yellow')
     this.log(`   1. 정기적으로 보안 테스트 실행`)
@@ -247,23 +253,23 @@ class SecurityTester {
     this.log(`   3. Rate Limiting 설정 모니터링`)
     this.log(`   4. 감사 로그 정기 검토`)
     this.log(`   5. 보안 헤더 정책 업데이트`)
-    
+
     this.log('\\n' + '='.repeat(60), 'cyan')
   }
 
   async runAllTests() {
     this.log('🚀 Starting ASCA Security Test Suite...', 'bright')
     this.log(`📍 Testing against: ${BASE_URL}`, 'blue')
-    
+
     await this.runTest('Disabled Endpoints', () => this.testDisabledEndpoints())
     await this.runTest('Unauthenticated Access', () => this.testUnauthenticatedAccess())
     await this.runTest('Rate Limiting', () => this.testRateLimiting())
     await this.runTest('Security Headers', () => this.testSecurityHeaders())
     await this.runTest('CORS Policy', () => this.testCorsPolicy())
     await this.runTest('Dev Token (Development)', () => this.testDevToken())
-    
+
     this.generateReport()
-    
+
     // 종료 코드 설정
     process.exit(this.passedTests === this.totalTests ? 0 : 1)
   }

@@ -41,12 +41,12 @@ export class SecurityAuditLogger {
   public logEvent(event: Omit<SecurityEvent, 'timestamp'>): void {
     const fullEvent: SecurityEvent = {
       ...event,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }
 
     // 메모리에 저장
     this.events.push(fullEvent)
-    
+
     // 메모리 제한 관리
     if (this.events.length > this.maxEvents) {
       this.events = this.events.slice(-this.maxEvents / 2) // 절반만 유지
@@ -85,11 +85,11 @@ export class SecurityAuditLogger {
       user: {
         id: user.id,
         email: user.email || 'unknown',
-        role: user.role || 'unknown'
+        role: user.role || 'unknown',
       },
       details: {
-        permissions: user.permissions
-      }
+        permissions: user.permissions,
+      },
     })
   }
 
@@ -103,8 +103,8 @@ export class SecurityAuditLogger {
       source: this.extractSourceInfo(request),
       details: {
         reason,
-        authHeader: request.headers.get('authorization') ? 'present' : 'missing'
-      }
+        authHeader: request.headers.get('authorization') ? 'present' : 'missing',
+      },
     })
   }
 
@@ -119,30 +119,39 @@ export class SecurityAuditLogger {
       details: {
         count,
         limit,
-        excess: count - limit
-      }
+        excess: count - limit,
+      },
     })
   }
 
   /**
    * 의심스러운 활동 로그
    */
-  public logSuspiciousActivity(request: NextRequest, activity: string, details: Record<string, any>): void {
+  public logSuspiciousActivity(
+    request: NextRequest,
+    activity: string,
+    details: Record<string, any>
+  ): void {
     this.logEvent({
       type: 'suspicious_activity',
       severity: 'high',
       source: this.extractSourceInfo(request),
       details: {
         activity,
-        ...details
-      }
+        ...details,
+      },
     })
   }
 
   /**
    * 관리자 액션 로그
    */
-  public logAdminAction(request: NextRequest, user: AuthUser, action: string, target?: string): void {
+  public logAdminAction(
+    request: NextRequest,
+    user: AuthUser,
+    action: string,
+    target?: string
+  ): void {
     this.logEvent({
       type: 'admin_action',
       severity: 'medium',
@@ -150,12 +159,12 @@ export class SecurityAuditLogger {
       user: {
         id: user.id,
         email: user.email || 'unknown',
-        role: user.role || 'unknown'
+        role: user.role || 'unknown',
       },
       details: {
         action,
-        target
-      }
+        target,
+      },
     })
   }
 
@@ -167,7 +176,7 @@ export class SecurityAuditLogger {
       ip: this.getClientIP(request),
       userAgent: request.headers.get('user-agent') || 'unknown',
       path: request.nextUrl.pathname,
-      method: request.method
+      method: request.method,
     }
   }
 
@@ -178,11 +187,8 @@ export class SecurityAuditLogger {
     const forwardedFor = request.headers.get('x-forwarded-for')
     const realIP = request.headers.get('x-real-ip')
     const cfConnectingIP = request.headers.get('cf-connecting-ip')
-    
-    return cfConnectingIP || 
-           forwardedFor?.split(',')[0]?.trim() || 
-           realIP || 
-           'unknown'
+
+    return cfConnectingIP || forwardedFor?.split(',')[0]?.trim() || realIP || 'unknown'
   }
 
   /**
@@ -194,7 +200,7 @@ export class SecurityAuditLogger {
       type: event.type,
       source: event.source,
       user: event.user,
-      details: event.details
+      details: event.details,
     })
   }
 
@@ -230,16 +236,12 @@ export class SecurityAuditLogger {
    */
   public getStats() {
     const now = Date.now()
-    const lastHour = now - (60 * 60 * 1000)
-    const lastDay = now - (24 * 60 * 60 * 1000)
+    const lastHour = now - 60 * 60 * 1000
+    const lastDay = now - 24 * 60 * 60 * 1000
 
-    const recentEvents = this.events.filter(event => 
-      new Date(event.timestamp).getTime() > lastHour
-    )
+    const recentEvents = this.events.filter(event => new Date(event.timestamp).getTime() > lastHour)
 
-    const dailyEvents = this.events.filter(event =>
-      new Date(event.timestamp).getTime() > lastDay
-    )
+    const dailyEvents = this.events.filter(event => new Date(event.timestamp).getTime() > lastDay)
 
     return {
       total: this.events.length,
@@ -247,30 +249,39 @@ export class SecurityAuditLogger {
       lastDay: dailyEvents.length,
       byType: this.groupEventsByType(recentEvents),
       bySeverity: this.groupEventsBySeverity(recentEvents),
-      topIPs: this.getTopIPs(dailyEvents, 10)
+      topIPs: this.getTopIPs(dailyEvents, 10),
     }
   }
 
   private groupEventsByType(events: SecurityEvent[]) {
-    return events.reduce((acc, event) => {
-      acc[event.type] = (acc[event.type] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    return events.reduce(
+      (acc, event) => {
+        acc[event.type] = (acc[event.type] || 0) + 1
+        return acc
+      },
+      {} as Record<string, number>
+    )
   }
 
   private groupEventsBySeverity(events: SecurityEvent[]) {
-    return events.reduce((acc, event) => {
-      acc[event.severity] = (acc[event.severity] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    return events.reduce(
+      (acc, event) => {
+        acc[event.severity] = (acc[event.severity] || 0) + 1
+        return acc
+      },
+      {} as Record<string, number>
+    )
   }
 
   private getTopIPs(events: SecurityEvent[], limit: number) {
-    const ipCounts = events.reduce((acc, event) => {
-      const ip = event.source.ip
-      acc[ip] = (acc[ip] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    const ipCounts = events.reduce(
+      (acc, event) => {
+        const ip = event.source.ip
+        acc[ip] = (acc[ip] || 0) + 1
+        return acc
+      },
+      {} as Record<string, number>
+    )
 
     return Object.entries(ipCounts)
       .sort(([, a], [, b]) => b - a)
