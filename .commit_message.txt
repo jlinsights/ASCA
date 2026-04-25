@@ -1,1 +1,1 @@
-🔐 fix(security): H1 members/[id] GET — 본인/admin만 조회 (IDOR 차단)
+🔐 fix(security): H2 dashboard error.message 응답 제거 (정보 누설 차단)
