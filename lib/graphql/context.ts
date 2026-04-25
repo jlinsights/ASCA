@@ -113,10 +113,7 @@ async function authenticateUser(): Promise<{ user: User | null; userId: string |
     })
     return { user: user ?? null, userId }
   } catch (error) {
-    logError(
-      'GraphQL authentication error',
-      error instanceof Error ? error : undefined
-    )
+    logError('GraphQL authentication error', error instanceof Error ? error : undefined)
     return { user: null, userId: null }
   }
 }
