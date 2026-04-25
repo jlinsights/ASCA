@@ -1,1 +1,1 @@
-🔐 fix(security): C1 GraphQL Clerk session auth 구현 — Bearer token stub 제거, server-side auth() 통합
+🔐 fix(security): H1 members/[id] GET — 본인/admin만 조회 (IDOR 차단)
