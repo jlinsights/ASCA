@@ -1,1 +1,1 @@
-🧹 chore: .gitignore에 public/images/gallery/ 추가 — git history filter-repo 정리 후 향후 자동 무시 (3.8GB → 0)
+📝 plan: asca-api-security-hardening — gstack /review 발견 6 이슈(C1·C2 인증 우회 + H1-H4) PDCA Plan 작성 (security-hardening-2026-04 branch)
