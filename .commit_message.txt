@@ -1,1 +1,1 @@
-🔐 fix(security): H4 members/me — prod에서 Supabase 미초기화 시 503 (dummy data fail-closed)
+✨ chore: prettier auto-format (S5 post-hook 결과 통합)
