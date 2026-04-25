@@ -21,24 +21,19 @@ export interface SecureAPIContext {
   request: NextRequest
 }
 
-type SecureAPIHandler = (
-  context: SecureAPIContext
-) => Promise<NextResponse> | NextResponse
+type SecureAPIHandler = (context: SecureAPIContext) => Promise<NextResponse> | NextResponse
 
 /**
  * 보안이 강화된 API 라우트 래퍼
  */
-export function createSecureAPI(
-  config: SecureAPIConfig = {},
-  handler: SecureAPIHandler
-) {
+export function createSecureAPI(config: SecureAPIConfig = {}, handler: SecureAPIHandler) {
   const {
     requireAuth = true,
     rateLimitPreset = 'moderate',
     customRateLimit,
     requiredPermissions = [],
     logActions = true,
-    validateCSRF = false
+    validateCSRF = false,
   } = config
 
   return async (request: NextRequest): Promise<NextResponse> => {
@@ -51,10 +46,10 @@ export function createSecureAPI(
       const rateLimitConfig = customRateLimit || RateLimitPresets[rateLimitPreset]
       const rateLimiter = rateLimit(rateLimitConfig)
       const rateLimitResponse = await rateLimiter.check(request)
-      
+
       if (rateLimitResponse) {
         auditLogger.logRateLimit(
-          request, 
+          request,
           parseInt(rateLimitResponse.headers.get('X-RateLimit-Limit') || '0'),
           rateLimitConfig.maxRequests
         )
@@ -67,7 +62,7 @@ export function createSecureAPI(
         if (csrfError) {
           auditLogger.logSuspiciousActivity(request, 'CSRF validation failed', {
             method: request.method,
-            hasToken: request.headers.has('x-csrf-token')
+            hasToken: request.headers.has('x-csrf-token'),
           })
           return csrfError
         }
@@ -76,14 +71,14 @@ export function createSecureAPI(
       // 3. 인증 확인
       if (requireAuth) {
         const authResult = await requireAdminAuth(request)
-        
+
         if (!authResult) {
           auditLogger.logAuthFailure(request, 'Authentication failed')
           return NextResponse.json(
             {
               success: false,
               error: 'Authentication required',
-              code: 'AUTH_REQUIRED'
+              code: 'AUTH_REQUIRED',
             },
             { status: 401 }
           )
@@ -94,21 +89,25 @@ export function createSecureAPI(
 
         // 4. 권한 확인
         if (requiredPermissions.length > 0) {
-          const hasRequiredPermissions = user && requiredPermissions.every(permission =>
-            (user?.permissions?.includes('*') ?? false) || (user?.permissions?.includes(permission) ?? false)
-          )
+          const hasRequiredPermissions =
+            user &&
+            requiredPermissions.every(
+              permission =>
+                (user?.permissions?.includes('*') ?? false) ||
+                (user?.permissions?.includes(permission) ?? false)
+            )
 
           if (!hasRequiredPermissions) {
             auditLogger.logSuspiciousActivity(request, 'Insufficient permissions', {
               required: requiredPermissions,
-              userPermissions: user.permissions
+              userPermissions: user.permissions,
             })
-            
+
             return NextResponse.json(
               {
                 success: false,
                 error: 'Insufficient permissions',
-                code: 'PERMISSION_DENIED'
+                code: 'PERMISSION_DENIED',
               },
               { status: 403 }
             )
@@ -123,7 +122,7 @@ export function createSecureAPI(
           path: request.nextUrl.pathname,
           userId: user?.id,
           userRole: user?.role,
-          ip: request.headers.get('x-forwarded-for') || 'unknown'
+          ip: request.headers.get('x-forwarded-for') || 'unknown',
         })
       }
 
@@ -142,29 +141,28 @@ export function createSecureAPI(
         path: request.nextUrl.pathname,
         status: response.status,
         duration,
-        userId: user?.id
+        userId: user?.id,
       })
 
       return response
-
     } catch (error) {
       // 에러 로깅
       log.error('Secure API error', error, {
         path: request.nextUrl.pathname,
         method: request.method,
-        userId: user?.id
+        userId: user?.id,
       })
 
       auditLogger.logSuspiciousActivity(request, 'API handler error', {
         error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined
+        stack: error instanceof Error ? error.stack : undefined,
       })
 
       return NextResponse.json(
         {
           success: false,
           error: 'Internal server error',
-          code: 'INTERNAL_ERROR'
+          code: 'INTERNAL_ERROR',
         },
         { status: 500 }
       )
@@ -184,7 +182,7 @@ async function validateCSRFToken(request: NextRequest): Promise<NextResponse | n
       {
         success: false,
         error: 'CSRF token required',
-        code: 'CSRF_TOKEN_MISSING'
+        code: 'CSRF_TOKEN_MISSING',
       },
       { status: 403 }
     )
@@ -196,7 +194,7 @@ async function validateCSRFToken(request: NextRequest): Promise<NextResponse | n
       {
         success: false,
         error: 'Invalid CSRF token',
-        code: 'CSRF_TOKEN_INVALID'
+        code: 'CSRF_TOKEN_INVALID',
       },
       { status: 403 }
     )
@@ -220,7 +218,7 @@ function addSecurityHeaders(response: NextResponse): void {
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   response.headers.set('X-XSS-Protection', '1; mode=block')
-  
+
   // HSTS (HTTPS 환경에서만)
   if (process.env.NODE_ENV === 'production') {
     response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
@@ -235,14 +233,14 @@ export const SecurityPresets = {
   public: {
     requireAuth: false,
     rateLimitPreset: 'loose' as const,
-    logActions: false
+    logActions: false,
   },
 
   // 인증된 사용자 API
   authenticated: {
     requireAuth: true,
     rateLimitPreset: 'moderate' as const,
-    logActions: true
+    logActions: true,
   },
 
   // 관리자 전용 API
@@ -251,7 +249,7 @@ export const SecurityPresets = {
     rateLimitPreset: 'strict' as const,
     requiredPermissions: ['admin'],
     logActions: true,
-    validateCSRF: true
+    validateCSRF: true,
   },
 
   // 시스템 관리 API (매우 제한적)
@@ -263,9 +261,9 @@ export const SecurityPresets = {
     validateCSRF: true,
     customRateLimit: {
       maxRequests: 5,
-      windowMs: 60 * 1000 // 1분에 5회
-    }
-  }
+      windowMs: 60 * 1000, // 1분에 5회
+    },
+  },
 }
 
 /**

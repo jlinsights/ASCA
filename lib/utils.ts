@@ -1,5 +1,5 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 /**
  * Tailwind CSS 클래스를 안전하게 병합하는 함수
@@ -73,7 +73,7 @@ export function deepEqual(a: unknown, b: unknown): boolean {
     return a.getTime() === b.getTime()
   }
 
-  if (!a || !b || (typeof a !== "object" && typeof b !== "object")) {
+  if (!a || !b || (typeof a !== 'object' && typeof b !== 'object')) {
     return a === b
   }
 
@@ -82,8 +82,11 @@ export function deepEqual(a: unknown, b: unknown): boolean {
   }
 
   // 타입 안전성을 위한 체크
-  if (typeof a === 'object' && typeof b === 'object' && 
-      Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) {
+  if (
+    typeof a === 'object' &&
+    typeof b === 'object' &&
+    Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)
+  ) {
     return false
   }
 
@@ -92,7 +95,7 @@ export function deepEqual(a: unknown, b: unknown): boolean {
     return false
   }
 
-  return keys.every(k => 
+  return keys.every(k =>
     deepEqual((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k])
   )
 }
@@ -108,7 +111,6 @@ export const storage = {
       const item = window.localStorage.getItem(key)
       return item ? JSON.parse(item) : defaultValue
     } catch (error) {
-      
       return defaultValue
     }
   },
@@ -118,9 +120,7 @@ export const storage = {
 
     try {
       window.localStorage.setItem(key, JSON.stringify(value))
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   },
 
   remove: (key: string): void => {
@@ -128,9 +128,7 @@ export const storage = {
 
     try {
       window.localStorage.removeItem(key)
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   },
 
   clear: (): void => {
@@ -138,10 +136,8 @@ export const storage = {
 
     try {
       window.localStorage.clear()
-    } catch (error) {
-      
-    }
-  }
+    } catch (error) {}
+  },
 }
 
 /**
@@ -170,7 +166,7 @@ export function formatFileSize(bytes: number): string {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
   if (bytes === 0) return '0 Byte'
   const i = Math.floor(Math.log(bytes) / Math.log(1024))
-  return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i]
+  return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i]
 }
 
 /**

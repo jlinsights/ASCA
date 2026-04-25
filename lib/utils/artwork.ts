@@ -1,10 +1,10 @@
-import { 
-  Artwork, 
-  ArtworkFilters, 
-  SortOption, 
+import {
+  Artwork,
+  ArtworkFilters,
+  SortOption,
   Currency,
   ArtworkCategory,
-  ArtworkStyle 
+  ArtworkStyle,
 } from '@/lib/types/artwork'
 
 /**
@@ -71,21 +71,25 @@ export function filterArtworks(artworks: Artwork[], filters: ArtworkFilters): Ar
     }
 
     // 가격 범위 필터
-    if (filters.minPrice && (artwork.price === undefined || artwork.price < filters.minPrice)) return false
-    if (filters.maxPrice && (artwork.price === undefined || artwork.price > filters.maxPrice)) return false
+    if (filters.minPrice && (artwork.price === undefined || artwork.price < filters.minPrice))
+      return false
+    if (filters.maxPrice && (artwork.price === undefined || artwork.price > filters.maxPrice))
+      return false
 
     // 연도 범위 필터
     if (filters.minYear && artwork.year < filters.minYear) return false
     if (filters.maxYear && artwork.year > filters.maxYear) return false
 
     // 구매 가능 여부 필터
-    if (filters.isAvailable !== undefined && artwork.isAvailable !== filters.isAvailable) return false
+    if (filters.isAvailable !== undefined && artwork.isAvailable !== filters.isAvailable)
+      return false
 
     // 추천 작품 필터
     if (filters.isFeatured !== undefined && artwork.isFeatured !== filters.isFeatured) return false
 
     // 작가 필터
-    if (filters.artist && !artwork.artist.toLowerCase().includes(filters.artist.toLowerCase())) return false
+    if (filters.artist && !artwork.artist.toLowerCase().includes(filters.artist.toLowerCase()))
+      return false
 
     // 검색어 필터
     if (filters.searchTerm) {
@@ -101,17 +105,17 @@ export function filterArtworks(artworks: Artwork[], filters: ArtworkFilters): Ar
         artwork.mediumEn,
         ...artwork.tags,
         ...artwork.tagsEn,
-      ].join(' ').toLowerCase()
+      ]
+        .join(' ')
+        .toLowerCase()
 
       if (!searchableText.includes(searchTerm)) return false
     }
 
     // 태그 필터
     if (filters.tags && filters.tags.length > 0) {
-      const hasMatchingTag = filters.tags.some(tag => 
-        artwork.tags.some(artworkTag => 
-          artworkTag.toLowerCase().includes(tag.toLowerCase())
-        )
+      const hasMatchingTag = filters.tags.some(tag =>
+        artwork.tags.some(artworkTag => artworkTag.toLowerCase().includes(tag.toLowerCase()))
       )
       if (!hasMatchingTag) return false
     }
@@ -167,7 +171,7 @@ export function searchArtworks(artworks: Artwork[], searchTerm: string): Artwork
   if (!searchTerm.trim()) return artworks
 
   const term = searchTerm.toLowerCase().trim()
-  
+
   const scoredArtworks = artworks.map(artwork => {
     let score = 0
 
@@ -225,11 +229,12 @@ export function getCategoryInfo(category: ArtworkCategory) {
       titleJa: '書道',
       titleZh: '书法',
       description: '전통과 현대를 아우르는 한국, 중국, 일본의 서예 작품',
-      descriptionEn: 'Korean, Chinese, and Japanese calligraphy works spanning tradition and modernity',
+      descriptionEn:
+        'Korean, Chinese, and Japanese calligraphy works spanning tradition and modernity',
       descriptionJa: '伝統と現代を包括する韓国、中国、日本の書道作品',
       descriptionZh: '涵盖传统与现代的韩国、中国、日本书法作品',
       color: '#2563eb',
-      icon: '筆'
+      icon: '筆',
     },
     painting: {
       title: '회화',
@@ -241,7 +246,7 @@ export function getCategoryInfo(category: ArtworkCategory) {
       descriptionJa: '山水画から現代東洋画まで、多彩な絵画作品',
       descriptionZh: '从山水画到现代东方绘画的多彩作品',
       color: '#dc2626',
-      icon: '🎨'
+      icon: '🎨',
     },
     sculpture: {
       title: '조각',
@@ -253,7 +258,7 @@ export function getCategoryInfo(category: ArtworkCategory) {
       descriptionJa: '東洋の精神性を込めた立体芸術作品',
       descriptionZh: '体现东方精神性的立体艺术作品',
       color: '#059669',
-      icon: '🗿'
+      icon: '🗿',
     },
     'mixed-media': {
       title: '혼합매체',
@@ -265,8 +270,8 @@ export function getCategoryInfo(category: ArtworkCategory) {
       descriptionJa: '伝統と現代技法が出会う実験的作品',
       descriptionZh: '传统与现代技法交汇的实验性作品',
       color: '#7c3aed',
-      icon: '🎭'
-    }
+      icon: '🎭',
+    },
   }
 
   return categoryData[category]
@@ -283,7 +288,7 @@ export function getStyleInfo(style: ArtworkStyle) {
       titleJa: '伝統',
       titleZh: '传统',
       description: '고전적인 기법과 양식을 따르는 작품',
-      color: '#92400e'
+      color: '#92400e',
     },
     contemporary: {
       title: '현대',
@@ -291,7 +296,7 @@ export function getStyleInfo(style: ArtworkStyle) {
       titleJa: '現代',
       titleZh: '现代',
       description: '현대적 감각으로 재해석한 작품',
-      color: '#1f2937'
+      color: '#1f2937',
     },
     modern: {
       title: '모던',
@@ -299,8 +304,8 @@ export function getStyleInfo(style: ArtworkStyle) {
       titleJa: 'モダン',
       titleZh: '现代',
       description: '혁신적인 기법과 표현을 사용한 작품',
-      color: '#059669'
-    }
+      color: '#059669',
+    },
   }
 
   return styleData[style]
@@ -310,8 +315,8 @@ export function getStyleInfo(style: ArtworkStyle) {
  * 관련 작품을 찾는 함수
  */
 export function findRelatedArtworks(
-  targetArtwork: Artwork, 
-  allArtworks: Artwork[], 
+  targetArtwork: Artwork,
+  allArtworks: Artwork[],
   limit: number = 6
 ): Artwork[] {
   const related = allArtworks
@@ -335,9 +340,7 @@ export function findRelatedArtworks(
       }
 
       // 공통 태그
-      const commonTags = artwork.tags.filter(tag => 
-        targetArtwork.tags.includes(tag)
-      ).length
+      const commonTags = artwork.tags.filter(tag => targetArtwork.tags.includes(tag)).length
       score += commonTags * 5
 
       // 비슷한 연도 (±5년)
@@ -373,16 +376,19 @@ export function getArtworkShareUrl(artwork: Artwork, baseUrl: string = ''): stri
 /**
  * 작품 썸네일 URL 생성 함수
  */
-export function getArtworkThumbnail(artwork: Artwork, size: 'small' | 'medium' | 'large' = 'medium'): string {
+export function getArtworkThumbnail(
+  artwork: Artwork,
+  size: 'small' | 'medium' | 'large' = 'medium'
+): string {
   if (artwork.thumbnailUrl) return artwork.thumbnailUrl
-  
+
   // 기본 이미지에 크기 파라미터 추가
   const dimensions = {
     small: '200x150',
     medium: '400x300',
-    large: '800x600'
+    large: '800x600',
   }
-  
+
   return `${artwork.imageUrl}?w=${dimensions[size]}`
 }
 
@@ -398,14 +404,14 @@ export function getArtworkAvailabilityStatus(artwork: Artwork): {
     return {
       status: 'sold',
       label: '판매완료',
-      color: 'text-red-600'
+      color: 'text-red-600',
     }
   }
 
   return {
     status: 'available',
     label: '구매가능',
-    color: 'text-green-600'
+    color: 'text-green-600',
   }
 }
 
@@ -421,13 +427,13 @@ export function generateArtworkMetadata(artwork: Artwork) {
       artwork.artist,
       artwork.category,
       artwork.style,
-      ...artwork.tags
+      ...artwork.tags,
     ].join(', '),
     og: {
       title: artwork.title,
       description: artwork.description,
       image: artwork.imageUrl,
-      type: 'article'
-    }
+      type: 'article',
+    },
   }
-} 
+}

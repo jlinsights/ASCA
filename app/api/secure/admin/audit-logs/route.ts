@@ -17,23 +17,21 @@ async function secureAuditLogsHandler({ user, request }: SecureAPIContext) {
       auditLogger.logSuspiciousActivity(request, 'Unauthorized audit log access attempt', {
         userId: user?.id,
         userRole: user?.role,
-        userPermissions: user?.permissions
+        userPermissions: user?.permissions,
       })
-      
-      return NextResponse.json({
-        success: false,
-        message: 'Insufficient permissions to view audit logs',
-        code: 'AUDIT_LOG_PERMISSION_DENIED'
-      }, { status: 403 })
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Insufficient permissions to view audit logs',
+          code: 'AUDIT_LOG_PERMISSION_DENIED',
+        },
+        { status: 403 }
+      )
     }
 
     // 감사 로그 접근 기록
-    auditLogger.logAdminAction(
-      request,
-      user!,
-      'AUDIT_LOG_ACCESS',
-      'Security audit logs accessed'
-    )
+    auditLogger.logAdminAction(request, user!, 'AUDIT_LOG_ACCESS', 'Security audit logs accessed')
 
     // 쿼리 파라미터 파싱
     const url = new URL(request.url)
@@ -50,15 +48,15 @@ async function secureAuditLogsHandler({ user, request }: SecureAPIContext) {
     if (type) {
       events = events.filter(event => event.type === type)
     }
-    
+
     if (severity) {
       events = events.filter(event => event.severity === severity)
     }
-    
+
     if (ip) {
       events = events.filter(event => event.source.ip === ip)
     }
-    
+
     if (userId) {
       events = events.filter(event => event.user?.id === userId)
     }
@@ -75,8 +73,8 @@ async function secureAuditLogsHandler({ user, request }: SecureAPIContext) {
           // 민감한 정보 제거/마스킹
           source: {
             ...event.source,
-            userAgent: event.source.userAgent.substring(0, 50) + '...'
-          }
+            userAgent: event.source.userAgent.substring(0, 50) + '...',
+          },
         })),
         stats,
         filters: {
@@ -84,29 +82,31 @@ async function secureAuditLogsHandler({ user, request }: SecureAPIContext) {
           type,
           severity,
           ip,
-          userId
+          userId,
         },
         metadata: {
           retrievedBy: user?.email,
           timestamp: new Date().toISOString(),
-          totalEvents: events.length
-        }
-      }
+          totalEvents: events.length,
+        },
+      },
     })
-
   } catch (error) {
     // 에러 감사 로깅
     auditLogger.logSuspiciousActivity(request, 'Audit log retrieval failed', {
       userId: user?.id,
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
 
-    return NextResponse.json({
-      success: false,
-      message: 'Failed to retrieve audit logs',
-      error: error instanceof Error ? error.message : 'Unknown error',
-      code: 'AUDIT_LOG_RETRIEVAL_FAILED'
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Failed to retrieve audit logs',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        code: 'AUDIT_LOG_RETRIEVAL_FAILED',
+      },
+      { status: 500 }
+    )
   }
 }
 

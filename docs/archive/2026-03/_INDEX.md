@@ -1,7 +1,7 @@
 # Archive Index — 2026-03
 
-| Feature | Match Rate | Completed | Documents |
-|---------|:----------:|-----------|-----------|
-| security-hardening | 100% | 2026-03-28 | [Plan](security-hardening/security-hardening.plan.md) / [Design](security-hardening/security-hardening.design.md) / [Analysis](security-hardening/security-hardening.analysis.md) / [Report](security-hardening/security-hardening.report.md) |
-| build-stabilization | 92% | 2026-03-30 | [Analysis](build-stabilization/build-stabilization.analysis.md) / [Report](build-stabilization/build-stabilization.report.md) |
-| ui-ux-improvement | 93% | 2026-03-31 | [Analysis](ui-ux-improvement/ui-ux-improvement.analysis.md) / [Report](ui-ux-improvement/ui-ux-improvement.report.md) |
+| Feature             | Match Rate | Completed  | Documents                                                                                                                                                                                                                                     |
+| ------------------- | :--------: | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| security-hardening  |    100%    | 2026-03-28 | [Plan](security-hardening/security-hardening.plan.md) / [Design](security-hardening/security-hardening.design.md) / [Analysis](security-hardening/security-hardening.analysis.md) / [Report](security-hardening/security-hardening.report.md) |
+| build-stabilization |    92%     | 2026-03-30 | [Analysis](build-stabilization/build-stabilization.analysis.md) / [Report](build-stabilization/build-stabilization.report.md)                                                                                                                 |
+| ui-ux-improvement   |    93%     | 2026-03-31 | [Analysis](ui-ux-improvement/ui-ux-improvement.analysis.md) / [Report](ui-ux-improvement/ui-ux-improvement.report.md)                                                                                                                         |

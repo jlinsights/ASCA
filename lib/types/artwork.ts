@@ -114,7 +114,7 @@ export interface ArtworkFilters {
 }
 
 // 정렬 옵션 타입
-export type SortOption = 
+export type SortOption =
   | 'featured'
   | 'newest'
   | 'oldest'
@@ -234,4 +234,4 @@ export interface ArtworkInquiry {
   status: 'pending' | 'responded' | 'closed'
   createdAt: Date
   respondedAt?: Date
-} 
+}

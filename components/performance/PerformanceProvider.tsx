@@ -12,10 +12,7 @@ interface PerformanceProviderProps {
   }
 }
 
-export default function PerformanceProvider({ 
-  children, 
-  config = {} 
-}: PerformanceProviderProps) {
+export default function PerformanceProvider({ children, config = {} }: PerformanceProviderProps) {
   useEffect(() => {
     // Initialize performance monitoring only on client side
     if (typeof window !== 'undefined') {
@@ -24,14 +21,12 @@ export default function PerformanceProvider({
         enableConsoleLogging: process.env.NODE_ENV === 'development',
         enableLocalStorage: true,
         sampleRate: 1.0,
-        ...config
+        ...config,
       }
 
       try {
         initializePerformanceMonitoring(defaultConfig)
-      } catch (error) {
-
-      }
+      } catch (error) {}
     }
   }, [config])
 

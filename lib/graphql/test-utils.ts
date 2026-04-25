@@ -1,6 +1,6 @@
-import { DataLoader } from '@/lib/optimization/dataloader';
-import type { GraphQLContext } from './context';
-import type { User } from '@/lib/db/schema';
+import { DataLoader } from '@/lib/optimization/dataloader'
+import type { GraphQLContext } from './context'
+import type { User } from '@/lib/db/schema'
 
 /**
  * GraphQL Testing Utilities
@@ -22,7 +22,7 @@ export function createMockUser(overrides?: Partial<User>): User {
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     ...overrides,
-  } as User;
+  } as User
 }
 
 /**
@@ -35,20 +35,21 @@ export function createMockAdmin(overrides?: Partial<User>): User {
     name: 'Admin User',
     role: 'admin',
     ...overrides,
-  });
+  })
 }
 
 /**
  * Create mock DataLoaders that return predefined data
  */
 export function createMockDataLoaders(mockData?: any) {
-  const createLoader = <T>(getData: (id: string) => T | null) => ({
-    load: jest.fn((id: string) => Promise.resolve(getData(id))),
-    loadMany: jest.fn((ids: string[]) => Promise.resolve(ids.map(getData))),
-    clear: jest.fn(),
-    clearAll: jest.fn(),
-    prime: jest.fn(),
-  }) as unknown as DataLoader<string, T>;
+  const createLoader = <T>(getData: (id: string) => T | null) =>
+    ({
+      load: jest.fn((id: string) => Promise.resolve(getData(id))),
+      loadMany: jest.fn((ids: string[]) => Promise.resolve(ids.map(getData))),
+      clear: jest.fn(),
+      clearAll: jest.fn(),
+      prime: jest.fn(),
+    }) as unknown as DataLoader<string, T>
 
   return {
     userLoader: createLoader<User>(mockData?.users || (() => null)),
@@ -66,7 +67,7 @@ export function createMockDataLoaders(mockData?: any) {
     galleryLoader: createLoader<any>(mockData?.galleries || (() => null)),
     galleryArtworkLoader: createLoader<any>(mockData?.galleryArtworks || (() => null)),
     newsLoader: createLoader<any>(mockData?.news || (() => null)),
-  };
+  }
 }
 
 /**
@@ -128,18 +129,18 @@ export function createMockDb() {
     delete: jest.fn(() => ({
       where: jest.fn().mockResolvedValue(undefined),
     })),
-  } as any;
+  } as any
 }
 
 /**
  * Create a mock GraphQL context for testing
  */
 export function createMockContext(options?: {
-  user?: User | null;
-  mockData?: any;
-  db?: any;
+  user?: User | null
+  mockData?: any
+  db?: any
 }): GraphQLContext {
-  const { user = null, mockData, db = createMockDb() } = options || {};
+  const { user = null, mockData, db = createMockDb() } = options || {}
 
   return {
     db,
@@ -150,7 +151,7 @@ export function createMockContext(options?: {
       ip: '127.0.0.1',
       userAgent: 'test-agent',
     },
-  };
+  }
 }
 
 /**
@@ -159,7 +160,7 @@ export function createMockContext(options?: {
 export function createAuthContext(user?: Partial<User>): GraphQLContext {
   return createMockContext({
     user: createMockUser(user),
-  });
+  })
 }
 
 /**
@@ -168,7 +169,7 @@ export function createAuthContext(user?: Partial<User>): GraphQLContext {
 export function createAdminContext(user?: Partial<User>): GraphQLContext {
   return createMockContext({
     user: createMockAdmin(user),
-  });
+  })
 }
 
 /**
@@ -193,7 +194,7 @@ export function createMockMember(overrides?: any) {
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     ...overrides,
-  };
+  }
 }
 
 /**
@@ -212,7 +213,7 @@ export function createMockArtist(overrides?: any) {
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     ...overrides,
-  };
+  }
 }
 
 /**
@@ -232,7 +233,7 @@ export function createMockArtwork(overrides?: any) {
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     ...overrides,
-  };
+  }
 }
 
 /**
@@ -253,7 +254,7 @@ export function createMockExhibition(overrides?: any) {
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     ...overrides,
-  };
+  }
 }
 
 /**
@@ -275,19 +276,19 @@ export function createMockEvent(overrides?: any) {
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     ...overrides,
-  };
+  }
 }
 
 /**
  * Helper to expect authentication error
  */
 export function expectAuthError(fn: () => Promise<any>) {
-  return expect(fn()).rejects.toThrow('Authentication required');
+  return expect(fn()).rejects.toThrow('Authentication required')
 }
 
 /**
  * Helper to expect authorization error
  */
 export function expectAuthzError(fn: () => Promise<any>) {
-  return expect(fn()).rejects.toThrow(/Not authorized|Requires .* role/);
+  return expect(fn()).rejects.toThrow(/Not authorized|Requires .* role/)
 }

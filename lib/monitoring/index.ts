@@ -15,7 +15,7 @@ export {
   Measure,
   type PerformanceMetric,
   type PerformanceAlert,
-} from './performance-monitor';
+} from './performance-monitor'
 
 // Metrics Collector
 export {
@@ -29,7 +29,7 @@ export {
   type AggregatedMetric,
   type TrendAnalysis,
   type AnomalyDetection,
-} from './metrics-collector';
+} from './metrics-collector'
 
 // Slow Query Detector
 export {
@@ -45,22 +45,22 @@ export {
   type QueryPatternStats,
   type NPlusOneDetection,
   type DetectorConfig,
-} from './slow-query-detector';
+} from './slow-query-detector'
 
-import { performanceMonitor } from './performance-monitor';
-import { metricsCollector } from './metrics-collector';
-import { slowQueryDetector } from './slow-query-detector';
+import { performanceMonitor } from './performance-monitor'
+import { metricsCollector } from './metrics-collector'
+import { slowQueryDetector } from './slow-query-detector'
 
 /**
  * 모니터링 시스템 초기화
  */
 export function initializeMonitoring(config?: {
-  enablePerformanceMonitoring?: boolean;
-  enableMetricsCollection?: boolean;
-  enableSlowQueryDetection?: boolean;
-  metricsCollectionInterval?: number;
-  slowQueryThreshold?: number;
-  criticalQueryThreshold?: number;
+  enablePerformanceMonitoring?: boolean
+  enableMetricsCollection?: boolean
+  enableSlowQueryDetection?: boolean
+  metricsCollectionInterval?: number
+  slowQueryThreshold?: number
+  criticalQueryThreshold?: number
 }): void {
   const {
     enablePerformanceMonitoring = true,
@@ -69,16 +69,16 @@ export function initializeMonitoring(config?: {
     metricsCollectionInterval = 60000,
     slowQueryThreshold = 100,
     criticalQueryThreshold = 1000,
-  } = config || {};
+  } = config || {}
 
   // 성능 모니터링 시작
   if (enablePerformanceMonitoring) {
-    performanceMonitor.start();
+    performanceMonitor.start()
   }
 
   // 메트릭 수집 시작
   if (enableMetricsCollection) {
-    metricsCollector.start(metricsCollectionInterval);
+    metricsCollector.start(metricsCollectionInterval)
   }
 
   // 느린 쿼리 감지 시작
@@ -86,8 +86,8 @@ export function initializeMonitoring(config?: {
     slowQueryDetector.updateConfig({
       slowQueryThreshold,
       criticalQueryThreshold,
-    });
-    slowQueryDetector.start();
+    })
+    slowQueryDetector.start()
   }
 }
 
@@ -95,9 +95,9 @@ export function initializeMonitoring(config?: {
  * 모니터링 시스템 종료
  */
 export function shutdownMonitoring(): void {
-  performanceMonitor.stop();
-  metricsCollector.stop();
-  slowQueryDetector.stop();
+  performanceMonitor.stop()
+  metricsCollector.stop()
+  slowQueryDetector.stop()
 }
 
 /**
@@ -108,5 +108,5 @@ export function getMonitoringStatus() {
     performance: performanceMonitor.getSystemStatus(),
     metricsCollection: metricsCollector.getStats(),
     slowQueryDetection: slowQueryDetector.getStats(),
-  };
+  }
 }
