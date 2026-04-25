@@ -90,11 +90,7 @@ export const GET = withAdmin(async (request, auth) => {
     logError('Dashboard API error', error instanceof Error ? error : undefined)
 
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch dashboard data',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      { success: false, error: 'Failed to fetch dashboard data' },
       { status: 500 }
     )
   }
