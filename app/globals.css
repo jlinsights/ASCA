@@ -157,7 +157,7 @@
     --primary-foreground: oklch(0.98 0.003 100);
 
     --secondary: oklch(0.95 0.005 100); /* Warm light gray */
-    --secondary-foreground: oklch(0.20 0 0);
+    --secondary-foreground: oklch(0.2 0 0);
 
     --muted: oklch(0.94 0.004 100); /* Warm muted bg */
     --muted-foreground: oklch(0.51 0 0); /* Stone Gray (#707070) */
@@ -168,7 +168,7 @@
     --destructive: oklch(0.53 0.21 25); /* Error red (#dc2626) */
     --destructive-foreground: oklch(0.98 0.003 100);
 
-    --border: oklch(0.90 0.003 100); /* Subtle warm border (#e2e2dd) */
+    --border: oklch(0.9 0.003 100); /* Subtle warm border (#e2e2dd) */
     --input: oklch(0.87 0.004 100); /* Input border (#d9d9d4) */
     --ring: oklch(0.69 0.04 155); /* Celadon Green for focus rings */
 
@@ -226,14 +226,14 @@
     --chart-2: oklch(0.69 0.04 155); /* Celadon Green */
     --chart-3: oklch(0.51 0 0); /* Stone Gray */
     --chart-4: oklch(0.55 0.12 155); /* East Wood */
-    --chart-5: oklch(0.44 0.10 21); /* Terra Red */
+    --chart-5: oklch(0.44 0.1 21); /* Terra Red */
     --sidebar: oklch(0.96 0.004 100);
     --sidebar-foreground: oklch(0.16 0 0);
     --sidebar-primary: oklch(0.45 0.16 25); /* Scholar Red */
     --sidebar-primary-foreground: oklch(0.98 0.003 100);
     --sidebar-accent: oklch(0.69 0.04 155); /* Celadon Green */
     --sidebar-accent-foreground: oklch(0.16 0 0);
-    --sidebar-border: oklch(0.90 0.003 100);
+    --sidebar-border: oklch(0.9 0.003 100);
     --sidebar-ring: oklch(0.69 0.04 155);
     --font-sans: DM Sans, sans-serif;
     --font-serif: Playfair Display, ui-serif, serif;
@@ -261,10 +261,10 @@
     --background: oklch(0.16 0 0); /* Traditional Ink Black (#1a1a1a) */
     --foreground: oklch(0.967 0.005 100); /* Rice Paper White (#f5f5f0) */
 
-    --card: oklch(0.20 0 0); /* #242424 */
+    --card: oklch(0.2 0 0); /* #242424 */
     --card-foreground: oklch(0.95 0.004 100);
 
-    --popover: oklch(0.20 0 0);
+    --popover: oklch(0.2 0 0);
     --popover-foreground: oklch(0.95 0.004 100);
 
     --primary: oklch(0.58 0.14 25); /* Lighter Scholar Red for dark bg */
@@ -279,11 +279,11 @@
     --accent: oklch(0.74 0.04 155); /* Brighter Celadon Green for dark bg */
     --accent-foreground: oklch(0.16 0 0);
 
-    --destructive: oklch(0.58 0.20 25); /* Visible error red on dark bg */
+    --destructive: oklch(0.58 0.2 25); /* Visible error red on dark bg */
     --destructive-foreground: oklch(0.98 0.003 100);
 
     --border: oklch(0.28 0 0); /* Subtle dark border (#3a3a3a) */
-    --input: oklch(0.30 0 0);
+    --input: oklch(0.3 0 0);
     --ring: oklch(0.74 0.04 155); /* Celadon Green for focus rings */
 
     /* 다크 모드 최적화 */
@@ -297,9 +297,9 @@
     --celadon-green: #96b69f;
     --chart-1: oklch(0.58 0.14 25);
     --chart-2: oklch(0.74 0.04 155);
-    --chart-3: oklch(0.60 0 0);
-    --chart-4: oklch(0.65 0.10 155);
-    --chart-5: oklch(0.55 0.10 21);
+    --chart-3: oklch(0.6 0 0);
+    --chart-4: oklch(0.65 0.1 155);
+    --chart-5: oklch(0.55 0.1 21);
     --radius: 0.5rem;
     --sidebar: oklch(0.14 0 0);
     --sidebar-foreground: oklch(0.95 0.004 100);

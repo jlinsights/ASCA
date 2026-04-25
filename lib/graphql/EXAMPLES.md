@@ -73,6 +73,7 @@ query GetMember($id: ID!) {
 ```
 
 Variables:
+
 ```json
 {
   "id": "member-123"
@@ -115,6 +116,7 @@ query ListMembers($first: Int, $after: String, $status: MemberStatus) {
 ```
 
 Variables:
+
 ```json
 {
   "first": 20,
@@ -140,6 +142,7 @@ query SearchMembers($query: String!, $limit: Int) {
 ```
 
 Variables:
+
 ```json
 {
   "query": "김",
@@ -216,6 +219,7 @@ query GetArtist($id: ID!) {
 ```
 
 Variables:
+
 ```json
 {
   "id": "artist-123"
@@ -277,6 +281,7 @@ query ListArtworks(
 ```
 
 Variables:
+
 ```json
 {
   "first": 20,
@@ -408,6 +413,7 @@ query GetEvents($first: Int, $type: EventType, $status: EventStatus) {
 ```
 
 Variables:
+
 ```json
 {
   "first": 10,
@@ -436,6 +442,7 @@ mutation CreateMember($input: CreateMemberInput!) {
 ```
 
 Variables:
+
 ```json
 {
   "input": {
@@ -471,6 +478,7 @@ mutation UpdateMember($id: ID!, $input: UpdateMemberInput!) {
 ```
 
 Variables:
+
 ```json
 {
   "id": "member-123",
@@ -496,6 +504,7 @@ mutation ApproveMember($id: ID!) {
 ```
 
 Variables:
+
 ```json
 {
   "id": "member-123"
@@ -519,6 +528,7 @@ mutation SubmitApplication($input: MembershipApplicationInput!) {
 ```
 
 Variables:
+
 ```json
 {
   "input": {
@@ -552,6 +562,7 @@ mutation CreateArtist($input: CreateArtistInput!) {
 ```
 
 Variables:
+
 ```json
 {
   "input": {
@@ -589,6 +600,7 @@ mutation CreateArtwork($input: CreateArtworkInput!) {
 ```
 
 Variables:
+
 ```json
 {
   "input": {
@@ -635,6 +647,7 @@ mutation RegisterForEvent($eventId: ID!, $notes: String) {
 ```
 
 Variables:
+
 ```json
 {
   "eventId": "event-123",
@@ -651,6 +664,7 @@ mutation CancelRegistration($participantId: ID!) {
 ```
 
 Variables:
+
 ```json
 {
   "participantId": "participant-123"
@@ -803,6 +817,7 @@ GraphQL errors are returned in the `errors` array:
 ```
 
 Common error codes:
+
 - `UNAUTHENTICATED`: Not logged in
 - `FORBIDDEN`: Insufficient permissions
 - `BAD_USER_INPUT`: Invalid input data
@@ -813,9 +828,11 @@ Common error codes:
 
 ## GraphQL Playground (Development Only)
 
-Visit http://localhost:3000/api/graphql in your browser to access the interactive GraphQL Playground.
+Visit http://localhost:3000/api/graphql in your browser to access the
+interactive GraphQL Playground.
 
 Features:
+
 - Auto-complete
 - Schema documentation
 - Query history
@@ -825,9 +842,11 @@ Features:
 
 ## Performance Tips
 
-1. **Use DataLoader**: Relations are automatically batched using DataLoader to prevent N+1 queries
+1. **Use DataLoader**: Relations are automatically batched using DataLoader to
+   prevent N+1 queries
 
-2. **Request Only Needed Fields**: Only query fields you need to reduce response size
+2. **Request Only Needed Fields**: Only query fields you need to reduce response
+   size
 
 3. **Use Pagination**: Use cursor-based pagination for large lists
 

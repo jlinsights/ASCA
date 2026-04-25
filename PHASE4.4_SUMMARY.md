@@ -2,7 +2,8 @@
 
 ## 개요
 
-ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스트를 완성했습니다.
+ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스트를
+완성했습니다.
 
 ## 구현 내용
 
@@ -11,6 +12,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 #### 테스트 범위 (43 tests)
 
 **조회 메서드**:
+
 ```typescript
 ✅ getMemberById
   - ID로 회원 조회
@@ -26,6 +28,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **검색 기능**:
+
 ```typescript
 ✅ searchMembers(criteria, page, limit)
   - 검색 조건으로 회원 검색
@@ -34,6 +37,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **필터링 메서드**:
+
 ```typescript
 ✅ getActiveMembers(page?, limit?)
   - 활성 회원 조회
@@ -44,6 +48,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **생성 작업**:
+
 ```typescript
 ✅ createMember(data)
   - 유효한 데이터로 회원 생성
@@ -54,6 +59,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **수정 작업**:
+
 ```typescript
 ✅ updateMember(id, data)
   - 유효한 데이터로 회원 정보 수정
@@ -63,6 +69,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **삭제 작업**:
+
 ```typescript
 ✅ deleteMember(id)
   - 존재하는 회원 삭제
@@ -70,6 +77,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **상태 관리**:
+
 ```typescript
 ✅ approveMember(id)
   - pending_approval → active 상태 전환
@@ -87,6 +95,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **검증 관리**:
+
 ```typescript
 ✅ verifyMember(id)
   - 회원 검증 (is_verified = true)
@@ -94,6 +103,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **레벨 관리**:
+
 ```typescript
 ✅ updateMemberLevel(id, levelId)
   - 멤버십 레벨 변경
@@ -101,12 +111,14 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **활동 추적**:
+
 ```typescript
 ✅ trackActivity(id)
   - last_active 타임스탬프 업데이트
 ```
 
 **통계 메서드**:
+
 ```typescript
 ✅ getStatistics()
   - 회원 통계 조회
@@ -121,6 +133,7 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 ```
 
 **대량 작업**:
+
 ```typescript
 ✅ bulkApproveMember(ids[])
   - 다중 회원 승인
@@ -138,18 +151,18 @@ ASCA 프로젝트의 Phase 4.4에서 Service Layer의 비즈니스 로직 테스
 
 ```typescript
 // Repository mock 설정
-jest.mock('@/lib/repositories/member.repository');
+jest.mock('@/lib/repositories/member.repository')
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  jest.clearAllMocks()
 
-  mockRepository = new MemberRepository() as jest.Mocked<MemberRepository>;
-  memberService = new MemberService();
-  (memberService as any).repository = mockRepository;
-});
+  mockRepository = new MemberRepository() as jest.Mocked<MemberRepository>
+  memberService = new MemberService()
+  ;(memberService as any).repository = mockRepository
+})
 
 // 각 테스트에서 repository 메서드 mocking
-mockRepository.findById = jest.fn().mockResolvedValue(mockMember);
+mockRepository.findById = jest.fn().mockResolvedValue(mockMember)
 ```
 
 ### AAA Pattern 적용
@@ -157,22 +170,22 @@ mockRepository.findById = jest.fn().mockResolvedValue(mockMember);
 ```typescript
 test('should approve pending member', async () => {
   // Arrange
-  mockRepository.findById = jest.fn().mockResolvedValue(mockPendingMember);
+  mockRepository.findById = jest.fn().mockResolvedValue(mockPendingMember)
   mockRepository.updateStatus = jest.fn().mockResolvedValue({
     ...mockPendingMember,
     membership_status: 'active',
-  });
+  })
 
   // Act
-  const result = await memberService.approveMember(mockPendingMember.id);
+  const result = await memberService.approveMember(mockPendingMember.id)
 
   // Assert
-  expect(result.membership_status).toBe('active');
+  expect(result.membership_status).toBe('active')
   expect(mockRepository.updateStatus).toHaveBeenCalledWith(
     mockPendingMember.id,
     'active'
-  );
-});
+  )
+})
 ```
 
 ### Error Handling 테스트
@@ -180,14 +193,14 @@ test('should approve pending member', async () => {
 ```typescript
 test('should throw conflict error for duplicate email', async () => {
   // Arrange
-  mockRepository.findByEmail = jest.fn().mockResolvedValue(mockMember);
+  mockRepository.findByEmail = jest.fn().mockResolvedValue(mockMember)
 
   // Act & Assert
-  await expect(memberService.createMember(createData)).rejects.toThrow(ApiError);
+  await expect(memberService.createMember(createData)).rejects.toThrow(ApiError)
   await expect(memberService.createMember(createData)).rejects.toThrow(
     'Email already exists'
-  );
-});
+  )
+})
 ```
 
 ### 상태 전환 로직 테스트
@@ -195,13 +208,13 @@ test('should throw conflict error for duplicate email', async () => {
 ```typescript
 test('should throw bad request for non-pending member', async () => {
   // Arrange
-  mockRepository.findById = jest.fn().mockResolvedValue(mockMember); // active 상태
+  mockRepository.findById = jest.fn().mockResolvedValue(mockMember) // active 상태
 
   // Act & Assert
   await expect(memberService.approveMember(mockMember.id)).rejects.toThrow(
     'Member is not pending approval'
-  );
-});
+  )
+})
 ```
 
 ## 테스트 인프라 개선
@@ -377,10 +390,10 @@ Time:        0.73 s
 
 ## 커버리지 목표
 
-| Service | 목표 | 테스트 개수 | 현재 상태 |
-|---------|------|------------|-----------|
-| MemberService | 90%+ | 43 tests | ✅ 구현 완료 |
-| **Total** | **90%+** | **43 tests** | ✅ **구현 완료** |
+| Service       | 목표     | 테스트 개수  | 현재 상태        |
+| ------------- | -------- | ------------ | ---------------- |
+| MemberService | 90%+     | 43 tests     | ✅ 구현 완료     |
+| **Total**     | **90%+** | **43 tests** | ✅ **구현 완료** |
 
 ## 다음 단계
 

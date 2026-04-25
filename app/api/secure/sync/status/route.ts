@@ -11,17 +11,14 @@ import { NextResponse } from 'next/server'
 async function secureSyncStatusHandler({ user, request }: SecureAPIContext) {
   try {
     // 관리자 액션 로깅 (상태 조회)
-    auditLogger.logAdminAction(
-      request,
-      user!,
-      'SYNC_STATUS_CHECK',
-      'Sync engine status requested'
-    )
+    auditLogger.logAdminAction(request, user!, 'SYNC_STATUS_CHECK', 'Sync engine status requested')
 
     // 동기화 엔진 상태 조회
     const { getSyncEngine } = await import('@/lib/sync-engine')
     const engine = getSyncEngine()
-    const status = (engine as any).getStatus ? (engine as any).getStatus() : { active: false, message: 'Status not available' }
+    const status = (engine as any).getStatus
+      ? (engine as any).getStatus()
+      : { active: false, message: 'Status not available' }
 
     return NextResponse.json({
       success: true,
@@ -33,24 +30,26 @@ async function secureSyncStatusHandler({ user, request }: SecureAPIContext) {
         security: {
           authenticated: true,
           userRole: user?.role,
-          accessLevel: 'admin'
-        }
-      }
+          accessLevel: 'admin',
+        },
+      },
     })
-
   } catch (error) {
     // 에러 감사 로깅
     auditLogger.logSuspiciousActivity(request, 'Sync status check failed', {
       userId: user?.id,
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
 
-    return NextResponse.json({
-      success: false,
-      message: 'Failed to retrieve sync engine status',
-      error: error instanceof Error ? error.message : 'Unknown error',
-      code: 'SYNC_STATUS_FAILED'
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Failed to retrieve sync engine status',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        code: 'SYNC_STATUS_FAILED',
+      },
+      { status: 500 }
+    )
   }
 }
 

@@ -10,10 +10,9 @@ export interface ExtendedArtist extends BaseArtist {
   email?: string
   phone?: string
 
-  
   // 학력 정보
   education?: string[]
-  
+
   // 통계 정보
   stats?: {
     artworksCount: number
@@ -23,10 +22,10 @@ export interface ExtendedArtist extends BaseArtist {
     averagePrice?: number
     soldCount?: number
   }
-  
+
   // 작품 정보
   artworks?: ExtendedArtwork[]
-  
+
   // 소셜 미디어
   socialMedia: {
     instagram?: string
@@ -34,7 +33,7 @@ export interface ExtendedArtist extends BaseArtist {
     twitter?: string
     youtube?: string
   } | null
-  
+
   // 추가 메타데이터
   metadata?: {
     featured: boolean
@@ -94,23 +93,33 @@ export function isExtendedArtist(artist: BaseArtist | ExtendedArtist): artist is
   return 'stats' in artist || 'education' in artist || 'socialMedia' in artist
 }
 
-export function hasArtworks(artist: ExtendedArtist): artist is ExtendedArtist & { artworks: ExtendedArtwork[] } {
+export function hasArtworks(
+  artist: ExtendedArtist
+): artist is ExtendedArtist & { artworks: ExtendedArtwork[] } {
   return Array.isArray(artist.artworks) && artist.artworks.length > 0
 }
 
-export function hasStats(artist: ExtendedArtist): artist is ExtendedArtist & { stats: NonNullable<ExtendedArtist['stats']> } {
+export function hasStats(
+  artist: ExtendedArtist
+): artist is ExtendedArtist & { stats: NonNullable<ExtendedArtist['stats']> } {
   return artist.stats != null
 }
 
 // Helper functions
-export function getArtistDisplayName(artist: BaseArtist | ExtendedArtist, language: 'ko' | 'en' = 'ko'): string {
+export function getArtistDisplayName(
+  artist: BaseArtist | ExtendedArtist,
+  language: 'ko' | 'en' = 'ko'
+): string {
   if (language === 'en' && artist.nameEn) {
     return artist.nameEn
   }
   return artist.name
 }
 
-export function getArtistBio(artist: BaseArtist | ExtendedArtist, language: 'ko' | 'en' = 'ko'): string {
+export function getArtistBio(
+  artist: BaseArtist | ExtendedArtist,
+  language: 'ko' | 'en' = 'ko'
+): string {
   if (language === 'en' && artist.bioEn) {
     return artist.bioEn
   }
@@ -134,19 +143,23 @@ export function getArtistContactInfo(artist: ExtendedArtist): {
     email: artist.email,
     phone: artist.phone,
     website: artist.website,
-    location: artist.location
+    location: artist.location,
   }
 }
 
-export function getArtistSocialMedia(artist: ExtendedArtist): NonNullable<ExtendedArtist['socialMedia']> {
+export function getArtistSocialMedia(
+  artist: ExtendedArtist
+): NonNullable<ExtendedArtist['socialMedia']> {
   return artist.socialMedia || {}
 }
 
 export function getArtistStats(artist: ExtendedArtist): NonNullable<ExtendedArtist['stats']> {
-  return artist.stats || {
-    artworksCount: 0,
-    exhibitionsCount: 0,
-    viewCount: 0,
-    followers: 0
-  }
+  return (
+    artist.stats || {
+      artworksCount: 0,
+      exhibitionsCount: 0,
+      viewCount: 0,
+      followers: 0,
+    }
+  )
 }

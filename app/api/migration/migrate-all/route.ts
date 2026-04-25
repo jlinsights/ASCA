@@ -11,8 +11,8 @@ export async function POST(request: NextRequest) {
       message: 'SECURITY: Migration endpoint temporarily disabled',
       reason: 'This endpoint is disabled. Requires implementation of Admin Role check.',
       disabledAt: '2025-07-12',
-      contact: 'Contact system administrator'
+      contact: 'Contact system administrator',
     },
     { status: 503 } // Service Unavailable
   )
-} 
+}

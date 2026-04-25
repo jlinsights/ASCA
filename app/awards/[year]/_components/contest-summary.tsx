@@ -1,12 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import {
-  Trophy,
-  Award,
-  Calendar,
-  Users,
-  Info,
-} from 'lucide-react'
+import { Trophy, Award, Calendar, Users, Info } from 'lucide-react'
 
 interface ContestSummaryProps {
   date: string
@@ -51,9 +45,7 @@ export function ContestSummary({
                 <Users className='h-5 w-5 text-scholar-red mt-0.5' />
                 <div>
                   <p className='text-sm text-muted-foreground'>총 출품</p>
-                  <p className='font-medium text-foreground'>
-                    {totalEntries.toLocaleString()}점
-                  </p>
+                  <p className='font-medium text-foreground'>{totalEntries.toLocaleString()}점</p>
                 </div>
               </div>
             )}
@@ -95,8 +87,7 @@ export function ContestSummary({
             <div>
               <p className='font-medium text-blue-800 dark:text-blue-300 mb-1'>개최 예정</p>
               <p className='text-sm text-blue-700 dark:text-blue-400'>
-                {title}은 아직 개최 전입니다. 일정이 확정되면 공지사항을 통해
-                안내드리겠습니다.
+                {title}은 아직 개최 전입니다. 일정이 확정되면 공지사항을 통해 안내드리겠습니다.
               </p>
             </div>
           </CardContent>

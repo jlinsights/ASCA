@@ -23,10 +23,7 @@ export async function fetchExhibitions(
     return { data: null, error: { message: 'Supabase not configured' } }
   }
 
-  let query = supabase
-    .from('exhibitions')
-    .select('*')
-    .eq('is_published', true)
+  let query = supabase.from('exhibitions').select('*').eq('is_published', true)
 
   // Apply filters
   if (filters?.status) {
@@ -100,10 +97,12 @@ export async function fetchArtistExhibitions(
 
   let query = supabase
     .from('exhibitions')
-    .select(`
+    .select(
+      `
       *,
       exhibition_artists!inner(artist_id)
-    `)
+    `
+    )
     .eq('exhibition_artists.artist_id', artistId)
     .eq('is_published', true)
 
@@ -143,7 +142,8 @@ export async function createExhibition(
       location: formData.location,
       venue: formData.venue,
       curator: formData.curator,
-      featured_image_url: typeof formData.featuredImage === 'string' ? formData.featuredImage : null,
+      featured_image_url:
+        typeof formData.featuredImage === 'string' ? formData.featuredImage : null,
       is_featured: formData.isFeatured || false,
       is_published: formData.isPublished !== false,
       max_capacity: formData.maxCapacity,
@@ -261,7 +261,7 @@ export async function addArtworksToExhibition(
     .order('display_order', { ascending: false })
     .limit(1)
 
-  const startOrder = existing && existing.length > 0 ? existing[0]?.display_order ?? -1 + 1 : 0
+  const startOrder = existing && existing.length > 0 ? (existing[0]?.display_order ?? -1 + 1) : 0
 
   const inserts = artworkIds.map((artworkId, index) => ({
     exhibition_id: exhibitionId,
@@ -269,10 +269,7 @@ export async function addArtworksToExhibition(
     display_order: startOrder + index,
   }))
 
-  const { data, error } = await supabase
-    .from('exhibition_artworks')
-    .insert(inserts)
-    .select()
+  const { data, error } = await supabase.from('exhibition_artworks').insert(inserts).select()
 
   return { data, error }
 }
@@ -345,10 +342,7 @@ export async function addArtistsToExhibition(
     display_order: index,
   }))
 
-  const { data, error } = await supabase
-    .from('exhibition_artists')
-    .insert(inserts)
-    .select()
+  const { data, error } = await supabase.from('exhibition_artists').insert(inserts).select()
 
   return { data, error }
 }

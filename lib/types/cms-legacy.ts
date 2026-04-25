@@ -1,4 +1,3 @@
- 
 export interface Notice {
   id: string
   title: string
@@ -44,7 +43,7 @@ export interface Exhibition {
   website?: string
   created_at: string
   updated_at: string
-  
+
   // 통계 및 관련 데이터
   stats?: {
     total_artworks: number
@@ -79,7 +78,14 @@ export interface Event {
   organizer?: string
   featured_image_url?: string
   gallery_images?: string[]
-  event_type: 'workshop' | 'lecture' | 'competition' | 'exhibition' | 'ceremony' | 'meeting' | 'other'
+  event_type:
+    | 'workshop'
+    | 'lecture'
+    | 'competition'
+    | 'exhibition'
+    | 'ceremony'
+    | 'meeting'
+    | 'other'
   status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled'
   is_featured: boolean
   is_published: boolean
@@ -208,4 +214,4 @@ export interface EventFormData {
   registration_deadline?: string
   contact_email?: string
   contact_phone?: string
-} 
+}

@@ -6,10 +6,7 @@ import { requireAdminAuth } from '@/lib/auth/middleware'
 import type { CulturalExchangeProgramInfo } from '@/lib/types/membership'
 
 // GET - 특정 프로그램 상세 조회
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: programId } = await params
 
@@ -53,7 +50,7 @@ export async function GET(
       currentParticipants: program.currentParticipants || 0,
       fee: program.fee || 0,
       currency: program.currency || 'KRW',
-      location: program.location || '', 
+      location: program.location || '',
       venue: program.venue || undefined,
       accommodationProvided: program.accommodationProvided || false,
       mealsProvided: program.mealsProvided || false,
@@ -63,7 +60,9 @@ export async function GET(
       metadata: (program.metadata as Record<string, any>) || undefined,
       startDate: new Date(program.startDate),
       endDate: new Date(program.endDate),
-      applicationDeadline: program.applicationDeadline ? new Date(program.applicationDeadline) : undefined,
+      applicationDeadline: program.applicationDeadline
+        ? new Date(program.applicationDeadline)
+        : undefined,
       createdAt: new Date(program.createdAt),
       updatedAt: new Date(program.updatedAt),
       // JSON 필드 처리 (이미 객체임)
@@ -75,14 +74,14 @@ export async function GET(
       benefits: (program.benefits as any[]) || [],
       schedule: ((program.schedule as any[]) || []).map((item: any) => ({
         ...item,
-        date: new Date(item.date)
+        date: new Date(item.date),
       })),
       coordinators: (program.coordinators as any[]) || [],
       images: (program.images as string[]) || [],
       documents: ((program.documents as any[]) || []).map((doc: any) => ({
         ...doc,
-        updatedAt: new Date(doc.updatedAt)
-      }))
+        updatedAt: new Date(doc.updatedAt),
+      })),
     }
 
     return NextResponse.json({
@@ -93,12 +92,10 @@ export async function GET(
         ...p,
         appliedAt: new Date(p.appliedAt),
         approvedAt: p.approvedAt ? new Date(p.approvedAt) : undefined,
-        completedAt: p.completedAt ? new Date(p.completedAt) : undefined
-      }))
+        completedAt: p.completedAt ? new Date(p.completedAt) : undefined,
+      })),
     })
-
   } catch (error) {
-
     return NextResponse.json(
       { success: false, error: '프로그램 정보를 가져오는 중 오류가 발생했습니다' },
       { status: 500 }
@@ -107,17 +104,17 @@ export async function GET(
 }
 
 // PUT - 프로그램 정보 수정 (관리자 전용)
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: programId } = await params
 
     // 관리자 인증 확인
     const user = await requireAdminAuth(request)
     if (!user) {
-      return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: '관리자 인증이 필요합니다' },
+        { status: 403 }
+      )
     }
 
     const body = await request.json()
@@ -138,16 +135,34 @@ export async function PUT(
 
     // 업데이트할 데이터 준비
     const updateData: any = {
-      updatedAt: new Date()
+      updatedAt: new Date(),
     }
 
     // 업데이트할 필드들
     const fields = [
-      'title', 'titleKo', 'titleEn', 'titleCn', 'titleJp',
-      'description', 'descriptionKo', 'descriptionEn', 'descriptionCn', 'descriptionJp',
-      'programType', 'duration', 'maxParticipants', 'fee', 'currency',
-      'location', 'venue', 'accommodationProvided', 'mealsProvided', 'transportationProvided',
-      'organizerId', 'isFeatured', 'status'
+      'title',
+      'titleKo',
+      'titleEn',
+      'titleCn',
+      'titleJp',
+      'description',
+      'descriptionKo',
+      'descriptionEn',
+      'descriptionCn',
+      'descriptionJp',
+      'programType',
+      'duration',
+      'maxParticipants',
+      'fee',
+      'currency',
+      'location',
+      'venue',
+      'accommodationProvided',
+      'mealsProvided',
+      'transportationProvided',
+      'organizerId',
+      'isFeatured',
+      'status',
     ]
 
     fields.forEach(field => {
@@ -158,8 +173,15 @@ export async function PUT(
 
     // JSON 필드들 (DB에는 객체로 저장)
     const jsonFields = [
-      'targetAudience', 'partnerOrganizations', 'countries', 'languages',
-      'requirements', 'benefits', 'coordinators', 'images', 'documents'
+      'targetAudience',
+      'partnerOrganizations',
+      'countries',
+      'languages',
+      'requirements',
+      'benefits',
+      'coordinators',
+      'images',
+      'documents',
     ]
 
     jsonFields.forEach(field => {
@@ -170,8 +192,9 @@ export async function PUT(
 
     // 날짜 필드들
     if (body.applicationDeadline !== undefined) {
-      updateData.applicationDeadline = body.applicationDeadline ? 
-        new Date(body.applicationDeadline) : null
+      updateData.applicationDeadline = body.applicationDeadline
+        ? new Date(body.applicationDeadline)
+        : null
     }
     if (body.startDate !== undefined) {
       updateData.startDate = new Date(body.startDate)
@@ -184,7 +207,7 @@ export async function PUT(
     if (body.schedule !== undefined) {
       updateData.schedule = body.schedule.map((item: any) => ({
         ...item,
-        date: item.date // Keep as string or convert if needed by schema (jsonb stores whatever)
+        date: item.date, // Keep as string or convert if needed by schema (jsonb stores whatever)
       }))
     }
 
@@ -207,11 +230,9 @@ export async function PUT(
     return NextResponse.json({
       success: true,
       program: result[0],
-      message: '프로그램이 성공적으로 업데이트되었습니다'
+      message: '프로그램이 성공적으로 업데이트되었습니다',
     })
-
   } catch (error) {
-
     return NextResponse.json(
       { success: false, error: '프로그램 수정 중 오류가 발생했습니다' },
       { status: 500 }
@@ -230,7 +251,10 @@ export async function DELETE(
     // 관리자 인증 확인
     const user = await requireAdminAuth(request)
     if (!user) {
-      return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: '관리자 인증이 필요합니다' },
+        { status: 403 }
+      )
     }
 
     // 프로그램 존재 확인
@@ -261,17 +285,13 @@ export async function DELETE(
     }
 
     // 프로그램 삭제
-    await db
-      .delete(culturalExchangePrograms)
-      .where(eq(culturalExchangePrograms.id, programId))
+    await db.delete(culturalExchangePrograms).where(eq(culturalExchangePrograms.id, programId))
 
     return NextResponse.json({
       success: true,
-      message: '프로그램이 성공적으로 삭제되었습니다'
+      message: '프로그램이 성공적으로 삭제되었습니다',
     })
-
   } catch (error) {
-
     return NextResponse.json(
       { success: false, error: '프로그램 삭제 중 오류가 발생했습니다' },
       { status: 500 }

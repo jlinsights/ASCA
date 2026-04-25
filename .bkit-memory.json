@@ -4,6 +4,31 @@
   "startedAt": "2026-04-22",
   "parallelFeatures": [
     {
+      "feature": "asca-api-security-hardening",
+      "phase": "completed",
+      "startedAt": "2026-04-25",
+      "planPath": "docs/01-plan/features/asca-api-security-hardening.plan.md",
+      "branch": "security-hardening-2026-04",
+      "sourceReview": "gstack /review (2026-04-25): C1+C2 CRITICAL, H1-H4 HIGH",
+      "designPath": "docs/02-design/features/asca-api-security-hardening.design.md",
+      "doCommits": [
+        "11a651db S1 C1 GraphQL Clerk auth",
+        "53ac8626 S2 C2 SSE Clerk auth + cosmetic context.ts",
+        "6c70a23e S3 H1 members/[id] GET IDOR",
+        "f2ed8829 S4 H2 dashboard error.message removed",
+        "c32e449a S5 H3 GraphQL CORS allowlist",
+        "89a2ad0f S6 H4 members/me prod fail-closed",
+        "7c525ec5 chore: prettier auto-format"
+      ],
+      "verificationStatus": "tsc clean (1 pre-existing layout-footer.tsx unrelated), eslint clean (6 changed files), npm run build PASS (0 errors 0 warnings)",
+      "matchRate": 92,
+      "analysisPath": "docs/03-analysis/asca-api-security-hardening.analysis.md",
+      "gapItems": [],
+      "recommendation": "report-ready (>=90%)",
+      "completedAt": "2026-04-25",
+      "reportPath": "docs/04-report/features/asca-api-security-hardening.report.md"
+    },
+    {
       "feature": "asca-design-system-finalize",
       "phase": "archived",
       "matchRate": 98,
@@ -21,7 +46,7 @@
         "phase3": "scripts/design-lint.ts (~140 LOC, WCAG 2.1 contrast formula, 11 페어 P1-P9+L1-L2). DESIGN.md destructive-foreground #f5f5f0→#ffffff (4.42→4.83), muted #707070→#f0f0eb + muted-foreground 신설 #6a6a6a (4.73). 결과: 11/11 PASS.",
         "phase4": ".github/workflows/ci.yml Code Quality job에 3 step 추가 (design:lint advisory + design:diff hard + design:wcag hard).",
         "phase5_skipped": "design-validator agent 호출 보류 (Check 단계로 위임). 회귀 검증: lint 0 errors/13 pre-existing warnings, type-check pre-existing layout-footer.tsx 1건 (이번 변경 무관)."
-      }
+      },
       "parentCycle": {
         "feature": "asca-design-system",
         "date": "2026-04-24",

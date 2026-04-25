@@ -27,7 +27,7 @@ export {
   type LogEntry,
   type LoggerConfig,
   type LogTransport,
-} from './structured-logger';
+} from './structured-logger'
 
 // Transports
 export {
@@ -41,7 +41,7 @@ export {
   createHTTPTransport,
   createMemoryTransport,
   createCustomTransport,
-} from './transports';
+} from './transports'
 
 // Formatters
 export {
@@ -58,22 +58,22 @@ export {
   createTemplateFormatter,
   createCompactFormatter,
   type LogFormatter,
-} from './formatters';
+} from './formatters'
 
-import { LogLevel, logger } from './structured-logger';
-import { createConsoleTransport, createFileTransport, createHTTPTransport } from './transports';
+import { LogLevel, logger } from './structured-logger'
+import { createConsoleTransport, createFileTransport, createHTTPTransport } from './transports'
 
 /**
  * 로깅 시스템 초기화
  */
 export function initializeLogging(config?: {
-  level?: LogLevel;
-  enableConsole?: boolean;
-  enableFile?: boolean;
-  enableHTTP?: boolean;
-  filepath?: string;
-  httpEndpoint?: string;
-  useColors?: boolean;
+  level?: LogLevel
+  enableConsole?: boolean
+  enableFile?: boolean
+  enableHTTP?: boolean
+  filepath?: string
+  httpEndpoint?: string
+  useColors?: boolean
 }): void {
   const {
     level = LogLevel.INFO,
@@ -83,14 +83,14 @@ export function initializeLogging(config?: {
     filepath = './logs/app.log',
     httpEndpoint,
     useColors = true,
-  } = config || {};
+  } = config || {}
 
   // 로그 레벨 설정
-  logger.setLevel(level);
+  logger.setLevel(level)
 
   // Console Transport 추가
   if (enableConsole) {
-    logger.addTransport(createConsoleTransport({ level, useColors }));
+    logger.addTransport(createConsoleTransport({ level, useColors }))
   }
 
   // File Transport 추가
@@ -102,7 +102,7 @@ export function initializeLogging(config?: {
         maxFileSize: 10 * 1024 * 1024, // 10MB
         maxFiles: 5,
       })
-    );
+    )
   }
 
   // HTTP Transport 추가
@@ -114,6 +114,6 @@ export function initializeLogging(config?: {
         batchSize: 10,
         flushInterval: 5000,
       })
-    );
+    )
   }
 }

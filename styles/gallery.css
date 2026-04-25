@@ -38,7 +38,7 @@
 
 .gallery-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.25),
     0 0 0 1px rgba(255, 255, 255, 0.1);
 }
@@ -58,7 +58,7 @@
   backdrop-filter: blur(12px);
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
+  box-shadow:
     0 8px 32px 0 rgba(31, 38, 135, 0.37),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
@@ -74,7 +74,7 @@
 /* 검색 바 포커스 효과 */
 .search-input:focus {
   transform: scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 0 0 3px rgba(59, 130, 246, 0.1),
     0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
@@ -83,7 +83,7 @@
 .category-button-active {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   transform: scale(1.05);
-  box-shadow: 
+  box-shadow:
     0 10px 15px -3px rgba(59, 130, 246, 0.3),
     0 4px 6px -2px rgba(59, 130, 246, 0.05);
 }
@@ -140,12 +140,7 @@
 
 /* 로딩 애니메이션 */
 .loading-shimmer {
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 25%,
-    #e0e0e0 50%,
-    #f0f0f0 75%
-  );
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
@@ -171,15 +166,15 @@
 @media (max-width: 640px) {
   .gallery-card:hover {
     transform: none;
-    box-shadow: 
+    box-shadow:
       0 10px 25px -5px rgba(0, 0, 0, 0.15),
       0 0 0 1px rgba(255, 255, 255, 0.1);
   }
-  
+
   .search-input:focus {
     transform: none;
   }
-  
+
   .category-button-active {
     transform: none;
   }
@@ -195,7 +190,7 @@
     transform: none;
     animation: none;
   }
-  
+
   .lightbox-enter,
   .lightbox-exit {
     animation: none;
@@ -208,14 +203,9 @@
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
+
   .loading-shimmer {
-    background: linear-gradient(
-      90deg,
-      #2a2a2a 25%,
-      #3a3a3a 50%,
-      #2a2a2a 75%
-    );
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
   }
 }
 
@@ -235,7 +225,7 @@ html {
 /* 포커스 링 제거 및 커스텀 */
 .focus-ring:focus {
   outline: none;
-  box-shadow: 
+  box-shadow:
     0 0 0 3px rgba(59, 130, 246, 0.3),
     0 0 0 1px rgba(59, 130, 246, 0.5);
 }

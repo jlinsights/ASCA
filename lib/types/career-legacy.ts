@@ -1,6 +1,6 @@
 // Career Management Types for Phase 2
 
-export type CareerEntryType = 
+export type CareerEntryType =
   | 'exhibition'
   | 'award'
   | 'education'
@@ -13,30 +13,30 @@ export interface CareerEntry {
   id: string
   artistId: string
   type: CareerEntryType
-  
+
   // Basic info
   title: string
   titleEn?: string
   organization?: string
   organizationEn?: string
-  
+
   // Date
   year: number
   month?: number
   startDate?: Date
   endDate?: Date
-  
+
   // Details
   description?: string
   descriptionEn?: string
   location?: string
   role?: string
-  
+
   // Media & Links
   images?: string[]
   documents?: string[]
   externalUrl?: string
-  
+
   // Metadata
   isFeatured: boolean
   order: number
@@ -119,26 +119,26 @@ export interface CareerEntryFormData {
   role?: string
   externalUrl?: string
   isFeatured: boolean
-  
+
   // Type-specific fields
   exhibitionType?: 'solo' | 'group' | 'online' | 'international'
   venue?: string
   curator?: string
   artworkIds?: string[]
-  
+
   awardType?: 'prize' | 'grant' | 'scholarship' | 'recognition'
   prizeAmount?: number
   currency?: string
-  
+
   degree?: string
   major?: string
   graduationYear?: number
-  
+
   publicationType?: 'book' | 'article' | 'interview' | 'review' | 'catalog'
   publisher?: string
   isbn?: string
   pages?: string
-  
+
   mediaType?: 'tv' | 'radio' | 'newspaper' | 'magazine' | 'online'
   mediaOutlet?: string
 }
@@ -151,5 +151,5 @@ export const CAREER_ENTRY_TYPE_LABELS: Record<CareerEntryType, { ko: string; en:
   publication: { ko: '출판', en: 'Publication' },
   media: { ko: '언론', en: 'Media' },
   residency: { ko: '레지던시', en: 'Residency' },
-  workshop: { ko: '워크샵', en: 'Workshop' }
+  workshop: { ko: '워크샵', en: 'Workshop' },
 }

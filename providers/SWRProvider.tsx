@@ -11,7 +11,7 @@ export function SWRProvider({ children }: SWRProviderProps) {
   return (
     <SWRConfig
       value={{
-        fetcher: (resource: string, init?: RequestInit) => 
+        fetcher: (resource: string, init?: RequestInit) =>
           fetch(resource, init).then(res => res.json()),
         revalidateOnFocus: false,
         revalidateOnReconnect: true,

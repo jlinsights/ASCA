@@ -24,60 +24,60 @@ export interface DataLoaderOptions<K, V> {
   /**
    * Batch loading function that loads multiple keys at once
    */
-  batchLoadFn: (keys: readonly K[]) => Promise<(V | Error)[]>;
+  batchLoadFn: (keys: readonly K[]) => Promise<(V | Error)[]>
 
   /**
    * Maximum batch size (default: 100)
    */
-  maxBatchSize?: number;
+  maxBatchSize?: number
 
   /**
    * Enable caching (default: true)
    */
-  cache?: boolean;
+  cache?: boolean
 
   /**
    * Cache TTL in milliseconds (default: no expiration)
    */
-  cacheTTL?: number;
+  cacheTTL?: number
 
   /**
    * Custom cache key function (default: JSON.stringify)
    */
-  cacheKeyFn?: (key: K) => string;
+  cacheKeyFn?: (key: K) => string
 }
 
 interface CacheEntry<V> {
-  value: V | Error;
-  expiresAt?: number;
+  value: V | Error
+  expiresAt?: number
 }
 
 /**
  * Generic DataLoader for batching and caching
  */
 export class DataLoader<K, V> {
-  private batchLoadFn: (keys: readonly K[]) => Promise<(V | Error)[]>;
-  private maxBatchSize: number;
-  private cache: Map<string, CacheEntry<V>>;
-  private cacheEnabled: boolean;
-  private cacheTTL?: number;
-  private cacheKeyFn: (key: K) => string;
+  private batchLoadFn: (keys: readonly K[]) => Promise<(V | Error)[]>
+  private maxBatchSize: number
+  private cache: Map<string, CacheEntry<V>>
+  private cacheEnabled: boolean
+  private cacheTTL?: number
+  private cacheKeyFn: (key: K) => string
 
   // Batching state
   private queue: Array<{
-    key: K;
-    resolve: (value: V) => void;
-    reject: (error: Error) => void;
-  }> = [];
-  private batchTimeout: NodeJS.Timeout | null = null;
+    key: K
+    resolve: (value: V) => void
+    reject: (error: Error) => void
+  }> = []
+  private batchTimeout: NodeJS.Timeout | null = null
 
   constructor(options: DataLoaderOptions<K, V>) {
-    this.batchLoadFn = options.batchLoadFn;
-    this.maxBatchSize = options.maxBatchSize ?? 100;
-    this.cacheEnabled = options.cache ?? true;
-    this.cacheTTL = options.cacheTTL;
-    this.cacheKeyFn = options.cacheKeyFn ?? ((key: K) => JSON.stringify(key));
-    this.cache = new Map();
+    this.batchLoadFn = options.batchLoadFn
+    this.maxBatchSize = options.maxBatchSize ?? 100
+    this.cacheEnabled = options.cache ?? true
+    this.cacheTTL = options.cacheTTL
+    this.cacheKeyFn = options.cacheKeyFn ?? ((key: K) => JSON.stringify(key))
+    this.cache = new Map()
   }
 
   /**
@@ -86,105 +86,99 @@ export class DataLoader<K, V> {
   async load(key: K): Promise<V> {
     // Check cache first
     if (this.cacheEnabled) {
-      const cacheKey = this.cacheKeyFn(key);
-      const cached = this.cache.get(cacheKey);
+      const cacheKey = this.cacheKeyFn(key)
+      const cached = this.cache.get(cacheKey)
 
       if (cached) {
         // Check if cache entry is expired
         if (!cached.expiresAt || cached.expiresAt > Date.now()) {
           if (cached.value instanceof Error) {
-            throw cached.value;
+            throw cached.value
           }
-          return cached.value;
+          return cached.value
         } else {
           // Remove expired entry
-          this.cache.delete(cacheKey);
+          this.cache.delete(cacheKey)
         }
       }
     }
 
     // Add to batch queue
     return new Promise<V>((resolve, reject) => {
-      this.queue.push({ key, resolve, reject });
+      this.queue.push({ key, resolve, reject })
 
       // Schedule batch execution
       if (!this.batchTimeout) {
-        this.batchTimeout = setTimeout(() => this.executeBatch(), 0);
+        this.batchTimeout = setTimeout(() => this.executeBatch(), 0)
       }
 
       // Execute immediately if batch is full
       if (this.queue.length >= this.maxBatchSize) {
-        clearTimeout(this.batchTimeout);
-        this.batchTimeout = null;
-        this.executeBatch();
+        clearTimeout(this.batchTimeout)
+        this.batchTimeout = null
+        this.executeBatch()
       }
-    });
+    })
   }
 
   /**
    * Load multiple values by keys
    */
   async loadMany(keys: readonly K[]): Promise<(V | Error)[]> {
-    return Promise.all(
-      keys.map(key =>
-        this.load(key).catch(error => error)
-      )
-    );
+    return Promise.all(keys.map(key => this.load(key).catch(error => error)))
   }
 
   /**
    * Execute batched load
    */
   private async executeBatch(): Promise<void> {
-    const batch = this.queue.splice(0, this.maxBatchSize);
-    if (batch.length === 0) return;
+    const batch = this.queue.splice(0, this.maxBatchSize)
+    if (batch.length === 0) return
 
-    const keys = batch.map(item => item.key);
+    const keys = batch.map(item => item.key)
 
     try {
-      const results = await this.batchLoadFn(keys);
+      const results = await this.batchLoadFn(keys)
 
       // Validate results length
       if (results.length !== keys.length) {
         throw new Error(
           `DataLoader batch function returned ${results.length} results for ${keys.length} keys. ` +
-          'The batch function must return the same number of results as keys.'
-        );
+            'The batch function must return the same number of results as keys.'
+        )
       }
 
       // Process results
       results.forEach((result, index) => {
-        const entry = batch[index];
-        if (!entry) return;
-        const { key, resolve, reject } = entry;
-        const cacheKey = this.cacheKeyFn(key);
+        const entry = batch[index]
+        if (!entry) return
+        const { key, resolve, reject } = entry
+        const cacheKey = this.cacheKeyFn(key)
 
         // Cache the result
         if (this.cacheEnabled) {
-          const expiresAt = this.cacheTTL
-            ? Date.now() + this.cacheTTL
-            : undefined;
+          const expiresAt = this.cacheTTL ? Date.now() + this.cacheTTL : undefined
 
-          this.cache.set(cacheKey, { value: result, expiresAt });
+          this.cache.set(cacheKey, { value: result, expiresAt })
         }
 
         // Resolve or reject the promise
         if (result instanceof Error) {
-          reject(result);
+          reject(result)
         } else {
-          resolve(result);
+          resolve(result)
         }
-      });
+      })
     } catch (error) {
       // Reject all promises in batch
       batch.forEach(({ reject }) => {
-        reject(error instanceof Error ? error : new Error(String(error)));
-      });
+        reject(error instanceof Error ? error : new Error(String(error)))
+      })
     }
 
     // Continue with next batch if queue is not empty
     if (this.queue.length > 0) {
-      this.batchTimeout = setTimeout(() => this.executeBatch(), 0);
+      this.batchTimeout = setTimeout(() => this.executeBatch(), 0)
     }
   }
 
@@ -192,29 +186,27 @@ export class DataLoader<K, V> {
    * Clear all cached values
    */
   clearAll(): void {
-    this.cache.clear();
+    this.cache.clear()
   }
 
   /**
    * Clear a specific cached value
    */
   clear(key: K): void {
-    const cacheKey = this.cacheKeyFn(key);
-    this.cache.delete(cacheKey);
+    const cacheKey = this.cacheKeyFn(key)
+    this.cache.delete(cacheKey)
   }
 
   /**
    * Prime the cache with a known value
    */
   prime(key: K, value: V): void {
-    if (!this.cacheEnabled) return;
+    if (!this.cacheEnabled) return
 
-    const cacheKey = this.cacheKeyFn(key);
-    const expiresAt = this.cacheTTL
-      ? Date.now() + this.cacheTTL
-      : undefined;
+    const cacheKey = this.cacheKeyFn(key)
+    const expiresAt = this.cacheTTL ? Date.now() + this.cacheTTL : undefined
 
-    this.cache.set(cacheKey, { value, expiresAt });
+    this.cache.set(cacheKey, { value, expiresAt })
   }
 }
 
@@ -247,7 +239,7 @@ export function createDataLoader<K, V>(
   return new DataLoader({
     batchLoadFn,
     ...options,
-  });
+  })
 }
 
 /**
@@ -264,30 +256,28 @@ export function createIdLoader<T extends { id: string }>(
   fetchFn: (ids: readonly string[]) => Promise<T[]>,
   options?: Partial<DataLoaderOptions<string, T>>
 ): DataLoader<string, T> {
-  return createDataLoader(
-    async (ids: readonly string[]) => {
-      const items = await fetchFn(ids);
-      const itemMap = new Map(items.map(item => [item.id, item]));
+  return createDataLoader(async (ids: readonly string[]) => {
+    const items = await fetchFn(ids)
+    const itemMap = new Map(items.map(item => [item.id, item]))
 
-      return ids.map(id =>
-        itemMap.get(id) ?? new Error(`Item with id ${id} not found`)
-      );
-    },
-    options
-  );
+    return ids.map(id => itemMap.get(id) ?? new Error(`Item with id ${id} not found`))
+  }, options)
 }
 
 /**
  * Performance monitoring for DataLoader
  */
 export class DataLoaderStats {
-  private loaders = new Map<string, {
-    loadCount: number;
-    batchCount: number;
-    cacheHits: number;
-    cacheMisses: number;
-    totalLoadTime: number;
-  }>();
+  private loaders = new Map<
+    string,
+    {
+      loadCount: number
+      batchCount: number
+      cacheHits: number
+      cacheMisses: number
+      totalLoadTime: number
+    }
+  >()
 
   recordLoad(loaderName: string, cached: boolean, duration: number): void {
     if (!this.loaders.has(loaderName)) {
@@ -297,38 +287,38 @@ export class DataLoaderStats {
         cacheHits: 0,
         cacheMisses: 0,
         totalLoadTime: 0,
-      });
+      })
     }
 
-    const stats = this.loaders.get(loaderName)!;
-    stats.loadCount++;
-    stats.totalLoadTime += duration;
+    const stats = this.loaders.get(loaderName)!
+    stats.loadCount++
+    stats.totalLoadTime += duration
 
     if (cached) {
-      stats.cacheHits++;
+      stats.cacheHits++
     } else {
-      stats.cacheMisses++;
+      stats.cacheMisses++
     }
   }
 
   recordBatch(loaderName: string): void {
-    const stats = this.loaders.get(loaderName);
+    const stats = this.loaders.get(loaderName)
     if (stats) {
-      stats.batchCount++;
+      stats.batchCount++
     }
   }
 
   getStats(loaderName: string) {
-    return this.loaders.get(loaderName);
+    return this.loaders.get(loaderName)
   }
 
   getAllStats() {
-    return Object.fromEntries(this.loaders);
+    return Object.fromEntries(this.loaders)
   }
 
   reset(): void {
-    this.loaders.clear();
+    this.loaders.clear()
   }
 }
 
-export const globalDataLoaderStats = new DataLoaderStats();
+export const globalDataLoaderStats = new DataLoaderStats()

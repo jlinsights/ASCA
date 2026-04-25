@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useLanguage } from "@/contexts/language-context"
+import { useLanguage } from '@/contexts/language-context'
 
 interface TranslatedContentProps {
   textKey: string

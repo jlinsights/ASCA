@@ -1,17 +1,17 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useRef, useMemo } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown } from "lucide-react"
+import { useState, useEffect, useRef, useMemo } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Menu, X, ChevronDown } from 'lucide-react'
 
-import { HeaderAuthSection } from "../header/header-auth-section"
-import { HeaderMobileAuth } from "../header/header-mobile-auth"
-import { ThemeToggle } from "../theme-toggle"
-import { ThemeTransition } from "../theme-transition"
-import { LanguageSelector } from "../language-selector"
-import { Logo } from "../brand/logo"
-import { useLanguage } from "@/contexts/language-context"
+import { HeaderAuthSection } from '../header/header-auth-section'
+import { HeaderMobileAuth } from '../header/header-mobile-auth'
+import { ThemeToggle } from '../theme-toggle'
+import { ThemeTransition } from '../theme-transition'
+import { LanguageSelector } from '../language-selector'
+import { Logo } from '../brand/logo'
+import { useLanguage } from '@/contexts/language-context'
 
 interface LayoutHeaderProps {
   variant?: 'default' | 'simple'
@@ -27,92 +27,95 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
   const pathname = usePathname()
 
   // Memoize menu structure to prevent recreation on every render
-  const menuStructure = useMemo(() => [
-    {
-      title: t("exhibition"),
-      key: "exhibition",
-      href: "/exhibitions",
-      subItems: [
-        { title: t("currentExhibitions"), href: "/exhibitions/current" },
-        { title: t("upcomingExhibitions"), href: "/exhibitions/upcoming" },
-        { title: t("pastExhibitions"), href: "/exhibitions/past" },
-        { title: t("onlineExhibitions"), href: "/exhibitions/online" }
-      ]
-    },
-    {
-      title: t("artworks"),
-      key: "artworks", 
-      href: "/artworks",
-      subItems: [
-        { title: t("hangeulCalligraphy"), href: "/artworks?category=한글서예" },
-        { title: t("hanjaCalligraphy"), href: "/artworks?category=한자서예" },
-        { title: t("literatiPainting"), href: "/artworks?category=문인화" },
-        { title: t("inkPainting"), href: "/artworks?category=수묵화" },
-        { title: t("folkPainting"), href: "/artworks?category=민화" },
-        { title: t("modernCalligraphy"), href: "/artworks?category=현대서예" },
-        { title: t("calligraphyArt"), href: "/artworks?category=캘리그라피" },
-        { title: t("sealEngraving"), href: "/artworks?category=전각" },
-        { title: t("woodEngraving"), href: "/artworks?category=서각" }
-      ]
-    },
-    {
-      title: t("artists"),
-      key: "artists",
-      href: "/artists", 
-      subItems: [
-        { title: t("openCallArtists"), href: "/artists?type=공모작가" },
-        { title: t("youngArtists"), href: "/artists?type=청년작가" },
-        { title: t("recommendedArtists"), href: "/artists?type=추천작가" },
-        { title: t("invitedArtists"), href: "/artists?type=초대작가" }
-      ]
-    },
-    {
-      title: t("events"),
-      key: "events", 
-      href: "/events",
-      subItems: [
-        { title: t("currentEvents"), href: "/events" },
-        { title: t("calligraphyContest2025"), href: "/events/calligraphy-contest-2025" },
-        { title: t("calligraphyContest2024"), href: "/events/calligraphy-contest-2024" }
-      ]
-    },
-    {
-      title: t("about"),
-      key: "about",
-      href: "/about",
-      subItems: [
-        { title: t("overview"), href: "/about" },
-        { title: t("history"), href: "/history" },
-        { title: t("organizationPage"), href: "/organization" },
-        { title: t("brandGuidelines"), href: "/brand" }
-      ]
-    },
-    {
-      title: t("regulations"),
-      key: "regulations",
-      href: "/regulations",
-      subItems: [
-        { title: t("articles"), href: "/regulations/articles" },
-        { title: t("operationJudging"), href: "/regulations/operation-judging" },
-        { title: t("judgingSystem"), href: "https://jury.orientalcalligraphy.org" },
-        { title: t("artistSelection"), href: "/regulations/artist-selection" },
-        { title: t("qualifications"), href: "/regulations/qualifications" }
-      ]
-    },
-    {
-      title: t("guide"),
-      key: "guide",
-      href: "/notice",
-      subItems: [
-        { title: t("notices"), href: "/notice" },
-        { title: t("news"), href: "/news" },
-        { title: t("calligraphyLessons"), href: "/lessons" },
-        { title: t("gallery"), href: "/gallery" },
-        { title: t("fundraising"), href: "/fundraising" },
-        { title: t("shop"), href: "/shop" }
-      ]
-    }
-  ], [t]) // Dependency: re-create when translations change
+  const menuStructure = useMemo(
+    () => [
+      {
+        title: t('exhibition'),
+        key: 'exhibition',
+        href: '/exhibitions',
+        subItems: [
+          { title: t('currentExhibitions'), href: '/exhibitions/current' },
+          { title: t('upcomingExhibitions'), href: '/exhibitions/upcoming' },
+          { title: t('pastExhibitions'), href: '/exhibitions/past' },
+          { title: t('onlineExhibitions'), href: '/exhibitions/online' },
+        ],
+      },
+      {
+        title: t('artworks'),
+        key: 'artworks',
+        href: '/artworks',
+        subItems: [
+          { title: t('hangeulCalligraphy'), href: '/artworks?category=한글서예' },
+          { title: t('hanjaCalligraphy'), href: '/artworks?category=한자서예' },
+          { title: t('literatiPainting'), href: '/artworks?category=문인화' },
+          { title: t('inkPainting'), href: '/artworks?category=수묵화' },
+          { title: t('folkPainting'), href: '/artworks?category=민화' },
+          { title: t('modernCalligraphy'), href: '/artworks?category=현대서예' },
+          { title: t('calligraphyArt'), href: '/artworks?category=캘리그라피' },
+          { title: t('sealEngraving'), href: '/artworks?category=전각' },
+          { title: t('woodEngraving'), href: '/artworks?category=서각' },
+        ],
+      },
+      {
+        title: t('artists'),
+        key: 'artists',
+        href: '/artists',
+        subItems: [
+          { title: t('openCallArtists'), href: '/artists?type=공모작가' },
+          { title: t('youngArtists'), href: '/artists?type=청년작가' },
+          { title: t('recommendedArtists'), href: '/artists?type=추천작가' },
+          { title: t('invitedArtists'), href: '/artists?type=초대작가' },
+        ],
+      },
+      {
+        title: t('events'),
+        key: 'events',
+        href: '/events',
+        subItems: [
+          { title: t('currentEvents'), href: '/events' },
+          { title: t('calligraphyContest2025'), href: '/events/calligraphy-contest-2025' },
+          { title: t('calligraphyContest2024'), href: '/events/calligraphy-contest-2024' },
+        ],
+      },
+      {
+        title: t('about'),
+        key: 'about',
+        href: '/about',
+        subItems: [
+          { title: t('overview'), href: '/about' },
+          { title: t('history'), href: '/history' },
+          { title: t('organizationPage'), href: '/organization' },
+          { title: t('brandGuidelines'), href: '/brand' },
+        ],
+      },
+      {
+        title: t('regulations'),
+        key: 'regulations',
+        href: '/regulations',
+        subItems: [
+          { title: t('articles'), href: '/regulations/articles' },
+          { title: t('operationJudging'), href: '/regulations/operation-judging' },
+          { title: t('judgingSystem'), href: 'https://jury.orientalcalligraphy.org' },
+          { title: t('artistSelection'), href: '/regulations/artist-selection' },
+          { title: t('qualifications'), href: '/regulations/qualifications' },
+        ],
+      },
+      {
+        title: t('guide'),
+        key: 'guide',
+        href: '/notice',
+        subItems: [
+          { title: t('notices'), href: '/notice' },
+          { title: t('news'), href: '/news' },
+          { title: t('calligraphyLessons'), href: '/lessons' },
+          { title: t('gallery'), href: '/gallery' },
+          { title: t('fundraising'), href: '/fundraising' },
+          { title: t('shop'), href: '/shop' },
+        ],
+      },
+    ],
+    [t]
+  ) // Dependency: re-create when translations change
 
   const handleThemeToggle = (position: { x: number; y: number }) => {
     setClickPosition(position)
@@ -129,7 +132,7 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
   const toggleMobileDropdown = (key: string) => {
     setMobileDropdowns(prev => ({
       ...prev,
-      [key]: !prev[key]
+      [key]: !prev[key],
     }))
   }
 
@@ -161,35 +164,50 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
     return (
       <>
         <ThemeTransition clickPosition={clickPosition} />
-        <header ref={headerRef} className="gallery-card gallery-card-bordered sticky top-0 z-50 bg-rice-paper/95 backdrop-blur-sm">
-          <div className="gallery-container">
-            <div className="flex items-center justify-between py-4">
-              <Link href="/" className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-celadon-green rounded-full flex items-center justify-center">
-                  <span className="font-calligraphy text-rice-paper font-bold text-lg">書</span>
+        <header
+          ref={headerRef}
+          className='gallery-card gallery-card-bordered sticky top-0 z-50 bg-rice-paper/95 backdrop-blur-sm'
+        >
+          <div className='gallery-container'>
+            <div className='flex items-center justify-between py-4'>
+              <Link href='/' className='flex items-center space-x-3'>
+                <div className='w-10 h-10 bg-celadon-green rounded-full flex items-center justify-center'>
+                  <span className='font-calligraphy text-rice-paper font-bold text-lg'>書</span>
                 </div>
                 <div>
-                  <h1 className="font-calligraphy text-xl font-bold text-ink-black">ASCA</h1>
-                  <p className="text-xs text-stone-gray">동양서예협회</p>
+                  <h1 className='font-calligraphy text-xl font-bold text-ink-black'>ASCA</h1>
+                  <p className='text-xs text-stone-gray'>동양서예협회</p>
                 </div>
               </Link>
 
-              <nav className="hidden md:flex items-center space-x-8">
-                <Link href="/exhibitions" className="text-ink-black hover:text-celadon-green transition-colors">
+              <nav className='hidden md:flex items-center space-x-8'>
+                <Link
+                  href='/exhibitions'
+                  className='text-ink-black hover:text-celadon-green transition-colors'
+                >
                   {t('exhibition')}
                 </Link>
-                <Link href="/artworks" className="text-ink-black hover:text-celadon-green transition-colors">
+                <Link
+                  href='/artworks'
+                  className='text-ink-black hover:text-celadon-green transition-colors'
+                >
                   {t('artworks')}
                 </Link>
-                <Link href="/artists" className="text-ink-black hover:text-celadon-green transition-colors">
+                <Link
+                  href='/artists'
+                  className='text-ink-black hover:text-celadon-green transition-colors'
+                >
                   {t('artists')}
                 </Link>
-                <Link href="/about" className="text-ink-black hover:text-celadon-green transition-colors">
+                <Link
+                  href='/about'
+                  className='text-ink-black hover:text-celadon-green transition-colors'
+                >
                   {t('about')}
                 </Link>
               </nav>
 
-              <div className="flex items-center space-x-2">
+              <div className='flex items-center space-x-2'>
                 <ThemeToggle onToggle={handleThemeToggle} />
                 <LanguageSelector />
               </div>
@@ -203,51 +221,54 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
   return (
     <>
       <ThemeTransition clickPosition={clickPosition} />
-      <header ref={headerRef} className="border-b border-[#222222]/10 dark:border-[#fcfcfc]/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16 md:h-20 lg:h-24">
-            <Link href="/" className="flex items-center">
-              <Logo
-                width={150}
-                height={50}
-                className="h-12 md:h-16 lg:h-20 w-auto"
-              />
+      <header
+        ref={headerRef}
+        className='border-b border-[#222222]/10 dark:border-[#fcfcfc]/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'
+      >
+        <div className='container mx-auto px-4'>
+          <div className='flex items-center justify-between h-16 md:h-20 lg:h-24'>
+            <Link href='/' className='flex items-center'>
+              <Logo width={150} height={50} className='h-12 md:h-16 lg:h-20 w-auto' />
             </Link>
 
-            <nav className="hidden lg:flex items-center space-x-8">
-              {menuStructure.map((menu) => (
+            <nav className='hidden lg:flex items-center space-x-8'>
+              {menuStructure.map(menu => (
                 <div
                   key={menu.key}
-                  className="relative group"
-                  onMouseEnter={menu.subItems.length > 0 ? () => handleMouseEnter(menu.key) : undefined}
+                  className='relative group'
+                  onMouseEnter={
+                    menu.subItems.length > 0 ? () => handleMouseEnter(menu.key) : undefined
+                  }
                   onMouseLeave={menu.subItems.length > 0 ? handleMouseLeave : undefined}
                 >
-                  <Link 
+                  <Link
                     href={menu.href}
-                    className="flex items-center gap-1 text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2"
+                    className='flex items-center gap-1 text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2'
                   >
                     {menu.title}
                     {menu.subItems.length > 0 && (
-                      <ChevronDown className="w-3 h-3 transition-transform duration-200 group-hover:rotate-180" />
+                      <ChevronDown className='w-3 h-3 transition-transform duration-200 group-hover:rotate-180' />
                     )}
                   </Link>
-                  
+
                   {menu.subItems.length > 0 && (
-                    <div className={`absolute top-full left-0 w-48 bg-background border border-border rounded-lg shadow-lg transition-all duration-200 z-50 ${
-                      activeDropdown === menu.key 
-                        ? 'opacity-100 visible translate-y-0' 
-                        : 'opacity-0 invisible -translate-y-2'
-                    }`}>
-                      <div className="py-2">
+                    <div
+                      className={`absolute top-full left-0 w-48 bg-background border border-border rounded-lg shadow-lg transition-all duration-200 z-50 ${
+                        activeDropdown === menu.key
+                          ? 'opacity-100 visible translate-y-0'
+                          : 'opacity-0 invisible -translate-y-2'
+                      }`}
+                    >
+                      <div className='py-2'>
                         {menu.subItems.map((subItem, index) => {
                           const isExternalLink = subItem.href.startsWith('http')
                           return isExternalLink ? (
                             <a
                               key={index}
                               href={subItem.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors'
                             >
                               {subItem.title}
                             </a>
@@ -255,7 +276,7 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
                             <Link
                               key={index}
                               href={subItem.href}
-                              className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                              className='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors'
                             >
                               {subItem.title}
                             </Link>
@@ -266,43 +287,50 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
                   )}
                 </div>
               ))}
-              
-              <Link href="/search" className="text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2">
-                {t("search")}
+
+              <Link
+                href='/search'
+                className='text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2'
+              >
+                {t('search')}
               </Link>
             </nav>
 
-            <div className="hidden lg:flex items-center space-x-3">
+            <div className='hidden lg:flex items-center space-x-3'>
               <HeaderAuthSection />
 
               <ThemeToggle onToggle={handleThemeToggle} />
               <LanguageSelector />
             </div>
 
-            <div className="lg:hidden flex items-center gap-2">
+            <div className='lg:hidden flex items-center gap-2'>
               <ThemeToggle onToggle={handleThemeToggle} />
               <LanguageSelector />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2 touch-manipulation"
-                aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+                className='flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded text-foreground hover:bg-foreground/10 transition-colors ml-2 touch-manipulation'
+                aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
                 aria-expanded={isMenuOpen}
-                aria-controls="mobile-navigation"
+                aria-controls='mobile-navigation'
               >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMenuOpen ? <X className='h-6 w-6' /> : <Menu className='h-6 w-6' />}
               </button>
             </div>
           </div>
         </div>
 
         {isMenuOpen && (
-          <div className="lg:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg">
-            <nav id="mobile-navigation" className="container mx-auto px-4 py-6 space-y-2" aria-label="모바일 메인 메뉴">
-              {menuStructure.map((menu) => {
+          <div className='lg:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg'>
+            <nav
+              id='mobile-navigation'
+              className='container mx-auto px-4 py-6 space-y-2'
+              aria-label='모바일 메인 메뉴'
+            >
+              {menuStructure.map(menu => {
                 const isActive = pathname === menu.href || pathname?.startsWith(menu.href + '/')
                 return (
-                  <div key={menu.key} className="space-y-1">
-                    <div className="flex items-center justify-between">
+                  <div key={menu.key} className='space-y-1'>
+                    <div className='flex items-center justify-between'>
                       <Link
                         href={menu.href}
                         className={`flex-1 text-sm font-medium py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
@@ -316,75 +344,81 @@ export function LayoutHeader({ variant = 'default' }: LayoutHeaderProps) {
                       {menu.subItems.length > 0 && (
                         <button
                           onClick={() => toggleMobileDropdown(menu.key)}
-                          className="p-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                          className='p-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center'
                           aria-label={`${menu.title} 하위 메뉴 ${mobileDropdowns[menu.key] ? '닫기' : '열기'}`}
                           aria-expanded={mobileDropdowns[menu.key]}
                           aria-controls={`mobile-submenu-${menu.key}`}
                         >
-                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${
-                            mobileDropdowns[menu.key] ? 'rotate-180' : ''
-                          }`} />
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-200 ${
+                              mobileDropdowns[menu.key] ? 'rotate-180' : ''
+                            }`}
+                          />
                         </button>
                       )}
                     </div>
-                  {menu.subItems.length > 0 && (
-                    <div
-                      id={`mobile-submenu-${menu.key}`}
-                      className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
-                        mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                      }`}
-                      role="region"
-                      aria-label={`${menu.title} 하위 메뉴`}
-                    >
-                      {menu.subItems.map((subItem, index) => {
-                        const isExternalLink = subItem.href.startsWith('http')
-                        const isSubActive = pathname === subItem.href
-                        return isExternalLink ? (
-                          <a
-                            key={index}
-                            href={subItem.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`block text-sm py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
-                              isSubActive ? 'bg-foreground/5 text-foreground' : 'text-muted-foreground hover:text-foreground'
-                            }`}
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {subItem.title}
-                          </a>
-                        ) : (
-                          <Link
-                            key={index}
-                            href={subItem.href}
-                            className={`block text-sm py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
-                              isSubActive ? 'bg-foreground/5 text-foreground' : 'text-muted-foreground hover:text-foreground'
-                            }`}
-                            onClick={() => setIsMenuOpen(false)}
-                            aria-current={isSubActive ? 'page' : undefined}
-                          >
-                            {subItem.title}
-                          </Link>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-              
-              <div className="pt-2 border-t border-border/50">
+                    {menu.subItems.length > 0 && (
+                      <div
+                        id={`mobile-submenu-${menu.key}`}
+                        className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
+                          mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                        }`}
+                        role='region'
+                        aria-label={`${menu.title} 하위 메뉴`}
+                      >
+                        {menu.subItems.map((subItem, index) => {
+                          const isExternalLink = subItem.href.startsWith('http')
+                          const isSubActive = pathname === subItem.href
+                          return isExternalLink ? (
+                            <a
+                              key={index}
+                              href={subItem.href}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className={`block text-sm py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
+                                isSubActive
+                                  ? 'bg-foreground/5 text-foreground'
+                                  : 'text-muted-foreground hover:text-foreground'
+                              }`}
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {subItem.title}
+                            </a>
+                          ) : (
+                            <Link
+                              key={index}
+                              href={subItem.href}
+                              className={`block text-sm py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
+                                isSubActive
+                                  ? 'bg-foreground/5 text-foreground'
+                                  : 'text-muted-foreground hover:text-foreground'
+                              }`}
+                              onClick={() => setIsMenuOpen(false)}
+                              aria-current={isSubActive ? 'page' : undefined}
+                            >
+                              {subItem.title}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+
+              <div className='pt-2 border-t border-border/50'>
                 <Link
-                  href="/search"
+                  href='/search'
                   className={`block text-sm font-medium py-3 px-3 hover:bg-foreground/10 rounded transition-colors touch-manipulation ${
                     pathname === '/search' ? 'bg-foreground/5 text-foreground' : ''
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                   aria-current={pathname === '/search' ? 'page' : undefined}
                 >
-                  {t("search")}
+                  {t('search')}
                 </Link>
               </div>
-              
+
               <HeaderMobileAuth onCloseMenu={() => setIsMenuOpen(false)} />
             </nav>
           </div>

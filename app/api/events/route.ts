@@ -4,7 +4,7 @@ import { getEvents } from '@/lib/supabase/cms'
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    
+
     // 쿼리 파라미터 파싱
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '12')
@@ -27,10 +27,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(result)
   } catch (error) {
-
-    return NextResponse.json(
-      { error: '이벤트 목록을 불러오는데 실패했습니다.' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: '이벤트 목록을 불러오는데 실패했습니다.' }, { status: 500 })
   }
-} 
+}

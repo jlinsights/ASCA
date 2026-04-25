@@ -8,8 +8,8 @@
  * - Request/response format validation
  */
 
-import { NextRequest } from 'next/server';
-import { POST } from '../route';
+import { NextRequest } from 'next/server'
+import { POST } from '../route'
 
 // Mock the database and context modules
 jest.mock('@/lib/db/drizzle', () => ({
@@ -61,11 +61,11 @@ jest.mock('@/lib/db/drizzle', () => ({
       where: jest.fn().mockResolvedValue(undefined),
     })),
   },
-}));
+}))
 
 // Helper to create mock NextRequest
 function createMockRequest(body: any, headers: Record<string, string> = {}) {
-  const url = 'http://localhost:3000/api/graphql';
+  const url = 'http://localhost:3000/api/graphql'
   const requestInit: RequestInit = {
     method: 'POST',
     headers: {
@@ -73,18 +73,18 @@ function createMockRequest(body: any, headers: Record<string, string> = {}) {
       ...headers,
     },
     body: JSON.stringify(body),
-  };
+  }
 
-  return new NextRequest(url, requestInit);
+  return new NextRequest(url, requestInit)
 }
 
 // Helper to parse response
 async function parseResponse(response: Response) {
-  const text = await response.text();
+  const text = await response.text()
   try {
-    return JSON.parse(text);
+    return JSON.parse(text)
   } catch {
-    return { text };
+    return { text }
   }
 }
 
@@ -97,10 +97,10 @@ describe('GraphQL API Integration Tests', () => {
           email: 'test@example.com',
           name: 'Test User',
           role: 'member',
-        };
+        }
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue(mockUser);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue(mockUser)
 
         const request = createMockRequest({
           query: `
@@ -114,25 +114,25 @@ describe('GraphQL API Integration Tests', () => {
             }
           `,
           variables: { id: 'user-1' },
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.user).toBeDefined();
-        expect(body.errors).toBeUndefined();
-      });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.user).toBeDefined()
+        expect(body.errors).toBeUndefined()
+      })
 
       it('should execute members query with pagination', async () => {
         const mockMembers = [
           { id: 'member-1', fullName: 'Member 1', status: 'active' },
           { id: 'member-2', fullName: 'Member 2', status: 'active' },
-        ];
+        ]
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.members.findMany.mockResolvedValue(mockMembers);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.members.findMany.mockResolvedValue(mockMembers)
 
         const request = createMockRequest({
           query: `
@@ -153,25 +153,25 @@ describe('GraphQL API Integration Tests', () => {
             }
           `,
           variables: { first: 20 },
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.members).toBeDefined();
-        expect(body.data.members.edges).toBeInstanceOf(Array);
-      });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.members).toBeDefined()
+        expect(body.data.members.edges).toBeInstanceOf(Array)
+      })
 
       it('should execute artists query successfully', async () => {
         const mockArtists = [
           { id: 'artist-1', name: 'Artist 1', nationality: 'KR' },
           { id: 'artist-2', name: 'Artist 2', nationality: 'US' },
-        ];
+        ]
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.artists.findMany.mockResolvedValue(mockArtists);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.artists.findMany.mockResolvedValue(mockArtists)
 
         const request = createMockRequest({
           query: `
@@ -188,24 +188,24 @@ describe('GraphQL API Integration Tests', () => {
             }
           `,
           variables: { first: 20 },
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.artists).toBeDefined();
-      });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.artists).toBeDefined()
+      })
 
       it('should execute exhibitions query successfully', async () => {
         const mockExhibitions = [
           { id: 'exhibition-1', title: 'Exhibition 1', status: 'upcoming' },
           { id: 'exhibition-2', title: 'Exhibition 2', status: 'current' },
-        ];
+        ]
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.exhibitions.findMany.mockResolvedValue(mockExhibitions);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.exhibitions.findMany.mockResolvedValue(mockExhibitions)
 
         const request = createMockRequest({
           query: `
@@ -222,16 +222,16 @@ describe('GraphQL API Integration Tests', () => {
             }
           `,
           variables: { first: 20 },
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.exhibitions).toBeDefined();
-      });
-    });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.exhibitions).toBeDefined()
+      })
+    })
 
     describe('Mutation Operations', () => {
       it('should return authentication error for createMember without auth', async () => {
@@ -251,32 +251,32 @@ describe('GraphQL API Integration Tests', () => {
               nationality: 'KR',
             },
           },
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200); // GraphQL returns 200 with errors
+        const response = await POST(request)
+        expect(response.status).toBe(200) // GraphQL returns 200 with errors
 
-        const body = await parseResponse(response);
-        expect(body.errors).toBeDefined();
-        expect(body.errors[0].message).toContain('Authentication required');
-      });
+        const body = await parseResponse(response)
+        expect(body.errors).toBeDefined()
+        expect(body.errors[0].message).toContain('Authentication required')
+      })
 
       it('should execute createMember mutation with authentication', async () => {
-        const mockUser = { id: 'user-1', role: 'member' };
+        const mockUser = { id: 'user-1', role: 'member' }
         const mockMember = {
           id: 'member-1',
           userId: 'user-1',
           fullName: 'New Member',
           membershipNumber: 'ASCA-2024-001',
-        };
+        }
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue(mockUser);
-        db.query.members.findMany.mockResolvedValue([]);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue(mockUser)
+        db.query.members.findMany.mockResolvedValue([])
         db.insert.mockReturnValue({
           values: jest.fn().mockReturnThis(),
           returning: jest.fn().mockResolvedValue([mockMember]),
-        });
+        })
 
         const request = createMockRequest(
           {
@@ -298,22 +298,22 @@ describe('GraphQL API Integration Tests', () => {
             },
           },
           { authorization: 'Bearer valid-token' }
-        );
+        )
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.createMember).toBeDefined();
-        expect(body.errors).toBeUndefined();
-      });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.createMember).toBeDefined()
+        expect(body.errors).toBeUndefined()
+      })
 
       it('should return authorization error for approveMember without admin role', async () => {
-        const mockUser = { id: 'user-1', role: 'member' };
+        const mockUser = { id: 'user-1', role: 'member' }
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue(mockUser);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue(mockUser)
 
         const request = createMockRequest(
           {
@@ -328,33 +328,33 @@ describe('GraphQL API Integration Tests', () => {
             variables: { id: 'member-1' },
           },
           { authorization: 'Bearer member-token' }
-        );
+        )
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.errors).toBeDefined();
-        expect(body.errors[0].message).toContain('Requires admin role');
-      });
+        const body = await parseResponse(response)
+        expect(body.errors).toBeDefined()
+        expect(body.errors[0].message).toContain('Requires admin role')
+      })
 
       it('should execute approveMember mutation with admin authentication', async () => {
-        const mockAdmin = { id: 'admin-1', role: 'admin' };
+        const mockAdmin = { id: 'admin-1', role: 'admin' }
         const mockMember = {
           id: 'member-1',
           status: 'pending_approval',
           userId: 'user-1',
-        };
-        const approvedMember = { ...mockMember, status: 'active' };
+        }
+        const approvedMember = { ...mockMember, status: 'active' }
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue(mockAdmin);
-        db.query.members.findFirst.mockResolvedValue(mockMember);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue(mockAdmin)
+        db.query.members.findFirst.mockResolvedValue(mockMember)
         db.update.mockReturnValue({
           set: jest.fn().mockReturnThis(),
           where: jest.fn().mockReturnThis(),
           returning: jest.fn().mockResolvedValue([approvedMember]),
-        });
+        })
 
         const request = createMockRequest(
           {
@@ -369,53 +369,53 @@ describe('GraphQL API Integration Tests', () => {
             variables: { id: 'member-1' },
           },
           { authorization: 'Bearer admin-token' }
-        );
+        )
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.approveMember).toBeDefined();
-        expect(body.errors).toBeUndefined();
-      });
-    });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.approveMember).toBeDefined()
+        expect(body.errors).toBeUndefined()
+      })
+    })
 
     describe('Error Handling', () => {
       it('should return error for malformed JSON', async () => {
-        const url = 'http://localhost:3000/api/graphql';
+        const url = 'http://localhost:3000/api/graphql'
         const requestInit: RequestInit = {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: '{ invalid json',
-        };
+        }
 
-        const request = new NextRequest(url, requestInit);
-        const response = await POST(request);
+        const request = new NextRequest(url, requestInit)
+        const response = await POST(request)
 
-        expect(response.status).toBeGreaterThanOrEqual(400);
-      });
+        expect(response.status).toBeGreaterThanOrEqual(400)
+      })
 
       it('should return error for missing query field', async () => {
         const request = createMockRequest({
           variables: { id: 'user-1' },
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(400);
-      });
+        const response = await POST(request)
+        expect(response.status).toBe(400)
+      })
 
       it('should return error for invalid GraphQL syntax', async () => {
         const request = createMockRequest({
           query: 'query { user(id: "user-1" }', // Missing closing brace
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBeGreaterThanOrEqual(200);
+        const response = await POST(request)
+        expect(response.status).toBeGreaterThanOrEqual(200)
 
-        const body = await parseResponse(response);
-        expect(body.errors).toBeDefined();
-      });
+        const body = await parseResponse(response)
+        expect(body.errors).toBeDefined()
+      })
 
       it('should return error for non-existent field', async () => {
         const request = createMockRequest({
@@ -427,15 +427,15 @@ describe('GraphQL API Integration Tests', () => {
               }
             }
           `,
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.errors).toBeDefined();
-        expect(body.errors[0].message).toContain('Cannot query field');
-      });
+        const body = await parseResponse(response)
+        expect(body.errors).toBeDefined()
+        expect(body.errors[0].message).toContain('Cannot query field')
+      })
 
       it('should return error for invalid variable types', async () => {
         const request = createMockRequest({
@@ -447,18 +447,18 @@ describe('GraphQL API Integration Tests', () => {
             }
           `,
           variables: { id: 123 }, // Should be string
-        });
+        })
 
-        const response = await POST(request);
-        const body = await parseResponse(response);
+        const response = await POST(request)
+        const body = await parseResponse(response)
 
         // GraphQL should handle type coercion or return validation error
-        expect(response.status).toBe(200);
-      });
+        expect(response.status).toBe(200)
+      })
 
       it('should return formatted error for resolver exceptions', async () => {
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockRejectedValue(new Error('Database connection failed'));
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockRejectedValue(new Error('Database connection failed'))
 
         const request = createMockRequest({
           query: `
@@ -468,16 +468,16 @@ describe('GraphQL API Integration Tests', () => {
               }
             }
           `,
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.errors).toBeDefined();
-        expect(body.errors[0].message).toBeDefined();
-      });
-    });
+        const body = await parseResponse(response)
+        expect(body.errors).toBeDefined()
+        expect(body.errors[0].message).toBeDefined()
+      })
+    })
 
     describe('Authentication', () => {
       it('should process requests without authorization header', async () => {
@@ -489,17 +489,17 @@ describe('GraphQL API Integration Tests', () => {
               }
             }
           `,
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
-      });
+        const response = await POST(request)
+        expect(response.status).toBe(200)
+      })
 
       it('should process authorization header for authenticated requests', async () => {
-        const mockUser = { id: 'user-1', role: 'member' };
+        const mockUser = { id: 'user-1', role: 'member' }
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue(mockUser);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue(mockUser)
 
         const request = createMockRequest(
           {
@@ -513,15 +513,15 @@ describe('GraphQL API Integration Tests', () => {
             `,
           },
           { authorization: 'Bearer valid-token' }
-        );
+        )
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.errors).toBeUndefined();
-      });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.errors).toBeUndefined()
+      })
 
       it('should return authentication error for protected queries without token', async () => {
         const request = createMockRequest({
@@ -533,19 +533,19 @@ describe('GraphQL API Integration Tests', () => {
               }
             }
           `,
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.errors).toBeDefined();
-        expect(body.errors[0].message).toContain('Authentication required');
-      });
+        const body = await parseResponse(response)
+        expect(body.errors).toBeDefined()
+        expect(body.errors[0].message).toContain('Authentication required')
+      })
 
       it('should handle invalid authorization token gracefully', async () => {
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue(null);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue(null)
 
         const request = createMockRequest(
           {
@@ -558,25 +558,25 @@ describe('GraphQL API Integration Tests', () => {
             `,
           },
           { authorization: 'Bearer invalid-token' }
-        );
+        )
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.errors).toBeDefined();
-        expect(body.errors[0].message).toContain('Authentication required');
-      });
-    });
+        const body = await parseResponse(response)
+        expect(body.errors).toBeDefined()
+        expect(body.errors[0].message).toContain('Authentication required')
+      })
+    })
 
     describe('Complex Operations', () => {
       it('should handle multiple queries in single request', async () => {
-        const mockUser = { id: 'user-1', name: 'Test User' };
-        const mockMembers = [{ id: 'member-1', fullName: 'Member 1' }];
+        const mockUser = { id: 'user-1', name: 'Test User' }
+        const mockMembers = [{ id: 'member-1', fullName: 'Member 1' }]
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue(mockUser);
-        db.query.members.findMany.mockResolvedValue(mockMembers);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue(mockUser)
+        db.query.members.findMany.mockResolvedValue(mockMembers)
 
         const request = createMockRequest({
           query: `
@@ -595,30 +595,28 @@ describe('GraphQL API Integration Tests', () => {
               }
             }
           `,
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.user).toBeDefined();
-        expect(body.data.members).toBeDefined();
-      });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.user).toBeDefined()
+        expect(body.data.members).toBeDefined()
+      })
 
       it('should handle nested queries with fragments', async () => {
         const mockArtist = {
           id: 'artist-1',
           name: 'Artist 1',
           userId: 'user-1',
-        };
-        const mockArtworks = [
-          { id: 'artwork-1', title: 'Artwork 1', artistId: 'artist-1' },
-        ];
+        }
+        const mockArtworks = [{ id: 'artwork-1', title: 'Artwork 1', artistId: 'artist-1' }]
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.artists.findFirst.mockResolvedValue(mockArtist);
-        db.query.artworks.findMany.mockResolvedValue(mockArtworks);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.artists.findFirst.mockResolvedValue(mockArtist)
+        db.query.artworks.findMany.mockResolvedValue(mockArtworks)
 
         const request = createMockRequest({
           query: `
@@ -634,24 +632,22 @@ describe('GraphQL API Integration Tests', () => {
             }
           `,
           variables: { id: 'artist-1' },
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.artist).toBeDefined();
-      });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.artist).toBeDefined()
+      })
 
       it('should handle queries with aliases', async () => {
-        const mockUser1 = { id: 'user-1', name: 'User 1' };
-        const mockUser2 = { id: 'user-2', name: 'User 2' };
+        const mockUser1 = { id: 'user-1', name: 'User 1' }
+        const mockUser2 = { id: 'user-2', name: 'User 2' }
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst
-          .mockResolvedValueOnce(mockUser1)
-          .mockResolvedValueOnce(mockUser2);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValueOnce(mockUser1).mockResolvedValueOnce(mockUser2)
 
         const request = createMockRequest({
           query: `
@@ -666,22 +662,22 @@ describe('GraphQL API Integration Tests', () => {
               }
             }
           `,
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.firstUser).toBeDefined();
-        expect(body.data.secondUser).toBeDefined();
-      });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.firstUser).toBeDefined()
+        expect(body.data.secondUser).toBeDefined()
+      })
 
       it('should handle queries with directives', async () => {
-        const mockUser = { id: 'user-1', name: 'Test User', email: 'test@example.com' };
+        const mockUser = { id: 'user-1', name: 'Test User', email: 'test@example.com' }
 
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue(mockUser);
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue(mockUser)
 
         const request = createMockRequest({
           query: `
@@ -694,77 +690,77 @@ describe('GraphQL API Integration Tests', () => {
             }
           `,
           variables: { id: 'user-1', withEmail: true },
-        });
+        })
 
-        const response = await POST(request);
-        expect(response.status).toBe(200);
+        const response = await POST(request)
+        expect(response.status).toBe(200)
 
-        const body = await parseResponse(response);
-        expect(body.data).toBeDefined();
-        expect(body.data.user).toBeDefined();
-      });
-    });
+        const body = await parseResponse(response)
+        expect(body.data).toBeDefined()
+        expect(body.data.user).toBeDefined()
+      })
+    })
 
     describe('Response Format', () => {
       it('should return JSON content-type', async () => {
         const request = createMockRequest({
           query: '{ user(id: "user-1") { id } }',
-        });
+        })
 
-        const response = await POST(request);
-        const contentType = response.headers.get('content-type');
+        const response = await POST(request)
+        const contentType = response.headers.get('content-type')
 
-        expect(contentType).toContain('application/json');
-      });
+        expect(contentType).toContain('application/json')
+      })
 
       it('should return data field for successful queries', async () => {
-        const { db } = require('@/lib/db/drizzle');
-        db.query.users.findFirst.mockResolvedValue({ id: 'user-1' });
+        const { db } = require('@/lib/db/drizzle')
+        db.query.users.findFirst.mockResolvedValue({ id: 'user-1' })
 
         const request = createMockRequest({
           query: '{ user(id: "user-1") { id } }',
-        });
+        })
 
-        const response = await POST(request);
-        const body = await parseResponse(response);
+        const response = await POST(request)
+        const body = await parseResponse(response)
 
-        expect(body).toHaveProperty('data');
-      });
+        expect(body).toHaveProperty('data')
+      })
 
       it('should return errors field for failed queries', async () => {
         const request = createMockRequest({
           query: '{ invalidQuery }',
-        });
+        })
 
-        const response = await POST(request);
-        const body = await parseResponse(response);
+        const response = await POST(request)
+        const body = await parseResponse(response)
 
-        expect(body).toHaveProperty('errors');
-        expect(Array.isArray(body.errors)).toBe(true);
-      });
+        expect(body).toHaveProperty('errors')
+        expect(Array.isArray(body.errors)).toBe(true)
+      })
 
       it('should include error locations and paths', async () => {
         const request = createMockRequest({
           query: '{ user(id: "user-1") { invalidField } }',
-        });
+        })
 
-        const response = await POST(request);
-        const body = await parseResponse(response);
+        const response = await POST(request)
+        const body = await parseResponse(response)
 
-        expect(body.errors).toBeDefined();
-        expect(body.errors[0]).toHaveProperty('message');
-      });
-    });
-  });
+        expect(body.errors).toBeDefined()
+        expect(body.errors[0]).toHaveProperty('message')
+      })
+    })
+  })
 
   describe('HTTP Methods', () => {
     it('should only support POST method', async () => {
       const request = createMockRequest({
         query: '{ user(id: "user-1") { id } }',
-      });
+      })
 
-      const response = await POST(request);
-      expect(response).toBeDefined();
-    });
-  });
-});
+      const response = await POST(request)
+      expect(response).toBeDefined()
+    })
+  })
+})

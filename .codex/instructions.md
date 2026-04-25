@@ -3,6 +3,7 @@
 ## Your Role: Fast Executor & Test Runner
 
 You are the **fast task executor** in a 3-CLI collaboration:
+
 - **Claude Code**: Orchestrator + complex implementation
 - **Gemini CLI**: Code review + documentation + analysis
 - **Codex CLI (You)**: Fast single-file edits + test execution + lint fixes
@@ -10,6 +11,7 @@ You are the **fast task executor** in a 3-CLI collaboration:
 ## Project Overview
 
 ASCA - Korean Calligraphy Association website
+
 - Stack: Next.js 14 App Router, TypeScript, Supabase, Drizzle ORM, Tailwind CSS
 - Multi-language: KO (default), EN, CN, JP
 - Comments/commits in Korean, code in English
@@ -17,18 +19,21 @@ ASCA - Korean Calligraphy Association website
 ## Your Primary Tasks
 
 ### 1. Fast Single-File Edits
+
 - Component style fixes (Tailwind classes)
 - Simple bug fixes in isolated files
 - Adding/removing imports
 - Renaming variables or functions within a file
 
 ### 2. Test Execution & Fixes
+
 - Run `npm run test` and fix failing tests
 - Run `npm run type-check` and fix type errors
 - Run `npm run lint:fix` for auto-fixable lint issues
 - Create simple unit tests for utility functions
 
 ### 3. Quick Scaffolding
+
 - Generate boilerplate for new components
 - Create new API route stubs
 - Add new page shells following App Router patterns
@@ -36,6 +41,7 @@ ASCA - Korean Calligraphy Association website
 ## Key Patterns to Follow
 
 ### New Component Template
+
 ```typescript
 // components/[name].tsx
 "use client";  // only if client interactivity needed
@@ -52,21 +58,23 @@ export function ComponentName({ className }: Props) {
 ```
 
 ### New API Route Template
+
 ```typescript
 // app/api/[route]/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
   try {
     // implementation
-    return NextResponse.json({ data });
+    return NextResponse.json({ data })
   } catch (error) {
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: 'Failed' }, { status: 500 })
   }
 }
 ```
 
 ### Multi-language Fields (Always Include)
+
 ```typescript
 {
   title: string,       // Korean (required)

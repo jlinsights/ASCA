@@ -1,32 +1,32 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 /**
  * Common Validation Schemas
  */
 
 // UUID validation
-export const uuidSchema = z.string().uuid('Invalid UUID format');
+export const uuidSchema = z.string().uuid('Invalid UUID format')
 
 // Email validation
-export const emailSchema = z.string().email('Invalid email format');
+export const emailSchema = z.string().email('Invalid email format')
 
 // Phone number validation (international format)
-export const phoneSchema = z.string().regex(
-  /^\+?[1-9]\d{1,14}$/,
-  'Invalid phone number format'
-).optional();
+export const phoneSchema = z
+  .string()
+  .regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format')
+  .optional()
 
 // Date validation
-export const dateSchema = z.string().datetime().or(z.string().date());
+export const dateSchema = z.string().datetime().or(z.string().date())
 
 // Pagination schemas
 export const paginationSchema = z.object({
   page: z.coerce.number().int().min(1).max(1000).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
-});
+})
 
 // Sort order schema
-export const sortOrderSchema = z.enum(['asc', 'desc']).default('desc');
+export const sortOrderSchema = z.enum(['asc', 'desc']).default('desc')
 
 /**
  * Member Validation Schemas
@@ -39,7 +39,7 @@ export const memberStatusSchema = z.enum([
   'suspended',
   'pending_approval',
   'expelled',
-]);
+])
 
 // Member search parameters
 export const memberSearchSchema = z.object({
@@ -48,11 +48,13 @@ export const memberSearchSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   status: memberStatusSchema.optional(),
   level: z.string().optional(),
-  sortBy: z.enum(['createdAt', 'updatedAt', 'email', 'lastActive', 'joinedDate']).default('createdAt'),
+  sortBy: z
+    .enum(['createdAt', 'updatedAt', 'email', 'lastActive', 'joinedDate'])
+    .default('createdAt'),
   sortOrder: sortOrderSchema,
-});
+})
 
-export type MemberSearchParams = z.infer<typeof memberSearchSchema>;
+export type MemberSearchParams = z.infer<typeof memberSearchSchema>
 
 // Create member schema
 export const createMemberSchema = z.object({
@@ -71,16 +73,16 @@ export const createMemberSchema = z.object({
   preferredLanguage: z.enum(['ko', 'en', 'ja', 'zh']).default('ko'),
   membershipLevelId: z.string().min(1),
   membershipStatus: memberStatusSchema.default('pending_approval'),
-});
+})
 
-export type CreateMemberDTO = z.infer<typeof createMemberSchema>;
+export type CreateMemberDTO = z.infer<typeof createMemberSchema>
 
 // Update member schema
 export const updateMemberSchema = createMemberSchema.partial().extend({
   id: uuidSchema,
-});
+})
 
-export type UpdateMemberDTO = z.infer<typeof updateMemberSchema>;
+export type UpdateMemberDTO = z.infer<typeof updateMemberSchema>
 
 /**
  * Artist Validation Schemas
@@ -106,16 +108,16 @@ export const createArtistSchema = z.object({
   membershipType: z.string().default('준회원'),
   artistType: z.string().default('일반작가'),
   title: z.string().optional(),
-});
+})
 
-export type CreateArtistDTO = z.infer<typeof createArtistSchema>;
+export type CreateArtistDTO = z.infer<typeof createArtistSchema>
 
 // Update artist schema
 export const updateArtistSchema = createArtistSchema.partial().extend({
   id: uuidSchema,
-});
+})
 
-export type UpdateArtistDTO = z.infer<typeof updateArtistSchema>;
+export type UpdateArtistDTO = z.infer<typeof updateArtistSchema>
 
 // Artist search parameters
 export const artistSearchSchema = z.object({
@@ -126,9 +128,9 @@ export const artistSearchSchema = z.object({
   membershipType: z.string().optional(),
   sortBy: z.enum(['createdAt', 'updatedAt', 'name']).default('createdAt'),
   sortOrder: sortOrderSchema,
-});
+})
 
-export type ArtistSearchParams = z.infer<typeof artistSearchSchema>;
+export type ArtistSearchParams = z.infer<typeof artistSearchSchema>
 
 /**
  * Artwork Validation Schemas
@@ -141,8 +143,8 @@ export const artworkAvailabilitySchema = z.enum([
   'reserved',
   'not_for_sale',
   'on_loan',
-  'n/a'
-]);
+  'n/a',
+])
 
 // Artwork category enum
 export const artworkCategorySchema = z.enum([
@@ -153,7 +155,7 @@ export const artworkCategorySchema = z.enum([
   'installation',
   'digital',
   'other',
-]);
+])
 
 // Artwork style enum
 export const artworkStyleSchema = z.enum([
@@ -163,7 +165,7 @@ export const artworkStyleSchema = z.enum([
   'abstract',
   'realistic',
   'experimental',
-]);
+])
 
 // Create artwork schema
 export const createArtworkSchema = z.object({
@@ -192,16 +194,16 @@ export const createArtworkSchema = z.object({
   condition: z.string().optional(),
   technique: z.string().optional(),
   authenticityCertificate: z.boolean().default(false),
-});
+})
 
-export type CreateArtworkDTO = z.infer<typeof createArtworkSchema>;
+export type CreateArtworkDTO = z.infer<typeof createArtworkSchema>
 
 // Update artwork schema
 export const updateArtworkSchema = createArtworkSchema.partial().extend({
   id: uuidSchema,
-});
+})
 
-export type UpdateArtworkDTO = z.infer<typeof updateArtworkSchema>;
+export type UpdateArtworkDTO = z.infer<typeof updateArtworkSchema>
 
 // Artwork search parameters
 export const artworkSearchSchema = z.object({
@@ -217,21 +219,16 @@ export const artworkSearchSchema = z.object({
   maxYear: z.coerce.number().int().optional(),
   sortBy: z.enum(['createdAt', 'updatedAt', 'title', 'year']).default('createdAt'),
   sortOrder: sortOrderSchema,
-});
+})
 
-export type ArtworkSearchParams = z.infer<typeof artworkSearchSchema>;
+export type ArtworkSearchParams = z.infer<typeof artworkSearchSchema>
 
 /**
  * Exhibition Validation Schemas
  */
 
 // Exhibition status enum
-export const exhibitionStatusSchema = z.enum([
-  'upcoming',
-  'ongoing',
-  'past',
-  'cancelled',
-]);
+export const exhibitionStatusSchema = z.enum(['upcoming', 'ongoing', 'past', 'cancelled'])
 
 // Create exhibition schema
 export const createExhibitionSchema = z.object({
@@ -259,16 +256,16 @@ export const createExhibitionSchema = z.object({
   openingHours: z.string().optional(),
   contact: z.string().optional(),
   website: z.string().url().optional(),
-});
+})
 
-export type CreateExhibitionDTO = z.infer<typeof createExhibitionSchema>;
+export type CreateExhibitionDTO = z.infer<typeof createExhibitionSchema>
 
 // Update exhibition schema
 export const updateExhibitionSchema = createExhibitionSchema.partial().extend({
   id: uuidSchema,
-});
+})
 
-export type UpdateExhibitionDTO = z.infer<typeof updateExhibitionSchema>;
+export type UpdateExhibitionDTO = z.infer<typeof updateExhibitionSchema>
 
 // Exhibition search parameters
 export const exhibitionSearchSchema = z.object({
@@ -280,9 +277,9 @@ export const exhibitionSearchSchema = z.object({
   isPublished: z.coerce.boolean().optional(),
   sortBy: z.enum(['createdAt', 'updatedAt', 'startDate', 'endDate']).default('startDate'),
   sortOrder: sortOrderSchema,
-});
+})
 
-export type ExhibitionSearchParams = z.infer<typeof exhibitionSearchSchema>;
+export type ExhibitionSearchParams = z.infer<typeof exhibitionSearchSchema>
 
 /**
  * Helper function to validate request params
@@ -291,8 +288,8 @@ export function validateSearchParams<T extends z.ZodTypeAny>(
   searchParams: URLSearchParams,
   schema: T
 ): z.infer<T> {
-  const params = Object.fromEntries(searchParams.entries());
-  return schema.parse(params);
+  const params = Object.fromEntries(searchParams.entries())
+  return schema.parse(params)
 }
 
 /**
@@ -302,6 +299,6 @@ export async function validateRequestBody<T extends z.ZodTypeAny>(
   request: Request,
   schema: T
 ): Promise<z.infer<T>> {
-  const body = await request.json();
-  return schema.parse(body);
+  const body = await request.json()
+  return schema.parse(body)
 }

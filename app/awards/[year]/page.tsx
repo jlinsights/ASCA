@@ -93,11 +93,7 @@ export default async function AwardYearPage({ params }: { params: Promise<{ year
 
   return (
     <main className='min-h-screen bg-transparent'>
-      <AwardHero
-        year={displayData.year}
-        edition={displayData.edition}
-        title={displayData.title}
-      />
+      <AwardHero year={displayData.year} edition={displayData.edition} title={displayData.title} />
 
       <div className='container mx-auto px-4 pt-8'>
         <Link

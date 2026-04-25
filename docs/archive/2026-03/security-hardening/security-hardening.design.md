@@ -19,8 +19,8 @@ Step 6: 관리자 권한 확인 (W10)
 
 ### 2.1 기존 인프라 활용
 
-이미 구현된 `createSecureAPI` 래퍼(`lib/security/secure-api.ts`)를 활용.
-이 래퍼는 Rate Limiting + CSRF + 인증 + 감사 로그를 일괄 처리함.
+이미 구현된 `createSecureAPI` 래퍼(`lib/security/secure-api.ts`)를 활용. 이
+래퍼는 Rate Limiting + CSRF + 인증 + 감사 로그를 일괄 처리함.
 
 ```typescript
 // 기존 패턴 (lib/security/secure-api.ts)
@@ -35,21 +35,23 @@ export const POST = createSecureAPI(
 ### 2.2 변경 대상 파일 (6건)
 
 **인증 방식 2가지**:
+
 - **정적 라우트** (params 불필요): `createSecureAPI` 래퍼 사용
 - **동적 라우트** (`[id]` params 필요): `requireAdminAuth` 함수 직접 호출
 
-| # | 파일 | HTTP 메서드 | 변경 내용 |
-|---|------|-----------|----------|
-| 1 | `app/api/artists/route.ts` | POST | `createSecureAPI` 래퍼로 감싸기 |
-| 2 | `app/api/artists/[id]/route.ts` | PUT, DELETE | `requireAdminAuth` 직접 호출 |
-| 3 | `app/api/cultural-exchange/applications/route.ts` | GET, POST | GET: memberId 없으면 관리자 인증, POST: `requireAdminAuth` |
-| 4 | `app/api/cultural-exchange/programs/route.ts` | POST | `requireAdminAuth` 직접 호출 |
-| 5 | `app/api/cultural-exchange/programs/[id]/route.ts` | PUT, DELETE | `requireAdminAuth` 직접 호출 |
-| 6 | `app/api/migration/migrate-all/route.ts` | POST | 영구 비활성화 (503) — CLI 마이그레이션 사용 |
+| #   | 파일                                               | HTTP 메서드 | 변경 내용                                                  |
+| --- | -------------------------------------------------- | ----------- | ---------------------------------------------------------- |
+| 1   | `app/api/artists/route.ts`                         | POST        | `createSecureAPI` 래퍼로 감싸기                            |
+| 2   | `app/api/artists/[id]/route.ts`                    | PUT, DELETE | `requireAdminAuth` 직접 호출                               |
+| 3   | `app/api/cultural-exchange/applications/route.ts`  | GET, POST   | GET: memberId 없으면 관리자 인증, POST: `requireAdminAuth` |
+| 4   | `app/api/cultural-exchange/programs/route.ts`      | POST        | `requireAdminAuth` 직접 호출                               |
+| 5   | `app/api/cultural-exchange/programs/[id]/route.ts` | PUT, DELETE | `requireAdminAuth` 직접 호출                               |
+| 6   | `app/api/migration/migrate-all/route.ts`           | POST        | 영구 비활성화 (503) — CLI 마이그레이션 사용                |
 
 ### 2.3 구현 패턴
 
 **Before** (`app/api/artists/route.ts` POST):
+
 ```typescript
 export async function POST(request: NextRequest) {
   try {
@@ -60,7 +62,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(newArtist, { status: 201 })
   } catch (error) {
     return NextResponse.json(
-      { error: '...', details: error instanceof Error ? error.message : String(error) },
+      {
+        error: '...',
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 }
     )
   }
@@ -68,6 +73,7 @@ export async function POST(request: NextRequest) {
 ```
 
 **After**:
+
 ```typescript
 import { createSecureAPI } from '@/lib/security/secure-api'
 import { ApiResponse } from '@/lib/api/response'
@@ -80,7 +86,11 @@ export const POST = createSecureAPI(
     const newArtist = await EnhancedAdminAPI.createArtist(body)
 
     if (!newArtist) {
-      return ApiResponse.error('작가 생성에 실패했습니다.', 'CREATE_FAILED', 500)
+      return ApiResponse.error(
+        '작가 생성에 실패했습니다.',
+        'CREATE_FAILED',
+        500
+      )
     }
 
     return ApiResponse.success(newArtist, undefined, 201)
@@ -90,7 +100,8 @@ export const POST = createSecureAPI(
 
 ### 2.4 cultural-exchange GET 인증 해제 패턴
 
-GET은 인증 필수가 아닐 수 있음. `memberId` 파라미터 없이 전체 조회는 관리자만 허용:
+GET은 인증 필수가 아닐 수 있음. `memberId` 파라미터 없이 전체 조회는 관리자만
+허용:
 
 ```typescript
 export async function GET(request: NextRequest) {
@@ -129,16 +140,50 @@ npm install -D @types/dompurify
 import DOMPurify from 'isomorphic-dompurify'
 
 const ALLOWED_TAGS = [
-  'p', 'br', 'strong', 'em', 'b', 'i', 'u',
-  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-  'ul', 'ol', 'li', 'a', 'img', 'figure', 'figcaption',
-  'blockquote', 'pre', 'code', 'span', 'div',
-  'table', 'thead', 'tbody', 'tr', 'th', 'td'
+  'p',
+  'br',
+  'strong',
+  'em',
+  'b',
+  'i',
+  'u',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'ul',
+  'ol',
+  'li',
+  'a',
+  'img',
+  'figure',
+  'figcaption',
+  'blockquote',
+  'pre',
+  'code',
+  'span',
+  'div',
+  'table',
+  'thead',
+  'tbody',
+  'tr',
+  'th',
+  'td',
 ]
 
 const ALLOWED_ATTR = [
-  'href', 'src', 'alt', 'title', 'class', 'target', 'rel',
-  'width', 'height', 'loading'
+  'href',
+  'src',
+  'alt',
+  'title',
+  'class',
+  'target',
+  'rel',
+  'width',
+  'height',
+  'loading',
 ]
 
 export function sanitizeHTML(dirty: string): string {
@@ -147,8 +192,23 @@ export function sanitizeHTML(dirty: string): string {
     ALLOWED_ATTR,
     ALLOW_DATA_ATTR: false,
     ADD_ATTR: ['target'],
-    FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input'],
-    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur']
+    FORBID_TAGS: [
+      'script',
+      'style',
+      'iframe',
+      'object',
+      'embed',
+      'form',
+      'input',
+    ],
+    FORBID_ATTR: [
+      'onerror',
+      'onload',
+      'onclick',
+      'onmouseover',
+      'onfocus',
+      'onblur',
+    ],
   })
 }
 
@@ -164,11 +224,11 @@ export function escapeHTML(text: string): string {
 
 ### 3.3 변경 대상 파일
 
-| # | 파일 | 현재 | 변경 |
-|---|------|------|------|
-| 1 | `app/blog/page.tsx:236` | `dangerouslySetInnerHTML={{ __html: content.replace(...) }}` | `dangerouslySetInnerHTML={{ __html: sanitizeHTML(content) }}` |
-| 2 | `components/ui/typewriter-effect.tsx:79` | `dangerouslySetInnerHTML={{ __html: displayedText }}` | 순수 텍스트로 전환. `<br/>`만 `\n` 변환 후 `white-space: pre-wrap` 스타일 적용 |
-| 3 | `app/gallery/page.tsx:336` | `dangerouslySetInnerHTML` | 확인 후 `sanitizeHTML` 적용 |
+| #   | 파일                                     | 현재                                                         | 변경                                                                           |
+| --- | ---------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| 1   | `app/blog/page.tsx:236`                  | `dangerouslySetInnerHTML={{ __html: content.replace(...) }}` | `dangerouslySetInnerHTML={{ __html: sanitizeHTML(content) }}`                  |
+| 2   | `components/ui/typewriter-effect.tsx:79` | `dangerouslySetInnerHTML={{ __html: displayedText }}`        | 순수 텍스트로 전환. `<br/>`만 `\n` 변환 후 `white-space: pre-wrap` 스타일 적용 |
+| 3   | `app/gallery/page.tsx:336`               | `dangerouslySetInnerHTML`                                    | 확인 후 `sanitizeHTML` 적용                                                    |
 
 ### 3.4 typewriter-effect 구체적 변경
 
@@ -187,6 +247,7 @@ export function escapeHTML(text: string): string {
 ### 3.5 안전한 dangerouslySetInnerHTML (유지 대상)
 
 아래는 개발자 제어 데이터이므로 변경 불필요:
+
 - `components/json-ld.tsx` — JSON-LD 구조화 데이터 (개발자 하드코딩)
 - `components/ui/chart.tsx` — CSS 변수 스타일 태그 (내부 생성)
 
@@ -200,8 +261,14 @@ export function escapeHTML(text: string): string {
 
 ```typescript
 // 허용된 테이블명
-const ALLOWED_TABLES = ['artists', 'artworks', 'exhibitions', 'events', 'news'] as const
-type AllowedTable = typeof ALLOWED_TABLES[number]
+const ALLOWED_TABLES = [
+  'artists',
+  'artworks',
+  'exhibitions',
+  'events',
+  'news',
+] as const
+type AllowedTable = (typeof ALLOWED_TABLES)[number]
 
 // 허용된 컬럼명 패턴 (영문소문자, 언더스코어만)
 const SAFE_COLUMN_PATTERN = /^[a-z][a-z0-9_]{0,62}$/
@@ -216,9 +283,19 @@ function validateColumnName(name: string): boolean {
 
 // 허용된 데이터 타입
 const ALLOWED_DATA_TYPES = [
-  'TEXT', 'VARCHAR(255)', 'INTEGER', 'BIGINT', 'BOOLEAN',
-  'TIMESTAMP', 'TIMESTAMPTZ', 'DATE', 'JSONB', 'UUID',
-  'NUMERIC', 'REAL', 'DOUBLE PRECISION'
+  'TEXT',
+  'VARCHAR(255)',
+  'INTEGER',
+  'BIGINT',
+  'BOOLEAN',
+  'TIMESTAMP',
+  'TIMESTAMPTZ',
+  'DATE',
+  'JSONB',
+  'UUID',
+  'NUMERIC',
+  'REAL',
+  'DOUBLE PRECISION',
 ] as const
 
 function validateDataType(type: string): boolean {
@@ -271,7 +348,9 @@ export class SyncEngine {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL
       const key = process.env.SUPABASE_SERVICE_ROLE_KEY
       if (!url || !key) {
-        throw new Error('SyncEngine: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required')
+        throw new Error(
+          'SyncEngine: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required'
+        )
       }
       this._supabase = createClient(url, key)
     }
@@ -283,7 +362,9 @@ export class SyncEngine {
       const apiKey = process.env.AIRTABLE_API_KEY
       const baseId = process.env.AIRTABLE_BASE_ID
       if (!apiKey || !baseId) {
-        throw new Error('SyncEngine: AIRTABLE_API_KEY and AIRTABLE_BASE_ID are required')
+        throw new Error(
+          'SyncEngine: AIRTABLE_API_KEY and AIRTABLE_BASE_ID are required'
+        )
       }
       this._airtableBase = new Airtable({ apiKey }).base(baseId)
     }
@@ -321,6 +402,7 @@ export function getSyncEngine(): SyncEngine {
 > 현재는 `lib/sync-engine.ts` 내부에서만 `getSyncEngine()` export가 유효함.
 
 변경 불필요 파일 (기존 Design에서 제외):
+
 - ~~`app/api/sync/start/route.ts`~~
 - ~~`app/api/sync/stop/route.ts`~~
 - `app/api/sync/status/route.ts`
@@ -364,12 +446,13 @@ static safeError(
 
 ### 6.3 변경 대상
 
-`createSecureAPI` 래퍼 적용 시 자동으로 에러 핸들링이 포함되므로, Step 1에서 래퍼를 적용하지 않는 GET 엔드포인트에서만 수동 적용:
+`createSecureAPI` 래퍼 적용 시 자동으로 에러 핸들링이 포함되므로, Step 1에서
+래퍼를 적용하지 않는 GET 엔드포인트에서만 수동 적용:
 
-| 파일 | 변경 |
-|------|------|
+| 파일                                 | 변경                              |
+| ------------------------------------ | --------------------------------- |
 | `app/api/artists/route.ts` GET catch | `ApiResponse.safeError(...)` 사용 |
-| 기타 GET 엔드포인트 catch 블록 | 동일 패턴 적용 |
+| 기타 GET 엔드포인트 catch 블록       | 동일 패턴 적용                    |
 
 ---
 
@@ -383,7 +466,10 @@ static safeError(
 // Before
 if (existingMember.user_id !== user.id) {
   // 관리자 권한 확인 로직 추가 필요
-  return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
+  return NextResponse.json(
+    { success: false, error: 'Forbidden' },
+    { status: 403 }
+  )
 }
 
 // After
@@ -400,24 +486,24 @@ if (existingMember.user_id !== user.id) {
 
 ## 8. 변경 파일 전체 목록
 
-| # | 파일 | Step | 변경 유형 |
-|---|------|------|----------|
-| 1 | `lib/security/sanitize.ts` | 2 | **신규 생성** |
-| 2 | `lib/api/response.ts` | 5 | `safeError` 메서드 추가 |
-| 3 | `lib/sync-engine.ts` | 3, 4 | SQL 검증 + 지연 초기화 |
-| 4 | `app/api/artists/route.ts` | 1, 5 | `createSecureAPI` + 안전 에러 |
-| 5 | `app/api/artists/[id]/route.ts` | 1 | `createSecureAPI` 적용 |
-| 6 | `app/api/cultural-exchange/applications/route.ts` | 1 | 인증 활성화 |
-| 7 | `app/api/cultural-exchange/programs/route.ts` | 1 | `createSecureAPI` 적용 |
-| 8 | `app/api/cultural-exchange/programs/[id]/route.ts` | 1 | `createSecureAPI` 적용 |
-| 9 | `app/api/migration/migrate-all/route.ts` | 1 | `createSecureAPI` 적용 |
-| 10 | `app/blog/page.tsx` | 2 | `sanitizeHTML` 적용 |
-| 11 | `components/ui/typewriter-effect.tsx` | 2 | `dangerouslySetInnerHTML` 제거 |
-| 12 | `app/gallery/page.tsx` | 2 | `sanitizeHTML` 적용 확인 |
-| 13 | `app/api/members/[id]/route.ts` | 6 | 관리자 권한 확인 구현 |
-| 14 | `app/api/sync/start/route.ts` | 4 | `getSyncEngine()` 호출 변경 |
-| 15 | `app/api/sync/stop/route.ts` | 4 | `getSyncEngine()` 호출 변경 |
-| 16 | `app/api/sync/status/route.ts` | 4 | `getSyncEngine()` 호출 변경 |
+| #   | 파일                                               | Step | 변경 유형                      |
+| --- | -------------------------------------------------- | ---- | ------------------------------ |
+| 1   | `lib/security/sanitize.ts`                         | 2    | **신규 생성**                  |
+| 2   | `lib/api/response.ts`                              | 5    | `safeError` 메서드 추가        |
+| 3   | `lib/sync-engine.ts`                               | 3, 4 | SQL 검증 + 지연 초기화         |
+| 4   | `app/api/artists/route.ts`                         | 1, 5 | `createSecureAPI` + 안전 에러  |
+| 5   | `app/api/artists/[id]/route.ts`                    | 1    | `createSecureAPI` 적용         |
+| 6   | `app/api/cultural-exchange/applications/route.ts`  | 1    | 인증 활성화                    |
+| 7   | `app/api/cultural-exchange/programs/route.ts`      | 1    | `createSecureAPI` 적용         |
+| 8   | `app/api/cultural-exchange/programs/[id]/route.ts` | 1    | `createSecureAPI` 적용         |
+| 9   | `app/api/migration/migrate-all/route.ts`           | 1    | `createSecureAPI` 적용         |
+| 10  | `app/blog/page.tsx`                                | 2    | `sanitizeHTML` 적용            |
+| 11  | `components/ui/typewriter-effect.tsx`              | 2    | `dangerouslySetInnerHTML` 제거 |
+| 12  | `app/gallery/page.tsx`                             | 2    | `sanitizeHTML` 적용 확인       |
+| 13  | `app/api/members/[id]/route.ts`                    | 6    | 관리자 권한 확인 구현          |
+| 14  | `app/api/sync/start/route.ts`                      | 4    | `getSyncEngine()` 호출 변경    |
+| 15  | `app/api/sync/stop/route.ts`                       | 4    | `getSyncEngine()` 호출 변경    |
+| 16  | `app/api/sync/status/route.ts`                     | 4    | `getSyncEngine()` 호출 변경    |
 
 ---
 
@@ -427,13 +513,13 @@ if (existingMember.user_id !== user.id) {
 - [ ] `npm run lint` 에러 0건
 - [ ] `npm run build` 성공
 - [ ] 모든 쓰기 API에 인증 미들웨어 확인 (`grep "TODO.*Auth" app/api/` → 0건)
-- [ ] `dangerouslySetInnerHTML` 사용처 전수: 안전(json-ld, chart) 또는 sanitize 적용 확인
+- [ ] `dangerouslySetInnerHTML` 사용처 전수: 안전(json-ld, chart) 또는 sanitize
+      적용 확인
 - [ ] `syncEngine` 직접 export 제거 → `getSyncEngine()` 사용 확인
 - [ ] 프로덕션 에러 응답에 `error.message` 미포함 확인
 
 ---
 
-**작성일**: 2026-03-28
-**PDCA Phase**: Design
-**참조**: `docs/01-plan/features/security-hardening.plan.md`
-**다음 단계**: `/pdca do security-hardening`
+**작성일**: 2026-03-28 **PDCA Phase**: Design **참조**:
+`docs/01-plan/features/security-hardening.plan.md` **다음 단계**:
+`/pdca do security-hardening`

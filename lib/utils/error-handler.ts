@@ -25,4 +25,4 @@ export const handleApiError = (error: unknown) => {
     error: error instanceof Error ? error.message : 'Internal server error',
     statusCode: 500,
   }
-} 
+}

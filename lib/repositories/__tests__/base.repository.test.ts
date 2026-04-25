@@ -4,127 +4,127 @@
  * Tests for generic CRUD operations and pagination
  */
 
-import { describe, test, expect, beforeAll, afterEach, afterAll } from '@jest/globals';
-import { BaseRepository } from '../base.repository';
-import { testDatabaseHelpers, getTestPool } from '@/lib/testing/setup-test-db';
-import { members } from '@/lib/db/schema-pg';
-import { eq } from 'drizzle-orm';
+import { describe, test, expect, beforeAll, afterEach, afterAll } from '@jest/globals'
+import { BaseRepository } from '../base.repository'
+import { testDatabaseHelpers, getTestPool } from '@/lib/testing/setup-test-db'
+import { members } from '@/lib/db/schema-pg'
+import { eq } from 'drizzle-orm'
 
 // Create a test repository using members table
 class TestRepository extends BaseRepository<typeof members> {
   constructor() {
-    super(members);
+    super(members)
   }
 }
 
 describe('BaseRepository', () => {
-  let repository: TestRepository;
+  let repository: TestRepository
 
   beforeAll(async () => {
-    await testDatabaseHelpers.beforeAll();
-    repository = new TestRepository();
-  });
+    await testDatabaseHelpers.beforeAll()
+    repository = new TestRepository()
+  })
 
   afterEach(async () => {
-    await testDatabaseHelpers.afterEach();
-  });
+    await testDatabaseHelpers.afterEach()
+  })
 
   afterAll(async () => {
-    await testDatabaseHelpers.afterAll();
-  });
+    await testDatabaseHelpers.afterAll()
+  })
 
   describe('findById', () => {
     test('should find record by ID', async () => {
       // Arrange
-      const testId = '00000000-0000-0000-0000-000000000101';
+      const testId = '00000000-0000-0000-0000-000000000101'
 
       // Act
-      const result = await repository.findById(testId);
+      const result = await repository.findById(testId)
 
       // Assert
-      expect(result).toBeDefined();
-      expect(result?.id).toBe(testId);
-      expect(result?.email).toBe('test1@example.com');
-    });
+      expect(result).toBeDefined()
+      expect(result?.id).toBe(testId)
+      expect(result?.email).toBe('test1@example.com')
+    })
 
     test('should return null for non-existent ID', async () => {
       // Arrange
-      const nonExistentId = '99999999-9999-9999-9999-999999999999';
+      const nonExistentId = '99999999-9999-9999-9999-999999999999'
 
       // Act
-      const result = await repository.findById(nonExistentId);
+      const result = await repository.findById(nonExistentId)
 
       // Assert
-      expect(result).toBeNull();
-    });
-  });
+      expect(result).toBeNull()
+    })
+  })
 
   describe('findAll', () => {
     test('should find all records', async () => {
       // Act
-      const results = await repository.findAll();
+      const results = await repository.findAll()
 
       // Assert
-      expect(results).toBeInstanceOf(Array);
-      expect(results.length).toBeGreaterThan(0);
-    });
+      expect(results).toBeInstanceOf(Array)
+      expect(results.length).toBeGreaterThan(0)
+    })
 
     test('should apply where clause', async () => {
       // Arrange
-      const whereClause = eq(members.membership_status, 'active');
+      const whereClause = eq(members.membership_status, 'active')
 
       // Act
       const results = await repository.findAll({
         where: whereClause,
-      });
+      })
 
       // Assert
-      expect(results).toBeInstanceOf(Array);
-      results.forEach((member) => {
-        expect(member.membership_status).toBe('active');
-      });
-    });
+      expect(results).toBeInstanceOf(Array)
+      results.forEach(member => {
+        expect(member.membership_status).toBe('active')
+      })
+    })
 
     test('should apply limit', async () => {
       // Act
-      const results = await repository.findAll({ limit: 1 });
+      const results = await repository.findAll({ limit: 1 })
 
       // Assert
-      expect(results).toHaveLength(1);
-    });
+      expect(results).toHaveLength(1)
+    })
 
     test('should apply offset', async () => {
       // Arrange
-      const allResults = await repository.findAll();
-      const firstRecord = allResults[0];
+      const allResults = await repository.findAll()
+      const firstRecord = allResults[0]
 
       // Act
-      const offsetResults = await repository.findAll({ offset: 1 });
+      const offsetResults = await repository.findAll({ offset: 1 })
 
       // Assert
-      expect(offsetResults).toBeInstanceOf(Array);
-      expect(offsetResults[0]?.id).not.toBe(firstRecord.id);
-    });
+      expect(offsetResults).toBeInstanceOf(Array)
+      expect(offsetResults[0]?.id).not.toBe(firstRecord.id)
+    })
 
     test('should apply order by', async () => {
       // Arrange
-      const { desc } = await import('drizzle-orm');
+      const { desc } = await import('drizzle-orm')
 
       // Act
       const results = await repository.findAll({
         orderBy: desc(members.created_at),
-      });
+      })
 
       // Assert
-      expect(results).toBeInstanceOf(Array);
+      expect(results).toBeInstanceOf(Array)
       // Most recent should be first
       for (let i = 0; i < results.length - 1; i++) {
-        const current = new Date(results[i].created_at!).getTime();
-        const next = new Date(results[i + 1].created_at!).getTime();
-        expect(current).toBeGreaterThanOrEqual(next);
+        const current = new Date(results[i].created_at!).getTime()
+        const next = new Date(results[i + 1].created_at!).getTime()
+        expect(current).toBeGreaterThanOrEqual(next)
       }
-    });
-  });
+    })
+  })
 
   describe('findWithPagination', () => {
     test('should paginate results', async () => {
@@ -132,70 +132,70 @@ describe('BaseRepository', () => {
       const result = await repository.findWithPagination({
         page: 1,
         limit: 2,
-      });
+      })
 
       // Assert
-      expect(result.data).toBeInstanceOf(Array);
-      expect(result.data.length).toBeLessThanOrEqual(2);
-      expect(result.page).toBe(1);
-      expect(result.limit).toBe(2);
-      expect(result.total).toBeGreaterThan(0);
-      expect(result.totalPages).toBeGreaterThan(0);
-      expect(result.hasMore).toBeDefined();
-      expect(result.hasPrevious).toBe(false);
-    });
+      expect(result.data).toBeInstanceOf(Array)
+      expect(result.data.length).toBeLessThanOrEqual(2)
+      expect(result.page).toBe(1)
+      expect(result.limit).toBe(2)
+      expect(result.total).toBeGreaterThan(0)
+      expect(result.totalPages).toBeGreaterThan(0)
+      expect(result.hasMore).toBeDefined()
+      expect(result.hasPrevious).toBe(false)
+    })
 
     test('should calculate hasMore correctly', async () => {
       // Act
       const result = await repository.findWithPagination({
         page: 1,
         limit: 1,
-      });
+      })
 
       // Assert
       if (result.total > 1) {
-        expect(result.hasMore).toBe(true);
+        expect(result.hasMore).toBe(true)
       } else {
-        expect(result.hasMore).toBe(false);
+        expect(result.hasMore).toBe(false)
       }
-    });
+    })
 
     test('should calculate hasPrevious correctly', async () => {
       // Act
       const result = await repository.findWithPagination({
         page: 2,
         limit: 1,
-      });
+      })
 
       // Assert
-      expect(result.hasPrevious).toBe(true);
-    });
-  });
+      expect(result.hasPrevious).toBe(true)
+    })
+  })
 
   describe('findOne', () => {
     test('should find one record matching criteria', async () => {
       // Arrange
-      const whereClause = eq(members.email, 'test1@example.com');
+      const whereClause = eq(members.email, 'test1@example.com')
 
       // Act
-      const result = await repository.findOne({ where: whereClause });
+      const result = await repository.findOne({ where: whereClause })
 
       // Assert
-      expect(result).toBeDefined();
-      expect(result?.email).toBe('test1@example.com');
-    });
+      expect(result).toBeDefined()
+      expect(result?.email).toBe('test1@example.com')
+    })
 
     test('should return null when no match', async () => {
       // Arrange
-      const whereClause = eq(members.email, 'nonexistent@example.com');
+      const whereClause = eq(members.email, 'nonexistent@example.com')
 
       // Act
-      const result = await repository.findOne({ where: whereClause });
+      const result = await repository.findOne({ where: whereClause })
 
       // Assert
-      expect(result).toBeNull();
-    });
-  });
+      expect(result).toBeNull()
+    })
+  })
 
   describe('create', () => {
     test('should create new record', async () => {
@@ -206,18 +206,18 @@ describe('BaseRepository', () => {
         last_name_ko: '회원',
         membership_level_id: '00000000-0000-0000-0000-000000000001',
         membership_status: 'pending_approval' as const,
-      };
+      }
 
       // Act
-      const result = await repository.create(newMember);
+      const result = await repository.create(newMember)
 
       // Assert
-      expect(result).toBeDefined();
-      expect(result.id).toBeDefined();
-      expect(result.email).toBe('newmember@example.com');
-      expect(result.first_name_ko).toBe('신규');
-    });
-  });
+      expect(result).toBeDefined()
+      expect(result.id).toBeDefined()
+      expect(result.email).toBe('newmember@example.com')
+      expect(result.first_name_ko).toBe('신규')
+    })
+  })
 
   describe('createMany', () => {
     test('should create multiple records', async () => {
@@ -237,66 +237,66 @@ describe('BaseRepository', () => {
           membership_level_id: '00000000-0000-0000-0000-000000000001',
           membership_status: 'pending_approval' as const,
         },
-      ];
+      ]
 
       // Act
-      const results = await repository.createMany(newMembers);
+      const results = await repository.createMany(newMembers)
 
       // Assert
-      expect(results).toHaveLength(2);
-      expect(results[0].email).toBe('bulk1@example.com');
-      expect(results[1].email).toBe('bulk2@example.com');
-    });
-  });
+      expect(results).toHaveLength(2)
+      expect(results[0].email).toBe('bulk1@example.com')
+      expect(results[1].email).toBe('bulk2@example.com')
+    })
+  })
 
   describe('update', () => {
     test('should update record by ID', async () => {
       // Arrange
-      const testId = '00000000-0000-0000-0000-000000000101';
+      const testId = '00000000-0000-0000-0000-000000000101'
       const updateData = {
         first_name_ko: '업데이트',
-      };
+      }
 
       // Act
-      const result = await repository.update(testId, updateData);
+      const result = await repository.update(testId, updateData)
 
       // Assert
-      expect(result).toBeDefined();
-      expect(result?.first_name_ko).toBe('업데이트');
-    });
+      expect(result).toBeDefined()
+      expect(result?.first_name_ko).toBe('업데이트')
+    })
 
     test('should return null for non-existent ID', async () => {
       // Arrange
-      const nonExistentId = '99999999-9999-9999-9999-999999999999';
+      const nonExistentId = '99999999-9999-9999-9999-999999999999'
 
       // Act
       const result = await repository.update(nonExistentId, {
         first_name_ko: '테스트',
-      });
+      })
 
       // Assert
-      expect(result).toBeNull();
-    });
-  });
+      expect(result).toBeNull()
+    })
+  })
 
   describe('updateMany', () => {
     test('should update multiple records', async () => {
       // Arrange
-      const whereClause = eq(members.membership_status, 'pending_approval');
+      const whereClause = eq(members.membership_status, 'pending_approval')
       const updateData = {
         membership_status: 'active' as const,
-      };
+      }
 
       // Act
-      const results = await repository.updateMany(whereClause, updateData);
+      const results = await repository.updateMany(whereClause, updateData)
 
       // Assert
-      expect(results).toBeInstanceOf(Array);
-      results.forEach((member) => {
-        expect(member.membership_status).toBe('active');
-      });
-    });
-  });
+      expect(results).toBeInstanceOf(Array)
+      results.forEach(member => {
+        expect(member.membership_status).toBe('active')
+      })
+    })
+  })
 
   describe('delete', () => {
     test('should delete record by ID', async () => {
@@ -307,30 +307,30 @@ describe('BaseRepository', () => {
         last_name_ko: '테스트',
         membership_level_id: '00000000-0000-0000-0000-000000000001',
         membership_status: 'pending_approval' as const,
-      });
+      })
 
       // Act
-      const deleted = await repository.delete(newMember.id);
+      const deleted = await repository.delete(newMember.id)
 
       // Assert
-      expect(deleted).toBe(true);
+      expect(deleted).toBe(true)
 
       // Verify deletion
-      const found = await repository.findById(newMember.id);
-      expect(found).toBeNull();
-    });
+      const found = await repository.findById(newMember.id)
+      expect(found).toBeNull()
+    })
 
     test('should return false for non-existent ID', async () => {
       // Arrange
-      const nonExistentId = '99999999-9999-9999-9999-999999999999';
+      const nonExistentId = '99999999-9999-9999-9999-999999999999'
 
       // Act
-      const result = await repository.delete(nonExistentId);
+      const result = await repository.delete(nonExistentId)
 
       // Assert
-      expect(result).toBe(false);
-    });
-  });
+      expect(result).toBe(false)
+    })
+  })
 
   describe('deleteMany', () => {
     test('should delete multiple records', async () => {
@@ -350,104 +350,104 @@ describe('BaseRepository', () => {
           membership_level_id: '00000000-0000-0000-0000-000000000001',
           membership_status: 'pending_approval' as const,
         },
-      ]);
+      ])
 
-      const whereClause = eq(members.membership_status, 'pending_approval');
+      const whereClause = eq(members.membership_status, 'pending_approval')
 
       // Act
-      const deletedCount = await repository.deleteMany(whereClause);
+      const deletedCount = await repository.deleteMany(whereClause)
 
       // Assert
-      expect(deletedCount).toBeGreaterThan(0);
-    });
-  });
+      expect(deletedCount).toBeGreaterThan(0)
+    })
+  })
 
   describe('exists', () => {
     test('should return true for existing ID', async () => {
       // Arrange
-      const testId = '00000000-0000-0000-0000-000000000101';
+      const testId = '00000000-0000-0000-0000-000000000101'
 
       // Act
-      const result = await repository.exists(testId);
+      const result = await repository.exists(testId)
 
       // Assert
-      expect(result).toBe(true);
-    });
+      expect(result).toBe(true)
+    })
 
     test('should return false for non-existent ID', async () => {
       // Arrange
-      const nonExistentId = '99999999-9999-9999-9999-999999999999';
+      const nonExistentId = '99999999-9999-9999-9999-999999999999'
 
       // Act
-      const result = await repository.exists(nonExistentId);
+      const result = await repository.exists(nonExistentId)
 
       // Assert
-      expect(result).toBe(false);
-    });
-  });
+      expect(result).toBe(false)
+    })
+  })
 
   describe('existsWhere', () => {
     test('should return true when record matches', async () => {
       // Arrange
-      const whereClause = eq(members.email, 'test1@example.com');
+      const whereClause = eq(members.email, 'test1@example.com')
 
       // Act
-      const result = await repository.existsWhere(whereClause);
+      const result = await repository.existsWhere(whereClause)
 
       // Assert
-      expect(result).toBe(true);
-    });
+      expect(result).toBe(true)
+    })
 
     test('should return false when no match', async () => {
       // Arrange
-      const whereClause = eq(members.email, 'nonexistent@example.com');
+      const whereClause = eq(members.email, 'nonexistent@example.com')
 
       // Act
-      const result = await repository.existsWhere(whereClause);
+      const result = await repository.existsWhere(whereClause)
 
       // Assert
-      expect(result).toBe(false);
-    });
-  });
+      expect(result).toBe(false)
+    })
+  })
 
   describe('count', () => {
     test('should count all records', async () => {
       // Act
-      const count = await repository.count();
+      const count = await repository.count()
 
       // Assert
-      expect(count).toBeGreaterThan(0);
-    });
+      expect(count).toBeGreaterThan(0)
+    })
 
     test('should count with where clause', async () => {
       // Arrange
-      const whereClause = eq(members.membership_status, 'active');
+      const whereClause = eq(members.membership_status, 'active')
 
       // Act
-      const count = await repository.count(whereClause);
+      const count = await repository.count(whereClause)
 
       // Assert
-      expect(count).toBeGreaterThanOrEqual(0);
-    });
-  });
+      expect(count).toBeGreaterThanOrEqual(0)
+    })
+  })
 
   describe('first', () => {
     test('should get first record', async () => {
       // Act
-      const result = await repository.first();
+      const result = await repository.first()
 
       // Assert
-      expect(result).toBeDefined();
-    });
-  });
+      expect(result).toBeDefined()
+    })
+  })
 
   describe('last', () => {
     test('should get last record', async () => {
       // Act
-      const result = await repository.last();
+      const result = await repository.last()
 
       // Assert
-      expect(result).toBeDefined();
-    });
-  });
-});
+      expect(result).toBeDefined()
+    })
+  })
+})

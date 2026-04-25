@@ -1,7 +1,13 @@
 'use client'
 
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { GalleryItem, GalleryCategory, GalleryFilterState, GalleryViewState, GalleryEvent } from '@/lib/types/gallery/gallery-legacy'
+import {
+  GalleryItem,
+  GalleryCategory,
+  GalleryFilterState,
+  GalleryViewState,
+  GalleryEvent,
+} from '@/lib/types/gallery/gallery-legacy'
 
 interface UseGalleryProps {
   items: GalleryItem[]
@@ -13,12 +19,12 @@ interface UseGalleryReturn {
   // 상태
   filterState: GalleryFilterState
   viewState: GalleryViewState
-  
+
   // 계산된 값
   filteredItems: GalleryItem[]
   totalPages: number
   currentItems: GalleryItem[]
-  
+
   // 액션
   setCategory: (category: string) => void
   setSearchQuery: (query: string) => void
@@ -29,7 +35,7 @@ interface UseGalleryReturn {
   openLightbox: (item: GalleryItem) => void
   closeLightbox: () => void
   navigateImage: (direction: 'prev' | 'next') => void
-  
+
   // 유틸리티
   resetFilters: () => void
   getItemIndex: (item: GalleryItem) => number
@@ -42,14 +48,14 @@ const DEFAULT_FILTER_STATE: GalleryFilterState = {
   sortBy: 'date',
   sortOrder: 'desc',
   page: 1,
-  itemsPerPage: 24
+  itemsPerPage: 24,
 }
 
 const DEFAULT_VIEW_STATE: GalleryViewState = {
   viewMode: 'grid',
   selectedImage: null,
   isLightboxOpen: false,
-  isLoading: false
+  isLoading: false,
 }
 
 export function useGallery({ items, categories, onEvent }: UseGalleryProps): UseGalleryReturn {
@@ -57,16 +63,19 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
   const [viewState, setViewState] = useState<GalleryViewState>(DEFAULT_VIEW_STATE)
 
   // 이벤트 발생 헬퍼
-  const emitEvent = useCallback((type: GalleryEvent['type'], payload: Partial<GalleryEvent['payload']>) => {
-    const event: GalleryEvent = {
-      type,
-      payload: {
-        timestamp: Date.now(),
-        ...payload
+  const emitEvent = useCallback(
+    (type: GalleryEvent['type'], payload: Partial<GalleryEvent['payload']>) => {
+      const event: GalleryEvent = {
+        type,
+        payload: {
+          timestamp: Date.now(),
+          ...payload,
+        },
       }
-    }
-    onEvent?.(event)
-  }, [onEvent])
+      onEvent?.(event)
+    },
+    [onEvent]
+  )
 
   // 필터링 및 정렬된 아이템
   const filteredItems = useMemo(() => {
@@ -80,10 +89,11 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
     // 검색 필터
     if (filterState.searchQuery.trim()) {
       const query = filterState.searchQuery.toLowerCase()
-      filtered = filtered.filter(item =>
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.tags.some(tag => tag.toLowerCase().includes(query))
+      filtered = filtered.filter(
+        item =>
+          item.title.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query) ||
+          item.tags.some(tag => tag.toLowerCase().includes(query))
       )
     }
 
@@ -128,16 +138,22 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
   }, [filteredItems, filterState.page, filterState.itemsPerPage])
 
   // 카테고리 변경
-  const setCategory = useCallback((category: string) => {
-    setFilterState(prev => ({ ...prev, category, page: 1 }))
-    emitEvent('category_changed', { category })
-  }, [emitEvent])
+  const setCategory = useCallback(
+    (category: string) => {
+      setFilterState(prev => ({ ...prev, category, page: 1 }))
+      emitEvent('category_changed', { category })
+    },
+    [emitEvent]
+  )
 
   // 검색어 변경
-  const setSearchQuery = useCallback((searchQuery: string) => {
-    setFilterState(prev => ({ ...prev, searchQuery, page: 1 }))
-    emitEvent('search_performed', { searchQuery })
-  }, [emitEvent])
+  const setSearchQuery = useCallback(
+    (searchQuery: string) => {
+      setFilterState(prev => ({ ...prev, searchQuery, page: 1 }))
+      emitEvent('search_performed', { searchQuery })
+    },
+    [emitEvent]
+  )
 
   // 페이지 변경
   const setPage = useCallback((page: number) => {
@@ -154,7 +170,7 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
     setFilterState(prev => ({
       ...prev,
       sortOrder: prev.sortOrder === 'asc' ? 'desc' : 'asc',
-      page: 1
+      page: 1,
     }))
   }, [])
 
@@ -164,51 +180,57 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
   }, [])
 
   // 라이트박스 열기
-  const openLightbox = useCallback((item: GalleryItem) => {
-    setViewState(prev => ({
-      ...prev,
-      selectedImage: item,
-      isLightboxOpen: true
-    }))
-    emitEvent('lightbox_opened', { itemId: item.id })
-    
-    // 키보드 이벤트 방지
-    document.body.style.overflow = 'hidden'
-  }, [emitEvent])
+  const openLightbox = useCallback(
+    (item: GalleryItem) => {
+      setViewState(prev => ({
+        ...prev,
+        selectedImage: item,
+        isLightboxOpen: true,
+      }))
+      emitEvent('lightbox_opened', { itemId: item.id })
+
+      // 키보드 이벤트 방지
+      document.body.style.overflow = 'hidden'
+    },
+    [emitEvent]
+  )
 
   // 라이트박스 닫기
   const closeLightbox = useCallback(() => {
     setViewState(prev => ({
       ...prev,
       selectedImage: null,
-      isLightboxOpen: false
+      isLightboxOpen: false,
     }))
     emitEvent('lightbox_closed', {})
-    
+
     // 키보드 이벤트 복원
     document.body.style.overflow = 'unset'
   }, [emitEvent])
 
   // 이미지 네비게이션
-  const navigateImage = useCallback((direction: 'prev' | 'next') => {
-    if (!viewState.selectedImage) return
+  const navigateImage = useCallback(
+    (direction: 'prev' | 'next') => {
+      if (!viewState.selectedImage) return
 
-    const currentIndex = filteredItems.findIndex(item => item.id === viewState.selectedImage!.id)
-    if (currentIndex === -1) return
+      const currentIndex = filteredItems.findIndex(item => item.id === viewState.selectedImage!.id)
+      if (currentIndex === -1) return
 
-    let newIndex
-    if (direction === 'prev') {
-      newIndex = currentIndex > 0 ? currentIndex - 1 : filteredItems.length - 1
-    } else {
-      newIndex = currentIndex < filteredItems.length - 1 ? currentIndex + 1 : 0
-    }
+      let newIndex
+      if (direction === 'prev') {
+        newIndex = currentIndex > 0 ? currentIndex - 1 : filteredItems.length - 1
+      } else {
+        newIndex = currentIndex < filteredItems.length - 1 ? currentIndex + 1 : 0
+      }
 
-    const newItem = filteredItems[newIndex]
-    if (newItem) {
-      setViewState(prev => ({ ...prev, selectedImage: newItem }))
-      emitEvent('item_clicked', { itemId: newItem.id })
-    }
-  }, [viewState.selectedImage, filteredItems, emitEvent])
+      const newItem = filteredItems[newIndex]
+      if (newItem) {
+        setViewState(prev => ({ ...prev, selectedImage: newItem }))
+        emitEvent('item_clicked', { itemId: newItem.id })
+      }
+    },
+    [viewState.selectedImage, filteredItems, emitEvent]
+  )
 
   // 필터 리셋
   const resetFilters = useCallback(() => {
@@ -216,9 +238,12 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
   }, [])
 
   // 아이템 인덱스 가져오기
-  const getItemIndex = useCallback((item: GalleryItem) => {
-    return filteredItems.findIndex(i => i.id === item.id)
-  }, [filteredItems])
+  const getItemIndex = useCallback(
+    (item: GalleryItem) => {
+      return filteredItems.findIndex(i => i.id === item.id)
+    },
+    [filteredItems]
+  )
 
   // 키보드 이벤트 처리
   useEffect(() => {
@@ -258,12 +283,12 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
     // 상태
     filterState,
     viewState,
-    
+
     // 계산된 값
     filteredItems,
     totalPages,
     currentItems,
-    
+
     // 액션
     setCategory,
     setSearchQuery,
@@ -274,9 +299,9 @@ export function useGallery({ items, categories, onEvent }: UseGalleryProps): Use
     openLightbox,
     closeLightbox,
     navigateImage,
-    
+
     // 유틸리티
     resetFilters,
-    getItemIndex
+    getItemIndex,
   }
 }

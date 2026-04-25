@@ -1,6 +1,7 @@
 # Real-time Updates System
 
-Complete real-time communication system supporting both WebSocket (bidirectional) and Server-Sent Events (SSE, unidirectional).
+Complete real-time communication system supporting both WebSocket
+(bidirectional) and Server-Sent Events (SSE, unidirectional).
 
 ## 📦 Architecture
 
@@ -39,6 +40,7 @@ Complete real-time communication system supporting both WebSocket (bidirectional
 ## 🚀 Features
 
 ### Event Emitter
+
 - ✅ Type-safe event definitions
 - ✅ Wildcard subscriptions (`member:*`, `*`)
 - ✅ Event filtering
@@ -47,6 +49,7 @@ Complete real-time communication system supporting both WebSocket (bidirectional
 - ✅ Promise-based async support
 
 ### WebSocket Manager
+
 - ✅ Bidirectional communication
 - ✅ Authentication support
 - ✅ Heartbeat/ping-pong
@@ -55,6 +58,7 @@ Complete real-time communication system supporting both WebSocket (bidirectional
 - ✅ Connection lifecycle management
 
 ### SSE Manager
+
 - ✅ Unidirectional streaming (server → client)
 - ✅ Automatic reconnection (browser native)
 - ✅ HTTP/2 compatible
@@ -63,6 +67,7 @@ Complete real-time communication system supporting both WebSocket (bidirectional
 - ✅ Simpler than WebSocket
 
 ### Subscription Manager
+
 - ✅ Client subscription tracking
 - ✅ Event type filtering
 - ✅ User-based filtering
@@ -75,10 +80,10 @@ Complete real-time communication system supporting both WebSocket (bidirectional
 ### Server-Side: Emitting Events
 
 ```typescript
-import { getEventEmitter, EventType } from '@/lib/realtime';
+import { getEventEmitter, EventType } from '@/lib/realtime'
 
 // Get global event emitter
-const eventEmitter = getEventEmitter();
+const eventEmitter = getEventEmitter()
 
 // Emit a member created event
 await eventEmitter.emit(
@@ -93,55 +98,52 @@ await eventEmitter.emit(
     userId: 'admin_456',
     source: 'admin-panel',
   }
-);
+)
 
 // Emit with wildcard listeners
-await eventEmitter.emit(
-  EventType.ARTWORK_APPROVED,
-  {
-    artworkId: 'artwork_789',
-    title: 'Beautiful Artwork',
-  }
-);
+await eventEmitter.emit(EventType.ARTWORK_APPROVED, {
+  artworkId: 'artwork_789',
+  title: 'Beautiful Artwork',
+})
 ```
 
 ### Server-Side: Subscribing to Events
 
 ```typescript
-import { getEventEmitter, EventType } from '@/lib/realtime';
+import { getEventEmitter, EventType } from '@/lib/realtime'
 
-const eventEmitter = getEventEmitter();
+const eventEmitter = getEventEmitter()
 
 // Subscribe to specific event
 const subscription = eventEmitter.on(
   EventType.MEMBER_CREATED,
-  async (payload) => {
-    console.log('New member created:', payload.data);
+  async payload => {
+    console.log('New member created:', payload.data)
     // Send welcome email, update analytics, etc.
   }
-);
+)
 
 // Subscribe to all member events
-eventEmitter.on('member:*', async (payload) => {
-  console.log('Member event:', payload.type, payload.data);
-});
+eventEmitter.on('member:*', async payload => {
+  console.log('Member event:', payload.type, payload.data)
+})
 
 // Subscribe to all events
-eventEmitter.on('*', async (payload) => {
-  console.log('Event:', payload.type);
-});
+eventEmitter.on('*', async payload => {
+  console.log('Event:', payload.type)
+})
 
 // Unsubscribe
-subscription.unsubscribe();
+subscription.unsubscribe()
 
 // Subscribe with filter
 eventEmitter.on(
   EventType.MEMBER_UPDATED,
-  async (payload) => {
-    console.log('VIP member updated:', payload.data);
+  async payload => {
+    console.log('VIP member updated:', payload.data)
   },
-  (payload) => payload.data.membershipLevel === 'VIP' // Filter
-);
+  payload => payload.data.membershipLevel === 'VIP' // Filter
+)
 ```
 
 ### Client-Side: SSE Connection
@@ -150,96 +152,100 @@ eventEmitter.on(
 // Connect to SSE endpoint
 const eventSource = new EventSource(
   '/api/realtime/sse?eventTypes=member:created,member:updated'
-);
+)
 
 // Listen for connection
-eventSource.addEventListener('connected', (event) => {
-  const data = JSON.parse(event.data);
-  console.log('Connected to SSE:', data.clientId);
-});
+eventSource.addEventListener('connected', event => {
+  const data = JSON.parse(event.data)
+  console.log('Connected to SSE:', data.clientId)
+})
 
 // Listen for specific events
-eventSource.addEventListener('member:created', (event) => {
-  const data = JSON.parse(event.data);
-  console.log('Member created:', data);
+eventSource.addEventListener('member:created', event => {
+  const data = JSON.parse(event.data)
+  console.log('Member created:', data)
   // Update UI
-});
+})
 
-eventSource.addEventListener('member:updated', (event) => {
-  const data = JSON.parse(event.data);
-  console.log('Member updated:', data);
+eventSource.addEventListener('member:updated', event => {
+  const data = JSON.parse(event.data)
+  console.log('Member updated:', data)
   // Update UI
-});
+})
 
 // Handle errors
-eventSource.onerror = (error) => {
-  console.error('SSE error:', error);
-};
+eventSource.onerror = error => {
+  console.error('SSE error:', error)
+}
 
 // Close connection
-eventSource.close();
+eventSource.close()
 ```
 
 ### Client-Side: WebSocket Connection
 
 ```typescript
 // Connect to WebSocket server
-const ws = new WebSocket('ws://localhost:3001');
+const ws = new WebSocket('ws://localhost:3001')
 
 ws.onopen = () => {
-  console.log('WebSocket connected');
+  console.log('WebSocket connected')
 
   // Authenticate (if required)
-  ws.send(JSON.stringify({
-    type: 'auth',
-    payload: { token: 'your-auth-token' }
-  }));
+  ws.send(
+    JSON.stringify({
+      type: 'auth',
+      payload: { token: 'your-auth-token' },
+    })
+  )
 
   // Subscribe to events
-  ws.send(JSON.stringify({
-    type: 'subscribe',
-    payload: {
-      eventTypes: ['member:created', 'artwork:approved']
-    }
-  }));
+  ws.send(
+    JSON.stringify({
+      type: 'subscribe',
+      payload: {
+        eventTypes: ['member:created', 'artwork:approved'],
+      },
+    })
+  )
 
   // Send ping
   setInterval(() => {
-    ws.send(JSON.stringify({ type: 'ping' }));
-  }, 30000);
-};
+    ws.send(JSON.stringify({ type: 'ping' }))
+  }, 30000)
+}
 
-ws.onmessage = (event) => {
-  const message = JSON.parse(event.data);
+ws.onmessage = event => {
+  const message = JSON.parse(event.data)
 
   switch (message.type) {
     case 'authenticated':
-      console.log('Authenticated:', message.payload);
-      break;
+      console.log('Authenticated:', message.payload)
+      break
 
     case 'subscribed':
-      console.log('Subscribed to:', message.payload.eventTypes);
-      break;
+      console.log('Subscribed to:', message.payload.eventTypes)
+      break
 
     case 'event':
-      console.log('Event received:', message.payload);
+      console.log('Event received:', message.payload)
       // Update UI
-      break;
+      break
 
     case 'error':
-      console.error('Error:', message.payload.error);
-      break;
+      console.error('Error:', message.payload.error)
+      break
   }
-};
+}
 
-ws.onerror = (error) => {
-  console.error('WebSocket error:', error);
-};
+ws.onerror = error => {
+  console.error('WebSocket error:', error)
+}
 
 ws.onclose = () => {
-  console.log('WebSocket disconnected');
+  console.log('WebSocket disconnected')
   // Implement reconnection logic
-};
+}
 ```
 
 ### React Hook: useRealtime
@@ -382,6 +388,7 @@ export enum EventType {
 ## 🎯 When to Use What?
 
 ### Use WebSocket when:
+
 - ✅ Bidirectional communication needed
 - ✅ Low latency critical
 - ✅ Real-time chat/collaboration
@@ -389,6 +396,7 @@ export enum EventType {
 - ✅ Complex message protocols
 
 ### Use SSE when:
+
 - ✅ Server → client only (one-way)
 - ✅ Browser compatibility important
 - ✅ Simpler implementation preferred
@@ -398,23 +406,28 @@ export enum EventType {
 ## 🔒 Security
 
 ### Authentication
+
 ```typescript
 // WebSocket with token
-ws.send(JSON.stringify({
-  type: 'auth',
-  payload: { token: 'jwt-token-here' }
-}));
+ws.send(
+  JSON.stringify({
+    type: 'auth',
+    payload: { token: 'jwt-token-here' },
+  })
+)
 
 // SSE with token in URL
-const eventSource = new EventSource('/api/realtime/sse?token=jwt-token-here');
+const eventSource = new EventSource('/api/realtime/sse?token=jwt-token-here')
 ```
 
 ### Rate Limiting
+
 - Implement connection rate limiting
 - Limit subscription changes per client
 - Monitor message frequency
 
 ### Event Filtering
+
 - Server-side event filtering
 - User-based event access control
 - Prevent information leakage
@@ -422,12 +435,14 @@ const eventSource = new EventSource('/api/realtime/sse?token=jwt-token-here');
 ## 📈 Performance
 
 ### Scalability
+
 - **Single Server**: Up to 10,000 concurrent connections
 - **Redis Pub/Sub**: Unlimited horizontal scaling
 - **Memory**: ~10KB per WebSocket connection
 - **Memory**: ~5KB per SSE connection
 
 ### Optimization Tips
+
 1. Use event filtering to reduce traffic
 2. Implement Redis for multi-server deployments
 3. Monitor connection count and set limits
@@ -449,38 +464,41 @@ websocat ws://localhost:3001
 ### Integration Testing
 
 ```typescript
-import { createEventEmitter } from '@/lib/realtime';
+import { createEventEmitter } from '@/lib/realtime'
 
 describe('Event System', () => {
   it('should emit and receive events', async () => {
-    const emitter = createEventEmitter();
-    const events: any[] = [];
+    const emitter = createEventEmitter()
+    const events: any[] = []
 
-    emitter.on(EventType.MEMBER_CREATED, (payload) => {
-      events.push(payload);
-    });
+    emitter.on(EventType.MEMBER_CREATED, payload => {
+      events.push(payload)
+    })
 
-    await emitter.emit(EventType.MEMBER_CREATED, { id: '123' });
+    await emitter.emit(EventType.MEMBER_CREATED, { id: '123' })
 
-    expect(events).toHaveLength(1);
-    expect(events[0].data.id).toBe('123');
-  });
-});
+    expect(events).toHaveLength(1)
+    expect(events[0].data.id).toBe('123')
+  })
+})
 ```
 
 ## 🐛 Troubleshooting
 
 ### WebSocket not connecting
+
 - Check if WebSocket server is running (port 3001)
 - Verify firewall rules
 - Check proxy configuration (nginx, etc.)
 
 ### SSE disconnecting frequently
+
 - Check keep-alive interval
 - Verify network stability
 - Monitor server resource usage
 
 ### Events not received
+
 - Verify subscription event types
 - Check event filtering logic
 - Monitor subscription manager stats
