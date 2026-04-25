@@ -23,29 +23,29 @@ import {
   getPermissionsForRole,
   getEffectivePermissions,
   type PermissionCheckResult,
-} from './permissions';
+} from './permissions'
 
 /**
  * User role info
  */
 export interface UserRole {
-  userId: string;
-  roles: Role[];
-  customPermissions: Permission[];
-  effectivePermissions: Permission[];
-  createdAt: Date;
-  updatedAt: Date;
+  userId: string
+  roles: Role[]
+  customPermissions: Permission[]
+  effectivePermissions: Permission[]
+  createdAt: Date
+  updatedAt: Date
 }
 
 /**
  * Role assignment
  */
 export interface RoleAssignment {
-  userId: string;
-  role: Role;
-  assignedBy: string;
-  assignedAt: Date;
-  expiresAt?: Date;
+  userId: string
+  role: Role
+  assignedBy: string
+  assignedAt: Date
+  expiresAt?: Date
 }
 
 /**
@@ -54,12 +54,12 @@ export interface RoleAssignment {
  * Manages roles and permissions for users.
  */
 export class RoleManager {
-  private userRoles: Map<string, UserRole>;
-  private roleCache: Map<string, Permission[]>;
+  private userRoles: Map<string, UserRole>
+  private roleCache: Map<string, Permission[]>
 
   constructor() {
-    this.userRoles = new Map();
-    this.roleCache = new Map();
+    this.userRoles = new Map()
+    this.roleCache = new Map()
   }
 
   /**
@@ -71,21 +71,21 @@ export class RoleManager {
    * @returns Updated user role info
    */
   assignRole(userId: string, role: Role, assignedBy: string): UserRole {
-    const userRole = this.getUserRole(userId);
+    const userRole = this.getUserRole(userId)
 
     // Add role if not already assigned
     if (!userRole.roles.includes(role)) {
-      userRole.roles.push(role);
-      userRole.updatedAt = new Date();
+      userRole.roles.push(role)
+      userRole.updatedAt = new Date()
 
       // Recalculate effective permissions
-      userRole.effectivePermissions = this.calculateEffectivePermissions(userRole);
+      userRole.effectivePermissions = this.calculateEffectivePermissions(userRole)
 
       // Clear cache for this user
-      this.roleCache.delete(userId);
+      this.roleCache.delete(userId)
     }
 
-    return userRole;
+    return userRole
   }
 
   /**
@@ -96,19 +96,19 @@ export class RoleManager {
    * @returns Updated user role info
    */
   revokeRole(userId: string, role: Role): UserRole {
-    const userRole = this.getUserRole(userId);
+    const userRole = this.getUserRole(userId)
 
     // Remove role
-    userRole.roles = userRole.roles.filter((r) => r !== role);
-    userRole.updatedAt = new Date();
+    userRole.roles = userRole.roles.filter(r => r !== role)
+    userRole.updatedAt = new Date()
 
     // Recalculate effective permissions
-    userRole.effectivePermissions = this.calculateEffectivePermissions(userRole);
+    userRole.effectivePermissions = this.calculateEffectivePermissions(userRole)
 
     // Clear cache
-    this.roleCache.delete(userId);
+    this.roleCache.delete(userId)
 
-    return userRole;
+    return userRole
   }
 
   /**
@@ -119,21 +119,21 @@ export class RoleManager {
    * @returns Updated user role info
    */
   addPermission(userId: string, permission: Permission): UserRole {
-    const userRole = this.getUserRole(userId);
+    const userRole = this.getUserRole(userId)
 
     // Add permission if not already assigned
     if (!userRole.customPermissions.includes(permission)) {
-      userRole.customPermissions.push(permission);
-      userRole.updatedAt = new Date();
+      userRole.customPermissions.push(permission)
+      userRole.updatedAt = new Date()
 
       // Recalculate effective permissions
-      userRole.effectivePermissions = this.calculateEffectivePermissions(userRole);
+      userRole.effectivePermissions = this.calculateEffectivePermissions(userRole)
 
       // Clear cache
-      this.roleCache.delete(userId);
+      this.roleCache.delete(userId)
     }
 
-    return userRole;
+    return userRole
   }
 
   /**
@@ -144,21 +144,19 @@ export class RoleManager {
    * @returns Updated user role info
    */
   revokePermission(userId: string, permission: Permission): UserRole {
-    const userRole = this.getUserRole(userId);
+    const userRole = this.getUserRole(userId)
 
     // Remove permission
-    userRole.customPermissions = userRole.customPermissions.filter(
-      (p) => p !== permission
-    );
-    userRole.updatedAt = new Date();
+    userRole.customPermissions = userRole.customPermissions.filter(p => p !== permission)
+    userRole.updatedAt = new Date()
 
     // Recalculate effective permissions
-    userRole.effectivePermissions = this.calculateEffectivePermissions(userRole);
+    userRole.effectivePermissions = this.calculateEffectivePermissions(userRole)
 
     // Clear cache
-    this.roleCache.delete(userId);
+    this.roleCache.delete(userId)
 
-    return userRole;
+    return userRole
   }
 
   /**
@@ -168,7 +166,7 @@ export class RoleManager {
    * @returns User role info
    */
   getUserRole(userId: string): UserRole {
-    let userRole = this.userRoles.get(userId);
+    let userRole = this.userRoles.get(userId)
 
     if (!userRole) {
       // Create default user role
@@ -179,12 +177,12 @@ export class RoleManager {
         effectivePermissions: getPermissionsForRole(Role.VIEWER),
         createdAt: new Date(),
         updatedAt: new Date(),
-      };
+      }
 
-      this.userRoles.set(userId, userRole);
+      this.userRoles.set(userId, userRole)
     }
 
-    return userRole;
+    return userRole
   }
 
   /**
@@ -194,7 +192,7 @@ export class RoleManager {
    * @returns Array of roles
    */
   getUserRoles(userId: string): Role[] {
-    return this.getUserRole(userId).roles;
+    return this.getUserRole(userId).roles
   }
 
   /**
@@ -205,18 +203,18 @@ export class RoleManager {
    */
   getUserPermissions(userId: string): Permission[] {
     // Check cache
-    const cached = this.roleCache.get(userId);
+    const cached = this.roleCache.get(userId)
     if (cached) {
-      return cached;
+      return cached
     }
 
     // Calculate and cache
-    const userRole = this.getUserRole(userId);
-    const permissions = userRole.effectivePermissions;
+    const userRole = this.getUserRole(userId)
+    const permissions = userRole.effectivePermissions
 
-    this.roleCache.set(userId, permissions);
+    this.roleCache.set(userId, permissions)
 
-    return permissions;
+    return permissions
   }
 
   /**
@@ -226,23 +224,23 @@ export class RoleManager {
    * @returns Effective permissions
    */
   private calculateEffectivePermissions(userRole: UserRole): Permission[] {
-    const permissions = new Set<Permission>();
+    const permissions = new Set<Permission>()
 
     // Add permissions from roles
     for (const role of userRole.roles) {
-      const rolePerms = getPermissionsForRole(role);
+      const rolePerms = getPermissionsForRole(role)
       for (const perm of rolePerms) {
-        permissions.add(perm);
+        permissions.add(perm)
       }
     }
 
     // Add custom permissions
     for (const perm of userRole.customPermissions) {
-      permissions.add(perm);
+      permissions.add(perm)
     }
 
     // Expand wildcards
-    return getEffectivePermissions(Array.from(permissions));
+    return getEffectivePermissions(Array.from(permissions))
   }
 
   /**
@@ -253,8 +251,8 @@ export class RoleManager {
    * @returns True if user has permission
    */
   can(userId: string, permission: Permission): boolean {
-    const userPermissions = this.getUserPermissions(userId);
-    return hasPermission(userPermissions, permission);
+    const userPermissions = this.getUserPermissions(userId)
+    return hasPermission(userPermissions, permission)
   }
 
   /**
@@ -265,8 +263,8 @@ export class RoleManager {
    * @returns True if user has all permissions
    */
   canAll(userId: string, permissions: Permission[]): boolean {
-    const userPermissions = this.getUserPermissions(userId);
-    return hasAllPermissions(userPermissions, permissions);
+    const userPermissions = this.getUserPermissions(userId)
+    return hasAllPermissions(userPermissions, permissions)
   }
 
   /**
@@ -277,8 +275,8 @@ export class RoleManager {
    * @returns True if user has any permission
    */
   canAny(userId: string, permissions: Permission[]): boolean {
-    const userPermissions = this.getUserPermissions(userId);
-    return hasAnyPermission(userPermissions, permissions);
+    const userPermissions = this.getUserPermissions(userId)
+    return hasAnyPermission(userPermissions, permissions)
   }
 
   /**
@@ -289,7 +287,7 @@ export class RoleManager {
    * @returns True if user has role
    */
   hasRole(userId: string, role: Role): boolean {
-    return this.getUserRoles(userId).includes(role);
+    return this.getUserRoles(userId).includes(role)
   }
 
   /**
@@ -300,8 +298,8 @@ export class RoleManager {
    * @returns True if user has any role
    */
   hasAnyRole(userId: string, roles: Role[]): boolean {
-    const userRoles = this.getUserRoles(userId);
-    return roles.some((role) => userRoles.includes(role));
+    const userRoles = this.getUserRoles(userId)
+    return roles.some(role => userRoles.includes(role))
   }
 
   /**
@@ -311,7 +309,7 @@ export class RoleManager {
    * @returns True if user is admin or super admin
    */
   isAdmin(userId: string): boolean {
-    return this.hasAnyRole(userId, [Role.ADMIN, Role.SUPER_ADMIN]);
+    return this.hasAnyRole(userId, [Role.ADMIN, Role.SUPER_ADMIN])
   }
 
   /**
@@ -321,7 +319,7 @@ export class RoleManager {
    * @returns True if user is super admin
    */
   isSuperAdmin(userId: string): boolean {
-    return this.hasRole(userId, Role.SUPER_ADMIN);
+    return this.hasRole(userId, Role.SUPER_ADMIN)
   }
 
   /**
@@ -333,7 +331,7 @@ export class RoleManager {
    * @returns Highest role
    */
   getHighestRole(userId: string): Role {
-    const roles = this.getUserRoles(userId);
+    const roles = this.getUserRoles(userId)
 
     const rolePriority: Role[] = [
       Role.SUPER_ADMIN,
@@ -342,15 +340,15 @@ export class RoleManager {
       Role.ARTIST,
       Role.MEMBER,
       Role.VIEWER,
-    ];
+    ]
 
     for (const role of rolePriority) {
       if (roles.includes(role)) {
-        return role;
+        return role
       }
     }
 
-    return Role.VIEWER;
+    return Role.VIEWER
   }
 
   /**
@@ -361,18 +359,18 @@ export class RoleManager {
    * @returns Updated user role info
    */
   setRoles(userId: string, roles: Role[]): UserRole {
-    const userRole = this.getUserRole(userId);
+    const userRole = this.getUserRole(userId)
 
-    userRole.roles = [...roles];
-    userRole.updatedAt = new Date();
+    userRole.roles = [...roles]
+    userRole.updatedAt = new Date()
 
     // Recalculate effective permissions
-    userRole.effectivePermissions = this.calculateEffectivePermissions(userRole);
+    userRole.effectivePermissions = this.calculateEffectivePermissions(userRole)
 
     // Clear cache
-    this.roleCache.delete(userId);
+    this.roleCache.delete(userId)
 
-    return userRole;
+    return userRole
   }
 
   /**
@@ -381,8 +379,8 @@ export class RoleManager {
    * @param userId - User ID
    */
   clearUser(userId: string): void {
-    this.userRoles.delete(userId);
-    this.roleCache.delete(userId);
+    this.userRoles.delete(userId)
+    this.roleCache.delete(userId)
   }
 
   /**
@@ -392,15 +390,15 @@ export class RoleManager {
    * @returns Array of user IDs
    */
   getUsersWithRole(role: Role): string[] {
-    const users: string[] = [];
+    const users: string[] = []
 
     for (const [userId, userRole] of this.userRoles) {
       if (userRole.roles.includes(role)) {
-        users.push(userId);
+        users.push(userId)
       }
     }
 
-    return users;
+    return users
   }
 
   /**
@@ -410,15 +408,15 @@ export class RoleManager {
    * @returns Array of user IDs
    */
   getUsersWithPermission(permission: Permission): string[] {
-    const users: string[] = [];
+    const users: string[] = []
 
     for (const [userId] of this.userRoles) {
       if (this.can(userId, permission)) {
-        users.push(userId);
+        users.push(userId)
       }
     }
 
-    return users;
+    return users
   }
 
   /**
@@ -434,11 +432,11 @@ export class RoleManager {
       [Role.MEMBER]: 0,
       [Role.ARTIST]: 0,
       [Role.VIEWER]: 0,
-    };
+    }
 
     for (const userRole of this.userRoles.values()) {
       for (const role of userRole.roles) {
-        roleCount[role]++;
+        roleCount[role]++
       }
     }
 
@@ -446,14 +444,14 @@ export class RoleManager {
       totalUsers: this.userRoles.size,
       cacheSize: this.roleCache.size,
       roleCount,
-    };
+    }
   }
 
   /**
    * Clear cache
    */
   clearCache(): void {
-    this.roleCache.clear();
+    this.roleCache.clear()
   }
 
   /**
@@ -462,8 +460,8 @@ export class RoleManager {
    * @returns Serialized user roles
    */
   exportRoles(): string {
-    const data = Array.from(this.userRoles.values());
-    return JSON.stringify(data, null, 2);
+    const data = Array.from(this.userRoles.values())
+    return JSON.stringify(data, null, 2)
   }
 
   /**
@@ -472,25 +470,25 @@ export class RoleManager {
    * @param data - Serialized user roles
    */
   importRoles(data: string): void {
-    const roles = JSON.parse(data) as UserRole[];
+    const roles = JSON.parse(data) as UserRole[]
 
     for (const userRole of roles) {
       // Convert date strings back to Date objects
-      userRole.createdAt = new Date(userRole.createdAt);
-      userRole.updatedAt = new Date(userRole.updatedAt);
+      userRole.createdAt = new Date(userRole.createdAt)
+      userRole.updatedAt = new Date(userRole.updatedAt)
 
-      this.userRoles.set(userRole.userId, userRole);
+      this.userRoles.set(userRole.userId, userRole)
     }
 
     // Clear cache after import
-    this.clearCache();
+    this.clearCache()
   }
 }
 
 /**
  * Global role manager instance (singleton)
  */
-let globalRoleManager: RoleManager | null = null;
+let globalRoleManager: RoleManager | null = null
 
 /**
  * Get or create global role manager instance
@@ -499,9 +497,9 @@ let globalRoleManager: RoleManager | null = null;
  */
 export function getRoleManager(): RoleManager {
   if (!globalRoleManager) {
-    globalRoleManager = new RoleManager();
+    globalRoleManager = new RoleManager()
   }
-  return globalRoleManager;
+  return globalRoleManager
 }
 
 /**
@@ -510,7 +508,7 @@ export function getRoleManager(): RoleManager {
  * @returns New role manager instance
  */
 export function createRoleManager(): RoleManager {
-  return new RoleManager();
+  return new RoleManager()
 }
 
 /**
@@ -524,18 +522,18 @@ export async function checkUserPermission(
   userId: string,
   permission: Permission
 ): Promise<PermissionCheckResult> {
-  const roleManager = getRoleManager();
-  const allowed = roleManager.can(userId, permission);
+  const roleManager = getRoleManager()
+  const allowed = roleManager.can(userId, permission)
 
   if (allowed) {
-    return { allowed: true };
+    return { allowed: true }
   }
 
   return {
     allowed: false,
     reason: `User ${userId} does not have permission: ${permission}`,
     missingPermissions: [permission],
-  };
+  }
 }
 
 /**
@@ -546,12 +544,10 @@ export async function checkUserPermission(
  * @throws Error if user doesn't have permission
  */
 export function requirePermission(userId: string, permission: Permission): void {
-  const roleManager = getRoleManager();
+  const roleManager = getRoleManager()
 
   if (!roleManager.can(userId, permission)) {
-    throw new Error(
-      `Unauthorized: User ${userId} does not have permission: ${permission}`
-    );
+    throw new Error(`Unauthorized: User ${userId} does not have permission: ${permission}`)
   }
 }
 
@@ -563,10 +559,10 @@ export function requirePermission(userId: string, permission: Permission): void 
  * @throws Error if user doesn't have role
  */
 export function requireRole(userId: string, role: Role): void {
-  const roleManager = getRoleManager();
+  const roleManager = getRoleManager()
 
   if (!roleManager.hasRole(userId, role)) {
-    throw new Error(`Unauthorized: User ${userId} does not have role: ${role}`);
+    throw new Error(`Unauthorized: User ${userId} does not have role: ${role}`)
   }
 }
 
@@ -577,9 +573,9 @@ export function requireRole(userId: string, role: Role): void {
  * @throws Error if user is not admin
  */
 export function requireAdmin(userId: string): void {
-  const roleManager = getRoleManager();
+  const roleManager = getRoleManager()
 
   if (!roleManager.isAdmin(userId)) {
-    throw new Error(`Unauthorized: User ${userId} is not an admin`);
+    throw new Error(`Unauthorized: User ${userId} is not an admin`)
   }
 }

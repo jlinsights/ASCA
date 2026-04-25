@@ -10,12 +10,13 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-  
+
   /* Aceternity UI Animations */
   .animate-scroll {
-    animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+    animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear
+      infinite;
   }
-  
+
   @keyframes scroll {
     to {
       transform: translate(calc(-50% - 0.5rem));
@@ -202,8 +203,11 @@ body {
   }
 
   .font-calligraphy {
-    font-family: 'ASCA-Calligraphy', 'Noto Serif KR', 'Noto Serif SC', 'Noto Serif TC', 'Noto Serif JP', serif;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-family:
+      'ASCA-Calligraphy', 'Noto Serif KR', 'Noto Serif SC', 'Noto Serif TC', 'Noto Serif JP', serif;
+    font-feature-settings:
+      'kern' 1,
+      'liga' 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -224,7 +228,9 @@ body {
   }
 
   .text-multilingual {
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-feature-settings:
+      'kern' 1,
+      'liga' 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -262,7 +268,7 @@ body {
   }
 
   /* 한자 문자 범위별 폰트 지정 */
-  @supports (font-feature-settings: "kern") {
+  @supports (font-feature-settings: 'kern') {
     .font-calligraphy {
       font-variant-ligatures: common-ligatures;
       font-kerning: normal;

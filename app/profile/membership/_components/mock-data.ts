@@ -16,4 +16,3 @@ export const styleNames: Record<CalligraphyStyle, string> = {
   modern: '현대서예',
   experimental: '실험서예',
 }
-

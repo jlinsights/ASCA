@@ -1,24 +1,25 @@
 export function Slogan() {
   return (
-    <section className="brand-section" id="slogan">
-      <h2 className="brand-section-title">슬로건</h2>
-      <div className="usage-container">
-        <div className="logo-container bg-ink-black">
-          <div className="text-rice-paper text-center">
-            <h3 className="text-2xl mb-2">GALLERIA</h3>
-            <p className="text-sm mb-4">Art Gallery & Exhibition</p>
-            <p className="text-lg italic">"Experience Art Beyond Imagination"</p>
+    <section className='brand-section' id='slogan'>
+      <h2 className='brand-section-title'>슬로건</h2>
+      <div className='usage-container'>
+        <div className='logo-container bg-ink-black'>
+          <div className='text-rice-paper text-center'>
+            <h3 className='text-2xl mb-2'>GALLERIA</h3>
+            <p className='text-sm mb-4'>Art Gallery & Exhibition</p>
+            <p className='text-lg italic'>"Experience Art Beyond Imagination"</p>
           </div>
         </div>
-        <div className="usage-title">"Experience Art Beyond Imagination"</div>
-        <p className="mb-8 text-base">
-          이 슬로건은 Galleria에서의 예술 경험이 단순한 관람을 넘어 상상력을 자극하고 새로운 세계로 안내한다는 메시지를
-          담고 있습니다. 관람객들이 예술 작품을 통해 상상력의 경계를 넘어서는 특별한 경험을 할 수 있음을 강조합니다.
+        <div className='usage-title'>"Experience Art Beyond Imagination"</div>
+        <p className='mb-8 text-base'>
+          이 슬로건은 Galleria에서의 예술 경험이 단순한 관람을 넘어 상상력을 자극하고 새로운 세계로
+          안내한다는 메시지를 담고 있습니다. 관람객들이 예술 작품을 통해 상상력의 경계를 넘어서는
+          특별한 경험을 할 수 있음을 강조합니다.
         </p>
-        <div className="usage-grid">
-          <div className="usage-item">
+        <div className='usage-grid'>
+          <div className='usage-item'>
             <h3>마케팅 활용</h3>
-            <ul className="usage-list">
+            <ul className='usage-list'>
               <li>
                 <strong>SNS 캠페인:</strong> 해시태그(#ArtBeyondImagination)와 함께 활용
               </li>
@@ -33,9 +34,9 @@ export function Slogan() {
               </li>
             </ul>
           </div>
-          <div className="usage-item">
+          <div className='usage-item'>
             <h3>공간 및 전시 적용</h3>
-            <ul className="usage-list">
+            <ul className='usage-list'>
               <li>
                 <strong>전시장 입구:</strong> 방문객을 맞이하는 첫 메시지로 활용
               </li>
@@ -50,9 +51,9 @@ export function Slogan() {
               </li>
             </ul>
           </div>
-          <div className="usage-item">
+          <div className='usage-item'>
             <h3>다국어 및 지역 적용</h3>
-            <ul className="usage-list">
+            <ul className='usage-list'>
               <li>
                 <strong>한국어:</strong> "상상을 넘어서는 예술 경험"
               </li>

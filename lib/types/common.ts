@@ -94,4 +94,4 @@ export interface AsyncState<T> {
   data: T | null
   status: LoadingState
   error: AppError | null
-} 
+}

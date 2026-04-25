@@ -2,9 +2,9 @@
 
 ## 🎯 Status: IN PROGRESS
 
-**Implementation Date**: December 28, 2025
-**Duration**: Estimated ~2-3 days
-**Building on**: Phase 1 (Infrastructure) + Phase 2 (Architecture) + Phase 3 (Performance & Advanced Features)
+**Implementation Date**: December 28, 2025 **Duration**: Estimated ~2-3 days
+**Building on**: Phase 1 (Infrastructure) + Phase 2 (Architecture) + Phase 3
+(Performance & Advanced Features)
 
 ---
 
@@ -45,6 +45,7 @@ Phase 4 focuses on **comprehensive testing** and **quality assurance**:
 ### 테스트 범위
 
 #### Layer 1: Unit Tests (60%)
+
 **목표**: 순수 함수와 유틸리티 테스트
 
 - **Core Utilities** (`lib/utils/`, `lib/validation/`)
@@ -63,6 +64,7 @@ Phase 4 focuses on **comprehensive testing** and **quality assurance**:
   - 통계 집계
 
 #### Layer 2: Integration Tests (30%)
+
 **목표**: 여러 컴포넌트 통합 테스트
 
 - **Repository Layer** (`lib/repositories/`)
@@ -86,6 +88,7 @@ Phase 4 focuses on **comprehensive testing** and **quality assurance**:
   - DataLoader 통합
 
 #### Layer 3: E2E Tests (10%)
+
 **목표**: 핵심 사용자 플로우 테스트
 
 - **Member Management Flow**
@@ -105,6 +108,7 @@ Phase 4 focuses on **comprehensive testing** and **quality assurance**:
 ### Current Setup ✅
 
 **Jest Configuration** (`config/build/jest.config.js`):
+
 - ✅ Next.js integration configured
 - ✅ Module path aliases (`@/`)
 - ✅ jsdom test environment
@@ -112,12 +116,14 @@ Phase 4 focuses on **comprehensive testing** and **quality assurance**:
 - ✅ JUnit reporter for CI
 
 **Jest Setup** (`config/build/jest.setup.js`):
+
 - ✅ @testing-library/jest-dom
 - ✅ Browser API mocks (IntersectionObserver, ResizeObserver, matchMedia)
 - ✅ localStorage/sessionStorage mocks
 - ✅ Auto-clear mocks between tests
 
 **Test Scripts** (`package.json`):
+
 - ✅ `npm test` - Run tests
 - ✅ `npm run test:watch` - Watch mode
 - ✅ `npm run test:coverage` - Coverage report
@@ -126,6 +132,7 @@ Phase 4 focuses on **comprehensive testing** and **quality assurance**:
 ### Additional Setup Required
 
 1. **Test Database Setup**
+
    ```typescript
    // lib/testing/setup-test-db.ts
    - Test database configuration
@@ -134,6 +141,7 @@ Phase 4 focuses on **comprehensive testing** and **quality assurance**:
    ```
 
 2. **API Test Helpers**
+
    ```typescript
    // lib/testing/api-helpers.ts
    - Mock request/response
@@ -154,6 +162,7 @@ Phase 4 focuses on **comprehensive testing** and **quality assurance**:
 ## 🚀 Phase 4.2: Core Utilities Unit Tests
 
 ### Environment Configuration Tests
+
 **File**: `lib/config/__tests__/env.test.ts`
 
 ```typescript
@@ -166,6 +175,7 @@ describe('Environment Configuration', () => {
 ```
 
 ### Validation Tests
+
 **File**: `lib/api/__tests__/validators.test.ts`
 
 ```typescript
@@ -185,6 +195,7 @@ describe('Input Validators', () => {
 ```
 
 ### Response Helpers Tests
+
 **File**: `lib/api/__tests__/response.test.ts`
 
 ```typescript
@@ -201,6 +212,7 @@ describe('API Response Helpers', () => {
 ## 🚀 Phase 4.3: Repository Layer Tests
 
 ### Base Repository Tests
+
 **File**: `lib/repositories/__tests__/base-repository.test.ts`
 
 ```typescript
@@ -232,6 +244,7 @@ describe('BaseRepository', () => {
 ```
 
 ### Member Repository Tests
+
 **File**: `lib/repositories/__tests__/member-repository.test.ts`
 
 ```typescript
@@ -249,6 +262,7 @@ describe('MemberRepository', () => {
 ## 🚀 Phase 4.4: Service Layer Tests
 
 ### Member Service Tests
+
 **File**: `lib/services/__tests__/member-service.test.ts`
 
 ```typescript
@@ -282,6 +296,7 @@ describe('MemberService', () => {
 ## 🚀 Phase 4.5: API Routes Integration Tests
 
 ### REST API Tests
+
 **File**: `app/api/members/__tests__/route.test.ts`
 
 ```typescript
@@ -309,6 +324,7 @@ describe('Members API', () => {
 ```
 
 ### Admin API Tests
+
 **File**: `app/api/admin/__tests__/analytics.test.ts`
 
 ```typescript
@@ -325,6 +341,7 @@ describe('Admin Analytics API', () => {
 ## 🚀 Phase 4.6: GraphQL Resolver Tests
 
 ### Query Resolver Tests
+
 **File**: `lib/graphql/__tests__/member.resolver.test.ts`
 
 ```typescript
@@ -350,6 +367,7 @@ describe('Member GraphQL Resolvers', () => {
 ```
 
 ### DataLoader Tests
+
 **File**: `lib/graphql/__tests__/dataloaders.test.ts`
 
 ```typescript
@@ -366,6 +384,7 @@ describe('GraphQL DataLoaders', () => {
 ## 🚀 Phase 4.7: Real-time System Tests
 
 ### WebSocket Manager Tests
+
 **File**: `lib/realtime/__tests__/websocket-manager.test.ts`
 
 ```typescript
@@ -379,6 +398,7 @@ describe('WebSocketManager', () => {
 ```
 
 ### Event Emitter Tests
+
 **File**: `lib/realtime/__tests__/event-emitter.test.ts`
 
 ```typescript
@@ -395,6 +415,7 @@ describe('EventEmitter', () => {
 ## 🚀 Phase 4.8: Monitoring & Logging Tests
 
 ### Metrics Collector Tests
+
 **File**: `lib/monitoring/__tests__/metrics-collector.test.ts`
 
 ```typescript
@@ -408,6 +429,7 @@ describe('MetricsCollector', () => {
 ```
 
 ### Slow Query Detector Tests
+
 **File**: `lib/monitoring/__tests__/slow-query-detector.test.ts`
 
 ```typescript
@@ -420,6 +442,7 @@ describe('SlowQueryDetector', () => {
 ```
 
 ### Structured Logger Tests
+
 **File**: `lib/logging/__tests__/structured-logger.test.ts`
 
 ```typescript
@@ -436,33 +459,36 @@ describe('StructuredLogger', () => {
 
 ## 📊 Test Coverage Goals
 
-| Layer | Coverage Target | Priority |
-|-------|----------------|----------|
-| Core Utilities | 90%+ | ⭐⭐⭐⭐⭐ |
-| Repositories | 85%+ | ⭐⭐⭐⭐⭐ |
-| Services | 85%+ | ⭐⭐⭐⭐⭐ |
-| API Routes | 80%+ | ⭐⭐⭐⭐ |
-| GraphQL | 80%+ | ⭐⭐⭐⭐ |
-| Real-time | 75%+ | ⭐⭐⭐ |
-| Monitoring | 75%+ | ⭐⭐⭐ |
-| **Overall** | **80%+** | **⭐⭐⭐⭐⭐** |
+| Layer          | Coverage Target | Priority       |
+| -------------- | --------------- | -------------- |
+| Core Utilities | 90%+            | ⭐⭐⭐⭐⭐     |
+| Repositories   | 85%+            | ⭐⭐⭐⭐⭐     |
+| Services       | 85%+            | ⭐⭐⭐⭐⭐     |
+| API Routes     | 80%+            | ⭐⭐⭐⭐       |
+| GraphQL        | 80%+            | ⭐⭐⭐⭐       |
+| Real-time      | 75%+            | ⭐⭐⭐         |
+| Monitoring     | 75%+            | ⭐⭐⭐         |
+| **Overall**    | **80%+**        | **⭐⭐⭐⭐⭐** |
 
 ---
 
 ## 🧪 Testing Tools & Libraries
 
 ### Core Testing
+
 - ✅ **Jest** - Test runner and assertion library
 - ✅ **@testing-library/react** - React component testing
 - ✅ **@testing-library/jest-dom** - DOM matchers
 - ✅ **@testing-library/user-event** - User interaction simulation
 
 ### Mocking & Utilities
+
 - **MSW (Mock Service Worker)** - API mocking (will add)
 - **jest-mock-extended** - Type-safe mocking (will add)
 - **nock** - HTTP mocking for integration tests (will add)
 
 ### Database Testing
+
 - **@testcontainers/postgresql** - Docker-based test DB (optional)
 - **pg-mem** - In-memory PostgreSQL (faster, will use)
 
@@ -471,22 +497,26 @@ describe('StructuredLogger', () => {
 ## 🎯 Implementation Order
 
 ### Week 1: Foundation (Day 1-2)
+
 1. ✅ Test infrastructure verification
 2. ⏳ Test utilities and helpers
 3. ⏳ Core utilities tests (env, validation, response)
 4. ⏳ Database test setup
 
 ### Week 2: Core Testing (Day 3-4)
+
 5. ⏳ Repository layer tests
 6. ⏳ Service layer tests
 7. ⏳ Monitoring & Logging tests
 
 ### Week 3: Integration (Day 5-6)
+
 8. ⏳ API Routes integration tests
 9. ⏳ GraphQL resolver tests
 10. ⏳ Real-time system tests
 
 ### Week 4: Quality & CI (Day 7)
+
 11. ⏳ Coverage verification and gaps filling
 12. ⏳ CI/CD test pipeline setup
 13. ⏳ Documentation and best practices
@@ -547,6 +577,7 @@ app/api/
 ## ⚠️ Testing Best Practices
 
 ### 1. AAA Pattern (Arrange-Act-Assert)
+
 ```typescript
 test('creates member with valid data', () => {
   // Arrange
@@ -562,11 +593,13 @@ test('creates member with valid data', () => {
 ```
 
 ### 2. Test Isolation
+
 - Each test should be independent
 - Use `beforeEach` for setup, `afterEach` for cleanup
 - Don't rely on test execution order
 
 ### 3. Meaningful Test Names
+
 ```typescript
 // Good ✅
 test('throws error when creating member with duplicate email')
@@ -576,6 +609,7 @@ test('error test')
 ```
 
 ### 4. Mock External Dependencies
+
 ```typescript
 // Mock database calls
 jest.mock('@/lib/db', () => ({
@@ -589,6 +623,7 @@ jest.mock('axios', () => ({
 ```
 
 ### 5. Test Error Cases
+
 ```typescript
 test('handles database connection error gracefully')
 test('returns 400 for invalid input')
@@ -599,13 +634,13 @@ test('handles race conditions')
 
 ## 📊 Success Metrics
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| Overall Coverage | 80%+ | ⏳ Pending |
-| Critical Path Coverage | 95%+ | ⏳ Pending |
-| Test Execution Time | <30s | ⏳ Pending |
-| Flaky Tests | 0 | ⏳ Pending |
-| CI Success Rate | 95%+ | ⏳ Pending |
+| Metric                 | Target | Status     |
+| ---------------------- | ------ | ---------- |
+| Overall Coverage       | 80%+   | ⏳ Pending |
+| Critical Path Coverage | 95%+   | ⏳ Pending |
+| Test Execution Time    | <30s   | ⏳ Pending |
+| Flaky Tests            | 0      | ⏳ Pending |
+| CI Success Rate        | 95%+   | ⏳ Pending |
 
 ---
 
@@ -622,7 +657,6 @@ After Phase 4 completion:
 
 ---
 
-**Implementation by**: Claude Sonnet 4.5
-**Documentation generated**: December 28, 2025
-**Status**: 🚧 In Progress - Starting Phase 4.1
-**Expected Completion**: 2-3 days
+**Implementation by**: Claude Sonnet 4.5 **Documentation generated**: December
+28, 2025 **Status**: 🚧 In Progress - Starting Phase 4.1 **Expected
+Completion**: 2-3 days

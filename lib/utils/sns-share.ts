@@ -2,7 +2,7 @@
  * SNS 공유 유틸리티 함수
  */
 
-import { log } from './logger';
+import { log } from './logger'
 
 export interface ShareData {
   title: string
@@ -20,11 +20,11 @@ export const shareToKakao = (data: ShareData) => {
   if (typeof window !== 'undefined' && window.Kakao && window.Kakao.Share) {
     try {
       if (!window.Kakao.isInitialized()) {
-         // Try to init if key available (optional, but safer to skip or rely on main init)
-         // Assuming main init works, we just skip or try init
-         // window.Kakao.init(...) // We don't have env key here easily unless we import env
+        // Try to init if key available (optional, but safer to skip or rely on main init)
+        // Assuming main init works, we just skip or try init
+        // window.Kakao.init(...) // We don't have env key here easily unless we import env
       }
-      
+
       window.Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
@@ -75,18 +75,23 @@ export const shareToInstagram = (data: ShareData) => {
   try {
     // 공유 텍스트 생성
     const shareText = `${data.title}\n\n${data.description}\n\n${data.hashtags?.map(tag => `#${tag}`).join(' ') || ''}\n\n더 보기: ${data.url}`
-    
+
     // 클립보드에 텍스트 복사
-    navigator.clipboard.writeText(shareText).then(() => {
-      // 이미지 다운로드 시도
-      downloadImage(data.imageUrl, `${data.title}.jpg`)
-      
-      // 사용자에게 안내
-      alert('📸 이미지가 다운로드되고 텍스트가 복사되었습니다!\n인스타그램 앱에서 이미지를 업로드하고 복사된 텍스트를 붙여넣으세요.')
-    }).catch(() => {
-      // 클립보드 복사 실패시 폴백
-      prompt('다음 텍스트를 복사하여 인스타그램에 사용하세요:', shareText)
-    })
+    navigator.clipboard
+      .writeText(shareText)
+      .then(() => {
+        // 이미지 다운로드 시도
+        downloadImage(data.imageUrl, `${data.title}.jpg`)
+
+        // 사용자에게 안내
+        alert(
+          '📸 이미지가 다운로드되고 텍스트가 복사되었습니다!\n인스타그램 앱에서 이미지를 업로드하고 복사된 텍스트를 붙여넣으세요.'
+        )
+      })
+      .catch(() => {
+        // 클립보드 복사 실패시 폴백
+        prompt('다음 텍스트를 복사하여 인스타그램에 사용하세요:', shareText)
+      })
   } catch (error) {
     log.error('인스타그램 공유 준비 실패:', error)
     alert('공유 준비 중 오류가 발생했습니다.')
@@ -149,14 +154,14 @@ const downloadImage = async (imageUrl: string, filename: string) => {
     const response = await fetch(imageUrl)
     const blob = await response.blob()
     const url = window.URL.createObjectURL(blob)
-    
+
     const link = document.createElement('a')
     link.href = url
     link.download = filename
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-    
+
     window.URL.revokeObjectURL(url)
   } catch (error) {
     log.error('이미지 다운로드 실패:', error)
@@ -172,17 +177,17 @@ const fallbackCopyTextToClipboard = (text: string) => {
   textArea.style.top = '0'
   textArea.style.left = '0'
   textArea.style.position = 'fixed'
-  
+
   document.body.appendChild(textArea)
   textArea.focus()
   textArea.select()
-  
+
   try {
     document.execCommand('copy')
   } catch (err) {
     log.error('클립보드 복사 실패:', err)
   }
-  
+
   document.body.removeChild(textArea)
 }
 
@@ -206,7 +211,7 @@ export const getHighQualityImageUrl = (imagePath: string, width?: number, qualit
     const params = new URLSearchParams({
       url: encodedPath,
       w: (width || 1920).toString(),
-      q: quality.toString()
+      q: quality.toString(),
     })
     return `${baseUrl}/_next/image?${params.toString()}`
   }

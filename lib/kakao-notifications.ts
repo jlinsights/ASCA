@@ -40,8 +40,8 @@ class KakaoNotificationService {
         type: 'contest_deadline',
         templateArgs: {
           contest_name: '제32회 동양서예협회 정기공모전',
-          days_left: '3'
-        }
+          days_left: '3',
+        },
       },
       {
         id: 2,
@@ -50,8 +50,8 @@ class KakaoNotificationService {
         type: 'exhibition_open',
         templateArgs: {
           exhibition_name: '2024 신진작가 초대전',
-          date: '2024년 3월 15일'
-        }
+          date: '2024년 3월 15일',
+        },
       },
       {
         id: 3,
@@ -59,8 +59,8 @@ class KakaoNotificationService {
         description: '#{artist_name} 작가의 새로운 작품이 업로드되었습니다.',
         type: 'artist_update',
         templateArgs: {
-          artist_name: '김서예'
-        }
+          artist_name: '김서예',
+        },
       },
       {
         id: 4,
@@ -69,9 +69,9 @@ class KakaoNotificationService {
         type: 'general',
         templateArgs: {
           title: '협회 소식',
-          description: '새로운 소식을 확인해보세요'
-        }
-      }
+          description: '새로운 소식을 확인해보세요',
+        },
+      },
     ]
 
     defaultTemplates.forEach(template => {
@@ -95,22 +95,16 @@ class KakaoNotificationService {
       const templateArgs = {
         contest_name: contestName,
         days_left: daysLeft.toString(),
-        contest_url: contestUrl || ''
+        contest_url: contestUrl || '',
       }
 
-      const success = await kakaoSDK.sendPushNotification(
-        subscribers,
-        template.id,
-        templateArgs
-      )
+      const success = await kakaoSDK.sendPushNotification(subscribers, template.id, templateArgs)
 
       if (success) {
-        
       }
 
       return success
     } catch (error) {
-      
       return false
     }
   }
@@ -133,22 +127,16 @@ class KakaoNotificationService {
         exhibition_name: exhibitionName,
         date: openDate,
         location: location || '',
-        exhibition_url: exhibitionUrl || ''
+        exhibition_url: exhibitionUrl || '',
       }
 
-      const success = await kakaoSDK.sendPushNotification(
-        subscribers,
-        template.id,
-        templateArgs
-      )
+      const success = await kakaoSDK.sendPushNotification(subscribers, template.id, templateArgs)
 
       if (success) {
-        
       }
 
       return success
     } catch (error) {
-      
       return false
     }
   }
@@ -168,31 +156,25 @@ class KakaoNotificationService {
       }
 
       const updateTypeText = {
-        'new_artwork': '새로운 작품',
-        'profile_update': '프로필 업데이트',
-        'exhibition': '전시 참여'
+        new_artwork: '새로운 작품',
+        profile_update: '프로필 업데이트',
+        exhibition: '전시 참여',
       }
 
       const templateArgs = {
         artist_name: artistName,
         update_type: updateTypeText[updateType],
         update_details: updateDetails || '',
-        artist_url: artistUrl || ''
+        artist_url: artistUrl || '',
       }
 
-      const success = await kakaoSDK.sendPushNotification(
-        subscribers,
-        template.id,
-        templateArgs
-      )
+      const success = await kakaoSDK.sendPushNotification(subscribers, template.id, templateArgs)
 
       if (success) {
-        
       }
 
       return success
     } catch (error) {
-      
       return false
     }
   }
@@ -213,22 +195,16 @@ class KakaoNotificationService {
       const templateArgs = {
         title,
         description,
-        url: url || ''
+        url: url || '',
       }
 
-      const success = await kakaoSDK.sendPushNotification(
-        subscribers,
-        template.id,
-        templateArgs
-      )
+      const success = await kakaoSDK.sendPushNotification(subscribers, template.id, templateArgs)
 
       if (success) {
-        
       }
 
       return success
     } catch (error) {
-      
       return false
     }
   }
@@ -281,7 +257,6 @@ class KakaoNotificationService {
 
       return true
     } catch (error) {
-      
       return false
     }
   }
@@ -297,14 +272,13 @@ class KakaoNotificationService {
       const subscriber: NotificationSubscriber = {
         userId,
         kakaoId,
-        preferences
+        preferences,
       }
 
       // Supabase나 다른 DB에 저장하는 로직
-      
+
       return true
     } catch (error) {
-      
       return false
     }
   }
@@ -312,10 +286,9 @@ class KakaoNotificationService {
   async unsubscribeFromNotifications(userId: string): Promise<boolean> {
     try {
       // 실제 구현에서는 데이터베이스에서 제거
-      
+
       return true
     } catch (error) {
-      
       return false
     }
   }
@@ -327,10 +300,9 @@ class KakaoNotificationService {
   ): Promise<boolean> {
     try {
       // 실제 구현에서는 데이터베이스 업데이트
-      
+
       return true
     } catch (error) {
-      
       return false
     }
   }
@@ -358,7 +330,13 @@ export const sendContestDeadlineAlert = (
   contestName: string,
   daysLeft: number,
   contestUrl?: string
-) => kakaoNotificationService.sendContestDeadlineNotification(subscribers, contestName, daysLeft, contestUrl)
+) =>
+  kakaoNotificationService.sendContestDeadlineNotification(
+    subscribers,
+    contestName,
+    daysLeft,
+    contestUrl
+  )
 
 export const sendExhibitionAlert = (
   subscribers: string[],
@@ -366,7 +344,14 @@ export const sendExhibitionAlert = (
   openDate: string,
   location?: string,
   exhibitionUrl?: string
-) => kakaoNotificationService.sendExhibitionOpenNotification(subscribers, exhibitionName, openDate, location, exhibitionUrl)
+) =>
+  kakaoNotificationService.sendExhibitionOpenNotification(
+    subscribers,
+    exhibitionName,
+    openDate,
+    location,
+    exhibitionUrl
+  )
 
 export const sendArtistAlert = (
   subscribers: string[],
@@ -374,13 +359,26 @@ export const sendArtistAlert = (
   updateType: 'new_artwork' | 'profile_update' | 'exhibition',
   updateDetails?: string,
   artistUrl?: string
-) => kakaoNotificationService.sendArtistUpdateNotification(subscribers, artistName, updateType, updateDetails, artistUrl)
+) =>
+  kakaoNotificationService.sendArtistUpdateNotification(
+    subscribers,
+    artistName,
+    updateType,
+    updateDetails,
+    artistUrl
+  )
 
 export const scheduleContestReminders = (
   contestId: string,
   contestName: string,
   deadlineDate: Date,
   subscribers: string[]
-) => kakaoNotificationService.scheduleContestReminders(contestId, contestName, deadlineDate, subscribers)
+) =>
+  kakaoNotificationService.scheduleContestReminders(
+    contestId,
+    contestName,
+    deadlineDate,
+    subscribers
+  )
 
-export default kakaoNotificationService 
+export default kakaoNotificationService

@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -267,17 +266,23 @@ const mockActivities: MemberActivityLog[] = [
   },
 ]
 
-
 interface ProfileHeaderProps {
-  profile: MemberProfile;
-  tierInfo: MembershipTierInfo;
-  isEditing: boolean;
-  setIsEditing: (val: boolean) => void;
-  handleSaveProfile: () => void;
-  handleCancelEdit: () => void;
+  profile: MemberProfile
+  tierInfo: MembershipTierInfo
+  isEditing: boolean
+  setIsEditing: (val: boolean) => void
+  handleSaveProfile: () => void
+  handleCancelEdit: () => void
 }
 
-export function ProfileHeader({ profile, tierInfo, isEditing, setIsEditing, handleSaveProfile, handleCancelEdit }: ProfileHeaderProps) {
+export function ProfileHeader({
+  profile,
+  tierInfo,
+  isEditing,
+  setIsEditing,
+  handleSaveProfile,
+  handleCancelEdit,
+}: ProfileHeaderProps) {
   return (
     <>
       {/* 프로필 헤더 */}
@@ -363,8 +368,6 @@ export function ProfileHeader({ profile, tierInfo, isEditing, setIsEditing, hand
           </div>
         </div>
       </section>
-
-      
     </>
   )
 }

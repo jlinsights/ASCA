@@ -3,21 +3,28 @@
 ## Your Role: Code Reviewer & Analyst
 
 You are the **code review and analysis specialist** in a 3-CLI collaboration:
+
 - **Claude Code**: Orchestrator + complex implementation
 - **Gemini CLI (You)**: Code review + documentation + large-scale analysis
 - **Codex CLI**: Fast unit tasks + test execution
 
 ## Project Overview
 
-ASCA (Asian Society of Calligraphic Arts) - Korean Calligraphy Association website
-- **Stack**: Next.js 14 App Router, TypeScript, Supabase, Drizzle ORM, Tailwind CSS
-- **Features**: Dual DB (Supabase + Airtable), 4-language i18n (KO/EN/CN/JP), Admin CMS
+ASCA (Asian Society of Calligraphic Arts) - Korean Calligraphy Association
+website
+
+- **Stack**: Next.js 14 App Router, TypeScript, Supabase, Drizzle ORM, Tailwind
+  CSS
+- **Features**: Dual DB (Supabase + Airtable), 4-language i18n (KO/EN/CN/JP),
+  Admin CMS
 - **Language**: Korean for comments/commits, English for code
 
 ## Your Primary Tasks
 
 ### 1. Code Review (Main Responsibility)
+
 When asked to review, focus on:
+
 - TypeScript type safety and proper typing
 - Next.js App Router best practices (Server vs Client Components)
 - Database query optimization (Drizzle ORM patterns)
@@ -25,13 +32,16 @@ When asked to review, focus on:
 - Security: input validation, auth checks, SQL injection prevention
 
 ### 2. Large-Scale Analysis
+
 Leverage your 1M token context for:
+
 - Cross-file dependency analysis
 - Dead code detection across the entire codebase
 - Architecture consistency checks
 - Migration impact analysis
 
 ### 3. Documentation Generation
+
 - API documentation from route handlers
 - Component documentation from TSX files
 - Database schema documentation from Drizzle schema
@@ -60,6 +70,7 @@ Leverage your 1M token context for:
 ## Review Output Format
 
 When reviewing code, output in this format:
+
 ```
 ## Review: [file/feature name]
 

@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -267,8 +266,8 @@ const mockActivities: MemberActivityLog[] = [
   },
 ]
 
-import { ProfileHeader } from './_components/profile-header';
-import { ProfileTabs } from './_components/profile-tabs';
+import { ProfileHeader } from './_components/profile-header'
+import { ProfileTabs } from './_components/profile-tabs'
 
 export default function MemberProfilePage() {
   const [profile, setProfile] = useState<MemberProfile>(mockMemberProfile)
@@ -284,7 +283,10 @@ export default function MemberProfilePage() {
       setProfile({ ...profile, ...editForm })
       setIsEditing(false)
     } catch (error) {
-      logger.error('프로필 업데이트 실패', error instanceof Error ? error : new Error(String(error)))
+      logger.error(
+        '프로필 업데이트 실패',
+        error instanceof Error ? error : new Error(String(error))
+      )
     }
   }
 
@@ -295,22 +297,22 @@ export default function MemberProfilePage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <ProfileHeader 
-        profile={profile} 
-        tierInfo={tierInfo} 
-        isEditing={isEditing} 
-        setIsEditing={setIsEditing} 
-        handleSaveProfile={handleSaveProfile} 
-        handleCancelEdit={handleCancelEdit} 
+      <ProfileHeader
+        profile={profile}
+        tierInfo={tierInfo}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        handleSaveProfile={handleSaveProfile}
+        handleCancelEdit={handleCancelEdit}
       />
-      <ProfileTabs 
-        profile={profile} 
-        tierInfo={tierInfo} 
-        activities={activities} 
-        isEditing={isEditing} 
-        editForm={editForm} 
-        setEditForm={setEditForm} 
-        parsedPrivacySettings={parsedPrivacySettings} 
+      <ProfileTabs
+        profile={profile}
+        tierInfo={tierInfo}
+        activities={activities}
+        isEditing={isEditing}
+        editForm={editForm}
+        setEditForm={setEditForm}
+        parsedPrivacySettings={parsedPrivacySettings}
       />
       <LayoutFooter />
     </div>

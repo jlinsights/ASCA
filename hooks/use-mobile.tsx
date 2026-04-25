@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback } from 'react'
 
 const MOBILE_BREAKPOINT = 768
 
@@ -15,7 +15,7 @@ export function useIsMobile() {
 
     // 미디어 쿼리를 사용한 성능 최적화
     const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
       setIsMobile(e.matches)
     }
@@ -48,7 +48,7 @@ export function useIsMobileSSR() {
   useEffect(() => {
     setHasMounted(true)
     const checkIsMobile = () => window.innerWidth < MOBILE_BREAKPOINT
-    
+
     setIsMobile(checkIsMobile())
 
     const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)

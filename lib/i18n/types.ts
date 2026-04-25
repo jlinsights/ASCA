@@ -42,7 +42,10 @@ export interface TranslationCache {
 
 // 동적 번역 로더 인터페이스
 export interface TranslationLoader {
-  load: (language: Language, namespace: keyof TranslationNamespaces) => Promise<Record<string, string>>
+  load: (
+    language: Language,
+    namespace: keyof TranslationNamespaces
+  ) => Promise<Record<string, string>>
   cache: TranslationCache
   preload: (language: Language) => Promise<void>
 }
@@ -52,4 +55,4 @@ export type LanguageContextType = {
   language: Language
   setLanguage: (language: Language) => void
   t: (key: string) => string
-} 
+}

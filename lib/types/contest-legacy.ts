@@ -9,7 +9,7 @@ export interface Contest {
   theme?: string
   organizer: string
   sponsors?: string[]
-  
+
   // 일정 관리
   timeline: {
     registrationStart: Date
@@ -22,15 +22,15 @@ export interface Contest {
     exhibitionStart: Date
     exhibitionEnd: Date
   }
-  
+
   // 참가비 및 수수료
   fees: {
-    domestic: number      // 국내 참가비
+    domestic: number // 국내 참가비
     international: number // 해외 참가비
-    student: number      // 학생 할인
-    group: number        // 단체 할인
+    student: number // 학생 할인
+    group: number // 단체 할인
   }
-  
+
   // 심사 정보
   judging: {
     judges: Judge[]
@@ -38,10 +38,10 @@ export interface Contest {
     maxScore: number
     isBlindJudging: boolean
   }
-  
+
   // 수상 정보
   awards: Award[]
-  
+
   // 전시 정보
   exhibition: {
     venue: string
@@ -49,7 +49,7 @@ export interface Contest {
     isVirtual: boolean
     catalogIncluded: boolean
   }
-  
+
   // 제출 요구사항
   requirements: {
     artworkTypes: ArtworkType[]
@@ -59,12 +59,12 @@ export interface Contest {
     minResolution?: string
     additionalDocuments?: string[]
   }
-  
+
   // 상태 관리
   status: ContestStatus
   isPublished: boolean
   isFeatured: boolean
-  
+
   // 메타데이터
   createdAt: Date
   updatedAt: Date
@@ -75,7 +75,7 @@ export interface ContestSubmission {
   id: string
   contestId: string
   artistId: string
-  
+
   // 작품 정보
   artwork: {
     title: string
@@ -89,7 +89,7 @@ export interface ContestSubmission {
     isForSale: boolean
     price?: number
   }
-  
+
   // 파일 정보
   files: {
     mainImage: FileUpload
@@ -97,7 +97,7 @@ export interface ContestSubmission {
     documents?: FileUpload[]
     videoUrl?: string
   }
-  
+
   // 아티스트 정보 (스냅샷)
   artistInfo: {
     name: string
@@ -113,7 +113,7 @@ export interface ContestSubmission {
     education?: Education[]
     exhibitions?: Exhibition[]
   }
-  
+
   // 제출 정보
   submissionInfo: {
     category: string
@@ -122,7 +122,7 @@ export interface ContestSubmission {
     statement: string
     statementEn?: string
   }
-  
+
   // 결제 정보
   payment: {
     amount: number
@@ -133,7 +133,7 @@ export interface ContestSubmission {
     refundRequested?: boolean
     refundedAt?: Date
   }
-  
+
   // 심사 결과
   judging?: {
     scores: JudgeScore[]
@@ -143,7 +143,7 @@ export interface ContestSubmission {
     feedback?: string
     isSelected: boolean
   }
-  
+
   // 상태 관리
   status: SubmissionStatus
   submittedAt: Date
@@ -170,7 +170,7 @@ export interface JudgingCriteria {
   name: string
   nameEn?: string
   description: string
-  weight: number  // 가중치 (총합 100%)
+  weight: number // 가중치 (총합 100%)
   maxScore: number
 }
 
@@ -231,18 +231,18 @@ export interface Exhibition {
 }
 
 // Enums
-export type ContestCategory = 
-  | 'calligraphy' 
-  | 'painting' 
-  | 'sculpture' 
-  | 'photography' 
-  | 'digital-art' 
+export type ContestCategory =
+  | 'calligraphy'
+  | 'painting'
+  | 'sculpture'
+  | 'photography'
+  | 'digital-art'
   | 'mixed-media'
   | 'installation'
 
-export type ArtworkType = 
+export type ArtworkType =
   | 'traditional-painting'
-  | 'modern-painting' 
+  | 'modern-painting'
   | 'calligraphy'
   | 'sculpture'
   | 'photography'
@@ -251,16 +251,16 @@ export type ArtworkType =
   | 'installation'
   | 'mixed-media'
 
-export type ContestStatus = 
+export type ContestStatus =
   | 'draft'
   | 'registration-open'
-  | 'submission-open' 
+  | 'submission-open'
   | 'submission-closed'
   | 'judging'
   | 'completed'
   | 'cancelled'
 
-export type SubmissionStatus = 
+export type SubmissionStatus =
   | 'draft'
   | 'submitted'
   | 'payment-pending'
@@ -268,4 +268,4 @@ export type SubmissionStatus =
   | 'judging'
   | 'selected'
   | 'not-selected'
-  | 'withdrawn' 
+  | 'withdrawn'

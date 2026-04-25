@@ -13,7 +13,7 @@
  * @module lib/realtime/subscription-manager
  */
 
-import type { EventType, EventPayload } from './event-emitter';
+import type { EventType, EventPayload } from './event-emitter'
 
 /**
  * Client connection type
@@ -27,22 +27,22 @@ export enum ConnectionType {
  * Client subscription info
  */
 export interface ClientSubscription {
-  clientId: string;
-  connectionType: ConnectionType;
-  eventTypes: Set<EventType | string>;
-  userId?: string;
-  metadata?: Record<string, any>;
-  connectedAt: Date;
-  lastActivityAt: Date;
+  clientId: string
+  connectionType: ConnectionType
+  eventTypes: Set<EventType | string>
+  userId?: string
+  metadata?: Record<string, any>
+  connectedAt: Date
+  lastActivityAt: Date
 }
 
 /**
  * Subscription filter
  */
 export interface SubscriptionFilter {
-  eventTypes?: Array<EventType | string>;
-  userId?: string;
-  customFilter?: (payload: EventPayload) => boolean;
+  eventTypes?: Array<EventType | string>
+  userId?: string
+  customFilter?: (payload: EventPayload) => boolean
 }
 
 /**
@@ -51,14 +51,14 @@ export interface SubscriptionFilter {
  * Manages client subscriptions and event routing.
  */
 export class SubscriptionManager {
-  private subscriptions: Map<string, ClientSubscription>;
-  private eventTypeIndex: Map<EventType | string, Set<string>>;
-  private userIdIndex: Map<string, Set<string>>;
+  private subscriptions: Map<string, ClientSubscription>
+  private eventTypeIndex: Map<EventType | string, Set<string>>
+  private userIdIndex: Map<string, Set<string>>
 
   constructor() {
-    this.subscriptions = new Map();
-    this.eventTypeIndex = new Map();
-    this.userIdIndex = new Map();
+    this.subscriptions = new Map()
+    this.eventTypeIndex = new Map()
+    this.userIdIndex = new Map()
   }
 
   /**
@@ -75,10 +75,10 @@ export class SubscriptionManager {
     filter?: SubscriptionFilter
   ): ClientSubscription {
     // Remove existing subscription if any
-    this.unsubscribe(clientId);
+    this.unsubscribe(clientId)
 
-    const now = new Date();
-    const eventTypes = new Set(filter?.eventTypes || ['*']);
+    const now = new Date()
+    const eventTypes = new Set(filter?.eventTypes || ['*'])
 
     const subscription: ClientSubscription = {
       clientId,
@@ -88,28 +88,28 @@ export class SubscriptionManager {
       metadata: {},
       connectedAt: now,
       lastActivityAt: now,
-    };
+    }
 
     // Store subscription
-    this.subscriptions.set(clientId, subscription);
+    this.subscriptions.set(clientId, subscription)
 
     // Index by event types
     for (const eventType of eventTypes) {
       if (!this.eventTypeIndex.has(eventType)) {
-        this.eventTypeIndex.set(eventType, new Set());
+        this.eventTypeIndex.set(eventType, new Set())
       }
-      this.eventTypeIndex.get(eventType)!.add(clientId);
+      this.eventTypeIndex.get(eventType)!.add(clientId)
     }
 
     // Index by user ID
     if (filter?.userId) {
       if (!this.userIdIndex.has(filter.userId)) {
-        this.userIdIndex.set(filter.userId, new Set());
+        this.userIdIndex.set(filter.userId, new Set())
       }
-      this.userIdIndex.get(filter.userId)!.add(clientId);
+      this.userIdIndex.get(filter.userId)!.add(clientId)
     }
 
-    return subscription;
+    return subscription
   }
 
   /**
@@ -118,33 +118,33 @@ export class SubscriptionManager {
    * @param clientId - Client identifier
    */
   unsubscribe(clientId: string): void {
-    const subscription = this.subscriptions.get(clientId);
-    if (!subscription) return;
+    const subscription = this.subscriptions.get(clientId)
+    if (!subscription) return
 
     // Remove from event type index
     for (const eventType of subscription.eventTypes) {
-      const clients = this.eventTypeIndex.get(eventType);
+      const clients = this.eventTypeIndex.get(eventType)
       if (clients) {
-        clients.delete(clientId);
+        clients.delete(clientId)
         if (clients.size === 0) {
-          this.eventTypeIndex.delete(eventType);
+          this.eventTypeIndex.delete(eventType)
         }
       }
     }
 
     // Remove from user ID index
     if (subscription.userId) {
-      const clients = this.userIdIndex.get(subscription.userId);
+      const clients = this.userIdIndex.get(subscription.userId)
       if (clients) {
-        clients.delete(clientId);
+        clients.delete(clientId)
         if (clients.size === 0) {
-          this.userIdIndex.delete(subscription.userId);
+          this.userIdIndex.delete(subscription.userId)
         }
       }
     }
 
     // Remove subscription
-    this.subscriptions.delete(clientId);
+    this.subscriptions.delete(clientId)
   }
 
   /**
@@ -153,9 +153,9 @@ export class SubscriptionManager {
    * @param clientId - Client identifier
    */
   updateActivity(clientId: string): void {
-    const subscription = this.subscriptions.get(clientId);
+    const subscription = this.subscriptions.get(clientId)
     if (subscription) {
-      subscription.lastActivityAt = new Date();
+      subscription.lastActivityAt = new Date()
     }
   }
 
@@ -166,7 +166,7 @@ export class SubscriptionManager {
    * @returns Client subscription or undefined
    */
   getSubscription(clientId: string): ClientSubscription | undefined {
-    return this.subscriptions.get(clientId);
+    return this.subscriptions.get(clientId)
   }
 
   /**
@@ -175,7 +175,7 @@ export class SubscriptionManager {
    * @returns Array of client subscriptions
    */
   getAllSubscriptions(): ClientSubscription[] {
-    return Array.from(this.subscriptions.values());
+    return Array.from(this.subscriptions.values())
   }
 
   /**
@@ -186,19 +186,19 @@ export class SubscriptionManager {
    */
   getClientsByEventType(eventType: EventType | string): Set<string> {
     // Direct match
-    const directMatch = this.eventTypeIndex.get(eventType) || new Set<string>();
+    const directMatch = this.eventTypeIndex.get(eventType) || new Set<string>()
 
     // Wildcard match (e.g., 'member:*' matches 'member:created')
-    const category = this.getEventCategory(eventType);
+    const category = this.getEventCategory(eventType)
     const wildcardMatch = category
       ? this.eventTypeIndex.get(`${category}:*`) || new Set<string>()
-      : new Set<string>();
+      : new Set<string>()
 
     // All events wildcard
-    const allMatch = this.eventTypeIndex.get('*') || new Set<string>();
+    const allMatch = this.eventTypeIndex.get('*') || new Set<string>()
 
     // Combine all matches
-    return new Set([...directMatch, ...wildcardMatch, ...allMatch]);
+    return new Set([...directMatch, ...wildcardMatch, ...allMatch])
   }
 
   /**
@@ -208,7 +208,7 @@ export class SubscriptionManager {
    * @returns Set of client IDs
    */
   getClientsByUserId(userId: string): Set<string> {
-    return this.userIdIndex.get(userId) || new Set<string>();
+    return this.userIdIndex.get(userId) || new Set<string>()
   }
 
   /**
@@ -219,21 +219,21 @@ export class SubscriptionManager {
    * @returns True if client should receive event
    */
   shouldReceiveEvent(clientId: string, payload: EventPayload): boolean {
-    const subscription = this.subscriptions.get(clientId);
-    if (!subscription) return false;
+    const subscription = this.subscriptions.get(clientId)
+    if (!subscription) return false
 
     // Check if subscribed to this event type
-    const subscribedClients = this.getClientsByEventType(payload.type);
+    const subscribedClients = this.getClientsByEventType(payload.type)
     if (!subscribedClients.has(clientId)) {
-      return false;
+      return false
     }
 
     // Check user ID filter (if specified)
     if (subscription.userId && payload.userId !== subscription.userId) {
-      return false;
+      return false
     }
 
-    return true;
+    return true
   }
 
   /**
@@ -242,7 +242,7 @@ export class SubscriptionManager {
    * @returns Number of active clients
    */
   getActiveCount(): number {
-    return this.subscriptions.size;
+    return this.subscriptions.size
   }
 
   /**
@@ -253,8 +253,8 @@ export class SubscriptionManager {
    */
   getByConnectionType(connectionType: ConnectionType): ClientSubscription[] {
     return Array.from(this.subscriptions.values()).filter(
-      (sub) => sub.connectionType === connectionType
-    );
+      sub => sub.connectionType === connectionType
+    )
   }
 
   /**
@@ -264,21 +264,21 @@ export class SubscriptionManager {
    * @returns Number of removed subscriptions
    */
   removeStaleSubscriptions(maxIdleTime: number): number {
-    const now = Date.now();
-    const staleClients: string[] = [];
+    const now = Date.now()
+    const staleClients: string[] = []
 
     for (const [clientId, subscription] of this.subscriptions) {
-      const idleTime = now - subscription.lastActivityAt.getTime();
+      const idleTime = now - subscription.lastActivityAt.getTime()
       if (idleTime > maxIdleTime) {
-        staleClients.push(clientId);
+        staleClients.push(clientId)
       }
     }
 
     for (const clientId of staleClients) {
-      this.unsubscribe(clientId);
+      this.unsubscribe(clientId)
     }
 
-    return staleClients.length;
+    return staleClients.length
   }
 
   /**
@@ -287,51 +287,50 @@ export class SubscriptionManager {
    * @returns Subscription statistics
    */
   getStats(): {
-    total: number;
-    byConnectionType: Record<ConnectionType, number>;
-    byEventType: Record<string, number>;
-    avgIdleTime: number;
+    total: number
+    byConnectionType: Record<ConnectionType, number>
+    byEventType: Record<string, number>
+    avgIdleTime: number
   } {
     const byConnectionType = {
       [ConnectionType.WEBSOCKET]: 0,
       [ConnectionType.SSE]: 0,
-    };
+    }
 
-    const byEventType: Record<string, number> = {};
-    let totalIdleTime = 0;
-    const now = Date.now();
+    const byEventType: Record<string, number> = {}
+    let totalIdleTime = 0
+    const now = Date.now()
 
     for (const subscription of this.subscriptions.values()) {
       // Count by connection type
-      byConnectionType[subscription.connectionType]++;
+      byConnectionType[subscription.connectionType]++
 
       // Count by event types
       for (const eventType of subscription.eventTypes) {
-        byEventType[eventType] = (byEventType[eventType] || 0) + 1;
+        byEventType[eventType] = (byEventType[eventType] || 0) + 1
       }
 
       // Calculate idle time
-      totalIdleTime += now - subscription.lastActivityAt.getTime();
+      totalIdleTime += now - subscription.lastActivityAt.getTime()
     }
 
-    const avgIdleTime =
-      this.subscriptions.size > 0 ? totalIdleTime / this.subscriptions.size : 0;
+    const avgIdleTime = this.subscriptions.size > 0 ? totalIdleTime / this.subscriptions.size : 0
 
     return {
       total: this.subscriptions.size,
       byConnectionType,
       byEventType,
       avgIdleTime,
-    };
+    }
   }
 
   /**
    * Clear all subscriptions
    */
   clear(): void {
-    this.subscriptions.clear();
-    this.eventTypeIndex.clear();
-    this.userIdIndex.clear();
+    this.subscriptions.clear()
+    this.eventTypeIndex.clear()
+    this.userIdIndex.clear()
   }
 
   /**
@@ -341,15 +340,15 @@ export class SubscriptionManager {
    * @returns Event category (e.g., 'member' from 'member:created')
    */
   private getEventCategory(type: EventType | string): string | null {
-    const parts = type.split(':');
-    return parts.length > 1 ? parts[0] ?? null : null;
+    const parts = type.split(':')
+    return parts.length > 1 ? (parts[0] ?? null) : null
   }
 }
 
 /**
  * Global subscription manager instance (singleton)
  */
-let globalSubscriptionManager: SubscriptionManager | null = null;
+let globalSubscriptionManager: SubscriptionManager | null = null
 
 /**
  * Get or create global subscription manager instance
@@ -358,9 +357,9 @@ let globalSubscriptionManager: SubscriptionManager | null = null;
  */
 export function getSubscriptionManager(): SubscriptionManager {
   if (!globalSubscriptionManager) {
-    globalSubscriptionManager = new SubscriptionManager();
+    globalSubscriptionManager = new SubscriptionManager()
   }
-  return globalSubscriptionManager;
+  return globalSubscriptionManager
 }
 
 /**
@@ -369,5 +368,5 @@ export function getSubscriptionManager(): SubscriptionManager {
  * @returns New subscription manager instance
  */
 export function createSubscriptionManager(): SubscriptionManager {
-  return new SubscriptionManager();
+  return new SubscriptionManager()
 }

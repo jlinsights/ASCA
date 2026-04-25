@@ -11,15 +11,14 @@ parent_cycle: warning-cleanup
 
 # warning-cleanup-cycle-2 Design Document
 
-> **Summary**: Stage 3/4/5/7 상세 설계 — 파일별 분리 맵, barrel export 규칙, sub-component 네이밍, Server/Client 경계, 병합 순서
+> **Summary**: Stage 3/4/5/7 상세 설계 — 파일별 분리 맵, barrel export 규칙,
+> sub-component 네이밍, Server/Client 경계, 병합 순서
 >
-> **Project**: ASCA (my-v0-project)
-> **Version**: 0.1.0
-> **Author**: jhlim725
-> **Date**: 2026-04-22
-> **Status**: Draft
-> **Planning Doc**: [warning-cleanup-cycle-2.plan.md](../../01-plan/features/warning-cleanup-cycle-2.plan.md)
-> **Parent Design**: [warning-cleanup.design.md](./warning-cleanup.design.md) — Stage 3/4/5 원 설계 계승
+> **Project**: ASCA (my-v0-project) **Version**: 0.1.0 **Author**: jhlim725
+> **Date**: 2026-04-22 **Status**: Draft **Planning Doc**:
+> [warning-cleanup-cycle-2.plan.md](../../01-plan/features/warning-cleanup-cycle-2.plan.md)
+> **Parent Design**: [warning-cleanup.design.md](./warning-cleanup.design.md) —
+> Stage 3/4/5 원 설계 계승
 
 ---
 
@@ -38,7 +37,8 @@ parent_cycle: warning-cleanup
 - **Barrel first**: 분리 폴더는 `index.ts`가 단일 진입점
 - **Domain cohesion**: 파일 크기 맞추기보다 도메인 경계 우선
 - **Zero behavior change**: 모든 분리 후 동작 동일
-- **Presentational extraction**: 페이지는 data fetching + layout, sub-component는 순수 렌더
+- **Presentational extraction**: 페이지는 data fetching + layout,
+  sub-component는 순수 렌더
 - **shadcn protection**: 외부 upstream 원본은 수정하지 않고 override
 
 ---
@@ -59,23 +59,23 @@ Presentation ──→ Application ──→ Domain ←── Infrastructure
 
 ```typescript
 // lib/types/gallery/index.ts
-export * from './artwork';
-export * from './image';
-export * from './viewer';
-export * from './comparison';
-export * from './filters';
+export * from './artwork'
+export * from './image'
+export * from './viewer'
+export * from './comparison'
+export * from './filters'
 
 // 외부 호출자 (변경 불필요)
-import { Artwork, GalleryImage } from '@/lib/types/gallery';
+import { Artwork, GalleryImage } from '@/lib/types/gallery'
 ```
 
 ### 2.3 Dependencies
 
-| Component | Depends On | Notes |
-|-----------|-----------|-------|
-| Barrel `index.ts` | 동일 폴더 subfiles | 순환 참조 방지 위해 sub-file끼리 import 최소화 |
-| `_components/*` | 페이지의 데이터 타입, 유틸 | Props로만 데이터 주입 |
-| GraphQL schema 병합 | template literal 조합 | `mergeTypeDefs` 의존성 추가 X |
+| Component           | Depends On                 | Notes                                          |
+| ------------------- | -------------------------- | ---------------------------------------------- |
+| Barrel `index.ts`   | 동일 폴더 subfiles         | 순환 참조 방지 위해 sub-file끼리 import 최소화 |
+| `_components/*`     | 페이지의 데이터 타입, 유틸 | Props로만 데이터 주입                          |
+| GraphQL schema 병합 | template literal 조합      | `mergeTypeDefs` 의존성 추가 X                  |
 
 ---
 
@@ -123,7 +123,8 @@ lib/services/image/
 └── metadata.ts           # extractExif, getDimensions, getColorPalette
 ```
 
-**의존성**: `storage.ts`는 `validation.ts` 사용, `transform.ts`는 `metadata.ts` 참조. `index.ts`는 순수 barrel.
+**의존성**: `storage.ts`는 `validation.ts` 사용, `transform.ts`는 `metadata.ts`
+참조. `index.ts`는 순수 barrel.
 
 #### `lib/api/membership.ts` (515줄) → `lib/api/membership/`
 
@@ -151,10 +152,11 @@ lib/graphql/schema/
 ```
 
 **병합 전략**:
+
 ```typescript
 // lib/graphql/schema/index.ts
-import { userTypeDefs } from './user.graphql';
-import { artworkTypeDefs } from './artwork.graphql';
+import { userTypeDefs } from './user.graphql'
+import { artworkTypeDefs } from './artwork.graphql'
 // ...
 
 export const typeDefs = `
@@ -165,7 +167,7 @@ export const typeDefs = `
   ${eventTypeDefs}
   ${noticeTypeDefs}
   ${memberTypeDefs}
-`;
+`
 ```
 
 **의존성 추가 없음** — template literal 조합만 사용.
@@ -209,70 +211,76 @@ After:
 
 #### 페이지별 서브 컴포넌트 스케치
 
-| Page | Sub-components (draft) |
-|------|------------------------|
-| `artists/page.tsx` | Hero, Filter, Grid, Card, Pagination |
-| `artworks/[id]/page.tsx` | ArtworkHero, ArtworkDetails, ArtworkGallery, ArtistInfo, RelatedWorks |
-| `artworks/genre/[genre]/page.tsx` | GenreHero, GenreFilter, GenreGrid |
-| `artworks/upload/artwork-upload-client.tsx` | UploadForm, UploadSteps, UploadPreview, CategorySelector |
-| `awards/[year]/page.tsx` | YearHero, WinnerList, WinnerCard, YearNavigation |
-| `events/page.tsx` | EventsHero, EventsFilter, EventsGrid, EventsCard |
-| `events/[id]/page.tsx` | EventHero, EventDetails, EventSchedule, EventRegistration |
-| `exhibitions/page.tsx` | ExhibitionsHero, ExhibitionsFilter, ExhibitionsList, ExhibitionCard |
-| `exhibitions/[id]/page.tsx` | ExhibitionHero, ExhibitionInfo, ExhibitionArtworks, ExhibitionArtists |
-| `history/page.tsx` | HistoryHero, HistoryTimeline, HistorySection, HistoryMilestone |
-| `programs/cultural-exchange/page.tsx` | ProgramHero, ProgramOverview, ProgramDetails, ProgramSchedule |
-| `admin/membership/page.tsx` | AdminHeader, ApplicationList, ApplicationCard, ApplicationDialog, FilterBar |
-| `articles-of-incorporation-and-bylaws/_components/bylaws-content.tsx` | BylawsToc, BylawsArticle, BylawsAppendix (기존 `_components` 내부 세분화) |
-| `profile/membership/_components/profile-tabs.tsx` | ProfileTab (탭별 콘텐츠를 각각 파일로), ProfileTabList, ProfileTabContent |
-| `academy/_components/sac-academy.tsx` | AcademyHero, AcademyCourses, AcademyInstructors, AcademyCTA |
+| Page                                                                  | Sub-components (draft)                                                      |
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `artists/page.tsx`                                                    | Hero, Filter, Grid, Card, Pagination                                        |
+| `artworks/[id]/page.tsx`                                              | ArtworkHero, ArtworkDetails, ArtworkGallery, ArtistInfo, RelatedWorks       |
+| `artworks/genre/[genre]/page.tsx`                                     | GenreHero, GenreFilter, GenreGrid                                           |
+| `artworks/upload/artwork-upload-client.tsx`                           | UploadForm, UploadSteps, UploadPreview, CategorySelector                    |
+| `awards/[year]/page.tsx`                                              | YearHero, WinnerList, WinnerCard, YearNavigation                            |
+| `events/page.tsx`                                                     | EventsHero, EventsFilter, EventsGrid, EventsCard                            |
+| `events/[id]/page.tsx`                                                | EventHero, EventDetails, EventSchedule, EventRegistration                   |
+| `exhibitions/page.tsx`                                                | ExhibitionsHero, ExhibitionsFilter, ExhibitionsList, ExhibitionCard         |
+| `exhibitions/[id]/page.tsx`                                           | ExhibitionHero, ExhibitionInfo, ExhibitionArtworks, ExhibitionArtists       |
+| `history/page.tsx`                                                    | HistoryHero, HistoryTimeline, HistorySection, HistoryMilestone              |
+| `programs/cultural-exchange/page.tsx`                                 | ProgramHero, ProgramOverview, ProgramDetails, ProgramSchedule               |
+| `admin/membership/page.tsx`                                           | AdminHeader, ApplicationList, ApplicationCard, ApplicationDialog, FilterBar |
+| `articles-of-incorporation-and-bylaws/_components/bylaws-content.tsx` | BylawsToc, BylawsArticle, BylawsAppendix (기존 `_components` 내부 세분화)   |
+| `profile/membership/_components/profile-tabs.tsx`                     | ProfileTab (탭별 콘텐츠를 각각 파일로), ProfileTabList, ProfileTabContent   |
+| `academy/_components/sac-academy.tsx`                                 | AcademyHero, AcademyCourses, AcademyInstructors, AcademyCTA                 |
 
 ### 3.3.1 Stage 5a — Implementation Status (2026-04-24)
 
 **실제 진행 순서 (Design과 다름):**
 
-| # | Commit | 파일 | Before → After | Warning Δ |
-|---|--------|------|----------------|-----------|
-| 5a-1/1 | `82eb14b9` | `events/page.tsx` | 557 → 307 | 24 → 23 |
-| 5a-1/2 | `575017a8` | `events/[id]/page.tsx` | 620 → 123 | 23 → 22 |
-| 5a-1/3 | `4bcf9f84` | `exhibitions/page.tsx` | 766 → 280 | 22 → 21 |
-| 5a-1/4 | `0a14bc2d` | `exhibitions/[id]/page.tsx` | 617 → 206 | 21 → 20 |
-| 5a-1/5 | `5987e33e` | `artists/page.tsx` | 827 → 201 | 20 → 19 |
-| 5a-1/6 | `1282e599` | `artworks/[id]/page.tsx` | 943 → 115 | 19 → 18 |
-| 5a-1/7 | `90129b66` | `profile/membership/_components/profile-tabs.tsx` | 974 → 84 | 18 → 17 |
+| #      | Commit     | 파일                                              | Before → After | Warning Δ |
+| ------ | ---------- | ------------------------------------------------- | -------------- | --------- |
+| 5a-1/1 | `82eb14b9` | `events/page.tsx`                                 | 557 → 307      | 24 → 23   |
+| 5a-1/2 | `575017a8` | `events/[id]/page.tsx`                            | 620 → 123      | 23 → 22   |
+| 5a-1/3 | `4bcf9f84` | `exhibitions/page.tsx`                            | 766 → 280      | 22 → 21   |
+| 5a-1/4 | `0a14bc2d` | `exhibitions/[id]/page.tsx`                       | 617 → 206      | 21 → 20   |
+| 5a-1/5 | `5987e33e` | `artists/page.tsx`                                | 827 → 201      | 20 → 19   |
+| 5a-1/6 | `1282e599` | `artworks/[id]/page.tsx`                          | 943 → 115      | 19 → 18   |
+| 5a-1/7 | `90129b66` | `profile/membership/_components/profile-tabs.tsx` | 974 → 84       | 18 → 17   |
 
 **Design과의 차이점:**
 
-1. **순서 변경**: Design은 `artists → artworks/[id] → genre → upload → awards`였으나, 실제로는 **영향 범위가 작은 페이지 먼저** (events → exhibitions) → 큰 페이지 (artworks/[id], profile-tabs) 순으로 진행. 이유: 패턴 검증 후 대형 파일 안전 진행.
-2. **`profile-tabs` 위치**: Design상 Stage 5a-2였으나 Stage 5a-1에 포함됨. 이유: 916줄 최대 파일 선제 해결.
-3. **Dead code 제거 부가 이득**: `profile-tabs.tsx`에서 미사용 mock 데이터 (mockMemberProfile 등) 제거 — 향후 `profile-header.tsx`에도 동일 중복 존재함을 발견.
+1. **순서 변경**: Design은
+   `artists → artworks/[id] → genre → upload → awards`였으나, 실제로는 **영향
+   범위가 작은 페이지 먼저** (events → exhibitions) → 큰 페이지 (artworks/[id],
+   profile-tabs) 순으로 진행. 이유: 패턴 검증 후 대형 파일 안전 진행.
+2. **`profile-tabs` 위치**: Design상 Stage 5a-2였으나 Stage 5a-1에 포함됨. 이유:
+   916줄 최대 파일 선제 해결.
+3. **Dead code 제거 부가 이득**: `profile-tabs.tsx`에서 미사용 mock 데이터
+   (mockMemberProfile 등) 제거 — 향후 `profile-header.tsx`에도 동일 중복
+   존재함을 발견.
 
 **진행 중 (Stage 5a-1 후속 / Stage 5a-2):**
 
-| 파일 | 줄수 | 우선순위 |
-|------|------|----------|
-| `admin/membership/page.tsx` | 854 | HIGH (관리자, 내부) |
-| `awards/[year]/page.tsx` | 786 | HIGH (공개) |
-| `bylaws-content.tsx` | 745 | MEDIUM |
-| `programs/cultural-exchange/page.tsx` | 686 | MEDIUM |
-| `academy/_components/sac-academy.tsx` | 572 | LOW |
-| `artworks/upload/artwork-upload-client.tsx` | 514 | LOW (marginal) |
-| `artworks/genre/[genre]/page.tsx` | 517 | LOW (marginal) |
-| `history/page.tsx` | 527 | LOW (marginal) |
+| 파일                                        | 줄수 | 우선순위            |
+| ------------------------------------------- | ---- | ------------------- |
+| `admin/membership/page.tsx`                 | 854  | HIGH (관리자, 내부) |
+| `awards/[year]/page.tsx`                    | 786  | HIGH (공개)         |
+| `bylaws-content.tsx`                        | 745  | MEDIUM              |
+| `programs/cultural-exchange/page.tsx`       | 686  | MEDIUM              |
+| `academy/_components/sac-academy.tsx`       | 572  | LOW                 |
+| `artworks/upload/artwork-upload-client.tsx` | 514  | LOW (marginal)      |
+| `artworks/genre/[genre]/page.tsx`           | 517  | LOW (marginal)      |
+| `history/page.tsx`                          | 527  | LOW (marginal)      |
 
 ### 3.4 Stage 5b — Component Decomposition
 
-| Component | Sub-components / Hooks |
-|-----------|------------------------|
-| `components/gallery/StrokeAnimationPlayer.tsx` (741) | Player, Controls, Timeline, useStrokeAnimation |
-| `components/gallery/ArtworkComparison.tsx` (681) | ComparisonPanel, ComparisonSlider, useComparison |
-| `components/gallery/GalleryGrid.tsx` (617) | GridItem, GridFilter, useGalleryGrid |
-| `components/gallery/ZoomableImageViewer.tsx` (555) | ZoomControls, ViewerCanvas, usePanZoom |
-| `components/cultural/CulturalAccessibility.tsx` (627) | A11yPanel, A11yToggle, useA11ySettings |
-| `components/cultural/CulturalCalendar.tsx` (611) | CalendarView, CalendarEvent, CalendarMonthSelector |
-| `components/cultural/LearningHub.tsx` (527) | HubSection, HubCard, HubFilter |
-| `components/layout/layout-footer.tsx` (501) | FooterNav, FooterSocial, FooterCopyright |
-| `components/ui/sidebar.tsx` (671) | **shadcn 원본인지 확인** → override 우선 |
+| Component                                             | Sub-components / Hooks                             |
+| ----------------------------------------------------- | -------------------------------------------------- |
+| `components/gallery/StrokeAnimationPlayer.tsx` (741)  | Player, Controls, Timeline, useStrokeAnimation     |
+| `components/gallery/ArtworkComparison.tsx` (681)      | ComparisonPanel, ComparisonSlider, useComparison   |
+| `components/gallery/GalleryGrid.tsx` (617)            | GridItem, GridFilter, useGalleryGrid               |
+| `components/gallery/ZoomableImageViewer.tsx` (555)    | ZoomControls, ViewerCanvas, usePanZoom             |
+| `components/cultural/CulturalAccessibility.tsx` (627) | A11yPanel, A11yToggle, useA11ySettings             |
+| `components/cultural/CulturalCalendar.tsx` (611)      | CalendarView, CalendarEvent, CalendarMonthSelector |
+| `components/cultural/LearningHub.tsx` (527)           | HubSection, HubCard, HubFilter                     |
+| `components/layout/layout-footer.tsx` (501)           | FooterNav, FooterSocial, FooterCopyright           |
+| `components/ui/sidebar.tsx` (671)                     | **shadcn 원본인지 확인** → override 우선           |
 
 ### 3.5 sidebar.tsx 결정 프로토콜
 
@@ -315,18 +323,18 @@ export function ArtistsGrid({ artists, filter }: ArtistsGridProps) {
 
 ```typescript
 // app/artists/_components/ArtistsFilter.tsx
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 interface ArtistsFilterProps {
-  categories: string[];
+  categories: string[]
 }
 
 export function ArtistsFilter({ categories }: ArtistsFilterProps) {
-  const router = useRouter();
-  const params = useSearchParams();
+  const router = useRouter()
+  const params = useSearchParams()
   // ...
 }
 ```
@@ -370,31 +378,34 @@ UI 동작 변경 없음. 시각 회귀 검증:
 
 ### 5.2 Server/Client 경계 유지 규칙
 
-| Component Type | Rule |
-|----------------|------|
-| Data fetching | page.tsx (Server) |
+| Component Type               | Rule                                    |
+| ---------------------------- | --------------------------------------- |
+| Data fetching                | page.tsx (Server)                       |
 | 인터랙티브 UI (상태, 이벤트) | `_components/*.tsx` with `'use client'` |
-| Pure presentational | Server (기본) |
-| URL state | Client + `useSearchParams` |
+| Pure presentational          | Server (기본)                           |
+| URL state                    | Client + `useSearchParams`              |
 
 ---
 
 ## 6. Error Handling
 
-변경 없음. 기존 `try/catch` + `structuredLogger` 패턴 유지. 단, 추출 시 error boundary 누락 방지:
+변경 없음. 기존 `try/catch` + `structuredLogger` 패턴 유지. 단, 추출 시 error
+boundary 누락 방지:
 
-| Error Scenario | Handler Location |
-|----------------|------------------|
-| Server fetch 실패 | page.tsx의 error.tsx |
+| Error Scenario            | Handler Location              |
+| ------------------------- | ----------------------------- |
+| Server fetch 실패         | page.tsx의 error.tsx          |
 | Client-side mutation 실패 | `_components/*`의 toast/alert |
-| Validation 실패 | sub-component 내부 |
+| Validation 실패           | sub-component 내부            |
 
 ---
 
 ## 7. Security Considerations
 
-- [x] 'use client' 경계를 통한 서버 전용 데이터 누수 방지 — page.tsx에서만 secret 사용
-- [x] GraphQL schema 분리 시 introspection 노출 정책 동일 유지 (production에서 disable)
+- [x] 'use client' 경계를 통한 서버 전용 데이터 누수 방지 — page.tsx에서만
+      secret 사용
+- [x] GraphQL schema 분리 시 introspection 노출 정책 동일 유지 (production에서
+      disable)
 - [x] Image service 분리 시 Storage signed URL 로직 무변경
 - [x] Auth middleware / session 관련 타입은 분리 대상 아님 (현 파일 구조 유지)
 
@@ -404,22 +415,24 @@ UI 동작 변경 없음. 시각 회귀 검증:
 
 ### 8.1 Test Strategy
 
-| Type | Target | Tool |
-|------|--------|------|
-| Type | 전체 | `tsc --noEmit` |
-| Unit | 분리된 utility (있다면) | Jest |
-| Integration | 페이지 data fetching | Jest (app/api/**/__tests__) |
-| E2E | 추출된 페이지 스모크 | Playwright (test:e2e:ci) |
-| Regression | 기존 jest 테스트 100% | `npm run test:ci` |
+| Type        | Target                  | Tool                          |
+| ----------- | ----------------------- | ----------------------------- |
+| Type        | 전체                    | `tsc --noEmit`                |
+| Unit        | 분리된 utility (있다면) | Jest                          |
+| Integration | 페이지 data fetching    | Jest (app/api/\*\*/**tests**) |
+| E2E         | 추출된 페이지 스모크    | Playwright (test:e2e:ci)      |
+| Regression  | 기존 jest 테스트 100%   | `npm run test:ci`             |
 
 ### 8.2 Test Gates per Stage
 
 **모든 Stage 종료 조건**:
+
 ```bash
 npm run type-check && npm run lint
 ```
 
 **Stage 7 최종 조건**:
+
 ```bash
 npm run lint:strict && \
 npm run type-check && \
@@ -443,21 +456,21 @@ npm run build
 
 ### 9.1 Layer 유지
 
-| Layer | Target Files | Stage |
-|-------|--------------|-------|
-| Domain | `lib/types/gallery/`, `lib/types/membership/` | 3 |
-| Application | `lib/services/image/`, `lib/api/membership/` | 4 |
-| Infrastructure | `lib/graphql/schema/`, `lib/icons/` | 4 |
-| Presentation | `app/**/_components/`, `components/**/` | 5 |
+| Layer          | Target Files                                  | Stage |
+| -------------- | --------------------------------------------- | ----- |
+| Domain         | `lib/types/gallery/`, `lib/types/membership/` | 3     |
+| Application    | `lib/services/image/`, `lib/api/membership/`  | 4     |
+| Infrastructure | `lib/graphql/schema/`, `lib/icons/`           | 4     |
+| Presentation   | `app/**/_components/`, `components/**/`       | 5     |
 
 ### 9.2 Import Rules (재확인)
 
-| From | Can Import | Cannot Import |
-|------|-----------|---------------|
-| `_components/*` | 같은 페이지 util, `@/lib/types`, `@/components/ui` | 다른 페이지의 `_components/` (금지) |
-| `lib/types/gallery/*` | 다른 `lib/types/*` | `lib/services`, `lib/api` (순환 위험) |
-| barrel `index.ts` | sub-file만 | sub-file이 barrel을 import 금지 |
-| shadcn 원본 | 수정 불가 | override로 해결 |
+| From                  | Can Import                                         | Cannot Import                         |
+| --------------------- | -------------------------------------------------- | ------------------------------------- |
+| `_components/*`       | 같은 페이지 util, `@/lib/types`, `@/components/ui` | 다른 페이지의 `_components/` (금지)   |
+| `lib/types/gallery/*` | 다른 `lib/types/*`                                 | `lib/services`, `lib/api` (순환 위험) |
+| barrel `index.ts`     | sub-file만                                         | sub-file이 barrel을 import 금지       |
+| shadcn 원본           | 수정 불가                                          | override로 해결                       |
 
 ### 9.3 Circular Dependency Detection
 
@@ -474,42 +487,42 @@ npx madge --circular --extensions ts,tsx app/
 
 ### 10.1 Naming
 
-| Target | Rule | 예시 |
-|--------|------|------|
-| 분리된 type 파일 | camelCase.ts | `artwork.ts`, `subscription.ts` |
-| 분리된 service 파일 | camelCase.ts | `upload.ts`, `metadata.ts` |
-| GraphQL partial | `{domain}.graphql.ts` | `user.graphql.ts` |
-| barrel | `index.ts` | 고정 |
-| `_components/` 파일 | PascalCase.tsx | `ArtistsGrid.tsx` |
-| `_components/` 훅 | `use*.ts` | `useArtistsFilter.ts` |
-| 폴더 | kebab-case 또는 기능명 | `gallery/`, `_components/` |
+| Target              | Rule                   | 예시                            |
+| ------------------- | ---------------------- | ------------------------------- |
+| 분리된 type 파일    | camelCase.ts           | `artwork.ts`, `subscription.ts` |
+| 분리된 service 파일 | camelCase.ts           | `upload.ts`, `metadata.ts`      |
+| GraphQL partial     | `{domain}.graphql.ts`  | `user.graphql.ts`               |
+| barrel              | `index.ts`             | 고정                            |
+| `_components/` 파일 | PascalCase.tsx         | `ArtistsGrid.tsx`               |
+| `_components/` 훅   | `use*.ts`              | `useArtistsFilter.ts`           |
+| 폴더                | kebab-case 또는 기능명 | `gallery/`, `_components/`      |
 
 ### 10.2 Import Order (barrel 도입 후)
 
 ```typescript
 // 1. External
-import { useState } from 'react';
+import { useState } from 'react'
 
 // 2. Internal absolute — barrel 우선
-import { Artwork } from '@/lib/types/gallery';  // barrel
-import { info } from '@/lib/logging';
+import { Artwork } from '@/lib/types/gallery' // barrel
+import { info } from '@/lib/logging'
 
 // 3. Relative
-import { ArtistsCard } from './ArtistsCard';
+import { ArtistsCard } from './ArtistsCard'
 
 // 4. Types
-import type { Artist } from '@/lib/types/artist';
+import type { Artist } from '@/lib/types/artist'
 ```
 
 ### 10.3 File Size Convention
 
-| Type | Target | Hard limit |
-|------|--------|-----------|
-| 일반 소스 | 300줄 | 500줄 |
-| 도메인 type 파일 | 200줄 | 300줄 |
-| 페이지 page.tsx | 150줄 | 200줄 |
-| `_components/*.tsx` | 200줄 | 400줄 |
-| 테스트 | 제한 없음 (override) | — |
+| Type                | Target               | Hard limit |
+| ------------------- | -------------------- | ---------- |
+| 일반 소스           | 300줄                | 500줄      |
+| 도메인 type 파일    | 200줄                | 300줄      |
+| 페이지 page.tsx     | 150줄                | 200줄      |
+| `_components/*.tsx` | 200줄                | 400줄      |
+| 테스트              | 제한 없음 (override) | —          |
 
 ---
 
@@ -517,19 +530,19 @@ import type { Artist } from '@/lib/types/artist';
 
 ### 11.1 Stage 실행 순서 및 커밋 전략
 
-| Stage | 작업 | Commit 단위 | Gate |
-|-------|------|------------|------|
-| 3 | Types 2 파일 분리 | Stage 단위 (1 commit) | type-check + grep 호출자 |
-| 4a | `image-service.ts` | 1 commit | type-check |
-| 4b | `api/membership.ts` | 1 commit | type-check |
-| 4c | `graphql/schema.ts` | 1 commit | type-check + GraphQL introspection 비교 (선택) |
-| 4d | `icons.ts` | 1 commit | type-check |
-| 5a-1 | 페이지 5개 (batch #1: artists, artworks/[id], artworks/genre, artworks/upload, awards) | 페이지별 커밋 (5 commits) | 페이지별 type-check + lint |
-| 5a-2 | 페이지 7개 (batch #2: events*, exhibitions*, history, programs, admin/membership, bylaws, profile-tabs, sac-academy) | 페이지별 커밋 (8 commits) | 동일 |
-| 5b-1 | `components/gallery/*` 4개 | 컴포넌트별 (4 commits) | type-check + screenshot 비교 |
-| 5b-2 | `components/cultural/*` 3개 | 컴포넌트별 (3 commits) | 동일 |
-| 5b-3 | `layout/footer` + `ui/sidebar` | 2 commits (sidebar는 override면 1) | 동일 |
-| 7 | 최종 검증 | 검증만 (commit 없음) 또는 override tweak 1 commit | 전체 gate |
+| Stage | 작업                                                                                                                 | Commit 단위                                       | Gate                                           |
+| ----- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------- |
+| 3     | Types 2 파일 분리                                                                                                    | Stage 단위 (1 commit)                             | type-check + grep 호출자                       |
+| 4a    | `image-service.ts`                                                                                                   | 1 commit                                          | type-check                                     |
+| 4b    | `api/membership.ts`                                                                                                  | 1 commit                                          | type-check                                     |
+| 4c    | `graphql/schema.ts`                                                                                                  | 1 commit                                          | type-check + GraphQL introspection 비교 (선택) |
+| 4d    | `icons.ts`                                                                                                           | 1 commit                                          | type-check                                     |
+| 5a-1  | 페이지 5개 (batch #1: artists, artworks/[id], artworks/genre, artworks/upload, awards)                               | 페이지별 커밋 (5 commits)                         | 페이지별 type-check + lint                     |
+| 5a-2  | 페이지 7개 (batch #2: events*, exhibitions*, history, programs, admin/membership, bylaws, profile-tabs, sac-academy) | 페이지별 커밋 (8 commits)                         | 동일                                           |
+| 5b-1  | `components/gallery/*` 4개                                                                                           | 컴포넌트별 (4 commits)                            | type-check + screenshot 비교                   |
+| 5b-2  | `components/cultural/*` 3개                                                                                          | 컴포넌트별 (3 commits)                            | 동일                                           |
+| 5b-3  | `layout/footer` + `ui/sidebar`                                                                                       | 2 commits (sidebar는 override면 1)                | 동일                                           |
+| 7     | 최종 검증                                                                                                            | 검증만 (commit 없음) 또는 override tweak 1 commit | 전체 gate                                      |
 
 **예상 총 commit 수**: ~25–28
 
@@ -566,34 +579,34 @@ npx jscodeshift -t <transform.js> <path>
 
 ## 12. Success Metrics
 
-| Metric | Before | Target | Measurement |
-|--------|--------|--------|-------------|
-| ESLint warnings | 30 | 0 | `npm run lint` |
-| `lint:strict` exit code | 1 | 0 | 직접 |
-| 최대 소스 파일 줄 수 | 916 | ≤ 500 | `wc -l` |
-| TypeScript errors | 0 | 0 | `tsc --noEmit` |
-| Circular dependencies | unknown | 0 | `madge --circular` |
-| Test pass rate | 현재 | 100% 유지 | `test:ci` |
-| Bundle size | 현재 | +2% 이내 | build manifest |
-| 시각 회귀 | N/A | diff < 1% | Playwright screenshot |
+| Metric                  | Before  | Target    | Measurement           |
+| ----------------------- | ------- | --------- | --------------------- |
+| ESLint warnings         | 30      | 0         | `npm run lint`        |
+| `lint:strict` exit code | 1       | 0         | 직접                  |
+| 최대 소스 파일 줄 수    | 916     | ≤ 500     | `wc -l`               |
+| TypeScript errors       | 0       | 0         | `tsc --noEmit`        |
+| Circular dependencies   | unknown | 0         | `madge --circular`    |
+| Test pass rate          | 현재    | 100% 유지 | `test:ci`             |
+| Bundle size             | 현재    | +2% 이내  | build manifest        |
+| 시각 회귀               | N/A     | diff < 1% | Playwright screenshot |
 
 ---
 
 ## 13. Risks & Open Questions
 
-| Topic | Risk | Mitigation/Action |
-|-------|------|-------------------|
-| shadcn sidebar | 분리하면 upstream 업데이트 차단 | 원본 확인 후 override 우선 |
-| GraphQL schema 분리 | 병합 순서 버그 | template literal + introspection 비교 |
-| profile-tabs.tsx (916줄) | 가장 큰 파일, 분리 난이도 높음 | Tab별 독립 파일 + dynamic import 고려 |
-| Server/Client 경계 | 추출 중 'use client' 누락 | 각 파일 상단 확인, E2E로 검증 |
-| Next.js route export (force-dynamic 등) | 이동 시 누락 가능 | page.tsx에서만 export, `_components/*`에는 미배치 |
+| Topic                                   | Risk                            | Mitigation/Action                                 |
+| --------------------------------------- | ------------------------------- | ------------------------------------------------- |
+| shadcn sidebar                          | 분리하면 upstream 업데이트 차단 | 원본 확인 후 override 우선                        |
+| GraphQL schema 분리                     | 병합 순서 버그                  | template literal + introspection 비교             |
+| profile-tabs.tsx (916줄)                | 가장 큰 파일, 분리 난이도 높음  | Tab별 독립 파일 + dynamic import 고려             |
+| Server/Client 경계                      | 추출 중 'use client' 누락       | 각 파일 상단 확인, E2E로 검증                     |
+| Next.js route export (force-dynamic 등) | 이동 시 누락 가능               | page.tsx에서만 export, `_components/*`에는 미배치 |
 
 ---
 
 ## Version History
 
-| Version | Date | Changes | Author |
-|---------|------|---------|--------|
-| 0.1 | 2026-04-22 | Initial Cycle #2 design — 파일별 분리 맵, barrel 규칙, Server/Client 경계, 25+ commit plan | jhlim725 |
-| 0.2 | 2026-04-24 | Stage 5a-1 실제 진행 반영 (§3.3.1 추가) — 7개 페이지 완료, 30→17 warnings (-43.3%), Match Rate 71.4%. 순서 변경(events 선행), profile-tabs Stage 5a-1 포함. | jhlim725 |
+| Version | Date       | Changes                                                                                                                                                     | Author   |
+| ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| 0.1     | 2026-04-22 | Initial Cycle #2 design — 파일별 분리 맵, barrel 규칙, Server/Client 경계, 25+ commit plan                                                                  | jhlim725 |
+| 0.2     | 2026-04-24 | Stage 5a-1 실제 진행 반영 (§3.3.1 추가) — 7개 페이지 완료, 30→17 warnings (-43.3%), Match Rate 71.4%. 순서 변경(events 선행), profile-tabs Stage 5a-1 포함. | jhlim725 |

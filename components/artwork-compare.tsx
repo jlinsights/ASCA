@@ -10,10 +10,13 @@ import { X, ZoomIn, ArrowLeftRight, Grid2X2 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
 // ImageViewer를 동적으로 로드하여 서버 컴포넌트 충돌 방지
-const ImageViewer = dynamic(() => import('./image-viewer').then(mod => ({ default: mod.ImageViewer })), {
-  ssr: false,
-  loading: () => <div className="w-full h-full bg-muted animate-pulse" />
-})
+const ImageViewer = dynamic(
+  () => import('./image-viewer').then(mod => ({ default: mod.ImageViewer })),
+  {
+    ssr: false,
+    loading: () => <div className='w-full h-full bg-muted animate-pulse' />,
+  }
+)
 
 interface Artwork {
   id: string
@@ -58,11 +61,17 @@ export function CompareProvider({ children }: CompareProviderProps) {
   const maxArtworks = 4
 
   // 작품 추가
-  const addArtwork = useCallback((artwork: Artwork) => {
-    if (selectedArtworks.length < maxArtworks && !selectedArtworks.find(a => a.id === artwork.id)) {
-      setSelectedArtworks(prev => [...prev, artwork])
-    }
-  }, [selectedArtworks, maxArtworks])
+  const addArtwork = useCallback(
+    (artwork: Artwork) => {
+      if (
+        selectedArtworks.length < maxArtworks &&
+        !selectedArtworks.find(a => a.id === artwork.id)
+      ) {
+        setSelectedArtworks(prev => [...prev, artwork])
+      }
+    },
+    [selectedArtworks, maxArtworks]
+  )
 
   // 작품 제거
   const removeArtwork = useCallback((artworkId: string) => {
@@ -83,14 +92,10 @@ export function CompareProvider({ children }: CompareProviderProps) {
     selectedArtworks,
     isOpen,
     setIsOpen,
-    maxArtworks
+    maxArtworks,
   }
 
-  return (
-    <CompareContext.Provider value={value}>
-      {children}
-    </CompareContext.Provider>
-  )
+  return <CompareContext.Provider value={value}>{children}</CompareContext.Provider>
 }
 
 // 비교 다이얼로그 컴포넌트
@@ -109,61 +114,60 @@ export function ArtworkCompareDialog({ children }: ArtworkCompareDialogProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
-      <DialogContent className="max-w-full max-h-full w-screen h-screen p-0">
-        <div className="relative w-full h-full flex flex-col bg-background">
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className='max-w-full max-h-full w-screen h-screen p-0'>
+        <div className='relative w-full h-full flex flex-col bg-background'>
           {/* 상단 툴바 */}
-          <div className="flex items-center justify-between p-4 border-b bg-background">
-            <div className="flex items-center gap-4">
-              <h2 className="text-lg font-semibold">작품 비교</h2>
-              <Badge variant="outline">
+          <div className='flex items-center justify-between p-4 border-b bg-background'>
+            <div className='flex items-center gap-4'>
+              <h2 className='text-lg font-semibold'>작품 비교</h2>
+              <Badge variant='outline'>
                 {selectedArtworks.length} / {maxArtworks}
               </Badge>
             </div>
-            
-            <div className="flex items-center gap-2">
+
+            <div className='flex items-center gap-2'>
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={() => setViewMode(viewMode === 'grid' ? 'side-by-side' : 'grid')}
-                className="gap-2"
+                className='gap-2'
               >
-                {viewMode === 'grid' ? <ArrowLeftRight className="w-4 h-4" /> : <Grid2X2 className="w-4 h-4" />}
+                {viewMode === 'grid' ? (
+                  <ArrowLeftRight className='w-4 h-4' />
+                ) : (
+                  <Grid2X2 className='w-4 h-4' />
+                )}
                 {viewMode === 'grid' ? '나란히' : '격자'}
               </Button>
-              
+
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={clearAll}
                 disabled={selectedArtworks.length === 0}
               >
                 전체 초기화
               </Button>
-              
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsOpen(false)}
-              >
-                <X className="w-4 h-4" />
+
+              <Button variant='ghost' size='sm' onClick={() => setIsOpen(false)}>
+                <X className='w-4 h-4' />
               </Button>
             </div>
           </div>
 
           {/* 작품 선택 영역 */}
           {selectedArtworks.length === 0 && (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-muted flex items-center justify-center">
-                  <Grid2X2 className="w-8 h-8 text-muted-foreground" />
+            <div className='flex-1 flex items-center justify-center'>
+              <div className='text-center space-y-4'>
+                <div className='w-16 h-16 mx-auto rounded-full bg-muted flex items-center justify-center'>
+                  <Grid2X2 className='w-8 h-8 text-muted-foreground' />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-2">작품을 선택해주세요</h3>
-                  <p className="text-sm text-muted-foreground">
-                    작품 페이지에서 "비교하기" 버튼을 클릭하여<br />
+                  <h3 className='text-lg font-medium mb-2'>작품을 선택해주세요</h3>
+                  <p className='text-sm text-muted-foreground'>
+                    작품 페이지에서 "비교하기" 버튼을 클릭하여
+                    <br />
                     최대 {maxArtworks}개의 작품을 동시에 비교할 수 있습니다.
                   </p>
                 </div>
@@ -173,31 +177,33 @@ export function ArtworkCompareDialog({ children }: ArtworkCompareDialogProps) {
 
           {/* 비교 영역 */}
           {selectedArtworks.length > 0 && (
-            <div className="flex-1 p-4 overflow-auto">
-              <div className={`h-full ${
-                viewMode === 'grid' 
-                  ? selectedArtworks.length === 1 
-                    ? 'grid grid-cols-1' 
-                    : selectedArtworks.length === 2 
-                      ? 'grid grid-cols-2' 
-                      : 'grid grid-cols-2 lg:grid-cols-3'
-                  : 'flex gap-4 overflow-x-auto'
-              } gap-4`}>
+            <div className='flex-1 p-4 overflow-auto'>
+              <div
+                className={`h-full ${
+                  viewMode === 'grid'
+                    ? selectedArtworks.length === 1
+                      ? 'grid grid-cols-1'
+                      : selectedArtworks.length === 2
+                        ? 'grid grid-cols-2'
+                        : 'grid grid-cols-2 lg:grid-cols-3'
+                    : 'flex gap-4 overflow-x-auto'
+                } gap-4`}
+              >
                 {selectedArtworks.map((artwork, index) => (
-                  <Card key={artwork.id} className="relative group flex-shrink-0 h-full">
+                  <Card key={artwork.id} className='relative group flex-shrink-0 h-full'>
                     {/* 제거 버튼 */}
                     <Button
-                      variant="destructive"
-                      size="sm"
+                      variant='destructive'
+                      size='sm'
                       onClick={() => removeArtwork(artwork.id)}
-                      className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className='absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity'
                     >
-                      <X className="w-3 h-3" />
+                      <X className='w-3 h-3' />
                     </Button>
 
-                    <CardContent className="p-0 h-full flex flex-col">
+                    <CardContent className='p-0 h-full flex flex-col'>
                       {/* 이미지 영역 */}
-                      <div className="relative flex-1 min-h-[300px] bg-muted rounded-t-lg overflow-hidden">
+                      <div className='relative flex-1 min-h-[300px] bg-muted rounded-t-lg overflow-hidden'>
                         <ImageViewer
                           images={artwork.images}
                           title={artwork.title}
@@ -208,27 +214,27 @@ export function ArtworkCompareDialog({ children }: ArtworkCompareDialogProps) {
                             src={artwork.imageUrl}
                             alt={`${artwork.title} by ${artwork.artist}`}
                             fill
-                            className="object-contain cursor-pointer hover:scale-105 transition-transform"
+                            className='object-contain cursor-pointer hover:scale-105 transition-transform'
                           />
                         </ImageViewer>
-                        
+
                         {/* 확대 아이콘 */}
-                        <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Badge variant="secondary" className="gap-1">
-                            <ZoomIn className="w-3 h-3" />
+                        <div className='absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity'>
+                          <Badge variant='secondary' className='gap-1'>
+                            <ZoomIn className='w-3 h-3' />
                             확대
                           </Badge>
                         </div>
                       </div>
 
                       {/* 작품 정보 */}
-                      <div className="p-4 space-y-2">
+                      <div className='p-4 space-y-2'>
                         <div>
-                          <h3 className="font-medium text-sm line-clamp-2">{artwork.title}</h3>
-                          <p className="text-xs text-muted-foreground">{artwork.artist}</p>
+                          <h3 className='font-medium text-sm line-clamp-2'>{artwork.title}</h3>
+                          <p className='text-xs text-muted-foreground'>{artwork.artist}</p>
                         </div>
-                        
-                        <div className="text-xs text-muted-foreground space-y-1">
+
+                        <div className='text-xs text-muted-foreground space-y-1'>
                           <p>{artwork.year}</p>
                           <p>{artwork.medium}</p>
                           <p>{artwork.dimensions}</p>
@@ -243,12 +249,11 @@ export function ArtworkCompareDialog({ children }: ArtworkCompareDialogProps) {
 
           {/* 하단 안내 */}
           {selectedArtworks.length > 0 && (
-            <div className="border-t bg-muted/50 p-3">
-              <div className="text-xs text-muted-foreground text-center">
+            <div className='border-t bg-muted/50 p-3'>
+              <div className='text-xs text-muted-foreground text-center'>
                 💡 작품을 클릭하면 고해상도로 확대하여 자세히 관찰할 수 있습니다.
-                {selectedArtworks.length < maxArtworks && 
-                  ` | ${maxArtworks - selectedArtworks.length}개 더 추가할 수 있습니다.`
-                }
+                {selectedArtworks.length < maxArtworks &&
+                  ` | ${maxArtworks - selectedArtworks.length}개 더 추가할 수 있습니다.`}
               </div>
             </div>
           )}
@@ -266,7 +271,7 @@ interface CompareButtonProps {
 
 export function CompareButton({ artwork, className }: CompareButtonProps) {
   const { addArtwork, selectedArtworks, setIsOpen, maxArtworks } = useCompare()
-  
+
   const isSelected = selectedArtworks.find(a => a.id === artwork.id)
   const isFull = selectedArtworks.length >= maxArtworks
 
@@ -281,8 +286,8 @@ export function CompareButton({ artwork, className }: CompareButtonProps) {
 
   return (
     <Button
-      variant={isSelected ? "default" : "outline"}
-      size="sm"
+      variant={isSelected ? 'default' : 'outline'}
+      size='sm'
       onClick={handleClick}
       disabled={!isSelected && isFull}
       className={className}
@@ -295,4 +300,4 @@ export function CompareButton({ artwork, className }: CompareButtonProps) {
 // 호환성을 위한 기존 컴포넌트 (deprecated)
 export function ArtworkCompare({ children }: { children: React.ReactNode }) {
   return <ArtworkCompareDialog>{children}</ArtworkCompareDialog>
-} 
+}

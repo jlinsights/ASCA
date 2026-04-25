@@ -39,44 +39,50 @@ curl http://localhost:3000/api/members
 
 #### 검색 파라미터
 
-| 파라미터 | 타입 | 설명 | 예시 |
-|---------|------|------|------|
-| `query` | string | 검색어 (이름, 이메일) | `?query=홍길동` |
-| `page` | number | 페이지 번호 (기본: 1) | `?page=2` |
-| `limit` | number | 페이지 크기 (기본: 20) | `?limit=10` |
-| `status` | string | 회원 상태 | `?status=active` |
-| `level` | string | 멤버십 레벨 | `?level=honorary_master` |
-| `sortBy` | string | 정렬 필드 | `?sortBy=created_at` |
-| `sortOrder` | string | 정렬 순서 (asc/desc) | `?sortOrder=desc` |
+| 파라미터    | 타입   | 설명                   | 예시                     |
+| ----------- | ------ | ---------------------- | ------------------------ |
+| `query`     | string | 검색어 (이름, 이메일)  | `?query=홍길동`          |
+| `page`      | number | 페이지 번호 (기본: 1)  | `?page=2`                |
+| `limit`     | number | 페이지 크기 (기본: 20) | `?limit=10`              |
+| `status`    | string | 회원 상태              | `?status=active`         |
+| `level`     | string | 멤버십 레벨            | `?level=honorary_master` |
+| `sortBy`    | string | 정렬 필드              | `?sortBy=created_at`     |
+| `sortOrder` | string | 정렬 순서 (asc/desc)   | `?sortOrder=desc`        |
 
 #### 요청 예시
 
 **페이지네이션**:
+
 ```bash
 curl "http://localhost:3000/api/members?page=1&limit=10"
 ```
 
 **검색 (이름, 이메일)**:
+
 ```bash
 curl "http://localhost:3000/api/members?query=홍길동"
 ```
 
 **상태 필터링**:
+
 ```bash
 curl "http://localhost:3000/api/members?status=active"
 ```
 
 **레벨 필터링**:
+
 ```bash
 curl "http://localhost:3000/api/members?level=honorary_master"
 ```
 
 **정렬**:
+
 ```bash
 curl "http://localhost:3000/api/members?sortBy=created_at&sortOrder=desc"
 ```
 
 **조합**:
+
 ```bash
 curl "http://localhost:3000/api/members?query=test&status=active&page=1&limit=20&sortBy=created_at&sortOrder=desc"
 ```
@@ -84,6 +90,7 @@ curl "http://localhost:3000/api/members?query=test&status=active&page=1&limit=20
 #### 응답 예시
 
 **성공 (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -119,6 +126,7 @@ curl "http://localhost:3000/api/members?query=test&status=active&page=1&limit=20
 ```
 
 **실패 - 인증 실패 (401 Unauthorized)**:
+
 ```json
 {
   "success": false,
@@ -127,6 +135,7 @@ curl "http://localhost:3000/api/members?query=test&status=active&page=1&limit=20
 ```
 
 **실패 - 서버 오류 (500 Internal Server Error)**:
+
 ```json
 {
   "success": false,
@@ -144,27 +153,28 @@ curl "http://localhost:3000/api/members?query=test&status=active&page=1&limit=20
 
 ```typescript
 interface CreateMemberRequest {
-  email: string;                    // 필수
-  first_name_ko?: string;
-  last_name_ko?: string;
-  first_name_en?: string;
-  last_name_en?: string;
-  phone?: string;
-  date_of_birth?: string;
-  gender?: string;
-  nationality?: string;
-  residence_country?: string;
-  residence_city?: string;
-  timezone?: string;                // 기본: "Asia/Seoul"
-  preferred_language?: string;      // 기본: "ko"
-  membership_level_id?: string;
-  membership_status?: string;       // 기본: "active"
+  email: string // 필수
+  first_name_ko?: string
+  last_name_ko?: string
+  first_name_en?: string
+  last_name_en?: string
+  phone?: string
+  date_of_birth?: string
+  gender?: string
+  nationality?: string
+  residence_country?: string
+  residence_city?: string
+  timezone?: string // 기본: "Asia/Seoul"
+  preferred_language?: string // 기본: "ko"
+  membership_level_id?: string
+  membership_status?: string // 기본: "active"
 }
 ```
 
 #### 요청 예시
 
 **기본 회원 생성**:
+
 ```bash
 curl -X POST http://localhost:3000/api/members \
   -H "Content-Type: application/json" \
@@ -178,6 +188,7 @@ curl -X POST http://localhost:3000/api/members \
 ```
 
 **전체 정보 포함**:
+
 ```bash
 curl -X POST http://localhost:3000/api/members \
   -H "Content-Type: application/json" \
@@ -203,6 +214,7 @@ curl -X POST http://localhost:3000/api/members \
 #### 응답 예시
 
 **성공 (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -228,6 +240,7 @@ curl -X POST http://localhost:3000/api/members \
 ```
 
 **실패 - 필수 필드 누락 (400 Bad Request)**:
+
 ```json
 {
   "success": false,
@@ -236,6 +249,7 @@ curl -X POST http://localhost:3000/api/members \
 ```
 
 **실패 - 인증 실패 (401 Unauthorized)**:
+
 ```json
 {
   "success": false,
@@ -244,6 +258,7 @@ curl -X POST http://localhost:3000/api/members \
 ```
 
 **실패 - 서버 오류 (500 Internal Server Error)**:
+
 ```json
 {
   "success": false,
@@ -258,32 +273,41 @@ curl -X POST http://localhost:3000/api/members \
 ### 시나리오 1: 회원 목록 조회
 
 1. **모든 회원 조회**
+
    ```bash
    curl http://localhost:3000/api/members
    ```
+
    - 예상: 성공 응답, 회원 목록 반환
 
 2. **페이지네이션 테스트**
+
    ```bash
    curl "http://localhost:3000/api/members?page=1&limit=5"
    ```
+
    - 예상: 5개 회원, pagination 정보 포함
 
 3. **검색 테스트**
+
    ```bash
    curl "http://localhost:3000/api/members?query=test"
    ```
+
    - 예상: "test"가 포함된 회원만 반환
 
 4. **필터링 테스트**
+
    ```bash
    curl "http://localhost:3000/api/members?status=active"
    ```
+
    - 예상: active 상태 회원만 반환
 
 ### 시나리오 2: 회원 생성
 
 1. **정상 회원 생성**
+
    ```bash
    curl -X POST http://localhost:3000/api/members \
      -H "Content-Type: application/json" \
@@ -293,9 +317,11 @@ curl -X POST http://localhost:3000/api/members \
        "last_name_ko": "회원1"
      }'
    ```
+
    - 예상: 201 Created, 새 회원 정보 반환
 
 2. **필수 필드 누락**
+
    ```bash
    curl -X POST http://localhost:3000/api/members \
      -H "Content-Type: application/json" \
@@ -303,9 +329,11 @@ curl -X POST http://localhost:3000/api/members \
        "first_name_ko": "테스트"
      }'
    ```
+
    - 예상: 400 Bad Request, "이메일은 필수입니다" 에러
 
 3. **중복 이메일**
+
    ```bash
    # 동일한 이메일로 두 번 생성 시도
    curl -X POST http://localhost:3000/api/members \
@@ -316,6 +344,7 @@ curl -X POST http://localhost:3000/api/members \
      -H "Content-Type: application/json" \
      -d '{"email": "duplicate@example.com", "first_name_ko": "중복"}'
    ```
+
    - 예상: 두 번째 요청에서 중복 에러
 
 ---
@@ -325,6 +354,7 @@ curl -X POST http://localhost:3000/api/members \
 개발 환경에서 데이터베이스가 비어있을 경우, 자동으로 더미 데이터를 제공합니다:
 
 ### 더미 회원 1 (관리자)
+
 ```json
 {
   "id": "dev-1",
@@ -341,6 +371,7 @@ curl -X POST http://localhost:3000/api/members \
 ```
 
 ### 더미 회원 2 (일반 회원)
+
 ```json
 {
   "id": "dev-2",
@@ -381,8 +412,8 @@ curl -X POST http://localhost:3000/api/members \
           "port": "3000",
           "path": ["api", "members"],
           "query": [
-            {"key": "page", "value": "1"},
-            {"key": "limit", "value": "20"}
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "20" }
           ]
         }
       }
@@ -419,6 +450,7 @@ curl -X POST http://localhost:3000/api/members \
 ## 📝 검증 체크리스트
 
 ### GET /api/members
+
 - [ ] 빈 데이터베이스에서 더미 데이터 반환
 - [ ] 페이지네이션 정상 동작
 - [ ] 검색 기능 정상 동작
@@ -428,6 +460,7 @@ curl -X POST http://localhost:3000/api/members \
 - [ ] 인증 실패 시 401 반환
 
 ### POST /api/members
+
 - [ ] 필수 필드만으로 회원 생성 가능
 - [ ] 전체 필드로 회원 생성 가능
 - [ ] 필수 필드 누락 시 400 반환
@@ -440,7 +473,8 @@ curl -X POST http://localhost:3000/api/members \
 ## 🔗 관련 문서
 
 - [PHASE4.5_SUMMARY.md](../PHASE4.5_SUMMARY.md) - Phase 4.5 전체 요약
-- [lib/services/member-service.ts](../lib/services/member-service.ts) - Service Layer 구현
+- [lib/services/member-service.ts](../lib/services/member-service.ts) - Service
+  Layer 구현
 - [app/api/members/route.ts](../app/api/members/route.ts) - API Route Handler
 
 ---

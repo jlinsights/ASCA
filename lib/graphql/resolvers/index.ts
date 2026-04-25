@@ -1,6 +1,6 @@
-import { queryResolvers } from './query.resolver';
-import { mutationResolvers } from './mutation.resolver';
-import { typeResolvers } from './types.resolver';
+import { queryResolvers } from './query.resolver'
+import { mutationResolvers } from './mutation.resolver'
+import { typeResolvers } from './types.resolver'
 
 /**
  * Combined GraphQL Resolvers
@@ -17,4 +17,4 @@ export const resolvers = {
 
   // Type resolvers (nested fields)
   ...typeResolvers,
-};
+}

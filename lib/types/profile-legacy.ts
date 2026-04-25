@@ -13,27 +13,27 @@ export interface SocialLinks {
 export interface ArtistProfile {
   id: string
   userId: string
-  
+
   // Basic info
   name: string
   nameEn?: string
   profileImage?: string
   bio: string
   bioEn?: string
-  
+
   // Contact
   email?: string
   phone?: string
   location?: string
-  
+
   // Professional info
   specialization: string[]
   yearsActive?: number
   birthYear?: number
-  
+
   // Social links
   socialLinks?: SocialLinks
-  
+
   // Portfolio config
   portfolioConfig?: {
     featuredArtworkIds: string[]
@@ -43,7 +43,7 @@ export interface ArtistProfile {
     showExhibitions: boolean
     showAwards: boolean
   }
-  
+
   // Website builder config (future)
   websiteConfig?: {
     subdomain?: string
@@ -51,7 +51,7 @@ export interface ArtistProfile {
     template?: string
     theme?: Record<string, any>
   }
-  
+
   // Metadata
   isPublic: boolean
   isVerified: boolean

@@ -17,48 +17,20 @@
       "exhibition_coverage",
       "member_achievements"
     ],
-    "seo_keywords": [
-      "한국서예",
-      "서예교육",
-      "문화예술",
-      "전통예술",
-      "서예전시",
-      "붓글씨 기법"
-    ],
+    "seo_keywords": ["한국서예", "서예교육", "문화예술", "전통예술", "서예전시", "붓글씨 기법"],
     "output_formats": {
       "blog_post": {
-        "structure": [
-          "title",
-          "badges",
-          "introduction",
-          "body",
-          "conclusion",
-          "tags"
-        ],
+        "structure": ["title", "badges", "introduction", "body", "conclusion", "tags"],
         "seo_requirements": true,
         "social_media_variants": true
       },
       "technical_article": {
-        "structure": [
-          "title",
-          "badges",
-          "abstract",
-          "technical_content",
-          "examples",
-          "references"
-        ],
+        "structure": ["title", "badges", "abstract", "technical_content", "examples", "references"],
         "code_examples": true,
         "documentation_links": true
       },
       "case_study": {
-        "structure": [
-          "title",
-          "badges",
-          "challenge",
-          "solution",
-          "results",
-          "lessons"
-        ],
+        "structure": ["title", "badges", "challenge", "solution", "results", "lessons"],
         "metrics_integration": true,
         "client_testimonials": false
       }
@@ -77,11 +49,7 @@
     "enabled": true,
     "auto_generate": true,
     "script_path": "~/Developer/Tools/scripts/generate-badges.js",
-    "project_metrics": [
-      "member_count",
-      "exhibition_frequency",
-      "cultural_impact"
-    ]
+    "project_metrics": ["member_count", "exhibition_frequency", "cultural_impact"]
   },
   "workflow": {
     "content_generation": [

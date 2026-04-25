@@ -33,27 +33,23 @@ const fetcher = async (url: string): Promise<StatsData> => {
 }
 
 export const useAdminStats = (): UseAdminStatsReturn => {
-  const { data, error, isLoading, mutate } = useSWR<StatsData>(
-    '/api/admin/stats',
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-      dedupingInterval: 30000, // 30초 중복 제거
-      refreshInterval: 60000, // 1분마다 자동 갱신
-      errorRetryCount: 3,
-      errorRetryInterval: 5000,
-      shouldRetryOnError: (error) => {
-        // 4xx 에러는 재시도하지 않음
-        return error.status >= 500
-      }
-    }
-  )
+  const { data, error, isLoading, mutate } = useSWR<StatsData>('/api/admin/stats', fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+    dedupingInterval: 30000, // 30초 중복 제거
+    refreshInterval: 60000, // 1분마다 자동 갱신
+    errorRetryCount: 3,
+    errorRetryInterval: 5000,
+    shouldRetryOnError: error => {
+      // 4xx 에러는 재시도하지 않음
+      return error.status >= 500
+    },
+  })
 
   return {
     stats: data || null,
     isLoading,
     error: error?.message || null,
-    mutate: useCallback(() => mutate(), [mutate])
+    mutate: useCallback(() => mutate(), [mutate]),
   }
-} 
+}

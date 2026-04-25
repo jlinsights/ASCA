@@ -37,10 +37,10 @@ export async function getArtists(
       log.warn('Supabase not configured, returning mock data')
       return {
         artists: [],
-        total: 0
+        total: 0,
       }
     }
-    
+
     const { data: artistsData, error: artistsError } = await supabase
       .from('artists')
       .select('*', { count: 'exact' })
@@ -51,14 +51,14 @@ export async function getArtists(
     }
     return {
       artists: artistsData || [],
-      total: artistsData?.length || 0
+      total: artistsData?.length || 0,
     }
   } catch (error) {
     log.error('getArtists unexpected error', error)
     // 에러 발생 시 빈 배열 반환
     return {
       artists: [],
-      total: 0
+      total: 0,
     }
   }
 }
@@ -96,9 +96,7 @@ export async function createArtist(artist: ArtistInsert): Promise<Artist> {
   try {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
-    const { error: createArtistError } = await supabase
-      .from('artists')
-      .insert([artist])
+    const { error: createArtistError } = await supabase.from('artists').insert([artist])
     if (createArtistError) {
       log.error('createArtist error', createArtistError)
       throw new AppError('작가 생성에 실패했습니다.', 500, createArtistError.code)
@@ -220,4 +218,4 @@ export async function getFeaturedArtists(limit: number = 6): Promise<Artist[]> {
     log.error('getFeaturedArtists unexpected error', error)
     throw error
   }
-} 
+}

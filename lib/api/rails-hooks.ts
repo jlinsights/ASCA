@@ -2,34 +2,34 @@
  * React Query hooks for Rails API
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { auth, members, membershipTiers, membershipApplications } from './rails-client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { auth, members, membershipTiers, membershipApplications } from './rails-client'
 
 /**
  * Authentication Hooks
  */
 
 export function useLogin() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       auth.login(email, password),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] })
     },
-  });
+  })
 }
 
 export function useLogout() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: () => auth.logout(),
     onSuccess: () => {
-      queryClient.clear();
+      queryClient.clear()
     },
-  });
+  })
 }
 
 export function useCurrentUser() {
@@ -38,7 +38,7 @@ export function useCurrentUser() {
     queryFn: () => auth.getCurrentUser(),
     enabled: auth.isAuthenticated(),
     retry: false,
-  });
+  })
 }
 
 /**
@@ -49,14 +49,14 @@ export function useMembers(page = 1, status?: string) {
   return useQuery({
     queryKey: ['members', page, status],
     queryFn: () => members.list(page, status),
-  });
+  })
 }
 
 export function usePendingMembers(page = 1) {
   return useQuery({
     queryKey: ['members', 'pending', page],
     queryFn: () => members.getPending(page),
-  });
+  })
 }
 
 export function useMember(id: string) {
@@ -64,63 +64,63 @@ export function useMember(id: string) {
     queryKey: ['member', id],
     queryFn: () => members.get(id),
     enabled: !!id,
-  });
+  })
 }
 
 export function useCreateMember() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (data: any) => members.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['members'] })
     },
-  });
+  })
 }
 
 export function useUpdateMember() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) => members.update(id, data),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['members'] });
-      queryClient.invalidateQueries({ queryKey: ['member', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['members'] })
+      queryClient.invalidateQueries({ queryKey: ['member', variables.id] })
     },
-  });
+  })
 }
 
 export function useApproveMember() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (id: string) => members.approve(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['members'] })
     },
-  });
+  })
 }
 
 export function useRejectMember() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason?: string }) => members.reject(id, reason),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['members'] })
     },
-  });
+  })
 }
 
 export function useSuspendMember() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason?: string }) => members.suspend(id, reason),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['members'] })
     },
-  });
+  })
 }
 
 /**
@@ -132,7 +132,7 @@ export function useMembershipTiers() {
     queryKey: ['membershipTiers'],
     queryFn: () => membershipTiers.list(),
     staleTime: 5 * 60 * 1000, // 5 minutes
-  });
+  })
 }
 
 export function useMembershipTier(id: string) {
@@ -140,7 +140,7 @@ export function useMembershipTier(id: string) {
     queryKey: ['membershipTier', id],
     queryFn: () => membershipTiers.get(id),
     enabled: !!id,
-  });
+  })
 }
 
 /**
@@ -151,7 +151,7 @@ export function useMembershipApplications(page = 1) {
   return useQuery({
     queryKey: ['membershipApplications', page],
     queryFn: () => membershipApplications.list(page),
-  });
+  })
 }
 
 export function useMembershipApplication(id: string) {
@@ -159,51 +159,51 @@ export function useMembershipApplication(id: string) {
     queryKey: ['membershipApplication', id],
     queryFn: () => membershipApplications.get(id),
     enabled: !!id,
-  });
+  })
 }
 
 export function useCreateMembershipApplication() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (data: any) => membershipApplications.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['membershipApplications'] });
+      queryClient.invalidateQueries({ queryKey: ['membershipApplications'] })
     },
-  });
+  })
 }
 
 export function useApproveMembershipApplication() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ id, comments }: { id: string; comments?: string }) =>
       membershipApplications.approve(id, comments),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['membershipApplications'] });
+      queryClient.invalidateQueries({ queryKey: ['membershipApplications'] })
     },
-  });
+  })
 }
 
 export function useRejectMembershipApplication() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ id, comments }: { id: string; comments: string }) =>
       membershipApplications.reject(id, comments),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['membershipApplications'] });
+      queryClient.invalidateQueries({ queryKey: ['membershipApplications'] })
     },
-  });
+  })
 }
 
 export function useWithdrawMembershipApplication() {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (id: string) => membershipApplications.withdraw(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['membershipApplications'] });
+      queryClient.invalidateQueries({ queryKey: ['membershipApplications'] })
     },
-  });
+  })
 }

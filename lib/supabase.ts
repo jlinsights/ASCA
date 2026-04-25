@@ -1,10 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 // SSR imports removed - not needed for this file
 import { log } from '@/lib/utils/logger'
-import type { 
-  Artist, NewArtist, 
-  Artwork, NewArtwork, 
-  Exhibition, NewExhibition
+import type {
+  Artist,
+  NewArtist,
+  Artwork,
+  NewArtwork,
+  Exhibition,
+  NewExhibition,
 } from '@/lib/db/schema-pg'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
@@ -19,7 +22,10 @@ const createSafeSupabaseClient = (url: string, key: string) => {
     }
     return createClient(url, key)
   } catch (error) {
-    log.warn('Failed to create Supabase client', error instanceof Error ? error : new Error(String(error)))
+    log.warn(
+      'Failed to create Supabase client',
+      error instanceof Error ? error : new Error(String(error))
+    )
     return null
   }
 }
@@ -36,9 +42,9 @@ export const isSupabaseAdminConfigured = () => supabaseAdmin !== null
 
 export const getSupabaseClient = () => {
   if (!supabase) {
-    log.warn('Supabase is not configured', { 
-      hasUrl: !!supabaseUrl, 
-      hasKey: !!supabaseAnonKey 
+    log.warn('Supabase is not configured', {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseAnonKey,
     })
     return null
   }
@@ -49,7 +55,7 @@ export const getSupabaseAdminClient = () => {
   if (!supabaseAdmin) {
     log.warn('Supabase Admin configuration missing', {
       hasUrl: !!supabaseUrl,
-      hasServiceKey: !!supabaseServiceRoleKey
+      hasServiceKey: !!supabaseServiceRoleKey,
     })
     return null
   }
@@ -103,7 +109,10 @@ export const safeSupabaseAdminCall = async <T>(
     }
     return await operation(client)
   } catch (error) {
-    log.warn('Supabase Admin operation failed', error instanceof Error ? error : new Error(String(error)))
+    log.warn(
+      'Supabase Admin operation failed',
+      error instanceof Error ? error : new Error(String(error))
+    )
     return null
   }
 }

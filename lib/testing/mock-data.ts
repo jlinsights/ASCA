@@ -20,14 +20,14 @@ export function createMockMembershipLevel(overrides: Partial<any> = {}) {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     ...overrides,
-  };
+  }
 }
 
 /**
  * Member mock data
  */
 export function createMockMember(overrides: Partial<any> = {}) {
-  const timestamp = Date.now();
+  const timestamp = Date.now()
   return {
     id: crypto.randomUUID(),
     email: `test${timestamp}@example.com`,
@@ -43,7 +43,7 @@ export function createMockMember(overrides: Partial<any> = {}) {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     ...overrides,
-  };
+  }
 }
 
 /**
@@ -63,7 +63,7 @@ export function createMockArtist(overrides: Partial<any> = {}) {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     ...overrides,
-  };
+  }
 }
 
 /**
@@ -86,7 +86,7 @@ export function createMockArtwork(overrides: Partial<any> = {}) {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     ...overrides,
-  };
+  }
 }
 
 /**
@@ -107,39 +107,32 @@ export function createMockExhibition(overrides: Partial<any> = {}) {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     ...overrides,
-  };
+  }
 }
 
 /**
  * API Response mock data
  */
-export function createMockApiResponse<T = any>(
-  data: T,
-  overrides: Partial<any> = {}
-) {
+export function createMockApiResponse<T = any>(data: T, overrides: Partial<any> = {}) {
   return {
     success: true,
     data,
     timestamp: new Date().toISOString(),
     ...overrides,
-  };
+  }
 }
 
 /**
  * API Error Response mock data
  */
-export function createMockErrorResponse(
-  error: string,
-  code?: string,
-  details?: any
-) {
+export function createMockErrorResponse(error: string, code?: string, details?: any) {
   return {
     success: false,
     error,
     code,
     details,
     timestamp: new Date().toISOString(),
-  };
+  }
 }
 
 /**
@@ -148,12 +141,12 @@ export function createMockErrorResponse(
 export function createMockPaginationResponse<T = any>(
   items: T[],
   options: {
-    page?: number;
-    limit?: number;
-    total?: number;
+    page?: number
+    limit?: number
+    total?: number
   } = {}
 ) {
-  const { page = 1, limit = 20, total = items.length } = options;
+  const { page = 1, limit = 20, total = items.length } = options
 
   return {
     success: true,
@@ -169,7 +162,7 @@ export function createMockPaginationResponse<T = any>(
       },
     },
     timestamp: new Date().toISOString(),
-  };
+  }
 }
 
 /**
@@ -178,12 +171,12 @@ export function createMockPaginationResponse<T = any>(
 export function createMockCursorResponse<T = any>(
   items: T[],
   options: {
-    limit?: number;
-    hasNext?: boolean;
-    nextCursor?: string | null;
+    limit?: number
+    hasNext?: boolean
+    nextCursor?: string | null
   } = {}
 ) {
-  const { limit = 20, hasNext = false, nextCursor = null } = options;
+  const { limit = 20, hasNext = false, nextCursor = null } = options
 
   return {
     success: true,
@@ -196,7 +189,7 @@ export function createMockCursorResponse<T = any>(
       },
     },
     timestamp: new Date().toISOString(),
-  };
+  }
 }
 
 /**
@@ -205,7 +198,7 @@ export function createMockCursorResponse<T = any>(
 export function createMockGraphQLResponse<T = any>(data: T) {
   return {
     data,
-  };
+  }
 }
 
 /**
@@ -219,17 +212,14 @@ export function createMockGraphQLError(message: string, path?: string[]) {
         path,
       },
     ],
-  };
+  }
 }
 
 /**
  * Create multiple mock items
  */
-export function createMockArray<T>(
-  factory: (index: number) => T,
-  count: number
-): T[] {
-  return Array.from({ length: count }, (_, index) => factory(index));
+export function createMockArray<T>(factory: (index: number) => T, count: number): T[] {
+  return Array.from({ length: count }, (_, index) => factory(index))
 }
 
 /**
@@ -237,13 +227,13 @@ export function createMockArray<T>(
  */
 export function createMockMembers(count: number = 10) {
   return createMockArray(
-    (index) =>
+    index =>
       createMockMember({
         email: `member${index}@example.com`,
         first_name_ko: `회원${index}`,
       }),
     count
-  );
+  )
 }
 
 /**
@@ -251,11 +241,11 @@ export function createMockMembers(count: number = 10) {
  */
 export function createMockArtworks(count: number = 10) {
   return createMockArray(
-    (index) =>
+    index =>
       createMockArtwork({
         title_ko: `작품 ${index}`,
         title_en: `Artwork ${index}`,
       }),
     count
-  );
+  )
 }

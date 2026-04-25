@@ -1,9 +1,9 @@
 // 관리자 역할 및 권한 관리
 export enum AdminRole {
   SUPER_ADMIN = 'super_admin',
-  ADMIN = 'admin', 
+  ADMIN = 'admin',
   EDITOR = 'editor',
-  VIEWER = 'viewer'
+  VIEWER = 'viewer',
 }
 
 export interface AdminPermissions {
@@ -64,7 +64,7 @@ const getAdminEmails = (): Record<AdminRole, string[]> => {
 // 사용자 역할 확인
 export const getUserRole = (email: string): AdminRole | null => {
   const adminEmails = getAdminEmails()
-  
+
   if (adminEmails[AdminRole.SUPER_ADMIN].includes(email)) {
     return AdminRole.SUPER_ADMIN
   }
@@ -77,7 +77,7 @@ export const getUserRole = (email: string): AdminRole | null => {
   if (adminEmails[AdminRole.VIEWER].includes(email)) {
     return AdminRole.VIEWER
   }
-  
+
   return null
 }
 
@@ -102,10 +102,10 @@ export const isAdmin = (email: string): boolean => {
 export const hasMinimumRole = (email: string, minimumRole: AdminRole): boolean => {
   const userRole = getUserRole(email)
   if (!userRole) return false
-  
+
   const roleHierarchy = [AdminRole.VIEWER, AdminRole.EDITOR, AdminRole.ADMIN, AdminRole.SUPER_ADMIN]
   const userRoleIndex = roleHierarchy.indexOf(userRole)
   const minimumRoleIndex = roleHierarchy.indexOf(minimumRole)
-  
+
   return userRoleIndex >= minimumRoleIndex
-} 
+}

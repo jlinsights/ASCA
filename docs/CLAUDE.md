@@ -1,12 +1,15 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with
+code in this repository.
 
 ## Project Overview
 
 ASCA is a sophisticated Korean Calligraphy Association website featuring:
-- **Dual Database System**: Supabase (PostgreSQL) primary + Airtable external CMS
-- **Bidirectional Sync**: Custom real-time synchronization between databases  
+
+- **Dual Database System**: Supabase (PostgreSQL) primary + Airtable external
+  CMS
+- **Bidirectional Sync**: Custom real-time synchronization between databases
 - **Multi-language Support**: Korean (default), English, Japanese, Chinese
 - **Admin Dashboard**: Complete CMS for managing artists, artworks, exhibitions
 - **Advanced Gallery**: Filtering, categorization, and viewing features
@@ -14,6 +17,7 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 ## Primary Commands
 
 ### Development
+
 ```bash
 npm run dev              # Development server using Webpack (Recommended)
 npm run dev:turbo        # Turbo mode development (May have ESM issues with Clerk)
@@ -23,6 +27,7 @@ npm run pre-commit       # Full quality check before commits
 ```
 
 ### Database Management
+
 ```bash
 npm run db:studio        # Open Drizzle Studio GUI (key tool)
 npm run db:push          # Apply schema changes to database
@@ -32,6 +37,7 @@ npm run db:generate      # Generate migrations from schema
 ```
 
 ### Quality Assurance
+
 ```bash
 npm run type-check       # TypeScript validation
 npm run lint             # ESLint checking
@@ -43,35 +49,43 @@ npm run test:coverage    # Generate test coverage report
 ## Core Architecture
 
 ### Database System
+
 - **Primary**: Supabase PostgreSQL (live production data)
 - **Schema**: 12 main tables with multi-language fields
 - **Sync Engine**: Custom bidirectional Airtable ↔ Supabase synchronization
 - **ORM**: Drizzle with type-safe queries in `lib/db/queries.ts`
 
 ### Key Tables
+
 - `artists` - Artist profiles with multilingual fields
-- `artworks` - Artwork data with category/metadata 
+- `artworks` - Artwork data with category/metadata
 - `exhibitions` - Exhibition management
 - `events`, `news` - Content management
 - Junction tables for many-to-many relationships
 
 ### Authentication
+
 - **Clerk** handles all authentication (Supabase Auth is fully removed)
 - Server Actions for admin/membership are being replaced by secure API routes
 
 ### Multi-language Pattern
+
 All content tables use consistent multilingual structure:
+
 - `title`, `titleKo`, `titleEn`, `titleCn`, `titleJp`
-- `description`, `descriptionKo`, `descriptionEn`, `descriptionCn`, `descriptionJp`
+- `description`, `descriptionKo`, `descriptionEn`, `descriptionCn`,
+  `descriptionJp`
 
 ## Admin System
 
 ### Special Admin Account
+
 - Email: `info@orientalcalligraphy.org`
 - Auto-login without password
 - Full CMS access at `/admin`
 
 ### Key Admin Features
+
 - Artist/artwork management
 - Exhibition scheduling
 - News/event publishing
@@ -81,45 +95,63 @@ All content tables use consistent multilingual structure:
 ## Development Patterns
 
 ### Database Operations
+
 Always use typed queries from `lib/db/queries.ts`:
+
 ```typescript
-import { getArtistById, createArtwork } from '@/lib/db/queries';
+import { getArtistById, createArtwork } from '@/lib/db/queries'
 ```
 
 ### Multi-language Content
+
 Use the established pattern for all content:
+
 ```typescript
 {
   title: string,      // Korean (default)
-  titleEn?: string,   // English  
+  titleEn?: string,   // English
   titleCn?: string,   // Chinese
   titleJp?: string    // Japanese
 }
 ```
 
 ### Component Structure
+
 - UI components in `components/ui/` with brand variants
 - Page components follow Next.js App Router structure
 - Admin components separated in `app/admin/`
 
 ### Design System (DESIGN.md)
+
 **UI 작업 시 `docs/02-design/DESIGN.md`를 먼저 참조한다.**
+
 - 색상·타이포·간격·반경·모션·컴포넌트 토큰의 단일 진실 공급원(SSOT)
 - YAML 프론트매터 = 기계 참조용 토큰 (`{colors.primary}` 등)
 - 마크다운 본문 = Do's/Don'ts + 문화 맥락
 - 토큰이 없으면 임의 값을 만들지 말고 DESIGN.md를 먼저 수정한다
-- Feature 단위 design 문서(`docs/02-design/features/*.design.md`)는 DESIGN.md 토큰을 참조
+- Feature 단위 design 문서(`docs/02-design/features/*.design.md`)는 DESIGN.md
+  토큰을 참조
 
 ### Large File Refactoring Process
-If a single code file exceeds **500 lines**, proactively trigger optimization and refactor using this standardized process:
-1. **Component Extraction**: Split large monolithic UI components into smaller independent sub-components (e.g., create an `_components/` directory).
-2. **Logic Separation**: Move complex state management and business logic into custom hooks (e.g., `use[Feature].ts`).
-3. **Data Externalization**: Extract redundant hardcoded mock data, large configuration objects, or literal constants into separate files (e.g., `mock-data.ts`).
-4. **Validation Focus**: Ensure TypeScript types are strictly preserved. Always verify syntax matching and run `npm run type-check` to fix any `implicit any` or JSX closing tag errors caused by component separation.
+
+If a single code file exceeds **500 lines**, proactively trigger optimization
+and refactor using this standardized process:
+
+1. **Component Extraction**: Split large monolithic UI components into smaller
+   independent sub-components (e.g., create an `_components/` directory).
+2. **Logic Separation**: Move complex state management and business logic into
+   custom hooks (e.g., `use[Feature].ts`).
+3. **Data Externalization**: Extract redundant hardcoded mock data, large
+   configuration objects, or literal constants into separate files (e.g.,
+   `mock-data.ts`).
+4. **Validation Focus**: Ensure TypeScript types are strictly preserved. Always
+   verify syntax matching and run `npm run type-check` to fix any `implicit any`
+   or JSX closing tag errors caused by component separation.
 
 ## Critical Development Guidelines
 
 ### Database Changes
+
 1. Modify schema in `lib/db/schema.ts` (not schema-pg.ts)
 2. Run `npm run db:generate` to create migration
 3. Apply with `npm run db:push`
@@ -127,12 +159,14 @@ If a single code file exceeds **500 lines**, proactively trigger optimization an
 5. Test with `npm run db:studio` visual interface
 
 ### Sync System
+
 - Airtable integration in `lib/airtable.ts`
-- Migration engine in `lib/airtable-migration.ts`  
+- Migration engine in `lib/airtable-migration.ts`
 - Real-time sync in `lib/sync-engine.ts`
 - Never modify sync tables directly - use sync endpoints
 
 ### Brand Consistency
+
 - Use brand color variables from Tailwind config
 - Follow component variants: celadon, sage, terra, traditional
 - Maintain Korean calligraphy aesthetic in UI
@@ -156,6 +190,7 @@ If a single code file exceeds **500 lines**, proactively trigger optimization an
 ## Common Workflows
 
 ### Adding New Content Type
+
 1. Add table to `lib/db/schema.ts` with multilingual fields
 2. Create query functions in `lib/db/queries.ts`
 3. Add API routes in `app/api/[content-type]/`
@@ -163,9 +198,11 @@ If a single code file exceeds **500 lines**, proactively trigger optimization an
 5. Update sync system if Airtable integration needed
 
 ### Database Debugging
+
 1. Use `npm run b:studio` for visual inspection
 2. Check schema with `scripts/check-supabase-schema.js`
 3. Test connections with `scripts/test-supabase-artworks.js`
 4. Monitor sync status via admin dashboard
 
-The project emphasizes type safety, multilingual support, and robust data synchronization between multiple systems.
+The project emphasizes type safety, multilingual support, and robust data
+synchronization between multiple systems.

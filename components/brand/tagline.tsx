@@ -1,24 +1,24 @@
 export function Tagline() {
   return (
-    <section className="brand-section" id="tagline">
-      <h2 className="brand-section-title">태그라인</h2>
-      <div className="usage-container">
-        <div className="logo-container bg-ink-black">
-          <div className="text-rice-paper text-center">
-            <h3 className="text-2xl mb-2">GALLERIA</h3>
-            <p className="text-sm">Art Gallery & Exhibition</p>
+    <section className='brand-section' id='tagline'>
+      <h2 className='brand-section-title'>태그라인</h2>
+      <div className='usage-container'>
+        <div className='logo-container bg-ink-black'>
+          <div className='text-rice-paper text-center'>
+            <h3 className='text-2xl mb-2'>GALLERIA</h3>
+            <p className='text-sm'>Art Gallery & Exhibition</p>
           </div>
         </div>
-        <div className="usage-title">"Where Art Transcends Boundaries"</div>
-        <p className="mb-8 text-base">
-          이 태그라인은 Galleria의 핵심 철학을 담고 있습니다. 예술이 물리적, 문화적, 정신적 경계를 초월하여 관람객에게
-          새로운 경험을 제공한다는 메시지를 담고 있습니다. 예술을 통해 서로 다른 세계와 관점을 연결하는 다리 역할을 하는
-          Galleria의 비전을 표현합니다.
+        <div className='usage-title'>"Where Art Transcends Boundaries"</div>
+        <p className='mb-8 text-base'>
+          이 태그라인은 Galleria의 핵심 철학을 담고 있습니다. 예술이 물리적, 문화적, 정신적 경계를
+          초월하여 관람객에게 새로운 경험을 제공한다는 메시지를 담고 있습니다. 예술을 통해 서로 다른
+          세계와 관점을 연결하는 다리 역할을 하는 Galleria의 비전을 표현합니다.
         </p>
-        <div className="usage-grid">
-          <div className="usage-item">
+        <div className='usage-grid'>
+          <div className='usage-item'>
             <h3>공식 문서 활용</h3>
-            <ul className="usage-list">
+            <ul className='usage-list'>
               <li>
                 <strong>레터헤드:</strong> 공문서 상단 로고 하단에 정렬하여 배치
               </li>
@@ -33,9 +33,9 @@ export function Tagline() {
               </li>
             </ul>
           </div>
-          <div className="usage-item">
+          <div className='usage-item'>
             <h3>디지털 미디어 적용</h3>
-            <ul className="usage-list">
+            <ul className='usage-list'>
               <li>
                 <strong>웹사이트 헤더:</strong> 랜딩 페이지 히어로 섹션에 강조하여 표시
               </li>
@@ -50,9 +50,9 @@ export function Tagline() {
               </li>
             </ul>
           </div>
-          <div className="usage-item">
+          <div className='usage-item'>
             <h3>디자인 가이드라인</h3>
-            <ul className="usage-list">
+            <ul className='usage-list'>
               <li>
                 <strong>여백 규정:</strong> 로고와 최소 20px(또는 로고 높이의 1/3) 간격 유지
               </li>

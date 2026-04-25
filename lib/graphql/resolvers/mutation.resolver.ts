@@ -1,8 +1,8 @@
-import { randomUUID } from 'crypto';
-import { eq } from 'drizzle-orm';
-import type { GraphQLContext } from '../context';
-import { requireAuth, requireAdmin } from '../context';
-import * as schema from '@/lib/db/schema';
+import { randomUUID } from 'crypto'
+import { eq } from 'drizzle-orm'
+import type { GraphQLContext } from '../context'
+import { requireAuth, requireAdmin } from '../context'
+import * as schema from '@/lib/db/schema'
 
 /**
  * Mutation Resolvers
@@ -15,17 +15,13 @@ export const mutationResolvers = {
   // Member Mutations
   // ===================================
 
-  createMember: async (
-    _: any,
-    { input }: { input: any },
-    context: GraphQLContext
-  ) => {
-    requireAuth(context);
+  createMember: async (_: any, { input }: { input: any }, context: GraphQLContext) => {
+    requireAuth(context)
 
     // Generate membership number
-    const year = new Date().getFullYear();
-    const count = await context.db.query.members.findMany();
-    const membershipNumber = `ASCA-${year}-${String(count.length + 1).padStart(3, '0')}`;
+    const year = new Date().getFullYear()
+    const count = await context.db.query.members.findMany()
+    const membershipNumber = `ASCA-${year}-${String(count.length + 1).padStart(3, '0')}`
 
     const [member] = await context.db
       .insert(schema.members)
@@ -35,9 +31,9 @@ export const mutationResolvers = {
         tierLevel: 1, // Start with basic tier
         status: 'pending_approval',
       })
-      .returning();
+      .returning()
 
-    return member;
+    return member
   },
 
   updateMember: async (
@@ -45,12 +41,12 @@ export const mutationResolvers = {
     { id, input }: { id: string; input: any },
     context: GraphQLContext
   ) => {
-    requireAuth(context);
+    requireAuth(context)
 
     // Check if user owns this member record or is admin
-    const member = await context.loaders.memberLoader.load(id);
+    const member = await context.loaders.memberLoader.load(id)
     if (member.userId !== context.userId && context.user!.role !== 'admin') {
-      throw new Error('Not authorized to update this member');
+      throw new Error('Not authorized to update this member')
     }
 
     const [updatedMember] = await context.db
@@ -60,20 +56,16 @@ export const mutationResolvers = {
         updatedAt: new Date(),
       })
       .where(eq(schema.members.id, id))
-      .returning();
+      .returning()
 
     // Clear cache
-    context.loaders.memberLoader.clear(id);
+    context.loaders.memberLoader.clear(id)
 
-    return updatedMember;
+    return updatedMember
   },
 
-  approveMember: async (
-    _: any,
-    { id }: { id: string },
-    context: GraphQLContext
-  ) => {
-    requireAdmin(context);
+  approveMember: async (_: any, { id }: { id: string }, context: GraphQLContext) => {
+    requireAdmin(context)
 
     const [approvedMember] = await context.db
       .update(schema.members)
@@ -82,12 +74,12 @@ export const mutationResolvers = {
         updatedAt: new Date(),
       })
       .where(eq(schema.members.id, id))
-      .returning();
+      .returning()
 
     // Clear cache
-    context.loaders.memberLoader.clear(id);
+    context.loaders.memberLoader.clear(id)
 
-    return approvedMember;
+    return approvedMember
   },
 
   rejectMember: async (
@@ -95,7 +87,7 @@ export const mutationResolvers = {
     { id, reason }: { id: string; reason?: string },
     context: GraphQLContext
   ) => {
-    requireAdmin(context);
+    requireAdmin(context)
 
     const [rejectedMember] = await context.db
       .update(schema.members)
@@ -105,12 +97,12 @@ export const mutationResolvers = {
         updatedAt: new Date(),
       })
       .where(eq(schema.members.id, id))
-      .returning();
+      .returning()
 
     // Clear cache
-    context.loaders.memberLoader.clear(id);
+    context.loaders.memberLoader.clear(id)
 
-    return rejectedMember;
+    return rejectedMember
   },
 
   // ===================================
@@ -122,7 +114,7 @@ export const mutationResolvers = {
     { input }: { input: any },
     context: GraphQLContext
   ) => {
-    requireAuth(context);
+    requireAuth(context)
 
     const [application] = await context.db
       .insert(schema.membershipApplications)
@@ -131,9 +123,9 @@ export const mutationResolvers = {
         status: 'pending',
         submittedAt: new Date(),
       })
-      .returning();
+      .returning()
 
-    return application;
+    return application
   },
 
   reviewMembershipApplication: async (
@@ -144,14 +136,14 @@ export const mutationResolvers = {
       comments,
       score,
     }: {
-      id: string;
-      status: string;
-      comments?: string;
-      score?: number;
+      id: string
+      status: string
+      comments?: string
+      score?: number
     },
     context: GraphQLContext
   ) => {
-    requireAdmin(context);
+    requireAdmin(context)
 
     const [reviewedApplication] = await context.db
       .update(schema.membershipApplications)
@@ -164,13 +156,13 @@ export const mutationResolvers = {
         decidedAt: new Date(),
       })
       .where(eq(schema.membershipApplications.id, id))
-      .returning();
+      .returning()
 
     // If approved, update member tier
     if (status === 'approved') {
       const application = await context.db.query.membershipApplications.findFirst({
         where: eq(schema.membershipApplications.id, id),
-      });
+      })
 
       if (application) {
         await context.db
@@ -181,26 +173,22 @@ export const mutationResolvers = {
             status: 'active',
             updatedAt: new Date(),
           })
-          .where(eq(schema.members.id, application.memberId));
+          .where(eq(schema.members.id, application.memberId))
 
         // Clear member cache
-        context.loaders.memberLoader.clear(application.memberId);
+        context.loaders.memberLoader.clear(application.memberId)
       }
     }
 
-    return reviewedApplication;
+    return reviewedApplication
   },
 
   // ===================================
   // Artist Mutations
   // ===================================
 
-  createArtist: async (
-    _: any,
-    { input }: { input: any },
-    context: GraphQLContext
-  ) => {
-    requireAuth(context);
+  createArtist: async (_: any, { input }: { input: any }, context: GraphQLContext) => {
+    requireAuth(context)
 
     const [artist] = await context.db
       .insert(schema.artists)
@@ -208,9 +196,9 @@ export const mutationResolvers = {
         ...input,
         isActive: true,
       })
-      .returning();
+      .returning()
 
-    return artist;
+    return artist
   },
 
   updateArtist: async (
@@ -218,12 +206,12 @@ export const mutationResolvers = {
     { id, input }: { id: string; input: any },
     context: GraphQLContext
   ) => {
-    requireAuth(context);
+    requireAuth(context)
 
     // Check if user owns this artist record or is admin
-    const artist = await context.loaders.artistLoader.load(id);
+    const artist = await context.loaders.artistLoader.load(id)
     if (artist.userId && artist.userId !== context.userId && context.user!.role !== 'admin') {
-      throw new Error('Not authorized to update this artist');
+      throw new Error('Not authorized to update this artist')
     }
 
     const [updatedArtist] = await context.db
@@ -233,24 +221,20 @@ export const mutationResolvers = {
         updatedAt: new Date(),
       })
       .where(eq(schema.artists.id, id))
-      .returning();
+      .returning()
 
     // Clear cache
-    context.loaders.artistLoader.clear(id);
+    context.loaders.artistLoader.clear(id)
 
-    return updatedArtist;
+    return updatedArtist
   },
 
   // ===================================
   // Artwork Mutations
   // ===================================
 
-  createArtwork: async (
-    _: any,
-    { input }: { input: any },
-    context: GraphQLContext
-  ) => {
-    requireAuth(context);
+  createArtwork: async (_: any, { input }: { input: any }, context: GraphQLContext) => {
+    requireAuth(context)
 
     const [artwork] = await context.db
       .insert(schema.artworks)
@@ -259,15 +243,15 @@ export const mutationResolvers = {
         isFeatured: false,
         isForSale: input.isForSale ?? false,
       })
-      .returning();
+      .returning()
 
     // Clear artist's artworks cache
     if (!artwork) {
-      throw new Error('Failed to create artwork');
+      throw new Error('Failed to create artwork')
     }
-    context.loaders.artworksByArtistLoader.clear(artwork.artistId);
+    context.loaders.artworksByArtistLoader.clear(artwork.artistId)
 
-    return artwork;
+    return artwork
   },
 
   updateArtwork: async (
@@ -275,14 +259,14 @@ export const mutationResolvers = {
     { id, input }: { id: string; input: any },
     context: GraphQLContext
   ) => {
-    requireAuth(context);
+    requireAuth(context)
 
     // Check authorization
-    const artwork = await context.loaders.artworkLoader.load(id);
-    const artist = await context.loaders.artistLoader.load(artwork.artistId);
+    const artwork = await context.loaders.artworkLoader.load(id)
+    const artist = await context.loaders.artistLoader.load(artwork.artistId)
 
     if (artist.userId && artist.userId !== context.userId && context.user!.role !== 'admin') {
-      throw new Error('Not authorized to update this artwork');
+      throw new Error('Not authorized to update this artwork')
     }
 
     const [updatedArtwork] = await context.db
@@ -292,39 +276,33 @@ export const mutationResolvers = {
         updatedAt: new Date(),
       })
       .where(eq(schema.artworks.id, id))
-      .returning();
+      .returning()
 
     // Clear caches
-    context.loaders.artworkLoader.clear(id);
-    context.loaders.artworksByArtistLoader.clear(artwork.artistId);
+    context.loaders.artworkLoader.clear(id)
+    context.loaders.artworksByArtistLoader.clear(artwork.artistId)
 
-    return updatedArtwork;
+    return updatedArtwork
   },
 
-  deleteArtwork: async (
-    _: any,
-    { id }: { id: string },
-    context: GraphQLContext
-  ) => {
-    requireAuth(context);
+  deleteArtwork: async (_: any, { id }: { id: string }, context: GraphQLContext) => {
+    requireAuth(context)
 
     // Check authorization
-    const artwork = await context.loaders.artworkLoader.load(id);
-    const artist = await context.loaders.artistLoader.load(artwork.artistId);
+    const artwork = await context.loaders.artworkLoader.load(id)
+    const artist = await context.loaders.artistLoader.load(artwork.artistId)
 
     if (artist.userId && artist.userId !== context.userId && context.user!.role !== 'admin') {
-      throw new Error('Not authorized to delete this artwork');
+      throw new Error('Not authorized to delete this artwork')
     }
 
-    await context.db
-      .delete(schema.artworks)
-      .where(eq(schema.artworks.id, id));
+    await context.db.delete(schema.artworks).where(eq(schema.artworks.id, id))
 
     // Clear caches
-    context.loaders.artworkLoader.clear(id);
-    context.loaders.artworksByArtistLoader.clear(artwork.artistId);
+    context.loaders.artworkLoader.clear(id)
+    context.loaders.artworksByArtistLoader.clear(artwork.artistId)
 
-    return true;
+    return true
   },
 
   // ===================================
@@ -336,28 +314,22 @@ export const mutationResolvers = {
     { eventId, notes }: { eventId: string; notes?: string },
     context: GraphQLContext
   ) => {
-    requireAuth(context);
+    requireAuth(context)
 
     // Check if already registered
     const existing = await context.db.query.eventParticipants.findFirst({
       where: (participants, { and, eq }) =>
-        and(
-          eq(participants.eventId, eventId),
-          eq(participants.userId, context.userId!)
-        ),
-    });
+        and(eq(participants.eventId, eventId), eq(participants.userId, context.userId!)),
+    })
 
     if (existing) {
-      throw new Error('Already registered for this event');
+      throw new Error('Already registered for this event')
     }
 
     // Check event capacity
-    const event = await context.loaders.eventLoader.load(eventId);
-    if (
-      event.maxParticipants &&
-      event.currentParticipants >= event.maxParticipants
-    ) {
-      throw new Error('Event is full');
+    const event = await context.loaders.eventLoader.load(eventId)
+    if (event.maxParticipants && event.currentParticipants >= event.maxParticipants) {
+      throw new Error('Event is full')
     }
 
     const [participant] = await context.db
@@ -370,7 +342,7 @@ export const mutationResolvers = {
         notes,
         registeredAt: new Date(),
       })
-      .returning();
+      .returning()
 
     // Update event participant count
     await context.db
@@ -378,12 +350,12 @@ export const mutationResolvers = {
       .set({
         currentParticipants: event.currentParticipants + 1,
       })
-      .where(eq(schema.events.id, eventId));
+      .where(eq(schema.events.id, eventId))
 
     // Clear event cache
-    context.loaders.eventLoader.clear(eventId);
+    context.loaders.eventLoader.clear(eventId)
 
-    return participant;
+    return participant
   },
 
   cancelEventRegistration: async (
@@ -391,31 +363,31 @@ export const mutationResolvers = {
     { participantId }: { participantId: string },
     context: GraphQLContext
   ) => {
-    requireAuth(context);
+    requireAuth(context)
 
     // Check if user owns this participant record
-    const participant = await context.loaders.eventParticipantLoader.load(participantId);
+    const participant = await context.loaders.eventParticipantLoader.load(participantId)
     if (participant.userId !== context.userId && context.user!.role !== 'admin') {
-      throw new Error('Not authorized to cancel this registration');
+      throw new Error('Not authorized to cancel this registration')
     }
 
     await context.db
       .delete(schema.eventParticipants)
-      .where(eq(schema.eventParticipants.id, participantId));
+      .where(eq(schema.eventParticipants.id, participantId))
 
     // Update event participant count
-    const event = await context.loaders.eventLoader.load(participant.eventId);
+    const event = await context.loaders.eventLoader.load(participant.eventId)
     await context.db
       .update(schema.events)
       .set({
         currentParticipants: Math.max(0, event.currentParticipants - 1),
       })
-      .where(eq(schema.events.id, participant.eventId));
+      .where(eq(schema.events.id, participant.eventId))
 
     // Clear caches
-    context.loaders.eventParticipantLoader.clear(participantId);
-    context.loaders.eventLoader.clear(participant.eventId);
+    context.loaders.eventParticipantLoader.clear(participantId)
+    context.loaders.eventLoader.clear(participant.eventId)
 
-    return true;
+    return true
   },
-};
+}

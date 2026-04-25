@@ -1,340 +1,362 @@
-import Airtable, { Base, Record, FieldSet } from 'airtable';
+import Airtable, { Base, Record, FieldSet } from 'airtable'
 
 // Airtable 설정
-const airtableApiKey = process.env.AIRTABLE_API_KEY;
-const airtableBaseId = process.env.AIRTABLE_BASE_ID;
+const airtableApiKey = process.env.AIRTABLE_API_KEY
+const airtableBaseId = process.env.AIRTABLE_BASE_ID
 
 // Airtable Base 타입 정의
-type AirtableBase = Base;
-type AirtableRecord<T extends FieldSet = FieldSet> = Record<T>;
+type AirtableBase = Base
+type AirtableRecord<T extends FieldSet = FieldSet> = Record<T>
 
 // Airtable 클라이언트 초기화 - 빌드 시에는 초기화하지 않음
-let airtable: Airtable | null = null;
-let base: AirtableBase | null = null;
+let airtable: Airtable | null = null
+let base: AirtableBase | null = null
 
 function initializeAirtable(): AirtableBase {
   if (!airtableApiKey || !airtableBaseId) {
-    throw new Error('Airtable credentials not configured');
+    throw new Error('Airtable credentials not configured')
   }
-  
+
   if (!airtable) {
-    airtable = new Airtable({ apiKey: airtableApiKey });
-    base = airtable.base(airtableBaseId);
+    airtable = new Airtable({ apiKey: airtableApiKey })
+    base = airtable.base(airtableBaseId)
   }
-  
+
   if (!base) {
-    throw new Error('Failed to initialize Airtable base');
+    throw new Error('Failed to initialize Airtable base')
   }
-  
-  return base;
+
+  return base
 }
 
 // Airtable 테이블 정의
 export const TABLES = {
   ARTISTS: 'Artists',
-  ARTWORKS: 'Artworks', 
+  ARTWORKS: 'Artworks',
   EXHIBITIONS: 'Exhibitions',
   EVENTS: 'Events',
-  NOTICES: 'Notices'
-} as const;
+  NOTICES: 'Notices',
+} as const
 
 // 타입 정의
 export interface AirtableArtist {
-  id: string;
+  id: string
   fields: {
-    'Name (Korean)': string;
-    'Name (English)'?: string;
-    'Name (Japanese)'?: string;
-    'Name (Chinese)'?: string;
-    'Bio (Korean)': string;
-    'Bio (English)'?: string;
-    'Bio (Japanese)'?: string;
-    'Bio (Chinese)'?: string;
-    'Birth Year'?: number;
-    'Nationality'?: string;
-    'Specialties'?: string[];
-    'Awards'?: string[];
-    'Exhibitions'?: string[];
+    'Name (Korean)': string
+    'Name (English)'?: string
+    'Name (Japanese)'?: string
+    'Name (Chinese)'?: string
+    'Bio (Korean)': string
+    'Bio (English)'?: string
+    'Bio (Japanese)'?: string
+    'Bio (Chinese)'?: string
+    'Birth Year'?: number
+    Nationality?: string
+    Specialties?: string[]
+    Awards?: string[]
+    Exhibitions?: string[]
     'Profile Image'?: Array<{
-      id: string;
-      url: string;
-      filename: string;
-    }>;
-    'Membership Type'?: '준회원' | '정회원' | '특별회원' | '명예회원';
-    'Artist Type'?: '공모작가' | '청년작가' | '일반작가' | '추천작가' | '초대작가';
-    'Title'?: '이사' | '상임이사' | '감사' | '고문' | '상임고문' | '자문위원' | '운영위원' | '심사위원' | '운영위원장' | '심사위원장' | '이사장' | '명예이사장' | '부회장' | '회장';
-    'Created'?: string;
-    'Last Modified'?: string;
-  };
+      id: string
+      url: string
+      filename: string
+    }>
+    'Membership Type'?: '준회원' | '정회원' | '특별회원' | '명예회원'
+    'Artist Type'?: '공모작가' | '청년작가' | '일반작가' | '추천작가' | '초대작가'
+    Title?:
+      | '이사'
+      | '상임이사'
+      | '감사'
+      | '고문'
+      | '상임고문'
+      | '자문위원'
+      | '운영위원'
+      | '심사위원'
+      | '운영위원장'
+      | '심사위원장'
+      | '이사장'
+      | '명예이사장'
+      | '부회장'
+      | '회장'
+    Created?: string
+    'Last Modified'?: string
+  }
 }
 
 export interface AirtableArtwork {
-  id: string;
+  id: string
   fields: {
-    'Title (Korean)': string;
-    'Title (English)'?: string;
-    'Title (Japanese)'?: string;
-    'Title (Chinese)'?: string;
-    'Description (Korean)': string;
-    'Description (English)'?: string;
-    'Artist': string[]; // Airtable Link field
-    'Category'?: 'calligraphy' | 'painting' | 'sculpture' | 'mixed-media';
-    'Style'?: 'traditional' | 'contemporary' | 'modern';
-    'Year'?: number;
-    'Materials'?: string[];
-    'Width (cm)'?: number;
-    'Height (cm)'?: number;
-    'Depth (cm)'?: number;
-    'Price Amount'?: number;
-    'Price Currency'?: 'KRW' | 'USD' | 'EUR' | 'JPY';
-    'Availability'?: 'available' | 'sold' | 'reserved';
-    'Featured'?: boolean;
-    'Tags'?: string[];
-    'Images'?: Array<{
-      id: string;
-      url: string;
-      filename: string;
-    }>;
-    'Condition'?: string;
-    'Technique'?: string;
-    'Authenticity Certificate'?: boolean;
-    'Created'?: string;
-    'Last Modified'?: string;
-  };
+    'Title (Korean)': string
+    'Title (English)'?: string
+    'Title (Japanese)'?: string
+    'Title (Chinese)'?: string
+    'Description (Korean)': string
+    'Description (English)'?: string
+    Artist: string[] // Airtable Link field
+    Category?: 'calligraphy' | 'painting' | 'sculpture' | 'mixed-media'
+    Style?: 'traditional' | 'contemporary' | 'modern'
+    Year?: number
+    Materials?: string[]
+    'Width (cm)'?: number
+    'Height (cm)'?: number
+    'Depth (cm)'?: number
+    'Price Amount'?: number
+    'Price Currency'?: 'KRW' | 'USD' | 'EUR' | 'JPY'
+    Availability?: 'available' | 'sold' | 'reserved'
+    Featured?: boolean
+    Tags?: string[]
+    Images?: Array<{
+      id: string
+      url: string
+      filename: string
+    }>
+    Condition?: string
+    Technique?: string
+    'Authenticity Certificate'?: boolean
+    Created?: string
+    'Last Modified'?: string
+  }
 }
 
 export interface AirtableExhibition {
-  id: string;
+  id: string
   fields: {
-    'Title (Korean)': string;
-    'Title (English)'?: string;
-    'Description (Korean)': string;
-    'Start Date': string;
-    'End Date': string;
-    'Location'?: string;
-    'Venue'?: string;
-    'Curator'?: string;
+    'Title (Korean)': string
+    'Title (English)'?: string
+    'Description (Korean)': string
+    'Start Date': string
+    'End Date': string
+    Location?: string
+    Venue?: string
+    Curator?: string
     'Featured Image'?: Array<{
-      id: string;
-      url: string;
-      filename: string;
-    }>;
+      id: string
+      url: string
+      filename: string
+    }>
     'Gallery Images'?: Array<{
-      id: string;
-      url: string;
-      filename: string;
-    }>;
-    'Status': 'upcoming' | 'current' | 'past';
-    'Is Featured'?: boolean;
-    'Is Published'?: boolean;
-    'Ticket Price'?: number;
-    'Currency'?: string;
-    'Is Free'?: boolean;
-    'Participating Artists'?: string[]; // Airtable Link field
-    'Featured Artworks'?: string[]; // Airtable Link field
-    'Created'?: string;
-    'Last Modified'?: string;
-  };
+      id: string
+      url: string
+      filename: string
+    }>
+    Status: 'upcoming' | 'current' | 'past'
+    'Is Featured'?: boolean
+    'Is Published'?: boolean
+    'Ticket Price'?: number
+    Currency?: string
+    'Is Free'?: boolean
+    'Participating Artists'?: string[] // Airtable Link field
+    'Featured Artworks'?: string[] // Airtable Link field
+    Created?: string
+    'Last Modified'?: string
+  }
 }
 
 export interface AirtableEvent {
-  id: string;
+  id: string
   fields: {
-    'Title (Korean)': string;
-    'Title (English)'?: string;
-    'Title (Chinese)'?: string;
-    'Description (Korean)': string;
-    'Description (English)'?: string;
-    'Description (Chinese)'?: string;
-    'Start Date': string;
-    'End Date'?: string;
-    'Registration Start'?: string;
-    'Registration End'?: string;
-    'Location'?: string;
-    'Venue'?: string;
-    'Address'?: string;
-    'Max Participants'?: number;
-    'Registration Fee'?: number;
-    'Currency'?: string;
-    'Is Free'?: boolean;
+    'Title (Korean)': string
+    'Title (English)'?: string
+    'Title (Chinese)'?: string
+    'Description (Korean)': string
+    'Description (English)'?: string
+    'Description (Chinese)'?: string
+    'Start Date': string
+    'End Date'?: string
+    'Registration Start'?: string
+    'Registration End'?: string
+    Location?: string
+    Venue?: string
+    Address?: string
+    'Max Participants'?: number
+    'Registration Fee'?: number
+    Currency?: string
+    'Is Free'?: boolean
     'Featured Image'?: Array<{
-      id: string;
-      url: string;
-      filename: string;
-    }>;
+      id: string
+      url: string
+      filename: string
+    }>
     'Gallery Images'?: Array<{
-      id: string;
-      url: string;
-      filename: string;
-    }>;
-    'Organizer'?: string;
-    'Contact Email'?: string;
-    'Contact Phone'?: string;
-    'Website'?: string;
-    'Status': 'draft' | 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
-    'Event Type': 'workshop' | 'exhibition' | 'seminar' | 'competition' | 'ceremony' | 'other';
-    'Is Featured'?: boolean;
-    'Is Published'?: boolean;
-    'Tags'?: string[];
-    'Requirements'?: string;
-    'Notes'?: string;
-    'Created'?: string;
-    'Last Modified'?: string;
-  };
+      id: string
+      url: string
+      filename: string
+    }>
+    Organizer?: string
+    'Contact Email'?: string
+    'Contact Phone'?: string
+    Website?: string
+    Status: 'draft' | 'upcoming' | 'ongoing' | 'completed' | 'cancelled'
+    'Event Type': 'workshop' | 'exhibition' | 'seminar' | 'competition' | 'ceremony' | 'other'
+    'Is Featured'?: boolean
+    'Is Published'?: boolean
+    Tags?: string[]
+    Requirements?: string
+    Notes?: string
+    Created?: string
+    'Last Modified'?: string
+  }
 }
 
 export interface AirtableNotice {
-  id: string;
+  id: string
   fields: {
-    'Title (Korean)': string;
-    'Title (English)'?: string;
-    'Title (Chinese)'?: string;
-    'Content (Korean)': string;
-    'Content (English)'?: string;
-    'Content (Chinese)'?: string;
-    'Summary'?: string;
-    'Author'?: string;
-    'Category': 'announcement' | 'news' | 'event' | 'regulation' | 'general';
-    'Priority': 'low' | 'normal' | 'high' | 'urgent';
-    'Status': 'draft' | 'published' | 'archived';
-    'Is Pinned'?: boolean;
-    'Is Featured'?: boolean;
-    'Show on Homepage'?: boolean;
-    'Published At'?: string;
-    'Expires At'?: string;
-    'Effective Date'?: string;
-    'Attachments'?: Array<{
-      id: string;
-      url: string;
-      filename: string;
-    }>;
+    'Title (Korean)': string
+    'Title (English)'?: string
+    'Title (Chinese)'?: string
+    'Content (Korean)': string
+    'Content (English)'?: string
+    'Content (Chinese)'?: string
+    Summary?: string
+    Author?: string
+    Category: 'announcement' | 'news' | 'event' | 'regulation' | 'general'
+    Priority: 'low' | 'normal' | 'high' | 'urgent'
+    Status: 'draft' | 'published' | 'archived'
+    'Is Pinned'?: boolean
+    'Is Featured'?: boolean
+    'Show on Homepage'?: boolean
+    'Published At'?: string
+    'Expires At'?: string
+    'Effective Date'?: string
+    Attachments?: Array<{
+      id: string
+      url: string
+      filename: string
+    }>
     'Featured Image'?: Array<{
-      id: string;
-      url: string;
-      filename: string;
-    }>;
-    'Target Audience'?: string[];
-    'Tags'?: string[];
-    'External Link'?: string;
-    'Download URL'?: string;
-    'Created'?: string;
-    'Last Modified'?: string;
-  };
+      id: string
+      url: string
+      filename: string
+    }>
+    'Target Audience'?: string[]
+    Tags?: string[]
+    'External Link'?: string
+    'Download URL'?: string
+    Created?: string
+    'Last Modified'?: string
+  }
 }
 
 // Airtable 데이터 조회 함수들
 export class AirtableService {
   // Artists 조회 - 모든 레코드를 가져오기 위해 페이지네이션 사용
   static async getAllArtists(): Promise<AirtableArtist[]> {
-    const currentBase = initializeAirtable();
+    const currentBase = initializeAirtable()
 
     try {
       // maxRecords를 제거하고 .all()을 사용하면 자동으로 페이지네이션 처리됨
-      const records = await currentBase(TABLES.ARTISTS).select({
-        sort: [{ field: 'Name (Korean)', direction: 'asc' }]
-      }).all();
+      const records = await currentBase(TABLES.ARTISTS)
+        .select({
+          sort: [{ field: 'Name (Korean)', direction: 'asc' }],
+        })
+        .all()
 
-      return records.map((record) => ({
+      return records.map(record => ({
         id: record.id,
-        fields: record.fields as unknown as AirtableArtist['fields']
-      }));
+        fields: record.fields as unknown as AirtableArtist['fields'],
+      }))
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
 
   // Artworks 조회 - 모든 레코드 가져오기
   static async getAllArtworks(): Promise<AirtableArtwork[]> {
-    const currentBase = initializeAirtable();
+    const currentBase = initializeAirtable()
 
     try {
-      const records = await currentBase(TABLES.ARTWORKS).select({
-        sort: [{ field: 'Title (Korean)', direction: 'asc' }]
-      }).all();
+      const records = await currentBase(TABLES.ARTWORKS)
+        .select({
+          sort: [{ field: 'Title (Korean)', direction: 'asc' }],
+        })
+        .all()
 
-      return records.map((record) => ({
+      return records.map(record => ({
         id: record.id,
-        fields: record.fields as unknown as AirtableArtwork['fields']
-      }));
+        fields: record.fields as unknown as AirtableArtwork['fields'],
+      }))
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
 
   // Exhibitions 조회 - 모든 레코드 가져오기
   static async getAllExhibitions(): Promise<AirtableExhibition[]> {
-    const currentBase = initializeAirtable();
+    const currentBase = initializeAirtable()
 
     try {
-      const records = await currentBase(TABLES.EXHIBITIONS).select({
-        sort: [{ field: 'Start Date', direction: 'desc' }]
-      }).all();
+      const records = await currentBase(TABLES.EXHIBITIONS)
+        .select({
+          sort: [{ field: 'Start Date', direction: 'desc' }],
+        })
+        .all()
 
       return records.map((record: any) => ({
         id: record.id,
-        fields: record.fields as unknown as AirtableExhibition['fields']
-      }));
+        fields: record.fields as unknown as AirtableExhibition['fields'],
+      }))
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
 
   // 특정 아티스트 조회
   static async getArtistById(id: string): Promise<AirtableArtist | null> {
-    const currentBase = initializeAirtable();
+    const currentBase = initializeAirtable()
 
     try {
-      const record = await currentBase(TABLES.ARTISTS).find(id);
+      const record = await currentBase(TABLES.ARTISTS).find(id)
       return {
         id: record.id,
-        fields: record.fields as unknown as AirtableArtist['fields']
-      };
+        fields: record.fields as unknown as AirtableArtist['fields'],
+      }
     } catch (error) {
-      
-      return null;
+      return null
     }
   }
 
   // 배치 처리를 위한 작가 데이터 가져오기 (페이지별)
-  static async getArtistsBatch(offset: number = 0, limit: number = 100): Promise<{
-    artists: AirtableArtist[];
-    hasMore: boolean;
-    total: number;
+  static async getArtistsBatch(
+    offset: number = 0,
+    limit: number = 100
+  ): Promise<{
+    artists: AirtableArtist[]
+    hasMore: boolean
+    total: number
   }> {
-    const currentBase = initializeAirtable();
+    const currentBase = initializeAirtable()
 
     try {
       // 먼저 전체 개수 확인
-      const countRecords = await currentBase(TABLES.ARTISTS).select({
-        fields: ['Name (Korean)'], // 최소한의 필드만 가져와서 성능 향상
-        sort: [{ field: 'Name (Korean)', direction: 'asc' }]
-      }).all();
+      const countRecords = await currentBase(TABLES.ARTISTS)
+        .select({
+          fields: ['Name (Korean)'], // 최소한의 필드만 가져와서 성능 향상
+          sort: [{ field: 'Name (Korean)', direction: 'asc' }],
+        })
+        .all()
 
-      const total = countRecords.length;
+      const total = countRecords.length
 
       // 실제 데이터 가져오기 (배치)
-      const allRecords = await currentBase(TABLES.ARTISTS).select({
-        sort: [{ field: 'Name (Korean)', direction: 'asc' }]
-      }).all();
-      
-      const records = allRecords.slice(offset, offset + limit);
+      const allRecords = await currentBase(TABLES.ARTISTS)
+        .select({
+          sort: [{ field: 'Name (Korean)', direction: 'asc' }],
+        })
+        .all()
+
+      const records = allRecords.slice(offset, offset + limit)
 
       const artists = records.map((record: any) => ({
         id: record.id,
-        fields: record.fields as unknown as AirtableArtist['fields']
-      }));
+        fields: record.fields as unknown as AirtableArtist['fields'],
+      }))
 
       return {
         artists,
         hasMore: offset + limit < total,
-        total
-      };
+        total,
+      }
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
 
@@ -343,77 +365,78 @@ export class AirtableService {
     processor: (batch: AirtableArtist[]) => Promise<void>,
     batchSize: number = 50
   ): Promise<{ processed: number; errors: number }> {
-    const currentBase = initializeAirtable();
-    let processed = 0;
-    let errors = 0;
+    const currentBase = initializeAirtable()
+    let processed = 0
+    let errors = 0
 
     try {
-      await currentBase(TABLES.ARTISTS).select({
-        sort: [{ field: 'Name (Korean)', direction: 'asc' }]
-      }).eachPage(async (records: any, fetchNextPage: any) => {
-        try {
-          // 레코드들을 배치 크기로 나누어 처리
-          for (let i = 0; i < records.length; i += batchSize) {
-            const batch = records.slice(i, i + batchSize).map((record: any) => ({
-              id: record.id,
-              fields: record.fields as unknown as AirtableArtist['fields']
-            }));
+      await currentBase(TABLES.ARTISTS)
+        .select({
+          sort: [{ field: 'Name (Korean)', direction: 'asc' }],
+        })
+        .eachPage(async (records: any, fetchNextPage: any) => {
+          try {
+            // 레코드들을 배치 크기로 나누어 처리
+            for (let i = 0; i < records.length; i += batchSize) {
+              const batch = records.slice(i, i + batchSize).map((record: any) => ({
+                id: record.id,
+                fields: record.fields as unknown as AirtableArtist['fields'],
+              }))
 
-            await processor(batch);
-            processed += batch.length;
+              await processor(batch)
+              processed += batch.length
+            }
 
+            fetchNextPage()
+          } catch (error) {
+            errors += records.length
+            fetchNextPage()
           }
+        })
 
-          fetchNextPage();
-        } catch (error) {
-          
-          errors += records.length;
-          fetchNextPage();
-        }
-      });
-
-      return { processed, errors };
+      return { processed, errors }
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
 
   // Events 조회 - 모든 레코드 가져오기
   static async getAllEvents(): Promise<AirtableEvent[]> {
-    const currentBase = initializeAirtable();
+    const currentBase = initializeAirtable()
 
     try {
-      const records = await currentBase(TABLES.EVENTS).select({
-        sort: [{ field: 'Start Date', direction: 'desc' }]
-      }).all();
+      const records = await currentBase(TABLES.EVENTS)
+        .select({
+          sort: [{ field: 'Start Date', direction: 'desc' }],
+        })
+        .all()
 
       return records.map((record: any) => ({
         id: record.id,
-        fields: record.fields as unknown as AirtableEvent['fields']
-      }));
+        fields: record.fields as unknown as AirtableEvent['fields'],
+      }))
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
 
   // Notices 조회 - 모든 레코드 가져오기
   static async getAllNotices(): Promise<AirtableNotice[]> {
-    const currentBase = initializeAirtable();
+    const currentBase = initializeAirtable()
 
     try {
-      const records = await currentBase(TABLES.NOTICES).select({
-        sort: [{ field: 'Created', direction: 'desc' }]
-      }).all();
+      const records = await currentBase(TABLES.NOTICES)
+        .select({
+          sort: [{ field: 'Created', direction: 'desc' }],
+        })
+        .all()
 
       return records.map((record: any) => ({
         id: record.id,
-        fields: record.fields as unknown as AirtableNotice['fields']
-      }));
+        fields: record.fields as unknown as AirtableNotice['fields'],
+      }))
     } catch (error) {
-      
-      throw error;
+      throw error
     }
   }
-} 
+}

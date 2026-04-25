@@ -1,15 +1,15 @@
 import { ensureSupabase } from '../supabase'
-import type { 
-  Notice, 
-  Exhibition, 
-  Event, 
+import type {
+  Notice,
+  Exhibition,
+  Event,
   NoticeComment,
   SearchFilters,
   PaginationParams,
   PaginatedResponse,
   NoticeFormData,
   ExhibitionFormData,
-  EventFormData
+  EventFormData,
 } from '@/lib/types/cms-legacy'
 
 // Notice functions
@@ -19,10 +19,7 @@ export async function getNotices(
 ): Promise<PaginatedResponse<Notice>> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  let query = supabase
-    .from('notices')
-    .select('*', { count: 'exact' })
-    .eq('is_published', true)
+  let query = supabase.from('notices').select('*', { count: 'exact' }).eq('is_published', true)
 
   // Apply filters
   if (filters.query) {
@@ -60,7 +57,7 @@ export async function getNotices(
     total: count || 0,
     page: pagination.page,
     limit: pagination.limit,
-    totalPages: Math.ceil((count || 0) / pagination.limit)
+    totalPages: Math.ceil((count || 0) / pagination.limit),
   }
 }
 
@@ -88,11 +85,7 @@ export async function getNoticeById(id: string): Promise<Notice | null> {
 export async function createNotice(data: NoticeFormData): Promise<Notice> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  const { data: notice, error } = await supabase
-    .from('notices')
-    .insert([data])
-    .select()
-    .single()
+  const { data: notice, error } = await supabase.from('notices').insert([data]).select().single()
 
   if (error) throw error
   return notice
@@ -115,10 +108,7 @@ export async function updateNotice(id: string, data: Partial<NoticeFormData>): P
 export async function deleteNotice(id: string): Promise<void> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  const { error } = await supabase
-    .from('notices')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('notices').delete().eq('id', id)
 
   if (error) throw error
 }
@@ -130,10 +120,7 @@ export async function getExhibitions(
 ): Promise<PaginatedResponse<Exhibition>> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  let query = supabase
-    .from('exhibitions')
-    .select('*', { count: 'exact' })
-    .eq('is_published', true)
+  let query = supabase.from('exhibitions').select('*', { count: 'exact' }).eq('is_published', true)
 
   // Apply filters
   if (filters.query) {
@@ -171,7 +158,7 @@ export async function getExhibitions(
     total: count || 0,
     page: pagination.page,
     limit: pagination.limit,
-    totalPages: Math.ceil((count || 0) / pagination.limit)
+    totalPages: Math.ceil((count || 0) / pagination.limit),
   }
 }
 
@@ -209,7 +196,10 @@ export async function createExhibition(data: ExhibitionFormData): Promise<Exhibi
   return exhibition
 }
 
-export async function updateExhibition(id: string, data: Partial<ExhibitionFormData>): Promise<Exhibition> {
+export async function updateExhibition(
+  id: string,
+  data: Partial<ExhibitionFormData>
+): Promise<Exhibition> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
   const { data: exhibition, error } = await supabase
@@ -226,10 +216,7 @@ export async function updateExhibition(id: string, data: Partial<ExhibitionFormD
 export async function deleteExhibition(id: string): Promise<void> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  const { error } = await supabase
-    .from('exhibitions')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('exhibitions').delete().eq('id', id)
 
   if (error) throw error
 }
@@ -241,10 +228,7 @@ export async function getEvents(
 ): Promise<PaginatedResponse<Event>> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  let query = supabase
-    .from('events')
-    .select('*', { count: 'exact' })
-    .eq('is_published', true)
+  let query = supabase.from('events').select('*', { count: 'exact' }).eq('is_published', true)
 
   // Apply filters
   if (filters.query) {
@@ -285,7 +269,7 @@ export async function getEvents(
     total: count || 0,
     page: pagination.page,
     limit: pagination.limit,
-    totalPages: Math.ceil((count || 0) / pagination.limit)
+    totalPages: Math.ceil((count || 0) / pagination.limit),
   }
 }
 
@@ -313,11 +297,7 @@ export async function getEventById(id: string): Promise<Event | null> {
 export async function createEvent(data: EventFormData): Promise<Event> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  const { data: event, error } = await supabase
-    .from('events')
-    .insert([data])
-    .select()
-    .single()
+  const { data: event, error } = await supabase.from('events').insert([data]).select().single()
 
   if (error) throw error
   return event
@@ -340,10 +320,7 @@ export async function updateEvent(id: string, data: Partial<EventFormData>): Pro
 export async function deleteEvent(id: string): Promise<void> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  const { error } = await supabase
-    .from('events')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('events').delete().eq('id', id)
 
   if (error) throw error
 }
@@ -373,10 +350,12 @@ export async function createNoticeComment(data: {
   if (!supabase) throw new Error('Supabase client not available')
   const { data: comment, error } = await supabase
     .from('notice_comments')
-    .insert([{
-      ...data,
-      is_approved: false // 댓글은 관리자 승인 후 공개
-    }])
+    .insert([
+      {
+        ...data,
+        is_approved: false, // 댓글은 관리자 승인 후 공개
+      },
+    ])
     .select()
     .single()
 
@@ -409,23 +388,20 @@ export async function getFeaturedContent() {
       .eq('is_published', true)
       .eq('is_featured', true)
       .order('start_date', { ascending: false })
-      .limit(3)
+      .limit(3),
   ])
 
   return {
     notices: notices.data || [],
     exhibitions: exhibitions.data || [],
-    events: events.data || []
+    events: events.data || [],
   }
 }
 
 export async function updateContentStatus() {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  await Promise.all([
-    supabase.rpc('update_exhibition_status'),
-    supabase.rpc('update_event_status')
-  ])
+  await Promise.all([supabase.rpc('update_exhibition_status'), supabase.rpc('update_event_status')])
 }
 
 // Additional utility functions for detail pages
@@ -447,7 +423,11 @@ export async function incrementEventViews(id: string): Promise<void> {
   await supabase.rpc('increment_event_views', { event_uuid: id })
 }
 
-export async function getRelatedNotices(noticeId: string, category: string, limit: number = 5): Promise<Notice[]> {
+export async function getRelatedNotices(
+  noticeId: string,
+  category: string,
+  limit: number = 5
+): Promise<Notice[]> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
@@ -463,7 +443,10 @@ export async function getRelatedNotices(noticeId: string, category: string, limi
   return data || []
 }
 
-export async function getRelatedExhibitions(exhibitionId: string, limit: number = 5): Promise<Exhibition[]> {
+export async function getRelatedExhibitions(
+  exhibitionId: string,
+  limit: number = 5
+): Promise<Exhibition[]> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
@@ -478,7 +461,11 @@ export async function getRelatedExhibitions(exhibitionId: string, limit: number 
   return data || []
 }
 
-export async function getRelatedEvents(eventId: string, eventType: string, limit: number = 5): Promise<Event[]> {
+export async function getRelatedEvents(
+  eventId: string,
+  eventType: string,
+  limit: number = 5
+): Promise<Event[]> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
@@ -492,4 +479,4 @@ export async function getRelatedEvents(eventId: string, eventType: string, limit
 
   if (error) throw error
   return data || []
-} 
+}

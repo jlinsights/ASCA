@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
-import Image from "next/image"
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
 
 interface LogoProps {
   /** 로고의 너비 (기본값: 120px) */
@@ -20,21 +20,21 @@ interface LogoProps {
 
 /**
  * 동양서예협회(ASCA) 로고 컴포넌트
- * 
+ *
  * 테마에 따라 자동으로 적절한 로고 버전을 선택합니다.
  * - 라이트 모드: 흰색 배경용 로고 (검은색 텍스트)
  * - 다크 모드: 검은색 배경용 로고 (흰색 텍스트)
- * 
+ *
  * @example
  * ```tsx
  * // 기본 태그라인 로고
  * <Logo width={200} height={60} />
- * 
+ *
  * // 슬로건 로고
  * <Logo variant="slogan" width={250} height={80} />
  * ```
  */
-export function Logo({ width = 120, height = 40, className = "", variant = 'tagline' }: LogoProps) {
+export function Logo({ width = 120, height = 40, className = '', variant = 'tagline' }: LogoProps) {
   const { theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -55,7 +55,7 @@ export function Logo({ width = 120, height = 40, className = "", variant = 'tagl
     return (
       <Image
         src={getLogoPath(false)}
-        alt="동양서예협회 | Oriental Calligraphy Association"
+        alt='동양서예협회 | Oriental Calligraphy Association'
         width={width}
         height={height}
         className={`transition-all duration-300 ${className}`}
@@ -71,11 +71,11 @@ export function Logo({ width = 120, height = 40, className = "", variant = 'tagl
   return (
     <Image
       src={logoSrc}
-      alt="동양서예협회 | Oriental Calligraphy Association"
+      alt='동양서예협회 | Oriental Calligraphy Association'
       width={width}
       height={height}
       className={`transition-all duration-300 ${className}`}
       priority
     />
   )
-} 
+}

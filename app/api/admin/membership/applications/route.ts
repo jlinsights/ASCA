@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         error: 'Validation failed',
         issues: parsed.error.flatten(),
       },
-      { status: 400 },
+      { status: 400 }
     )
   }
 

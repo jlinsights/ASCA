@@ -1,19 +1,18 @@
 import { ensureSupabase } from './supabase'
-import type { 
-  Contest, 
-  ContestSubmission, 
-  Judge, 
+import type {
+  Contest,
+  ContestSubmission,
+  Judge,
   JudgeScore,
   ContestStatus,
-  SubmissionStatus 
+  SubmissionStatus,
 } from '@/lib/types/contest-legacy'
 
 export class ContestAPI {
-  
   // ===============================
   // 공모전 관리 (Contest Management)
   // ===============================
-  
+
   /**
    * 모든 공모전 조회
    */
@@ -27,14 +26,16 @@ export class ContestAPI {
     if (!supabase) throw new Error('Supabase client not available')
     let query = supabase
       .from('contests')
-      .select(`
+      .select(
+        `
         *,
         judges:contest_judges(
           judge_id,
           judges(*)
         ),
         submissions:contest_submissions(count)
-      `)
+      `
+      )
       .order('created_at', { ascending: false })
 
     if (params?.status) {
@@ -67,7 +68,8 @@ export class ContestAPI {
     if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contests')
-      .select(`
+      .select(
+        `
         *,
         judges:contest_judges(
           judge_id,
@@ -78,7 +80,8 @@ export class ContestAPI {
           status
         ),
         awards:contest_awards(*)
-      `)
+      `
+      )
       .eq('id', id)
       .single()
 
@@ -92,11 +95,7 @@ export class ContestAPI {
   static async createContest(contest: Omit<Contest, 'id' | 'createdAt' | 'updatedAt'>) {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
-    const { data, error } = await supabase
-      .from('contests')
-      .insert(contest)
-      .select()
-      .single()
+    const { data, error } = await supabase.from('contests').insert(contest).select().single()
 
     if (error) throw error
     return data as Contest
@@ -125,10 +124,7 @@ export class ContestAPI {
   static async deleteContest(id: string) {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
-    const { error } = await supabase
-      .from('contests')
-      .delete()
-      .eq('id', id)
+    const { error } = await supabase.from('contests').delete().eq('id', id)
 
     if (error) throw error
   }
@@ -140,21 +136,26 @@ export class ContestAPI {
   /**
    * 공모전별 출품작 조회
    */
-  static async getContestSubmissions(contestId: string, params?: {
-    status?: SubmissionStatus
-    judgeId?: string
-    limit?: number
-    offset?: number
-  }) {
+  static async getContestSubmissions(
+    contestId: string,
+    params?: {
+      status?: SubmissionStatus
+      judgeId?: string
+      limit?: number
+      offset?: number
+    }
+  ) {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
     let query = supabase
       .from('contest_submissions')
-      .select(`
+      .select(
+        `
         *,
         contest:contests(*),
         judging_scores:judge_scores(*)
-      `)
+      `
+      )
       .eq('contest_id', contestId)
       .order('submitted_at', { ascending: false })
 
@@ -179,7 +180,9 @@ export class ContestAPI {
   /**
    * 출품작 제출
    */
-  static async submitArtwork(submission: Omit<ContestSubmission, 'id' | 'submittedAt' | 'updatedAt'>) {
+  static async submitArtwork(
+    submission: Omit<ContestSubmission, 'id' | 'submittedAt' | 'updatedAt'>
+  ) {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
@@ -187,7 +190,7 @@ export class ContestAPI {
       .insert({
         ...submission,
         submitted_at: new Date(),
-        status: 'submitted'
+        status: 'submitted',
       })
       .select()
       .single()
@@ -216,14 +219,17 @@ export class ContestAPI {
   /**
    * 결제 상태 업데이트
    */
-  static async updatePaymentStatus(submissionId: string, paymentInfo: ContestSubmission['payment']) {
+  static async updatePaymentStatus(
+    submissionId: string,
+    paymentInfo: ContestSubmission['payment']
+  ) {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contest_submissions')
-      .update({ 
+      .update({
         payment: paymentInfo,
-        updated_at: new Date() 
+        updated_at: new Date(),
       })
       .eq('id', submissionId)
       .select()
@@ -245,7 +251,8 @@ export class ContestAPI {
     if (!supabase) throw new Error('Supabase client not available')
     const { data, error } = await supabase
       .from('contest_submissions')
-      .select(`
+      .select(
+        `
         *,
         contest:contests(*),
         judging_scores:judge_scores!inner(
@@ -253,7 +260,8 @@ export class ContestAPI {
           comment,
           scored_at
         )
-      `)
+      `
+      )
       .eq('contest_id', contestId)
       .eq('judge_scores.judge_id', judgeId)
       .order('submitted_at', { ascending: false })
@@ -272,7 +280,7 @@ export class ContestAPI {
       .from('judge_scores')
       .insert({
         ...score,
-        scored_at: new Date()
+        scored_at: new Date(),
       })
       .select()
       .single()
@@ -289,7 +297,8 @@ export class ContestAPI {
     if (!supabase) throw new Error('Supabase client not available')
     const { data: scores, error: scoresError } = await supabase
       .from('judge_scores')
-      .select(`
+      .select(
+        `
         *,
         submission:contest_submissions!inner(
           id,
@@ -297,19 +306,23 @@ export class ContestAPI {
           title,
           artist_name
         )
-      `)
+      `
+      )
       .eq('submission.contest_id', contestId)
 
     if (scoresError) throw scoresError
 
     // 출품작별 점수 집계
-    const submissionScores = new Map<string, {
-      submissionId: string
-      scores: JudgeScore[]
-      averageScore: number
-      totalScore: number
-      judgeCount: number
-    }>()
+    const submissionScores = new Map<
+      string,
+      {
+        submissionId: string
+        scores: JudgeScore[]
+        averageScore: number
+        totalScore: number
+        judgeCount: number
+      }
+    >()
 
     scores?.forEach(score => {
       const submissionId = score.submission.id
@@ -319,7 +332,7 @@ export class ContestAPI {
           scores: [],
           averageScore: 0,
           totalScore: 0,
-          judgeCount: 0
+          judgeCount: 0,
         })
       }
 
@@ -352,31 +365,21 @@ export class ContestAPI {
   static async getContestStatistics(contestId: string) {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
-    
+
     // 기본 통계
-    const [
-      submissionsResult,
-      judgeScoresResult,
-      demographicsResult,
-      categoriesResult
-    ] = await Promise.all([
-      supabase
-        .from('contest_submissions')
-        .select('*')
-        .eq('contest_id', contestId),
-      supabase
-        .from('judge_scores')
-        .select('*, submission:contest_submissions!inner(contest_id)')
-        .eq('submission.contest_id', contestId),
-      supabase
-        .from('contest_submissions')
-        .select('artist_nationality, artist_age_group')
-        .eq('contest_id', contestId),
-      supabase
-        .from('contest_submissions')
-        .select('category')
-        .eq('contest_id', contestId)
-    ])
+    const [submissionsResult, judgeScoresResult, demographicsResult, categoriesResult] =
+      await Promise.all([
+        supabase.from('contest_submissions').select('*').eq('contest_id', contestId),
+        supabase
+          .from('judge_scores')
+          .select('*, submission:contest_submissions!inner(contest_id)')
+          .eq('submission.contest_id', contestId),
+        supabase
+          .from('contest_submissions')
+          .select('artist_nationality, artist_age_group')
+          .eq('contest_id', contestId),
+        supabase.from('contest_submissions').select('category').eq('contest_id', contestId),
+      ])
 
     const submissions = submissionsResult.data || []
     const judgeScores = judgeScoresResult.data || []
@@ -385,16 +388,20 @@ export class ContestAPI {
 
     return {
       totalSubmissions: submissions.length,
-      submissionsByStatus: submissions.reduce((acc, sub) => {
-        acc[sub.status] = (acc[sub.status] || 0) + 1
-        return acc
-      }, {} as Record<string, number>),
-      averageScore: judgeScores.length > 0 
-        ? judgeScores.reduce((sum, score) => sum + score.score, 0) / judgeScores.length 
-        : 0,
+      submissionsByStatus: submissions.reduce(
+        (acc, sub) => {
+          acc[sub.status] = (acc[sub.status] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>
+      ),
+      averageScore:
+        judgeScores.length > 0
+          ? judgeScores.reduce((sum, score) => sum + score.score, 0) / judgeScores.length
+          : 0,
       judgeParticipation: judgeScores.length,
       demographicBreakdown: this.aggregateNationalities(demographics),
-      categoryDistribution: this.aggregateCategories(categories)
+      categoryDistribution: this.aggregateCategories(categories),
     }
   }
 
@@ -412,14 +419,15 @@ export class ContestAPI {
 
     if (error) throw error
 
-    const totalRevenue = data?.reduce((total, submission) => {
-      return total + ((submission.payment as any)?.amount || 0)
-    }, 0) || 0
+    const totalRevenue =
+      data?.reduce((total, submission) => {
+        return total + ((submission.payment as any)?.amount || 0)
+      }, 0) || 0
 
     return {
       totalRevenue,
       paidSubmissions: data?.length || 0,
-      averageSubmissionFee: data?.length ? totalRevenue / data.length : 0
+      averageSubmissionFee: data?.length ? totalRevenue / data.length : 0,
     }
   }
 
@@ -428,18 +436,24 @@ export class ContestAPI {
   // ===============================
 
   private static aggregateCategories(data: any[]) {
-    return data.reduce((acc, item) => {
-      const category = item.category || 'Unknown'
-      acc[category] = (acc[category] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    return data.reduce(
+      (acc, item) => {
+        const category = item.category || 'Unknown'
+        acc[category] = (acc[category] || 0) + 1
+        return acc
+      },
+      {} as Record<string, number>
+    )
   }
 
   private static aggregateNationalities(data: any[]) {
-    return data.reduce((acc, item) => {
-      const nationality = item.artist_nationality || 'Unknown'
-      acc[nationality] = (acc[nationality] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    return data.reduce(
+      (acc, item) => {
+        const nationality = item.artist_nationality || 'Unknown'
+        acc[nationality] = (acc[nationality] || 0) + 1
+        return acc
+      },
+      {} as Record<string, number>
+    )
   }
-} 
+}

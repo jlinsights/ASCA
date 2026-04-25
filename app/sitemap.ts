@@ -24,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/email-refuse',
   ]
 
-  return routes.map((route) => ({
+  return routes.map(route => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: route === '' ? 'daily' : 'weekly',

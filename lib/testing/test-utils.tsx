@@ -4,20 +4,20 @@
  * Custom render functions and utilities for React component testing
  */
 
-import React, { ReactElement } from 'react';
-import { render, RenderOptions, RenderResult } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import React, { ReactElement } from 'react'
+import { render, RenderOptions, RenderResult } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 /**
  * Test providers wrapper
  */
 interface TestProvidersProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 function TestProviders({ children }: TestProvidersProps) {
   // Add any providers needed for testing (ThemeProvider, etc.)
-  return <>{children}</>;
+  return <>{children}</>
 }
 
 /**
@@ -30,22 +30,22 @@ export function renderWithProviders(
   return render(ui, {
     wrapper: TestProviders,
     ...options,
-  });
+  })
 }
 
 /**
  * Create user event instance
  */
 export function setupUser() {
-  return userEvent.setup();
+  return userEvent.setup()
 }
 
 /**
  * Wait for loading to complete
  */
 export async function waitForLoadingToFinish() {
-  const { waitForElementToBeRemoved } = await import('@testing-library/react');
-  await waitForElementToBeRemoved(() => document.querySelector('[data-testid="loading"]'));
+  const { waitForElementToBeRemoved } = await import('@testing-library/react')
+  await waitForElementToBeRemoved(() => document.querySelector('[data-testid="loading"]'))
 }
 
 /**
@@ -57,10 +57,10 @@ export function mockIntersectionObserver() {
     disconnect() {}
     observe() {}
     takeRecords() {
-      return [];
+      return []
     }
     unobserve() {}
-  } as any;
+  } as any
 }
 
 /**
@@ -72,7 +72,7 @@ export function mockResizeObserver() {
     disconnect() {}
     observe() {}
     unobserve() {}
-  } as any;
+  } as any
 }
 
 /**
@@ -81,7 +81,7 @@ export function mockResizeObserver() {
 export function mockMatchMedia() {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: jest.fn().mockImplementation(query => ({
       matches: false,
       media: query,
       onchange: null,
@@ -91,7 +91,7 @@ export function mockMatchMedia() {
       removeEventListener: jest.fn(),
       dispatchEvent: jest.fn(),
     })),
-  });
+  })
 }
 
 /**
@@ -121,11 +121,11 @@ export function createMockRouter(overrides = {}) {
     isReady: true,
     isPreview: false,
     ...overrides,
-  };
+  }
 }
 
 /**
  * Re-export testing library utilities
  */
-export * from '@testing-library/react';
-export { userEvent };
+export * from '@testing-library/react'
+export { userEvent }

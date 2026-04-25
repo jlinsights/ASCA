@@ -17,18 +17,18 @@ export default function GalleryClient({ data }: GalleryClientProps) {
         event_category: 'Gallery',
         event_label: event.payload.category || event.payload.itemId,
         custom_map: {
-          gallery_event: event.type
-        }
+          gallery_event: event.type,
+        },
       })
     }
   }, [])
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+    <div className='bg-white rounded-xl shadow-sm p-6'>
       <GalleryGrid
         items={data.items}
         categories={data.categories}
-        className="gallery-main"
+        className='gallery-main'
         onEvent={handleGalleryEvent}
       />
     </div>

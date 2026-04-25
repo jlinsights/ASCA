@@ -7,7 +7,7 @@
     "category": "committee"
   },
   {
-    "id": "committee2", 
+    "id": "committee2",
     "title": "위원회 회의 2",
     "description": "2025년 4월 19일 위원회 회의",
     "src": "/images/gallery/committee_2025-04-19/thumbnails/committee2.jpg",
@@ -22,7 +22,7 @@
   },
   {
     "id": "contest2",
-    "title": "서예 대회 2", 
+    "title": "서예 대회 2",
     "description": "2025년 4월 26일 서예 대회",
     "src": "/images/gallery/contest_2025-04-26/thumbnails/contest2.jpg",
     "category": "contest"

@@ -39,9 +39,7 @@ export function ApplicationManagement({
           <div className='text-center py-12'>
             <AlertCircle className='h-12 w-12 text-muted-foreground mx-auto mb-4' />
             <h3 className='text-lg font-semibold mb-2'>승인 대기 중인 신청이 없습니다</h3>
-            <p className='text-muted-foreground'>
-              새로운 가입 신청이 있으면 여기에 표시됩니다.
-            </p>
+            <p className='text-muted-foreground'>새로운 가입 신청이 있으면 여기에 표시됩니다.</p>
           </div>
         ) : (
           <div className='space-y-4'>

@@ -13,7 +13,15 @@
     {
       "files": ["app/admin/**/*.tsx", "app/admin/**/*.ts"],
       "rules": {
-        "no-restricted-imports": ["error", { "patterns": ["**/app/profile/membership/_components/*", "**/components/gallery/dashboard/*"] }]
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              "**/app/profile/membership/_components/*",
+              "**/components/gallery/dashboard/*"
+            ]
+          }
+        ]
       }
     },
     {

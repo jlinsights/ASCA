@@ -1,4 +1,19 @@
-export const footerLinks = {
+export type FooterLink = {
+  title: string
+  href: string
+  external?: boolean
+}
+
+type FooterLinkSection =
+  | 'exhibitions'
+  | 'artworks'
+  | 'artists'
+  | 'about'
+  | 'news'
+  | 'legal'
+  | 'sponsors'
+
+export const footerLinks: Record<FooterLinkSection, FooterLink[]> = {
   exhibitions: [
     { title: '현재 전시', href: '/exhibitions/current' },
     { title: '예정 전시', href: '/exhibitions/upcoming' },
@@ -24,12 +39,36 @@ export const footerLinks = {
   ],
   about: [
     { title: '개요', href: '/about' },
-    { title: '정관', href: 'https://docs.google.com/document/d/1on5DqNNLBXvr_wvvapz5zhWFPR1dPlHKaZ6y3bgIWuE/edit?usp=sharing', external: true },
-    { title: '회칙', href: 'https://docs.google.com/document/d/1LqwokChxq-7qgus7B3ntAKl2skP-Ch31co7kyDs4RDE/edit?usp=sharing', external: true },
-    { title: '운영 및 심사 규정', href: 'https://docs.google.com/document/d/1x65nBE0Auk-_8UMF0sWpBpbyyI3aKmYKwGGo_Htvenw/edit?usp=sharing', external: true },
-    { title: '추천ㆍ초대작가 선임 규정', href: 'https://docs.google.com/document/d/1dOtCRVEsBZ0dW87lynU-ZulnvaxThhD6vU-28i9tBPY/edit?usp=sharing', external: true },
-    { title: '작품 감정 및 보증서 발행 규정', href: 'https://docs.google.com/document/d/1zyRHlG-PqJ2QqAHVqzUNHX5I0ztp4uzIP_YCkAuUrOk/edit?usp=sharing', external: true },
-    { title: '전시 관리 및 운영 규정', href: 'https://docs.google.com/document/d/1PCt1HOOuilplQg47c5GrK6nHbWozkzrJWJhLUVnOtOQ/edit?usp=sharing', external: true },
+    {
+      title: '정관',
+      href: 'https://docs.google.com/document/d/1on5DqNNLBXvr_wvvapz5zhWFPR1dPlHKaZ6y3bgIWuE/edit?usp=sharing',
+      external: true,
+    },
+    {
+      title: '회칙',
+      href: 'https://docs.google.com/document/d/1LqwokChxq-7qgus7B3ntAKl2skP-Ch31co7kyDs4RDE/edit?usp=sharing',
+      external: true,
+    },
+    {
+      title: '운영 및 심사 규정',
+      href: 'https://docs.google.com/document/d/1x65nBE0Auk-_8UMF0sWpBpbyyI3aKmYKwGGo_Htvenw/edit?usp=sharing',
+      external: true,
+    },
+    {
+      title: '추천ㆍ초대작가 선임 규정',
+      href: 'https://docs.google.com/document/d/1dOtCRVEsBZ0dW87lynU-ZulnvaxThhD6vU-28i9tBPY/edit?usp=sharing',
+      external: true,
+    },
+    {
+      title: '작품 감정 및 보증서 발행 규정',
+      href: 'https://docs.google.com/document/d/1zyRHlG-PqJ2QqAHVqzUNHX5I0ztp4uzIP_YCkAuUrOk/edit?usp=sharing',
+      external: true,
+    },
+    {
+      title: '전시 관리 및 운영 규정',
+      href: 'https://docs.google.com/document/d/1PCt1HOOuilplQg47c5GrK6nHbWozkzrJWJhLUVnOtOQ/edit?usp=sharing',
+      external: true,
+    },
     { title: '연혁', href: '/about/history' },
     { title: '조직도', href: '/organization' },
     { title: '브랜드', href: '/brand' },
@@ -52,5 +91,5 @@ export const footerLinks = {
     { title: '대한검정회', href: 'https://www.hanja.ne.kr/index_original.asp', external: true },
     { title: '서울특별시', href: 'https://www.seoul.go.kr/main/index.jsp', external: true },
     { title: '문화체육관광부', href: 'https://www.mcst.go.kr/kor/main.jsp', external: true },
-  ]
+  ],
 }

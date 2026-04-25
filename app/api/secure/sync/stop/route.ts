@@ -32,23 +32,25 @@ async function secureSyncStopHandler({ user, request }: SecureAPIContext) {
         stoppedBy: user?.email,
         timestamp: new Date().toISOString(),
         reason: reason,
-        status: 'stopped'
-      }
+        status: 'stopped',
+      },
     })
-
   } catch (error) {
     // 에러 감사 로깅
     auditLogger.logSuspiciousActivity(request, 'Sync engine stop failed', {
       userId: user?.id,
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
 
-    return NextResponse.json({
-      success: false,
-      message: 'Failed to stop sync engine',
-      error: error instanceof Error ? error.message : 'Unknown error',
-      code: 'SYNC_STOP_FAILED'
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Failed to stop sync engine',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        code: 'SYNC_STOP_FAILED',
+      },
+      { status: 500 }
+    )
   }
 }
 
@@ -59,9 +61,9 @@ async function syncStopInfoHandler({ user, request }: SecureAPIContext) {
       method: 'POST',
       body: { reason: 'Optional reason for stopping' },
       authentication: 'Required (Admin role)',
-      permissions: ['admin']
+      permissions: ['admin'],
     },
-    warning: 'Stopping sync engine will halt data synchronization between Airtable and Supabase'
+    warning: 'Stopping sync engine will halt data synchronization between Airtable and Supabase',
   })
 }
 

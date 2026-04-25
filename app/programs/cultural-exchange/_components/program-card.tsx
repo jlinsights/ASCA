@@ -3,14 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import {
-  Calendar,
-  Clock,
-  MapPin,
-  Users,
-  Star,
-  ArrowRight,
-} from 'lucide-react'
+import { Calendar, Clock, MapPin, Users, Star, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { CulturalExchangeProgramInfo } from '@/lib/types/membership'
 import { programTypeConfig, statusConfig } from './program-data'
@@ -73,9 +66,7 @@ export function ProgramCard({ program, onSelect }: ProgramCardProps) {
         <div className='space-y-4'>
           <div>
             <h3 className='text-xl font-bold mb-2'>{program.title}</h3>
-            <p className='text-sm text-muted-foreground line-clamp-2'>
-              {program.description}
-            </p>
+            <p className='text-sm text-muted-foreground line-clamp-2'>{program.description}</p>
           </div>
 
           <div className='grid grid-cols-2 gap-4 text-sm'>
@@ -104,7 +95,13 @@ export function ProgramCard({ program, onSelect }: ProgramCardProps) {
             <div className='flex gap-2'>
               {program.countries.map(country => (
                 <Badge key={country} variant='outline' className='text-xs'>
-                  {country === 'KR' ? '🇰🇷 한국' : country === 'CN' ? '🇨🇳 중국' : country === 'JP' ? '🇯🇵 일본' : country}
+                  {country === 'KR'
+                    ? '🇰🇷 한국'
+                    : country === 'CN'
+                      ? '🇨🇳 중국'
+                      : country === 'JP'
+                        ? '🇯🇵 일본'
+                        : country}
                 </Badge>
               ))}
             </div>
@@ -120,9 +117,7 @@ export function ProgramCard({ program, onSelect }: ProgramCardProps) {
 
           <div className='flex items-center justify-between'>
             <div>
-              <div className='text-2xl font-bold'>
-                ₩{program.fee.toLocaleString()}
-              </div>
+              <div className='text-2xl font-bold'>₩{program.fee.toLocaleString()}</div>
               <div className='text-xs text-muted-foreground'>
                 {program.accommodationProvided && '숙박 포함'}
                 {program.mealsProvided && ' • 식사 포함'}

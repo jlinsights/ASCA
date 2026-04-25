@@ -34,7 +34,12 @@ class Logger {
     return level >= this.level
   }
 
-  private createEntry(level: LogLevel, message: string, context?: Record<string, any>, error?: Error): LogEntry {
+  private createEntry(
+    level: LogLevel,
+    message: string,
+    context?: Record<string, any>,
+    error?: Error
+  ): LogEntry {
     return {
       level,
       message,
@@ -46,7 +51,7 @@ class Logger {
 
   debug(message: string, context?: Record<string, any>) {
     if (!this.shouldLog(LogLevel.DEBUG)) return
-    
+
     const entry = this.createEntry(LogLevel.DEBUG, message, context)
     if (this.isDevelopment) {
       console.debug(this.formatMessage(entry), context || '')
@@ -56,7 +61,7 @@ class Logger {
 
   info(message: string, context?: Record<string, any>) {
     if (!this.shouldLog(LogLevel.INFO)) return
-    
+
     const entry = this.createEntry(LogLevel.INFO, message, context)
     if (this.isDevelopment) {
       console.info(this.formatMessage(entry), context || '')
@@ -66,7 +71,7 @@ class Logger {
 
   warn(message: string, context?: Record<string, any>) {
     if (!this.shouldLog(LogLevel.WARN)) return
-    
+
     const entry = this.createEntry(LogLevel.WARN, message, context)
     console.warn(this.formatMessage(entry), context || '')
     this.writeToFile(entry)
@@ -74,11 +79,11 @@ class Logger {
 
   error(message: string, error?: Error, context?: Record<string, any>) {
     if (!this.shouldLog(LogLevel.ERROR)) return
-    
+
     const entry = this.createEntry(LogLevel.ERROR, message, context, error)
     console.error(this.formatMessage(entry), error?.stack || error, context || '')
     this.writeToFile(entry)
-    
+
     // 프로덕션에서는 외부 로깅 서비스로 전송
     if (!this.isDevelopment) {
       this.sendToLoggingService(entry)
@@ -166,4 +171,4 @@ export const log = {
       console.log('[DEBUG]', ...args)
     }
   },
-} 
+}

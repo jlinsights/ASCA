@@ -43,31 +43,30 @@ export const dynamic = 'force-dynamic'
 
 export const metadata = constructMetadata()
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang='ko' suppressHydrationWarning>
       <head>
         <KakaoScript />
         {/* Global JSON-LD for AEO */}
         <JsonLd />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans bg-background transition-colors duration-300`} suppressHydrationWarning={true}>
+      <body
+        className={`${inter.variable} ${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans bg-background transition-colors duration-300`}
+        suppressHydrationWarning={true}
+      >
         <ClientProviders>
           <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-celadon-green focus:text-white focus:rounded-md focus:text-sm focus:font-medium"
+            href='#main-content'
+            className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-celadon-green focus:text-white focus:rounded-md focus:text-sm focus:font-medium'
           >
             본문으로 건너뛰기
           </a>
           <VideoBackground />
-          <div className="min-h-screen flex flex-col relative">
+          <div className='min-h-screen flex flex-col relative'>
             <Header transparentOnTop={true} />
 
-            <main id="main-content" className="flex-1 relative z-10 scroll-mt-20">
+            <main id='main-content' className='flex-1 relative z-10 scroll-mt-20'>
               {children}
             </main>
           </div>

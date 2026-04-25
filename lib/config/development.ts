@@ -75,12 +75,12 @@ export const devConfig = {
 // 개발 환경 검증
 export const validateDevConfig = () => {
   const errors: string[] = []
-  
+
   // 필수 환경 변수 검증
   if (!devConfig.services.supabase.url) {
     errors.push('NEXT_PUBLIC_SUPABASE_URL이 설정되지 않았습니다.')
   }
-  
+
   if (!devConfig.services.supabase.anonKey) {
     errors.push('NEXT_PUBLIC_SUPABASE_ANON_KEY가 설정되지 않았습니다.')
   }
@@ -89,7 +89,7 @@ export const validateDevConfig = () => {
     logger.error('개발 환경 설정 오류', new Error('Environment configuration errors'), { errors })
     return false
   }
-  
+
   logger.info('개발 환경 설정이 완료되었습니다.')
   return true
 }
@@ -97,7 +97,7 @@ export const validateDevConfig = () => {
 // 개발 환경 정보 출력
 export const logDevInfo = () => {
   if (process.env.NODE_ENV !== 'development') return
-  
+
   const devInfo = {
     message: '개발 서버 시작',
     address: `http://${devConfig.server.host}:${devConfig.server.port}`,
@@ -109,12 +109,12 @@ export const logDevInfo = () => {
     links: {
       admin: `http://${devConfig.server.host}:${devConfig.server.port}/admin`,
       api: `http://${devConfig.server.host}:${devConfig.server.port}/api`,
-      database: 'http://localhost:4983'
-    }
+      database: 'http://localhost:4983',
+    },
   }
-  
+
   logger.info('개발 서버 정보', devInfo)
-  
+
   if (devConfig.development.adminMode) {
     logger.warn('개발 모드에서 관리자 권한 체크가 우회됩니다.')
   }
@@ -123,14 +123,14 @@ export const logDevInfo = () => {
 // 개발 환경 초기화
 export const initializeDevEnvironment = () => {
   if (process.env.NODE_ENV !== 'development') return
-  
+
   // 환경 변수 검증
   validateDevConfig()
-  
+
   // 개발 환경 정보 출력
   logDevInfo()
-  
+
   // 성능 모니터링 제거됨
 }
 
-export default devConfig 
+export default devConfig

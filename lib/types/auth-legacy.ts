@@ -89,63 +89,63 @@ export const PERMISSIONS = {
       READ: 'read',
       UPDATE: 'update',
       DELETE: 'delete',
-      PUBLISH: 'publish'
+      PUBLISH: 'publish',
     },
     EXHIBITIONS: {
       CREATE: 'create',
       READ: 'read',
       UPDATE: 'update',
       DELETE: 'delete',
-      PUBLISH: 'publish'
+      PUBLISH: 'publish',
     },
     EVENTS: {
       CREATE: 'create',
       READ: 'read',
       UPDATE: 'update',
       DELETE: 'delete',
-      PUBLISH: 'publish'
+      PUBLISH: 'publish',
     },
     COMMENTS: {
       READ: 'read',
       APPROVE: 'approve',
-      DELETE: 'delete'
-    }
+      DELETE: 'delete',
+    },
   },
   ARTISTS: {
     ARTISTS: {
       CREATE: 'create',
       READ: 'read',
       UPDATE: 'update',
-      DELETE: 'delete'
+      DELETE: 'delete',
     },
     ARTWORKS: {
       CREATE: 'create',
       READ: 'read',
       UPDATE: 'update',
-      DELETE: 'delete'
-    }
+      DELETE: 'delete',
+    },
   },
   ADMIN: {
     USERS: {
       CREATE: 'create',
       READ: 'read',
       UPDATE: 'update',
-      DELETE: 'delete'
+      DELETE: 'delete',
     },
     ROLES: {
       CREATE: 'create',
       READ: 'read',
       UPDATE: 'update',
-      DELETE: 'delete'
+      DELETE: 'delete',
     },
     LOGS: {
-      READ: 'read'
+      READ: 'read',
     },
     BACKUP: {
       CREATE: 'create',
-      RESTORE: 'restore'
-    }
-  }
+      RESTORE: 'restore',
+    },
+  },
 } as const
 
 // 기본 역할 상수
@@ -153,5 +153,5 @@ export const DEFAULT_ROLES = {
   SUPER_ADMIN: 'super_admin',
   CONTENT_MANAGER: 'content_manager',
   EDITOR: 'editor',
-  VIEWER: 'viewer'
+  VIEWER: 'viewer',
 } as const

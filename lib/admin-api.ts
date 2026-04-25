@@ -1,4 +1,13 @@
-import { safeSupabaseAdminCall, ensureSupabaseAdmin, type ArtistRow, type ArtistInsert, type ArtistUpdate, type ArtworkRow, type ArtworkInsert, type ArtworkUpdate } from './supabase'
+import {
+  safeSupabaseAdminCall,
+  ensureSupabaseAdmin,
+  type ArtistRow,
+  type ArtistInsert,
+  type ArtistUpdate,
+  type ArtworkRow,
+  type ArtworkInsert,
+  type ArtworkUpdate,
+} from './supabase'
 
 type Artist = ArtistRow
 // ArtistInsert is already imported
@@ -12,7 +21,7 @@ type Artwork = ArtworkRow
 
 // 모든 작가 조회
 export async function getAllArtists() {
-  return await safeSupabaseAdminCall(async (supabase) => {
+  return await safeSupabaseAdminCall(async supabase => {
     const { data, error } = await supabase
       .from('artists')
       .select('*')
@@ -28,12 +37,8 @@ export async function getAllArtists() {
 
 // 작가 단일 조회
 export async function getArtistById(id: string) {
-  return await safeSupabaseAdminCall(async (supabase) => {
-    const { data, error } = await supabase
-      .from('artists')
-      .select('*')
-      .eq('id', id)
-      .single()
+  return await safeSupabaseAdminCall(async supabase => {
+    const { data, error } = await supabase.from('artists').select('*').eq('id', id).single()
 
     if (error) {
       throw error
@@ -48,16 +53,17 @@ export async function createArtist(artistData: ArtistInsert) {
   const supabase = ensureSupabaseAdmin()
   const { data, error } = await supabase
     .from('artists')
-    .insert([{
-      ...artistData,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }])
+    .insert([
+      {
+        ...artistData,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+    ])
     .select()
     .single()
 
   if (error) {
-    
     throw error
   }
 
@@ -71,14 +77,13 @@ export async function updateArtist(id: string, artistData: ArtistUpdate) {
     .from('artists')
     .update({
       ...artistData,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     })
     .eq('id', id)
     .select()
     .single()
 
   if (error) {
-    
     throw error
   }
 
@@ -88,13 +93,9 @@ export async function updateArtist(id: string, artistData: ArtistUpdate) {
 // 작가 삭제
 export async function deleteArtist(id: string) {
   const supabase = ensureSupabaseAdmin()
-  const { error } = await supabase
-    .from('artists')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('artists').delete().eq('id', id)
 
   if (error) {
-    
     throw error
   }
 
@@ -111,7 +112,6 @@ export async function searchArtists(query: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
-    
     throw error
   }
 
@@ -125,18 +125,19 @@ export async function getAllArtworks() {
   const supabase = ensureSupabaseAdmin()
   const { data, error } = await supabase
     .from('artworks')
-    .select(`
+    .select(
+      `
       *,
       artists (
         id,
         name,
         profile_image
       )
-    `)
+    `
+    )
     .order('created_at', { ascending: false })
 
   if (error) {
-    
     throw error
   }
 
@@ -148,19 +149,20 @@ export async function getArtworkById(id: string) {
   const supabase = ensureSupabaseAdmin()
   const { data, error } = await supabase
     .from('artworks')
-    .select(`
+    .select(
+      `
       *,
       artists (
         id,
         name,
         profile_image
       )
-    `)
+    `
+    )
     .eq('id', id)
     .single()
 
   if (error) {
-    
     throw error
   }
 
@@ -172,18 +174,19 @@ export async function createArtwork(artworkData: ArtworkInsert) {
   const supabase = ensureSupabaseAdmin()
   const { data, error } = await supabase
     .from('artworks')
-    .insert([{
-      ...artworkData,
-      views: 0,
-      likes: 0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }])
+    .insert([
+      {
+        ...artworkData,
+        views: 0,
+        likes: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+    ])
     .select()
     .single()
 
   if (error) {
-    
     throw error
   }
 
@@ -197,14 +200,13 @@ export async function updateArtwork(id: string, artworkData: ArtworkUpdate) {
     .from('artworks')
     .update({
       ...artworkData,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     })
     .eq('id', id)
     .select()
     .single()
 
   if (error) {
-    
     throw error
   }
 
@@ -214,13 +216,9 @@ export async function updateArtwork(id: string, artworkData: ArtworkUpdate) {
 // 작품 삭제
 export async function deleteArtwork(id: string) {
   const supabase = ensureSupabaseAdmin()
-  const { error } = await supabase
-    .from('artworks')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('artworks').delete().eq('id', id)
 
   if (error) {
-    
     throw error
   }
 
@@ -232,19 +230,20 @@ export async function searchArtworks(query: string) {
   const supabase = ensureSupabaseAdmin()
   const { data, error } = await supabase
     .from('artworks')
-    .select(`
+    .select(
+      `
       *,
       artists (
         id,
         name,
         profile_image
       )
-    `)
+    `
+    )
     .or(`title.ilike.%${query}%,description.ilike.%${query}%,technique.ilike.%${query}%`)
     .order('created_at', { ascending: false })
 
   if (error) {
-    
     throw error
   }
 
@@ -261,7 +260,6 @@ export async function getArtworksByArtist(artistId: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
-    
     throw error
   }
 
@@ -304,10 +302,9 @@ export async function getDashboardStats() {
       totalArtists: artistCount || 0,
       totalArtworks: artworkCount || 0,
       availableArtworks: availableCount || 0,
-      monthlyArtworks: monthlyCount || 0
+      monthlyArtworks: monthlyCount || 0,
     }
   } catch (error) {
-    
     throw error
   }
 }
@@ -322,7 +319,6 @@ export async function getRecentArtists(limit: number = 5) {
     .limit(limit)
 
   if (error) {
-    
     throw error
   }
 
@@ -334,19 +330,20 @@ export async function getRecentArtworks(limit: number = 5) {
   const supabase = ensureSupabaseAdmin()
   const { data, error } = await supabase
     .from('artworks')
-    .select(`
+    .select(
+      `
       *,
       artists (
         id,
         name,
         profile_image
       )
-    `)
+    `
+    )
     .order('created_at', { ascending: false })
     .limit(limit)
 
   if (error) {
-    
     throw error
   }
 
@@ -362,35 +359,27 @@ export async function uploadImage(file: File, bucket: 'artists' | 'artworks' = '
   const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`
   const filePath = `${bucket}/${fileName}`
 
-  const { data, error } = await supabase.storage
-    .from('images')
-    .upload(filePath, file)
+  const { data, error } = await supabase.storage.from('images').upload(filePath, file)
 
   if (error) {
-    
     throw error
   }
 
   // 공개 URL 가져오기
-  const { data: urlData } = supabase.storage
-    .from('images')
-    .getPublicUrl(filePath)
+  const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath)
 
   return {
     filePath,
-    url: urlData.publicUrl
+    url: urlData.publicUrl,
   }
 }
 
 // 이미지 삭제
 export async function deleteImage(filePath: string) {
   const supabase = ensureSupabaseAdmin()
-  const { error } = await supabase.storage
-    .from('images')
-    .remove([filePath])
+  const { error } = await supabase.storage.from('images').remove([filePath])
 
   if (error) {
-    
     throw error
   }
 
@@ -398,4 +387,4 @@ export async function deleteImage(filePath: string) {
 }
 
 // 타입 내보내기
-export type { Artist, ArtistInsert, ArtistUpdate, Artwork, ArtworkInsert, ArtworkUpdate } 
+export type { Artist, ArtistInsert, ArtistUpdate, Artwork, ArtworkInsert, ArtworkUpdate }

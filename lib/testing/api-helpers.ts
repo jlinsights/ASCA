@@ -4,17 +4,17 @@
  * Utilities for testing API routes and endpoints
  */
 
-import { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server'
 
 /**
  * Create mock NextRequest for testing
  */
 export function createMockRequest(options: {
-  method?: string;
-  url?: string;
-  headers?: Record<string, string>;
-  body?: any;
-  searchParams?: Record<string, string>;
+  method?: string
+  url?: string
+  headers?: Record<string, string>
+  body?: any
+  searchParams?: Record<string, string>
 }): NextRequest {
   const {
     method = 'GET',
@@ -22,13 +22,13 @@ export function createMockRequest(options: {
     headers = {},
     body,
     searchParams = {},
-  } = options;
+  } = options
 
   // Build URL with search params
-  const urlObj = new URL(url);
+  const urlObj = new URL(url)
   Object.entries(searchParams).forEach(([key, value]) => {
-    urlObj.searchParams.set(key, value);
-  });
+    urlObj.searchParams.set(key, value)
+  })
 
   // Create request init
   const init: RequestInit = {
@@ -37,35 +37,35 @@ export function createMockRequest(options: {
       'Content-Type': 'application/json',
       ...headers,
     },
-  };
+  }
 
   // Add body if present
   if (body) {
-    init.body = JSON.stringify(body);
+    init.body = JSON.stringify(body)
   }
 
-  return new NextRequest(urlObj.toString(), init as any);
+  return new NextRequest(urlObj.toString(), init as any)
 }
 
 /**
  * Create authenticated mock request
  */
 export function createAuthenticatedRequest(options: {
-  userId?: string;
-  email?: string;
-  role?: string;
-  method?: string;
-  url?: string;
-  headers?: Record<string, string>;
-  body?: any;
-  searchParams?: Record<string, string>;
+  userId?: string
+  email?: string
+  role?: string
+  method?: string
+  url?: string
+  headers?: Record<string, string>
+  body?: any
+  searchParams?: Record<string, string>
 }): NextRequest {
   const {
     userId = 'test-user-id',
     email = 'test@example.com',
     role = 'user',
     ...requestOptions
-  } = options;
+  } = options
 
   // Create mock JWT token (for testing only)
   const mockToken = Buffer.from(
@@ -74,7 +74,7 @@ export function createAuthenticatedRequest(options: {
       email,
       role,
     })
-  ).toString('base64');
+  ).toString('base64')
 
   return createMockRequest({
     ...requestOptions,
@@ -82,18 +82,18 @@ export function createAuthenticatedRequest(options: {
       ...requestOptions.headers,
       Authorization: `Bearer ${mockToken}`,
     },
-  });
+  })
 }
 
 /**
  * Parse response JSON
  */
 export async function parseResponse<T = any>(response: Response): Promise<T> {
-  const text = await response.text();
+  const text = await response.text()
   try {
-    return JSON.parse(text);
+    return JSON.parse(text)
   } catch (error) {
-    throw new Error(`Failed to parse response: ${text}`);
+    throw new Error(`Failed to parse response: ${text}`)
   }
 }
 
@@ -106,27 +106,22 @@ export function assertResponseStatus(
   message?: string
 ): void {
   if (response.status !== expectedStatus) {
-    throw new Error(
-      message ||
-        `Expected status ${expectedStatus}, got ${response.status}`
-    );
+    throw new Error(message || `Expected status ${expectedStatus}, got ${response.status}`)
   }
 }
 
 /**
  * Assert success response
  */
-export async function assertSuccessResponse<T = any>(
-  response: Response
-): Promise<T> {
-  assertResponseStatus(response, 200, 'Expected successful response');
-  const data = await parseResponse<{ success: boolean; data: T }>(response);
+export async function assertSuccessResponse<T = any>(response: Response): Promise<T> {
+  assertResponseStatus(response, 200, 'Expected successful response')
+  const data = await parseResponse<{ success: boolean; data: T }>(response)
 
   if (!data.success) {
-    throw new Error('Response marked as unsuccessful');
+    throw new Error('Response marked as unsuccessful')
   }
 
-  return data.data;
+  return data.data
 }
 
 /**
@@ -137,18 +132,16 @@ export async function assertErrorResponse(
   expectedStatus: number,
   expectedMessage?: string
 ): Promise<void> {
-  assertResponseStatus(response, expectedStatus);
+  assertResponseStatus(response, expectedStatus)
 
-  const data = await parseResponse<{ success: boolean; error: string }>(response);
+  const data = await parseResponse<{ success: boolean; error: string }>(response)
 
   if (data.success) {
-    throw new Error('Response marked as successful');
+    throw new Error('Response marked as successful')
   }
 
   if (expectedMessage && !data.error.includes(expectedMessage)) {
-    throw new Error(
-      `Expected error message to include "${expectedMessage}", got "${data.error}"`
-    );
+    throw new Error(`Expected error message to include "${expectedMessage}", got "${data.error}"`)
   }
 }
 
@@ -156,46 +149,44 @@ export async function assertErrorResponse(
  * Mock API route context
  */
 export interface MockRouteContext {
-  params: Record<string, string>;
+  params: Record<string, string>
 }
 
 /**
  * Create mock route context
  */
-export function createMockRouteContext(
-  params: Record<string, string> = {}
-): MockRouteContext {
-  return { params };
+export function createMockRouteContext(params: Record<string, string> = {}): MockRouteContext {
+  return { params }
 }
 
 /**
  * Test API endpoint helper
  */
 export async function testApiEndpoint(options: {
-  handler: (req: NextRequest, context?: any) => Promise<Response>;
-  method?: string;
-  url?: string;
-  headers?: Record<string, string>;
-  body?: any;
-  searchParams?: Record<string, string>;
-  context?: MockRouteContext;
-  authenticated?: boolean;
-  userId?: string;
-  email?: string;
-  role?: string;
+  handler: (req: NextRequest, context?: any) => Promise<Response>
+  method?: string
+  url?: string
+  headers?: Record<string, string>
+  body?: any
+  searchParams?: Record<string, string>
+  context?: MockRouteContext
+  authenticated?: boolean
+  userId?: string
+  email?: string
+  role?: string
 }): Promise<Response> {
   const {
     handler,
     authenticated = false,
     context = createMockRouteContext(),
     ...requestOptions
-  } = options;
+  } = options
 
   const request = authenticated
     ? createAuthenticatedRequest(requestOptions)
-    : createMockRequest(requestOptions);
+    : createMockRequest(requestOptions)
 
-  return handler(request, context);
+  return handler(request, context)
 }
 
 /**
@@ -203,11 +194,11 @@ export async function testApiEndpoint(options: {
  */
 export function mockFetch(responses: Map<string, any>): void {
   global.fetch = jest.fn((url: string | URL) => {
-    const urlString = url.toString();
-    const response = responses.get(urlString);
+    const urlString = url.toString()
+    const response = responses.get(urlString)
 
     if (!response) {
-      return Promise.reject(new Error(`No mock response for ${urlString}`));
+      return Promise.reject(new Error(`No mock response for ${urlString}`))
     }
 
     return Promise.resolve({
@@ -215,8 +206,8 @@ export function mockFetch(responses: Map<string, any>): void {
       status: response.status ?? 200,
       json: async () => response.data,
       text: async () => JSON.stringify(response.data),
-    } as Response);
-  }) as jest.Mock;
+    } as Response)
+  }) as jest.Mock
 }
 
 /**
@@ -224,7 +215,7 @@ export function mockFetch(responses: Map<string, any>): void {
  */
 export function resetFetchMock(): void {
   if (jest.isMockFunction(global.fetch)) {
-    (global.fetch as jest.Mock).mockRestore();
+    ;(global.fetch as jest.Mock).mockRestore()
   }
 }
 
@@ -234,19 +225,19 @@ export function resetFetchMock(): void {
 export async function waitFor(
   callback: () => boolean | Promise<boolean>,
   options: {
-    timeout?: number;
-    interval?: number;
+    timeout?: number
+    interval?: number
   } = {}
 ): Promise<void> {
-  const { timeout = 5000, interval = 50 } = options;
-  const startTime = Date.now();
+  const { timeout = 5000, interval = 50 } = options
+  const startTime = Date.now()
 
   while (Date.now() - startTime < timeout) {
     if (await callback()) {
-      return;
+      return
     }
-    await new Promise((resolve) => setTimeout(resolve, interval));
+    await new Promise(resolve => setTimeout(resolve, interval))
   }
 
-  throw new Error(`Timeout waiting for condition`);
+  throw new Error(`Timeout waiting for condition`)
 }

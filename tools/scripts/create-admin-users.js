@@ -14,8 +14,8 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 })
 
 const adminUsers = [
@@ -23,20 +23,20 @@ const adminUsers = [
     email: 'admin@asca.kr',
     password: 'admin123!@#',
     name: '시스템 관리자',
-    role: 'super_admin'
+    role: 'super_admin',
   },
   {
     email: 'content@asca.kr',
     password: 'content123!@#',
     name: '콘텐츠 관리자',
-    role: 'content_manager'
+    role: 'content_manager',
   },
   {
     email: 'editor@asca.kr',
     password: 'editor123!@#',
     name: '편집자',
-    role: 'editor'
-  }
+    role: 'editor',
+  },
 ]
 
 async function createAdminUsers() {
@@ -45,12 +45,12 @@ async function createAdminUsers() {
   for (const user of adminUsers) {
     try {
       console.log(`\n${user.email} 계정 생성 중...`)
-      
+
       // 1. Auth 사용자 생성
       const { data: authData, error: authError } = await supabase.auth.admin.createUser({
         email: user.email,
         password: user.password,
-        email_confirm: true
+        email_confirm: true,
       })
 
       if (authError) {
@@ -73,15 +73,13 @@ async function createAdminUsers() {
       }
 
       // 3. admin_users 테이블에 추가
-      const { error: adminError } = await supabase
-        .from('admin_users')
-        .upsert({
-          user_id: authData.user.id,
-          role_id: roleData.id,
-          name: user.name,
-          email: user.email,
-          is_active: true
-        })
+      const { error: adminError } = await supabase.from('admin_users').upsert({
+        user_id: authData.user.id,
+        role_id: roleData.id,
+        name: user.name,
+        email: user.email,
+        is_active: true,
+      })
 
       if (adminError) {
         console.error(`❌ 관리자 정보 저장 실패 (${user.email}):`, adminError.message)
@@ -89,7 +87,6 @@ async function createAdminUsers() {
       }
 
       console.log(`✅ ${user.email} 관리자 정보 저장 완료`)
-
     } catch (error) {
       console.error(`❌ ${user.email} 처리 중 오류:`, error.message)
     }

@@ -182,7 +182,10 @@ export const EXHIBITION_STATUS_LABELS: Record<ExhibitionStatus, { ko: string; en
 /**
  * Exhibition artist role labels (Korean/English)
  */
-export const EXHIBITION_ARTIST_ROLE_LABELS: Record<ExhibitionArtistRole, { ko: string; en: string }> = {
+export const EXHIBITION_ARTIST_ROLE_LABELS: Record<
+  ExhibitionArtistRole,
+  { ko: string; en: string }
+> = {
   organizer: { ko: '주최자', en: 'Organizer' },
   curator: { ko: '큐레이터', en: 'Curator' },
   participant: { ko: '참여 작가', en: 'Participant' },

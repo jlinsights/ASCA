@@ -1,7 +1,7 @@
-import { eq, like, or, desc, asc } from 'drizzle-orm';
-import { BaseRepository } from './base.repository';
-import { artists } from '@/lib/db/schema-pg';
-import type { Artist, NewArtist } from '@/lib/db/schema-pg';
+import { eq, like, or, desc, asc } from 'drizzle-orm'
+import { BaseRepository } from './base.repository'
+import { artists } from '@/lib/db/schema-pg'
+import type { Artist, NewArtist } from '@/lib/db/schema-pg'
 
 /**
  * Artist Repository
@@ -9,7 +9,7 @@ import type { Artist, NewArtist } from '@/lib/db/schema-pg';
  */
 export class ArtistRepository extends BaseRepository<typeof artists, Artist, NewArtist> {
   constructor() {
-    super(artists);
+    super(artists)
   }
 
   /**
@@ -17,11 +17,8 @@ export class ArtistRepository extends BaseRepository<typeof artists, Artist, New
    */
   async findByName(name: string): Promise<Artist | null> {
     return this.findOne({
-      where: or(
-        eq(artists.name, name),
-        eq(artists.nameEn, name)
-      ),
-    });
+      where: or(eq(artists.name, name), eq(artists.nameEn, name)),
+    })
   }
 
   /**
@@ -31,10 +28,8 @@ export class ArtistRepository extends BaseRepository<typeof artists, Artist, New
     return this.findAll({
       where: eq(artists.nationality, nationality),
       orderBy: desc(artists.createdAt),
-    });
+    })
   }
-
-
 
   /**
    * Search artists by name or bio
@@ -47,8 +42,8 @@ export class ArtistRepository extends BaseRepository<typeof artists, Artist, New
         like(artists.bio, `%${query}%`)
       ),
       orderBy: desc(artists.createdAt),
-    });
+    })
   }
 }
 
-export const artistRepository = new ArtistRepository();
+export const artistRepository = new ArtistRepository()

@@ -6,7 +6,7 @@ import { requireAdminAuth } from '@/lib/auth/middleware'
 import type {
   CulturalExchangeProgramInfo,
   CulturalProgramType,
-  CulturalProgramStatus
+  CulturalProgramStatus,
 } from '@/lib/types/membership'
 
 // GET - 프로그램 목록 조회
@@ -23,15 +23,15 @@ export async function GET(request: NextRequest) {
 
     // 기본 쿼리 조건
     const conditions = []
-    
+
     if (type) {
       conditions.push(eq(culturalExchangePrograms.programType, type))
     }
-    
+
     if (status) {
       conditions.push(eq(culturalExchangePrograms.status, status))
     }
-    
+
     if (featured) {
       conditions.push(eq(culturalExchangePrograms.isFeatured, true))
     }
@@ -73,7 +73,9 @@ export async function GET(request: NextRequest) {
       descriptionJp: program.descriptionJp || undefined,
       startDate: new Date(program.startDate),
       endDate: new Date(program.endDate),
-      applicationDeadline: program.applicationDeadline ? new Date(program.applicationDeadline) : undefined,
+      applicationDeadline: program.applicationDeadline
+        ? new Date(program.applicationDeadline)
+        : undefined,
       createdAt: new Date(program.createdAt),
       updatedAt: new Date(program.updatedAt),
       // JSON 필드 처리 (이미 객체임)
@@ -85,14 +87,14 @@ export async function GET(request: NextRequest) {
       benefits: (program.benefits as any[]) || [],
       schedule: ((program.schedule as any[]) || []).map((item: any) => ({
         ...item,
-        date: new Date(item.date)
+        date: new Date(item.date),
       })),
       coordinators: (program.coordinators as any[]) || [],
       images: (program.images as string[]) || [],
       documents: ((program.documents as any[]) || []).map((doc: any) => ({
         ...doc,
-        updatedAt: new Date(doc.updatedAt)
-      }))
+        updatedAt: new Date(doc.updatedAt),
+      })),
     }))
 
     return NextResponse.json({
@@ -102,12 +104,10 @@ export async function GET(request: NextRequest) {
         page,
         limit,
         total: Number(total),
-        totalPages: Math.ceil(Number(total) / limit)
-      }
+        totalPages: Math.ceil(Number(total) / limit),
+      },
     })
-
   } catch (error) {
-
     return NextResponse.json(
       { success: false, error: '프로그램 목록을 가져오는 중 오류가 발생했습니다' },
       { status: 500 }
@@ -121,7 +121,10 @@ export async function POST(request: NextRequest) {
     // 관리자 인증 확인
     const user = await requireAdminAuth(request)
     if (!user) {
-      return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: '관리자 인증이 필요합니다' },
+        { status: 403 }
+      )
     }
 
     const body = await request.json()
@@ -161,7 +164,7 @@ export async function POST(request: NextRequest) {
       coordinators,
       images,
       documents,
-      isFeatured
+      isFeatured,
     } = body
 
     const newProgram = {
@@ -195,7 +198,7 @@ export async function POST(request: NextRequest) {
       benefits: benefits || [],
       schedule: (schedule || []).map((item: any) => ({
         ...item,
-        date: item.date // Keep as string or Date compliant format
+        date: item.date, // Keep as string or Date compliant format
       })),
       applicationDeadline: applicationDeadline ? new Date(applicationDeadline) : null,
       startDate: new Date(startDate),
@@ -206,16 +209,16 @@ export async function POST(request: NextRequest) {
       images: images || [],
       documents: (documents || []).map((doc: any) => ({
         ...doc,
-        updatedAt: doc.updatedAt // Keep format
+        updatedAt: doc.updatedAt, // Keep format
       })),
       isFeatured: isFeatured || false,
       metadata: {},
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     }
 
     const result = await db.insert(culturalExchangePrograms).values([newProgram]).returning()
-    
+
     if (!result[0]) {
       throw new Error('프로그램 생성에 실패했습니다')
     }
@@ -223,11 +226,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       program: result[0],
-      message: '프로그램이 성공적으로 생성되었습니다'
+      message: '프로그램이 성공적으로 생성되었습니다',
     })
-
   } catch (error) {
-
     return NextResponse.json(
       { success: false, error: '프로그램 생성 중 오류가 발생했습니다' },
       { status: 500 }

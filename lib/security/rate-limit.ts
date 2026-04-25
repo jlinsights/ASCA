@@ -35,7 +35,7 @@ export interface RateLimitConfig {
  * Redis-based rate limiter (when Redis is available)
  */
 function createRedisRateLimiter(config: RateLimitConfig) {
-  const { maxRequests, windowMs, keyGenerator = (req) => getClientIdentifier(req) } = config
+  const { maxRequests, windowMs, keyGenerator = req => getClientIdentifier(req) } = config
 
   const limiter = new Ratelimit({
     redis: redis!,
@@ -103,7 +103,7 @@ function createMemoryRateLimiter(config: RateLimitConfig) {
     windowMs,
     skipSuccessfulRequests = false,
     skipFailedRequests = false,
-    keyGenerator = (req) => getClientIdentifier(req),
+    keyGenerator = req => getClientIdentifier(req),
   } = config
 
   return {
@@ -204,11 +204,11 @@ function getClientIdentifier(request: NextRequest): string {
   const forwardedFor = request.headers.get('x-forwarded-for')
   const realIP = request.headers.get('x-real-ip')
   const ip = forwardedFor?.split(',')[0] || realIP || 'unknown'
-  
+
   // User Agent 해시 추가 (같은 IP에서 다른 클라이언트 구분)
   const userAgent = request.headers.get('user-agent') || ''
   const userAgentHash = simpleHash(userAgent).toString(36)
-  
+
   return `${ip}:${userAgentHash}`
 }
 
@@ -219,7 +219,7 @@ function simpleHash(str: string): number {
   let hash = 0
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i)
-    hash = ((hash << 5) - hash) + char
+    hash = (hash << 5) - hash + char
     hash = hash & hash // 32bit 정수로 변환
   }
   return Math.abs(hash)
@@ -234,13 +234,13 @@ export const RateLimitPresets = {
     maxRequests: 10,
     windowMs: 60 * 1000, // 1분
   },
-  
+
   // 일반 API용 - 보통 제한
   moderate: {
     maxRequests: 100,
     windowMs: 60 * 1000, // 1분
   },
-  
+
   // 공개 API용 - 느슨한 제한
   loose: {
     maxRequests: 1000,
@@ -251,7 +251,7 @@ export const RateLimitPresets = {
   auth: {
     maxRequests: 5,
     windowMs: 15 * 60 * 1000, // 15분
-  }
+  },
 }
 
 /**
@@ -260,20 +260,21 @@ export const RateLimitPresets = {
 export function cleanupRateLimitStore(): void {
   const now = Date.now()
   let cleaned = 0
-  
+
   for (const [key, entry] of rateLimitStore.entries()) {
     if (entry.resetTime <= now) {
       rateLimitStore.delete(key)
       cleaned++
     }
   }
-  
+
   if (cleaned > 0) {
     log.debug(`Cleaned up ${cleaned} expired rate limit entries`)
   }
 }
 
 // 5분마다 정리 작업 실행
-if (typeof window === 'undefined') { // 서버사이드에서만
+if (typeof window === 'undefined') {
+  // 서버사이드에서만
   setInterval(cleanupRateLimitStore, 5 * 60 * 1000)
 }

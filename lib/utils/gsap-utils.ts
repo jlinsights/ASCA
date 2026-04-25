@@ -16,18 +16,18 @@ export const GSAP_CONFIG = {
     small: 0.1,
     medium: 0.2,
     large: 0.3,
-  }
-};
+  },
+}
 
 export const fadeInUp = {
   y: 30,
   opacity: 0,
   duration: GSAP_CONFIG.duration.slow,
   ease: GSAP_CONFIG.ease.smooth,
-};
+}
 
 export const fadeIn = {
   opacity: 0,
   duration: GSAP_CONFIG.duration.slow,
   ease: GSAP_CONFIG.ease.smooth,
-};
+}

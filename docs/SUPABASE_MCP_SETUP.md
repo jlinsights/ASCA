@@ -1,10 +1,12 @@
 # Supabase MCP 서버 설정 가이드
 
-이 가이드는 ASCA 프로젝트에서 Supabase MCP (Model Context Protocol) 서버를 설정하는 방법을 설명합니다.
+이 가이드는 ASCA 프로젝트에서 Supabase MCP (Model Context Protocol) 서버를
+설정하는 방법을 설명합니다.
 
 ## 🎯 개요
 
-MCP 서버를 통해 AI가 Supabase 데이터베이스와 직접 상호작용할 수 있습니다. 이를 통해 다음과 같은 작업이 가능합니다:
+MCP 서버를 통해 AI가 Supabase 데이터베이스와 직접 상호작용할 수 있습니다. 이를
+통해 다음과 같은 작업이 가능합니다:
 
 - 데이터베이스 쿼리 실행
 - 테이블 스키마 확인
@@ -38,6 +40,7 @@ node scripts/test-mcp-server.js
 ```
 
 예상 출력:
+
 ```
 🧪 Supabase MCP 서버 테스트 시작...
 
@@ -65,11 +68,13 @@ node scripts/test-mcp-server.js
 Claude Desktop의 MCP 설정 파일은 다음 위치에 있습니다:
 
 **macOS:**
+
 ```
 ~/Library/Application Support/Claude/claude_desktop_config.json
 ```
 
 **Windows:**
+
 ```
 %APPDATA%\Claude\claude_desktop_config.json
 ```
@@ -101,21 +106,25 @@ Claude Desktop의 MCP 설정 파일은 다음 위치에 있습니다:
 MCP 서버가 설정되면 Claude에서 다음과 같은 작업을 수행할 수 있습니다:
 
 ### 데이터베이스 쿼리
+
 ```
 "artists 테이블에서 한국 작가들의 수를 알려주세요"
 ```
 
 ### 테이블 스키마 확인
+
 ```
 "exhibitions 테이블의 구조를 보여주세요"
 ```
 
 ### 데이터 분석
+
 ```
 "최근에 추가된 작품들을 분석해주세요"
 ```
 
 ### CRUD 작업
+
 ```
 "새로운 전시회 정보를 추가해주세요"
 ```
@@ -137,11 +146,13 @@ MCP 서버가 설정되면 Claude에서 다음과 같은 작업을 수행할 수
 ## 🔧 문제 해결
 
 ### 연결 실패 시
+
 1. 환경변수가 올바르게 설정되었는지 확인
 2. Supabase 프로젝트가 활성화되어 있는지 확인
 3. Service Role Key의 권한 확인
 
 ### 명령어 인식 실패 시
+
 ```bash
 # 전역 설치 확인
 npm list -g supabase-mcp
@@ -152,6 +163,7 @@ npm install -g supabase-mcp
 ```
 
 ### Claude Desktop에서 MCP 서버가 보이지 않을 때
+
 1. 설정 파일 경로 재확인
 2. JSON 형식 유효성 검사
 3. Claude Desktop 완전 재시작
@@ -169,4 +181,4 @@ npm install -g supabase-mcp
 
 - `scripts/test-mcp-server.js`: MCP 서버 연결 및 기능 테스트
 - `mcp-config.json`: MCP 서버 설정 템플릿
-- `claude-mcp-config.json`: Claude Desktop용 설정 템플릿 
+- `claude-mcp-config.json`: Claude Desktop용 설정 템플릿

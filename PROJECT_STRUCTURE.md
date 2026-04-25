@@ -87,16 +87,19 @@ ASCA/
 ### ✅ 정리된 내용
 
 #### 1. **설정 파일 통합** (`config/`)
+
 - **이전**: 루트에 산재된 20+ 설정 파일
 - **현재**: 목적별로 분류된 체계적 구조
 - **혜택**: 설정 관리 용이성, 환경별 분리
 
 #### 2. **문서 체계화** (`docs/`)
-- **이전**: README-*, SECURITY-* 파일들이 루트에 혼재
+
+- **이전**: README-_, SECURITY-_ 파일들이 루트에 혼재
 - **현재**: 주제별 폴더로 분류
 - **혜택**: 문서 검색 및 관리 개선
 
 #### 3. **개발 도구 통합** (`tools/`)
+
 - **이전**: scripts/, api-backup/ 디렉토리가 별도 존재
 - **현재**: 모든 개발 도구를 tools/ 하위로 통합
 - **혜택**: 개발 워크플로우 일관성
@@ -104,6 +107,7 @@ ASCA/
 ### 📂 새로운 디렉토리별 역할
 
 #### `config/` - 설정 관리
+
 ```
 config/
 ├── build/          # 빌드 도구 설정 (Jest, PostCSS)
@@ -113,6 +117,7 @@ config/
 ```
 
 #### `docs/` - 문서 관리
+
 ```
 docs/
 ├── setup/          # 초기 설정 가이드
@@ -123,6 +128,7 @@ docs/
 ```
 
 #### `tools/` - 개발 도구
+
 ```
 tools/
 ├── scripts/        # 개발/운영 스크립트
@@ -134,14 +140,14 @@ tools/
 
 ### 자주 찾는 파일들의 새 위치
 
-| 파일명 | 이전 위치 | 새 위치 |
-|--------|-----------|---------|
-| Jest 설정 | `./jest.config.js` | `config/build/jest.config.js` |
-| 보안 문서 | `./SECURITY_*.md` | `docs/security/` |
-| 설치 가이드 | `./README-*.md` | `docs/setup/` |
-| 스크립트 | `./scripts/` | `tools/scripts/` |
-| API 백업 | `./api-backup/` | `tools/backup/api-backup/` |
-| MCP 설정 | `./claude-mcp-config.json` | `config/claude-mcp-config.json` |
+| 파일명      | 이전 위치                  | 새 위치                         |
+| ----------- | -------------------------- | ------------------------------- |
+| Jest 설정   | `./jest.config.js`         | `config/build/jest.config.js`   |
+| 보안 문서   | `./SECURITY_*.md`          | `docs/security/`                |
+| 설치 가이드 | `./README-*.md`            | `docs/setup/`                   |
+| 스크립트    | `./scripts/`               | `tools/scripts/`                |
+| API 백업    | `./api-backup/`            | `tools/backup/api-backup/`      |
+| MCP 설정    | `./claude-mcp-config.json` | `config/claude-mcp-config.json` |
 
 ### 빠른 검색 명령어
 
@@ -164,13 +170,16 @@ find tools/backup/ -type f
 ### 이전 vs 현재
 
 #### 설정 파일 수정 시
-**이전**: 
+
+**이전**:
+
 ```bash
 # 루트 디렉토리에서 여러 파일 검색 필요
 ls *.config.* *.json jest.* postcss.*
 ```
 
-**현재**: 
+**현재**:
+
 ```bash
 # 목적에 맞는 디렉토리로 직접 이동
 cd config/build/        # 빌드 설정
@@ -179,13 +188,16 @@ cd config/production/   # 프로덕션 설정
 ```
 
 #### 문서 작업 시
-**이전**: 
+
+**이전**:
+
 ```bash
 # 루트에서 README 파일들 혼재
 ls README*.md SECURITY*.md
 ```
 
-**현재**: 
+**현재**:
+
 ```bash
 # 주제별 폴더에서 작업
 cd docs/setup/     # 설치 가이드
@@ -194,12 +206,15 @@ cd docs/api/       # API 문서
 ```
 
 #### 스크립트 실행 시
-**이전**: 
+
+**이전**:
+
 ```bash
 node scripts/test-security-apis.js
 ```
 
-**현재**: 
+**현재**:
+
 ```bash
 node tools/scripts/test-security-apis.js
 ```
@@ -207,6 +222,7 @@ node tools/scripts/test-security-apis.js
 ## 📋 마이그레이션 체크리스트
 
 ### ✅ 완료된 작업
+
 - [x] 문서 파일 재배치 (`docs/`)
 - [x] 설정 파일 정리 (`config/`)
 - [x] 스크립트 이동 (`tools/scripts/`)
@@ -216,6 +232,7 @@ node tools/scripts/test-security-apis.js
 ### 🔄 추가 최적화 가능 영역
 
 #### 1. **환경별 설정 분리** (권장)
+
 ```bash
 # 개발 환경 전용 설정
 config/development/
@@ -231,6 +248,7 @@ config/production/
 ```
 
 #### 2. **컴포넌트 구조 개선** (선택사항)
+
 ```bash
 components/
 ├── ui/           # 기본 UI 컴포넌트
@@ -241,6 +259,7 @@ components/
 ```
 
 #### 3. **타입 정의 세분화** (선택사항)
+
 ```bash
 types/
 ├── api/          # API 관련 타입
@@ -252,6 +271,7 @@ types/
 ## 🚀 사용법
 
 ### 개발 시작할 때
+
 ```bash
 # 1. 의존성 설치
 npm install
@@ -267,6 +287,7 @@ node tools/scripts/test-security-apis.js
 ```
 
 ### 새 팀원 온보딩
+
 1. **프로젝트 구조 이해**: 이 문서 읽기
 2. **설치 가이드**: `docs/setup/` 확인
 3. **보안 정책**: `docs/security/` 검토
@@ -275,6 +296,7 @@ node tools/scripts/test-security-apis.js
 ## 📞 문제 해결
 
 ### 파일을 찾을 수 없는 경우
+
 ```bash
 # 전체 프로젝트에서 파일 검색
 find . -name "파일명" -type f
@@ -284,6 +306,7 @@ find . -name "*.config.*" -type f
 ```
 
 ### import 경로 오류 발생 시
+
 - 대부분의 설정 파일은 루트 레벨에서 참조되므로 영향 없음
 - 만약 경로 오류 발생 시 상대 경로를 절대 경로로 수정
 
@@ -292,6 +315,7 @@ find . -name "*.config.*" -type f
 ## 🎉 정리 효과
 
 ### 📊 개선 지표
+
 - **루트 파일 수**: 32개 → 15개 (53% 감소)
 - **문서 체계성**: 파편화 → 주제별 분류
 - **설정 관리**: 산재 → 목적별 통합
@@ -303,7 +327,8 @@ find . -name "*.config.*" -type f
 
 ## 1. 오해 방지: zsh: command not found
 
-- `zsh: command not found: next:` 등은 **터미널에서 패키지명을 명령어처럼 입력해서 생긴 에러**입니다.
+- `zsh: command not found: next:` 등은 **터미널에서 패키지명을 명령어처럼
+  입력해서 생긴 에러**입니다.
 - 실제로는 아래처럼 입력해야 합니다:
   ```sh
   npm ls react
@@ -337,6 +362,7 @@ npm ls @clerk/shared
 rm -rf node_modules package-lock.json yarn.lock
 npm install
 ```
+
 - 모든 패키지를 **깨끗하게 재설치**합니다.
 
 ---
@@ -371,5 +397,6 @@ npm run dev
 
 ---
 
-**이 과정을 따라가면 대부분의 "Invalid hook call" 및 Clerk 로딩 문제는 해결됩니다.  
+**이 과정을 따라가면 대부분의 "Invalid hook call" 및 Clerk 로딩 문제는
+해결됩니다.  
 진행 후 결과를 남겨주시면, 다음 단계로 빠르게 안내드리겠습니다!**

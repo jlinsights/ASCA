@@ -209,6 +209,7 @@ USE_MOCK_DATA=true
 ```
 
 모의 데이터 모드에서는:
+
 - 사전 정의된 샘플 데이터 사용
 - 실제 API 호출 없이 개발 가능
 - 데이터베이스 설정 불필요
@@ -381,4 +382,4 @@ npm run perf:audit
 
 ---
 
-**Happy Coding! 🎨** 
+**Happy Coding! 🎨**
