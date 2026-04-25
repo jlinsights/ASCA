@@ -1,1 +1,1 @@
-📋 chore: bkit-memory 갱신 — asca-api-security-hardening phase=do, 7 commits 기록
+📊 analyze: asca-api-security-hardening — gap-detector Match 92% (1 정당화된 편차, gap 0건) → report-ready
