@@ -1,1 +1,1 @@
-✨ feat: pickWatermarkChar 유틸 — 전시 타이틀에서 hero 워터마크 캐릭터 추출 (한자→한글→폴백)
+✨ feat: CalligraphyStyle 타입 + normalizeCalligraphyStyle 정규화 함수 (한글/한자/영문 매핑)
