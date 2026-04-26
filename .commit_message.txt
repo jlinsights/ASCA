@@ -1,1 +1,1 @@
-✨ feat: CalligraphyStyle 타입 + normalizeCalligraphyStyle 정규화 함수 (한글/한자/영문 매핑)
+🏷️ types: ExhibitionFull 확장 — titleHanja, artistName, style, medium, dimensions, year, imageUrl 필드 추가
