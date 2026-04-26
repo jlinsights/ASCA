@@ -1,1 +1,1 @@
-✨ feat(exhibitions): ExhibitionDescription 컴포넌트 — sticky aside + 기획 의도 + 한자 악센트
+✨ feat(exhibitions): ExhibitionHero 컴포넌트 — 포스터/워터마크 듀얼 모드 + ownerActions slot
