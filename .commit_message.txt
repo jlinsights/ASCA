@@ -1,1 +1,1 @@
-✨ feat(api): fetchExhibitionFullById 클라이언트 + /api/exhibitions/[id]/full 라우트
+🗂️ data: STATIC_EXHIBITIONS — 서경(書境) 새로운 지평 + 6점 작품 정적 fallback
