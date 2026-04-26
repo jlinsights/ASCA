@@ -6,16 +6,12 @@
  * DB env (DATABASE_URL/NEXT_PUBLIC_SUPABASE_URL) 미설정 시 전체 suite skip.
  * jest 환경에서는 env validation이 import 시점에 throw되므로 require는 it 안에서.
  */
-const hasDbEnv =
-  Boolean(process.env.DATABASE_URL) ||
-  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL)
+const hasDbEnv = Boolean(process.env.DATABASE_URL) || Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL)
 
 const d = hasDbEnv ? describe : describe.skip
 
 d('getExhibitionFullById', () => {
-  let getExhibitionFullById: (
-    id: string
-  ) => Promise<{ data: any; error: Error | null }>
+  let getExhibitionFullById: (id: string) => Promise<{ data: any; error: Error | null }>
 
   beforeAll(() => {
     // env validation은 import 시점에 throw됨 → 가드된 describe 안에서만 require
@@ -25,12 +21,12 @@ d('getExhibitionFullById', () => {
   it('returns null + error for non-existent ID', async () => {
     const { data, error } = await getExhibitionFullById('non-existent-uuid')
     expect(data).toBeNull()
-    expect(error).toBeNull()  // not-found는 error가 아니라 data null
+    expect(error).toBeNull() // not-found는 error가 아니라 data null
   })
 
   it('returns exhibition with artwork details for valid ID', async () => {
     const { data, error } = await getExhibitionFullById('test-exhibition-1')
-    if (!data) return  // 시드 없으면 skip
+    if (!data) return // 시드 없으면 skip
     expect(error).toBeNull()
     expect(data.id).toBe('test-exhibition-1')
     expect(Array.isArray(data.artworks)).toBe(true)

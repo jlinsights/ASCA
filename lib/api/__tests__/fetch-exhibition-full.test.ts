@@ -8,7 +8,9 @@ import { fetchExhibitionFullById } from '../exhibitions'
 
 // fetch mock
 const originalFetch = global.fetch
-afterEach(() => { global.fetch = originalFetch })
+afterEach(() => {
+  global.fetch = originalFetch
+})
 
 describe('fetchExhibitionFullById', () => {
   it('returns data on 200 response', async () => {
