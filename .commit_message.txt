@@ -1,1 +1,1 @@
-🗂️ data: STATIC_EXHIBITIONS — 서경(書境) 새로운 지평 + 6점 작품 정적 fallback
+✨ hook: useExhibitionDetail — fetch+ownership+삭제 통합 (page.tsx 인라인 로직 추출, RTL 테스트 동봉)
