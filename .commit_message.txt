@@ -1,1 +1,1 @@
-🎨 style: prettier 자동 포맷팅 — Phase 1~2 신규/수정 파일 일괄 포맷
+✨ feat(exhibitions): ExhibitionLoading 컴포넌트 — role=status, 한국어 로딩 텍스트
