@@ -1,1 +1,1 @@
-📝 chore: HANDOFF.md — 다음 세션 이어가기 가이드 (D1~D6 결정·git 상태·실행 명령)
+✨ feat: pickWatermarkChar 유틸 — 전시 타이틀에서 hero 워터마크 캐릭터 추출 (한자→한글→폴백)
