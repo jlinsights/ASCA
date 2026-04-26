@@ -1,1 +1,1 @@
-🧹 chore: .gitignore에 public/images/gallery/ 추가 — git history filter-repo 정리 후 향후 자동 무시 (3.8GB → 0)
+✨ ASCA exhibition-detail design-html mockup 생성 (서경 새로운 지평)
