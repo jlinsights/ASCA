@@ -192,6 +192,117 @@ export async function getExhibitionById(id: string): Promise<Exhibition | undefi
   return exhibition;
 }
 
+import { normalizeCalligraphyStyle } from '@/lib/exhibitions/normalize-style'
+import type { ExhibitionFull, ExhibitionStatus } from '@/lib/types/exhibition-legacy'
+
+const EXHIBITION_STATUS_MAP: Record<string, ExhibitionStatus> = {
+  upcoming: 'upcoming',
+  ongoing: 'current',
+  completed: 'past',
+  cancelled: 'past',  // 취소도 과거로 처리
+}
+
+/**
+ * 전시 + 연결 작품(풀 메타) + 작가명 단일 join.
+ * mockup-port v1.0 — exhibition detail page 전용.
+ */
+export async function getExhibitionFullById(
+  id: string
+): Promise<{ data: ExhibitionFull | null; error: Error | null }> {
+  try {
+    // 1) Exhibition 본체
+    const [ex] = await db
+      .select()
+      .from(exhibitions)
+      .where(eq(exhibitions.id, id))
+      .limit(1)
+
+    if (!ex) return { data: null, error: null }
+
+    // 2) 작품 join — exhibitionArtworks ⨝ artworks ⨝ artists
+    const artworkRows = await db
+      .select({
+        relationId: exhibitionArtworks.id,
+        artworkId: artworks.id,
+        title: artworks.title,
+        titleEn: artworks.titleEn,
+        imageUrl: artworks.imageUrl,
+        imageUrls: artworks.imageUrls,
+        artistId: artworks.artistId,
+        artistName: artists.name,
+        style: artworks.style,
+        medium: artworks.medium,
+        dimensions: artworks.dimensions,
+        year: artworks.year,
+        displayOrder: exhibitionArtworks.displayOrder,
+        isHighlight: exhibitionArtworks.isHighlight,
+      })
+      .from(exhibitionArtworks)
+      .innerJoin(artworks, eq(exhibitionArtworks.artworkId, artworks.id))
+      .innerJoin(artists, eq(artworks.artistId, artists.id))
+      .where(eq(exhibitionArtworks.exhibitionId, id))
+      .orderBy(asc(exhibitionArtworks.displayOrder))
+
+    // 3) Artist join 별도 (참여 작가 vs 작품 작가는 다를 수 있음 — 본 사이클은 작품 join만 사용)
+    // TODO: exhibitionArtists 테이블 join이 필요하면 후속 사이클
+
+    return {
+      data: {
+        id: ex.id,
+        title: ex.title,
+        subtitle: null,  // schema에 없음 — 후속에 추가 필요 시
+        description: ex.description ?? '',
+        content: null,
+        startDate: ex.startDate.toISOString(),
+        endDate: ex.endDate.toISOString(),
+        location: ex.venueAddress ?? null,
+        venue: ex.venue ?? null,
+        curator: ex.curatorNotes ?? null,
+        featuredImageUrl: ex.posterImage ?? null,
+        galleryImages: ex.galleryImages ?? null,
+        status: EXHIBITION_STATUS_MAP[ex.status] ?? 'upcoming',
+        isFeatured: ex.isFeatured,
+        isPublished: true,  // schema에 isPublished 없음 — 모두 published 가정
+        views: 0,            // schema에 views 없음
+        ticketPrice: ex.admissionFee ?? null,
+        createdAt: ex.createdAt.toISOString(),
+        updatedAt: ex.updatedAt.toISOString(),
+        artworks: artworkRows.map(r => ({
+          relationId: r.relationId,
+          id: r.artworkId,
+          title: r.title,
+          titleEn: r.titleEn,
+          titleHanja: extractHanjaFromTitle(r.title),
+          images: r.imageUrls ?? [],
+          imageUrl: r.imageUrl,
+          artistId: r.artistId,
+          artistName: r.artistName,
+          displayOrder: r.displayOrder ?? 0,
+          isFeatured: r.isHighlight,
+          style: normalizeCalligraphyStyle(r.style),
+          medium: r.medium,
+          dimensions: r.dimensions,
+          year: r.year,
+        })),
+        artists: [],  // 본 사이클은 작품 join만, 참여 작가 별도 fetch는 후속
+        artworkCount: artworkRows.length,
+        artistCount: 0,
+        featuredArtworkCount: artworkRows.filter(r => r.isHighlight).length,
+      },
+      error: null,
+    }
+  } catch (err) {
+    return { data: null, error: err instanceof Error ? err : new Error(String(err)) }
+  }
+}
+
+/** title에서 한자 추출 (titleHanja 컬럼 부재 폴백) */
+function extractHanjaFromTitle(title: string): string | null {
+  const match = title.match(/[一-鿿]+/g)
+  if (!match?.length) return null
+  return match.join('')
+}
+
 export async function getExhibitionsByStatus(status: string, options?: {
   limit?: number;
   offset?: number;

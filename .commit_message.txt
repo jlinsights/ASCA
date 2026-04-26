@@ -1,1 +1,1 @@
-🏷️ types: ExhibitionFull 확장 — titleHanja, artistName, style, medium, dimensions, year, imageUrl 필드 추가
+✨ feat(db): getExhibitionFullById 단일 join 쿼리 — 작품 풀 메타(작가명/서체/치수) 한 번에 fetch
