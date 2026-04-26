@@ -1,1 +1,1 @@
-✨ ASCA exhibition-detail design-html mockup 생성 (서경 새로운 지평)
+🗂️ docs(plan): exhibition-detail port 단계별 구현 plan (23 task TDD, 6 phase, schema 매핑 포함)
