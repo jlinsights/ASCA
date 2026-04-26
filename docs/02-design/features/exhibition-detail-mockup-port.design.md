@@ -190,7 +190,7 @@ interface ExhibitionShareBarProps {
 
 - 4개 버튼: Facebook / Twitter / Instagram / Copy link
 - 핸들러는 기존 `ExhibitionDetailBody`의 `handleShare` 함수 그대로 이동
-- 위치: hero 외부, breadcrumb 우측 또는 별도 cluster (구체 위치는 implementation에서 시각 균형 보고 결정)
+- **위치 확정: breadcrumb 우측 floating cluster** (hero 외부, 페이지 상단 액션 영역으로 통일)
 
 ### 4.7 ExhibitionVisitInfo (조건부)
 
@@ -467,7 +467,7 @@ function pickWatermarkChar(title: string): string {
 ### 9.6 접근성
 
 자동:
-- `axe-core/react` 통합 (가능하면) — 새 컴포넌트마다 violations 0
+- 본 사이클은 manual 검수만 수행. axe-core 도입(`@axe-core/react` devDep 추가 + 테스트 wrapper)은 별도 PR — D4 Minimal scope 외
 
 수동 체크리스트:
 - [ ] 헤딩 hierarchy: h1(전시 제목) / h2(섹션) / h3(작품 카드)
@@ -510,11 +510,9 @@ npm run pre-commit
 ## 11. Open Questions for Implementation Plan
 
 writing-plans 단계에서 확정할 항목:
-1. `lib/db/schema.ts`의 `artworks` 테이블에 `titleHanja`, `style`, `dimensions`, `materials`, `year` 필드가 모두 존재하는가? 누락 시 schema 추가는 사전 작업으로 분리.
-2. `artists` 테이블 join으로 `artistName`을 가져올 때 다국어 필드 우선순위 (`name` Korean default 사용 가정).
-3. `ExhibitionShareBar` 위치 — breadcrumb 우측 cluster vs hero 외부 별도 영역 (구현 중 시각 균형 보고 결정).
-4. axe-core가 ASCA에 이미 있는지 확인. 없으면 추가는 D4 Minimal 외 — 수동 접근성 체크만.
-5. `useExhibitionDetail` hook에 swr/react-query 사용 여부 — 현재 inline useState/useEffect 패턴이 단순하므로 유지 권장. 의존성 추가 시 D4 Minimal 위반.
+1. `lib/db/schema.ts`의 `artworks` 테이블에 `titleHanja`, `style`, `dimensions`, `materials`, `year` 필드가 모두 존재하는가? 누락 시 schema 추가는 사전 작업으로 분리(별도 PR 또는 본 PR 1단계).
+2. `artists` 테이블 join으로 `artistName`을 가져올 때 다국어 필드 우선순위 — `name` (Korean default) 사용. `nameKo` / `nameEn` 분기는 i18n 사이클로 유보.
+3. `useExhibitionDetail` hook에 swr/react-query 도입 여부 — 현재 inline useState/useEffect 패턴이 단순하고 의존성 추가는 D4 Minimal 위반이라 **유지**. 명시적 결정.
 
 ## 12. References
 
