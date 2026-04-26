@@ -80,7 +80,8 @@ export interface ExhibitionWithDetails extends Exhibition {
 }
 
 /**
- * Exhibition with full artwork and artist information
+ * Exhibition with full artwork and artist metadata.
+ * Used by /exhibitions/[id] detail page (mockup-port v1.0).
  */
 export interface ExhibitionFull extends Exhibition {
   artworks: Array<{
@@ -88,10 +89,17 @@ export interface ExhibitionFull extends Exhibition {
     id: string
     title: string
     titleEn?: string | null
-    images?: any[]
+    titleHanja?: string | null    // NEW: extracted from title via regex
+    images?: string[]
+    imageUrl?: string | null      // NEW: primary image
     artistId: string
+    artistName: string            // NEW: joined from artists.name
     displayOrder: number
     isFeatured: boolean
+    style?: CalligraphyStyle | null  // NEW: normalized
+    medium?: string | null           // NEW: 종이/비단/etc
+    dimensions?: string | null       // NEW: "180×90cm"
+    year?: number | null             // NEW
   }>
   artists: Array<{
     relationId: string
