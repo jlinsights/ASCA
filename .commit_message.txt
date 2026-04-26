@@ -1,1 +1,1 @@
-✨ feat(exhibitions): ExhibitionArtworkGrid 컴포넌트 — STYLE_LABELS/PLACEHOLDER 매핑, /artworks/[id] Link 카드
+✨ feat(exhibitions): ExhibitionVisitInfo 컴포넌트 — 관람 안내 dl + 핀 라벨 (location 부재 시 null)
