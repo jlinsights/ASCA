@@ -1,1 +1,1 @@
-🎨 css(globals): exhibition-description-prose dropcap + CJK word-break (mockup-port)
+✨ refactor: ExhibitionDetailBody mockup-port — 8 컴포넌트 orchestrator (mockup 디자인 도입, 390→90줄)
