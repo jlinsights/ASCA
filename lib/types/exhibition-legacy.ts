@@ -188,3 +188,16 @@ export const EXHIBITION_ARTIST_ROLE_LABELS: Record<ExhibitionArtistRole, { ko: s
   participant: { ko: '참여 작가', en: 'Participant' },
   guest: { ko: '초대 작가', en: 'Guest Artist' },
 }
+
+/**
+ * 서예 서체 분류 (artworks.style 자유 텍스트의 정규화 결과)
+ */
+export type CalligraphyStyle =
+  | 'zhuan'   // 篆書
+  | 'li'      // 隷書
+  | 'kai'     // 楷書
+  | 'xing'    // 行書
+  | 'cao'     // 草書
+  | 'hangul'  // 한글
+  | 'mixed'   // 한문/한글 혼합
+
