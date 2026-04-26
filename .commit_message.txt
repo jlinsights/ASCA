@@ -1,1 +1,1 @@
-✨ hook: useExhibitionDetail — fetch+ownership+삭제 통합 (page.tsx 인라인 로직 추출, RTL 테스트 동봉)
+🎨 style: prettier 자동 포맷팅 — Phase 1~2 신규/수정 파일 일괄 포맷

@@ -66,9 +66,10 @@ export function useExhibitionDetail(id: string): UseExhibitionDetailResult {
       setIsOwner(false)
       return
     }
-    const owner = exhibition.artists?.some(
-      a => a.id === user.id && (a.role === 'organizer' || a.role === 'curator')
-    ) ?? false
+    const owner =
+      exhibition.artists?.some(
+        a => a.id === user.id && (a.role === 'organizer' || a.role === 'curator')
+      ) ?? false
     setIsOwner(owner)
   }, [isLoaded, isSignedIn, user, exhibition])
 
