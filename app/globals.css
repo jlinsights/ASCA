@@ -140,6 +140,32 @@
   .glow-effect:hover::before {
     @apply translate-x-full;
   }
+
+  /* ADDED: 2026-04-26 — exhibition detail mockup port */
+
+  .exhibition-description-prose {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-height: 1.75;
+  }
+
+  @supports (text-wrap: pretty) {
+    .exhibition-description-prose { text-wrap: pretty; }
+  }
+
+  .exhibition-description-prose p {
+    margin: 0 0 1.5rem;
+  }
+
+  .exhibition-description-prose > p:first-of-type::first-letter {
+    font-family: var(--font-playfair, "Playfair Display"), "Noto Serif KR", serif;
+    font-size: 3.5em;
+    float: left;
+    line-height: 0.85;
+    padding: 6px 12px 0 0;
+    color: var(--scholar-red, #af2626);
+    font-weight: 600;
+  }
 }
 
 @layer base {

@@ -1,1 +1,1 @@
-✨ feat(exhibitions): ExhibitionVisitInfo 컴포넌트 — 관람 안내 dl + 핀 라벨 (location 부재 시 null)
+🎨 css(globals): exhibition-description-prose dropcap + CJK word-break (mockup-port)
