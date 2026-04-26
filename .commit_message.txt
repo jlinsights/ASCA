@@ -1,1 +1,1 @@
-✨ feat(db): getExhibitionFullById 단일 join 쿼리 — 작품 풀 메타(작가명/서체/치수) 한 번에 fetch
+✨ feat(api): fetchExhibitionFullById 클라이언트 + /api/exhibitions/[id]/full 라우트

@@ -434,3 +434,32 @@ export async function toggleExhibitionArtworkFeatured(
 
   return { data, error }
 }
+
+import type { ExhibitionFull } from '@/lib/types/exhibition-legacy'
+
+/**
+ * 전시 풀 메타 fetch — 클라이언트에서 호출.
+ * 서버 측: /api/exhibitions/[id]/full 라우트.
+ * mockup-port v1.0 사용처: app/exhibitions/[id]/page.tsx (useExhibitionDetail hook).
+ */
+export async function fetchExhibitionFullById(
+  id: string
+): Promise<{ data: ExhibitionFull | null; error: string | null }> {
+  try {
+    const res = await fetch(`/api/exhibitions/${id}/full`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}))
+      return { data: null, error: body.error ?? `HTTP ${res.status}` }
+    }
+    const json = await res.json()
+    return { data: json.data ?? null, error: null }
+  } catch (err) {
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Network error',
+    }
+  }
+}
