@@ -1,1 +1,1 @@
-✨ feat(exhibitions): ExhibitionError 컴포넌트 — kind=not-found/network/unauthorized 분기, backHref slot
+✨ feat(exhibitions): ExhibitionShareBar 컴포넌트 — Facebook/Twitter/Instagram/Copy 4 공유 채널
