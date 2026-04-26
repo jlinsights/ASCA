@@ -1,1 +1,1 @@
-✨ feat(exhibitions): ExhibitionMetaBand 컴포넌트 — 4-col grid (기간/장소/주최/관람) + 무료 입장/조회 표시
+✨ feat(exhibitions): ExhibitionDescription 컴포넌트 — sticky aside + 기획 의도 + 한자 악센트
