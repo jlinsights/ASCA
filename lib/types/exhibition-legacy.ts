@@ -80,7 +80,8 @@ export interface ExhibitionWithDetails extends Exhibition {
 }
 
 /**
- * Exhibition with full artwork and artist information
+ * Exhibition with full artwork and artist metadata.
+ * Used by /exhibitions/[id] detail page (mockup-port v1.0).
  */
 export interface ExhibitionFull extends Exhibition {
   artworks: Array<{
@@ -88,10 +89,17 @@ export interface ExhibitionFull extends Exhibition {
     id: string
     title: string
     titleEn?: string | null
-    images?: any[]
+    titleHanja?: string | null // NEW: extracted from title via regex
+    images?: string[]
+    imageUrl?: string | null // NEW: primary image
     artistId: string
+    artistName: string // NEW: joined from artists.name
     displayOrder: number
     isFeatured: boolean
+    style?: CalligraphyStyle | null // NEW: normalized
+    medium?: string | null // NEW: 종이/비단/etc
+    dimensions?: string | null // NEW: "180×90cm"
+    year?: number | null // NEW
   }>
   artists: Array<{
     relationId: string
@@ -182,9 +190,24 @@ export const EXHIBITION_STATUS_LABELS: Record<ExhibitionStatus, { ko: string; en
 /**
  * Exhibition artist role labels (Korean/English)
  */
-export const EXHIBITION_ARTIST_ROLE_LABELS: Record<ExhibitionArtistRole, { ko: string; en: string }> = {
+export const EXHIBITION_ARTIST_ROLE_LABELS: Record<
+  ExhibitionArtistRole,
+  { ko: string; en: string }
+> = {
   organizer: { ko: '주최자', en: 'Organizer' },
   curator: { ko: '큐레이터', en: 'Curator' },
   participant: { ko: '참여 작가', en: 'Participant' },
   guest: { ko: '초대 작가', en: 'Guest Artist' },
 }
+
+/**
+ * 서예 서체 분류 (artworks.style 자유 텍스트의 정규화 결과)
+ */
+export type CalligraphyStyle =
+  | 'zhuan' // 篆書
+  | 'li' // 隷書
+  | 'kai' // 楷書
+  | 'xing' // 行書
+  | 'cao' // 草書
+  | 'hangul' // 한글
+  | 'mixed' // 한문/한글 혼합
