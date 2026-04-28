@@ -20,21 +20,19 @@ export function ExhibitionError({
   backHref = '/exhibitions',
 }: ExhibitionErrorProps) {
   return (
-    <div className="min-h-[60vh] bg-rice-paper grid place-items-center px-4">
-      <div className="text-center max-w-md">
+    <div className='min-h-[60vh] bg-rice-paper grid place-items-center px-4'>
+      <div className='text-center max-w-md'>
         <div
-          aria-hidden="true"
-          className="font-brush text-[8rem] text-scholar-red/15 leading-none -mb-8 select-none"
+          aria-hidden='true'
+          className='font-brush text-[8rem] text-scholar-red/15 leading-none -mb-8 select-none'
         >
           空
         </div>
-        <h1 className="font-serif text-3xl font-semibold text-foreground mb-3">
-          {HEADINGS[kind]}
-        </h1>
-        <p className="text-muted-foreground mb-8">{message}</p>
+        <h1 className='font-serif text-3xl font-semibold text-foreground mb-3'>{HEADINGS[kind]}</h1>
+        <p className='text-muted-foreground mb-8'>{message}</p>
         <Link href={backHref}>
-          <Button variant="outline" className="border-celadon-green/40 hover:bg-celadon-green/10">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+          <Button variant='outline' className='border-celadon-green/40 hover:bg-celadon-green/10'>
+            <ArrowLeft className='h-4 w-4 mr-2' />
             목록으로 돌아가기
           </Button>
         </Link>

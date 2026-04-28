@@ -10,8 +10,7 @@ import { ExhibitionError } from './_components/exhibition-error'
 export default function ExhibitionDetailPage() {
   const params = useParams()
   const exhibitionId = params.id as string
-  const { exhibition, loading, error, isOwner, handleDelete } =
-    useExhibitionDetail(exhibitionId)
+  const { exhibition, loading, error, isOwner, handleDelete } = useExhibitionDetail(exhibitionId)
 
   if (loading) {
     return (
@@ -35,13 +34,9 @@ export default function ExhibitionDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent">
-      <main className="container mx-auto px-4 py-8">
-        <ExhibitionDetailBody
-          exhibition={exhibition}
-          isOwner={isOwner}
-          onDelete={handleDelete}
-        />
+    <div className='min-h-screen bg-transparent'>
+      <main className='container mx-auto px-4 py-8'>
+        <ExhibitionDetailBody exhibition={exhibition} isOwner={isOwner} onDelete={handleDelete} />
       </main>
       <LayoutFooter />
     </div>
