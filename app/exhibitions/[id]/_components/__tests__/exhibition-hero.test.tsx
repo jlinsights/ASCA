@@ -15,11 +15,11 @@ describe('ExhibitionHero', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/서경/)
   })
   it('renders subtitle when provided', () => {
-    render(<ExhibitionHero {...baseProps} subtitle="New Horizons" />)
+    render(<ExhibitionHero {...baseProps} subtitle='New Horizons' />)
     expect(screen.getByText(/New Horizons/)).toBeInTheDocument()
   })
   it('renders <Image> in poster mode when featuredImageUrl present', () => {
-    render(<ExhibitionHero {...baseProps} featuredImageUrl="/p.jpg" />)
+    render(<ExhibitionHero {...baseProps} featuredImageUrl='/p.jpg' />)
     const img = screen.getByAltText(baseProps.title)
     expect(img).toBeInTheDocument()
   })

@@ -17,25 +17,21 @@ interface ExhibitionDetailBodyProps {
   onDelete: () => Promise<void>
 }
 
-export function ExhibitionDetailBody({
-  exhibition,
-  isOwner,
-  onDelete,
-}: ExhibitionDetailBodyProps) {
+export function ExhibitionDetailBody({ exhibition, isOwner, onDelete }: ExhibitionDetailBodyProps) {
   const ownerActions = isOwner ? (
     <>
       <Link href={`/exhibitions/${exhibition.id}/edit`}>
-        <Button variant="outline" size="sm" className="bg-rice-paper/90 hover:bg-rice-paper">
-          <Edit className="w-4 h-4 mr-2" /> 수정
+        <Button variant='outline' size='sm' className='bg-rice-paper/90 hover:bg-rice-paper'>
+          <Edit className='w-4 h-4 mr-2' /> 수정
         </Button>
       </Link>
       <Button
-        variant="outline"
-        size="sm"
+        variant='outline'
+        size='sm'
         onClick={onDelete}
-        className="bg-rice-paper/90 hover:bg-rice-paper text-scholar-red hover:text-scholar-red"
+        className='bg-rice-paper/90 hover:bg-rice-paper text-scholar-red hover:text-scholar-red'
       >
-        <Trash2 className="w-4 h-4 mr-2" /> 삭제
+        <Trash2 className='w-4 h-4 mr-2' /> 삭제
       </Button>
     </>
   ) : null
@@ -43,13 +39,22 @@ export function ExhibitionDetailBody({
   return (
     <article>
       {/* Breadcrumb + ShareBar 줄 */}
-      <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
-        <nav aria-label="현재 위치" className="text-sm text-muted-foreground flex items-center gap-2">
-          <Link href="/" className="hover:text-foreground">홈</Link>
-          <span className="opacity-40">/</span>
-          <Link href="/exhibitions" className="hover:text-foreground">전시</Link>
-          <span className="opacity-40">/</span>
-          <span className="text-foreground font-medium line-clamp-1 max-w-[40ch]">{exhibition.title}</span>
+      <div className='flex items-center justify-between gap-4 mb-4 flex-wrap'>
+        <nav
+          aria-label='현재 위치'
+          className='text-sm text-muted-foreground flex items-center gap-2'
+        >
+          <Link href='/' className='hover:text-foreground'>
+            홈
+          </Link>
+          <span className='opacity-40'>/</span>
+          <Link href='/exhibitions' className='hover:text-foreground'>
+            전시
+          </Link>
+          <span className='opacity-40'>/</span>
+          <span className='text-foreground font-medium line-clamp-1 max-w-[40ch]'>
+            {exhibition.title}
+          </span>
         </nav>
         <ExhibitionShareBar title={exhibition.title} />
       </div>

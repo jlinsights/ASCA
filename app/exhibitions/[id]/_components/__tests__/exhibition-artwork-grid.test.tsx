@@ -3,12 +3,21 @@ import { ExhibitionArtworkGrid } from '../exhibition-artwork-grid'
 import type { ExhibitionFull } from '@/lib/types/exhibition-legacy'
 
 const oneArtwork: ExhibitionFull['artworks'][0] = {
-  relationId: 'r1', id: 'a1',
-  title: '逍遙游', titleHanja: '逍遙游', titleEn: 'Wandering',
-  images: [], imageUrl: null,
-  artistId: 'art1', artistName: '徐景 김재호',
-  displayOrder: 0, isFeatured: true,
-  style: 'zhuan', medium: '화선지', dimensions: '136×70', year: 2025,
+  relationId: 'r1',
+  id: 'a1',
+  title: '逍遙游',
+  titleHanja: '逍遙游',
+  titleEn: 'Wandering',
+  images: [],
+  imageUrl: null,
+  artistId: 'art1',
+  artistName: '徐景 김재호',
+  displayOrder: 0,
+  isFeatured: true,
+  style: 'zhuan',
+  medium: '화선지',
+  dimensions: '136×70',
+  year: 2025,
 }
 
 describe('ExhibitionArtworkGrid', () => {

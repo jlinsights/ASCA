@@ -34,13 +34,21 @@ export function ExhibitionMetaBand({
 
   return (
     <section
-      aria-label="전시 정보"
-      className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6 md:p-8 mb-12 bg-silk-cream border border-border rounded-xl"
+      aria-label='전시 정보'
+      className='grid grid-cols-2 md:grid-cols-4 gap-6 p-6 md:p-8 mb-12 bg-silk-cream border border-border rounded-xl'
     >
-      <Cell label="기간" value={`${formatExhibitionDate(startDate)} — ${formatExhibitionDate(endDate)}`} sub={status === 'current' && remaining ? remaining : undefined} />
-      <Cell label="장소" value={location ?? DASH} sub={venue ?? undefined} />
-      <Cell label="주최" value={curator ?? DASH} />
-      <Cell label="관람" value={formatTicket(ticketPrice)} sub={typeof views === 'number' ? `조회 ${views.toLocaleString()}회` : undefined} />
+      <Cell
+        label='기간'
+        value={`${formatExhibitionDate(startDate)} — ${formatExhibitionDate(endDate)}`}
+        sub={status === 'current' && remaining ? remaining : undefined}
+      />
+      <Cell label='장소' value={location ?? DASH} sub={venue ?? undefined} />
+      <Cell label='주최' value={curator ?? DASH} />
+      <Cell
+        label='관람'
+        value={formatTicket(ticketPrice)}
+        sub={typeof views === 'number' ? `조회 ${views.toLocaleString()}회` : undefined}
+      />
     </section>
   )
 }
@@ -48,13 +56,11 @@ export function ExhibitionMetaBand({
 function Cell({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
     <div>
-      <p className="text-xs font-semibold tracking-widest uppercase text-celadon-green mb-2">
+      <p className='text-xs font-semibold tracking-widest uppercase text-celadon-green mb-2'>
         {label}
       </p>
-      <div className="font-serif text-lg font-medium text-foreground leading-tight">
-        {value}
-      </div>
-      {sub && <div className="text-sm text-muted-foreground mt-1">{sub}</div>}
+      <div className='font-serif text-lg font-medium text-foreground leading-tight'>{value}</div>
+      {sub && <div className='text-sm text-muted-foreground mt-1'>{sub}</div>}
     </div>
   )
 }
