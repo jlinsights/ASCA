@@ -42,7 +42,12 @@ const customJestConfig = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/', '<rootDir>/e2e/'],
-  transformIgnorePatterns: ['/node_modules/', '^.+\\.module\\.(css|sass|scss)$'],
+  transformIgnorePatterns: [
+    // ESM-only npm packages must be transformed by babel-jest.
+    // graphql v16 ships dual-package; deep imports may resolve to ESM paths.
+    '/node_modules/(?!(graphql|@graphql-tools|@graphql-yoga|graphql-yoga|graphql-ws)/)',
+    '^.+\\.module\\.(css|sass|scss)$',
+  ],
   globals: {
     'ts-jest': {
       tsconfig: 'tsconfig.json',

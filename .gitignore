@@ -26,6 +26,8 @@ yarn-error.log*
 
 # env files
 .env*
+# but DO track the placeholder template (used by CI e2e workflow)
+!.env.example
 
 # vercel
 .vercel/
@@ -58,3 +60,6 @@ videos/
 public/images/gallery/**/*-[0-9]*w.webp
 public/images/gallery/**/*-[0-9]*w.avif
 public/images/gallery/
+
+# CSO security reports (local only)
+.gstack/

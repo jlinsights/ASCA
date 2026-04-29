@@ -30,6 +30,44 @@
       },
       "estimatedHours": 6,
       "note": "Phase 3 보류분(typography canonical / WCAG contrast / CI 통합) — emax-design-system PDCA(2026-04-25) 학습자산 재활용"
+    },
+    {
+      "feature": "jest-infra-debt",
+      "phase": "completed",
+      "matchRate": 100,
+      "analysisPath": "docs/03-analysis/jest-infra-debt.analysis.md",
+      "reportPath": "docs/04-report/features/jest-infra-debt.report.md",
+      "checkVerdict": "split-cycle-recommended",
+      "checkDate": "2026-04-29",
+      "completedAt": "2026-04-29",
+      "splitOut": {
+        "phase6CIIntegration": "별 세션 (commit→push→PR→CI→merge→PR#3 rebase)",
+        "hygienePR": "Codecov SHA 고정 + .gstack gitignore (별 작업)"
+      },
+      "startedAt": "2026-04-28",
+      "planPath": "docs/01-plan/features/jest-infra-debt.plan.md",
+      "designPath": "docs/02-design/features/jest-infra-debt.design.md",
+      "estimatedHours": 6,
+      "actualHoursDoPhase": 1.5,
+      "branch": "infra/jest-fix-2026-04-29",
+      "parentCycle": {
+        "feature": "asca-security-debt",
+        "date": "2026-04-25",
+        "matchRate": 92,
+        "status": "blocked-by-ci"
+      },
+      "note": "PR #3 (보안 픽스 6건) CI Tests/E2E 실패 unblocker. CSO 2026-04-28 Finding #3 — Jest ESM/mock/Web APIs/env 5종 인프라 결함 일괄 해결",
+      "blockingPR": "https://github.com/jlinsights/ASCA/pull/3",
+      "phases": ["F1 ESM transform", "F2 Supabase mock", "F3 Web APIs", "F4 test env vars", "F5 E2E env bootstrap", "CI 통합 검증"],
+      "doSummary": {
+        "f1": "jest.config.js transformIgnorePatterns에 graphql/@graphql-tools/@graphql-yoga/graphql-yoga/graphql-ws 화이트리스트. 결과: lib/graphql/__tests__/auth.test.ts 56/57 PASS (이전: parse 0건 통과). 1 실패는 test logic.",
+        "f2": "app/api/members/[id]/__tests__/route.test.ts L26 `import { jest } from '@jest/globals'`에서 jest 제거. Root cause: @jest/globals 임포트 시 babel-jest가 jest.mock(...) 호이스팅 비활성화 → real module이 mock보다 먼저 로드 → createClient가 jest.fn() 아님. 결과: TypeError mockResolvedValue 17건 → 0건. 17 test 실패 잔여는 PR #3 route handler 로직 (별 사이클).",
+        "f3": "app/api/realtime/__tests__/sse-route.test.ts + lib/realtime/__tests__/sse-manager.test.ts에 `@jest-environment node` docblock 추가. Approach A (per-file Node env). 결과: sse-manager 27/29 PASS (이전: ReferenceError 전체). 2 실패는 test logic.",
+        "f4": "jest.setup.js에 TEST_ENV_DEFAULTS placeholder fallback 추가 (NODE_ENV/DATABASE_URL/SUPABASE/CLERK). dotenv 직후 `process.env[key] = process.env[key] ?? value` 패턴. 결과: member.service 32/43 PASS (이전: Invalid environment variables로 전체 throw).",
+        "f5": ".env.example 신규 생성 (~50 LOC). 이전: 파일 자체가 없어 e2e workflow의 `cp .env.example .env.local` silent fail. CI 검증은 Phase 6 PR push 후.",
+        "regression": "5종 인프라 에러(SyntaxError Unexpected token / Invalid environment variables / Request/TextEncoder/ReadableStream is not defined / mockResolvedValue is not a function) 전체 unit test suite에서 0건 (grep empty). 전체 suite full run은 Node V8 OOM 발생 — pre-existing, 별 사이클 후처리 필요.",
+        "filesChanged": [".env.example (new)", "jest.config.js", "jest.setup.js", "app/api/members/[id]/__tests__/route.test.ts", "app/api/realtime/__tests__/sse-route.test.ts", "lib/realtime/__tests__/sse-manager.test.ts"]
+      }
     }
   ],
   "planPath": "docs/01-plan/features/warning-cleanup-cycle-2.plan.md",

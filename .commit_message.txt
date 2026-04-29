@@ -1,1 +1,1 @@
-🗂️ docs(plan): exhibition-detail port 단계별 구현 plan (23 task TDD, 6 phase, schema 매핑 포함)
+📦 docs(report): jest-infra-debt PDCA 완료 보고서 — Match 100%, F1-F5 해결, Phase 6 split-cycle (PR #3 unblock 경로 확보)

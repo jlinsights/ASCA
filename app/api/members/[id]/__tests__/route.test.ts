@@ -23,7 +23,9 @@ jest.mock('@/lib/middleware/admin-middleware', () => ({
   getAuthContext: jest.fn(),
 }))
 
-import { describe, test, expect, jest, beforeEach } from '@jest/globals'
+// NOTE: do NOT import `jest` from '@jest/globals' — that disables babel-jest's
+// hoisting of jest.mock(...) calls and the real modules get loaded before mocks.
+import { describe, test, expect, beforeEach } from '@jest/globals'
 import { GET, PUT, DELETE } from '../route'
 import { NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
