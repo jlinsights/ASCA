@@ -21,9 +21,10 @@
 
 1. **`npm install --legacy-peer-deps`** is required due to React 19 + various Radix UI peer dependency conflicts.
 2. **Middleware 500**: If the app returns 500 on all routes, check that `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` is in valid format (see above).
-3. **DB schema push**: Run `npx drizzle-kit push --force` to apply schema. The `npm run db:push` script also runs a backup check (`tsx scripts/db-check-backup.ts`) which may fail if no prior DB exists — use the direct drizzle-kit command in that case.
-4. **Tests**: Jest tests use `jest.setup.js` which provides test env defaults. No real DB connection is needed — tests mock the DB via pg-mem. Some realtime/WebSocket tests may timeout (known issue, not blocking).
-5. **Dev server startup**: `npm run dev` uses `--webpack` flag (not Turbopack) to avoid ESM conflicts with Clerk. Server is ready in ~1s.
+3. **Clerk browser redirect**: Even with a valid publishable key, Clerk's dev mode redirects **browsers** (not curl) to `clerk.localhost.dev` for a handshake. Without real Clerk credentials, you must temporarily bypass Clerk in `middleware.ts` (replace the export with `export default function middleware() { return NextResponse.next() }`) to access pages in a browser. Restore it after testing. `curl` requests are unaffected and return 200 normally.
+4. **DB schema push**: Run `npx drizzle-kit push --force` to apply schema. The `npm run db:push` script also runs a backup check (`tsx scripts/db-check-backup.ts`) which may fail if no prior DB exists — use the direct drizzle-kit command in that case.
+5. **Tests**: Jest tests use `jest.setup.js` which provides test env defaults. No real DB connection is needed — tests mock the DB via pg-mem. Some realtime/WebSocket tests may timeout (known issue, not blocking).
+6. **Dev server startup**: `npm run dev` uses `--webpack` flag (not Turbopack) to avoid ESM conflicts with Clerk. Server is ready in ~1s.
 
 ### Common Commands
 
