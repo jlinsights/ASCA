@@ -58,7 +58,8 @@ describe('WebSocket Manager', () => {
   let manager: ReturnType<typeof createWebSocketManager>
 
   beforeEach(() => {
-    jest.useFakeTimers()
+    // doNotFake: microtask/nextTick은 real 유지 → await shutdown() resolve 보장.
+    jest.useFakeTimers({ doNotFake: ['queueMicrotask', 'nextTick'] })
     manager = createWebSocketManager()
   })
 
