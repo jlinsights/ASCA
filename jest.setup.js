@@ -35,6 +35,14 @@ if (
   }
 }
 
+// jsdom doesn't provide Node.js timer APIs used by SSE/realtime code.
+if (typeof globalThis.setImmediate === 'undefined') {
+  globalThis.setImmediate = (fn, ...args) => setTimeout(fn, 0, ...args)
+}
+if (typeof globalThis.clearImmediate === 'undefined') {
+  globalThis.clearImmediate = id => clearTimeout(id)
+}
+
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter: () => ({

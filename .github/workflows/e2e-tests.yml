@@ -36,7 +36,10 @@ jobs:
 
       - name: Setup environment variables
         run: |
-          cp .env.example .env.local
+          # Next.js with NODE_ENV=test loads .env.test (NOT .env.local).
+          # See: https://nextjs.org/docs/app/building-your-application/configuring/environment-variables
+          cp .env.example .env.test
+          cp .env.example .env.local  # safety net for any non-Next consumer
           # Add any additional environment variables needed for testing
 
       - name: Run Playwright tests

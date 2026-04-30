@@ -1,1 +1,1 @@
-🔐 chore(ci): codecov-action SHA pin v3.1.6 — CSO 2026-04-28 Finding #2 remediation
+💅 style: tests-infra-cleanup plan.md prettier 적용
