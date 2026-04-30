@@ -1,1 +1,1 @@
-🔧 fix(test): GraphQL 6 logic stale 일괄 fix (tests-stale-graphql-extras, rev β)
+📦 chore: tests-stale-graphql-extras PDCA 아카이브 (Match 100%, rev β 두 번째)
