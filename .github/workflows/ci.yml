@@ -71,7 +71,10 @@ jobs:
         run: npm run test:graphql
 
       - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
+        # Pinned to commit SHA (not tag) — tags are mutable; SHA guarantees integrity.
+        # v3.1.6 release (2024). Codecov compromised in 2021 — supply chain hardening.
+        # CSO 2026-04-28 Finding #2 remediation.
+        uses: codecov/codecov-action@9cc74bf7e13a810454a28846494ddbc3795eb693 # v3.1.6
         if: always()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
