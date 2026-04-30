@@ -4,6 +4,7 @@
 | --------------------------- | :--------: | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | asca-design-system-finalize |    98%     | 2026-04-25 | [Plan](asca-design-system-finalize/asca-design-system-finalize.plan.md) / [Design](asca-design-system-finalize/asca-design-system-finalize.design.md) / [Analysis](asca-design-system-finalize/asca-design-system-finalize.analysis.md) / [Report](asca-design-system-finalize/asca-design-system-finalize.report.md) |
 | jest-infra-debt             |    100%    | 2026-04-29 | [Plan](jest-infra-debt/jest-infra-debt.plan.md) / [Design](jest-infra-debt/jest-infra-debt.design.md) / [Analysis](jest-infra-debt/jest-infra-debt.analysis.md) / [Report](jest-infra-debt/jest-infra-debt.report.md)                                                                                                 |
+| tests-infra-cleanup         |    100%    | 2026-04-30 | [Plan](tests-infra-cleanup/tests-infra-cleanup.plan.md) / [Analysis](tests-infra-cleanup/tests-infra-cleanup.analysis.md) / [Report](tests-infra-cleanup/tests-infra-cleanup.report.md)                                                                                                                               |
 
 ## Highlights
 
@@ -22,3 +23,11 @@
   fallback) + F5(`.env.example` 신규 생성). 핵심 학습:
   `import { jest } from '@jest/globals'`은 babel-jest의 `jest.mock()` hoisting을
   비활성화 — global jest 사용 권장.
+
+- **tests-infra-cleanup** (100%, 2026-04-30): 부모 사이클 jest-infra-debt 종료
+  후 surface된 잔여 인프라 결함 2종 해결. P1(jsdom용
+  `setImmediate`/`clearImmediate` 폴리필 — undefined 체크 후 `setTimeout`
+  위임) + P2(e2e workflow `.env.test` 복사 — Next.js `NODE_ENV=test`는
+  `.env.local` 미로드). 13 LOC 단일 PR (#8, `c92d9371`), 45분 소요. 핵심 학습:
+  폴리필 컨벤션(undefined 체크 + 위임 + 동일 위치) 확립, Plan §5 Risk 섹션을 OOS
+  경계 정의 도구로 활용 가능.
