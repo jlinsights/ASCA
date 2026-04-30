@@ -1,1 +1,1 @@
-📦 chore: tests-infra-cleanup PDCA 아카이브 (Match 100%)
+🧪 fix(test): G1 doNotFake 폴리필 + G2 verifyMember dead-delete (tests-stale-update Phase A+B)
