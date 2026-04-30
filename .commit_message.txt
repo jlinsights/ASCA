@@ -1,1 +1,1 @@
-📦 chore: tests-stale-update PDCA 아카이브 (Match 55%, 4 신규 사이클 권장)
+🔧 fix(test): Clerk mock + JSX→createElement (jest-clerk-esm-fix, 0→138 GraphQL tests)
