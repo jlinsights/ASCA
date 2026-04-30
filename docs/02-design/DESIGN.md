@@ -1,10 +1,12 @@
 ---
 name: ASCA Design System
-version: 1.2.0-alpha
+version: 1.2.1-alpha
 description: >-
   사단법인 동양서예협회(ASCA) 웹사이트의 디자인 시스템 명세. 전통 동아시아
   예술의 색채·서체·질감을 현대 디지털 인터페이스 언어로 재해석한 토큰 집합. 본
   문서는 AI 코딩 에이전트가 UI를 생성·수정할 때 참조하는 단일 진실 공급원(SSOT).
+  색상은「브랜드 의미론 이름」과「shadcn / Tailwind 슬롯(app/globals.css)」이
+  1:1로 같지 않을 수 있으므로 §2.1에서 두 층을 구분한다.
 references:
   tailwind: tailwind.config.ts
   globals: app/globals.css
@@ -12,17 +14,17 @@ references:
   brand-data: app/brand/_components/brand-data.ts
 
 # ─────────────────────────────────────────────
-# COLORS — 의미론 기반 매핑
+# COLORS — 브랜드 팔레트 + shadcn 시맨틱 슬롯 (구현 = app/globals.css :root)
+# YAML 키 primary/secondary 는 Tailwind bg-primary/bg-secondary 와 동일 의미.
+# 브랜드 「주 녹색」은 celadon-green / accent 슬롯 — §2.1 본문 참조.
 # ─────────────────────────────────────────────
 colors:
-  # Semantic (UI 의도) — 일반 UI 작업은 이 레이어만 사용
-  # 주의: shadcn 규약에 따라 `accent` 는 hover/selected 배경용 부드러운 색.
-  # "프리미엄 강조"는 별도 `highlight` 슬롯을 사용한다.
-  primary: '#88A891' # Celadon Green — 청자 녹색, 브랜드 주색
-  primary-foreground: '#1a1a1a'
-  secondary: '#af2626' # Scholar Red — 선비 홍색, 보조 강조
-  secondary-foreground: '#f5f5f0'
-  accent: '#88A891' # Celadon Green (OKLCH 변환) — hover/selected 배경
+  # shadcn 시맨틱 슬롯 (WCAG 검증·design-lint 대상 — globals.css OKLCH의 HEX 근사)
+  primary: '#af2626' # Scholar Red — bg-primary / --primary (주 CTA·강조 버튼)
+  primary-foreground: '#fafafa' # 옅은 텍스트 on primary (~ oklch 0.98)
+  secondary: '#f0f0eb' # Warm surface — bg-secondary / --secondary (보조 표면·칩)
+  secondary-foreground: '#333333' # 짙은 텍스트 on secondary (~ oklch 0.2)
+  accent: '#88A891' # Celadon — bg-accent / --accent (hover·선택·포커스 링)
   accent-foreground: '#1a1a1a'
   highlight: '#ffcc00' # Brand Gold — 수상·기념·프리미엄. bg-brand-gold 로 접근
   highlight-foreground: '#1a1a1a'
@@ -75,7 +77,7 @@ colors:
 
   # Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정본)
   # Source: app/brand/_components/brand-data.ts
-  brand-gold: '#ffcc00' # 브랜드 공식 금색 — Semantic `accent` 로 승격
+  brand-gold: '#ffcc00' # 브랜드 공식 금색 — semantic `highlight` / bg-brand-gold
   terra-red: '#9b4444' # 전통 도장 주홍 — Scholar Red 의 차분한 보조
   sage-green: '#b7c4b7' # 문인화 절제된 초록 — Celadon Green 의 저채도 변형
   spring-green: '#09f557' # 생동·새 시작 — 장식 악센트 한정, UI 금지
@@ -209,21 +211,53 @@ ASCA는 서예라는 **무형의 정신성**을 디지털 인터페이스로 옮
 
 ## 2. Colors
 
-### 2.1 의미론(Semantic) 레이어 — 항상 먼저 이 레이어부터 선택
+### 2.1 브랜드 의미론 vs shadcn 슬롯 (구현 SSOT)
 
-UI 요소는 원칙적으로 Semantic 토큰으로 구현한다. Obang/Materials는 **브랜드
-표현용**이지 범용 UI 토큰이 아니다.
+브랜드 가이드에서는 **청자 녹(Celadon)** 이 식별의 중심이고, **선비 홍(Scholar
+Red)** 이 단호한 강조로 쓰인다. 반면 **shadcn / Tailwind** 는 관례상 **주
+버튼·주 CTA에 채도 높은 색(`primary` 슬롯)** 을 두므로, 본 프로젝트 구현
+(`app/globals.css`)에서는 **Primary 슬롯 = Scholar Red**, **Accent 슬롯 =
+Celadon** 으로 맞춘다. 문서·기획에서「브랜드 주녹으로 버튼」이라고 할 때는
+`bg-accent`, `bg-celadon-green`, 브랜드 유틸 클래스를 쓰고, 기본 shadcn
+`Button` 의 기본 강조 배경은 `bg-primary`(홍색)임을 전제한다.
 
-| 토큰                   | HEX       | 용도                                   | 근거                                                              |
-| ---------------------- | --------- | -------------------------------------- | ----------------------------------------------------------------- |
-| `{colors.primary}`     | `#88A891` | 주요 CTA, 링크, 포커스 링              | Celadon Green — 청자의 은은함, 브랜드 중심                        |
-| `{colors.secondary}`   | `#af2626` | 보조 강조, 섹션 구분선, 인용           | Scholar Red — 선비의 단호함                                       |
-| `{colors.accent}`      | `#88A891` | hover 배경, 선택 상태, 메뉴 하이라이트 | shadcn 규약 — `bg-accent`/`hover:bg-accent` (Celadon Green)       |
-| `{colors.highlight}`   | `#ffcc00` | 수상·기념·프리미엄 배지                | Brand Gold — `bg-brand-gold`/`text-brand-gold` 로 접근, 과용 금지 |
-| `{colors.destructive}` | `#dc2626` | 삭제·오류                              | 일반 destructive, Scholar Red와 분리                              |
-| `{colors.success}`     | `#4a7c59` | 완료·승인                              | East Wood (봄·생명)                                               |
-| `{colors.warning}`     | `#fdb462` | 주의·임박                              | Autumn Gold (풍요 속 경계)                                        |
-| `{colors.info}`        | `#1e3a8a` | 정보·안내                              | North Water (깊이·지혜)                                           |
+#### 2.1.1 브랜드 의미론 (기획·카피·/brand 내러티브)
+
+Obang / Materials 와 함께 쓰는 **문화적 이름**이다. Tailwind 클래스를 고를 때는
+오른쪽「구현 참고」열을 따른다.
+
+| 브랜드 의미            | 대표 HEX  | 용도 (내러티브)            | 구현 시 Tailwind / 변수 참고                                    |
+| ---------------------- | --------- | -------------------------- | --------------------------------------------------------------- |
+| 브랜드 주녹 (Celadon)  | `#88A891` | 브랜드 식별, 차분한 강조   | `bg-accent`, `bg-celadon-green`, `--accent`, `--celadon-green`  |
+| 선비 홍 (Scholar Red)  | `#af2626` | 단호한 강조, 주요 CTA      | `bg-primary`, `text-primary`, `--primary`                       |
+| 브랜드 금 (Brand Gold) | `#ffcc00` | 수상·프리미엄·기념 배지    | `bg-brand-gold`, `{colors.highlight}`                          |
+
+#### 2.1.2 shadcn 시맨틱 슬롯 — `app/globals.css` 와 1:1 (코드 SSOT)
+
+일반 UI는 아래 **슬롯 이름**으로 구현한다. 값은 라이트 모드 OKLCH의 HEX 근사이며,
+정확한 값은 `globals.css` 를 본다.
+
+| 슬롯                     | Tailwind 예                 | 대표 HEX (근사) | 브랜드 대응     | 용도                                       |
+| ------------------------ | --------------------------- | --------------- | --------------- | ------------------------------------------ |
+| `--primary`              | `bg-primary`                | `#af2626`       | Scholar Red     | 기본 primary 버튼, 강한 CTA                |
+| `--primary-foreground`   | `text-primary-foreground`   | `#fafafa`       | (대비용 라이트) | primary 면 위 텍스트                     |
+| `--secondary`            | `bg-secondary`              | `#f0f0eb`       | 무채 보조 표면  | 보조 버튼·칩·옅은 패널 (**홍색 아님**)     |
+| `--secondary-foreground` | `text-secondary-foreground` | `#333333`       | (대비용 먹색)   | secondary 면 위 텍스트                     |
+| `--accent`               | `bg-accent`                 | `#88A891`       | Celadon         | hover·선택·드롭다운 하이라이트, `ring`     |
+| `--accent-foreground`    | `text-accent-foreground`    | `#1a1a1a`       | 먹색            | accent 면 위 본문                        |
+| `--destructive`          | `bg-destructive`            | `#dc2626`       | (일반 오류)     | 삭제·검증 오류 (`primary` 슬롯과 용도 분리) |
+| `{colors.highlight}`     | `bg-brand-gold` 등          | `#ffcc00`       | Brand Gold      | §2.5 프리미엄 배지                         |
+
+**흔한 실수:** `bg-primary` 는 Celadon 이 아니며, `bg-secondary` 는 Scholar Red 가
+아니다. 브랜드 녹색 CTA는 `bg-accent` 또는 `bg-celadon-green` 을 쓴다.
+
+#### 2.1.3 상태·피드백 (YAML·Tailwind 확장과 동일 이름)
+
+| 토큰 / Tailwind        | HEX       | 용도          |
+| ---------------------- | --------- | ------------- |
+| `success` / 녹 계열    | `#4a7c59` | 완료·승인     |
+| `warning`              | `#fdb462` | 주의·임박     |
+| `info`                 | `#1e3a8a` | 정보·안내     |
 
 ### 2.2 Surface 레이어 — 배경/테두리
 
@@ -276,16 +310,19 @@ shadcn 규약상 **Celadon Green** 기반 부드러운 배경 (드롭다운 hove
 
 ### 2.6 WCAG 검증 쌍
 
-아래 페어는 WCAG AA (4.5:1) 이상을 충족한다. 새 조합을 만들면 반드시 대비율을
-측정한다.
+아래 페어는 **front matter `colors` 의 리터럴 HEX**(§2.1.2 슬롯과 동기화)에 대해
+WCAG AA (4.5:1) 이상을 충족한다. 정량 값은 `npm run design:wcag` 출력이
+정본이다.
 
-- `{colors.foreground}` on `{colors.background}` — 15.8:1 ✅
-- `{colors.primary-foreground}` on `{colors.primary}` — 5.2:1 ✅
-- `{colors.secondary-foreground}` on `{colors.secondary}` — 6.1:1 ✅
+- `{colors.foreground}` on `{colors.background}` — 15.9:1 ✅
+- `{colors.primary-foreground}` on `{colors.primary}` — Scholar Red 슬롯, 6.4:1
+  ✅
+- `{colors.secondary-foreground}` on `{colors.secondary}` — 무채 보조 표면 슬롯,
+  11.1:1 ✅
 - `{colors.accent-foreground}` on `{colors.accent}` (`#1a1a1a` on `#88A891`) —
-  5.2:1 ✅
+  6.7:1 ✅
 - `{colors.highlight-foreground}` on `{colors.highlight}` (`#1a1a1a` on
-  `#ffcc00`) — 14.1:1 ✅
+  `#ffcc00`) — 11.5:1 ✅
 - `{colors.terra-red}` (`#9b4444`) on `{colors.rice-paper}` (`#f5f5f0`) — 6.8:1
   ✅
 - ⚠️ `{colors.sage-green}` (`#b7c4b7`) 흰 배경 — 약 2.1:1 ❌ (텍스트 금지, 배경
@@ -379,6 +416,8 @@ shadcn 규약상 **Celadon Green** 기반 부드러운 배경 (드롭다운 hove
 
 > **Hard-fail pairs (verified by `npm run design:wcag`)** —
 > `scripts/design-lint.ts` 실행 시 11개 페어 모두 WCAG 2.1 AA 통과 필수.
+> **P2**·**L2**는 `primary` 슬롯(Scholar Red), **P3**는 `secondary` 슬롯(무채
+> 표면) — §2.1.2와 YAML `colors` 정의와 일치한다.
 
 | 페어 | foreground / background                  | 최소 비율 | 크기       |
 | ---- | ---------------------------------------- | --------- | ---------- |
@@ -586,7 +625,9 @@ shadcn 규약상 **Celadon Green** 기반 부드러운 배경 (드롭다운 hove
 1. **조회 순서**: 이 문서 → `tailwind.config.ts` → `app/globals.css` → 기존
    컴포넌트
 2. **토큰 참조 문법**: `{colors.primary}`, `{typography.scale.lg}` — 본문에서
-   규칙을 인용할 때 사용
+   규칙을 인용할 때 사용. **`{colors.primary}`는 YAML·Tailwind `primary` 슬롯
+   (Scholar Red, §2.1.2)** 이지 브랜드 「주녹」이 아님 — 녹색 CTA는 §2.1.1 표의
+   `accent` / `celadon-green` 참조.
 3. **토큰이 없을 때**: 절대 임의 값을 만들지 않는다. 사용자에게 **"DESIGN.md에
    토큰이 없어 추가가 필요하다"** 고 보고한 뒤 승인받고 본 문서를 먼저 수정한다.
 4. **컴포넌트가 없을 때**: `components/` 하위에 만들되, 기존 `gallery-*` 네이밍
@@ -599,12 +640,16 @@ shadcn 규약상 **Celadon Green** 기반 부드러운 배경 (드롭다운 hove
 
 - **오너**: @jhlim725
 - **변경 주기**: 토큰 변경 시 `.commit_message.txt` + Git 커밋 필수
-- **Breaking Change**: `version` 메이저 증가 (현재 1.1.0-alpha)
-- **검증**: 토큰 추가/변경 시 `npm run build` + `npm run type-check` 통과 필수
+- **Breaking Change**: `version` 메이저 증가 (현재 1.2.1-alpha)
+- **검증**: 토큰 추가/변경 시 `npm run build` + `npm run type-check` + `npm run
+  design:wcag` + `npm run design:diff` 통과 권장
 
 ### Changelog
 
-- **1.2.0-alpha** (2026-04-24) — 🔴 **Critical fix** (design-validator 발견).
+- **1.2.1-alpha** (2026-04-12) — §2.1 재구성: **브랜드 의미론**과 **shadcn 슬롯
+  (`globals.css`)** 이중 층 명시. YAML `primary`/`secondary` 를 구현(SSOT)에
+  맞춤(Primary=Scholar Red, Secondary=무채 표면). §2.6·§3.6·에이전트 가이드 보강.
+  `npm run design:wcag`·`design:diff` 통과 확인.
   shadcn `accent` 는 Celadon Green 기반 hover 배경이므로 Brand Gold 로 승격
   불가. 새 `highlight` Semantic 슬롯을 신설해 Brand Gold (`#ffcc00`,
   `bg-brand-gold`) 전용으로 분리. globals.css 의 미사용 `--color-*` semantic

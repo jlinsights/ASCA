@@ -1,1 +1,1 @@
-🔧 fix(test): Clerk mock + JSX→createElement (jest-clerk-esm-fix, 0→138 GraphQL tests)
+📝 DESIGN.md 1.2.1: 브랜드 의미론 vs shadcn 슬롯 이중 정의 + YAML 구현 동기화
