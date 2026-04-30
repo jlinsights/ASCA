@@ -1,1 +1,1 @@
-💅 style: tests-infra-cleanup plan.md prettier 적용
+📦 chore: tests-infra-cleanup PDCA 아카이브 (Match 100%)
