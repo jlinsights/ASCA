@@ -84,6 +84,10 @@ export function createMockDb() {
         findFirst: jest.fn(),
         findMany: jest.fn().mockResolvedValue([]),
       },
+      membershipApplications: {
+        findFirst: jest.fn(),
+        findMany: jest.fn().mockResolvedValue([]),
+      },
       membershipTiers: {
         findFirst: jest.fn(),
         findMany: jest.fn().mockResolvedValue([]),

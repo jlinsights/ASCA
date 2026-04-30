@@ -1,6 +1,11 @@
 /**
  * GraphQL API Integration Tests
  *
+ * @jest-environment node
+ *
+ * Uses Node test env to access Web Streams (Request, Response) required by
+ * Next.js Edge runtime types. jsdom env does not provide these globals.
+ *
  * End-to-end tests for the GraphQL API endpoint:
  * - POST /api/graphql with queries and mutations
  * - Authentication header processing
@@ -12,7 +17,7 @@ import { NextRequest } from 'next/server'
 import { POST } from '../route'
 
 // Mock the database and context modules
-jest.mock('@/lib/db/drizzle', () => ({
+jest.mock('@/lib/db', () => ({
   db: {
     query: {
       users: {

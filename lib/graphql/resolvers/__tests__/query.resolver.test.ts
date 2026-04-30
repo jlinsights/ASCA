@@ -92,7 +92,7 @@ describe('Query Resolvers', () => {
   describe('memberByUserId', () => {
     it('should load member by user ID using DataLoader', async () => {
       const mockMember = createMockMember()
-      const context = createMockContext()
+      const context = createAuthContext()
       ;(context.loaders.memberByUserIdLoader.load as jest.Mock).mockResolvedValue(mockMember)
 
       const result = await queryResolvers.memberByUserId({}, { userId: 'user-1' }, context)
@@ -156,7 +156,7 @@ describe('Query Resolvers', () => {
   describe('searchMembers', () => {
     it('should search members by name', async () => {
       const matchingMembers = [createMockMember({ fullName: 'John Doe' })]
-      const context = createMockContext()
+      const context = createAuthContext()
       context.db.query.members.findMany = jest.fn().mockResolvedValue(matchingMembers)
 
       const result = await queryResolvers.searchMembers({}, { query: 'John', limit: 10 }, context)
@@ -166,7 +166,7 @@ describe('Query Resolvers', () => {
     })
 
     it('should use default limit of 10', async () => {
-      const context = createMockContext()
+      const context = createAuthContext()
       context.db.query.members.findMany = jest.fn().mockResolvedValue([])
 
       await queryResolvers.searchMembers({}, { query: 'test' }, context)

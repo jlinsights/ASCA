@@ -193,7 +193,7 @@ describe('Authentication and Authorization', () => {
 
         const result = await queryResolvers.searchMembers({}, { query: 'test', first: 20 }, context)
 
-        expect(result.edges).toHaveLength(0)
+        expect(result).toHaveLength(0)
         expect(context.db.query.members.findMany).toHaveBeenCalled()
       })
     })
