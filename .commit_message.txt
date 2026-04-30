@@ -1,1 +1,1 @@
-📋 docs(pdca): tests-stale-update plan/design + tests-db-fixture plan
+📦 chore: tests-stale-update PDCA 아카이브 (Match 55%, 4 신규 사이클 권장)
