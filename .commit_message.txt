@@ -1,1 +1,1 @@
-📝 DESIGN.md 1.2.1: 브랜드 의미론 vs shadcn 슬롯 이중 정의 + YAML 구현 동기화
+📦 chore: jest-clerk-esm-fix PDCA 아카이브 (Match 95%, rev β 첫 검증)
