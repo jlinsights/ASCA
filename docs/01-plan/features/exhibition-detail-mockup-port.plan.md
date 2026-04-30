@@ -1,14 +1,27 @@
 # Exhibition Detail Mockup → Next.js Port — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use
+> superpowers:subagent-driven-development (recommended) or
+> superpowers:executing-plans to implement this plan task-by-task. Steps use
+> checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** mockup의 편집 디자인 가치를 ASCA `/exhibitions/[id]` 페이지로 옮기되 운영 기능(공유, 포스터, 조회수, 오너 액션)을 보존하고 작품 풀 메타데이터 join을 추가한다.
+**Goal:** mockup의 편집 디자인 가치를 ASCA `/exhibitions/[id]` 페이지로 옮기되
+운영 기능(공유, 포스터, 조회수, 오너 액션)을 보존하고 작품 풀 메타데이터 join을
+추가한다.
 
-**Architecture:** 8개 컴포넌트로 섹션 분해(orchestrator + Hero/MetaBand/Description/ArtworkGrid/ShareBar/VisitInfo/CTAStrip(보류)/Loading/Error). 새 hook `useExhibitionDetail`이 fetch+ownership 로직을 담당. 새 query 함수 `getExhibitionFullById`가 작품 풀 메타까지 단일 join. Tailwind 우선 + globals.css `@layer components`에 5개 신규 클래스. Pretext 런타임 의존성 미도입 (CSS-only).
+**Architecture:** 8개 컴포넌트로 섹션 분해(orchestrator +
+Hero/MetaBand/Description/ArtworkGrid/ShareBar/VisitInfo/CTAStrip(보류)/Loading/Error).
+새 hook `useExhibitionDetail`이 fetch+ownership 로직을 담당. 새 query 함수
+`getExhibitionFullById`가 작품 풀 메타까지 단일 join. Tailwind 우선 +
+globals.css `@layer components`에 5개 신규 클래스. Pretext 런타임 의존성 미도입
+(CSS-only).
 
-**Tech Stack:** Next.js 14 App Router (client component), TypeScript, Tailwind v3, shadcn/ui (Card/Button/Badge/Separator), Drizzle ORM, Clerk auth, Jest + React Testing Library.
+**Tech Stack:** Next.js 14 App Router (client component), TypeScript, Tailwind
+v3, shadcn/ui (Card/Button/Badge/Separator), Drizzle ORM, Clerk auth, Jest +
+React Testing Library.
 
-**Source spec:** `docs/02-design/features/exhibition-detail-mockup-port.design.md`
+**Source spec:**
+`docs/02-design/features/exhibition-detail-mockup-port.design.md`
 
 ---
 
@@ -17,8 +30,11 @@
 ### Task 0.1: 기존 코드 매핑 확인 (필수 사전 읽기)
 
 **Files (read only):**
-- `lib/db/schema.ts` (artworks 테이블 line 57~89, exhibitions line 92~126, exhibitionArtworks line 129~)
-- `lib/types/exhibition-legacy.ts` (`Exhibition`, `ExhibitionWithDetails`, `ExhibitionFull` interfaces)
+
+- `lib/db/schema.ts` (artworks 테이블 line 57~89, exhibitions line 92~126,
+  exhibitionArtworks line 129~)
+- `lib/types/exhibition-legacy.ts` (`Exhibition`, `ExhibitionWithDetails`,
+  `ExhibitionFull` interfaces)
 - `lib/db/queries.ts:190` (`getExhibitionById`)
 - `lib/api/exhibitions.ts` (`fetchExhibitionById` + 매핑 로직)
 - `app/exhibitions/[id]/page.tsx` (현재 client component 흐름)
@@ -26,24 +42,29 @@
 
 - [ ] **Step 1: schema 매핑 테이블 작성 — 머릿속 또는 메모**
 
-| Type 필드 | Schema 컬럼 | 비고 |
-|---|---|---|
-| `Exhibition.featuredImageUrl` | `exhibitions.posterImage` | api/exhibitions.ts에 매핑 있음 |
-| `Exhibition.curator` | `exhibitions.curatorNotes`? | 정확한 매핑 확인 필요 |
-| `Exhibition.location` | `exhibitions.venueAddress`? | 매핑 확인 필요 |
-| `Exhibition.status` 'current' | `exhibitions.status` 'ongoing' | 'current'↔'ongoing' 매핑 |
-| `ExhibitionArtwork.isFeatured` | `exhibitionArtworks.isHighlight` | 매핑 확인 필요 |
-| `ExhibitionArtwork.notes` | (schema 없음) | metadata jsonb 또는 미사용 |
+| Type 필드                      | Schema 컬럼                      | 비고                           |
+| ------------------------------ | -------------------------------- | ------------------------------ |
+| `Exhibition.featuredImageUrl`  | `exhibitions.posterImage`        | api/exhibitions.ts에 매핑 있음 |
+| `Exhibition.curator`           | `exhibitions.curatorNotes`?      | 정확한 매핑 확인 필요          |
+| `Exhibition.location`          | `exhibitions.venueAddress`?      | 매핑 확인 필요                 |
+| `Exhibition.status` 'current'  | `exhibitions.status` 'ongoing'   | 'current'↔'ongoing' 매핑      |
+| `ExhibitionArtwork.isFeatured` | `exhibitionArtworks.isHighlight` | 매핑 확인 필요                 |
+| `ExhibitionArtwork.notes`      | (schema 없음)                    | metadata jsonb 또는 미사용     |
 
 - [ ] **Step 2: 본 plan에서 사용할 fetch 함수 패턴 확정**
 
-`lib/api/exhibitions.ts`의 기존 `fetchExhibitionById` 매핑 로직(snake_case → camelCase, status enum, posterImage→featuredImageUrl)을 그대로 따른다. 새 함수는 추가 join 컬럼만 더 매핑한다.
+`lib/api/exhibitions.ts`의 기존 `fetchExhibitionById` 매핑 로직(snake_case →
+camelCase, status enum, posterImage→featuredImageUrl)을 그대로 따른다. 새 함수는
+추가 join 컬럼만 더 매핑한다.
 
 - [ ] **Step 3: `ExhibitionFull` 타입 재사용 결정**
 
-`lib/types/exhibition-legacy.ts:85` 의 기존 `ExhibitionFull`을 확장한다(spec §5.1의 `ExhibitionWithArtworkDetails`라는 새 이름은 사용하지 않음 — 기존 타입 충돌 회피).
+`lib/types/exhibition-legacy.ts:85` 의 기존 `ExhibitionFull`을 확장한다(spec
+§5.1의 `ExhibitionWithArtworkDetails`라는 새 이름은 사용하지 않음 — 기존 타입
+충돌 회피).
 
-추가 필드: artworks 항목에 `style`, `medium`, `dimensions`, `year`, `imageUrl`. artists 항목은 그대로(이미 풀 메타 포함됨).
+추가 필드: artworks 항목에 `style`, `medium`, `dimensions`, `year`, `imageUrl`.
+artists 항목은 그대로(이미 풀 메타 포함됨).
 
 - [ ] **Step 4: 본 사전 조사는 commit 없음 — 다음 task로 진행**
 
@@ -54,6 +75,7 @@
 ### Task 1.1: `pickWatermarkChar` 유틸 함수 (TDD)
 
 **Files:**
+
 - Create: `lib/exhibitions/pick-watermark-char.ts`
 - Test: `lib/exhibitions/__tests__/pick-watermark-char.test.ts`
 
@@ -88,8 +110,8 @@ describe('pickWatermarkChar', () => {
 
 - [ ] **Step 2: 테스트 실패 확인**
 
-Run: `npm run test -- pick-watermark-char`
-Expected: FAIL with "Cannot find module '../pick-watermark-char'"
+Run: `npm run test -- pick-watermark-char` Expected: FAIL with "Cannot find
+module '../pick-watermark-char'"
 
 - [ ] **Step 3: 최소 구현 작성**
 
@@ -112,8 +134,7 @@ export function pickWatermarkChar(title: string): string {
 
 - [ ] **Step 4: 테스트 통과 확인**
 
-Run: `npm run test -- pick-watermark-char`
-Expected: PASS (5 tests)
+Run: `npm run test -- pick-watermark-char` Expected: PASS (5 tests)
 
 - [ ] **Step 5: 커밋**
 
@@ -128,6 +149,7 @@ git commit -m "feat(exhibitions): pickWatermarkChar utility for hero watermark"
 ### Task 1.2: `CalligraphyStyle` 타입 + style 정규화 (TDD)
 
 **Files:**
+
 - Modify: `lib/types/exhibition-legacy.ts` (CalligraphyStyle export 추가)
 - Create: `lib/exhibitions/normalize-style.ts`
 - Test: `lib/exhibitions/__tests__/normalize-style.test.ts`
@@ -166,8 +188,7 @@ describe('normalizeCalligraphyStyle', () => {
 
 - [ ] **Step 2: 테스트 실패 확인**
 
-Run: `npm run test -- normalize-style`
-Expected: FAIL
+Run: `npm run test -- normalize-style` Expected: FAIL
 
 - [ ] **Step 3: 타입 추가**
 
@@ -178,13 +199,13 @@ Expected: FAIL
  * 서예 서체 분류 (artworks.style 자유 텍스트의 정규화 결과)
  */
 export type CalligraphyStyle =
-  | 'zhuan'   // 篆書
-  | 'li'      // 隷書
-  | 'kai'     // 楷書
-  | 'xing'    // 行書
-  | 'cao'     // 草書
-  | 'hangul'  // 한글
-  | 'mixed'   // 한문/한글 혼합
+  | 'zhuan' // 篆書
+  | 'li' // 隷書
+  | 'kai' // 楷書
+  | 'xing' // 行書
+  | 'cao' // 草書
+  | 'hangul' // 한글
+  | 'mixed' // 한문/한글 혼합
 ```
 
 - [ ] **Step 4: 정규화 함수 구현**
@@ -195,15 +216,27 @@ import type { CalligraphyStyle } from '@/lib/types/exhibition-legacy'
 
 const STYLE_MAP: Record<string, CalligraphyStyle> = {
   // 한글 라벨
-  '전서': 'zhuan', '예서': 'li', '해서': 'kai',
-  '행서': 'xing', '초서': 'cao', '한글': 'hangul',
-  '혼합': 'mixed',
+  전서: 'zhuan',
+  예서: 'li',
+  해서: 'kai',
+  행서: 'xing',
+  초서: 'cao',
+  한글: 'hangul',
+  혼합: 'mixed',
   // 한자 라벨
-  '篆書': 'zhuan', '隷書': 'li', '楷書': 'kai',
-  '行書': 'xing', '草書': 'cao',
+  篆書: 'zhuan',
+  隷書: 'li',
+  楷書: 'kai',
+  行書: 'xing',
+  草書: 'cao',
   // 영문 (소문자 키로 lookup)
-  'zhuan': 'zhuan', 'li': 'li', 'kai': 'kai',
-  'xing': 'xing', 'cao': 'cao', 'hangul': 'hangul', 'mixed': 'mixed',
+  zhuan: 'zhuan',
+  li: 'li',
+  kai: 'kai',
+  xing: 'xing',
+  cao: 'cao',
+  hangul: 'hangul',
+  mixed: 'mixed',
 }
 
 export function normalizeCalligraphyStyle(
@@ -217,8 +250,7 @@ export function normalizeCalligraphyStyle(
 
 - [ ] **Step 5: 테스트 통과 확인**
 
-Run: `npm run test -- normalize-style`
-Expected: PASS (10 tests)
+Run: `npm run test -- normalize-style` Expected: PASS (10 tests)
 
 - [ ] **Step 6: 커밋**
 
@@ -233,7 +265,9 @@ git commit -m "feat(types): CalligraphyStyle enum + style normalizer"
 ### Task 1.3: `ExhibitionFullExtended` 타입 추가
 
 **Files:**
-- Modify: `lib/types/exhibition-legacy.ts` (기존 ExhibitionFull 확장 또는 새 타입 추가)
+
+- Modify: `lib/types/exhibition-legacy.ts` (기존 ExhibitionFull 확장 또는 새
+  타입 추가)
 
 - [ ] **Step 1: 기존 ExhibitionFull 의존자 검색**
 
@@ -241,8 +275,8 @@ git commit -m "feat(types): CalligraphyStyle enum + style normalizer"
 cd ~/Developer/Projects/ASCA && grep -rn "ExhibitionFull" --include="*.ts" --include="*.tsx" | grep -v node_modules | grep -v __tests__
 ```
 
-만약 사용처 0건 → ExhibitionFull 자체를 확장하면 됨.
-사용처 있음 → 새 타입 `ExhibitionDetailFull` 별도 추가.
+만약 사용처 0건 → ExhibitionFull 자체를 확장하면 됨. 사용처 있음 → 새 타입
+`ExhibitionDetailFull` 별도 추가.
 
 - [ ] **Step 2: 타입 정의 (사용처 없는 경우 — ExhibitionFull 직접 확장)**
 
@@ -259,17 +293,17 @@ export interface ExhibitionFull extends Exhibition {
     id: string
     title: string
     titleEn?: string | null
-    titleHanja?: string | null    // NEW: extracted from title via regex
+    titleHanja?: string | null // NEW: extracted from title via regex
     images?: string[]
-    imageUrl?: string | null      // NEW: primary image
+    imageUrl?: string | null // NEW: primary image
     artistId: string
-    artistName: string            // NEW: joined from artists.name
+    artistName: string // NEW: joined from artists.name
     displayOrder: number
     isFeatured: boolean
-    style?: CalligraphyStyle | null  // NEW: normalized
-    medium?: string | null           // NEW: 종이/비단/etc
-    dimensions?: string | null       // NEW: "180×90cm"
-    year?: number | null             // NEW
+    style?: CalligraphyStyle | null // NEW: normalized
+    medium?: string | null // NEW: 종이/비단/etc
+    dimensions?: string | null // NEW: "180×90cm"
+    year?: number | null // NEW
   }>
   artists: Array<{
     relationId: string
@@ -289,10 +323,11 @@ export interface ExhibitionFull extends Exhibition {
 
 - [ ] **Step 3: 타입 체크 (테스트 없이 컴파일 검증)**
 
-Run: `npm run type-check`
-Expected: 새 필드 추가에 따른 빌드 오류 없음 (ExhibitionFull 사용처 없음 가정)
+Run: `npm run type-check` Expected: 새 필드 추가에 따른 빌드 오류 없음
+(ExhibitionFull 사용처 없음 가정)
 
-만약 컴파일 오류 → Step 1으로 돌아가 새 별도 타입 `ExhibitionDetailFull` 정의로 전환.
+만약 컴파일 오류 → Step 1으로 돌아가 새 별도 타입 `ExhibitionDetailFull` 정의로
+전환.
 
 - [ ] **Step 4: 커밋**
 
@@ -309,6 +344,7 @@ git commit -m "types(exhibitions): extend ExhibitionFull with artwork detail fie
 ### Task 2.1: `getExhibitionFullById` Drizzle query (TDD)
 
 **Files:**
+
 - Modify: `lib/db/queries.ts` (새 함수 추가)
 - Test: `lib/db/__tests__/get-exhibition-full-by-id.test.ts`
 
@@ -327,13 +363,13 @@ describe('getExhibitionFullById', () => {
   it('returns null + error for non-existent ID', async () => {
     const { data, error } = await getExhibitionFullById('non-existent-uuid')
     expect(data).toBeNull()
-    expect(error).toBeNull()  // not-found는 error가 아니라 data null
+    expect(error).toBeNull() // not-found는 error가 아니라 data null
   })
 
   it('returns exhibition with artwork details for valid ID', async () => {
     // SETUP: 시드 데이터에 'test-exhibition-1' 가정 (없으면 skip)
     const { data, error } = await getExhibitionFullById('test-exhibition-1')
-    if (!data) return  // 시드 없으면 skip
+    if (!data) return // 시드 없으면 skip
     expect(error).toBeNull()
     expect(data.id).toBe('test-exhibition-1')
     expect(Array.isArray(data.artworks)).toBe(true)
@@ -358,8 +394,8 @@ describe('getExhibitionFullById', () => {
 
 - [ ] **Step 2: 테스트 실패 확인**
 
-Run: `npm run test -- get-exhibition-full-by-id`
-Expected: FAIL with "Cannot find export getExhibitionFullById"
+Run: `npm run test -- get-exhibition-full-by-id` Expected: FAIL with "Cannot
+find export getExhibitionFullById"
 
 - [ ] **Step 3: query 함수 구현**
 
@@ -367,15 +403,23 @@ Expected: FAIL with "Cannot find export getExhibitionFullById"
 
 ```ts
 import { eq, asc } from 'drizzle-orm'
-import { exhibitions, exhibitionArtworks, artworks, artists } from '@/lib/db/schema'
+import {
+  exhibitions,
+  exhibitionArtworks,
+  artworks,
+  artists,
+} from '@/lib/db/schema'
 import { normalizeCalligraphyStyle } from '@/lib/exhibitions/normalize-style'
-import type { ExhibitionFull, ExhibitionStatus } from '@/lib/types/exhibition-legacy'
+import type {
+  ExhibitionFull,
+  ExhibitionStatus,
+} from '@/lib/types/exhibition-legacy'
 
 const STATUS_MAP: Record<string, ExhibitionStatus> = {
   upcoming: 'upcoming',
   ongoing: 'current',
   completed: 'past',
-  cancelled: 'past',  // 취소도 과거로 처리
+  cancelled: 'past', // 취소도 과거로 처리
 }
 
 /**
@@ -426,7 +470,7 @@ export async function getExhibitionFullById(
       data: {
         id: ex.id,
         title: ex.title,
-        subtitle: null,  // schema에 없음 — 후속에 추가 필요 시
+        subtitle: null, // schema에 없음 — 후속에 추가 필요 시
         description: ex.description ?? '',
         content: null,
         startDate: ex.startDate.toISOString(),
@@ -438,8 +482,8 @@ export async function getExhibitionFullById(
         galleryImages: ex.galleryImages ?? null,
         status: STATUS_MAP[ex.status] ?? 'upcoming',
         isFeatured: ex.isFeatured,
-        isPublished: true,  // schema에 isPublished 없음 — 모두 published 가정
-        views: 0,            // schema에 views 없음
+        isPublished: true, // schema에 isPublished 없음 — 모두 published 가정
+        views: 0, // schema에 views 없음
         ticketPrice: ex.admissionFee ?? null,
         createdAt: ex.createdAt.toISOString(),
         updatedAt: ex.updatedAt.toISOString(),
@@ -460,7 +504,7 @@ export async function getExhibitionFullById(
           dimensions: r.dimensions,
           year: r.year,
         })),
-        artists: [],  // 본 사이클은 작품 join만, 참여 작가 별도 fetch는 후속
+        artists: [], // 본 사이클은 작품 join만, 참여 작가 별도 fetch는 후속
         artworkCount: artworkRows.length,
         artistCount: 0,
         featuredArtworkCount: artworkRows.filter(r => r.isHighlight).length,
@@ -468,7 +512,10 @@ export async function getExhibitionFullById(
       error: null,
     }
   } catch (err) {
-    return { data: null, error: err instanceof Error ? err : new Error(String(err)) }
+    return {
+      data: null,
+      error: err instanceof Error ? err : new Error(String(err)),
+    }
   }
 }
 
@@ -482,8 +529,8 @@ function extractHanjaFromTitle(title: string): string | null {
 
 - [ ] **Step 4: 테스트 통과 확인**
 
-Run: `npm run test -- get-exhibition-full-by-id`
-Expected: PASS (3 tests, 시드 부재 시 일부 skip 정상)
+Run: `npm run test -- get-exhibition-full-by-id` Expected: PASS (3 tests, 시드
+부재 시 일부 skip 정상)
 
 추가: `npm run type-check` PASS
 
@@ -500,6 +547,7 @@ git commit -m "feat(db): getExhibitionFullById with full artwork metadata join"
 ### Task 2.2: `fetchExhibitionFullById` API 클라이언트 (TDD)
 
 **Files:**
+
 - Modify: `lib/api/exhibitions.ts` (새 함수 추가)
 - Test: `lib/api/__tests__/fetch-exhibition-full.test.ts`
 
@@ -511,7 +559,9 @@ import { fetchExhibitionFullById } from '../exhibitions'
 
 // fetch mock
 const originalFetch = global.fetch
-afterEach(() => { global.fetch = originalFetch })
+afterEach(() => {
+  global.fetch = originalFetch
+})
 
 describe('fetchExhibitionFullById', () => {
   it('returns data on 200 response', async () => {
@@ -548,8 +598,7 @@ describe('fetchExhibitionFullById', () => {
 
 - [ ] **Step 2: 테스트 실패 확인**
 
-Run: `npm run test -- fetch-exhibition-full`
-Expected: FAIL
+Run: `npm run test -- fetch-exhibition-full` Expected: FAIL
 
 - [ ] **Step 3: API client 구현**
 
@@ -600,16 +649,10 @@ export async function GET(
 ) {
   const { data, error } = await getExhibitionFullById(params.id)
   if (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
   if (!data) {
-    return NextResponse.json(
-      { error: 'Exhibition not found' },
-      { status: 404 }
-    )
+    return NextResponse.json({ error: 'Exhibition not found' }, { status: 404 })
   }
   return NextResponse.json({ data })
 }
@@ -617,8 +660,7 @@ export async function GET(
 
 - [ ] **Step 5: 테스트 통과 확인**
 
-Run: `npm run test -- fetch-exhibition-full`
-Expected: PASS (3 tests)
+Run: `npm run test -- fetch-exhibition-full` Expected: PASS (3 tests)
 
 - [ ] **Step 6: 커밋**
 
@@ -633,6 +675,7 @@ git commit -m "feat(api): fetchExhibitionFullById client + /full route"
 ### Task 2.3: 정적 fallback 데이터 분리
 
 **Files:**
+
 - Create: `lib/data/static-exhibitions.ts`
 - (page.tsx에서 인라인 정적 데이터를 다음 task에서 사용)
 
@@ -671,52 +714,106 @@ export const STATIC_EXHIBITIONS: Record<string, ExhibitionFull> = {
     updatedAt: new Date('2026-01-01').toISOString(),
     artworks: [
       {
-        relationId: 'static-rel-1', id: 'static-art-1',
-        title: '逍遙游', titleEn: 'Wandering Free', titleHanja: '逍遙游',
-        images: [], imageUrl: null,
-        artistId: 'static-artist-1', artistName: '徐景 김재호',
-        displayOrder: 0, isFeatured: true,
-        style: 'zhuan', medium: '화선지에 먹', dimensions: '136 × 70 cm', year: 2025,
+        relationId: 'static-rel-1',
+        id: 'static-art-1',
+        title: '逍遙游',
+        titleEn: 'Wandering Free',
+        titleHanja: '逍遙游',
+        images: [],
+        imageUrl: null,
+        artistId: 'static-artist-1',
+        artistName: '徐景 김재호',
+        displayOrder: 0,
+        isFeatured: true,
+        style: 'zhuan',
+        medium: '화선지에 먹',
+        dimensions: '136 × 70 cm',
+        year: 2025,
       },
       {
-        relationId: 'static-rel-2', id: 'static-art-2',
-        title: '松柏之操', titleEn: 'The Constancy of Pine and Cypress', titleHanja: '松柏之操',
-        images: [], imageUrl: null,
-        artistId: 'static-artist-2', artistName: '墨香 이정민',
-        displayOrder: 1, isFeatured: false,
-        style: 'li', medium: '비단에 먹', dimensions: '180 × 90 cm', year: 2026,
+        relationId: 'static-rel-2',
+        id: 'static-art-2',
+        title: '松柏之操',
+        titleEn: 'The Constancy of Pine and Cypress',
+        titleHanja: '松柏之操',
+        images: [],
+        imageUrl: null,
+        artistId: 'static-artist-2',
+        artistName: '墨香 이정민',
+        displayOrder: 1,
+        isFeatured: false,
+        style: 'li',
+        medium: '비단에 먹',
+        dimensions: '180 × 90 cm',
+        year: 2026,
       },
       {
-        relationId: 'static-rel-3', id: 'static-art-3',
-        title: '致虛守靜', titleEn: 'Empty the Self, Hold Stillness', titleHanja: '致虛守靜',
-        images: [], imageUrl: null,
-        artistId: 'static-artist-3', artistName: '淸潭 박순영',
-        displayOrder: 2, isFeatured: true,
-        style: 'kai', medium: '화선지에 먹', dimensions: '200 × 100 cm', year: 2026,
+        relationId: 'static-rel-3',
+        id: 'static-art-3',
+        title: '致虛守靜',
+        titleEn: 'Empty the Self, Hold Stillness',
+        titleHanja: '致虛守靜',
+        images: [],
+        imageUrl: null,
+        artistId: 'static-artist-3',
+        artistName: '淸潭 박순영',
+        displayOrder: 2,
+        isFeatured: true,
+        style: 'kai',
+        medium: '화선지에 먹',
+        dimensions: '200 × 100 cm',
+        year: 2026,
       },
       {
-        relationId: 'static-rel-4', id: 'static-art-4',
-        title: '入木三分', titleEn: 'Three-tenths Through the Wood', titleHanja: '入木三分',
-        images: [], imageUrl: null,
-        artistId: 'static-artist-4', artistName: '白雲 정대현',
-        displayOrder: 3, isFeatured: false,
-        style: 'xing', medium: '한지에 먹·낙관', dimensions: '136 × 35 cm', year: 2025,
+        relationId: 'static-rel-4',
+        id: 'static-art-4',
+        title: '入木三分',
+        titleEn: 'Three-tenths Through the Wood',
+        titleHanja: '入木三分',
+        images: [],
+        imageUrl: null,
+        artistId: 'static-artist-4',
+        artistName: '白雲 정대현',
+        displayOrder: 3,
+        isFeatured: false,
+        style: 'xing',
+        medium: '한지에 먹·낙관',
+        dimensions: '136 × 35 cm',
+        year: 2025,
       },
       {
-        relationId: 'static-rel-5', id: 'static-art-5',
-        title: '飛白', titleEn: 'Flying-White', titleHanja: '飛白',
-        images: [], imageUrl: null,
-        artistId: 'static-artist-5', artistName: '韓松 윤지환',
-        displayOrder: 4, isFeatured: false,
-        style: 'cao', medium: '화선지에 먹', dimensions: '234 × 53 cm', year: 2026,
+        relationId: 'static-rel-5',
+        id: 'static-art-5',
+        title: '飛白',
+        titleEn: 'Flying-White',
+        titleHanja: '飛白',
+        images: [],
+        imageUrl: null,
+        artistId: 'static-artist-5',
+        artistName: '韓松 윤지환',
+        displayOrder: 4,
+        isFeatured: false,
+        style: 'cao',
+        medium: '화선지에 먹',
+        dimensions: '234 × 53 cm',
+        year: 2026,
       },
       {
-        relationId: 'static-rel-6', id: 'static-art-6',
-        title: '훈민정음 서문', titleEn: 'Preface of Hunminjeongeum', titleHanja: null,
-        images: [], imageUrl: null,
-        artistId: 'static-artist-6', artistName: '蘭谷 최은영',
-        displayOrder: 5, isFeatured: true,
-        style: 'hangul', medium: '한지에 먹', dimensions: '70 × 200 cm', year: 2026,
+        relationId: 'static-rel-6',
+        id: 'static-art-6',
+        title: '훈민정음 서문',
+        titleEn: 'Preface of Hunminjeongeum',
+        titleHanja: null,
+        images: [],
+        imageUrl: null,
+        artistId: 'static-artist-6',
+        artistName: '蘭谷 최은영',
+        displayOrder: 5,
+        isFeatured: true,
+        style: 'hangul',
+        medium: '한지에 먹',
+        dimensions: '70 × 200 cm',
+        year: 2026,
       },
     ],
     artists: [],
@@ -729,8 +826,8 @@ export const STATIC_EXHIBITIONS: Record<string, ExhibitionFull> = {
 
 - [ ] **Step 2: 타입 체크**
 
-Run: `npm run type-check`
-Expected: PASS (없으면 위 객체 필드 누락 — 메시지 보고 보완)
+Run: `npm run type-check` Expected: PASS (없으면 위 객체 필드 누락 — 메시지 보고
+보완)
 
 - [ ] **Step 3: 커밋**
 
@@ -745,6 +842,7 @@ git commit -m "data: extract static exhibitions to lib/data/static-exhibitions.t
 ### Task 2.4: `useExhibitionDetail` hook (TDD)
 
 **Files:**
+
 - Create: `lib/hooks/use-exhibition-detail.ts`
 - Test: `lib/hooks/__tests__/use-exhibition-detail.test.tsx`
 
@@ -787,7 +885,10 @@ describe('useExhibitionDetail', () => {
   })
 
   it('sets error on fetch failure', async () => {
-    fetchExhibitionFullById.mockResolvedValue({ data: null, error: 'Not found' })
+    fetchExhibitionFullById.mockResolvedValue({
+      data: null,
+      error: 'Not found',
+    })
     const { result } = renderHook(() => useExhibitionDetail('nope'))
     await waitFor(() => expect(result.current.loading).toBe(false))
     expect(result.current.error).toBe('Not found')
@@ -804,8 +905,7 @@ describe('useExhibitionDetail', () => {
 
 - [ ] **Step 2: 테스트 실패 확인**
 
-Run: `npm run test -- use-exhibition-detail`
-Expected: FAIL
+Run: `npm run test -- use-exhibition-detail` Expected: FAIL
 
 - [ ] **Step 3: hook 구현**
 
@@ -815,7 +915,10 @@ Expected: FAIL
 
 import { useEffect, useState, useCallback } from 'react'
 import { useUser } from '@clerk/nextjs'
-import { fetchExhibitionFullById, deleteExhibition } from '@/lib/api/exhibitions'
+import {
+  fetchExhibitionFullById,
+  deleteExhibition,
+} from '@/lib/api/exhibitions'
 import { STATIC_EXHIBITIONS } from '@/lib/data/static-exhibitions'
 import type { ExhibitionFull } from '@/lib/types/exhibition-legacy'
 
@@ -879,14 +982,18 @@ export function useExhibitionDetail(id: string): UseExhibitionDetailResult {
       setIsOwner(false)
       return
     }
-    const owner = exhibition.artists?.some(
-      a => a.id === user.id && (a.role === 'organizer' || a.role === 'curator')
-    ) ?? false
+    const owner =
+      exhibition.artists?.some(
+        a =>
+          a.id === user.id && (a.role === 'organizer' || a.role === 'curator')
+      ) ?? false
     setIsOwner(owner)
   }, [isLoaded, isSignedIn, user, exhibition])
 
   const handleDelete = useCallback(async () => {
-    if (!confirm('정말 이 전시를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+    if (
+      !confirm('정말 이 전시를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')
+    ) {
       return
     }
     const { error: delError } = await deleteExhibition(id)
@@ -904,8 +1011,7 @@ export function useExhibitionDetail(id: string): UseExhibitionDetailResult {
 
 - [ ] **Step 4: 테스트 통과 확인**
 
-Run: `npm run test -- use-exhibition-detail`
-Expected: PASS (4 tests)
+Run: `npm run test -- use-exhibition-detail` Expected: PASS (4 tests)
 
 - [ ] **Step 5: 커밋**
 
@@ -919,11 +1025,14 @@ git commit -m "feat(hooks): useExhibitionDetail extracts fetch+ownership logic"
 
 ## Phase 3 — UI 컴포넌트 (의존성 순서, 8 tasks)
 
-각 컴포넌트 task는 동일한 TDD 패턴: 테스트 작성 → 실패 확인 → 구현 → 통과 확인 → 커밋. 코드 길이 절제를 위해 핵심 구현만 보이고 styling은 Tailwind 클래스 + globals.css 보조(Phase 4)에 의존.
+각 컴포넌트 task는 동일한 TDD 패턴: 테스트 작성 → 실패 확인 → 구현 → 통과 확인 →
+커밋. 코드 길이 절제를 위해 핵심 구현만 보이고 styling은 Tailwind 클래스 +
+globals.css 보조(Phase 4)에 의존.
 
 ### Task 3.1: `ExhibitionLoading` (TDD)
 
 **Files:**
+
 - Create: `app/exhibitions/[id]/_components/exhibition-loading.tsx`
 - Test: `app/exhibitions/[id]/_components/__tests__/exhibition-loading.test.tsx`
 
@@ -956,13 +1065,13 @@ import { Loader2 } from 'lucide-react'
 export function ExhibitionLoading() {
   return (
     <div
-      role="status"
-      aria-live="polite"
-      className="min-h-[60vh] bg-rice-paper grid place-items-center"
+      role='status'
+      aria-live='polite'
+      className='min-h-[60vh] bg-rice-paper grid place-items-center'
     >
-      <div className="flex flex-col items-center gap-4 text-muted-foreground">
-        <Loader2 className="h-8 w-8 animate-spin text-celadon-green motion-reduce:animate-none" />
-        <p className="font-serif text-lg">전시를 불러오는 중...</p>
+      <div className='flex flex-col items-center gap-4 text-muted-foreground'>
+        <Loader2 className='h-8 w-8 animate-spin text-celadon-green motion-reduce:animate-none' />
+        <p className='font-serif text-lg'>전시를 불러오는 중...</p>
       </div>
     </div>
   )
@@ -978,6 +1087,7 @@ export function ExhibitionLoading() {
 ### Task 3.2: `ExhibitionError` (TDD)
 
 **Files:**
+
 - Create: `app/exhibitions/[id]/_components/exhibition-error.tsx`
 - Test: `__tests__/exhibition-error.test.tsx`
 
@@ -989,20 +1099,24 @@ import { ExhibitionError } from '../exhibition-error'
 
 describe('ExhibitionError', () => {
   it('renders not-found heading by default', () => {
-    render(<ExhibitionError message="boom" />)
+    render(<ExhibitionError message='boom' />)
     expect(screen.getByText('전시를 찾을 수 없습니다')).toBeInTheDocument()
   })
   it('renders network heading when kind=network', () => {
-    render(<ExhibitionError kind="network" message="boom" />)
+    render(<ExhibitionError kind='network' message='boom' />)
     expect(screen.getByText(/문제가 발생/)).toBeInTheDocument()
   })
   it('shows back link', () => {
-    render(<ExhibitionError message="boom" />)
-    expect(screen.getByRole('link', { name: /목록으로 돌아가기/ })).toHaveAttribute('href', '/exhibitions')
+    render(<ExhibitionError message='boom' />)
+    expect(
+      screen.getByRole('link', { name: /목록으로 돌아가기/ })
+    ).toHaveAttribute('href', '/exhibitions')
   })
   it('honors custom backHref', () => {
-    render(<ExhibitionError message="boom" backHref="/" />)
-    expect(screen.getByRole('link', { name: /목록으로 돌아가기/ })).toHaveAttribute('href', '/')
+    render(<ExhibitionError message='boom' backHref='/' />)
+    expect(
+      screen.getByRole('link', { name: /목록으로 돌아가기/ })
+    ).toHaveAttribute('href', '/')
   })
 })
 ```
@@ -1035,21 +1149,24 @@ export function ExhibitionError({
   backHref = '/exhibitions',
 }: ExhibitionErrorProps) {
   return (
-    <div className="min-h-[60vh] bg-rice-paper grid place-items-center px-4">
-      <div className="text-center max-w-md">
+    <div className='min-h-[60vh] bg-rice-paper grid place-items-center px-4'>
+      <div className='text-center max-w-md'>
         <div
-          aria-hidden="true"
-          className="font-brush text-[8rem] text-scholar-red/15 leading-none -mb-8 select-none"
+          aria-hidden='true'
+          className='font-brush text-[8rem] text-scholar-red/15 leading-none -mb-8 select-none'
         >
           空
         </div>
-        <h1 className="font-serif text-3xl font-semibold text-foreground mb-3">
+        <h1 className='font-serif text-3xl font-semibold text-foreground mb-3'>
           {HEADINGS[kind]}
         </h1>
-        <p className="text-muted-foreground mb-8">{message}</p>
+        <p className='text-muted-foreground mb-8'>{message}</p>
         <Link href={backHref}>
-          <Button variant="outline" className="border-celadon-green/40 hover:bg-celadon-green/10">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+          <Button
+            variant='outline'
+            className='border-celadon-green/40 hover:bg-celadon-green/10'
+          >
+            <ArrowLeft className='h-4 w-4 mr-2' />
             목록으로 돌아가기
           </Button>
         </Link>
@@ -1068,6 +1185,7 @@ export function ExhibitionError({
 ### Task 3.3: `ExhibitionShareBar` (TDD)
 
 **Files:**
+
 - Create: `app/exhibitions/[id]/_components/exhibition-share-bar.tsx`
 - Test: `__tests__/exhibition-share-bar.test.tsx`
 
@@ -1089,12 +1207,15 @@ beforeEach(() => {
 })
 afterEach(() => {
   window.open = originalOpen
-  Object.defineProperty(navigator, 'clipboard', { value: originalClipboard, configurable: true })
+  Object.defineProperty(navigator, 'clipboard', {
+    value: originalClipboard,
+    configurable: true,
+  })
 })
 
 describe('ExhibitionShareBar', () => {
   it('opens Facebook share URL on click', () => {
-    render(<ExhibitionShareBar title="Test" url="https://example.com/x" />)
+    render(<ExhibitionShareBar title='Test' url='https://example.com/x' />)
     fireEvent.click(screen.getByRole('button', { name: /facebook/i }))
     expect(window.open).toHaveBeenCalledWith(
       expect.stringContaining('facebook.com/sharer'),
@@ -1102,7 +1223,7 @@ describe('ExhibitionShareBar', () => {
     )
   })
   it('opens Twitter intent URL', () => {
-    render(<ExhibitionShareBar title="Test" url="https://example.com/x" />)
+    render(<ExhibitionShareBar title='Test' url='https://example.com/x' />)
     fireEvent.click(screen.getByRole('button', { name: /twitter/i }))
     expect(window.open).toHaveBeenCalledWith(
       expect.stringContaining('twitter.com/intent/tweet'),
@@ -1110,9 +1231,11 @@ describe('ExhibitionShareBar', () => {
     )
   })
   it('copies URL to clipboard on copy', async () => {
-    render(<ExhibitionShareBar title="Test" url="https://example.com/x" />)
+    render(<ExhibitionShareBar title='Test' url='https://example.com/x' />)
     fireEvent.click(screen.getByRole('button', { name: /copy/i }))
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://example.com/x')
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+      'https://example.com/x'
+    )
   })
 })
 ```
@@ -1137,7 +1260,9 @@ export function ExhibitionShareBar({ title, url }: ExhibitionShareBarProps) {
   const shareUrl =
     url ?? (typeof window === 'object' ? window.location.href : '')
 
-  const handle = async (platform: 'facebook' | 'twitter' | 'instagram' | 'copy') => {
+  const handle = async (
+    platform: 'facebook' | 'twitter' | 'instagram' | 'copy'
+  ) => {
     if (platform === 'facebook') {
       window.open(
         `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
@@ -1152,7 +1277,9 @@ export function ExhibitionShareBar({ title, url }: ExhibitionShareBarProps) {
       try {
         await navigator.clipboard.writeText(shareUrl)
         window.open('https://www.instagram.com', '_blank')
-        alert('인스타그램이 새 창에서 열렸습니다. 링크가 복사되었으니 게시물이나 스토리에 붙여넣어 공유해보세요!')
+        alert(
+          '인스타그램이 새 창에서 열렸습니다. 링크가 복사되었으니 게시물이나 스토리에 붙여넣어 공유해보세요!'
+        )
       } catch {
         alert('링크 복사에 실패했습니다.')
       }
@@ -1167,18 +1294,42 @@ export function ExhibitionShareBar({ title, url }: ExhibitionShareBarProps) {
   }
 
   return (
-    <div className="flex items-center gap-1.5" role="group" aria-label="전시 공유">
-      <Button variant="outline" size="sm" aria-label="Facebook" onClick={() => handle('facebook')}>
-        <Facebook className="h-4 w-4" />
+    <div
+      className='flex items-center gap-1.5'
+      role='group'
+      aria-label='전시 공유'
+    >
+      <Button
+        variant='outline'
+        size='sm'
+        aria-label='Facebook'
+        onClick={() => handle('facebook')}
+      >
+        <Facebook className='h-4 w-4' />
       </Button>
-      <Button variant="outline" size="sm" aria-label="Twitter" onClick={() => handle('twitter')}>
-        <Twitter className="h-4 w-4" />
+      <Button
+        variant='outline'
+        size='sm'
+        aria-label='Twitter'
+        onClick={() => handle('twitter')}
+      >
+        <Twitter className='h-4 w-4' />
       </Button>
-      <Button variant="outline" size="sm" aria-label="Instagram" onClick={() => handle('instagram')}>
-        <Instagram className="h-4 w-4" />
+      <Button
+        variant='outline'
+        size='sm'
+        aria-label='Instagram'
+        onClick={() => handle('instagram')}
+      >
+        <Instagram className='h-4 w-4' />
       </Button>
-      <Button variant="outline" size="sm" aria-label="Copy link" onClick={() => handle('copy')}>
-        <LinkIcon className="h-4 w-4" />
+      <Button
+        variant='outline'
+        size='sm'
+        aria-label='Copy link'
+        onClick={() => handle('copy')}
+      >
+        <LinkIcon className='h-4 w-4' />
       </Button>
     </div>
   )
@@ -1194,6 +1345,7 @@ export function ExhibitionShareBar({ title, url }: ExhibitionShareBarProps) {
 ### Task 3.4: `ExhibitionMetaBand` (TDD)
 
 **Files:**
+
 - Create: `app/exhibitions/[id]/_components/exhibition-meta-band.tsx`
 - Test: `__tests__/exhibition-meta-band.test.tsx`
 
@@ -1237,7 +1389,10 @@ describe('ExhibitionMetaBand', () => {
 ```tsx
 // app/exhibitions/[id]/_components/exhibition-meta-band.tsx
 import type { ExhibitionStatus } from '@/lib/types/exhibition-legacy'
-import { formatExhibitionDate, getRemainingDays } from './exhibition-detail-meta'
+import {
+  formatExhibitionDate,
+  getRemainingDays,
+} from './exhibition-detail-meta'
 
 interface ExhibitionMetaBandProps {
   startDate: string
@@ -1272,27 +1427,47 @@ export function ExhibitionMetaBand({
 
   return (
     <section
-      aria-label="전시 정보"
-      className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6 md:p-8 mb-12 bg-silk-cream border border-border rounded-xl"
+      aria-label='전시 정보'
+      className='grid grid-cols-2 md:grid-cols-4 gap-6 p-6 md:p-8 mb-12 bg-silk-cream border border-border rounded-xl'
     >
-      <Cell label="기간" value={`${formatExhibitionDate(startDate)} — ${formatExhibitionDate(endDate)}`} sub={status === 'current' && remaining ? remaining : undefined} />
-      <Cell label="장소" value={location ?? DASH} sub={venue ?? undefined} />
-      <Cell label="주최" value={curator ?? DASH} />
-      <Cell label="관람" value={formatTicket(ticketPrice)} sub={typeof views === 'number' ? `조회 ${views.toLocaleString()}회` : undefined} />
+      <Cell
+        label='기간'
+        value={`${formatExhibitionDate(startDate)} — ${formatExhibitionDate(endDate)}`}
+        sub={status === 'current' && remaining ? remaining : undefined}
+      />
+      <Cell label='장소' value={location ?? DASH} sub={venue ?? undefined} />
+      <Cell label='주최' value={curator ?? DASH} />
+      <Cell
+        label='관람'
+        value={formatTicket(ticketPrice)}
+        sub={
+          typeof views === 'number'
+            ? `조회 ${views.toLocaleString()}회`
+            : undefined
+        }
+      />
     </section>
   )
 }
 
-function Cell({ label, value, sub }: { label: string; value: string; sub?: string }) {
+function Cell({
+  label,
+  value,
+  sub,
+}: {
+  label: string
+  value: string
+  sub?: string
+}) {
   return (
     <div>
-      <p className="text-xs font-semibold tracking-widest uppercase text-celadon-green mb-2">
+      <p className='text-xs font-semibold tracking-widest uppercase text-celadon-green mb-2'>
         {label}
       </p>
-      <div className="font-serif text-lg font-medium text-foreground leading-tight">
+      <div className='font-serif text-lg font-medium text-foreground leading-tight'>
         {value}
       </div>
-      {sub && <div className="text-sm text-muted-foreground mt-1">{sub}</div>}
+      {sub && <div className='text-sm text-muted-foreground mt-1'>{sub}</div>}
     </div>
   )
 }
@@ -1307,6 +1482,7 @@ function Cell({ label, value, sub }: { label: string; value: string; sub?: strin
 ### Task 3.5: `ExhibitionDescription` (TDD)
 
 **Files:**
+
 - Create: `app/exhibitions/[id]/_components/exhibition-description.tsx`
 - Test: `__tests__/exhibition-description.test.tsx`
 
@@ -1318,19 +1494,19 @@ import { ExhibitionDescription } from '../exhibition-description'
 
 describe('ExhibitionDescription', () => {
   it('returns null when description is empty', () => {
-    const { container } = render(<ExhibitionDescription description="" />)
+    const { container } = render(<ExhibitionDescription description='' />)
     expect(container.firstChild).toBeNull()
   })
   it('renders description text', () => {
-    render(<ExhibitionDescription description="전시 소개 내용입니다." />)
+    render(<ExhibitionDescription description='전시 소개 내용입니다.' />)
     expect(screen.getByText(/전시 소개 내용입니다/)).toBeInTheDocument()
   })
   it('renders default section number', () => {
-    render(<ExhibitionDescription description="x" />)
+    render(<ExhibitionDescription description='x' />)
     expect(screen.getByText('§ 01 — 기획 의도')).toBeInTheDocument()
   })
   it('honors custom section number', () => {
-    render(<ExhibitionDescription description="x" sectionNumber="§ 02" />)
+    render(<ExhibitionDescription description='x' sectionNumber='§ 02' />)
     expect(screen.getByText(/§ 02/)).toBeInTheDocument()
   })
 })
@@ -1358,19 +1534,21 @@ export function ExhibitionDescription({
   if (!description.trim()) return null
 
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-16 mb-24">
-      <aside className="lg:sticky lg:top-24">
-        <p className="font-serif text-sm tracking-widest text-celadon-green mb-2">
+    <section className='grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-16 mb-24'>
+      <aside className='lg:sticky lg:top-24'>
+        <p className='font-serif text-sm tracking-widest text-celadon-green mb-2'>
           {sectionNumber} — {sectionHeading}
         </p>
-        <h2 className="font-serif text-3xl font-semibold leading-tight text-foreground tracking-tight">
-          正法의 계승과<br/>創新의 조화
-          <span className="block font-cjk text-scholar-red text-base font-medium mt-2">
+        <h2 className='font-serif text-3xl font-semibold leading-tight text-foreground tracking-tight'>
+          正法의 계승과
+          <br />
+          創新의 조화
+          <span className='block font-cjk text-scholar-red text-base font-medium mt-2'>
             {hanjaAccent}
           </span>
         </h2>
       </aside>
-      <div className="exhibition-description-prose font-cjk text-lg text-foreground max-w-prose whitespace-pre-wrap">
+      <div className='exhibition-description-prose font-cjk text-lg text-foreground max-w-prose whitespace-pre-wrap'>
         {description}
       </div>
     </section>
@@ -1387,6 +1565,7 @@ export function ExhibitionDescription({
 ### Task 3.6: `ExhibitionHero` (TDD)
 
 **Files:**
+
 - Create: `app/exhibitions/[id]/_components/exhibition-hero.tsx`
 - Test: `__tests__/exhibition-hero.test.tsx`
 
@@ -1410,20 +1589,24 @@ describe('ExhibitionHero', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/서경/)
   })
   it('renders subtitle when provided', () => {
-    render(<ExhibitionHero {...baseProps} subtitle="New Horizons" />)
+    render(<ExhibitionHero {...baseProps} subtitle='New Horizons' />)
     expect(screen.getByText(/New Horizons/)).toBeInTheDocument()
   })
   it('renders <Image> in poster mode when featuredImageUrl present', () => {
-    render(<ExhibitionHero {...baseProps} featuredImageUrl="/p.jpg" />)
+    render(<ExhibitionHero {...baseProps} featuredImageUrl='/p.jpg' />)
     const img = screen.getByAltText(baseProps.title)
     expect(img).toBeInTheDocument()
   })
   it('renders watermark with extracted Hanja in watermark mode', () => {
     const { container } = render(<ExhibitionHero {...baseProps} />)
-    expect(container.querySelector('[data-watermark]')?.textContent).toBe('書境')
+    expect(container.querySelector('[data-watermark]')?.textContent).toBe(
+      '書境'
+    )
   })
   it('renders ownerActions when provided', () => {
-    render(<ExhibitionHero {...baseProps} ownerActions={<button>Edit</button>} />)
+    render(
+      <ExhibitionHero {...baseProps} ownerActions={<button>Edit</button>} />
+    )
     expect(screen.getByRole('button', { name: /Edit/ })).toBeInTheDocument()
   })
   it('omits ownerActions slot when null', () => {
@@ -1473,8 +1656,8 @@ export function ExhibitionHero({
 
   return (
     <section
-      aria-labelledby="exhibition-title"
-      className="relative my-6 mb-24 rounded-2xl overflow-hidden aspect-[16/9] min-h-[480px] md:aspect-[16/9] aspect-[4/5] bg-ink-black isolate"
+      aria-labelledby='exhibition-title'
+      className='relative my-6 mb-24 rounded-2xl overflow-hidden aspect-[16/9] min-h-[480px] md:aspect-[16/9] aspect-[4/5] bg-ink-black isolate'
     >
       {isPosterMode ? (
         <>
@@ -1482,19 +1665,19 @@ export function ExhibitionHero({
             src={featuredImageUrl as string}
             alt={title}
             fill
-            sizes="100vw"
-            className="object-cover"
+            sizes='100vw'
+            className='object-cover'
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-black/90 via-ink-black/40 to-ink-black/20 pointer-events-none" />
+          <div className='absolute inset-0 bg-gradient-to-t from-ink-black/90 via-ink-black/40 to-ink-black/20 pointer-events-none' />
         </>
       ) : (
         <>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,_color-mix(in_srgb,_var(--celadon-green)_40%,_var(--ink-black))_0%,_var(--ink-black)_70%)]" />
+          <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,_color-mix(in_srgb,_var(--celadon-green)_40%,_var(--ink-black))_0%,_var(--ink-black)_70%)]' />
           <div
             data-watermark
-            aria-hidden="true"
-            className="absolute right-[4%] top-1/2 -translate-y-1/2 font-brush text-[clamp(8rem,22vw,18rem)] leading-none text-white/[0.08] pointer-events-none select-none"
+            aria-hidden='true'
+            className='absolute right-[4%] top-1/2 -translate-y-1/2 font-brush text-[clamp(8rem,22vw,18rem)] leading-none text-white/[0.08] pointer-events-none select-none'
           >
             {watermarkChar}
           </div>
@@ -1502,26 +1685,26 @@ export function ExhibitionHero({
       )}
 
       {ownerActions && (
-        <div className="absolute top-6 right-6 z-10 flex gap-2">
+        <div className='absolute top-6 right-6 z-10 flex gap-2'>
           {ownerActions}
         </div>
       )}
 
-      <div className="absolute left-0 right-0 bottom-0 p-8 md:p-12 text-rice-paper z-10">
+      <div className='absolute left-0 right-0 bottom-0 p-8 md:p-12 text-rice-paper z-10'>
         {(isFeatured || status === 'upcoming') && (
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-brand-gold text-ink-black text-xs font-semibold tracking-widest uppercase mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-current motion-safe:animate-pulse" />
+          <span className='inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-brand-gold text-ink-black text-xs font-semibold tracking-widest uppercase mb-4'>
+            <span className='w-1.5 h-1.5 rounded-full bg-current motion-safe:animate-pulse' />
             {STATUS_LABELS[status]}
           </span>
         )}
         <h1
-          id="exhibition-title"
-          className="font-serif font-semibold text-4xl md:text-6xl leading-tight tracking-tight max-w-[18ch] mb-2"
+          id='exhibition-title'
+          className='font-serif font-semibold text-4xl md:text-6xl leading-tight tracking-tight max-w-[18ch] mb-2'
         >
           {title}
         </h1>
         {subtitle && (
-          <p className="font-serif italic text-lg md:text-xl text-rice-paper/75 max-w-[40ch]">
+          <p className='font-serif italic text-lg md:text-xl text-rice-paper/75 max-w-[40ch]'>
             {subtitle}
           </p>
         )}
@@ -1540,6 +1723,7 @@ export function ExhibitionHero({
 ### Task 3.7: `ExhibitionArtworkGrid` (TDD)
 
 **Files:**
+
 - Create: `app/exhibitions/[id]/_components/exhibition-artwork-grid.tsx`
 - Test: `__tests__/exhibition-artwork-grid.test.tsx`
 
@@ -1551,12 +1735,21 @@ import { ExhibitionArtworkGrid } from '../exhibition-artwork-grid'
 import type { ExhibitionFull } from '@/lib/types/exhibition-legacy'
 
 const oneArtwork: ExhibitionFull['artworks'][0] = {
-  relationId: 'r1', id: 'a1',
-  title: '逍遙游', titleHanja: '逍遙游', titleEn: 'Wandering',
-  images: [], imageUrl: null,
-  artistId: 'art1', artistName: '徐景 김재호',
-  displayOrder: 0, isFeatured: true,
-  style: 'zhuan', medium: '화선지', dimensions: '136×70', year: 2025,
+  relationId: 'r1',
+  id: 'a1',
+  title: '逍遙游',
+  titleHanja: '逍遙游',
+  titleEn: 'Wandering',
+  images: [],
+  imageUrl: null,
+  artistId: 'art1',
+  artistName: '徐景 김재호',
+  displayOrder: 0,
+  isFeatured: true,
+  style: 'zhuan',
+  medium: '화선지',
+  dimensions: '136×70',
+  year: 2025,
 }
 
 describe('ExhibitionArtworkGrid', () => {
@@ -1577,8 +1770,12 @@ describe('ExhibitionArtworkGrid', () => {
     expect(screen.getByText(/대표/)).toBeInTheDocument()
   })
   it('shows calligraphy placeholder when imageUrl is null', () => {
-    const { container } = render(<ExhibitionArtworkGrid artworks={[oneArtwork]} />)
-    expect(container.querySelector('[data-calligraphy-placeholder]')).toBeInTheDocument()
+    const { container } = render(
+      <ExhibitionArtworkGrid artworks={[oneArtwork]} />
+    )
+    expect(
+      container.querySelector('[data-calligraphy-placeholder]')
+    ).toBeInTheDocument()
   })
   it('wraps card in Link to /artworks/[id]', () => {
     render(<ExhibitionArtworkGrid artworks={[oneArtwork]} />)
@@ -1597,7 +1794,10 @@ describe('ExhibitionArtworkGrid', () => {
 import Image from 'next/image'
 import Link from 'next/link'
 import { Star } from 'lucide-react'
-import type { ExhibitionFull, CalligraphyStyle } from '@/lib/types/exhibition-legacy'
+import type {
+  ExhibitionFull,
+  CalligraphyStyle,
+} from '@/lib/types/exhibition-legacy'
 
 interface ExhibitionArtworkGridProps {
   artworks: ExhibitionFull['artworks']
@@ -1614,80 +1814,100 @@ const STYLE_LABELS: Record<CalligraphyStyle, string> = {
 }
 
 const STYLE_PLACEHOLDER: Record<CalligraphyStyle, string> = {
-  zhuan: '篆', li: '隷', kai: '楷',
-  xing: '行', cao: '草', hangul: '한', mixed: '書',
+  zhuan: '篆',
+  li: '隷',
+  kai: '楷',
+  xing: '行',
+  cao: '草',
+  hangul: '한',
+  mixed: '書',
 }
 
-export function ExhibitionArtworkGrid({ artworks }: ExhibitionArtworkGridProps) {
+export function ExhibitionArtworkGrid({
+  artworks,
+}: ExhibitionArtworkGridProps) {
   if (artworks.length === 0) return null
 
   return (
-    <section className="mb-24" aria-labelledby="works-heading">
-      <header className="flex items-end justify-between mb-8 gap-4 pb-4 border-b border-border">
-        <h2 id="works-heading" className="font-serif text-4xl font-semibold tracking-tight">
-          <span className="font-cjk text-celadon-green font-normal mr-3">貳</span>
+    <section className='mb-24' aria-labelledby='works-heading'>
+      <header className='flex items-end justify-between mb-8 gap-4 pb-4 border-b border-border'>
+        <h2
+          id='works-heading'
+          className='font-serif text-4xl font-semibold tracking-tight'
+        >
+          <span className='font-cjk text-celadon-green font-normal mr-3'>
+            貳
+          </span>
           주요 출품작
         </h2>
-        <span className="text-sm text-muted-foreground font-medium">
+        <span className='text-sm text-muted-foreground font-medium'>
           총 {artworks.length}점
         </span>
       </header>
 
-      <div className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
+      <div className='grid gap-8 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]'>
         {artworks.map(art => {
-          const placeholderChar = art.style ? STYLE_PLACEHOLDER[art.style] : '書'
+          const placeholderChar = art.style
+            ? STYLE_PLACEHOLDER[art.style]
+            : '書'
           const styleLabel = art.style ? STYLE_LABELS[art.style] : null
 
           return (
             <Link
               key={art.relationId}
               href={`/artworks/${art.id}`}
-              className="group block bg-card rounded-lg overflow-hidden border border-celadon-green/20 hover:-translate-y-1 hover:shadow-xl transition-[transform,box-shadow] duration-250 motion-reduce:hover:transform-none"
+              className='group block bg-card rounded-lg overflow-hidden border border-celadon-green/20 hover:-translate-y-1 hover:shadow-xl transition-[transform,box-shadow] duration-250 motion-reduce:hover:transform-none'
             >
-              <div className="relative aspect-[3/4] bg-rice-paper border-b border-border grid place-items-center overflow-hidden">
+              <div className='relative aspect-[3/4] bg-rice-paper border-b border-border grid place-items-center overflow-hidden'>
                 {art.imageUrl ? (
                   <Image
                     src={art.imageUrl}
                     alt={art.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
+                    sizes='(max-width: 768px) 100vw, 33vw'
+                    className='object-cover'
                   />
                 ) : (
                   <span
                     data-calligraphy-placeholder
-                    aria-hidden="true"
-                    className="font-brush text-[clamp(5rem,12vw,9rem)] text-ink-black leading-none select-none"
+                    aria-hidden='true'
+                    className='font-brush text-[clamp(5rem,12vw,9rem)] text-ink-black leading-none select-none'
                   >
                     {placeholderChar}
                   </span>
                 )}
                 {art.isFeatured && (
-                  <div className="absolute top-3 right-3 z-10 inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-brand-gold text-ink-black text-xs font-semibold">
-                    <Star className="w-3 h-3 fill-current" />
+                  <div className='absolute top-3 right-3 z-10 inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-brand-gold text-ink-black text-xs font-semibold'>
+                    <Star className='w-3 h-3 fill-current' />
                     대표
                   </div>
                 )}
               </div>
-              <div className="p-4 pb-5">
+              <div className='p-4 pb-5'>
                 {styleLabel && (
-                  <span className="inline-block text-[0.6875rem] font-semibold tracking-widest uppercase text-celadon-green mb-2">
+                  <span className='inline-block text-[0.6875rem] font-semibold tracking-widest uppercase text-celadon-green mb-2'>
                     {styleLabel}
                   </span>
                 )}
-                <h3 className="font-cjk text-xl font-semibold mb-1 leading-tight group-hover:text-celadon-green transition-colors">
+                <h3 className='font-cjk text-xl font-semibold mb-1 leading-tight group-hover:text-celadon-green transition-colors'>
                   {art.title}
                   {art.titleEn && (
-                    <span className="block font-serif italic text-sm font-normal text-muted-foreground mt-1">
+                    <span className='block font-serif italic text-sm font-normal text-muted-foreground mt-1'>
                       {art.titleEn}
                     </span>
                   )}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-3">
+                <p className='text-sm text-muted-foreground mb-3'>
                   {art.artistName}
                 </p>
-                <div className="flex flex-wrap gap-3 text-xs text-muted-foreground pt-3 border-t border-dashed border-border">
-                  {art.year && <span><strong className="text-foreground font-medium">{art.year}</strong></span>}
+                <div className='flex flex-wrap gap-3 text-xs text-muted-foreground pt-3 border-t border-dashed border-border'>
+                  {art.year && (
+                    <span>
+                      <strong className='text-foreground font-medium'>
+                        {art.year}
+                      </strong>
+                    </span>
+                  )}
                   {art.medium && <span>{art.medium}</span>}
                   {art.dimensions && <span>{art.dimensions}</span>}
                 </div>
@@ -1710,6 +1930,7 @@ export function ExhibitionArtworkGrid({ artworks }: ExhibitionArtworkGridProps) 
 ### Task 3.8: `ExhibitionVisitInfo` (TDD)
 
 **Files:**
+
 - Create: `app/exhibitions/[id]/_components/exhibition-visit-info.tsx`
 - Test: `__tests__/exhibition-visit-info.test.tsx`
 
@@ -1721,16 +1942,16 @@ import { ExhibitionVisitInfo } from '../exhibition-visit-info'
 
 describe('ExhibitionVisitInfo', () => {
   it('renders nothing when location is missing', () => {
-    const { container } = render(<ExhibitionVisitInfo location="" />)
+    const { container } = render(<ExhibitionVisitInfo location='' />)
     expect(container.firstChild).toBeNull()
   })
   it('renders location and venue', () => {
-    render(<ExhibitionVisitInfo location="예술의전당" venue="서울서예박물관" />)
+    render(<ExhibitionVisitInfo location='예술의전당' venue='서울서예박물관' />)
     expect(screen.getByText(/예술의전당/)).toBeInTheDocument()
     expect(screen.getByText(/서울서예박물관/)).toBeInTheDocument()
   })
   it('shows free entry when ticketPrice is 0', () => {
-    render(<ExhibitionVisitInfo location="x" ticketPrice={0} />)
+    render(<ExhibitionVisitInfo location='x' ticketPrice={0} />)
     expect(screen.getByText('무료 입장')).toBeInTheDocument()
   })
 })
@@ -1760,56 +1981,77 @@ export function ExhibitionVisitInfo({
   if (!location.trim()) return null
 
   const ticket =
-    ticketPrice === 0 ? '무료 입장' :
-    ticketPrice && ticketPrice > 0 ? `${ticketPrice.toLocaleString()}원` :
-    null
+    ticketPrice === 0
+      ? '무료 입장'
+      : ticketPrice && ticketPrice > 0
+        ? `${ticketPrice.toLocaleString()}원`
+        : null
 
   return (
-    <section className="mb-24 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-start" aria-labelledby="visit-heading">
-      <div className="bg-silk-cream border border-border rounded-xl p-8">
-        <h3 id="visit-heading" className="font-serif text-2xl font-semibold mb-6 tracking-tight flex items-center gap-3">
-          <span className="w-1 h-6 bg-scholar-red rounded-sm" aria-hidden="true" />
+    <section
+      className='mb-24 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-start'
+      aria-labelledby='visit-heading'
+    >
+      <div className='bg-silk-cream border border-border rounded-xl p-8'>
+        <h3
+          id='visit-heading'
+          className='font-serif text-2xl font-semibold mb-6 tracking-tight flex items-center gap-3'
+        >
+          <span
+            className='w-1 h-6 bg-scholar-red rounded-sm'
+            aria-hidden='true'
+          />
           관람 안내
         </h3>
-        <dl className="grid grid-cols-[100px_1fr] gap-x-6 gap-y-4">
-          <dt className="text-sm font-semibold text-celadon-green">주소</dt>
-          <dd className="text-base text-foreground leading-relaxed">
+        <dl className='grid grid-cols-[100px_1fr] gap-x-6 gap-y-4'>
+          <dt className='text-sm font-semibold text-celadon-green'>주소</dt>
+          <dd className='text-base text-foreground leading-relaxed'>
             {location}
-            {venue && <em className="not-italic block text-sm text-muted-foreground mt-0.5">{venue}</em>}
+            {venue && (
+              <em className='not-italic block text-sm text-muted-foreground mt-0.5'>
+                {venue}
+              </em>
+            )}
           </dd>
           {openingHours && (
             <>
-              <dt className="text-sm font-semibold text-celadon-green">운영시간</dt>
-              <dd className="text-base text-foreground">{openingHours}</dd>
+              <dt className='text-sm font-semibold text-celadon-green'>
+                운영시간
+              </dt>
+              <dd className='text-base text-foreground'>{openingHours}</dd>
             </>
           )}
           {ticket && (
             <>
-              <dt className="text-sm font-semibold text-celadon-green">입장료</dt>
-              <dd className="text-base text-foreground">{ticket}</dd>
+              <dt className='text-sm font-semibold text-celadon-green'>
+                입장료
+              </dt>
+              <dd className='text-base text-foreground'>{ticket}</dd>
             </>
           )}
           {contact && (
             <>
-              <dt className="text-sm font-semibold text-celadon-green">문의</dt>
-              <dd className="text-base text-foreground">{contact}</dd>
+              <dt className='text-sm font-semibold text-celadon-green'>문의</dt>
+              <dd className='text-base text-foreground'>{contact}</dd>
             </>
           )}
         </dl>
       </div>
       <div
-        role="img"
+        role='img'
         aria-label={`${location} 위치`}
-        className="aspect-[4/3] bg-silk-cream border border-border rounded-xl grid place-items-center relative overflow-hidden"
+        className='aspect-[4/3] bg-silk-cream border border-border rounded-xl grid place-items-center relative overflow-hidden'
       >
         <div
-          aria-hidden="true"
-          className="w-14 h-14 bg-scholar-red text-white rounded-full grid place-items-center"
+          aria-hidden='true'
+          className='w-14 h-14 bg-scholar-red text-white rounded-full grid place-items-center'
           style={{ borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)' }}
         >
-          <span style={{ transform: 'rotate(45deg)' }} className="text-xl">📍</span>
+          <span style={{ transform: 'rotate(45deg)' }} className='text-xl'>
+            📍
+          </span>
         </div>
-        <div className="absolute bottom-4 bg-ink-black text-rice-paper px-3.5 py-1.5 rounded-sm text-sm font-medium">
+        <div className='absolute bottom-4 bg-ink-black text-rice-paper px-3.5 py-1.5 rounded-sm text-sm font-medium'>
           {location}
         </div>
       </div>
@@ -1829,6 +2071,7 @@ export function ExhibitionVisitInfo({
 ### Task 4.1: `@layer components`에 dropcap 추가
 
 **Files:**
+
 - Modify: `app/globals.css` (마지막에 추가)
 
 - [ ] **Step 1: dropcap 클래스 추가**
@@ -1845,7 +2088,9 @@ export function ExhibitionVisitInfo({
 }
 
 @supports (text-wrap: pretty) {
-  .exhibition-description-prose { text-wrap: pretty; }
+  .exhibition-description-prose {
+    text-wrap: pretty;
+  }
 }
 
 .exhibition-description-prose p {
@@ -1853,7 +2098,7 @@ export function ExhibitionVisitInfo({
 }
 
 .exhibition-description-prose > p:first-of-type::first-letter {
-  font-family: var(--font-playfair, "Playfair Display"), "Noto Serif KR", serif;
+  font-family: var(--font-playfair, 'Playfair Display'), 'Noto Serif KR', serif;
   font-size: 3.5em;
   float: left;
   line-height: 0.85;
@@ -1870,9 +2115,8 @@ npm run dev &
 # 브라우저에서 /exhibitions/3 접속 (Phase 5 이후 가능)
 ```
 
-본 단계에서는 컴파일 통과만 확인:
-Run: `npm run build`
-Expected: PASS (CSS 컴파일 오류 없음)
+본 단계에서는 컴파일 통과만 확인: Run: `npm run build` Expected: PASS (CSS
+컴파일 오류 없음)
 
 - [ ] **Step 3: 커밋**
 
@@ -1889,7 +2133,9 @@ git commit -m "css(globals): dropcap + CJK word-break for exhibition description
 ### Task 5.1: `ExhibitionDetailBody` 교체 (orchestrator)
 
 **Files:**
-- Modify: `app/exhibitions/[id]/_components/exhibition-detail-body.tsx` (전면 재작성)
+
+- Modify: `app/exhibitions/[id]/_components/exhibition-detail-body.tsx` (전면
+  재작성)
 
 - [ ] **Step 1: 백업 (안전망)**
 
@@ -1928,17 +2174,21 @@ export function ExhibitionDetailBody({
   const ownerActions = isOwner ? (
     <>
       <Link href={`/exhibitions/${exhibition.id}/edit`}>
-        <Button variant="outline" size="sm" className="bg-rice-paper/90 hover:bg-rice-paper">
-          <Edit className="w-4 h-4 mr-2" /> 수정
+        <Button
+          variant='outline'
+          size='sm'
+          className='bg-rice-paper/90 hover:bg-rice-paper'
+        >
+          <Edit className='w-4 h-4 mr-2' /> 수정
         </Button>
       </Link>
       <Button
-        variant="outline"
-        size="sm"
+        variant='outline'
+        size='sm'
         onClick={onDelete}
-        className="bg-rice-paper/90 hover:bg-rice-paper text-scholar-red hover:text-scholar-red"
+        className='bg-rice-paper/90 hover:bg-rice-paper text-scholar-red hover:text-scholar-red'
       >
-        <Trash2 className="w-4 h-4 mr-2" /> 삭제
+        <Trash2 className='w-4 h-4 mr-2' /> 삭제
       </Button>
     </>
   ) : null
@@ -1946,13 +2196,22 @@ export function ExhibitionDetailBody({
   return (
     <article>
       {/* Breadcrumb + ShareBar 줄 */}
-      <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
-        <nav aria-label="현재 위치" className="text-sm text-muted-foreground flex items-center gap-2">
-          <Link href="/" className="hover:text-foreground">홈</Link>
-          <span className="opacity-40">/</span>
-          <Link href="/exhibitions" className="hover:text-foreground">전시</Link>
-          <span className="opacity-40">/</span>
-          <span className="text-foreground font-medium line-clamp-1 max-w-[40ch]">{exhibition.title}</span>
+      <div className='flex items-center justify-between gap-4 mb-4 flex-wrap'>
+        <nav
+          aria-label='현재 위치'
+          className='text-sm text-muted-foreground flex items-center gap-2'
+        >
+          <Link href='/' className='hover:text-foreground'>
+            홈
+          </Link>
+          <span className='opacity-40'>/</span>
+          <Link href='/exhibitions' className='hover:text-foreground'>
+            전시
+          </Link>
+          <span className='opacity-40'>/</span>
+          <span className='text-foreground font-medium line-clamp-1 max-w-[40ch]'>
+            {exhibition.title}
+          </span>
         </nav>
         <ExhibitionShareBar title={exhibition.title} />
       </div>
@@ -2019,6 +2278,7 @@ git commit -m "refactor(exhibitions): ExhibitionDetailBody as thin orchestrator 
 ### Task 5.2: `page.tsx` 새 hook 사용
 
 **Files:**
+
 - Modify: `app/exhibitions/[id]/page.tsx`
 
 - [ ] **Step 1: 새 page.tsx 작성**
@@ -2054,7 +2314,9 @@ export default function ExhibitionDetailPage() {
       <>
         <ExhibitionError
           message={error ?? '전시 정보를 찾을 수 없습니다.'}
-          kind={error?.toLowerCase().includes('not found') ? 'not-found' : 'network'}
+          kind={
+            error?.toLowerCase().includes('not found') ? 'not-found' : 'network'
+          }
         />
         <LayoutFooter />
       </>
@@ -2062,8 +2324,8 @@ export default function ExhibitionDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent">
-      <main className="container mx-auto px-4 py-8">
+    <div className='min-h-screen bg-transparent'>
+      <main className='container mx-auto px-4 py-8'>
         <ExhibitionDetailBody
           exhibition={exhibition}
           isOwner={isOwner}
@@ -2085,6 +2347,7 @@ npm run dev
 ```
 
 확인 사항:
+
 - 한자 워터마크 hero 또는 포스터 hero 렌더 (poster-main.png 존재 여부에 따라)
 - 메타 밴드 4-col
 - description 드롭캡 (첫 글자 빨강 큰 글씨)
@@ -2150,8 +2413,8 @@ $B viewport 375x812  && $B reload && sleep 2 && $B screenshot /tmp/asca-port-mob
 ls /tmp/asca-verify-{desktop,tablet,mobile}.png  # 이전 design-html 사이클 산출물
 ```
 
-3개 뷰포트에서 mockup vs 신규 컴포넌트 페이지를 시각 비교.
-회귀 사항 (예: hero 텍스트 잘림, artwork 카드 배치 깨짐) 발견 시 task로 복귀.
+3개 뷰포트에서 mockup vs 신규 컴포넌트 페이지를 시각 비교. 회귀 사항 (예: hero
+텍스트 잘림, artwork 카드 배치 깨짐) 발견 시 task로 복귀.
 
 ---
 
@@ -2167,6 +2430,7 @@ dev 서버에서 Tab 키로 페이지 순회 — 모든 link/button 도달, focu
 # DevTools Console에서:
 # Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6')).map(h => `${h.tagName}: ${h.textContent.slice(0,40)}`)
 ```
+
 h1 한 개(전시 제목), h2 섹션 헤더, h3 작품 카드 — 순차 확인.
 
 - [ ] **Step 3: 다크 모드**
@@ -2224,7 +2488,8 @@ EOF
 
 - [ ] **Step 2: 캡처 첨부**
 
-PR comment로 `/tmp/asca-port-{desktop,tablet,mobile}.png` 3장 + mockup 비교 캡처 첨부.
+PR comment로 `/tmp/asca-port-{desktop,tablet,mobile}.png` 3장 + mockup 비교 캡처
+첨부.
 
 ---
 
@@ -2232,7 +2497,8 @@ PR comment로 `/tmp/asca-port-{desktop,tablet,mobile}.png` 3장 + mockup 비교 
 
 - [x] **Spec coverage:** 모든 §1~§12 spec 섹션이 task로 매핑됨
 - [x] **Placeholder scan:** "TBD"/"TODO"/"implement later" 없음
-- [x] **Type consistency:** `ExhibitionFull` 단일 타입으로 통일 (spec에서 제시한 ExhibitionWithArtworkDetails 이름 폐기, 기존 타입 확장)
+- [x] **Type consistency:** `ExhibitionFull` 단일 타입으로 통일 (spec에서 제시한
+      ExhibitionWithArtworkDetails 이름 폐기, 기존 타입 확장)
 - [x] **Bite-sized tasks:** 각 task 5 단계 이내, 5분 단위
 - [x] **No "similar to Task N":** 각 task 코드 전체 inline
 - [x] **Exact paths:** 모든 파일 절대 경로 또는 `app/...` 시작
@@ -2240,6 +2506,11 @@ PR comment로 `/tmp/asca-port-{desktop,tablet,mobile}.png` 3장 + mockup 비교 
 
 ### 보완 노트 (실행 시 발생 가능 항목)
 
-- Task 0.1에서 schema 매핑이 plan 작성 가정과 다르면(특히 `curatorNotes`↔`curator`, `venueAddress`↔`location`), Task 2.1의 매핑 로직을 그에 맞춰 조정.
-- ASCA에 `@testing-library/react` + `jest`가 설정되어 있다고 가정. 미설정 시 Phase 0에 `npm install -D @testing-library/react jest-environment-jsdom` 사전 설치 task 추가 필요.
-- Drizzle schema에 `subtitle` 컬럼이 없어 Task 2.1에서 `subtitle: null`로 매핑. 후속에서 schema 추가 시 매핑 갱신.
+- Task 0.1에서 schema 매핑이 plan 작성 가정과 다르면(특히
+  `curatorNotes`↔`curator`, `venueAddress`↔`location`), Task 2.1의 매핑 로직을
+  그에 맞춰 조정.
+- ASCA에 `@testing-library/react` + `jest`가 설정되어 있다고 가정. 미설정 시
+  Phase 0에 `npm install -D @testing-library/react jest-environment-jsdom` 사전
+  설치 task 추가 필요.
+- Drizzle schema에 `subtitle` 컬럼이 없어 Task 2.1에서 `subtitle: null`로 매핑.
+  후속에서 schema 추가 시 매핑 갱신.
