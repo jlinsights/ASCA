@@ -1,1 +1,1 @@
-📦 chore: tests-stale-update PDCA 아카이브 (Match 55%, 4 신규 사이클 권장)
+📝 DESIGN.md 1.2.1: 브랜드 의미론 vs shadcn 슬롯 이중 정의 + YAML 구현 동기화

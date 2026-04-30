@@ -61,9 +61,17 @@ jest.mock('next/navigation', () => ({
 jest.mock('next/image', () => ({
   __esModule: true,
   default: props => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} />
+    const React = require('react')
+    return React.createElement('img', props)
   },
+}))
+
+// @clerk/backend는 ESM-only + babel regex transform 충돌. test에서는 mock 사용.
+// 실 Clerk 동작은 production 또는 e2e에서 검증.
+jest.mock('@clerk/nextjs/server', () => ({
+  auth: jest.fn().mockResolvedValue({ userId: null }),
+  currentUser: jest.fn().mockResolvedValue(null),
+  clerkClient: { users: { getUser: jest.fn() } },
 }))
 
 // Mock performance API (only in browser environment)
