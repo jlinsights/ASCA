@@ -1,1 +1,1 @@
-🎨 prettier 일괄 포맷 + footer-data 타입 명시 (FooterLink/Record) — type-check·format:check·design 3 hard gate 모두 통과
+📦 archive: jest-infra-debt PDCA → docs/archive/2026-04/ (Match 100%, PR #3 머지로 보안 픽스 6건 production 반영 완료)
