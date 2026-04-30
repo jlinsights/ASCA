@@ -59,7 +59,8 @@ class MockController {
 
 describe('E2E Real-time Event Flow', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    // doNotFake: microtask/nextTick은 real 유지 → await flow resolve 보장.
+    jest.useFakeTimers({ doNotFake: ['queueMicrotask', 'nextTick'] })
   })
 
   afterEach(() => {

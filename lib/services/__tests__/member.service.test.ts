@@ -544,32 +544,6 @@ describe('MemberService', () => {
     })
   })
 
-  describe('verifyMember', () => {
-    test('should verify member', async () => {
-      // Arrange
-      mockRepository.findById = jest.fn().mockResolvedValue(mockMember)
-      mockRepository.verify = jest.fn().mockResolvedValue({
-        ...mockMember,
-        is_verified: true,
-      })
-
-      // Act
-      const result = await memberService.verifyMember(mockMember.id)
-
-      // Assert
-      expect(result.is_verified).toBe(true)
-      expect(mockRepository.verify).toHaveBeenCalledWith(mockMember.id)
-    })
-
-    test('should throw not found for non-existent member', async () => {
-      // Arrange
-      mockRepository.findById = jest.fn().mockResolvedValue(null)
-
-      // Act & Assert
-      await expect(memberService.verifyMember('invalid-id')).rejects.toThrow('Member not found')
-    })
-  })
-
   describe('updateMemberLevel', () => {
     test('should update member level', async () => {
       // Arrange

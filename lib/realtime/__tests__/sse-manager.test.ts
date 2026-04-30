@@ -42,7 +42,9 @@ describe('SSE Manager', () => {
   let manager: ReturnType<typeof createSSEManager>
 
   beforeEach(() => {
-    jest.useFakeTimers()
+    // doNotFake: microtask/nextTick은 real 유지 → await shutdown() resolve 보장.
+    // 기본 fake timer는 microtask까지 잡아 promise 미resolve → 5초 timeout.
+    jest.useFakeTimers({ doNotFake: ['queueMicrotask', 'nextTick'] })
     manager = createSSEManager()
   })
 
