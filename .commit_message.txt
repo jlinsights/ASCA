@@ -1,1 +1,1 @@
-🔐 chore(ci): codecov-action SHA pin v3.1.6 — CSO 2026-04-28 Finding #2 remediation
+🔧 chore(ci): jsdom timer 폴리필 + e2e .env.test 복사 (tests-infra-cleanup P1+P2)
