@@ -1,1 +1,1 @@
-🔧 chore(ci): jsdom timer 폴리필 + e2e .env.test 복사 (tests-infra-cleanup P1+P2)
+💅 style: tests-infra-cleanup plan.md prettier 적용
