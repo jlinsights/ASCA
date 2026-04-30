@@ -3,7 +3,7 @@
 | Feature                     | Match Rate | Completed  | Documents                                                                                                                                                                                                                                                                                                             |
 | --------------------------- | :--------: | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | asca-design-system-finalize |    98%     | 2026-04-25 | [Plan](asca-design-system-finalize/asca-design-system-finalize.plan.md) / [Design](asca-design-system-finalize/asca-design-system-finalize.design.md) / [Analysis](asca-design-system-finalize/asca-design-system-finalize.analysis.md) / [Report](asca-design-system-finalize/asca-design-system-finalize.report.md) |
-| jest-infra-debt             |    100%    | 2026-04-29 | [Plan](jest-infra-debt/jest-infra-debt.plan.md) / [Design](jest-infra-debt/jest-infra-debt.design.md) / [Analysis](jest-infra-debt/jest-infra-debt.analysis.md) / [Report](jest-infra-debt/jest-infra-debt.report.md)                                                                                                  |
+| jest-infra-debt             |    100%    | 2026-04-29 | [Plan](jest-infra-debt/jest-infra-debt.plan.md) / [Design](jest-infra-debt/jest-infra-debt.design.md) / [Analysis](jest-infra-debt/jest-infra-debt.analysis.md) / [Report](jest-infra-debt/jest-infra-debt.report.md)                                                                                                 |
 
 ## Highlights
 
@@ -16,8 +16,9 @@
 
 - **jest-infra-debt** (100%, 2026-04-29): CSO 2026-04-28 Finding #3 unblocker.
   PR #3 (`asca-api-security-hardening`)이 5종 jest 인프라 결함으로 3일째 머지
-  차단된 상황을 해소. F1(jest.config.js graphql ESM whitelist) + F2(`@jest/globals`
-  jest hoisting 함정 — root cause 발견) + F3(SSE/realtime per-file Node env) +
-  F4(jest.setup.js TEST_ENV_DEFAULTS placeholder fallback) + F5(`.env.example`
-  신규 생성). 핵심 학습: `import { jest } from '@jest/globals'`은 babel-jest의
-  `jest.mock()` hoisting을 비활성화 — global jest 사용 권장.
+  차단된 상황을 해소. F1(jest.config.js graphql ESM whitelist) +
+  F2(`@jest/globals` jest hoisting 함정 — root cause 발견) + F3(SSE/realtime
+  per-file Node env) + F4(jest.setup.js TEST_ENV_DEFAULTS placeholder
+  fallback) + F5(`.env.example` 신규 생성). 핵심 학습:
+  `import { jest } from '@jest/globals'`은 babel-jest의 `jest.mock()` hoisting을
+  비활성화 — global jest 사용 권장.
