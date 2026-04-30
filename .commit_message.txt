@@ -1,1 +1,1 @@
-📦 chore: jest-clerk-esm-fix PDCA 아카이브 (Match 95%, rev β 첫 검증)
+🔧 fix(test): GraphQL 6 logic stale 일괄 fix (tests-stale-graphql-extras, rev β)
