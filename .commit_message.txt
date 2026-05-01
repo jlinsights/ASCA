@@ -1,1 +1,1 @@
-📦 chore: tests-stale-graphql-extras PDCA 아카이브 (Match 100%, rev β 두 번째)
+🔧 fix(test): route.test.ts require @/lib/db/drizzle 일괄 치환 (15 → 0, 8 PASS)
