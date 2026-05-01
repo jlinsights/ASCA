@@ -85,7 +85,7 @@ describe('Event Emitter', () => {
 
       emitter.on(EventType.MEMBER_CREATED, async payload => {
         // Simulate async operation
-        await new Promise(resolve => setTimeout(resolve, 10))
+        await jest.advanceTimersByTimeAsync(10)
         events.push(payload)
       })
 
