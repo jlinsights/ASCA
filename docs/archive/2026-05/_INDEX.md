@@ -8,8 +8,19 @@
 | tests-route-dataloader-mock |    95%     | 2026-05-01 | [Plan](tests-route-dataloader-mock/tests-route-dataloader-mock.plan.md) / [Analysis](tests-route-dataloader-mock/tests-route-dataloader-mock.analysis.md) / [Report](tests-route-dataloader-mock/tests-route-dataloader-mock.report.md) |
 | tests-route-auth-cleanup    |    100%    | 2026-05-01 | [Plan](tests-route-auth-cleanup/tests-route-auth-cleanup.plan.md) / [Analysis](tests-route-auth-cleanup/tests-route-auth-cleanup.analysis.md) / [Report](tests-route-auth-cleanup/tests-route-auth-cleanup.report.md)                   |
 | tests-route-mutation-auth   |    100%    | 2026-05-01 | [Plan](tests-route-mutation-auth/tests-route-mutation-auth.plan.md) / [Analysis](tests-route-mutation-auth/tests-route-mutation-auth.analysis.md) / [Report](tests-route-mutation-auth/tests-route-mutation-auth.report.md)             |
+| tests-route-error-policy    |    100%    | 2026-05-01 | [Plan](tests-route-error-policy/tests-route-error-policy.plan.md) / [Analysis](tests-route-error-policy/tests-route-error-policy.analysis.md) / [Report](tests-route-error-policy/tests-route-error-policy.report.md)                   |
 
 ## Highlights
+
+- **tests-route-error-policy** (100%, 2026-05-01): rev β #7. 🎯 **route.test.ts
+  0 fail 달성**. F 그룹 3 fail (malformed JSON / non-existent field /
+  resolver exceptions) 각각 다른 root cause를 test assertion 수정만으로 해결
+  (source 무변경). 1 file 3 hunks. PR #17 admin merge `64936390`. CI passed
+  399→402 (+3, mini-do 정확 일치). **10 chain 누적 228→402 (+174, +76%)**.
+  rev β 7연속 (Match avg 98.6%). 핵심 학습: Apollo v4 default validation=400,
+  parse=throw, resolver throw=200+errors. vm-realm cross-realm instanceof 실패
+  → .name 비교. DataLoader resolver mock은 findMany (batchLoadFn).
+
 
 - **tests-route-mutation-auth** (100%, 2026-05-01): rev β #6. 부모 5 ejection
   중 D 그룹 (Mutation Operations 2 fail) 처리. C+E 패턴 (Clerk session mock) +
