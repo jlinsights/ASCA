@@ -1,1 +1,1 @@
-🔧 fix(test): route.test.ts Clerk auth mock 통합 (rev β #5, +2 PASS)
+📦 chore: tests-route-auth-cleanup PDCA 아카이브 (Match 100%, rev β #5, 8 chain +169)

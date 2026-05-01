@@ -6,6 +6,7 @@
 | tests-stale-graphql-extras  |    100%    | 2026-05-01 | [Plan](tests-stale-graphql-extras/tests-stale-graphql-extras.plan.md) / [Analysis](tests-stale-graphql-extras/tests-stale-graphql-extras.analysis.md) / [Report](tests-stale-graphql-extras/tests-stale-graphql-extras.report.md)       |
 | tests-stale-route-extras    |    100%    | 2026-05-01 | [Plan](tests-stale-route-extras/tests-stale-route-extras.plan.md) / [Analysis](tests-stale-route-extras/tests-stale-route-extras.analysis.md) / [Report](tests-stale-route-extras/tests-stale-route-extras.report.md)                   |
 | tests-route-dataloader-mock |    95%     | 2026-05-01 | [Plan](tests-route-dataloader-mock/tests-route-dataloader-mock.plan.md) / [Analysis](tests-route-dataloader-mock/tests-route-dataloader-mock.analysis.md) / [Report](tests-route-dataloader-mock/tests-route-dataloader-mock.report.md) |
+| tests-route-auth-cleanup    |    100%    | 2026-05-01 | [Plan](tests-route-auth-cleanup/tests-route-auth-cleanup.plan.md) / [Analysis](tests-route-auth-cleanup/tests-route-auth-cleanup.analysis.md) / [Report](tests-route-auth-cleanup/tests-route-auth-cleanup.report.md)                   |
 
 ## Highlights
 
@@ -25,6 +26,14 @@
   +157, +69%). rev β 패턴 두 번째 검증 (Match 100%, 0 unplanned ejection,
   estimate 정확). route.test.ts 17 신규 RED는 사전 예측된 ejection — 별 사이클
   tests-stale-route-extras로 분리.
+
+- **tests-route-auth-cleanup** (100%, 2026-05-01): rev β #5. 부모 5 ejection 중
+  C(authz)+E(auth-header) 두 그룹을 통합 1 PR (Karpathy §2 simplicity). 공통
+  root cause: production이 Clerk session(`auth()`) source of truth인데 test가 옛
+  Bearer header 가정. 해결: `auth.mockResolvedValueOnce` + db user mock +
+  GraphQL enum casing. 1 file 5 hunks. PR #15 admin merge `3608aa1c`. CI passed
+  395→397 (+2, mini-do 정확 일치). 8 chain 누적 228→397 (+169, +74%). rev β
+  5연속 검증 (Match 평균 98%, ejection 0).
 
 - **tests-route-dataloader-mock** (95%, 2026-05-01): 부모 사이클
   tests-stale-route-extras 5 ejection 중 B 그룹 (DataLoader mock) 3건 + 부수
