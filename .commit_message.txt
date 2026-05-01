@@ -1,1 +1,1 @@
-🔧 fix(test): route.test.ts require @/lib/db/drizzle 일괄 치환 (15 → 0, 8 PASS)
+📦 chore: tests-stale-route-extras PDCA 아카이브 (Match 100%, rev β #3, 6 chain +165 PASS)
