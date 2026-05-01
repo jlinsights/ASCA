@@ -94,7 +94,7 @@ describe('E2E Real-time Event Flow', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Emit event
       await eventEmitter.emit(EventType.MEMBER_CREATED, {
@@ -103,7 +103,7 @@ describe('E2E Real-time Event Flow', () => {
         email: 'john@example.com',
       })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Verify client received event
       const eventMessage = socket.sentMessages.find(
@@ -143,12 +143,12 @@ describe('E2E Real-time Event Flow', () => {
       socket2.emit('message', subscribeMessage)
       socket3.emit('message', subscribeMessage)
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Emit event
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Verify all clients received event
       ;[socket1, socket2, socket3].forEach(socket => {
@@ -192,12 +192,12 @@ describe('E2E Real-time Event Flow', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Emit member event
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // socket1 should receive, socket2 should not
       const socket1Event = socket1.sentMessages.find(msg => msg.type === WSMessageType.EVENT)
@@ -231,7 +231,7 @@ describe('E2E Real-time Event Flow', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Emit various member events
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
@@ -241,7 +241,7 @@ describe('E2E Real-time Event Flow', () => {
       // Emit non-member event
       await eventEmitter.emit(EventType.ARTIST_CREATED, { id: 'artist-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Should receive 3 member events, not the artist event
       const memberEvents = socket.sentMessages.filter(
@@ -273,14 +273,14 @@ describe('E2E Real-time Event Flow', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Emit various events
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
       await eventEmitter.emit(EventType.ARTIST_CREATED, { id: 'artist-1' })
       await eventEmitter.emit(EventType.ARTWORK_CREATED, { id: 'artwork-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Should receive all events
       const allEvents = socket.sentMessages.filter(msg => msg.type === WSMessageType.EVENT)
@@ -308,7 +308,7 @@ describe('E2E Real-time Event Flow', () => {
       // Emit event for user-123
       await eventEmitter.emit(EventType.MEMBER_UPDATED, { id: 'member-1' }, { userId: 'user-123' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Only client-1 should receive
       const eventPayload = {
@@ -368,12 +368,12 @@ describe('E2E Real-time Event Flow', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Disconnect client
       socket.close()
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Clear previous messages
       socket.sentMessages = []
@@ -381,7 +381,7 @@ describe('E2E Real-time Event Flow', () => {
       // Emit event after disconnect
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Should not receive event
       const eventMessage = socket.sentMessages.find(msg => msg.type === WSMessageType.EVENT)
@@ -404,7 +404,7 @@ describe('E2E Real-time Event Flow', () => {
       await wsManager.handleConnection(socket1, request)
       socket1.close()
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Reconnection
       await wsManager.handleConnection(socket2, request)
@@ -438,7 +438,7 @@ describe('E2E Real-time Event Flow', () => {
       socket1.emit('message', subscribeMessage)
       socket2.emit('message', subscribeMessage)
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Make socket1 throw error on send
       socket1.send = jest.fn().mockImplementation(() => {
@@ -448,7 +448,7 @@ describe('E2E Real-time Event Flow', () => {
       // Emit event
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // socket2 should still receive
       const socket2Event = socket2.sentMessages.find(msg => msg.type === WSMessageType.EVENT)
@@ -479,7 +479,7 @@ describe('E2E Real-time Event Flow', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Emit 100 events rapidly
       const startTime = Date.now()
@@ -522,7 +522,7 @@ describe('E2E Real-time Event Flow', () => {
         socket.emit('message', subscribeMessage)
       })
 
-      await new Promise(resolve => setTimeout(resolve, 50))
+      await jest.advanceTimersByTimeAsync(50)
 
       // Cleanup
       await wsManager.shutdown()
@@ -551,14 +551,14 @@ describe('E2E Real-time Event Flow', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Emit events in sequence
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1', order: 1 })
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-2', order: 2 })
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-3', order: 3 })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Verify order
       const events = socket.sentMessages
@@ -591,7 +591,7 @@ describe('E2E Real-time Event Flow', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Emit with metadata
       await eventEmitter.emit(
@@ -604,7 +604,7 @@ describe('E2E Real-time Event Flow', () => {
         }
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const eventMessage = socket.sentMessages.find(msg => msg.type === WSMessageType.EVENT)
 

@@ -156,7 +156,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       expect(verifyToken).toHaveBeenCalledWith('valid-token')
 
@@ -185,7 +185,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const errorMessage = socket.sentMessages.find(msg => msg.type === WSMessageType.ERROR)
       expect(errorMessage).toBeDefined()
@@ -211,7 +211,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const errorMessage = socket.sentMessages.find(msg => msg.type === WSMessageType.ERROR)
       expect(errorMessage).toBeDefined()
@@ -237,7 +237,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const subscribedMessage = socket.sentMessages.find(
         msg => msg.type === WSMessageType.SUBSCRIBED
@@ -261,7 +261,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const subscribedMessage = socket.sentMessages.find(
         msg => msg.type === WSMessageType.SUBSCRIBED
@@ -283,7 +283,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const unsubscribedMessage = socket.sentMessages.find(
         msg => msg.type === WSMessageType.UNSUBSCRIBED
@@ -304,7 +304,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const pongMessage = socket.sentMessages.find(msg => msg.type === WSMessageType.PONG)
       expect(pongMessage).toBeDefined()
@@ -318,7 +318,7 @@ describe('WebSocket Manager', () => {
 
       socket.emit('message', 'invalid json')
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const errorMessage = socket.sentMessages.find(msg => msg.type === WSMessageType.ERROR)
       expect(errorMessage).toBeDefined()
@@ -338,7 +338,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const errorMessage = socket.sentMessages.find(msg => msg.type === WSMessageType.ERROR)
       expect(errorMessage).toBeDefined()
@@ -371,13 +371,13 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Get event emitter and emit event
       const eventEmitter = createEventEmitter()
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // socket1 should receive the event
       const event1 = socket1.sentMessages.find(
@@ -406,13 +406,13 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const eventEmitter = createEventEmitter()
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
       await eventEmitter.emit(EventType.MEMBER_UPDATED, { id: 'member-2' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const createdEvent = socket.sentMessages.find(
         msg => msg.type === WSMessageType.EVENT && msg.payload.type === EventType.MEMBER_CREATED
@@ -439,7 +439,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Close the socket
       socket.readyState = 3 // CLOSED
@@ -447,7 +447,7 @@ describe('WebSocket Manager', () => {
       const eventEmitter = createEventEmitter()
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // Should not have sent event
       const event = socket.sentMessages.find(msg => msg.type === WSMessageType.EVENT)
@@ -552,7 +552,7 @@ describe('WebSocket Manager', () => {
         })
       )
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       const stats = manager.getStats()
 

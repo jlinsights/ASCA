@@ -145,7 +145,7 @@ describe('SSE Manager', () => {
       // Emit event
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await jest.advanceTimersByTimeAsync(10)
 
       // In a real scenario, we'd verify the stream received the data
       // For this test, we're verifying the manager structure is correct
