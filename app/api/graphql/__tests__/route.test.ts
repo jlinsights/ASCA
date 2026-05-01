@@ -268,7 +268,7 @@ describe('GraphQL API Integration Tests', () => {
       })
 
       it('should execute createMember mutation with authentication', async () => {
-        const mockUser = { id: 'user-1', role: 'member' }
+        const mockUser = { id: 'user-1', role: 'MEMBER', email: 'test@example.com' }
         const mockMember = {
           id: 'member-1',
           userId: 'user-1',
@@ -283,6 +283,9 @@ describe('GraphQL API Integration Tests', () => {
           values: jest.fn().mockReturnThis(),
           returning: jest.fn().mockResolvedValue([mockMember]),
         })
+
+        const { auth } = require('@clerk/nextjs/server')
+        auth.mockResolvedValueOnce({ userId: 'user-1' })
 
         const request = createMockRequest(
           {
@@ -349,13 +352,13 @@ describe('GraphQL API Integration Tests', () => {
       })
 
       it('should execute approveMember mutation with admin authentication', async () => {
-        const mockAdmin = { id: 'admin-1', role: 'admin' }
+        const mockAdmin = { id: 'admin-1', role: 'admin', email: 'admin@example.com' }
         const mockMember = {
           id: 'member-1',
-          status: 'pending_approval',
+          status: 'PENDING_APPROVAL',
           userId: 'user-1',
         }
-        const approvedMember = { ...mockMember, status: 'active' }
+        const approvedMember = { ...mockMember, status: 'ACTIVE' }
 
         const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockAdmin)
@@ -365,6 +368,9 @@ describe('GraphQL API Integration Tests', () => {
           where: jest.fn().mockReturnThis(),
           returning: jest.fn().mockResolvedValue([approvedMember]),
         })
+
+        const { auth } = require('@clerk/nextjs/server')
+        auth.mockResolvedValueOnce({ userId: 'admin-1' })
 
         const request = createMockRequest(
           {
