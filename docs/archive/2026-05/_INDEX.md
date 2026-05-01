@@ -9,8 +9,19 @@
 | tests-route-auth-cleanup    |    100%    | 2026-05-01 | [Plan](tests-route-auth-cleanup/tests-route-auth-cleanup.plan.md) / [Analysis](tests-route-auth-cleanup/tests-route-auth-cleanup.analysis.md) / [Report](tests-route-auth-cleanup/tests-route-auth-cleanup.report.md)                   |
 | tests-route-mutation-auth   |    100%    | 2026-05-01 | [Plan](tests-route-mutation-auth/tests-route-mutation-auth.plan.md) / [Analysis](tests-route-mutation-auth/tests-route-mutation-auth.analysis.md) / [Report](tests-route-mutation-auth/tests-route-mutation-auth.report.md)             |
 | tests-route-error-policy    |    100%    | 2026-05-01 | [Plan](tests-route-error-policy/tests-route-error-policy.plan.md) / [Analysis](tests-route-error-policy/tests-route-error-policy.analysis.md) / [Report](tests-route-error-policy/tests-route-error-policy.report.md)                   |
+| tests-realtime-async-fix    |    95%     | 2026-05-02 | [Plan](tests-realtime-async-fix/tests-realtime-async-fix.plan.md) / [Analysis](tests-realtime-async-fix/tests-realtime-async-fix.analysis.md) / [Report](tests-realtime-async-fix/tests-realtime-async-fix.report.md)                   |
 
 ## Highlights
+
+- **tests-realtime-async-fix** (95%, 2026-05-02): rev β #8. ⏱️ Realtime 4 file
+  `jest.useFakeTimers + setTimeout` 충돌을 canonical 패턴
+  `jest.advanceTimersByTimeAsync(N)` 으로 43 occurrences replace_all 일괄 fix.
+  PR #18 admin merge `598ec889`. CI passed 402→419 (+17, mini-do +16 예측 +1
+  차이). **11 chain 누적 228→419 (+191, +84%)**. realtime suite 시간 67s→4s
+  (-94%). rev β 8연속 (Match avg 98%). 핵심 학습: jest.useFakeTimers +
+  setTimeout 은 microtask flush 안 됨 → advanceTimersByTimeAsync 가 canonical
+  (Jest 27+). 잔여 12 logic bug → tests-realtime-logic-fixes 별 사이클.
+
 
 - **tests-route-error-policy** (100%, 2026-05-01): rev β #7. 🎯 **route.test.ts
   0 fail 달성**. F 그룹 3 fail (malformed JSON / non-existent field /
