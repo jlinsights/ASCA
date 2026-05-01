@@ -101,11 +101,12 @@ describe('GraphQL API Integration Tests', () => {
           id: 'user-1',
           email: 'test@example.com',
           name: 'Test User',
-          role: 'member',
+          role: 'MEMBER',
         }
 
         const { db } = require('@/lib/db')
-        db.query.users.findFirst.mockResolvedValue(mockUser)
+        // user resolver는 DataLoader (userLoader)를 사용, batchLoadFn에서 findMany 호출.
+        db.query.users.findMany.mockResolvedValue([mockUser])
 
         const request = createMockRequest({
           query: `
@@ -132,8 +133,8 @@ describe('GraphQL API Integration Tests', () => {
 
       it('should execute members query with pagination', async () => {
         const mockMembers = [
-          { id: 'member-1', fullName: 'Member 1', status: 'active' },
-          { id: 'member-2', fullName: 'Member 2', status: 'active' },
+          { id: 'member-1', fullName: 'Member 1', status: 'ACTIVE' },
+          { id: 'member-2', fullName: 'Member 2', status: 'ACTIVE' },
         ]
 
         const { db } = require('@/lib/db')
@@ -205,8 +206,8 @@ describe('GraphQL API Integration Tests', () => {
 
       it('should execute exhibitions query successfully', async () => {
         const mockExhibitions = [
-          { id: 'exhibition-1', title: 'Exhibition 1', status: 'upcoming' },
-          { id: 'exhibition-2', title: 'Exhibition 2', status: 'current' },
+          { id: 'exhibition-1', title: 'Exhibition 1', status: 'UPCOMING' },
+          { id: 'exhibition-2', title: 'Exhibition 2', status: 'ONGOING' },
         ]
 
         const { db } = require('@/lib/db')
