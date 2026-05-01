@@ -316,10 +316,14 @@ describe('GraphQL API Integration Tests', () => {
       })
 
       it('should return authorization error for approveMember without admin role', async () => {
-        const mockUser = { id: 'user-1', role: 'member' }
+        const mockUser = { id: 'user-1', role: 'MEMBER' }
 
         const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockUser)
+
+        // Clerk session mock: authenticated as non-admin user
+        const { auth } = require('@clerk/nextjs/server')
+        auth.mockResolvedValueOnce({ userId: 'user-1' })
 
         const request = createMockRequest(
           {
@@ -502,10 +506,15 @@ describe('GraphQL API Integration Tests', () => {
       })
 
       it('should process authorization header for authenticated requests', async () => {
-        const mockUser = { id: 'user-1', role: 'member' }
+        const mockUser = { id: 'user-1', email: 'test@example.com', role: 'MEMBER' }
 
         const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockUser)
+
+        // Clerk session mock: authenticated user (Bearer header is legacy — actual
+        // auth is via Clerk session. Mock auth() to return userId.)
+        const { auth } = require('@clerk/nextjs/server')
+        auth.mockResolvedValueOnce({ userId: 'user-1' })
 
         const request = createMockRequest(
           {

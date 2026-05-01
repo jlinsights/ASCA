@@ -1,1 +1,1 @@
-📦 chore: tests-route-dataloader-mock PDCA 아카이브 (Match 95%, rev β #4, 7 chain +167)
+🔧 fix(test): route.test.ts Clerk auth mock 통합 (rev β #5, +2 PASS)
