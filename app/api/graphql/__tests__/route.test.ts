@@ -104,7 +104,7 @@ describe('GraphQL API Integration Tests', () => {
           role: 'member',
         }
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockUser)
 
         const request = createMockRequest({
@@ -136,7 +136,7 @@ describe('GraphQL API Integration Tests', () => {
           { id: 'member-2', fullName: 'Member 2', status: 'active' },
         ]
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.members.findMany.mockResolvedValue(mockMembers)
 
         const request = createMockRequest({
@@ -175,7 +175,7 @@ describe('GraphQL API Integration Tests', () => {
           { id: 'artist-2', name: 'Artist 2', nationality: 'US' },
         ]
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.artists.findMany.mockResolvedValue(mockArtists)
 
         const request = createMockRequest({
@@ -209,7 +209,7 @@ describe('GraphQL API Integration Tests', () => {
           { id: 'exhibition-2', title: 'Exhibition 2', status: 'current' },
         ]
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.exhibitions.findMany.mockResolvedValue(mockExhibitions)
 
         const request = createMockRequest({
@@ -275,7 +275,7 @@ describe('GraphQL API Integration Tests', () => {
           membershipNumber: 'ASCA-2024-001',
         }
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockUser)
         db.query.members.findMany.mockResolvedValue([])
         db.insert.mockReturnValue({
@@ -317,7 +317,7 @@ describe('GraphQL API Integration Tests', () => {
       it('should return authorization error for approveMember without admin role', async () => {
         const mockUser = { id: 'user-1', role: 'member' }
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockUser)
 
         const request = createMockRequest(
@@ -352,7 +352,7 @@ describe('GraphQL API Integration Tests', () => {
         }
         const approvedMember = { ...mockMember, status: 'active' }
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockAdmin)
         db.query.members.findFirst.mockResolvedValue(mockMember)
         db.update.mockReturnValue({
@@ -462,7 +462,7 @@ describe('GraphQL API Integration Tests', () => {
       })
 
       it('should return formatted error for resolver exceptions', async () => {
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockRejectedValue(new Error('Database connection failed'))
 
         const request = createMockRequest({
@@ -503,7 +503,7 @@ describe('GraphQL API Integration Tests', () => {
       it('should process authorization header for authenticated requests', async () => {
         const mockUser = { id: 'user-1', role: 'member' }
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockUser)
 
         const request = createMockRequest(
@@ -549,7 +549,7 @@ describe('GraphQL API Integration Tests', () => {
       })
 
       it('should handle invalid authorization token gracefully', async () => {
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(null)
 
         const request = createMockRequest(
@@ -579,7 +579,7 @@ describe('GraphQL API Integration Tests', () => {
         const mockUser = { id: 'user-1', name: 'Test User' }
         const mockMembers = [{ id: 'member-1', fullName: 'Member 1' }]
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockUser)
         db.query.members.findMany.mockResolvedValue(mockMembers)
 
@@ -619,7 +619,7 @@ describe('GraphQL API Integration Tests', () => {
         }
         const mockArtworks = [{ id: 'artwork-1', title: 'Artwork 1', artistId: 'artist-1' }]
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.artists.findFirst.mockResolvedValue(mockArtist)
         db.query.artworks.findMany.mockResolvedValue(mockArtworks)
 
@@ -651,7 +651,7 @@ describe('GraphQL API Integration Tests', () => {
         const mockUser1 = { id: 'user-1', name: 'User 1' }
         const mockUser2 = { id: 'user-2', name: 'User 2' }
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValueOnce(mockUser1).mockResolvedValueOnce(mockUser2)
 
         const request = createMockRequest({
@@ -681,7 +681,7 @@ describe('GraphQL API Integration Tests', () => {
       it('should handle queries with directives', async () => {
         const mockUser = { id: 'user-1', name: 'Test User', email: 'test@example.com' }
 
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue(mockUser)
 
         const request = createMockRequest({
@@ -719,7 +719,7 @@ describe('GraphQL API Integration Tests', () => {
       })
 
       it('should return data field for successful queries', async () => {
-        const { db } = require('@/lib/db/drizzle')
+        const { db } = require('@/lib/db')
         db.query.users.findFirst.mockResolvedValue({ id: 'user-1' })
 
         const request = createMockRequest({
