@@ -7,8 +7,18 @@
 | tests-stale-route-extras    |    100%    | 2026-05-01 | [Plan](tests-stale-route-extras/tests-stale-route-extras.plan.md) / [Analysis](tests-stale-route-extras/tests-stale-route-extras.analysis.md) / [Report](tests-stale-route-extras/tests-stale-route-extras.report.md)                   |
 | tests-route-dataloader-mock |    95%     | 2026-05-01 | [Plan](tests-route-dataloader-mock/tests-route-dataloader-mock.plan.md) / [Analysis](tests-route-dataloader-mock/tests-route-dataloader-mock.analysis.md) / [Report](tests-route-dataloader-mock/tests-route-dataloader-mock.report.md) |
 | tests-route-auth-cleanup    |    100%    | 2026-05-01 | [Plan](tests-route-auth-cleanup/tests-route-auth-cleanup.plan.md) / [Analysis](tests-route-auth-cleanup/tests-route-auth-cleanup.analysis.md) / [Report](tests-route-auth-cleanup/tests-route-auth-cleanup.report.md)                   |
+| tests-route-mutation-auth   |    100%    | 2026-05-01 | [Plan](tests-route-mutation-auth/tests-route-mutation-auth.plan.md) / [Analysis](tests-route-mutation-auth/tests-route-mutation-auth.analysis.md) / [Report](tests-route-mutation-auth/tests-route-mutation-auth.report.md)             |
 
 ## Highlights
+
+- **tests-route-mutation-auth** (100%, 2026-05-01): rev β #6. 부모 5 ejection
+  중 D 그룹 (Mutation Operations 2 fail) 처리. C+E 패턴 (Clerk session mock) +
+  GraphQL enum casing 분리 학습. 1 file 2 hunks (+10/-4). PR #16 admin merge
+  `b05f204e`. CI passed 397→399 (+2, mini-do 정확 일치). **9 chain 누적
+  228→399 (+171, +75%)**. rev β 6연속 검증 (Match avg 98.3%, ejection 0). 핵심
+  학습: `requireAdmin`은 DB lowercase `'admin'` 체크 / GraphQL `MemberStatus`
+  enum은 UPPERCASE 직렬화 → mock에서 두 레이어 분리 필수.
+
 
 - **jest-clerk-esm-fix** (95%, 2026-05-01): 부모 사이클 tests-stale-update의 G4
   unplanned ejection을 rev β 패턴(plan 전 mini-do 30분으로 가설 직접 검증)으로
