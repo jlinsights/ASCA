@@ -407,9 +407,18 @@ describe('GraphQL API Integration Tests', () => {
         }
 
         const request = new NextRequest(url, requestInit)
-        const response = await POST(request)
 
-        expect(response.status).toBeGreaterThanOrEqual(400)
+        // Apollo @as-integrations/next throws SyntaxError on malformed JSON
+        // body parse (does not return a 4xx Response). The error is thrown from
+        // Apollo's vm-realm, so `instanceof SyntaxError` fails — check by name.
+        let caught: any = null
+        try {
+          await POST(request)
+        } catch (err) {
+          caught = err
+        }
+        expect(caught).not.toBeNull()
+        expect(caught.name).toBe('SyntaxError')
       })
 
       it('should return error for missing query field', async () => {
@@ -446,7 +455,8 @@ describe('GraphQL API Integration Tests', () => {
         })
 
         const response = await POST(request)
-        expect(response.status).toBe(200)
+        // Apollo Server v4 default: validation errors return 400 (not 200).
+        expect(response.status).toBe(400)
 
         const body = await parseResponse(response)
         expect(body.errors).toBeDefined()
@@ -474,7 +484,8 @@ describe('GraphQL API Integration Tests', () => {
 
       it('should return formatted error for resolver exceptions', async () => {
         const { db } = require('@/lib/db')
-        db.query.users.findFirst.mockRejectedValue(new Error('Database connection failed'))
+        // userLoader (DataLoader) batchLoadFn → findMany 호출 (auth context 별개)
+        db.query.users.findMany.mockRejectedValueOnce(new Error('Database connection failed'))
 
         const request = createMockRequest({
           query: `
