@@ -1,10 +1,11 @@
 # Archive Index — 2026-05
 
-| Feature                    | Match Rate | Completed  | Documents                                                                                                                                                                                                                         |
-| -------------------------- | :--------: | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| jest-clerk-esm-fix         |    95%     | 2026-05-01 | [Plan](jest-clerk-esm-fix/jest-clerk-esm-fix.plan.md) / [Analysis](jest-clerk-esm-fix/jest-clerk-esm-fix.analysis.md) / [Report](jest-clerk-esm-fix/jest-clerk-esm-fix.report.md)                                                 |
-| tests-stale-graphql-extras |    100%    | 2026-05-01 | [Plan](tests-stale-graphql-extras/tests-stale-graphql-extras.plan.md) / [Analysis](tests-stale-graphql-extras/tests-stale-graphql-extras.analysis.md) / [Report](tests-stale-graphql-extras/tests-stale-graphql-extras.report.md) |
-| tests-stale-route-extras   |    100%    | 2026-05-01 | [Plan](tests-stale-route-extras/tests-stale-route-extras.plan.md) / [Analysis](tests-stale-route-extras/tests-stale-route-extras.analysis.md) / [Report](tests-stale-route-extras/tests-stale-route-extras.report.md)             |
+| Feature                     | Match Rate | Completed  | Documents                                                                                                                                                                                                                               |
+| --------------------------- | :--------: | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| jest-clerk-esm-fix          |    95%     | 2026-05-01 | [Plan](jest-clerk-esm-fix/jest-clerk-esm-fix.plan.md) / [Analysis](jest-clerk-esm-fix/jest-clerk-esm-fix.analysis.md) / [Report](jest-clerk-esm-fix/jest-clerk-esm-fix.report.md)                                                       |
+| tests-stale-graphql-extras  |    100%    | 2026-05-01 | [Plan](tests-stale-graphql-extras/tests-stale-graphql-extras.plan.md) / [Analysis](tests-stale-graphql-extras/tests-stale-graphql-extras.analysis.md) / [Report](tests-stale-graphql-extras/tests-stale-graphql-extras.report.md)       |
+| tests-stale-route-extras    |    100%    | 2026-05-01 | [Plan](tests-stale-route-extras/tests-stale-route-extras.plan.md) / [Analysis](tests-stale-route-extras/tests-stale-route-extras.analysis.md) / [Report](tests-stale-route-extras/tests-stale-route-extras.report.md)                   |
+| tests-route-dataloader-mock |    95%     | 2026-05-01 | [Plan](tests-route-dataloader-mock/tests-route-dataloader-mock.plan.md) / [Analysis](tests-route-dataloader-mock/tests-route-dataloader-mock.analysis.md) / [Report](tests-route-dataloader-mock/tests-route-dataloader-mock.report.md) |
 
 ## Highlights
 
@@ -24,6 +25,15 @@
   +157, +69%). rev β 패턴 두 번째 검증 (Match 100%, 0 unplanned ejection,
   estimate 정확). route.test.ts 17 신규 RED는 사전 예측된 ejection — 별 사이클
   tests-stale-route-extras로 분리.
+
+- **tests-route-dataloader-mock** (95%, 2026-05-01): 부모 사이클
+  tests-stale-route-extras 5 ejection 중 B 그룹 (DataLoader mock) 3건 + 부수
+  enum mismatch 1건 = 4 fix. 1 file 4 hunks. PR #14 admin merge `37ab759e`. CI
+  passed 393→395 (+2, mini-do 4 vs CI 2 첫 변동). 7 chain 누적 228→395 (+167,
+  +73%). **rev β 4연속 검증** (Match 평균 97.5%, ejection 0). 핵심 학습:
+  DataLoader는 batchLoadFn에서 findMany 호출 → test mock에 findFirst만 정의 시
+  silent fail; GraphQL enum UPPER_SNAKE_CASE 강제 (`'member'` → `'MEMBER'`,
+  `'CURRENT'` → `'ONGOING'`).
 
 - **tests-stale-route-extras** (100%, 2026-05-01): 부모 사이클
   tests-stale-graphql-extras에서 ejection된 17 fail 중 단일 root cause
