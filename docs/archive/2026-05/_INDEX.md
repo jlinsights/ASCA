@@ -11,8 +11,19 @@
 | tests-route-error-policy    |    100%    | 2026-05-01 | [Plan](tests-route-error-policy/tests-route-error-policy.plan.md) / [Analysis](tests-route-error-policy/tests-route-error-policy.analysis.md) / [Report](tests-route-error-policy/tests-route-error-policy.report.md)                   |
 | tests-realtime-async-fix    |    95%     | 2026-05-02 | [Plan](tests-realtime-async-fix/tests-realtime-async-fix.plan.md) / [Analysis](tests-realtime-async-fix/tests-realtime-async-fix.analysis.md) / [Report](tests-realtime-async-fix/tests-realtime-async-fix.report.md)                   |
 | tests-stale-member-extras-spike | 100%   | 2026-05-02 | [Plan](tests-stale-member-extras-spike/tests-stale-member-extras-spike.plan.md) / [Analysis](tests-stale-member-extras-spike/tests-stale-member-extras-spike.analysis.md) / [Report](tests-stale-member-extras-spike/tests-stale-member-extras-spike.report.md) |
+| tests-stale-member-thenable-fix | 100%   | 2026-05-02 | [Plan](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.plan.md) / [Analysis](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.analysis.md) / [Report](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.report.md) |
 
 ## Highlights
+
+- **tests-stale-member-thenable-fix** (100%, 2026-05-02): rev β #10. 🪡 hyphen
+  file thenable 무한 재귀 fix. `Promise.resolve(this)` (this가 thenable) →
+  plain object unwrap 후 resolve. 1 file 1 hunk (+8/-3). PR #20 admin merge
+  `15485e42`. **hyphen file 0 → 13/13 PASS** (was OOM). CI passed 419→432
+  (+13, **mini-do 100% 정확**). **13 chain 누적 228→432 (+204, +89%)**.
+  rev β 10연속 (Match avg 98.5%). 핵심: thenable mock의 Promise.resolve(this)
+  무한 재귀, plain object unwrap이 canonical. dot file 9 fail은 schema 재작성
+  필요 → tests-stale-member-schema-rewrite 별 사이클로 분리.
+
 
 - **tests-stale-member-extras-spike** (100%, 2026-05-02): rev β #9 (spike scope).
   🔬 OOM root cause 식별 spike. 2 root cause 정확 식별: (1) `@jest/globals` jest
