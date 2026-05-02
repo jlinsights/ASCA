@@ -12,8 +12,20 @@
 | tests-realtime-async-fix    |    95%     | 2026-05-02 | [Plan](tests-realtime-async-fix/tests-realtime-async-fix.plan.md) / [Analysis](tests-realtime-async-fix/tests-realtime-async-fix.analysis.md) / [Report](tests-realtime-async-fix/tests-realtime-async-fix.report.md)                   |
 | tests-stale-member-extras-spike | 100%   | 2026-05-02 | [Plan](tests-stale-member-extras-spike/tests-stale-member-extras-spike.plan.md) / [Analysis](tests-stale-member-extras-spike/tests-stale-member-extras-spike.analysis.md) / [Report](tests-stale-member-extras-spike/tests-stale-member-extras-spike.report.md) |
 | tests-stale-member-thenable-fix | 100%   | 2026-05-02 | [Plan](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.plan.md) / [Analysis](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.analysis.md) / [Report](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.report.md) |
+| tests-stale-member-schema-rewrite | 90%  | 2026-05-02 | [Plan](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.plan.md) / [Analysis](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.analysis.md) / [Report](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.report.md) |
 
 ## Highlights
+
+- **tests-stale-member-schema-rewrite** (90%, 2026-05-02): rev β #11. 📐 부모
+  사이클 ejection (dot file 9 fail) 정식 처리. mockMember 구조 + DTO + assertion +
+  dead method 일괄 정리 (snake_case → camelCase, status 필드 추가, updateMemberLevel
+  describe 삭제). 1 file 9 hunks (+51/-78). PR #21 admin merge `65971e47`.
+  **Local 52/52 PASS**, CI passed 432→439 (+7, mini-do +9 -2 CI variance, 첫 90%
+  Match). **14 chain 누적 228→439 (+211, +93%)**. Test Suites 12→13 pass. rev β
+  11연속 (Match avg 97.7%, 2 unplanned ejection — CI env variance). 핵심 학습:
+  TypeScript `as unknown as Member` lenient cast → runtime 차이 가능, CI env
+  variance 사전 정의 어려움 (Karpathy §1 한계).
+
 
 - **tests-stale-member-thenable-fix** (100%, 2026-05-02): rev β #10. 🪡 hyphen
   file thenable 무한 재귀 fix. `Promise.resolve(this)` (this가 thenable) →
