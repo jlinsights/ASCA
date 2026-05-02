@@ -31,12 +31,17 @@ describe('MemberService', () => {
       order: jest.fn().mockReturnThis(),
       range: jest.fn().mockReturnThis(),
       single: jest.fn().mockReturnThis(),
-      // Make it thenable (Promise-like) so it can be awaited
+      // Thenable: resolve with plain object (NOT this — this는 thenable이라 무한 재귀)
       then(resolve: Function, reject?: Function) {
-        return Promise.resolve(this).then(resolve, reject)
+        const result = {
+          data: (this as any).data,
+          error: (this as any).error,
+          count: (this as any).count,
+        }
+        return Promise.resolve(result).then(resolve as any, reject as any)
       },
       catch(reject: Function) {
-        return Promise.resolve(this).catch(reject)
+        return Promise.resolve(undefined).catch(reject as any)
       },
     } as unknown as SupabaseClient
   })
