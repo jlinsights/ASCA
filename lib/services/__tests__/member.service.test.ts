@@ -21,42 +21,43 @@ describe('MemberService', () => {
   let memberService: MemberService
   let mockRepository: jest.Mocked<MemberRepository>
 
-  // Mock data
-  const mockMember: Member = {
+  // Mock data — Member 타입은 camelCase + status 필드 (DB schema와 정합)
+  // email은 Member type엔 없지만 일부 test가 assert (joined user data)
+  const mockMember = {
     id: '00000000-0000-0000-0000-000000000101',
+    userId: '00000000-0000-0000-0000-000000000001',
     email: 'test@example.com',
-    first_name_ko: '철수',
-    last_name_ko: '김',
-    first_name_en: 'Chulsoo',
-    last_name_en: 'Kim',
-    membership_number: 'ASCA-2024-0001',
-    membership_level_id: '00000000-0000-0000-0000-000000000001',
-    membership_status: 'active',
+    membershipNumber: 'ASCA-2024-0001',
+    tierLevel: 1,
+    tierId: '00000000-0000-0000-0000-000000000001',
+    status: 'active',
+    fullName: '김철수',
+    fullNameKo: '김철수',
+    fullNameEn: 'Chulsoo Kim',
     nationality: 'KR',
-    is_verified: false,
-    is_public: false,
-    joined_date: new Date('2024-01-01'),
-    last_active: new Date('2024-01-10'),
-    created_at: new Date('2024-01-01'),
-    updated_at: new Date('2024-01-01'),
-    deleted_at: null,
-  }
+    joinDate: '2024-01-01',
+  } as unknown as Member
 
   const mockPendingMember: Member = {
     ...mockMember,
     id: '00000000-0000-0000-0000-000000000102',
-    email: 'pending@example.com',
-    membership_number: 'ASCA-2024-0002',
-    membership_status: 'pending_approval',
-  }
+    membershipNumber: 'ASCA-2024-0002',
+    status: 'pending_approval',
+  } as Member
 
   const mockSuspendedMember: Member = {
     ...mockMember,
     id: '00000000-0000-0000-0000-000000000103',
-    email: 'suspended@example.com',
-    membership_number: 'ASCA-2024-0003',
-    membership_status: 'suspended',
-  }
+    membershipNumber: 'ASCA-2024-0003',
+    status: 'suspended',
+  } as Member
+
+  const mockInactiveMember: Member = {
+    ...mockMember,
+    id: '00000000-0000-0000-0000-000000000104',
+    membershipNumber: 'ASCA-2024-0004',
+    status: 'inactive',
+  } as Member
 
   beforeEach(() => {
     // Clear all mocks before each test
@@ -130,7 +131,7 @@ describe('MemberService', () => {
 
       // Assert
       expect(result).toBeDefined()
-      expect(result?.membership_number).toBe('ASCA-2024-0001')
+      expect(result?.membershipNumber).toBe('ASCA-2024-0001')
     })
 
     test('should return null for non-existent membership number', async () => {
@@ -264,28 +265,29 @@ describe('MemberService', () => {
 
       // Assert
       expect(result).toHaveLength(1)
-      expect(result[0].membership_status).toBe('pending_approval')
+      expect(result[0].status).toBe('pending_approval')
     })
   })
 
   describe('createMember', () => {
     test('should create new member with valid data', async () => {
-      // Arrange
+      // Arrange — DTO는 camelCase (createMemberSchema)
       const createData = {
         email: 'newmember@example.com',
-        first_name_ko: '신규',
-        last_name_ko: '회원',
-        membership_level_id: '00000000-0000-0000-0000-000000000001',
-        membership_status: 'pending_approval' as const,
+        firstNameKo: '신규',
+        lastNameKo: '회원',
+        membershipLevelId: '00000000-0000-0000-0000-000000000001',
+        membershipStatus: 'pending_approval' as const,
       }
 
       mockRepository.findByEmail = jest.fn().mockResolvedValue(null)
       mockRepository.generateMembershipNumber = jest.fn().mockResolvedValue('ASCA-2024-0010')
       mockRepository.create = jest.fn().mockResolvedValue({
         ...mockMember,
-        ...createData,
         id: 'new-id',
-        membership_number: 'ASCA-2024-0010',
+        membershipNumber: 'ASCA-2024-0010',
+        fullName: '회원신규',
+        fullNameKo: '회원신규',
       })
 
       // Act
@@ -293,21 +295,20 @@ describe('MemberService', () => {
 
       // Assert
       expect(result).toBeDefined()
-      expect(result.email).toBe('newmember@example.com')
-      expect(result.membership_number).toBe('ASCA-2024-0010')
+      expect(result.membershipNumber).toBe('ASCA-2024-0010')
       expect(mockRepository.findByEmail).toHaveBeenCalledWith('newmember@example.com')
       expect(mockRepository.generateMembershipNumber).toHaveBeenCalled()
       expect(mockRepository.create).toHaveBeenCalled()
     })
 
     test('should throw conflict error for duplicate email', async () => {
-      // Arrange
+      // Arrange — DTO는 camelCase
       const createData = {
         email: 'test@example.com',
-        first_name_ko: '중복',
-        last_name_ko: '이메일',
-        membership_level_id: '00000000-0000-0000-0000-000000000001',
-        membership_status: 'pending_approval' as const,
+        firstNameKo: '중복',
+        lastNameKo: '이메일',
+        membershipLevelId: '00000000-0000-0000-0000-000000000001',
+        membershipStatus: 'pending_approval' as const,
       }
 
       mockRepository.findByEmail = jest.fn().mockResolvedValue(mockMember)
@@ -507,31 +508,30 @@ describe('MemberService', () => {
       mockRepository.findById = jest.fn().mockResolvedValue(mockSuspendedMember)
       mockRepository.updateStatus = jest.fn().mockResolvedValue({
         ...mockSuspendedMember,
-        membership_status: 'active',
+        status: 'active',
       })
 
       // Act
       const result = await memberService.reactivateMember(mockSuspendedMember.id)
 
       // Assert
-      expect(result.membership_status).toBe('active')
+      expect(result.status).toBe('active')
       expect(mockRepository.updateStatus).toHaveBeenCalledWith(mockSuspendedMember.id, 'active')
     })
 
     test('should reactivate inactive member', async () => {
-      // Arrange
-      const inactiveMember = { ...mockMember, membership_status: 'inactive' as const }
-      mockRepository.findById = jest.fn().mockResolvedValue(inactiveMember)
+      // Arrange — mockInactiveMember는 status: 'inactive'
+      mockRepository.findById = jest.fn().mockResolvedValue(mockInactiveMember)
       mockRepository.updateStatus = jest.fn().mockResolvedValue({
-        ...inactiveMember,
-        membership_status: 'active',
+        ...mockInactiveMember,
+        status: 'active',
       })
 
       // Act
-      const result = await memberService.reactivateMember(mockMember.id)
+      const result = await memberService.reactivateMember(mockInactiveMember.id)
 
       // Assert
-      expect(result.membership_status).toBe('active')
+      expect(result.status).toBe('active')
     })
 
     test('should throw bad request for active member', async () => {
@@ -545,34 +545,7 @@ describe('MemberService', () => {
     })
   })
 
-  describe('updateMemberLevel', () => {
-    test('should update member level', async () => {
-      // Arrange
-      const newLevelId = '00000000-0000-0000-0000-000000000002'
-      mockRepository.findById = jest.fn().mockResolvedValue(mockMember)
-      mockRepository.updateLevel = jest.fn().mockResolvedValue({
-        ...mockMember,
-        membership_level_id: newLevelId,
-      })
-
-      // Act
-      const result = await memberService.updateMemberLevel(mockMember.id, newLevelId)
-
-      // Assert
-      expect(result.membership_level_id).toBe(newLevelId)
-      expect(mockRepository.updateLevel).toHaveBeenCalledWith(mockMember.id, newLevelId)
-    })
-
-    test('should throw not found for non-existent member', async () => {
-      // Arrange
-      mockRepository.findById = jest.fn().mockResolvedValue(null)
-
-      // Act & Assert
-      await expect(memberService.updateMemberLevel('invalid-id', 'level-id')).rejects.toThrow(
-        'Member not found'
-      )
-    })
-  })
+  // updateMemberLevel: dead method (service에 미존재) — describe block 삭제
 
   describe('trackActivity', () => {
     test('should track member activity', async () => {
