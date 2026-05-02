@@ -10,8 +10,19 @@
 | tests-route-mutation-auth   |    100%    | 2026-05-01 | [Plan](tests-route-mutation-auth/tests-route-mutation-auth.plan.md) / [Analysis](tests-route-mutation-auth/tests-route-mutation-auth.analysis.md) / [Report](tests-route-mutation-auth/tests-route-mutation-auth.report.md)             |
 | tests-route-error-policy    |    100%    | 2026-05-01 | [Plan](tests-route-error-policy/tests-route-error-policy.plan.md) / [Analysis](tests-route-error-policy/tests-route-error-policy.analysis.md) / [Report](tests-route-error-policy/tests-route-error-policy.report.md)                   |
 | tests-realtime-async-fix    |    95%     | 2026-05-02 | [Plan](tests-realtime-async-fix/tests-realtime-async-fix.plan.md) / [Analysis](tests-realtime-async-fix/tests-realtime-async-fix.analysis.md) / [Report](tests-realtime-async-fix/tests-realtime-async-fix.report.md)                   |
+| tests-stale-member-extras-spike | 100%   | 2026-05-02 | [Plan](tests-stale-member-extras-spike/tests-stale-member-extras-spike.plan.md) / [Analysis](tests-stale-member-extras-spike/tests-stale-member-extras-spike.analysis.md) / [Report](tests-stale-member-extras-spike/tests-stale-member-extras-spike.report.md) |
 
 ## Highlights
+
+- **tests-stale-member-extras-spike** (100%, 2026-05-02): rev β #9 (spike scope).
+  🔬 OOM root cause 식별 spike. 2 root cause 정확 식별: (1) `@jest/globals` jest
+  import → babel-jest hoisting 비활성화 → mock silent fail → real DB connection
+  → OOM. (2) thenable mock `Promise.resolve(this)` 무한 재귀 (hyphen file).
+  surgical fix: 양 file `jest` import 제거. **dot file OOM 79s→2.1s 해결**.
+  PR #19 admin merge `ca108522`. CI 419 변동 없음 (local-only OOM, CI 워커
+  메모리 충분). **rev β 9연속** (Match avg 98.3%). 핵심: memory feedback
+  사전 학습이 식별 30min 단축. 잔여 hyphen thenable → tests-stale-member-thenable-fix.
+
 
 - **tests-realtime-async-fix** (95%, 2026-05-02): rev β #8. ⏱️ Realtime 4 file
   `jest.useFakeTimers + setTimeout` 충돌을 canonical 패턴
