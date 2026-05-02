@@ -77,9 +77,9 @@ export class SSEManager {
   constructor(options: SSEManagerOptions = {}) {
     this.clients = new Map()
     this.options = {
-      keepAliveInterval: options.keepAliveInterval || 30000, // 30 seconds
-      clientTimeout: options.clientTimeout || 300000, // 5 minutes
-      maxClients: options.maxClients || 1000,
+      keepAliveInterval: options.keepAliveInterval ?? 30000, // 30 seconds
+      clientTimeout: options.clientTimeout ?? 300000, // 5 minutes
+      maxClients: options.maxClients ?? 1000, // ?? not || (allow 0 for testing)
     }
   }
 
