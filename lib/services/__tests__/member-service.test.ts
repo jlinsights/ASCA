@@ -9,7 +9,8 @@
  * @jest-environment node
  */
 
-import { describe, test, expect, jest, beforeEach } from '@jest/globals'
+// jest는 global 사용 (babel-jest hoisting 활성화 → jest.mock 정상 작동)
+import { describe, test, expect, beforeEach } from '@jest/globals'
 import { MemberService } from '../member-service'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
