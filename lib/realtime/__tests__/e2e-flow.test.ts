@@ -13,7 +13,7 @@
  */
 
 import { EventEmitter } from 'events'
-import { createEventEmitter, EventType, type EventPayload } from '../event-emitter'
+import { getEventEmitter, EventType, type EventPayload } from '../event-emitter'
 import { createSubscriptionManager, ConnectionType } from '../subscription-manager'
 import { createWebSocketManager, WSMessageType } from '../websocket-manager'
 import { createSSEManager } from '../sse-manager'
@@ -70,7 +70,7 @@ describe('E2E Real-time Event Flow', () => {
   describe('Complete Event Pipeline', () => {
     it('should deliver event from emitter to WebSocket client', async () => {
       // Setup: Create all components
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const subscriptionManager = createSubscriptionManager()
       const wsManager = createWebSocketManager()
 
@@ -116,7 +116,7 @@ describe('E2E Real-time Event Flow', () => {
     })
 
     it('should deliver event to multiple WebSocket clients', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       // Create multiple clients
@@ -160,7 +160,7 @@ describe('E2E Real-time Event Flow', () => {
     })
 
     it('should filter events based on subscription', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       const socket1 = new MockWebSocket() as any
@@ -210,7 +210,7 @@ describe('E2E Real-time Event Flow', () => {
 
   describe('Wildcard Subscriptions', () => {
     it('should deliver matching wildcard events to clients', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       const socket = new MockWebSocket() as any
@@ -252,7 +252,7 @@ describe('E2E Real-time Event Flow', () => {
     })
 
     it('should deliver all events to global wildcard subscriber', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       const socket = new MockWebSocket() as any
@@ -291,7 +291,7 @@ describe('E2E Real-time Event Flow', () => {
 
   describe('User-Specific Events', () => {
     it('should deliver user-specific events only to matching clients', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const subscriptionManager = createSubscriptionManager()
 
       // Subscribe two clients with different user IDs
@@ -322,7 +322,7 @@ describe('E2E Real-time Event Flow', () => {
     })
 
     it('should deliver events to all clients when no userId filter', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const subscriptionManager = createSubscriptionManager()
 
       // Subscribe two clients without user ID filter
@@ -348,7 +348,7 @@ describe('E2E Real-time Event Flow', () => {
 
   describe('Connection Lifecycle', () => {
     it('should stop delivering events after client disconnect', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       const socket = new MockWebSocket() as any
@@ -416,7 +416,7 @@ describe('E2E Real-time Event Flow', () => {
 
   describe('Error Handling', () => {
     it('should continue delivering to other clients on individual client error', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       const socket1 = new MockWebSocket() as any
@@ -459,7 +459,7 @@ describe('E2E Real-time Event Flow', () => {
 
   describe('Performance and Scalability', () => {
     it('should handle high-frequency events efficiently', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       const socket = new MockWebSocket() as any
@@ -531,7 +531,7 @@ describe('E2E Real-time Event Flow', () => {
 
   describe('Message Ordering', () => {
     it('should deliver events in order', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       const socket = new MockWebSocket() as any
@@ -571,7 +571,7 @@ describe('E2E Real-time Event Flow', () => {
 
   describe('Metadata Propagation', () => {
     it('should propagate metadata through event pipeline', async () => {
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       const wsManager = createWebSocketManager()
 
       const socket = new MockWebSocket() as any

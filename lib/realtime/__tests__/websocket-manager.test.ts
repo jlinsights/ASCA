@@ -20,7 +20,7 @@ import {
   WSMessageType,
   type WebSocketManagerOptions,
 } from '../websocket-manager'
-import { createEventEmitter, EventType } from '../event-emitter'
+import { getEventEmitter, EventType } from '../event-emitter'
 import { ConnectionType } from '../subscription-manager'
 
 // Mock WebSocket implementation
@@ -374,7 +374,7 @@ describe('WebSocket Manager', () => {
       await jest.advanceTimersByTimeAsync(10)
 
       // Get event emitter and emit event
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
       await jest.advanceTimersByTimeAsync(10)
@@ -408,7 +408,7 @@ describe('WebSocket Manager', () => {
 
       await jest.advanceTimersByTimeAsync(10)
 
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
       await eventEmitter.emit(EventType.MEMBER_UPDATED, { id: 'member-2' })
 
@@ -444,7 +444,7 @@ describe('WebSocket Manager', () => {
       // Close the socket
       socket.readyState = 3 // CLOSED
 
-      const eventEmitter = createEventEmitter()
+      const eventEmitter = getEventEmitter()
       await eventEmitter.emit(EventType.MEMBER_CREATED, { id: 'member-1' })
 
       await jest.advanceTimersByTimeAsync(10)
