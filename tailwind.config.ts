@@ -101,6 +101,20 @@ const config = {
         success: '#4a7c59', // = east-wood
         warning: '#fdb462', // = autumn-gold
         info: '#1e3a8a', // = north-water
+
+        // ── Framer Design System (DESIGN.md) ─────────────────
+        'framer-canvas': '#090909',
+        'framer-surface-1': '#141414',
+        'framer-surface-2': '#1c1c1c',
+        'framer-ink': '#ffffff',
+        'framer-ink-muted': '#999999',
+        'framer-accent-blue': '#0099ff',
+        'framer-hairline': '#262626',
+        'framer-hairline-soft': '#1a1a1a',
+        'framer-gradient-violet': '#6a4cf5',
+        'framer-gradient-magenta': '#d44df0',
+        'framer-gradient-orange': '#ff7a3d',
+        'framer-gradient-coral': '#ff5577',
       },
       borderRadius: {
         lg: 'var(--radius)',

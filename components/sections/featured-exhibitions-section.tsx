@@ -1,17 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Calendar, MapPin, ArrowRight, Sparkles } from 'lucide-react'
+import Image from 'next/image'
+import { Calendar, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
 
-// 전시 분류 타입 정의
 type ExhibitionType = '개인전' | '공모전' | '회원전' | '추천작가전' | '초대작가전' | '온라인전시'
 
-// 전시 데이터 타입
 interface Exhibition {
   id: number
   title: string
@@ -24,20 +19,15 @@ interface Exhibition {
   featured?: boolean
 }
 
-// 전시 분류별 색상 매핑
-const getExhibitionTypeStyle = (type: ExhibitionType) => {
-  const styles = {
-    개인전: { color: 'bg-celadon-green', label: '개인전' },
-    공모전: { color: 'bg-scholar-red', label: '공모전' },
-    회원전: { color: 'bg-temple-gold', label: '회원전' },
-    추천작가전: { color: 'bg-autumn-gold', label: '추천작가전' },
-    초대작가전: { color: 'bg-plum-blossom', label: '초대작가전' },
-    온라인전시: { color: 'bg-indigo-600', label: '온라인전시' },
-  }
-  return styles[type]
+const typeColors: Record<ExhibitionType, string> = {
+  개인전: '#88A891',
+  공모전: '#af2626',
+  회원전: '#d4af37',
+  추천작가전: '#fdb462',
+  초대작가전: '#8e4585',
+  온라인전시: '#4f46e5',
 }
 
-// Featured 전시 데이터 (실제로는 API에서 가져올 데이터)
 const featuredExhibitions: Exhibition[] = [
   {
     id: 1,
@@ -74,6 +64,271 @@ const featuredExhibitions: Exhibition[] = [
   },
 ]
 
+/* Framer-style exhibition card (surface-1) */
+function ExhibitionCard({ exhibition, delay }: { exhibition: Exhibition; delay: number }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <Link
+      href={`/exhibitions/${exhibition.id}`}
+      style={{ textDecoration: 'none', display: 'block' }}
+    >
+      <div
+        className={`card-framer framer-fade-up framer-fade-up-delay-${delay}`}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          cursor: 'pointer',
+          transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+          transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease',
+          boxShadow: hovered
+            ? 'rgba(255,255,255,0.08) 0px 0.5px 0px 0px, rgba(0,0,0,0.5) 0px 16px 40px 0px'
+            : 'none',
+        }}
+      >
+        {/* Image area */}
+        <div
+          style={{
+            position: 'relative',
+            aspectRatio: '16/9',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            marginBottom: '16px',
+            backgroundColor: 'var(--framer-surface-2)',
+          }}
+        >
+          <Image
+            src={exhibition.image}
+            alt={exhibition.title}
+            fill
+            className='object-cover'
+            style={{
+              transform: hovered ? 'scale(1.04)' : 'scale(1)',
+              transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1)',
+            }}
+          />
+          {/* Gradient overlay */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(20,20,20,0.8) 0%, transparent 60%)',
+            }}
+          />
+          {/* Type badge */}
+          <div style={{ position: 'absolute', top: '12px', left: '12px' }}>
+            <span
+              style={{
+                display: 'inline-block',
+                backgroundColor: typeColors[exhibition.type],
+                color: '#fff',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.02em',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
+              {exhibition.type}
+            </span>
+          </div>
+        </div>
+
+        {/* Card content */}
+        <div style={{ padding: '0 4px' }}>
+          <h3
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '18px',
+              fontWeight: 600,
+              letterSpacing: '-0.5px',
+              color: 'var(--framer-ink)',
+              lineHeight: 1.25,
+              marginBottom: '6px',
+            }}
+          >
+            {exhibition.title}
+          </h3>
+          <p className='framer-body-sm' style={{ color: 'var(--framer-ink-muted)', marginBottom: '16px' }}>
+            {exhibition.subtitle}
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
+            <div
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              className='framer-caption'
+            >
+              <MapPin size={12} style={{ color: 'var(--framer-ink-muted)', flexShrink: 0 }} />
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {exhibition.venue}
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }} className='framer-caption'>
+              <Calendar size={12} style={{ color: 'var(--framer-ink-muted)', flexShrink: 0 }} />
+              <span>
+                {exhibition.startDate} ~ {exhibition.endDate}
+              </span>
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              color: 'var(--framer-accent-blue)',
+              fontSize: '13px',
+              fontWeight: 500,
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
+            전시 상세보기
+            <ArrowRight
+              size={13}
+              style={{
+                transform: hovered ? 'translateX(3px)' : 'translateX(0)',
+                transition: 'transform 0.2s ease',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+/* Gradient Spotlight Card — Framer signature element */
+function SpotlightCard({
+  variant,
+  title,
+  subtitle,
+  href,
+  delay,
+}: {
+  variant: 'violet' | 'magenta' | 'orange'
+  title: string
+  subtitle: string
+  href: string
+  delay: number
+}) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <Link href={href} style={{ textDecoration: 'none', display: 'block' }}>
+      <div
+        className={`card-framer-spotlight card-framer-spotlight-${variant} framer-fade-up framer-fade-up-delay-${delay}`}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          cursor: 'pointer',
+          transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+          transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* Noise/texture overlay */}
+        <div
+          aria-hidden='true'
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.04\'/%3E%3C/svg%3E")',
+            borderRadius: 'inherit',
+            pointerEvents: 'none',
+          }}
+        />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div
+            style={{
+              display: 'inline-block',
+              backgroundColor: 'rgba(255,255,255,0.18)',
+              borderRadius: '6px',
+              padding: '4px 10px',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              fontFamily: 'Inter, sans-serif',
+              color: 'rgba(255,255,255,0.9)',
+              marginBottom: '20px',
+            }}
+          >
+            {variant === 'violet' ? '갤러리' : variant === 'magenta' ? '공모전' : '강좌'}
+          </div>
+
+          <h3
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '26px',
+              fontWeight: 700,
+              letterSpacing: '-1.2px',
+              color: '#fff',
+              lineHeight: 1.1,
+              marginBottom: '12px',
+            }}
+          >
+            {title}
+          </h3>
+
+          <p
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '15px',
+              fontWeight: 400,
+              letterSpacing: '-0.15px',
+              lineHeight: 1.4,
+              color: 'rgba(255,255,255,0.8)',
+            }}
+          >
+            {subtitle}
+          </p>
+        </div>
+
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            marginTop: '32px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+          }}
+        >
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              borderRadius: '100px',
+              padding: '8px 16px',
+              fontSize: '13px',
+              fontWeight: 500,
+              fontFamily: 'Inter, sans-serif',
+              color: '#fff',
+              gap: '6px',
+              transition: 'background-color 0.15s',
+            }}
+          >
+            더 알아보기
+            <ArrowUpRight
+              size={13}
+              style={{
+                transform: hovered ? 'translate(2px, -2px)' : 'translate(0,0)',
+                transition: 'transform 0.2s ease',
+              }}
+            />
+          </span>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
 export function FeaturedExhibitionsSection() {
   const [mounted, setMounted] = useState(false)
 
@@ -82,133 +337,76 @@ export function FeaturedExhibitionsSection() {
   }, [])
 
   return (
-    <section className='relative py-20 md:py-32 bg-gradient-to-b from-background via-rice-paper/30 to-background dark:via-stone-gray/10 overflow-hidden'>
-      {/* Decorative Background Pattern */}
-      <div className='absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none'>
-        <div className="absolute inset-0 bg-[url('/patterns/korean-pattern.png')] bg-repeat" />
-      </div>
-
-      <div className='relative z-10 container mx-auto px-4'>
-        {/* Section Header */}
-        <div className='max-w-3xl mx-auto text-center mb-16'>
-          <div
-            className={`transition-all duration-1000 ${
-              mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <Badge className='mb-4 bg-celadon-green/10 text-celadon-green border-celadon-green/20'>
-              <Sparkles className='w-3 h-3 mr-1' />
-              Featured Exhibitions
-            </Badge>
-            <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mb-4'>
-              주요 전시
-            </h2>
-            <p className='text-base md:text-lg text-muted-foreground leading-relaxed'>
-              동양서예협회가 엄선한 현재 진행 중인 주요 전시를 만나보세요
-            </p>
-          </div>
-        </div>
-
-        {/* Exhibition Cards Grid */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12'>
-          {featuredExhibitions.map((exhibition, index) => (
-            <div
-              key={exhibition.id}
-              className={`transition-all duration-1000 delay-${index * 200} ${
-                mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-            >
-              <Card className='group h-full overflow-hidden border-border/50 hover:border-celadon-green/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-2'>
-                {/* Exhibition Image */}
-                <div className='relative aspect-[4/3] overflow-hidden'>
-                  <Image
-                    src={exhibition.image}
-                    alt={exhibition.title}
-                    fill
-                    className='object-cover transition-transform duration-500 group-hover:scale-110'
-                  />
-                  {/* Gradient Overlay */}
-                  <div className='absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent' />
-
-                  {/* Type Badge */}
-                  <div className='absolute top-4 left-4'>
-                    <Badge
-                      className={`${getExhibitionTypeStyle(exhibition.type).color} text-rice-paper border-0`}
-                    >
-                      {getExhibitionTypeStyle(exhibition.type).label}
-                    </Badge>
-                  </div>
-
-                  {/* Featured Badge */}
-                  {exhibition.featured && (
-                    <div className='absolute top-4 right-4'>
-                      <Badge className='bg-scholar-red text-rice-paper border-0'>
-                        <Sparkles className='w-3 h-3 mr-1' />
-                        추천
-                      </Badge>
-                    </div>
-                  )}
-                </div>
-
-                {/* Exhibition Info */}
-                <CardContent className='p-6 space-y-4'>
-                  <div>
-                    <h3 className='text-xl font-serif font-semibold mb-2 group-hover:text-celadon-green transition-colors'>
-                      {exhibition.title}
-                    </h3>
-                    <p className='text-sm text-muted-foreground mb-4'>{exhibition.subtitle}</p>
-                  </div>
-
-                  {/* Exhibition Details */}
-                  <div className='space-y-2'>
-                    <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                      <MapPin className='w-4 h-4 flex-shrink-0' />
-                      <span className='line-clamp-1'>{exhibition.venue}</span>
-                    </div>
-                    <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                      <Calendar className='w-4 h-4 flex-shrink-0' />
-                      <span>
-                        {exhibition.startDate} ~ {exhibition.endDate}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* View Details Link */}
-                  <Link
-                    href={`/exhibitions/${exhibition.id}`}
-                    className='inline-flex items-center gap-2 text-sm font-medium text-celadon-green hover:text-scholar-red transition-colors group/link'
-                  >
-                    전시 상세보기
-                    <ArrowRight className='w-4 h-4 group-hover/link:translate-x-1 transition-transform' />
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </div>
-
-        {/* View All Button */}
+    <section
+      className='framer-section'
+      style={{ backgroundColor: 'var(--framer-canvas)' }}
+    >
+      <div className='framer-container'>
+        {/* Section header */}
         <div
-          className={`text-center transition-all duration-1000 delay-600 ${
-            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`framer-fade-up ${mounted ? '' : 'opacity-0'}`}
+          style={{ marginBottom: '64px' }}
         >
-          <Button
-            asChild
-            size='lg'
-            variant='outline'
-            className='group h-14 px-8 text-lg border-2 border-celadon-green text-celadon-green hover:bg-celadon-green hover:text-rice-paper shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
+          <span className='framer-eyebrow' style={{ marginBottom: '20px', display: 'inline-flex' }}>
+            주요 활동
+          </span>
+          <h2
+            className='framer-display-lg'
+            style={{ marginTop: '16px', maxWidth: '600px' }}
           >
-            <Link href='/exhibitions'>
-              모든 전시 둘러보기
-              <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
-            </Link>
-          </Button>
+            전통의 예술,
+            <br />
+            현대의 무대
+          </h2>
+          <p className='framer-body-lg' style={{ marginTop: '20px', maxWidth: '480px' }}>
+            동양서예협회가 엄선한 현재 진행 중인 주요 전시와 프로그램을 만나보세요
+          </p>
+        </div>
+
+        {/* Card grid — 2 columns with spotlight cards interspersed */}
+        <div className='framer-card-grid'>
+          {/* Row 1: Exhibition card + Spotlight (violet) */}
+          <ExhibitionCard exhibition={featuredExhibitions[0]} delay={1} />
+          <SpotlightCard
+            variant='violet'
+            title='협회 갤러리'
+            subtitle='수백 점의 서예 작품을 온라인에서 감상하고 작가와 소통하세요'
+            href='/gallery'
+            delay={2}
+          />
+
+          {/* Row 2: Spotlight (magenta) + Exhibition card */}
+          <SpotlightCard
+            variant='magenta'
+            title='2024 서예 공모전'
+            subtitle='전국 규모의 서예 공모전에 참가하고 실력을 겨루어 보세요'
+            href='/contests'
+            delay={3}
+          />
+          <ExhibitionCard exhibition={featuredExhibitions[1]} delay={4} />
+
+          {/* Row 3: Exhibition card + Spotlight (orange) */}
+          <ExhibitionCard exhibition={featuredExhibitions[2]} delay={5} />
+          <SpotlightCard
+            variant='orange'
+            title='서예 아카데미'
+            subtitle='전문 서예가에게 배우는 체계적인 온·오프라인 강좌 프로그램'
+            href='/academy'
+            delay={5}
+          />
+        </div>
+
+        {/* View all CTA */}
+        <div
+          className='framer-fade-up'
+          style={{ textAlign: 'center', marginTop: '64px' }}
+        >
+          <Link href='/exhibitions' className='btn-framer-primary' style={{ fontSize: '15px', padding: '13px 28px' }}>
+            모든 전시 보기
+            <ArrowRight size={16} />
+          </Link>
         </div>
       </div>
-
-      {/* Bottom Decorative Gradient */}
-      <div className='absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none' />
     </section>
   )
 }
