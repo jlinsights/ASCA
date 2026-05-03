@@ -68,20 +68,17 @@ export default function GalleryGrid({
   const [isLoading, setIsLoading] = useState(false)
   const [shareItem, setShareItem] = useState<GalleryItem | null>(null)
 
-  // 이미지 로딩 상태 - 스켈레톤 로더를 표시하기 위해 false로 초기화
-  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>(() => {
-    // 초기 렌더링 시 이미지를 아직 로드하지 않은 상태로 설정
-    const initialState: Record<string, boolean> = {}
-    items.forEach(item => {
-      initialState[item.id] = false
-    })
-    return initialState
-  })
+  // 이미지 로딩 상태 — 로드 완료된 id만 Set에 추가 (초기화 비용 없음)
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
   const [errorImages, setErrorImages] = useState<Set<string>>(new Set())
 
   // 이미지 로드 핸들러
   const handleImageLoad = useCallback((id: string) => {
-    setLoadedImages(prev => ({ ...prev, [id]: true }))
+    setLoadedImages(prev => {
+      const next = new Set(prev)
+      next.add(id)
+      return next
+    })
   }, [])
 
   // 이미지 에러 핸들러
@@ -320,9 +317,9 @@ export default function GalleryGrid({
       {/* 갤러리 그리드 - Virtual Scrolling 마사이크 레이아웃 */}
       {filteredItems.length > 0 && (
         <VirtuosoGrid
-          style={{ height: '100vh', minHeight: '800px' }}
+          useWindowScroll
           totalCount={filteredItems.length}
-          overscan={200}
+          overscan={600}
           listClassName='masonry-grid'
           itemClassName='gallery-card'
           components={{
@@ -346,26 +343,14 @@ export default function GalleryGrid({
           }}
           itemContent={index => {
             const item = filteredItems[index]!
-            const isImageLoaded = loadedImages[item.id]
+            const isImageLoaded = loadedImages.has(item.id)
             const hasImageError = errorImages.has(item.id)
 
             return (
-              <motion.div
+              <div
                 key={item.id}
-                layout
-                initial={{ opacity: 0, scale: 0.8, y: 40 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8, y: 40 }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.08,
-                  type: 'spring',
-                  bounce: 0.3,
-                }}
                 className='group cursor-pointer gallery-card touch-manipulation'
                 onClick={() => handleImageClick(item)}
-                whileHover={{ y: -8, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
                 role='button'
                 tabIndex={0}
                 aria-label={`${item.title} - ${item.description}`}
@@ -375,6 +360,7 @@ export default function GalleryGrid({
                     handleImageClick(item)
                   }
                 }}
+                style={{ animation: `framer-fade-up 0.3s ease both`, animationDelay: `${Math.min(index, 12) * 30}ms` }}
               >
                 <div
                   style={{
@@ -416,14 +402,14 @@ export default function GalleryGrid({
                   )}
 
                   <Image
-                    src={item.src}
-                    alt={`${item.title} - ${getCategoryName(item.category)} - ${item.description}`}
+                    src={item.thumbnail || item.src}
+                    alt={`${item.title} - ${getCategoryName(item.category)}`}
                     fill
-                    className={`object-cover group-hover:scale-110 group-hover:brightness-110 transition-all duration-700 ease-in-out ${isImageLoaded ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
-                    sizes='(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw'
-                    quality={85}
-                    priority={index < 6}
-                    loading={index < 6 ? undefined : 'lazy'}
+                    className={`object-cover group-hover:scale-105 transition-all duration-500 ease-out ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                    quality={75}
+                    priority={index < 8}
+                    loading={index < 8 ? 'eager' : 'lazy'}
                     unoptimized={false}
                     onLoad={() => handleImageLoad(item.id)}
                     onError={() => handleImageError(item.id)}
@@ -527,7 +513,7 @@ export default function GalleryGrid({
                     </div>
                   </motion.div>
                 </div>
-              </motion.div>
+              </div>
             )
           }}
         />

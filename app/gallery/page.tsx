@@ -12,9 +12,9 @@ import {
   Award,
   BookOpen,
 } from 'lucide-react'
-import galleryData from '@/lib/data/gallery-data.json'
-import { GalleryData } from '@/lib/types/gallery/gallery-legacy'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import galleryData from '@/lib/data/gallery-data.json'
+
 
 // GalleryClient 동적 임포트 (code-splitting)
 const GalleryClient = dynamic(() => import('@/components/gallery/GalleryClient'), {
@@ -48,10 +48,10 @@ function GalleryLoadingSkeleton() {
 }
 
 /* ─── Stats Row — Framer hairline-divided inline stats ──── */
-function GalleryStats({ data }: { data: GalleryData }) {
+function GalleryStats() {
   const stats = [
-    { icon: Camera, value: data.metadata.totalImages.toLocaleString(), label: '활동사진' },
-    { icon: Palette, value: data.categories.length, label: '카테고리' },
+    { icon: Camera, value: galleryData.metadata.totalImages.toLocaleString(), label: '활동사진' },
+    { icon: Palette, value: galleryData.categories.length, label: '카테고리' },
     { icon: Sparkles, value: 'HD', label: '최고화질' },
   ]
   return (
@@ -163,8 +163,6 @@ function ServiceCard({ item }: { item: ServiceItem }) {
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default function Page() {
-  const data = galleryData as unknown as GalleryData
-
   const services: ServiceItem[] = [
     { icon: Calendar, title: '전시회', desc: '현재, 예정, 과거 전시회 정보를 확인하세요', href: '/exhibitions' },
     { icon: Users, title: '작가 소개', desc: '협회 소속 작가들의 프로필을 확인하세요', href: '/artists' },
@@ -229,7 +227,7 @@ export default function Page() {
           </div>
 
           {/* Stats */}
-          <GalleryStats data={data} />
+          <GalleryStats />
         </div>
       </section>
 
@@ -240,7 +238,7 @@ export default function Page() {
         style={{ backgroundColor: 'var(--framer-canvas)' }}
       >
         <Suspense fallback={<GalleryLoadingSkeleton />}>
-          <GalleryClient data={data} />
+          <GalleryClient />
         </Suspense>
       </section>
 
@@ -359,8 +357,8 @@ export default function Page() {
             description:
               '동양서예협회의 전시회, 심사위원회, 휘호대회, 시상식 등 다양한 협회 활동을 담은 종합 갤러리.',
             url: 'https://orientalcalligraphy.org/gallery',
-            numberOfItems: data.metadata.totalImages,
-            dateModified: data.metadata.lastUpdated,
+            numberOfItems: galleryData.metadata.totalImages,
+            dateModified: galleryData.metadata.lastUpdated,
             publisher: {
               '@type': 'Organization',
               name: '동양서예협회',
