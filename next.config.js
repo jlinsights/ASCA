@@ -26,10 +26,9 @@ const nextConfig = {
   // 최고 화질 이미지 최적화 - 갤러리 특화
   images: {
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920, 2048, 2560, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 640, 768, 1024, 1280, 1536, 1920],
-    qualities: [75, 85, 90, 95, 100], // 커스텀 품질 설정 지원 (100은 라이트박스용)
-    minimumCacheTTL: 86400, // 24시간 캐시 (고화질 이미지)
+    deviceSizes: [640, 828, 1080, 1200, 1920, 2560],
+    imageSizes: [64, 128, 256, 384, 640],
+    minimumCacheTTL: 604800, // 7일 캐시
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -39,7 +38,6 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    // 고화질 갤러리 이미지 최적화
     loader: 'default',
     path: '/_next/image',
     domains: [],
