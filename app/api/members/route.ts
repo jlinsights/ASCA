@@ -11,9 +11,10 @@
  * To use this: rename to route.ts (backup the old one first)
  */
 
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextRequest } from 'next/server'
 import { db } from '@/lib/db'
-import { members } from '@/lib/db/schema-pg'
+import { members, users } from '@/lib/db/schema-pg'
 import { eq, or, like, desc, asc, count } from 'drizzle-orm'
 import {
   memberSearchSchema,
@@ -21,7 +22,6 @@ import {
   validateSearchParams,
   validateRequestBody,
   type MemberSearchParams,
-  type CreateMemberDTO,
 } from '@/lib/api/validators'
 import { ApiResponse, handleApiError } from '@/lib/api/response'
 import { rateLimit, RateLimitPresets } from '@/lib/security/rate-limit'
@@ -46,6 +46,16 @@ const writeLimiter = rateLimit({
     return userId || req.headers.get('x-forwarded-for') || 'anonymous'
   },
 })
+
+function buildMembershipNumber(): string {
+  const year = new Date().getFullYear()
+  const randomPart = crypto.randomUUID().slice(0, 8).toUpperCase()
+  return `ASCA-${year}-${randomPart}`
+}
+
+function buildFullName(body: z.infer<typeof createMemberSchema>): string {
+  return `${body.lastNameKo}${body.firstNameKo}`
+}
 
 /**
  * GET /api/members - List members with search and pagination
@@ -141,45 +151,114 @@ export async function POST(request: NextRequest) {
   if (rateLimitResponse) return rateLimitResponse
 
   try {
+    const { userId } = await auth()
+    if (!userId) {
+      return ApiResponse.unauthorized('Authentication required')
+    }
+
+    const clerkUser = await currentUser()
+    const primaryEmail = clerkUser?.emailAddresses[0]?.emailAddress
+
     // Validate request body
     const body = await validateRequestBody(request, createMemberSchema)
 
-    // Check if email already exists
-    const existing = await withPerformanceLog('members.checkEmail', async () => {
-      /*
-      return await db
-        .select()
-        .from(members)
-        .where(eq(members.email, body.email))
-        .limit(1);
-      */
-      return []
+    if (primaryEmail && primaryEmail !== body.email) {
+      return ApiResponse.forbidden('Member email must match authenticated user email')
+    }
+
+    const existingUsers = await withPerformanceLog('members.checkEmail', async () => {
+      return await db.select().from(users).where(eq(users.email, body.email)).limit(1)
     })
 
-    if (existing.length > 0) {
+    if (existingUsers[0] && existingUsers[0].id !== userId) {
       return ApiResponse.conflict('Email already exists', {
         field: 'email',
         value: body.email,
       })
     }
 
-    // Mock implementation for build success
-    /*
-    const [newMember] = await withPerformanceLog('members.create', async () => {
-      return await db
-        .insert(members)
-        .values([{
-          ...body,
-        }])
-        .returning();
-    });
-    */
-    const newMember = {
-      id: 'mock-id',
-      ...body,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+    const existingMembers = await withPerformanceLog('members.checkUserMember', async () => {
+      return await db.select().from(members).where(eq(members.userId, userId)).limit(1)
+    })
+
+    if (existingMembers[0]) {
+      return ApiResponse.conflict('Member already exists for authenticated user', {
+        field: 'userId',
+        value: userId,
+      })
     }
+
+    const fullName = buildFullName(body)
+    const now = new Date().toISOString()
+
+    const newMember = await withPerformanceLog('members.create', async () => {
+      const [user] = await db
+        .insert(users)
+        .values({
+          id: userId,
+          email: body.email,
+          name: fullName,
+          role: 'member',
+          updatedAt: now,
+        })
+        .onConflictDoUpdate({
+          target: users.id,
+          set: {
+            email: body.email,
+            name: fullName,
+            role: 'member',
+            updatedAt: now,
+          },
+        })
+        .returning()
+
+      if (!user) {
+        throw new Error('Failed to upsert user')
+      }
+
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const [member] = await db
+            .insert(members)
+            .values({
+              id: crypto.randomUUID(),
+              userId,
+              membershipNumber: buildMembershipNumber(),
+              tierId: body.membershipLevelId,
+              status: body.membershipStatus,
+              fullName,
+              fullNameKo: fullName,
+              fullNameEn:
+                body.firstNameEn || body.lastNameEn
+                  ? [body.firstNameEn, body.lastNameEn].filter(Boolean).join(' ')
+                  : null,
+              dateOfBirth: body.dateOfBirth,
+              gender: body.gender,
+              nationality: body.nationality,
+              phoneNumber: body.phone,
+              alternateEmail: body.email,
+              country: body.residenceCountry,
+              city: body.residenceCity,
+              languages: [body.preferredLanguage],
+              metadata: {
+                timezone: body.timezone,
+              },
+              updatedAt: now,
+            })
+            .returning()
+
+          if (member) {
+            return member
+          }
+        } catch (error) {
+          if (attempt === 2) {
+            throw error
+          }
+        }
+      }
+
+      throw new Error('Failed to create member')
+    })
 
     // Return created member
     return ApiResponse.created(newMember, {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as cheerio from 'cheerio'
+import { timingSafeEqual } from 'crypto'
 import { db } from '@/lib/db' // Ensure you have this exported in lib/db/index.ts or similar
 import { academyCourses, academyInstructors } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
@@ -33,8 +34,16 @@ interface ScrapedInstructor {
 
 export async function GET(req: NextRequest) {
   // 1. Security Check
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret) {
+    return new NextResponse('Cron secret not configured', { status: 503 })
+  }
+
   const authHeader = req.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  const expectedAuth = `Bearer ${cronSecret}`
+  const provided = Buffer.from(authHeader || '')
+  const expected = Buffer.from(expectedAuth)
+  if (provided.length !== expected.length || !timingSafeEqual(provided, expected)) {
     return new NextResponse('Unauthorized', { status: 401 })
   }
 

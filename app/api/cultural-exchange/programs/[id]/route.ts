@@ -88,12 +88,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       success: true,
       program: formattedProgram,
       participantsCount: participants.length,
-      participants: participants.map((p: any) => ({
-        ...p,
-        appliedAt: new Date(p.appliedAt),
-        approvedAt: p.approvedAt ? new Date(p.approvedAt) : undefined,
-        completedAt: p.completedAt ? new Date(p.completedAt) : undefined,
-      })),
     })
   } catch (error) {
     return NextResponse.json(

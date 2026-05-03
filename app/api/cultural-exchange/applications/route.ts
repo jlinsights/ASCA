@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { culturalExchangeParticipants, culturalExchangePrograms, members } from '@/lib/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
@@ -10,22 +11,58 @@ import type {
   PaymentStatus,
 } from '@/lib/types/membership'
 
+async function isAdminRequest(request: NextRequest): Promise<boolean> {
+  return (await requireAdminAuth(request)) !== null
+}
+
+async function getAuthorizedMember(
+  request: NextRequest,
+  memberId: string,
+  userId: string
+): Promise<{ authorized: boolean; missing: boolean }> {
+  const [member] = await db.select().from(members).where(eq(members.id, memberId)).limit(1)
+
+  if (!member) {
+    return { authorized: false, missing: true }
+  }
+
+  if (member.userId === userId) {
+    return { authorized: true, missing: false }
+  }
+
+  return { authorized: await isAdminRequest(request), missing: false }
+}
+
 // GET - 신청 내역 조회 (본인 또는 관리자)
 export async function GET(request: NextRequest) {
   try {
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ success: false, error: '로그인이 필요합니다' }, { status: 401 })
+    }
+
     const { searchParams } = new URL(request.url)
     const memberId = searchParams.get('memberId')
     const programId = searchParams.get('programId')
     const status = searchParams.get('status') as ParticipantStatus | null
 
-    // memberId 없이 전체 조회 시 관리자 인증 필요
     if (!memberId) {
-      const user = await requireAdminAuth(request)
-      if (!user) {
+      if (!(await isAdminRequest(request))) {
         return NextResponse.json(
           { success: false, error: '관리자 인증이 필요합니다' },
-          { status: 401 }
+          { status: 403 }
         )
+      }
+    } else {
+      const authorization = await getAuthorizedMember(request, memberId, userId)
+      if (authorization.missing) {
+        return NextResponse.json(
+          { success: false, error: '회원 정보를 찾을 수 없습니다' },
+          { status: 404 }
+        )
+      }
+      if (!authorization.authorized) {
+        return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
       }
     }
 
@@ -117,15 +154,31 @@ export async function GET(request: NextRequest) {
 // POST - 프로그램 신청
 export async function POST(request: NextRequest) {
   try {
-    // 인증 확인
-    const user = await requireAdminAuth(request)
-    if (!user) {
+    const { userId } = await auth()
+    if (!userId) {
       return NextResponse.json({ success: false, error: '로그인이 필요합니다' }, { status: 401 })
     }
 
     const body = await request.json()
 
     const { programId, memberId, applicationData, specialRequests, emergencyContact } = body
+    if (!programId || !memberId) {
+      return NextResponse.json(
+        { success: false, error: 'programId와 memberId가 필요합니다' },
+        { status: 400 }
+      )
+    }
+
+    const authorization = await getAuthorizedMember(request, memberId, userId)
+    if (authorization.missing) {
+      return NextResponse.json(
+        { success: false, error: '회원 정보를 찾을 수 없습니다' },
+        { status: 404 }
+      )
+    }
+    if (!authorization.authorized) {
+      return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
+    }
 
     // 프로그램 존재 및 모집 중 확인
     const program = await db
@@ -191,9 +244,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 회원 정보 확인
     const member = await db.select().from(members).where(eq(members.id, memberId)).limit(1)
-
     if (!member[0]) {
       return NextResponse.json(
         { success: false, error: '회원 정보를 찾을 수 없습니다' },

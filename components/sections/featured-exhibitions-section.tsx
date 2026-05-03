@@ -28,7 +28,7 @@ const typeColors: Record<ExhibitionType, string> = {
   온라인전시: '#4f46e5',
 }
 
-const featuredExhibitions: Exhibition[] = [
+const featuredExhibitions: [Exhibition, Exhibition, Exhibition] = [
   {
     id: 1,
     title: '2024 동양서예협회 정기전',
