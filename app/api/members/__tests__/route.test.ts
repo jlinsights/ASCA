@@ -4,7 +4,7 @@
  * Members API Route Tests
  *
  * Tests for /api/members GET and POST endpoints
- * Route uses Drizzle ORM (no Supabase, no authentication)
+ * Route uses Drizzle ORM and Clerk authentication for POST
  */
 
 // Mock database module BEFORE any imports to prevent PostgresError at module load
@@ -27,12 +27,20 @@ jest.mock('@/lib/security/rate-limit', () => ({
   },
 }))
 
+jest.mock('@clerk/nextjs/server', () => ({
+  auth: jest.fn(),
+  currentUser: jest.fn(),
+}))
+
 import { describe, test, expect, beforeEach } from '@jest/globals'
 import { NextRequest } from 'next/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { withPerformanceLog } from '@/lib/db'
 import { GET, POST } from '../route'
 
 const mockWithPerformanceLog = withPerformanceLog as jest.MockedFunction<typeof withPerformanceLog>
+const mockAuth = auth as jest.MockedFunction<typeof auth>
+const mockCurrentUser = currentUser as jest.MockedFunction<typeof currentUser>
 
 describe('GET /api/members', () => {
   beforeEach(() => {
@@ -173,11 +181,24 @@ describe('POST /api/members', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    mockAuth.mockResolvedValue({ userId: 'user-1' } as any)
+    mockCurrentUser.mockResolvedValue({
+      emailAddresses: [{ emailAddress: validBody.email }],
+    } as any)
   })
 
   test('should create member and return 201 with valid data', async () => {
-    // Arrange - checkEmail returns [] (no duplicate)
+    // Arrange - no duplicate email/member, then actual created member
     mockWithPerformanceLog.mockResolvedValueOnce([])
+    mockWithPerformanceLog.mockResolvedValueOnce([])
+    mockWithPerformanceLog.mockResolvedValueOnce({
+      id: 'member-1',
+      userId: 'user-1',
+      email: validBody.email,
+      fullNameKo: '회원신규',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    })
 
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
@@ -193,14 +214,13 @@ describe('POST /api/members', () => {
     expect(response.status).toBe(201)
     expect(data.success).toBe(true)
     expect(data.data).toBeDefined()
-    expect(data.data.email).toBe(validBody.email)
-    expect(data.data.firstNameKo).toBe(validBody.firstNameKo)
-    expect(data.data.lastNameKo).toBe(validBody.lastNameKo)
+    expect(data.data.id).toBe('member-1')
+    expect(data.data.userId).toBe('user-1')
   })
 
   test('should return 409 when email already exists', async () => {
-    // Arrange - checkEmail returns existing member
-    mockWithPerformanceLog.mockResolvedValueOnce([{ id: 'existing-id' }])
+    // Arrange - checkEmail returns another user's email
+    mockWithPerformanceLog.mockResolvedValueOnce([{ id: 'other-user' }])
 
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
@@ -320,6 +340,13 @@ describe('POST /api/members', () => {
   test('should call withPerformanceLog with checkEmail operation', async () => {
     // Arrange
     mockWithPerformanceLog.mockResolvedValueOnce([])
+    mockWithPerformanceLog.mockResolvedValueOnce([])
+    mockWithPerformanceLog.mockResolvedValueOnce({
+      id: 'member-1',
+      userId: 'user-1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    })
 
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
@@ -337,6 +364,13 @@ describe('POST /api/members', () => {
   test('should include createdAt and updatedAt in created member', async () => {
     // Arrange
     mockWithPerformanceLog.mockResolvedValueOnce([])
+    mockWithPerformanceLog.mockResolvedValueOnce([])
+    mockWithPerformanceLog.mockResolvedValueOnce({
+      id: 'member-1',
+      userId: 'user-1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    })
 
     const request = new NextRequest('http://localhost:3000/api/members', {
       method: 'POST',
