@@ -183,50 +183,30 @@ export default function GalleryGrid({
   }, [selectedImage, handleKeyDown])
 
   return (
-    <div className={`gallery-grid ${className}`}>
-      {/* 현대적인 헤더 및 필터 */}
-      <div className='mb-12 space-y-8'>
-        {/* 헤더 섹션 */}
-        <div className='text-center space-y-4'>
-          <motion.h1
-            className='text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-gray-100 dark:via-gray-300 dark:to-gray-100 bg-clip-text text-transparent'
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            갤러리
-          </motion.h1>
-          <motion.p
-            className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            동양서예협회의 아름다운 서예 작품들을 만나보세요
-          </motion.p>
-        </div>
+    <div
+      className={`gallery-grid ${className}`}
+      style={{ backgroundColor: 'var(--framer-canvas)', padding: '0 30px' }}
+    >
+      {/* ── 필터 영역 */}
+      <div style={{ marginBottom: '48px' }}>
 
-        {/* 고급 검색 바 */}
+        {/* 검색 바 — Framer surface-1 */}
         <motion.div
-          className='relative max-w-xl mx-auto'
-          initial={{ opacity: 0, y: 20 }}
+          style={{ position: 'relative', maxWidth: '560px', margin: '0 auto 24px' }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.5 }}
         >
-          <label htmlFor='gallery-search' className='sr-only'>
-            갤러리 검색
-          </label>
+          <label htmlFor='gallery-search' className='sr-only'>갤러리 검색</label>
           <div
-            className='absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500'
             aria-hidden='true'
+            style={{
+              position: 'absolute', left: '16px', top: '50%',
+              transform: 'translateY(-50%)', color: 'var(--framer-ink-muted)',
+            }}
           >
-            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-              />
+            <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
             </svg>
           </div>
           <input
@@ -237,115 +217,104 @@ export default function GalleryGrid({
             onChange={e => setSearchQuery(e.target.value)}
             aria-label='갤러리 작품 검색'
             aria-describedby='search-results-count'
-            className='w-full pl-12 pr-6 py-4 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/50 focus:border-blue-300 dark:focus:border-blue-600 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-gray-900/20'
+            style={{
+              width: '100%', paddingLeft: '44px', paddingRight: '44px',
+              paddingTop: '12px', paddingBottom: '12px',
+              backgroundColor: 'var(--framer-surface-1)',
+              border: '1px solid var(--framer-hairline)',
+              borderRadius: '100px',
+              color: 'var(--framer-ink)',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '14px', letterSpacing: '-0.14px',
+              outline: 'none', boxSizing: 'border-box',
+              transition: 'border-color 0.15s, box-shadow 0.15s',
+            }}
+            onFocus={e => {
+              e.currentTarget.style.borderColor = 'var(--framer-accent-blue)'
+              e.currentTarget.style.boxShadow = 'var(--framer-shadow-selected)'
+            }}
+            onBlur={e => {
+              e.currentTarget.style.borderColor = 'var(--framer-hairline)'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
               aria-label='검색어 지우기'
-              className='absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 rounded'
+              style={{
+                position: 'absolute', right: '14px', top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: 'var(--framer-ink-muted)', padding: '4px',
+              }}
             >
-              <svg
-                className='w-5 h-5'
-                fill='none'
-                stroke='currentColor'
-                viewBox='0 0 24 24'
-                aria-hidden='true'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth={2}
-                  d='M6 18L18 6M6 6l12 12'
-                />
+              <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
               </svg>
             </button>
           )}
         </motion.div>
 
-        {/* 현대적인 카테고리 필터 */}
-        <motion.div
+        {/* 카테고리 필터 — Framer pill chips */}
+        <div
           role='group'
           aria-label='카테고리 필터'
-          className='flex flex-wrap justify-center gap-3'
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px' }}
         >
-          <motion.button
-            onClick={() => setSelectedCategory('all')}
-            aria-pressed={selectedCategory === 'all'}
-            aria-label={`전체 카테고리 (${items.length}개 작품)`}
-            className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 ${
-              selectedCategory === 'all'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md dark:shadow-gray-900/20'
-            }`}
-            whileHover={{ scale: selectedCategory === 'all' ? 1.05 : 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            ✨ 전체{' '}
-            <span className='ml-1 text-xs opacity-75' aria-hidden='true'>
-              ({items.length})
-            </span>
-          </motion.button>
-          {categories.map((category, index) => (
-            <motion.button
-              key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              aria-pressed={selectedCategory === category.id}
-              aria-label={`${category.name} 카테고리 (${category.count}개 작품)`}
-              className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 ${
-                selectedCategory === category.id
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md dark:shadow-gray-900/20'
-              }`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 + index * 0.05 }}
-              whileHover={{ scale: selectedCategory === category.id ? 1.05 : 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {category.icon} {category.name}{' '}
-              <span className='ml-1 text-xs opacity-75' aria-hidden='true'>
-                ({category.count})
-              </span>
-            </motion.button>
-          ))}
-        </motion.div>
+          {[{ id: 'all', name: '전체', count: items.length, icon: '' }, ...categories].map(cat => {
+            const isActive = selectedCategory === cat.id
+            return (
+              <motion.button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                aria-pressed={isActive}
+                aria-label={`${cat.name} (${cat.count}개)`}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '4px',
+                  padding: '7px 14px',
+                  borderRadius: '100px',
+                  border: 'none', cursor: 'pointer',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '13px', fontWeight: 500, letterSpacing: '-0.13px',
+                  transition: 'background-color 0.15s, color 0.15s',
+                  backgroundColor: isActive ? 'var(--framer-primary)' : 'var(--framer-surface-1)',
+                  color: isActive ? 'var(--framer-on-primary)' : 'var(--framer-ink-muted)',
+                }}
+              >
+                {cat.icon && <span aria-hidden='true'>{cat.icon}</span>}
+                {cat.name}
+                <span style={{ opacity: 0.6, fontSize: '11px' }}>({cat.count})</span>
+              </motion.button>
+            )
+          })}
+        </div>
 
-        {/* 결과 정보 */}
-        <motion.div
+        {/* 결과 카운트 — Framer caption */}
+        <div
           id='search-results-count'
           role='status'
           aria-live='polite'
-          className='text-center'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          style={{ textAlign: 'center', marginTop: '20px' }}
         >
           {filteredItems.length === 0 ? (
-            <div className='py-8'>
-              <div className='text-6xl mb-4' aria-hidden='true'>
-                🔍
-              </div>
-              <p className='text-xl text-gray-500 dark:text-gray-400 mb-2'>검색 결과가 없습니다</p>
-              <p className='text-gray-400 dark:text-gray-500'>다른 키워드로 시도해보세요</p>
+            <div style={{ padding: '48px 0' }}>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: 'var(--framer-ink-muted)', marginBottom: '8px' }}>검색 결과가 없습니다</p>
+              <p className='framer-caption'>다른 키워드로 시도해보세요</p>
             </div>
           ) : (
-            <div className='flex items-center justify-center space-x-2 text-gray-600 dark:text-gray-400'>
-              <span className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', fontWeight: 600, color: 'var(--framer-ink)' }}>
                 {filteredItems.length}
               </span>
-              <span>개의 작품</span>
+              <span className='framer-caption'>개의 사진</span>
               {searchQuery && (
-                <span className='text-sm text-gray-500 dark:text-gray-500'>
-                  "{searchQuery}" 검색 결과
-                </span>
+                <span className='framer-caption'>&ldquo;{searchQuery}&rdquo; 검색 결과</span>
               )}
             </div>
           )}
-        </motion.div>
+        </div>
       </div>
 
       {/* 갤러리 그리드 - Virtual Scrolling 마사이크 레이아웃 */}
@@ -408,58 +377,41 @@ export default function GalleryGrid({
                 }}
               >
                 <div
-                  className='relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl dark:shadow-gray-900/50 dark:hover:shadow-gray-900/80 transition-all duration-500'
                   style={{
+                    position: 'relative',
+                    backgroundColor: 'var(--framer-surface-1)',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
                     aspectRatio: getRandomAspectRatio(index),
-                    minHeight: '250px',
+                    minHeight: '240px',
+                    transition: 'box-shadow 0.3s ease',
                   }}
                 >
-                  {/* 스켈레톤 로더 */}
+                  {/* 스켈레톤 로더 — Framer surface-2 */}
                   {!isImageLoaded && !hasImageError && (
-                    <div className='absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 bg-[length:200%_100%] animate-shimmer'>
-                      <div className='absolute inset-0 flex items-center justify-center'>
-                        <svg
-                          className='w-12 h-12 text-gray-400 dark:text-gray-500 animate-spin'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                        >
-                          <circle
-                            className='opacity-25'
-                            cx='12'
-                            cy='12'
-                            r='10'
-                            stroke='currentColor'
-                            strokeWidth='4'
-                          ></circle>
-                          <path
-                            className='opacity-75'
-                            fill='currentColor'
-                            d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                          ></path>
-                        </svg>
-                      </div>
-                    </div>
+                    <div
+                      style={{
+                        position: 'absolute', inset: 0,
+                        backgroundColor: 'var(--framer-surface-2)',
+                        animation: 'pulse 1.5s ease-in-out infinite',
+                      }}
+                    />
                   )}
 
                   {/* 에러 플레이스홀더 */}
                   {hasImageError && (
-                    <div className='absolute inset-0 bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center'>
-                      <svg
-                        className='w-16 h-16 text-gray-400 dark:text-gray-600 mb-4'
-                        fill='none'
-                        stroke='currentColor'
-                        viewBox='0 0 24 24'
-                      >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
-                        />
+                    <div
+                      style={{
+                        position: 'absolute', inset: 0,
+                        backgroundColor: 'var(--framer-surface-2)',
+                        display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center',
+                      }}
+                    >
+                      <svg className='w-12 h-12' style={{ color: 'var(--framer-hairline)' }} fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
                       </svg>
-                      <p className='text-sm text-gray-500 dark:text-gray-400'>
-                        이미지를 불러올 수 없습니다
-                      </p>
+                      <p className='framer-micro' style={{ marginTop: '8px' }}>이미지를 불러올 수 없습니다</p>
                     </div>
                   )}
 
@@ -479,10 +431,22 @@ export default function GalleryGrid({
                   {/* 그라디언트 오버레이 */}
                   <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500' />
 
-                  {/* 카테고리 배지 */}
-                  <div className='absolute top-4 left-4 z-10'>
-                    <span className='px-3 py-1 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-xs font-semibold text-gray-800 dark:text-gray-200 rounded-full shadow-sm'>
-                      {getCategoryIcon(item.category)} {getCategoryName(item.category)}
+                  {/* 카테고리 배지 — Framer eyebrow */}
+                  <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 10 }}>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        backgroundColor: 'rgba(20,20,20,0.85)',
+                        backdropFilter: 'blur(8px)',
+                        color: 'var(--framer-ink-muted)',
+                        fontSize: '11px', fontWeight: 500,
+                        padding: '3px 8px',
+                        borderRadius: '6px',
+                        fontFamily: 'Inter, sans-serif',
+                        letterSpacing: '-0.11px',
+                      }}
+                    >
+                      {getCategoryName(item.category)}
                     </span>
                   </div>
 
@@ -593,11 +557,19 @@ export default function GalleryGrid({
             />
 
             <motion.div
-              initial={{ scale: 0.8, opacity: 0, y: 50 }}
+              initial={{ scale: 0.92, opacity: 0, y: 40 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: 50 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className='relative max-w-7xl max-h-full bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-2xl'
+              exit={{ scale: 0.92, opacity: 0, y: 40 }}
+              transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+              style={{
+                position: 'relative',
+                maxWidth: '1100px', width: '95vw',
+                maxHeight: '95vh',
+                backgroundColor: 'var(--framer-surface-1)',
+                borderRadius: '20px',
+                overflow: 'hidden',
+                boxShadow: '0 32px 80px rgba(0,0,0,0.8)',
+              }}
               onClick={e => e.stopPropagation()}
             >
               {/* 상단 헤더 */}
@@ -718,8 +690,15 @@ export default function GalleryGrid({
                 </svg>
               </motion.button>
 
-              {/* 이미지 컨테이너 */}
-              <div className='relative bg-gray-50 flex items-center justify-center min-h-[60vh] max-h-[85vh]'>
+              {/* 이미지 콘테이너 */}
+              <div
+                style={{
+                  position: 'relative',
+                  backgroundColor: 'var(--framer-canvas)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  minHeight: '60vh', maxHeight: '80vh',
+                }}
+              >
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -738,59 +717,84 @@ export default function GalleryGrid({
                 </motion.div>
               </div>
 
-              {/* 하단 정보 패널 */}
+              {/* 하단 정보 패널 — Framer surface-1 */}
               <motion.div
-                className='p-8 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800'
-                initial={{ y: 50, opacity: 0 }}
+                style={{
+                  padding: '24px 28px',
+                  backgroundColor: 'var(--framer-surface-1)',
+                  borderTop: '1px solid var(--framer-hairline-soft)',
+                }}
+                initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
+                transition={{ delay: 0.25, duration: 0.4 }}
               >
-                <div className='flex items-start justify-between mb-4'>
-                  <div className='flex-1'>
-                    <div className='flex items-center space-x-3 mb-3'>
-                      <span className='px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-semibold rounded-full'>
-                        {getCategoryIcon(selectedImage.category)}{' '}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', marginBottom: '16px' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          backgroundColor: 'var(--framer-surface-2)',
+                          color: 'var(--framer-ink-muted)',
+                          fontSize: '11px', fontWeight: 500,
+                          padding: '3px 9px', borderRadius: '6px',
+                          fontFamily: 'Inter, sans-serif',
+                        }}
+                      >
                         {getCategoryName(selectedImage.category)}
                       </span>
                       {selectedImage.eventDate && (
-                        <span className='text-gray-500 dark:text-gray-400 text-sm'>
-                          {selectedImage.eventDate}
-                        </span>
+                        <span className='framer-caption'>{selectedImage.eventDate}</span>
                       )}
                     </div>
-                    <h3 className='text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
+                    <h3
+                      style={{
+                        fontFamily: 'Inter, sans-serif', fontSize: '18px',
+                        fontWeight: 600, letterSpacing: '-0.5px',
+                        color: 'var(--framer-ink)', marginBottom: '6px',
+                      }}
+                    >
                       {selectedImage.title}
                     </h3>
-                    <p className='text-gray-600 dark:text-gray-400 text-lg leading-relaxed'>
+                    <p className='framer-body' style={{ color: 'var(--framer-ink-muted)' }}>
                       {selectedImage.description}
                     </p>
                   </div>
                 </div>
 
-                {/* 태그들 */}
-                <div className='flex flex-wrap gap-2'>
-                  {selectedImage.tags.map((tag, index) => (
-                    <motion.span
-                      key={index}
-                      className='px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-default'
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.4 + index * 0.05 }}
-                      whileHover={{ scale: 1.05 }}
+                {/* 태그 */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {selectedImage.tags.map((tag, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        padding: '4px 10px',
+                        backgroundColor: 'var(--framer-surface-2)',
+                        color: 'var(--framer-ink-muted)',
+                        fontSize: '12px', fontWeight: 500,
+                        borderRadius: '6px',
+                        fontFamily: 'Inter, sans-serif',
+                        letterSpacing: '-0.12px',
+                      }}
                     >
                       #{tag}
-                    </motion.span>
+                    </span>
                   ))}
                 </div>
 
-                {/* 이미지 네비게이션 정보 */}
-                <div className='mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400'>
-                  <span>
-                    {filteredItems.findIndex(item => item.id === selectedImage.id) + 1} /{' '}
-                    {filteredItems.length}
+                {/* 네비게이션 정보 */}
+                <div
+                  style={{
+                    marginTop: '16px', paddingTop: '14px',
+                    borderTop: '1px solid var(--framer-hairline-soft)',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  }}
+                >
+                  <span className='framer-caption'>
+                    {filteredItems.findIndex(item => item.id === selectedImage.id) + 1} / {filteredItems.length}
                   </span>
-                  <span className='text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-2 py-1 rounded'>
-                    ESC로 닫기 | ← → 키로 이동
+                  <span className='framer-caption'>
+                    ESC로 닫기 · ← → 키로 이동
                   </span>
                 </div>
               </motion.div>

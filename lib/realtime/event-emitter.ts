@@ -107,6 +107,8 @@ export class AppEventEmitter {
   private redis?: Redis
   private redisChannel: string
   private subscriptions: Map<string, Set<EventListener>>
+  // 원본 listener → wrapped listener 추적 (off() 에서 wrapped 찾기 위해 필요)
+  private listenerWrappers: Map<EventListener, EventListener> = new Map()
   private subscriptionCounter: number
 
   constructor(options: EventEmitterOptions = {}) {
@@ -235,13 +237,16 @@ export class AppEventEmitter {
     }
     this.subscriptions.get(type)!.add(wrappedListener)
 
+    // Track wrapped listener so off(type, listener) 가 wrapped를 찾을 수 있음
+    this.listenerWrappers.set(listener, wrappedListener)
+
     // Add listener to EventEmitter
     this.emitter.on(type, wrappedListener)
 
     return {
       id: subscriptionId,
       unsubscribe: () => {
-        this.off(type, wrappedListener)
+        this.off(type, listener)
       },
     }
   }
@@ -278,11 +283,16 @@ export class AppEventEmitter {
    * @param listener - Event listener to remove
    */
   off<T = any>(type: EventType | string, listener: EventListener<T>): void {
-    this.emitter.off(type, listener)
+    // 원본 listener는 wrapped로 등록되어 있으므로 mapping에서 wrapped 찾기
+    const wrapped =
+      (this.listenerWrappers.get(listener as EventListener) as EventListener<T>) ?? listener
+
+    this.emitter.off(type, wrapped)
+    this.listenerWrappers.delete(listener as EventListener)
 
     const listeners = this.subscriptions.get(type)
     if (listeners) {
-      listeners.delete(listener)
+      listeners.delete(wrapped)
       if (listeners.size === 0) {
         this.subscriptions.delete(type)
       }

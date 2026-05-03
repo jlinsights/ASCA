@@ -45,20 +45,21 @@ export const metadata = constructMetadata()
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='ko' suppressHydrationWarning>
+    <html lang='ko' suppressHydrationWarning className='dark'>
       <head>
         <KakaoScript />
         {/* Global JSON-LD for AEO */}
         <JsonLd />
       </head>
       <body
-        className={`${inter.variable} ${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans bg-background transition-colors duration-300`}
+        className={`${inter.variable} ${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans transition-colors duration-300`}
+        style={{ backgroundColor: 'var(--framer-canvas)', color: 'var(--framer-ink)' }}
         suppressHydrationWarning={true}
       >
         <ClientProviders>
           <a
             href='#main-content'
-            className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-celadon-green focus:text-white focus:rounded-md focus:text-sm focus:font-medium'
+            className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-framer-accent-blue focus:text-white focus:rounded-md focus:text-sm focus:font-medium'
           >
             본문으로 건너뛰기
           </a>
