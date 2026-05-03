@@ -19,21 +19,31 @@ export function HeaderAuthSection() {
   const { signOut } = useClerk()
 
   if (!isLoaded) {
-    return <div className='w-8 h-8 rounded-full bg-muted animate-pulse' />
+    return (
+      <div
+        style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          backgroundColor: 'var(--framer-surface-1)',
+          animation: 'pulse 2s infinite',
+        }}
+      />
+    )
   }
 
   if (!isSignedIn) {
     return (
-      <div className='flex items-center space-x-3'>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <SignInButton mode='redirect'>
-          <Button variant='ghost' size='sm' className='text-sm'>
+          <button className='btn-framer-secondary' style={{ padding: '8px 14px', minHeight: '36px' }}>
             로그인
-          </Button>
+          </button>
         </SignInButton>
         <SignUpButton mode='redirect'>
-          <Button size='sm' className='bg-celadon-green hover:bg-celadon-green/90 text-sm'>
-            회원가입
-          </Button>
+          <button className='btn-framer-primary' style={{ padding: '8px 14px', minHeight: '36px' }}>
+            시작하기
+          </button>
         </SignUpButton>
       </div>
     )

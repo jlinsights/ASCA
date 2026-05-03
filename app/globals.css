@@ -4,6 +4,456 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   FRAMER DESIGN SYSTEM — DESIGN.md 기반 구현
+   Ref: DESIGN.md (version: alpha, name: Framer)
+   ============================================================ */
+
+/* ── Framer Color Tokens ──────────────────────────────────── */
+:root {
+  /* Brand & Accent */
+  --framer-primary: #ffffff;
+  --framer-on-primary: #000000;
+  --framer-accent-blue: #0099ff;
+
+  /* Text */
+  --framer-ink: #ffffff;
+  --framer-ink-muted: #999999;
+
+  /* Surface Hierarchy */
+  --framer-canvas: #090909;
+  --framer-surface-1: #141414;
+  --framer-surface-2: #1c1c1c;
+
+  /* Borders */
+  --framer-hairline: #262626;
+  --framer-hairline-soft: #1a1a1a;
+
+  /* Inverse */
+  --framer-inverse-canvas: #ffffff;
+  --framer-inverse-ink: #000000;
+
+  /* Gradient Spotlight (base anchors) */
+  --framer-gradient-magenta: #d44df0;
+  --framer-gradient-violet: #6a4cf5;
+  --framer-gradient-orange: #ff7a3d;
+  --framer-gradient-coral: #ff5577;
+
+  /* Semantic */
+  --framer-success: #22c55e;
+
+  /* Spacing (5px base system) */
+  --framer-hair: 1px;
+  --framer-xxs: 4px;
+  --framer-xs: 8px;
+  --framer-sm: 12px;
+  --framer-md: 15px;
+  --framer-lg: 20px;
+  --framer-xl: 30px;
+  --framer-xxl: 40px;
+  --framer-section: 96px;
+
+  /* Border Radius Scale */
+  --framer-r-xs: 4px;
+  --framer-r-sm: 6px;
+  --framer-r-md: 10px;
+  --framer-r-lg: 15px;
+  --framer-r-xl: 20px;
+  --framer-r-xxl: 30px;
+  --framer-r-pill: 100px;
+  --framer-r-full: 9999px;
+
+  /* Elevation Shadows */
+  --framer-shadow-light-edge: rgba(255,255,255,0.10) 0px 0.5px 0px 0px, rgba(0,0,0,0.25) 0px 10px 30px 0px;
+  --framer-shadow-selected: rgba(0,153,255,0.15) 0px 0px 0px 1px;
+}
+
+/* ── Framer Typography Utilities ─────────────────────────── */
+/* GT Walsheim 미보유 시 Mona Sans / Inter 700 대체 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.framer-display-xxl {
+  font-family: 'Mona Sans', 'Inter', sans-serif;
+  font-size: clamp(52px, 8vw, 110px);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: clamp(-2.6px, -5%, -5.5px);
+  font-feature-settings: 'ss02' on;
+  color: var(--framer-ink);
+}
+
+.framer-display-xl {
+  font-family: 'Mona Sans', 'Inter', sans-serif;
+  font-size: clamp(40px, 6vw, 85px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: clamp(-2px, -5%, -4.25px);
+  font-feature-settings: 'ss02' on;
+  color: var(--framer-ink);
+}
+
+.framer-display-lg {
+  font-family: 'Mona Sans', 'Inter', sans-serif;
+  font-size: clamp(32px, 4.5vw, 62px);
+  font-weight: 700;
+  line-height: 1.00;
+  letter-spacing: clamp(-1.6px, -5%, -3.1px);
+  font-feature-settings: 'ss02' on;
+  color: var(--framer-ink);
+}
+
+.framer-display-md {
+  font-family: 'Mona Sans', 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.13;
+  letter-spacing: -1.0px;
+  color: var(--framer-ink);
+}
+
+.framer-headline {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.20;
+  letter-spacing: -0.8px;
+  font-feature-settings: 'cv05' on;
+  color: var(--framer-ink);
+}
+
+.framer-subhead {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.30;
+  letter-spacing: -0.01px;
+  font-feature-settings: 'cv11' on;
+  color: var(--framer-ink);
+}
+
+.framer-body-lg {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.30;
+  letter-spacing: -0.18px;
+  font-feature-settings: 'cv11' on;
+  color: var(--framer-ink-muted);
+}
+
+.framer-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.30;
+  letter-spacing: -0.15px;
+  font-feature-settings: 'cv11' on;
+  color: var(--framer-ink);
+}
+
+.framer-body-sm {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.40;
+  letter-spacing: -0.14px;
+  font-feature-settings: 'cv11' on;
+  color: var(--framer-ink);
+}
+
+.framer-caption {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.20;
+  letter-spacing: -0.13px;
+  font-feature-settings: 'cv11' on;
+  color: var(--framer-ink-muted);
+}
+
+.framer-micro {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.20;
+  letter-spacing: -0.12px;
+  font-feature-settings: 'cv11' on;
+  color: var(--framer-ink-muted);
+}
+
+.framer-button-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.0;
+  letter-spacing: -0.14px;
+  font-feature-settings: 'cv11' on;
+}
+
+/* ── Framer Button Components ─────────────────────────────── */
+.btn-framer-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: var(--framer-primary);
+  color: var(--framer-on-primary);
+  border-radius: var(--framer-r-pill);
+  padding: 10px 15px;
+  min-height: 44px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.14px;
+  font-feature-settings: 'cv11' on;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-framer-primary:hover {
+  opacity: 0.92;
+}
+
+.btn-framer-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-framer-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: var(--framer-surface-1);
+  color: var(--framer-ink);
+  border-radius: var(--framer-r-pill);
+  padding: 10px 15px;
+  min-height: 44px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.14px;
+  font-feature-settings: 'cv11' on;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-framer-secondary:hover {
+  background-color: var(--framer-surface-2);
+}
+
+.btn-framer-translucent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: var(--framer-surface-2);
+  color: var(--framer-ink);
+  border-radius: var(--framer-r-xxl);
+  padding: 8px 14px;
+  min-height: 40px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.14px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-framer-translucent:hover {
+  background-color: rgba(255,255,255,0.12);
+}
+
+/* ── Framer Card Components ───────────────────────────────── */
+/* Standard content card */
+.card-framer {
+  background-color: var(--framer-surface-1);
+  color: var(--framer-ink);
+  border-radius: var(--framer-r-xl);
+  padding: 16px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-framer:hover {
+  box-shadow: var(--framer-shadow-light-edge);
+  transform: translateY(-2px);
+}
+
+/* Featured content card */
+.card-framer-featured {
+  background-color: var(--framer-surface-2);
+  color: var(--framer-ink);
+  border-radius: var(--framer-r-xl);
+  padding: 24px;
+  box-shadow: var(--framer-shadow-light-edge);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gradient Spotlight Cards (signature Framer element) */
+.card-framer-spotlight {
+  border-radius: var(--framer-r-xxl);
+  padding: 32px;
+  overflow: hidden;
+  position: relative;
+  color: var(--framer-ink);
+  min-height: 280px;
+}
+
+.card-framer-spotlight-violet {
+  background: linear-gradient(135deg, #6a4cf5 0%, #9b59b6 60%, #4a2fb5 100%);
+}
+
+.card-framer-spotlight-magenta {
+  background: linear-gradient(135deg, #d44df0 0%, #e85aff 50%, #b030d0 100%);
+}
+
+.card-framer-spotlight-orange {
+  background: linear-gradient(135deg, #ff7a3d 0%, #ff9a5c 50%, #e05a20 100%);
+}
+
+.card-framer-spotlight-coral {
+  background: linear-gradient(135deg, #ff5577 0%, #ff7799 50%, #e03355 100%);
+}
+
+/* ── Framer Top Nav ───────────────────────────────────────── */
+.framer-top-nav {
+  background-color: var(--framer-canvas);
+  color: var(--framer-ink);
+  height: 56px;
+  border-bottom: 1px solid var(--framer-hairline-soft);
+}
+
+.framer-top-nav.scrolled {
+  background-color: rgba(9, 9, 9, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ── Framer Layout Utilities ──────────────────────────────── */
+.framer-canvas {
+  background-color: var(--framer-canvas);
+  color: var(--framer-ink);
+}
+
+.framer-container {
+  max-width: 1199px;
+  margin: 0 auto;
+  padding: 0 var(--framer-xl);
+}
+
+@media (max-width: 810px) {
+  .framer-container {
+    padding: 0 var(--framer-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .framer-container {
+    padding: 0 var(--framer-md);
+  }
+}
+
+.framer-section {
+  padding: var(--framer-section) 0;
+}
+
+@media (max-width: 810px) {
+  .framer-section {
+    padding: 64px 0;
+  }
+}
+
+/* Card grid: 2-up desktop → 1-up mobile */
+.framer-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--framer-lg);
+}
+
+@media (max-width: 810px) {
+  .framer-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Hyperlink style */
+.framer-link {
+  color: var(--framer-accent-blue);
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.framer-link:hover {
+  opacity: 0.8;
+}
+
+/* Focus ring (blue-tinted) */
+.framer-focus:focus-visible {
+  outline: none;
+  box-shadow: var(--framer-shadow-selected);
+}
+
+/* Hairline divider */
+.framer-divider {
+  border: none;
+  border-top: 1px solid var(--framer-hairline-soft);
+}
+
+/* Eyebrow / label chip */
+.framer-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--framer-surface-1);
+  color: var(--framer-ink-muted);
+  border-radius: var(--framer-r-sm);
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.12px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Scroll indicator animation */
+@keyframes framer-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+/* Floating card entrance */
+@keyframes framer-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.framer-fade-up {
+  animation: framer-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.framer-fade-up-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.framer-fade-up-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.framer-fade-up-delay-3 { animation-delay: 0.3s; opacity: 0; }
+.framer-fade-up-delay-4 { animation-delay: 0.4s; opacity: 0; }
+.framer-fade-up-delay-5 { animation-delay: 0.5s; opacity: 0; }
+
+
 /* Animation & Transition Design Tokens */
 :root {
   --duration-fast: 150ms;

@@ -3,134 +3,209 @@
 import { useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, ArrowDown } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
-import { m, LazyMotion, domAnimation } from 'framer-motion'
-import { TypewriterEffect } from '@/components/ui/typewriter-effect'
 
 export function HeroSection() {
   const { t } = useLanguage()
   const containerRef = useRef<HTMLElement>(null)
 
-  // Animation Variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: 'spring' as const,
-        stiffness: 50,
-        damping: 20,
-      },
-    },
-  }
-
   return (
-    <LazyMotion features={domAnimation}>
-      <section
-        ref={containerRef}
-        className='relative min-h-[80vh] md:min-h-[90vh] flex items-center justify-center overflow-hidden'
+    <section
+      ref={containerRef}
+      className='relative flex items-center justify-center overflow-hidden'
+      style={{
+        minHeight: '100vh',
+        backgroundColor: 'var(--framer-canvas)',
+        paddingTop: '56px', /* header 높이만큼 오프셋 */
+      }}
+    >
+      {/* Subtle ambient glow — Framer 분위기 연출 */}
+      <div
+        aria-hidden='true'
+        style={{
+          position: 'absolute',
+          top: '20%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '600px',
+          height: '400px',
+          background:
+            'radial-gradient(ellipse at center, rgba(106,76,245,0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          filter: 'blur(40px)',
+          zIndex: 0,
+        }}
+      />
+
+      {/* Hero Content */}
+      <div
+        className='relative framer-container framer-fade-up'
+        style={{
+          zIndex: 1,
+          textAlign: 'center',
+          paddingTop: '80px',
+          paddingBottom: '100px',
+        }}
       >
-        {/* Hero Content */}
-        <m.div
-          className='relative z-10 container mx-auto px-4 py-20 md:py-32'
-          variants={containerVariants}
-          initial='hidden'
-          animate='visible'
+        {/* Eyebrow label */}
+        <div
+          className='framer-fade-up framer-fade-up-delay-1'
+          style={{ marginBottom: '40px', display: 'flex', justifyContent: 'center' }}
         >
-          <div className='max-w-5xl mx-auto text-center'>
-            {/* Logo */}
-            <m.div variants={itemVariants} className='mb-12'>
-              <div className='relative w-64 h-24 md:w-80 md:h-32 lg:w-96 lg:h-36 mx-auto mb-8'>
-                <Image
-                  src='/logo/Logo & Tagline_white BG.png'
-                  alt='동양서예협회'
-                  fill
-                  className='object-contain dark:invert drop-shadow-lg'
-                  priority
-                />
+          <span className='framer-eyebrow'>
+            사단법인 동양서예협회 · ASCA
+          </span>
+        </div>
+
+        {/* Main headline — display-xxl */}
+        <h1
+          className='framer-display-xxl framer-fade-up framer-fade-up-delay-2'
+          style={{
+            margin: '0 auto',
+            maxWidth: '960px',
+          }}
+        >
+          正法의 계승
+          <br />
+          <span
+            style={{
+              background: 'linear-gradient(135deg, #6a4cf5 0%, #d44df0 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            創新의 조화
+          </span>
+        </h1>
+
+        {/* Subhead */}
+        <p
+          className='framer-body-lg framer-fade-up framer-fade-up-delay-3'
+          style={{
+            margin: '32px auto 0',
+            maxWidth: '560px',
+            color: 'var(--framer-ink-muted)',
+          }}
+        >
+          전통 서예의 정법을 계승하고 현대적 창신을 통해
+          <br />
+          동양서예의 새로운 미래를 열어갑니다
+        </p>
+
+        {/* CTA Buttons — White pill + Dark pill */}
+        <div
+          className='framer-fade-up framer-fade-up-delay-4'
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '10px',
+            justifyContent: 'center',
+            marginTop: '48px',
+          }}
+        >
+          <Link href='/exhibitions' className='btn-framer-primary' style={{ fontSize: '15px', padding: '12px 22px' }}>
+            전시회 둘러보기
+            <ArrowRight size={16} />
+          </Link>
+          <Link href='/artworks' className='btn-framer-secondary' style={{ fontSize: '15px', padding: '12px 22px' }}>
+            작품 감상하기
+          </Link>
+        </div>
+
+        {/* Stats row */}
+        <div
+          className='framer-fade-up framer-fade-up-delay-5'
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '1px',
+            justifyContent: 'center',
+            marginTop: '80px',
+          }}
+        >
+          {[
+            { value: '창립 1962', label: '역사와 전통' },
+            { value: '3,000+', label: '회원 서예가' },
+            { value: '500+', label: '연간 전시 작품' },
+            { value: '전국 지부', label: '전국 네트워크' },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              style={{
+                padding: '20px 32px',
+                borderLeft: i === 0 ? 'none' : '1px solid var(--framer-hairline-soft)',
+                textAlign: 'center',
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '24px',
+                  fontWeight: 700,
+                  letterSpacing: '-1px',
+                  color: 'var(--framer-ink)',
+                  lineHeight: 1.1,
+                }}
+              >
+                {stat.value}
               </div>
-            </m.div>
-
-            {/* Main Heading */}
-            <m.h1
-              variants={itemVariants}
-              className='text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-foreground mb-6 tracking-wide'
-            >
-              <span className='inline-block bg-clip-text text-transparent bg-gradient-to-r from-celadon-green via-scholar-red to-temple-gold'>
-                正法의 계승
-              </span>
-              <span className='block mt-2'>創新의 조화</span>
-            </m.h1>
-
-            {/* Subtitle - Typewriter Effect */}
-            <m.div
-              variants={itemVariants}
-              className='text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed min-h-[3.5rem] md:min-h-[4rem]'
-            >
-              <TypewriterEffect
-                text='전통 서예의 정법을 계승하고 현대적 창신을 통해<br />동양서예의 새로운 미래를 열어갑니다'
-                duration={3}
-                delay={1} // Wait for entrance animations
-              />
-            </m.div>
-
-            {/* Enhanced CTA Buttons */}
-            <m.div
-              variants={itemVariants}
-              className='flex flex-col sm:flex-row gap-4 justify-center items-center'
-            >
-              <Link href='/exhibitions'>
-                <Button
-                  size='lg'
-                  className='group h-14 px-8 text-lg bg-celadon-green hover:bg-celadon-green/90 text-rice-paper shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
-                >
-                  <Sparkles className='mr-2 h-5 w-5 group-hover:rotate-12 transition-transform' />
-                  전시회 둘러보기
-                  <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
-                </Button>
-              </Link>
-
-              <Link href='/artworks'>
-                <Button
-                  size='lg'
-                  variant='outline'
-                  className='group h-14 px-8 text-lg border-2 border-scholar-red text-scholar-red hover:bg-scholar-red hover:text-rice-paper shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
-                >
-                  작품 감상하기
-                  <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
-                </Button>
-              </Link>
-            </m.div>
-
-            {/* Scroll Indicator */}
-            <m.div variants={itemVariants} className='mt-16 md:mt-20'>
-              <div className='flex flex-col items-center gap-2 text-muted-foreground'>
-                <span className='text-sm tracking-wider uppercase'>Scroll</span>
-                <div className='w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex justify-center pt-2'>
-                  <div className='w-1 h-3 bg-muted-foreground/50 rounded-full animate-bounce' />
-                </div>
+              <div className='framer-caption' style={{ marginTop: '4px' }}>
+                {stat.label}
               </div>
-            </m.div>
+            </div>
+          ))}
+        </div>
+
+        {/* Scroll indicator */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '32px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+            color: 'var(--framer-ink-muted)',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '11px',
+              fontWeight: 500,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Scroll
+          </span>
+          <div
+            style={{
+              width: '24px',
+              height: '40px',
+              border: '1.5px solid rgba(255,255,255,0.2)',
+              borderRadius: '12px',
+              display: 'flex',
+              justifyContent: 'center',
+              paddingTop: '6px',
+            }}
+          >
+            <div
+              style={{
+                width: '3px',
+                height: '10px',
+                backgroundColor: 'rgba(255,255,255,0.4)',
+                borderRadius: '2px',
+                animation: 'framer-bounce 1.4s ease-in-out infinite',
+              }}
+            />
           </div>
-        </m.div>
-
-        {/* Decorative Elements */}
-        <div className='absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-10' />
-      </section>
-    </LazyMotion>
+        </div>
+      </div>
+    </section>
   )
 }
