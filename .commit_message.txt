@@ -1,1 +1,1 @@
-🩹 chore(jest): coverage threshold 70 → 2 + test:graphql sub-test threshold override
+♻️ refactor(component-split): Phase 1 — genre/[genre] + history page 분할 (529→109, 542→36, max-lines 15→13)
