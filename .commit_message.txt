@@ -1,1 +1,1 @@
-📦 chore: tests-route-auth-cleanup PDCA 아카이브 (Match 100%, rev β #5, 8 chain +169)
+📝 docs: .agents/product-marketing-context.md 자동 초안 생성 (4개 ICP, 12 섹션, 정법·창신 슬로건)
