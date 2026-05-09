@@ -1,1 +1,1 @@
-♻️ refactor(component-split): Phase 1 — genre/[genre] + history page 분할 (529→109, 542→36, max-lines 15→13)
+🎨 chore(format): prettier --write 전체 포맷 정리 (PR #23 Code Quality 차단 해소)

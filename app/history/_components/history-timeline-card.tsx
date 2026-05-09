@@ -25,9 +25,7 @@ export function HistoryTimelineCard({ event }: HistoryTimelineCardProps) {
           </div>
 
           <h3 className='text-base font-semibold mb-1'>{event.title}</h3>
-          {event.subtitle && (
-            <p className='text-sm text-muted-foreground mb-2'>{event.subtitle}</p>
-          )}
+          {event.subtitle && <p className='text-sm text-muted-foreground mb-2'>{event.subtitle}</p>}
 
           <div className='flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground'>
             {event.venue && (
