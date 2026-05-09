@@ -10,6 +10,9 @@ interface GenreArtworkCardProps {
   genreName: string
 }
 
+/**
+ * Card displaying a single genre artwork with hover overlay (views/likes) and a genre badge.
+ */
 export function GenreArtworkCard({ artwork, genreName }: GenreArtworkCardProps) {
   return (
     <Card className='group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300'>
@@ -19,6 +22,7 @@ export function GenreArtworkCard({ artwork, genreName }: GenreArtworkCardProps) 
             src={artwork.imageUrl}
             alt={artwork.title}
             fill
+            sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw'
             className='object-cover transition-transform duration-300 group-hover:scale-105'
           />
           <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />

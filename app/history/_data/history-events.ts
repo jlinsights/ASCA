@@ -430,7 +430,10 @@ export const typeConfig: Record<
   },
 }
 
-export function groupByYear(events: HistoryEvent[]) {
+/**
+ * Group events by year and sort year groups in descending order.
+ */
+export function groupByYear(events: HistoryEvent[]): { year: number; events: HistoryEvent[] }[] {
   const groups: Record<number, HistoryEvent[]> = {}
   for (const event of events) {
     const yearEvents = groups[event.year]

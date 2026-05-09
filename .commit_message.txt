@@ -1,1 +1,1 @@
-🎨 chore(format): prettier --write 전체 포맷 정리 (PR #23 Code Quality 차단 해소)
+📝 chore(coderabbit): PR #23 수용 7건 일괄 처리 (JSDoc 5 + Image sizes 1 + Glossary 회귀 복원 + asca-test-suite-debt Plan)

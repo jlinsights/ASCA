@@ -5,6 +5,9 @@ interface GenreNavGridProps {
   currentGenre: string
 }
 
+/**
+ * Grid of all calligraphy genres with the current genre highlighted.
+ */
 export function GenreNavGrid({ currentGenre }: GenreNavGridProps) {
   return (
     <section className='bg-muted/30 border-t border-border'>

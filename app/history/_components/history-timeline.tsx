@@ -3,6 +3,9 @@ import { Badge } from '@/components/ui/badge'
 import { historyEvents, groupByYear } from '../_data/history-events'
 import { HistoryTimelineCard } from './history-timeline-card'
 
+/**
+ * History timeline grouping events by year (descending) with a sticky year badge per group.
+ */
 export function HistoryTimeline() {
   const yearGroups = groupByYear(historyEvents)
 

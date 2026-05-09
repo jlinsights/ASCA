@@ -7,6 +7,9 @@ interface HistoryTimelineCardProps {
   event: HistoryEvent
 }
 
+/**
+ * Single timeline card rendering an event's type badge, title, subtitle, venue, and date.
+ */
 export function HistoryTimelineCard({ event }: HistoryTimelineCardProps) {
   const config = typeConfig[event.type]
   const Icon = config.icon

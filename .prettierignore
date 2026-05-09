@@ -84,4 +84,7 @@ pnpm-lock.yaml
 
 # Test outputs
 coverage/
-junit.xml 
+junit.xml
+
+# Marketing/agent context (markdown tables would break under prettier)
+.agents/ 
