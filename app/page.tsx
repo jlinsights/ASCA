@@ -1,5 +1,9 @@
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroSection } from '@/components/sections/hero-section'
+import { PhilosophySection } from '@/components/sections/philosophy-section'
+import { WhatWeDoSection } from '@/components/sections/what-we-do-section'
+import { BrandMessageSection } from '@/components/sections/brand-message-section'
+import { ClosingCtaSection } from '@/components/sections/closing-cta-section'
 import dynamic from 'next/dynamic'
 import { Metadata } from 'next'
 
@@ -30,8 +34,20 @@ export default function Home() {
         {/* Hero Section */}
         <HeroSection />
 
+        {/* Philosophy Section — brand-rollout D2 */}
+        <PhilosophySection />
+
+        {/* What We Do Section — brand-rollout D3 */}
+        <WhatWeDoSection />
+
+        {/* Brand Message Section — brand-rollout D4 */}
+        <BrandMessageSection />
+
         {/* Featured Exhibitions Section */}
         <FeaturedExhibitionsSection />
+
+        {/* Closing CTA Section — brand-rollout D5 */}
+        <ClosingCtaSection />
       </main>
 
       <LayoutFooter />

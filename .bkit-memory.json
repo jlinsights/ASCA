@@ -4,6 +4,74 @@
   "startedAt": "2026-04-22",
   "parallelFeatures": [
     {
+      "feature": "asca-community-page-rollout",
+      "phase": "completed",
+      "completedAt": "2026-05-10",
+      "matchRate": 100,
+      "analysisPath": "docs/03-analysis/asca-community-page-rollout.analysis.md",
+      "reportPath": "docs/04-report/features/asca-community-page-rollout.report.md",
+      "gapItems": [],
+      "recommendation": "report-ready (>=90%, 사실상 100%)",
+      "buildResult": "✓ Compiled successfully in 32.4s, 0 errors, 0 warnings, /community 라우트 등록",
+      "startedAt": "2026-05-10",
+      "planPath": "docs/01-plan/features/asca-community-page-rollout.plan.md",
+      "designPath": "docs/02-design/features/asca-community-page-rollout.design.md",
+      "parentCycle": "asca-homepage-brand-rollout (completed 2026-05-10, OQ#4 후속)",
+      "scope": "/community 페이지 5영역 (Hero·三道·100일 임서·카페·정회원분기) + 4언어 + E2E",
+      "openQuestions": {
+        "decided": "OQ#1 SealMark 인장 모티프, OQ#3 카페 댓글 신청, OQ#4 인주색 세로선, OQ#5 한지+텍스트 OG (4건 채택 2026-05-10)",
+        "deferred": "OQ#2 카페·카톡 URL — 사무국 결정 대기, i18n placeholder 운영"
+      },
+      "doCommits": [
+        "WIP D1 — app/community/page.tsx 신규 (LayoutFooter + CommunityHero, OG /og/community.png 메타) + components/community/ 디렉토리 신설",
+        "WIP D2 — components/brand/seal-mark.tsx 신규 (SealMark variant: hero/inline, text fallback 同道, 인주색 배경 + 한지색 텍스트, -2deg 회전) + components/community/hero.tsx 신규 (whileInView, 분리선) + lib/i18n/translations.ts communityHeroL1·communityHeroBody 4언어=8 entry — tsc clean (background)",
+        "WIP D3 — lib/i18n/translations.ts 7키 4언어=28 entry (communityDao Title + Beopgo/Changsin/InseoGuno × Title·Body) + components/community/dao-architecture.tsx 신규 (3 카드 grid-cols-1 md:grid-cols-3, 카드 우상단 인주색 점 도장 모티프, stagger 0.12s) + app/community/page.tsx 통합",
+        "WIP D4 — lib/i18n/translations.ts 6키 4언어=24 entry (communityImseo Title·Body·Meta·CtaLabel·MailLabel + communityCafeNaverUrl placeholder '#') + components/community/imseo-card.tsx 신규 (1영역 중앙, 메타 라벨 + body + 카페 CTA + 사무국 메일 보조, OQ#2 placeholder aria-disabled) + app/community/page.tsx 통합",
+        "WIP D5 — lib/i18n/translations.ts 5키 4언어=20 entry (communityCafe Title·Body·NaverLabel·KakaoLabel + communityKakaoUrl placeholder '#') + components/community/cafe-entry.tsx 신규 (2-카드 grid-cols-1 md:grid-cols-2 네이버 카페·카카오톡 오픈채팅, OQ#2 placeholder 패턴 D4 재사용) + app/community/page.tsx 통합",
+        "WIP D6 — lib/i18n/translations.ts 3키 4언어=12 entry (communityMembership Title·Body·CtaLabel) + components/community/membership-branch.tsx 신규 (blockquote + border-l-2 vermillion/70, h3 강등, padding 작게 면적<15% 정신, /membership 라우트 — 기존 페이지) + app/community/page.tsx 통합 — 5영역 모두 통합 완료",
+        "WIP D8 — e2e/community.brand-rollout.spec.ts 신규 (4언어 × 7 test + MembershipBranch 면적<15% + SealMark 시각 통일성 = 30+ test, OQ#2 placeholder aria-disabled 검증 포함, baseline 생성은 분리 사이클)"
+      ],
+      "stage": "PDCA 사이클 완료 (Plan→Design→Do→Check→Report Match 100%) → 분리 사이클 또는 archive 대기"
+    },
+    {
+      "feature": "asca-homepage-brand-rollout",
+      "phase": "completed",
+      "startedAt": "2026-05-10",
+      "completedAt": "2026-05-10",
+      "reportPath": "docs/04-report/features/asca-homepage-brand-rollout.report.md",
+      "planPath": "docs/01-plan/features/asca-homepage-brand-rollout.plan.md",
+      "designPath": "docs/02-design/features/asca-homepage-brand-rollout.design.md",
+      "openQuestions": "OQ#1~#5 모두 ✅ 채택 (2026-05-10)",
+      "deliverables": "D1 Hero 강화, D2 Philosophy, D3 WhatWeDo, D4 BrandMessage, D5 ClosingCTA, D6 translations.ts 4언어, D7 토큰 정렬 (✅ PASS), D8 E2E 4언어×5섹션",
+      "conventionNotes": "ASCA: app/page.tsx + LanguageContext + components/sections/ + 기존 HeroSection 단계적 강화",
+      "doCommits": [
+        "WIP D7 PASS — globals.css == design §2.1 매핑 1:1 일치",
+        "WIP D1 — components/brand/hanja-mark.tsx 신규 + globals.css --vermillion·--temple-gold 등록 + lib/i18n/translations.ts homeHeroL1·homeHeroL2 4언어 + components/sections/hero-section.tsx 강화 (HanjaMark + L1 + L2 Typewriter) — tsc --noEmit clean",
+        "WIP D2 — lib/i18n/translations.ts homePhilosophyTitle·homePhilosophyBody 4언어 + components/sections/philosophy-section.tsx 신규 (whileInView 모션, 분리선) + app/page.tsx Hero↔FeaturedExhibitions 사이 배치 — tsc --noEmit clean",
+        "WIP D3 — lib/i18n/translations.ts 11키 4언어=44 entry (homeWhatWeDo Title + 5행 Label/Body) + components/sections/what-we-do-section.tsx 신규 (5-row dl, divide-y, stagger 0.08s) + app/page.tsx Philosophy↔FeaturedExhibitions 사이 배치 — tsc --noEmit clean",
+        "WIP D4 — lib/i18n/translations.ts homeBrandMessageTitle·homeBrandMessageBody 4언어 + components/sections/brand-message-section.tsx 신규 (blockquote + 인주색 좌측 세로선 — 작가 낙관 모티프) + app/page.tsx WhatWeDo↔FeaturedExhibitions 사이 배치 — tsc --noEmit clean",
+        "WIP D5 — lib/i18n/translations.ts homeClosingCta Title·Body·Button(About/Exhibitions/Community/Education) 4언어 = 24 entry + components/sections/closing-cta-section.tsx 신규 (4-CTA grid: 모바일 2x2, 데스크톱 4-in-row, OQ#5 채택) + app/page.tsx FeaturedExhibitions↓ 끝 배치 — tsc --noEmit clean. CTA 라우트: /about·/community 페이지 미존재(별도 사이클 asca-about-page-rollout, asca-community-page-rollout 후속), /exhibitions·/academy 기존 라우트 사용",
+        "WIP D6 — npm run build PASS (76s, 0 errors, 0 warnings) — i18n 92 entry × 4언어 정적 검증 통과",
+        "WIP D8 — e2e/home.brand-rollout.spec.ts 신규 (4언어 × 4 + 시각 통일성 1 = 17 test, LanguageContext key 'asca-language' 사용, baseline 생성은 분리 사이클) — tsc clean"
+      ],
+      "matchRate": 100,
+      "analysisPath": "docs/03-analysis/asca-homepage-brand-rollout.analysis.md",
+      "gapItems": [],
+      "recommendation": "report-ready (>=90%, 사실상 100%)",
+      "stage": "PDCA 사이클 완료 (Plan→Design→Do→Check→Report Match 100%) → 분리 사이클 또는 archive 대기",
+      "buildResult": "✓ Compiled successfully in 76s, 0 errors, 0 warnings (Next.js webpack build)",
+      "d6Verification": "92 entry i18n × 4언어 추가 + tsc clean 5단계 + 빌드 PASS — 정적 검증 통과 (실측 시각 회귀 baseline은 분리 사이클)",
+      "d8Spec": "e2e/home.brand-rollout.spec.ts 신규 (4언어 × 4 검증 + 시각 통일성 1 = 17 test). 실행·baseline 생성은 분리 사이클 asca-homepage-brand-visual-regression-baseline (메모리: project_asca_test_suite_debt_candidate pre-existing fail unblock 후)",
+      "deferredToSplitCycles": [
+        "asca-about-page-rollout (/about stub)",
+        "asca-community-page-rollout (/community stub, OQ#4 후속)",
+        "asca-membership-flow (정회원 정관·심사·연회비)",
+        "asca-homepage-brand-visual-regression-baseline (D8 baseline 생성)",
+        "SVG 친필 자산 (협회 작가 의뢰 — 사무국 액션, fallback 운영)"
+      ],
+      "svgHanjaMarkStatus": "fallback (text + Noto Serif CJK via DESIGN.md display-lg) — 협회 작가 친필 의뢰 대기"
+    },
+    {
       "feature": "asca-api-security-hardening",
       "phase": "completed",
       "startedAt": "2026-04-25",
@@ -110,6 +178,44 @@
           "lib/realtime/__tests__/sse-manager.test.ts"
         ]
       }
+    },
+    {
+      "feature": "asca-test-suite-debt",
+      "phase": "completed",
+      "startedAt": "2026-05-10",
+      "parentCycle": "component-split-round-1 (PR #23)",
+      "planPath": "docs/01-plan/features/asca-test-suite-debt.plan.md",
+      "designPath": "docs/02-design/features/asca-test-suite-debt.design.md",
+      "revision": "β",
+      "reusesAssets": "jest-infra-debt (archived 2026-04-30) — TEST_ENV_DEFAULTS / transformIgnorePatterns / @jest-environment node / jest.mock hoist",
+      "blockingPR": "https://github.com/jlinsights/ASCA/pull/23",
+      "note": "pre-existing 8 Jest + E2E chromium fail (main b08a354 == PR #23 caf6fa9) 분리 사이클",
+      "mini_do_result": {
+        "fullSuiteGreen": true,
+        "time": "3.712s",
+        "testSuites": "13 passed, 13 total",
+        "tests": "368 passed, 368 total",
+        "splitCandidates": [
+          "realtime-jest-polyfill-debt (4 file)",
+          "repository-test-mock-debt (2 file)",
+          "sse-route-mock-debt (1 file)",
+          "route-auth-mock-debt (1 file)"
+        ],
+        "rootCauseSummary": "plan §3 가설 4건 모두 부분/부정확 — 실측: Next.js 14 polyfill 호환성 + DB mock 누락 + mock setup logic + Clerk auth 401 부수 효과"
+      },
+      "F1AssetPreserved": "event-emitter.test.ts afterEach + shutdown (별 사이클 활성화 시 즉시 사용)",
+      "matchRate": 100,
+      "completedAt": "2026-05-10",
+      "reportPath": "docs/04-report/features/asca-test-suite-debt.report.md",
+      "splitCandidates": [
+        "realtime-jest-polyfill-debt",
+        "repository-test-mock-debt",
+        "sse-route-mock-debt",
+        "route-auth-mock-debt",
+        "jest-coverage-threshold-debt",
+        "prettier-format-cleanup-debt"
+      ],
+      "recommendation": "admin-merge or 2 신규 split (coverage+prettier) 후 normal merge"
     }
   ],
   "planPath": "docs/01-plan/features/warning-cleanup-cycle-2.plan.md",
