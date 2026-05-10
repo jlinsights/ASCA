@@ -1,1 +1,1 @@
-📝 docs: PDCA design — asca-test-suite-debt rev α (8 Jest + E2E fail 분류 + jest-infra-debt 자산 재활용 매핑)
+📑 docs(pdca): asca-community-page-rollout PDCA 사이클 완료 보고서 (Match 100%, parent 패턴 재사용 효과 검증, 분리 사이클 4건 매핑)

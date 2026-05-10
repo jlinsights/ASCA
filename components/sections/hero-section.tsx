@@ -8,6 +8,7 @@ import { ArrowRight, Sparkles } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 import { m, LazyMotion, domAnimation } from 'framer-motion'
 import { TypewriterEffect } from '@/components/ui/typewriter-effect'
+import { HanjaMark } from '@/components/brand/hanja-mark'
 
 export function HeroSection() {
   const { t } = useLanguage()
@@ -65,27 +66,29 @@ export function HeroSection() {
               </div>
             </m.div>
 
-            {/* Main Heading */}
+            {/* Main Heading — Hanja Mark (法古創新 · 人書俱老) */}
             <m.h1
               variants={itemVariants}
-              className='text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-foreground mb-6 tracking-wide'
+              aria-label={t('homeHeroL1')}
+              className='mb-8 flex justify-center'
             >
-              <span className='inline-block bg-clip-text text-transparent bg-gradient-to-r from-celadon-green via-scholar-red to-temple-gold'>
-                正法의 계승
-              </span>
-              <span className='block mt-2'>創新의 조화</span>
+              <HanjaMark variant='hero' color='ink' />
             </m.h1>
 
-            {/* Subtitle - Typewriter Effect */}
+            {/* L1 Slogan (brand-guidelines §8) */}
+            <m.p
+              variants={itemVariants}
+              className='text-2xl md:text-3xl lg:text-4xl font-serif font-medium text-foreground mb-8 tracking-wide leading-snug'
+            >
+              {t('homeHeroL1')}
+            </m.p>
+
+            {/* L2 Subcopy — Typewriter Effect */}
             <m.div
               variants={itemVariants}
-              className='text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed min-h-[3.5rem] md:min-h-[4rem]'
+              className='text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed min-h-[3.5rem] md:min-h-[4rem]'
             >
-              <TypewriterEffect
-                text='전통 서예의 정법을 계승하고 현대적 창신을 통해<br />동양서예의 새로운 미래를 열어갑니다'
-                duration={3}
-                delay={1} // Wait for entrance animations
-              />
+              <TypewriterEffect text={t('homeHeroL2')} duration={3} delay={1} />
             </m.div>
 
             {/* Enhanced CTA Buttons */}
