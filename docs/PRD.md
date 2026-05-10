@@ -231,13 +231,22 @@
 - 🔄 고급 분석 리포트 생성
 - 🔄 예측 분석 및 트렌드 분석
 
-**활동 로그 및 감사**
+**활동 로그 및 감사 (Audit Trail)**
 
-- ✅ 모든 관리자 활동 로그 기록
+- ✅ 엔터프라이즈급 감사 추적 시스템 구축
+- ✅ 데이터 변경 이력 (old/new value) 상세 기록
+- ✅ 보안 위반 및 고위험 작업 실시간 감지
+- ✅ 모든 관리자 활동 로그 기록 및 검색
 - ✅ 사용자 행동 분석 및 추적
 - ✅ 보안 이벤트 모니터링
-- ✅ 데이터 변경 이력 관리
-- 🔄 컴플라이언스 리포팅
+- ✅ 규정 준수 (Compliance) 보고서 생성 자동화
+
+**성능 및 상태 모니터링**
+
+- ✅ 실시간 성능 메트릭 수집 (API 지연 시간, DB 쿼리 성능)
+- ✅ 에이전트 및 시스템 헬스 모니터링
+- ✅ 슬로우 쿼리 탐지 및 최적화 제안
+- ✅ 실시간 이벤트 버스 기반 시스템 모니터링
 
 ### 3.2 사용자 인터페이스 및 경험 (UI/UX)
 
@@ -365,9 +374,20 @@ Cache: Redis (Supabase Edge Functions)
 Hosting: Vercel (Edge Runtime)
 CDN: Vercel Edge Network
 Database: Supabase Cloud (AWS)
-Monitoring: Vercel Analytics + Sentry
+Monitoring: Vercel Analytics + Sentry + Custom Metrics
 CI/CD: GitHub Actions
 Domain: Custom Domain + SSL
+```
+
+#### 엔터프라이즈 아키텍처 패턴
+
+```typescript
+Pattern: CQRS (Command Query Responsibility Segregation)
+Communication: Event-Driven Architecture (Internal Event Bus)
+Logic: Agent-Based Service Pattern
+Security: Security Middleware + Context-Aware Validation
+Audit: Enterprise Audit Trail System
+Monitoring: Real-time Performance & Health Monitoring
 ```
 
 ### 4.2 데이터베이스 설계
@@ -620,28 +640,81 @@ export const PERMISSIONS = {
 export const DEFAULT_ROLES = {
   SUPER_ADMIN: {
     name: 'Super Admin',
-    permissions: Object.values(PERMISSIONS).flatMap(p => Object.values(p)),
+    permissions: [Permission.ALL],
   },
-  CONTENT_ADMIN: {
-    name: 'Content Admin',
+  ADMIN: {
+    name: 'Admin',
     permissions: [
-      ...Object.values(PERMISSIONS.NOTICES),
-      ...Object.values(PERMISSIONS.EXHIBITIONS),
-      ...Object.values(PERMISSIONS.EVENTS),
-      ...Object.values(PERMISSIONS.ARTISTS),
-      ...Object.values(PERMISSIONS.ARTWORKS),
+      Permission.MEMBER_ALL,
+      Permission.ARTIST_ALL,
+      Permission.ARTWORK_ALL,
+      Permission.EXHIBITION_ALL,
+      Permission.EVENT_ALL,
+      Permission.ADMIN_DASHBOARD,
+      Permission.ADMIN_ANALYTICS,
+      Permission.ADMIN_SETTINGS,
+      Permission.ADMIN_USERS,
+      Permission.ADMIN_AUDIT_LOGS,
+      Permission.ADMIN_SYSTEM_HEALTH,
+      Permission.CONTENT_ALL,
+    ],
+  },
+  MODERATOR: {
+    name: 'Moderator',
+    permissions: [
+      Permission.MEMBER_READ,
+      Permission.MEMBER_APPROVE,
+      Permission.MEMBER_REJECT,
+      Permission.ARTIST_READ,
+      Permission.ARTIST_APPROVE,
+      Permission.ARTIST_REJECT,
+      Permission.ARTWORK_READ,
+      Permission.ARTWORK_CREATE,
+      Permission.ARTWORK_UPDATE,
+      Permission.ARTWORK_APPROVE,
+      Permission.ARTWORK_REJECT,
+      Permission.ARTWORK_FEATURE,
+      Permission.EXHIBITION_READ,
+      Permission.EXHIBITION_CREATE,
+      Permission.EXHIBITION_UPDATE,
+      Permission.EXHIBITION_PUBLISH,
+      Permission.EXHIBITION_UNPUBLISH,
+      Permission.EVENT_READ,
+      Permission.EVENT_CREATE,
+      Permission.EVENT_UPDATE,
+      Permission.EVENT_PUBLISH,
+      Permission.EVENT_UNPUBLISH,
+      Permission.EVENT_MANAGE_ATTENDEES,
+      Permission.CONTENT_READ,
+      Permission.CONTENT_CREATE,
+      Permission.CONTENT_UPDATE,
+      Permission.CONTENT_PUBLISH,
+      Permission.ADMIN_DASHBOARD,
+      Permission.ADMIN_ANALYTICS,
     ],
   },
   EDITOR: {
     name: 'Editor',
     permissions: [
-      PERMISSIONS.NOTICES.CREATE,
-      PERMISSIONS.NOTICES.READ,
-      PERMISSIONS.NOTICES.UPDATE,
-      PERMISSIONS.EXHIBITIONS.READ,
-      PERMISSIONS.EVENTS.READ,
+      Permission.NOTICES.CREATE,
+      Permission.NOTICES.READ,
+      Permission.NOTICES.UPDATE,
+      Permission.EXHIBITIONS.READ,
+      Permission.EVENTS.READ,
     ],
   },
+} as const
+
+// 보안 미들웨어 및 컨텍스트
+export const SECURITY_CONFIG = {
+  SENSITIVE_RESOURCES: ['admin', 'system', 'audit'],
+  RISK_THRESHOLDS: {
+    LOW: 0.3,
+    MEDIUM: 0.7,
+    HIGH: 0.9,
+  },
+  INPUT_SANITIZATION: true,
+  AUDIT_LEVEL: 'verbose',
 } as const
 ```
 
@@ -702,6 +775,14 @@ export const DEFAULT_ROLES = {
 - [x] 접근성 준수 (WCAG 2.1 AA)
 - [x] 성능 최적화
 - [x] SEO 최적화
+
+**Phase 11: 엔터프라이즈 아키텍처 (Completed)**
+
+- [x] CQRS 및 이벤트 버스 시스템 구축
+- [x] 엔터프라이즈 감사 추적 (Audit Trail) 시스템
+- [x] 계층적 권한 및 RBAC 고도화
+- [x] 보안 미들웨어 및 입력 살균화
+- [x] 실시간 성능 모니터링 인프라
 
 #### 🔄 진행 중인 기능 (80%)
 
@@ -794,11 +875,13 @@ SEO 점수: 95/100
 --stone-gray: #707070; /* 문인석 회색 */
 --sage-green: #b7c4b7; /* 연한 녹색 */
 
-/* 확장 컬러 */
+/* 확장 컬러 (Modern Calligraphy) */
+--temple-gold: #d4af37; /* 사찰 금색 */
+--scholar-red: #af2626; /* 학자 빨강 */
+--ink-dark: #0f0f0f; /* 깊은 먹색 */
 --spring-green: #09f557; /* 포인트 녹색 */
 --gold: #ffcc00; /* 금색 강조 */
 --royal-blue: #275eea; /* 로얄 블루 */
---scholar-red: #af2626; /* 학자 빨강 */
 ```
 
 #### 타이포그래피 시스템
@@ -855,8 +938,9 @@ font-family:
 
 - **암호화**: 모든 민감 데이터 AES-256 암호화
 - **전송 보안**: HTTPS/TLS 1.3 강제 적용
-- **접근 제어**: Role-based Access Control (RBAC)
-- **감사 로그**: 모든 관리자 활동 로깅
+- **접근 제어**: 계층적 Role-based Access Control (RBAC) + Wildcard Permissions
+- **감사 로그**: 엔터프라이즈 Audit Trail (Data Change Tracking, Access Logging)
+- **보안 컨텍스트**: 실시간 작업 검증 및 리스크 기반 평가
 
 #### 인증 및 권한
 
@@ -930,9 +1014,12 @@ font-family:
 - **Hotjar**: 사용자 경험 분석
 - **Search Console**: SEO 성과 추적
 
-#### 성능 모니터링
+#### 성능 및 엔터프라이즈 모니터링
 
 - **Sentry**: 오류 추적 및 성능 모니터링
+- **Custom Metrics Collector**: 실시간 시스템 메트릭 수집
+- **Audit Dashboard**: 감사 로그 분석 및 리포팅
+- **Slow Query Detector**: 데이터베이스 성능 분석
 - **Uptime Robot**: 서비스 가용성 모니터링
 - **PageSpeed Insights**: 페이지 성능 분석
 - **Lighthouse**: 종합 품질 평가
