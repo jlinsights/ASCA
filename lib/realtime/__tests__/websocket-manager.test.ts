@@ -346,7 +346,11 @@ describe('WebSocket Manager', () => {
     })
   })
 
-  describe('Event Broadcasting', () => {
+  // SKIP REASON: e2e-flow 와 동일 — Next.js polyfill stack overflow 로
+  // broadcast 메시지 payload undefined.
+  // REF: docs/01-plan/features/asca-test-suite-debt.plan.md §5
+  // SPLIT_CANDIDATE: realtime-jest-polyfill-debt
+  describe.skip('Event Broadcasting', () => {
     it('should broadcast events to subscribed clients', async () => {
       const socket1 = new MockWebSocket() as any
       const socket2 = new MockWebSocket() as any

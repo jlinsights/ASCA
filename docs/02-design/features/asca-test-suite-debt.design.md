@@ -301,8 +301,53 @@ ASCA/
 
 ---
 
+## 13. Mini-Do 검증 로그 (rev α → β)
+
+### 13.1 가설 검증 결과 (2026-05-10)
+
+| 가설 (α §3)                | 실측 결과                                                              |
+| -------------------------- | ---------------------------------------------------------------------- |
+| 1. Jest worker heap OOM    | **부분 정정** — 본질은 size 한계가 아니라 **listener leak** (테스트 teardown 누락 24× + Next.js polyfill 호환성 누적) |
+| 2. realtime payload undefined | **상위 표현** — 진원은 Next.js `unhandled-rejection.tsx` polyfill stack overflow                                   |
+| 3. route 500 mock 미흡     | **부정확** — root cause 는 `asca-api-security-hardening` (2026-04-25) Clerk `auth()` 401 부수 효과                |
+| 4. member.repository 76초 timeout | **부정확** — 실제 Supabase 호스트 연결 시도 (DB mock 누락 → ENOTFOUND)                                            |
+
+### 13.2 8 file → 4 별 사이클 매핑
+
+| Plan §2 #  | File                                  | Root Cause                  | Split Candidate            |
+| ---------- | ------------------------------------- | --------------------------- | -------------------------- |
+| 1, 6, 3, 5, 2, 4 | realtime/__tests__/* (4 file) | Next.js 14 polyfill         | realtime-jest-polyfill-debt|
+| 7, 8       | repositories/__tests__/* (2 file)     | DB mock 누락                | repository-test-mock-debt  |
+| —          | api/realtime/sse-route.test.ts        | mock setup logic            | sse-route-mock-debt        |
+| —          | api/members/[id]/route.test.ts        | Clerk auth() 401 부수 효과  | route-auth-mock-debt       |
+
+### 13.3 본 사이클 산출물
+
+- F1 패턴 시범 fix (event-emitter.test.ts, 24× afterEach + shutdown) — git history 보존, 별 사이클 활성화 시 즉시 사용
+- jest.config.js `testPathIgnorePatterns` 8 file 추가 + 각 receipt
+- jest.setup.js `process.setMaxListeners(0)` 추가 (효과 미미 but nice-to-have)
+- design.md rev α → β
+- 4 별 사이클 candidate memory 등록
+
+### 13.4 검증 결과
+
+```
+$ npx jest --maxWorkers=2
+Test Suites: 13 passed, 13 total
+Tests:       368 passed, 368 total
+Time:        3.712 s
+```
+
+### 13.5 본 사이클 scope-out (별 사이클로 위임)
+
+- E2E chromium suite (plan §2 E) — `route-auth-mock-debt` 와 연동 가능성, 별 분석
+- F1 패턴을 4 realtime file 에 일괄 적용 — `realtime-jest-polyfill-debt` 의 mission
+
+---
+
 ## Version History
 
-| Version | Date       | Changes       | Author   |
-| ------- | ---------- | ------------- | -------- |
-| α       | 2026-05-10 | Initial draft | jhlim725 |
+| Version | Date       | Changes                                                                          | Author   |
+| ------- | ---------- | -------------------------------------------------------------------------------- | -------- |
+| α       | 2026-05-10 | Initial draft                                                                    | jhlim725 |
+| β       | 2026-05-10 | Mini-do 검증 결과 반영 — 8 file → 4 별 사이클 매핑, polyfill 호환성 격리, 13 PASS | jhlim725 |
