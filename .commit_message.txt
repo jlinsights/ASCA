@@ -1,1 +1,1 @@
-📝 docs: .agents/product-marketing-context.md 자동 초안 생성 (4개 ICP, 12 섹션, 정법·창신 슬로건)
+📑 docs(pdca): asca-community-page-rollout PDCA 사이클 완료 보고서 (Match 100%, parent 패턴 재사용 효과 검증, 분리 사이클 4건 매핑)

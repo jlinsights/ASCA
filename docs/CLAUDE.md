@@ -61,7 +61,18 @@ npm run test:coverage    # Generate test coverage report
 - `artworks` - Artwork data with category/metadata
 - `exhibitions` - Exhibition management
 - `events`, `news` - Content management
+- `audit_logs` - Enterprise audit trail data
 - Junction tables for many-to-many relationships
+
+### Enterprise Architecture
+
+The platform uses a sophisticated enterprise architecture for scalability and security:
+
+- **CQRS Pattern**: Separate buses for commands (`lib/cqrs/command-bus.ts`) and queries (`lib/cqrs/query-bus.ts`).
+- **Event Bus**: Asynchronous system communication via `lib/events/event-bus.ts`.
+- **Audit Trail**: Detailed tracking of all data changes and access attempts in `lib/audit/audit-trail.ts`.
+- **Agent Pattern**: Specialized services (e.g., `lib/agents/artist-agent.ts`) handling complex domain logic.
+- **Performance Monitoring**: Real-time metric collection and monitoring in `lib/monitoring/`.
 
 ### Authentication
 
@@ -91,6 +102,31 @@ All content tables use consistent multilingual structure:
 - News/event publishing
 - Database migration monitoring
 - Real-time sync controls
+- **Audit Log Viewer**: High-risk activity monitoring and compliance reporting
+- **System Health**: Performance metrics and agent status tracking
+
+### Permission System (RBAC)
+
+Hierarchical and resource-based permissions defined in `lib/admin/permissions.ts`:
+
+- **Roles**: `SUPER_ADMIN`, `ADMIN`, `MODERATOR`, `EDITOR`, `ARTIST`, `MEMBER`.
+- **Wildcards**: Supports `*` for full access or `resource:*` for resource-specific wildcards.
+- **Validation**: Use `hasPermission` or `assertPermission` in routes and components.
+- **Security Context**: Operations are validated against a context containing user ID and required permissions.
+
+## Security Guidelines
+
+### Data Protection & Compliance
+
+- **Input Sanitization**: Always use `sanitizeInput()` from `lib/security/security-middleware.ts` for user-provided data.
+- **Audit Logging**: All sensitive mutations MUST be logged via `auditTrail.trackDataChange()`.
+- **Access Tracking**: Unauthorized access attempts must be tracked via `auditTrail.trackAccess()`.
+- **Risk Scoring**: Operations are assigned a risk score; scores > 0.7 trigger high-risk alerts.
+
+### Security Middleware
+
+- All administrative API routes should use `SecurityMiddleware.validateOperation()`.
+- Maintain Row Level Security (RLS) in Supabase as the final line of defense.
 
 ## Development Patterns
 
@@ -173,9 +209,14 @@ and refactor using this standardized process:
 
 ## Important File Locations
 
-- **Database Schema**: `lib/db/schema.ts` (primary SQLite schema)
+- **Database Schema**: `lib/db/schema.ts` (primary PostgreSQL schema)
 - **Database Config**: `drizzle.config.ts` (points to PostgreSQL)
 - **Admin Auth**: Clerk Authentication integration
+- **Permission Mapping**: `lib/admin/permissions.ts`
+- **Audit System**: `lib/audit/audit-trail.ts`
+- **CQRS Buses**: `lib/cqrs/` (command-bus, query-bus)
+- **Monitoring**: `lib/monitoring/` (performance, metrics, agent-monitor)
+- **Security Middleware**: `lib/security/security-middleware.ts`
 - **Multi-language**: `lib/i18n/` directory
 - **Sync Logic**: `lib/sync-engine.ts`
 - **API Routes**: `app/api/` (admin, membership, artists, migration, sync)

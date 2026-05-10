@@ -1,5 +1,10 @@
 import '@testing-library/jest-dom'
 
+// jest worker process listener cap 풀기 — Next.js 14 unhandled-rejection
+// polyfill 이 worker 모듈 reload 시 internal queue 에 listener 누적해
+// stack overflow 유발하는 호환성 문제 회피용 (asca-test-suite-debt α).
+process.setMaxListeners(0)
+
 // Load test environment variables
 import { config } from 'dotenv'
 import path from 'path'

@@ -90,6 +90,12 @@
     "server:prod": "npm run build && npm run start",
     "images:optimize": "node scripts/optimize-gallery-images.js",
     "images:optimize:force": "node scripts/optimize-gallery-images.js --force",
+    "gallery:split": "node scripts/split-gallery-data.js",
+    "gallery:upload": "node scripts/upload-gallery-to-supabase.js",
+    "gallery:upload:test": "node scripts/upload-gallery-to-supabase.js --test",
+    "gallery:upload:dry": "node scripts/upload-gallery-to-supabase.js --dry-run",
+    "gallery:update-paths": "node scripts/update-gallery-paths.js",
+    "gallery:update-paths:dry": "node scripts/update-gallery-paths.js --dry-run",
     "prebuild": "npm run images:optimize"
   },
   "dependencies": {
@@ -184,6 +190,7 @@
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "baseline-browser-mapping": "^2.10.29",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "drizzle-kit": "^0.31.8",
