@@ -110,6 +110,18 @@
           "lib/realtime/__tests__/sse-manager.test.ts"
         ]
       }
+    },
+    {
+      "feature": "asca-test-suite-debt",
+      "phase": "design",
+      "startedAt": "2026-05-10",
+      "parentCycle": "component-split-round-1 (PR #23)",
+      "planPath": "docs/01-plan/features/asca-test-suite-debt.plan.md",
+      "designPath": "docs/02-design/features/asca-test-suite-debt.design.md",
+      "revision": "α",
+      "reusesAssets": "jest-infra-debt (archived 2026-04-30) — TEST_ENV_DEFAULTS / transformIgnorePatterns / @jest-environment node / jest.mock hoist",
+      "blockingPR": "https://github.com/jlinsights/ASCA/pull/23",
+      "note": "pre-existing 8 Jest + E2E chromium fail (main b08a354 == PR #23 caf6fa9) 분리 사이클"
     }
   ],
   "planPath": "docs/01-plan/features/warning-cleanup-cycle-2.plan.md",

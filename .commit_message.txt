@@ -1,1 +1,1 @@
-📝 docs: .agents/product-marketing-context.md 자동 초안 생성 (4개 ICP, 12 섹션, 정법·창신 슬로건)
+📝 docs: PDCA design — asca-test-suite-debt rev α (8 Jest + E2E fail 분류 + jest-infra-debt 자산 재활용 매핑)
