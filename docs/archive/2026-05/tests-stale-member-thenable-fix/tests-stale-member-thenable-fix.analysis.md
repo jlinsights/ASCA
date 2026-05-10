@@ -11,15 +11,15 @@ parent_cycle: tests-stale-member-extras-spike
 
 ## Match Rate: 100%
 
-| 항목 | Plan | 구현 | Match |
-|---|---|---|---|
-| Root cause | Promise.resolve(this) 무한 재귀 | 정확 일치 | ✅ |
-| Fix scope | 1 file 1 hunk | 1 file 1 hunk (+8/-3) | ✅ |
-| hyphen file 결과 | 13/13 PASS | 13/13 PASS | ✅ |
-| CI Tests passed delta | +13 | **+13 (419→432)** | ✅ |
-| Test Suites delta | +1 pass | 11→12 pass | ✅ |
-| Real time | ~75min | ~50min | ✅ |
-| Ejection 사전 정의 | dot file 9 fail | 정확히 잔존 | ✅ |
+| 항목                  | Plan                            | 구현                  | Match |
+| --------------------- | ------------------------------- | --------------------- | ----- |
+| Root cause            | Promise.resolve(this) 무한 재귀 | 정확 일치             | ✅    |
+| Fix scope             | 1 file 1 hunk                   | 1 file 1 hunk (+8/-3) | ✅    |
+| hyphen file 결과      | 13/13 PASS                      | 13/13 PASS            | ✅    |
+| CI Tests passed delta | +13                             | **+13 (419→432)**     | ✅    |
+| Test Suites delta     | +1 pass                         | 11→12 pass            | ✅    |
+| Real time             | ~75min                          | ~50min                | ✅    |
+| Ejection 사전 정의    | dot file 9 fail                 | 정확히 잔존           | ✅    |
 
 ## Findings
 

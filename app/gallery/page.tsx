@@ -89,10 +89,7 @@ export default function GalleryPage() {
             ssr:false dynamic은 Server Component에서 사용 불가 (Next.js 16).
           */}
           <Suspense fallback={<GallerySkeleton />}>
-            <GalleryPageClient
-              availableYears={availableYears}
-              categories={categories}
-            />
+            <GalleryPageClient availableYears={availableYears} categories={categories} />
           </Suspense>
         </div>
       </section>

@@ -11,18 +11,22 @@ const PAGE_SIZE = 24
 
 const CATEGORY_META: Record<string, { icon: string; name: string }> = {
   committee: { icon: '👥', name: '심사위원회' },
-  contest:   { icon: '🏆', name: '휘호대회' },
-  exhibition:{ icon: '🖼️', name: '전시회' },
-  group:     { icon: '👨‍👩‍👧‍👦', name: '단체사진' },
-  award:     { icon: '🏅', name: '시상기념' },
-  ceremony:  { icon: '🎉', name: '개막식 및 시상식' },
-  event:     { icon: '📸', name: '행사 이모저모' },
-  people:    { icon: '👤', name: '인물/참석자' },
-  sac:       { icon: '🏛️', name: '전시장 풍경' },
+  contest: { icon: '🏆', name: '휘호대회' },
+  exhibition: { icon: '🖼️', name: '전시회' },
+  group: { icon: '👨‍👩‍👧‍👦', name: '단체사진' },
+  award: { icon: '🏅', name: '시상기념' },
+  ceremony: { icon: '🎉', name: '개막식 및 시상식' },
+  event: { icon: '📸', name: '행사 이모저모' },
+  people: { icon: '👤', name: '인물/참석자' },
+  sac: { icon: '🏛️', name: '전시장 풍경' },
 }
 
-function catIcon(c: string) { return CATEGORY_META[c]?.icon ?? '📷' }
-function catName(c: string) { return CATEGORY_META[c]?.name ?? c }
+function catIcon(c: string) {
+  return CATEGORY_META[c]?.icon ?? '📷'
+}
+function catName(c: string) {
+  return CATEGORY_META[c]?.name ?? c
+}
 
 // ─── 타입 ────────────────────────────────────────────────
 interface Pagination {
@@ -44,32 +48,35 @@ function useGalleryParams() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const year     = searchParams.get('year')     ?? 'all'
+  const year = searchParams.get('year') ?? 'all'
   const category = searchParams.get('category') ?? 'all'
-  const search   = searchParams.get('search')   ?? ''
-  const page     = Number(searchParams.get('page') ?? '1')
+  const search = searchParams.get('search') ?? ''
+  const page = Number(searchParams.get('page') ?? '1')
 
-  const setParams = useCallback((updates: Record<string, string>) => {
-    const params = new URLSearchParams(searchParams.toString())
-    for (const [k, v] of Object.entries(updates)) {
-      if (v === '' || v === 'all' || v === '1') params.delete(k)
-      else params.set(k, v)
-    }
-    // 필터 바뀌면 page 리셋
-    if ('year' in updates || 'category' in updates || 'search' in updates) {
-      params.delete('page')
-    }
-    router.push(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [router, pathname, searchParams])
+  const setParams = useCallback(
+    (updates: Record<string, string>) => {
+      const params = new URLSearchParams(searchParams.toString())
+      for (const [k, v] of Object.entries(updates)) {
+        if (v === '' || v === 'all' || v === '1') params.delete(k)
+        else params.set(k, v)
+      }
+      // 필터 바뀌면 page 리셋
+      if ('year' in updates || 'category' in updates || 'search' in updates) {
+        params.delete('page')
+      }
+      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    },
+    [router, pathname, searchParams]
+  )
 
   return { year, category, search, page, setParams }
 }
 
 // ─── 훅: API 데이터 패치 ─────────────────────────────────
 function useGalleryData(year: string, category: string, search: string, page: number) {
-  const [data, setData]     = useState<ApiResponse | null>(null)
+  const [data, setData] = useState<ApiResponse | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError]   = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -81,9 +88,9 @@ function useGalleryData(year: string, category: string, search: string, page: nu
     setError(null)
 
     const qs = new URLSearchParams({
-      ...(year !== 'all'     ? { year }     : {}),
+      ...(year !== 'all' ? { year } : {}),
       ...(category !== 'all' ? { category } : {}),
-      ...(search.trim()      ? { search }   : {}),
+      ...(search.trim() ? { search } : {}),
       page: String(page),
       limit: String(PAGE_SIZE),
     })
@@ -111,13 +118,17 @@ function useGalleryData(year: string, category: string, search: string, page: nu
 function FilterBar({
   availableYears,
   categories,
-  year, category, search,
+  year,
+  category,
+  search,
   totalCount,
   onChange,
 }: {
   availableYears: number[]
   categories: GalleryCategory[]
-  year: string; category: string; search: string
+  year: string
+  category: string
+  search: string
   totalCount: number
   onChange: (updates: Record<string, string>) => void
 }) {
@@ -125,7 +136,9 @@ function FilterBar({
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
   // search prop 동기화 (뒤로가기 등)
-  useEffect(() => { setLocalSearch(search) }, [search])
+  useEffect(() => {
+    setLocalSearch(search)
+  }, [search])
 
   const handleSearch = (v: string) => {
     setLocalSearch(v)
@@ -141,8 +154,12 @@ function FilterBar({
       <div className='relative max-w-lg mx-auto'>
         <span className='absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none'>
           <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2}
-              d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth={2}
+              d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+            />
           </svg>
         </span>
         <input
@@ -160,7 +177,12 @@ function FilterBar({
             aria-label='검색어 지우기'
           >
             <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M6 18L18 6M6 6l12 12'
+              />
             </svg>
           </button>
         )}
@@ -214,7 +236,9 @@ function FilterBar({
       {/* 결과 요약 */}
       <p className='text-center text-sm text-muted-foreground' role='status' aria-live='polite'>
         {totalCount > 0 ? (
-          <><strong className='text-foreground'>{totalCount}</strong>개의 사진</>
+          <>
+            <strong className='text-foreground'>{totalCount}</strong>개의 사진
+          </>
         ) : (
           '검색 결과가 없습니다'
         )}
@@ -226,12 +250,16 @@ function FilterBar({
 // ─── 서브 컴포넌트: 이미지 카드 ──────────────────────────
 const ASPECT_RATIOS = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[5/4]']
 
-function GalleryCard({ item, index, onClick }: {
+function GalleryCard({
+  item,
+  index,
+  onClick,
+}: {
   item: GalleryItem
   index: number
   onClick: (item: GalleryItem) => void
 }) {
-  const [loaded, setLoaded]   = useState(false)
+  const [loaded, setLoaded] = useState(false)
   const [errored, setErrored] = useState(false)
   const ratio = ASPECT_RATIOS[index % ASPECT_RATIOS.length]
 
@@ -246,7 +274,12 @@ function GalleryCard({ item, index, onClick }: {
       role='button'
       tabIndex={0}
       aria-label={`${item.title} 보기`}
-      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(item) } }}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onClick(item)
+        }
+      }}
     >
       <div className={`relative ${ratio} bg-muted rounded-xl overflow-hidden`}>
         {/* 스켈레톤 */}
@@ -286,9 +319,7 @@ function GalleryCard({ item, index, onClick }: {
         {/* 제목 */}
         <div className='absolute bottom-0 left-0 right-0 p-3 translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'>
           <p className='text-white text-sm font-semibold line-clamp-2'>{item.title}</p>
-          {item.eventDate && (
-            <p className='text-white/70 text-xs mt-0.5'>{item.eventDate}</p>
-          )}
+          {item.eventDate && <p className='text-white/70 text-xs mt-0.5'>{item.eventDate}</p>}
         </div>
       </div>
     </motion.div>
@@ -296,7 +327,12 @@ function GalleryCard({ item, index, onClick }: {
 }
 
 // ─── 서브 컴포넌트: 라이트박스 ───────────────────────────
-function Lightbox({ item, items, onClose, onNavigate }: {
+function Lightbox({
+  item,
+  items,
+  onClose,
+  onNavigate,
+}: {
   item: GalleryItem
   items: GalleryItem[]
   onClose: () => void
@@ -306,9 +342,9 @@ function Lightbox({ item, items, onClose, onNavigate }: {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape')      onClose()
-      if (e.key === 'ArrowLeft')   onNavigate('prev')
-      if (e.key === 'ArrowRight')  onNavigate('next')
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') onNavigate('prev')
+      if (e.key === 'ArrowRight') onNavigate('next')
     }
     document.addEventListener('keydown', handler)
     document.body.style.overflow = 'hidden'
@@ -320,8 +356,12 @@ function Lightbox({ item, items, onClose, onNavigate }: {
 
   return (
     <motion.div
-      role='dialog' aria-modal='true' aria-label={item.title}
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      role='dialog'
+      aria-modal='true'
+      aria-label={item.title}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       className='fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4'
       onClick={onClose}
     >
@@ -343,21 +383,31 @@ function Lightbox({ item, items, onClose, onNavigate }: {
             </p>
           </div>
           <div className='flex items-center gap-2'>
-            <span className='text-xs text-muted-foreground'>{idx + 1} / {items.length}</span>
+            <span className='text-xs text-muted-foreground'>
+              {idx + 1} / {items.length}
+            </span>
             <button
               onClick={onClose}
               className='p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground'
               aria-label='닫기'
             >
               <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M6 18L18 6M6 6l12 12'
+                />
               </svg>
             </button>
           </div>
         </div>
 
         {/* 이미지 */}
-        <div className='relative bg-black flex items-center justify-center' style={{ minHeight: 400, maxHeight: '70vh' }}>
+        <div
+          className='relative bg-black flex items-center justify-center'
+          style={{ minHeight: 400, maxHeight: '70vh' }}
+        >
           {/* 이전 */}
           <button
             onClick={() => onNavigate('prev')}
@@ -365,14 +415,20 @@ function Lightbox({ item, items, onClose, onNavigate }: {
             aria-label='이전 이미지'
           >
             <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M15 19l-7-7 7-7'
+              />
             </svg>
           </button>
 
           <Image
             src={item.src}
             alt={item.title}
-            width={1600} height={1200}
+            width={1600}
+            height={1200}
             className='max-w-full max-h-[70vh] object-contain'
             quality={90}
             priority
@@ -395,7 +451,10 @@ function Lightbox({ item, items, onClose, onNavigate }: {
         {item.tags.length > 0 && (
           <div className='flex flex-wrap gap-1.5 p-4 border-t border-border'>
             {item.tags.slice(0, 8).map((tag, i) => (
-              <span key={i} className='text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-md'>
+              <span
+                key={i}
+                className='text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-md'
+              >
                 #{tag}
               </span>
             ))}
@@ -412,7 +471,10 @@ function Lightbox({ item, items, onClose, onNavigate }: {
 }
 
 // ─── 서브 컴포넌트: 페이지네이션 ────────────────────────
-function Pagination({ pagination, onPage }: {
+function Pagination({
+  pagination,
+  onPage,
+}: {
   pagination: Pagination
   onPage: (p: number) => void
 }) {
@@ -443,7 +505,9 @@ function Pagination({ pagination, onPage }: {
 
       {pages.map((p, i) =>
         p === '…' ? (
-          <span key={`ellipsis-${i}`} className='px-2 text-muted-foreground text-sm'>…</span>
+          <span key={`ellipsis-${i}`} className='px-2 text-muted-foreground text-sm'>
+            …
+          </span>
         ) : (
           <button
             key={p}
@@ -499,20 +563,31 @@ export default function GalleryPageClient({ availableYears, categories }: Galler
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null)
   const [, startTransition] = useTransition()
 
-  const handleParamsChange = useCallback((updates: Record<string, string>) => {
-    startTransition(() => setParams(updates))
-  }, [setParams])
+  const handleParamsChange = useCallback(
+    (updates: Record<string, string>) => {
+      startTransition(() => setParams(updates))
+    },
+    [setParams]
+  )
 
-  const navigateImage = useCallback((dir: 'prev' | 'next') => {
-    if (!selectedImage || !data) return
-    const items = data.items
-    const idx = items.findIndex(i => i.id === selectedImage.id)
-    if (idx === -1) return
-    const next = dir === 'prev'
-      ? (idx > 0 ? items[idx - 1] : items[items.length - 1])
-      : (idx < items.length - 1 ? items[idx + 1] : items[0])
-    setSelectedImage(next!)
-  }, [selectedImage, data])
+  const navigateImage = useCallback(
+    (dir: 'prev' | 'next') => {
+      if (!selectedImage || !data) return
+      const items = data.items
+      const idx = items.findIndex(i => i.id === selectedImage.id)
+      if (idx === -1) return
+      const next =
+        dir === 'prev'
+          ? idx > 0
+            ? items[idx - 1]
+            : items[items.length - 1]
+          : idx < items.length - 1
+            ? items[idx + 1]
+            : items[0]
+      setSelectedImage(next!)
+    },
+    [selectedImage, data]
+  )
 
   const totalCount = data?.pagination.totalCount ?? 0
 
@@ -556,7 +631,10 @@ export default function GalleryPageClient({ availableYears, categories }: Galler
                 </div>
               ))}
             </div>
-            <Pagination pagination={data.pagination} onPage={p => handleParamsChange({ page: String(p) })} />
+            <Pagination
+              pagination={data.pagination}
+              onPage={p => handleParamsChange({ page: String(p) })}
+            />
           </>
         )}
       </div>

@@ -1,51 +1,49 @@
 # Archive Index — 2026-05
 
-| Feature                     | Match Rate | Completed  | Documents                                                                                                                                                                                                                               |
-| --------------------------- | :--------: | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| jest-clerk-esm-fix          |    95%     | 2026-05-01 | [Plan](jest-clerk-esm-fix/jest-clerk-esm-fix.plan.md) / [Analysis](jest-clerk-esm-fix/jest-clerk-esm-fix.analysis.md) / [Report](jest-clerk-esm-fix/jest-clerk-esm-fix.report.md)                                                       |
-| tests-stale-graphql-extras  |    100%    | 2026-05-01 | [Plan](tests-stale-graphql-extras/tests-stale-graphql-extras.plan.md) / [Analysis](tests-stale-graphql-extras/tests-stale-graphql-extras.analysis.md) / [Report](tests-stale-graphql-extras/tests-stale-graphql-extras.report.md)       |
-| tests-stale-route-extras    |    100%    | 2026-05-01 | [Plan](tests-stale-route-extras/tests-stale-route-extras.plan.md) / [Analysis](tests-stale-route-extras/tests-stale-route-extras.analysis.md) / [Report](tests-stale-route-extras/tests-stale-route-extras.report.md)                   |
-| tests-route-dataloader-mock |    95%     | 2026-05-01 | [Plan](tests-route-dataloader-mock/tests-route-dataloader-mock.plan.md) / [Analysis](tests-route-dataloader-mock/tests-route-dataloader-mock.analysis.md) / [Report](tests-route-dataloader-mock/tests-route-dataloader-mock.report.md) |
-| tests-route-auth-cleanup    |    100%    | 2026-05-01 | [Plan](tests-route-auth-cleanup/tests-route-auth-cleanup.plan.md) / [Analysis](tests-route-auth-cleanup/tests-route-auth-cleanup.analysis.md) / [Report](tests-route-auth-cleanup/tests-route-auth-cleanup.report.md)                   |
-| tests-route-mutation-auth   |    100%    | 2026-05-01 | [Plan](tests-route-mutation-auth/tests-route-mutation-auth.plan.md) / [Analysis](tests-route-mutation-auth/tests-route-mutation-auth.analysis.md) / [Report](tests-route-mutation-auth/tests-route-mutation-auth.report.md)             |
-| tests-route-error-policy    |    100%    | 2026-05-01 | [Plan](tests-route-error-policy/tests-route-error-policy.plan.md) / [Analysis](tests-route-error-policy/tests-route-error-policy.analysis.md) / [Report](tests-route-error-policy/tests-route-error-policy.report.md)                   |
-| tests-realtime-async-fix    |    95%     | 2026-05-02 | [Plan](tests-realtime-async-fix/tests-realtime-async-fix.plan.md) / [Analysis](tests-realtime-async-fix/tests-realtime-async-fix.analysis.md) / [Report](tests-realtime-async-fix/tests-realtime-async-fix.report.md)                   |
-| tests-stale-member-extras-spike | 100%   | 2026-05-02 | [Plan](tests-stale-member-extras-spike/tests-stale-member-extras-spike.plan.md) / [Analysis](tests-stale-member-extras-spike/tests-stale-member-extras-spike.analysis.md) / [Report](tests-stale-member-extras-spike/tests-stale-member-extras-spike.report.md) |
-| tests-stale-member-thenable-fix | 100%   | 2026-05-02 | [Plan](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.plan.md) / [Analysis](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.analysis.md) / [Report](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.report.md) |
-| tests-stale-member-schema-rewrite | 90%  | 2026-05-02 | [Plan](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.plan.md) / [Analysis](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.analysis.md) / [Report](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.report.md) |
+| Feature                           | Match Rate | Completed  | Documents                                                                                                                                                                                                                                                                   |
+| --------------------------------- | :--------: | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| jest-clerk-esm-fix                |    95%     | 2026-05-01 | [Plan](jest-clerk-esm-fix/jest-clerk-esm-fix.plan.md) / [Analysis](jest-clerk-esm-fix/jest-clerk-esm-fix.analysis.md) / [Report](jest-clerk-esm-fix/jest-clerk-esm-fix.report.md)                                                                                           |
+| tests-stale-graphql-extras        |    100%    | 2026-05-01 | [Plan](tests-stale-graphql-extras/tests-stale-graphql-extras.plan.md) / [Analysis](tests-stale-graphql-extras/tests-stale-graphql-extras.analysis.md) / [Report](tests-stale-graphql-extras/tests-stale-graphql-extras.report.md)                                           |
+| tests-stale-route-extras          |    100%    | 2026-05-01 | [Plan](tests-stale-route-extras/tests-stale-route-extras.plan.md) / [Analysis](tests-stale-route-extras/tests-stale-route-extras.analysis.md) / [Report](tests-stale-route-extras/tests-stale-route-extras.report.md)                                                       |
+| tests-route-dataloader-mock       |    95%     | 2026-05-01 | [Plan](tests-route-dataloader-mock/tests-route-dataloader-mock.plan.md) / [Analysis](tests-route-dataloader-mock/tests-route-dataloader-mock.analysis.md) / [Report](tests-route-dataloader-mock/tests-route-dataloader-mock.report.md)                                     |
+| tests-route-auth-cleanup          |    100%    | 2026-05-01 | [Plan](tests-route-auth-cleanup/tests-route-auth-cleanup.plan.md) / [Analysis](tests-route-auth-cleanup/tests-route-auth-cleanup.analysis.md) / [Report](tests-route-auth-cleanup/tests-route-auth-cleanup.report.md)                                                       |
+| tests-route-mutation-auth         |    100%    | 2026-05-01 | [Plan](tests-route-mutation-auth/tests-route-mutation-auth.plan.md) / [Analysis](tests-route-mutation-auth/tests-route-mutation-auth.analysis.md) / [Report](tests-route-mutation-auth/tests-route-mutation-auth.report.md)                                                 |
+| tests-route-error-policy          |    100%    | 2026-05-01 | [Plan](tests-route-error-policy/tests-route-error-policy.plan.md) / [Analysis](tests-route-error-policy/tests-route-error-policy.analysis.md) / [Report](tests-route-error-policy/tests-route-error-policy.report.md)                                                       |
+| tests-realtime-async-fix          |    95%     | 2026-05-02 | [Plan](tests-realtime-async-fix/tests-realtime-async-fix.plan.md) / [Analysis](tests-realtime-async-fix/tests-realtime-async-fix.analysis.md) / [Report](tests-realtime-async-fix/tests-realtime-async-fix.report.md)                                                       |
+| tests-stale-member-extras-spike   |    100%    | 2026-05-02 | [Plan](tests-stale-member-extras-spike/tests-stale-member-extras-spike.plan.md) / [Analysis](tests-stale-member-extras-spike/tests-stale-member-extras-spike.analysis.md) / [Report](tests-stale-member-extras-spike/tests-stale-member-extras-spike.report.md)             |
+| tests-stale-member-thenable-fix   |    100%    | 2026-05-02 | [Plan](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.plan.md) / [Analysis](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.analysis.md) / [Report](tests-stale-member-thenable-fix/tests-stale-member-thenable-fix.report.md)             |
+| tests-stale-member-schema-rewrite |    90%     | 2026-05-02 | [Plan](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.plan.md) / [Analysis](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.analysis.md) / [Report](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.report.md) |
 
 ## Highlights
 
 - **tests-stale-member-schema-rewrite** (90%, 2026-05-02): rev β #11. 📐 부모
-  사이클 ejection (dot file 9 fail) 정식 처리. mockMember 구조 + DTO + assertion +
-  dead method 일괄 정리 (snake_case → camelCase, status 필드 추가, updateMemberLevel
-  describe 삭제). 1 file 9 hunks (+51/-78). PR #21 admin merge `65971e47`.
-  **Local 52/52 PASS**, CI passed 432→439 (+7, mini-do +9 -2 CI variance, 첫 90%
-  Match). **14 chain 누적 228→439 (+211, +93%)**. Test Suites 12→13 pass. rev β
-  11연속 (Match avg 97.7%, 2 unplanned ejection — CI env variance). 핵심 학습:
-  TypeScript `as unknown as Member` lenient cast → runtime 차이 가능, CI env
-  variance 사전 정의 어려움 (Karpathy §1 한계).
-
+  사이클 ejection (dot file 9 fail) 정식 처리. mockMember 구조 + DTO +
+  assertion + dead method 일괄 정리 (snake_case → camelCase, status 필드 추가,
+  updateMemberLevel describe 삭제). 1 file 9 hunks (+51/-78). PR #21 admin merge
+  `65971e47`. **Local 52/52 PASS**, CI passed 432→439 (+7, mini-do +9 -2 CI
+  variance, 첫 90% Match). **14 chain 누적 228→439 (+211, +93%)**. Test Suites
+  12→13 pass. rev β 11연속 (Match avg 97.7%, 2 unplanned ejection — CI env
+  variance). 핵심 학습: TypeScript `as unknown as Member` lenient cast → runtime
+  차이 가능, CI env variance 사전 정의 어려움 (Karpathy §1 한계).
 
 - **tests-stale-member-thenable-fix** (100%, 2026-05-02): rev β #10. 🪡 hyphen
-  file thenable 무한 재귀 fix. `Promise.resolve(this)` (this가 thenable) →
-  plain object unwrap 후 resolve. 1 file 1 hunk (+8/-3). PR #20 admin merge
-  `15485e42`. **hyphen file 0 → 13/13 PASS** (was OOM). CI passed 419→432
-  (+13, **mini-do 100% 정확**). **13 chain 누적 228→432 (+204, +89%)**.
-  rev β 10연속 (Match avg 98.5%). 핵심: thenable mock의 Promise.resolve(this)
-  무한 재귀, plain object unwrap이 canonical. dot file 9 fail은 schema 재작성
-  필요 → tests-stale-member-schema-rewrite 별 사이클로 분리.
+  file thenable 무한 재귀 fix. `Promise.resolve(this)` (this가 thenable) → plain
+  object unwrap 후 resolve. 1 file 1 hunk (+8/-3). PR #20 admin merge
+  `15485e42`. **hyphen file 0 → 13/13 PASS** (was OOM). CI passed 419→432 (+13,
+  **mini-do 100% 정확**). **13 chain 누적 228→432 (+204, +89%)**. rev β 10연속
+  (Match avg 98.5%). 핵심: thenable mock의 Promise.resolve(this) 무한 재귀,
+  plain object unwrap이 canonical. dot file 9 fail은 schema 재작성 필요 →
+  tests-stale-member-schema-rewrite 별 사이클로 분리.
 
-
-- **tests-stale-member-extras-spike** (100%, 2026-05-02): rev β #9 (spike scope).
-  🔬 OOM root cause 식별 spike. 2 root cause 정확 식별: (1) `@jest/globals` jest
-  import → babel-jest hoisting 비활성화 → mock silent fail → real DB connection
-  → OOM. (2) thenable mock `Promise.resolve(this)` 무한 재귀 (hyphen file).
-  surgical fix: 양 file `jest` import 제거. **dot file OOM 79s→2.1s 해결**.
-  PR #19 admin merge `ca108522`. CI 419 변동 없음 (local-only OOM, CI 워커
-  메모리 충분). **rev β 9연속** (Match avg 98.3%). 핵심: memory feedback
-  사전 학습이 식별 30min 단축. 잔여 hyphen thenable → tests-stale-member-thenable-fix.
-
+- **tests-stale-member-extras-spike** (100%, 2026-05-02): rev β #9 (spike
+  scope). 🔬 OOM root cause 식별 spike. 2 root cause 정확 식별: (1)
+  `@jest/globals` jest import → babel-jest hoisting 비활성화 → mock silent fail
+  → real DB connection → OOM. (2) thenable mock `Promise.resolve(this)` 무한
+  재귀 (hyphen file). surgical fix: 양 file `jest` import 제거. **dot file OOM
+  79s→2.1s 해결**. PR #19 admin merge `ca108522`. CI 419 변동 없음 (local-only
+  OOM, CI 워커 메모리 충분). **rev β 9연속** (Match avg 98.3%). 핵심: memory
+  feedback 사전 학습이 식별 30min 단축. 잔여 hyphen thenable →
+  tests-stale-member-thenable-fix.
 
 - **tests-realtime-async-fix** (95%, 2026-05-02): rev β #8. ⏱️ Realtime 4 file
   `jest.useFakeTimers + setTimeout` 충돌을 canonical 패턴
@@ -56,25 +54,22 @@
   setTimeout 은 microtask flush 안 됨 → advanceTimersByTimeAsync 가 canonical
   (Jest 27+). 잔여 12 logic bug → tests-realtime-logic-fixes 별 사이클.
 
-
 - **tests-route-error-policy** (100%, 2026-05-01): rev β #7. 🎯 **route.test.ts
-  0 fail 달성**. F 그룹 3 fail (malformed JSON / non-existent field /
-  resolver exceptions) 각각 다른 root cause를 test assertion 수정만으로 해결
-  (source 무변경). 1 file 3 hunks. PR #17 admin merge `64936390`. CI passed
-  399→402 (+3, mini-do 정확 일치). **10 chain 누적 228→402 (+174, +76%)**.
-  rev β 7연속 (Match avg 98.6%). 핵심 학습: Apollo v4 default validation=400,
-  parse=throw, resolver throw=200+errors. vm-realm cross-realm instanceof 실패
-  → .name 비교. DataLoader resolver mock은 findMany (batchLoadFn).
+  0 fail 달성**. F 그룹 3 fail (malformed JSON / non-existent field / resolver
+  exceptions) 각각 다른 root cause를 test assertion 수정만으로 해결 (source
+  무변경). 1 file 3 hunks. PR #17 admin merge `64936390`. CI passed 399→402 (+3,
+  mini-do 정확 일치). **10 chain 누적 228→402 (+174, +76%)**. rev β 7연속 (Match
+  avg 98.6%). 핵심 학습: Apollo v4 default validation=400, parse=throw, resolver
+  throw=200+errors. vm-realm cross-realm instanceof 실패 → .name 비교.
+  DataLoader resolver mock은 findMany (batchLoadFn).
 
-
-- **tests-route-mutation-auth** (100%, 2026-05-01): rev β #6. 부모 5 ejection
-  중 D 그룹 (Mutation Operations 2 fail) 처리. C+E 패턴 (Clerk session mock) +
+- **tests-route-mutation-auth** (100%, 2026-05-01): rev β #6. 부모 5 ejection 중
+  D 그룹 (Mutation Operations 2 fail) 처리. C+E 패턴 (Clerk session mock) +
   GraphQL enum casing 분리 학습. 1 file 2 hunks (+10/-4). PR #16 admin merge
-  `b05f204e`. CI passed 397→399 (+2, mini-do 정확 일치). **9 chain 누적
-  228→399 (+171, +75%)**. rev β 6연속 검증 (Match avg 98.3%, ejection 0). 핵심
-  학습: `requireAdmin`은 DB lowercase `'admin'` 체크 / GraphQL `MemberStatus`
-  enum은 UPPERCASE 직렬화 → mock에서 두 레이어 분리 필수.
-
+  `b05f204e`. CI passed 397→399 (+2, mini-do 정확 일치). **9 chain 누적 228→399
+  (+171, +75%)**. rev β 6연속 검증 (Match avg 98.3%, ejection 0). 핵심 학습:
+  `requireAdmin`은 DB lowercase `'admin'` 체크 / GraphQL `MemberStatus` enum은
+  UPPERCASE 직렬화 → mock에서 두 레이어 분리 필수.
 
 - **jest-clerk-esm-fix** (95%, 2026-05-01): 부모 사이클 tests-stale-update의 G4
   unplanned ejection을 rev β 패턴(plan 전 mini-do 30분으로 가설 직접 검증)으로
