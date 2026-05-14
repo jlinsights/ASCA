@@ -11,18 +11,19 @@ parent_cycle: tests-route-auth-cleanup
 
 ## Match Rate: 100%
 
-| 항목 | Plan | 구현 | Match |
-|---|---|---|---|
-| Root cause 식별 | C+E와 동일 + enum casing 분리 | 정확히 일치 | ✅ |
-| Fix scope | 1 file 2 hunks | 1 file 2 hunks (+10/-4) | ✅ |
-| Mutation Operations 4/4 | GREEN | 4/4 GREEN | ✅ |
-| CI Tests passed delta | 397 → 399 (+2) | **397 → 399 (+2)** | ✅ |
-| Ejection 사전 정의 (F group) | 3 fail → tests-route-error-policy | 잔여 3 fail 정확히 F | ✅ |
-| Real time | ~75min | ~70min | ✅ |
+| 항목                         | Plan                              | 구현                    | Match |
+| ---------------------------- | --------------------------------- | ----------------------- | ----- |
+| Root cause 식별              | C+E와 동일 + enum casing 분리     | 정확히 일치             | ✅    |
+| Fix scope                    | 1 file 2 hunks                    | 1 file 2 hunks (+10/-4) | ✅    |
+| Mutation Operations 4/4      | GREEN                             | 4/4 GREEN               | ✅    |
+| CI Tests passed delta        | 397 → 399 (+2)                    | **397 → 399 (+2)**      | ✅    |
+| Ejection 사전 정의 (F group) | 3 fail → tests-route-error-policy | 잔여 3 fail 정확히 F    | ✅    |
+| Real time                    | ~75min                            | ~70min                  | ✅    |
 
 ## Findings
 
-1. **rev β 패턴 6연속 검증**: Match avg 98.3% (95/100/100/95/100/100), unplanned ejection 0
+1. **rev β 패턴 6연속 검증**: Match avg 98.3% (95/100/100/95/100/100), unplanned
+   ejection 0
 2. **신규 학습**: GraphQL enum 직렬화 layer는 DB casing과 별개 — mock에서 분리
 3. **mini-do 예측 정확도**: CI delta 정확히 +2 (mini-do 측정과 동일)
 
