@@ -18,17 +18,17 @@ const { createClient } = require('@supabase/supabase-js')
 
 // ─── 설정 ────────────────────────────────────────────────
 const BUCKET_NAME = 'gallery'
-const CONCURRENCY = 5       // 동시 업로드 수
+const CONCURRENCY = 5 // 동시 업로드 수
 const PUBLIC_DIR = path.join(__dirname, '../public')
 const GALLERY_DATA_PATH = path.join(__dirname, '../lib/data/gallery-data.json')
 const URL_MAP_PATH = path.join(__dirname, '../lib/data/gallery-url-map.json')
 
 const isDryRun = process.argv.includes('--dry-run')
-const isTest   = process.argv.includes('--test')
+const isTest = process.argv.includes('--test')
 
 // ─── Supabase 클라이언트 ─────────────────────────────────
-const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL
-const serviceKey   = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 if (!supabaseUrl || !serviceKey) {
   console.error('❌  NEXT_PUBLIC_SUPABASE_URL 또는 SUPABASE_SERVICE_ROLE_KEY가 없습니다.')
@@ -62,7 +62,7 @@ function collectTargets() {
   const paths = new Set()
 
   data.items.forEach(item => {
-    if (item.src.endsWith('.webp'))       paths.add(item.src)
+    if (item.src.endsWith('.webp')) paths.add(item.src)
     if (item.thumbnail.endsWith('.webp')) paths.add(item.thumbnail)
   })
 
@@ -91,15 +91,14 @@ async function uploadFile(localPath) {
 
   const fileBuffer = fs.readFileSync(fullLocalPath)
   const ext = path.extname(localPath).slice(1).toLowerCase()
-  const mimeType = ext === 'webp' ? 'image/webp' : ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : 'image/png'
+  const mimeType =
+    ext === 'webp' ? 'image/webp' : ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : 'image/png'
 
-  const { error } = await supabase.storage
-    .from(BUCKET_NAME)
-    .upload(storagePath, fileBuffer, {
-      contentType: mimeType,
-      cacheControl: '31536000', // 1년 캐시
-      upsert: false,
-    })
+  const { error } = await supabase.storage.from(BUCKET_NAME).upload(storagePath, fileBuffer, {
+    contentType: mimeType,
+    cacheControl: '31536000', // 1년 캐시
+    upsert: false,
+  })
 
   if (error) {
     return { localPath, storagePath, status: 'ERROR', error: error.message }
@@ -136,10 +135,14 @@ async function main() {
   // 용량 계산
   let totalBytes = 0
   targets.forEach(p => {
-    try { totalBytes += fs.statSync(path.join(PUBLIC_DIR, p)).size } catch {}
+    try {
+      totalBytes += fs.statSync(path.join(PUBLIC_DIR, p)).size
+    } catch {}
   })
 
-  console.log(`📁  업로드 대상: WebP ${targets.length}개 (${(totalBytes / 1024 / 1024).toFixed(0)} MB)`)
+  console.log(
+    `📁  업로드 대상: WebP ${targets.length}개 (${(totalBytes / 1024 / 1024).toFixed(0)} MB)`
+  )
 
   if (isDryRun) {
     console.log('\n📋  대상 파일 목록 (처음 10개):')
@@ -158,7 +161,10 @@ async function main() {
 
   // 업로드 실행
   console.log('\n⬆️  업로드 시작...')
-  let uploaded = 0, skipped = 0, errors = 0, missing = 0
+  let uploaded = 0,
+    skipped = 0,
+    errors = 0,
+    missing = 0
   const urlMap = fs.existsSync(URL_MAP_PATH)
     ? JSON.parse(fs.readFileSync(URL_MAP_PATH, 'utf-8'))
     : {}
@@ -187,7 +193,9 @@ async function main() {
     const done = uploaded + skipped + errors + missing
     if (done % 50 === 0 || done === targets.length) {
       const pct = ((done / targets.length) * 100).toFixed(0)
-      process.stdout.write(`\r   진행: ${done}/${targets.length} (${pct}%) ✅${uploaded} ⏭${skipped} ❌${errors}`)
+      process.stdout.write(
+        `\r   진행: ${done}/${targets.length} (${pct}%) ✅${uploaded} ⏭${skipped} ❌${errors}`
+      )
     }
   })
 

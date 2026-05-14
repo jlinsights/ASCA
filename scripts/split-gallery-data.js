@@ -32,7 +32,9 @@ for (const [year, items] of Object.entries(byYear)) {
     items,
   }
   fs.writeFileSync(outPath, JSON.stringify(payload))
-  console.log(`✅  gallery-${year}.json — ${items.length}개 (${(fs.statSync(outPath).size / 1024).toFixed(0)} KB)`)
+  console.log(
+    `✅  gallery-${year}.json — ${items.length}개 (${(fs.statSync(outPath).size / 1024).toFixed(0)} KB)`
+  )
 }
 
 console.log('\n🎉 분할 완료! 전체', data.items.length, '개')

@@ -16,13 +16,9 @@ const path = require('path')
 
 const isDryRun = process.argv.includes('--dry-run')
 
-const DATA_DIR    = path.join(__dirname, '../lib/data')
+const DATA_DIR = path.join(__dirname, '../lib/data')
 const URL_MAP_PATH = path.join(DATA_DIR, 'gallery-url-map.json')
-const FILES_TO_UPDATE = [
-  'gallery-data.json',
-  'gallery-2025.json',
-  'gallery-2026.json',
-]
+const FILES_TO_UPDATE = ['gallery-data.json', 'gallery-2025.json', 'gallery-2026.json']
 
 function updateFile(filename, urlMap) {
   const filePath = path.join(DATA_DIR, filename)
@@ -31,11 +27,12 @@ function updateFile(filename, urlMap) {
     return { updated: 0, unchanged: 0 }
   }
 
-  const raw  = fs.readFileSync(filePath, 'utf-8')
+  const raw = fs.readFileSync(filePath, 'utf-8')
   const data = JSON.parse(raw)
   const items = data.items ?? []
 
-  let updated = 0, unchanged = 0
+  let updated = 0,
+    unchanged = 0
 
   items.forEach(item => {
     let changed = false
@@ -54,7 +51,7 @@ function updateFile(filename, urlMap) {
   })
 
   if (!isDryRun) {
-    fs.writeFileSync(filePath, JSON.stringify(data))   // 압축 저장 (용량 절약)
+    fs.writeFileSync(filePath, JSON.stringify(data)) // 압축 저장 (용량 절약)
     // 분할 파일도 업데이트하기 위해 재분할 필요
   }
 
@@ -78,11 +75,14 @@ function main() {
   console.log(`🗺️   URL 맵 로드: ${mapSize}개 항목`)
   console.log('')
 
-  let totalUpdated = 0, totalUnchanged = 0
+  let totalUpdated = 0,
+    totalUnchanged = 0
 
   for (const filename of FILES_TO_UPDATE) {
     const { updated, unchanged } = updateFile(filename, urlMap)
-    console.log(`  ${isDryRun ? '[DRY]' : '✅'} ${filename}: ${updated}개 교체, ${unchanged}개 유지`)
+    console.log(
+      `  ${isDryRun ? '[DRY]' : '✅'} ${filename}: ${updated}개 교체, ${unchanged}개 유지`
+    )
     totalUpdated += updated
     totalUnchanged += unchanged
   }

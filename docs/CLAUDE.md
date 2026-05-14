@@ -66,13 +66,19 @@ npm run test:coverage    # Generate test coverage report
 
 ### Enterprise Architecture
 
-The platform uses a sophisticated enterprise architecture for scalability and security:
+The platform uses a sophisticated enterprise architecture for scalability and
+security:
 
-- **CQRS Pattern**: Separate buses for commands (`lib/cqrs/command-bus.ts`) and queries (`lib/cqrs/query-bus.ts`).
-- **Event Bus**: Asynchronous system communication via `lib/events/event-bus.ts`.
-- **Audit Trail**: Detailed tracking of all data changes and access attempts in `lib/audit/audit-trail.ts`.
-- **Agent Pattern**: Specialized services (e.g., `lib/agents/artist-agent.ts`) handling complex domain logic.
-- **Performance Monitoring**: Real-time metric collection and monitoring in `lib/monitoring/`.
+- **CQRS Pattern**: Separate buses for commands (`lib/cqrs/command-bus.ts`) and
+  queries (`lib/cqrs/query-bus.ts`).
+- **Event Bus**: Asynchronous system communication via
+  `lib/events/event-bus.ts`.
+- **Audit Trail**: Detailed tracking of all data changes and access attempts in
+  `lib/audit/audit-trail.ts`.
+- **Agent Pattern**: Specialized services (e.g., `lib/agents/artist-agent.ts`)
+  handling complex domain logic.
+- **Performance Monitoring**: Real-time metric collection and monitoring in
+  `lib/monitoring/`.
 
 ### Authentication
 
@@ -107,25 +113,34 @@ All content tables use consistent multilingual structure:
 
 ### Permission System (RBAC)
 
-Hierarchical and resource-based permissions defined in `lib/admin/permissions.ts`:
+Hierarchical and resource-based permissions defined in
+`lib/admin/permissions.ts`:
 
 - **Roles**: `SUPER_ADMIN`, `ADMIN`, `MODERATOR`, `EDITOR`, `ARTIST`, `MEMBER`.
-- **Wildcards**: Supports `*` for full access or `resource:*` for resource-specific wildcards.
-- **Validation**: Use `hasPermission` or `assertPermission` in routes and components.
-- **Security Context**: Operations are validated against a context containing user ID and required permissions.
+- **Wildcards**: Supports `*` for full access or `resource:*` for
+  resource-specific wildcards.
+- **Validation**: Use `hasPermission` or `assertPermission` in routes and
+  components.
+- **Security Context**: Operations are validated against a context containing
+  user ID and required permissions.
 
 ## Security Guidelines
 
 ### Data Protection & Compliance
 
-- **Input Sanitization**: Always use `sanitizeInput()` from `lib/security/security-middleware.ts` for user-provided data.
-- **Audit Logging**: All sensitive mutations MUST be logged via `auditTrail.trackDataChange()`.
-- **Access Tracking**: Unauthorized access attempts must be tracked via `auditTrail.trackAccess()`.
-- **Risk Scoring**: Operations are assigned a risk score; scores > 0.7 trigger high-risk alerts.
+- **Input Sanitization**: Always use `sanitizeInput()` from
+  `lib/security/security-middleware.ts` for user-provided data.
+- **Audit Logging**: All sensitive mutations MUST be logged via
+  `auditTrail.trackDataChange()`.
+- **Access Tracking**: Unauthorized access attempts must be tracked via
+  `auditTrail.trackAccess()`.
+- **Risk Scoring**: Operations are assigned a risk score; scores > 0.7 trigger
+  high-risk alerts.
 
 ### Security Middleware
 
-- All administrative API routes should use `SecurityMiddleware.validateOperation()`.
+- All administrative API routes should use
+  `SecurityMiddleware.validateOperation()`.
 - Maintain Row Level Security (RLS) in Supabase as the final line of defense.
 
 ## Development Patterns

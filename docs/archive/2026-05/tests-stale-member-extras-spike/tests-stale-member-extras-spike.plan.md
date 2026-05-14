@@ -11,7 +11,9 @@ status: draft
 
 ## §0. 컨텍스트
 
-- 부모 사이클 `tests-realtime-async-fix` 완료. 다음 작은 사이클 `tests-stale-member-extras` (10 fail 추정) 시도 중 OOM 발견 → spike로 root cause 식별
+- 부모 사이클 `tests-realtime-async-fix` 완료. 다음 작은 사이클
+  `tests-stale-member-extras` (10 fail 추정) 시도 중 OOM 발견 → spike로 root
+  cause 식별
 - spike scope = 식별 위주 (~30min)
 
 ## §1. 목표 (success criteria, Karpathy §4)
@@ -24,6 +26,7 @@ status: draft
 ## §2. Findings (mini-do 검증 완료)
 
 ### Root Cause 1: `@jest/globals` jest import (양 파일 공통)
+
 - `import { jest } from '@jest/globals'` → babel-jest hoisting **비활성화**
 - → `jest.mock('@/lib/repositories/member.repository')` 미작동
 - → 실제 MemberRepository instantiate (line 65)
@@ -31,6 +34,7 @@ status: draft
 - (메모리 `feedback_jest_globals_hoisting.md` 와 일치)
 
 ### Root Cause 2: thenable mock 무한 재귀 (hyphen 전용)
+
 - `mockSupabase` 객체 thenable 패턴 (line 35-37):
   ```js
   then(resolve, reject) { return Promise.resolve(this).then(resolve, reject) }
@@ -47,6 +51,7 @@ status: draft
 ```
 
 ### 효과
+
 - **member.service.test.ts (dot)**: OOM 사라짐 (79s → 2.1s, 9 fail / 32 pass)
 - **member-service.test.ts (hyphen)**: 부분 효과만 (thenable OOM 잔존)
 
@@ -64,15 +69,16 @@ status: draft
 
 ## §6. Estimate
 
-| Phase | Real |
-|---|---|
+| Phase                                | Real          |
+| ------------------------------------ | ------------- |
 | mini-do (root cause 식별 + 부분 fix) | 30min ✅ done |
-| Plan + Commit + PR | 20min |
-| CI + Analyze + Report + Archive | 30min |
-| **Total** | **~80min** |
+| Plan + Commit + PR                   | 20min         |
+| CI + Analyze + Report + Archive      | 30min         |
+| **Total**                            | **~80min**    |
 
 ## §7. 학습
 
-- `@jest/globals` jest import = babel-jest hoisting 비활성화 (silent mock fail → real instance → DB leak)
+- `@jest/globals` jest import = babel-jest hoisting 비활성화 (silent mock fail →
+  real instance → DB leak)
 - thenable mock은 `Promise.resolve(this)` 패턴 위험 (무한 재귀)
 - Spike scope ≠ fix scope (Karpathy §2 simplicity)

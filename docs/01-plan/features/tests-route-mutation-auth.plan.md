@@ -11,20 +11,23 @@ status: draft
 
 ## §0. 컨텍스트
 
-- 부모 사이클 `tests-route-auth-cleanup` (PR #15 admin merge `3608aa1c`) 에서 ejection된 D 그룹 (Mutation Operations 2 fail)
+- 부모 사이클 `tests-route-auth-cleanup` (PR #15 admin merge `3608aa1c`) 에서
+  ejection된 D 그룹 (Mutation Operations 2 fail)
 - 잔여: createMember/approveMember 성공 시나리오 인증 mock 누락
 - F 그룹 (Error Handling 3 fail)은 별 사이클 `tests-route-error-policy` 로 분리
 
 ## §1. 목표 (success criteria)
 
-- `app/api/graphql/__tests__/route.test.ts > Mutation Operations` 4 tests **all GREEN**
+- `app/api/graphql/__tests__/route.test.ts > Mutation Operations` 4 tests **all
+  GREEN**
 - ASCA Tests CI passed: 397 → **399** (+2)
 - 8 chain → 9 chain 누적 +171 (+75%)
 - rev β 패턴 6연속 검증 (Match avg 98%, 0 unplanned ejection)
 
 ### §1.1 Pre-defined ejection (Karpathy §1)
 
-- F 그룹 (3 fail): error policy 차이 — 별 사이클 `tests-route-error-policy` 로 처리
+- F 그룹 (3 fail): error policy 차이 — 별 사이클 `tests-route-error-policy` 로
+  처리
 
 ## §2. Root Cause (mini-do 검증 완료)
 
@@ -78,6 +81,7 @@ npx jest app/api/graphql/__tests__/route.test.ts -t "Mutation Operations"
 ```
 
 CI 확인:
+
 ```bash
 gh run list --branch fix/tests-route-mutation-auth --limit 1
 # Expected: Tests passed 397 → 399
@@ -85,10 +89,10 @@ gh run list --branch fix/tests-route-mutation-auth --limit 1
 
 ## §5. Estimate
 
-| Phase | Real |
-|---|---|
-| mini-do | 15min ✅ done |
-| Plan write | 10min |
-| Commit + PR + CI | 30min |
-| Analyze + Report + Archive | 20min |
-| **Total** | **~75min** |
+| Phase                      | Real          |
+| -------------------------- | ------------- |
+| mini-do                    | 15min ✅ done |
+| Plan write                 | 10min         |
+| Commit + PR + CI           | 30min         |
+| Analyze + Report + Archive | 20min         |
+| **Total**                  | **~75min**    |
