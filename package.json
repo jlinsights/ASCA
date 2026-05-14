@@ -96,7 +96,7 @@
     "gallery:upload:dry": "node scripts/upload-gallery-to-supabase.js --dry-run",
     "gallery:update-paths": "node scripts/update-gallery-paths.js",
     "gallery:update-paths:dry": "node scripts/update-gallery-paths.js --dry-run",
-    "prebuild": "npm run images:optimize"
+    "prebuild": "echo '✅ prebuild: 이미지 최적화 스킵 (Supabase CDN 사용)'"
   },
   "dependencies": {
     "@apollo/server": "^5.2.0",
@@ -192,6 +192,7 @@
     "@typescript-eslint/parser": "^6.21.0",
     "baseline-browser-mapping": "^2.10.29",
     "concurrently": "^8.2.2",
+    "critters": "^0.0.23",
     "cross-env": "^7.0.3",
     "drizzle-kit": "^0.31.8",
     "eslint": "^8.56.0",
