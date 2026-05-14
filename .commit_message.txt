@@ -1,1 +1,1 @@
-📝 docs(plan): asca-e2e-debt-roadmap + asca-e2e-clerk-unblock plan 신규 (Phase 1 즉시 분리 사이클)
+🚀 perf(web-vitals): 폰트 weight 슬림 + ISR + 이미지 사이즈 축소 + critical CSS 인라인
