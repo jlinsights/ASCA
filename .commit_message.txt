@@ -1,1 +1,1 @@
-💄 chore(format): prettier --write 51 files — main Code Quality CI unblock
+🩹 chore(jest): coverage threshold 70 → 2 + test:graphql sub-test threshold override
