@@ -1,1 +1,1 @@
-📝 chore(coderabbit): PR #23 수용 7건 일괄 처리 (JSDoc 5 + Image sizes 1 + Glossary 회귀 복원 + asca-test-suite-debt Plan)
+📝 docs(plan): asca-e2e-debt-roadmap + asca-e2e-clerk-unblock plan 신규 (Phase 1 즉시 분리 사이클)
