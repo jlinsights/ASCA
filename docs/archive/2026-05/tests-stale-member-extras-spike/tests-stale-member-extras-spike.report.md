@@ -5,7 +5,7 @@ phase: report
 match_rate: 100%
 revision: β
 chain_position: 12 (rev β #9)
-pr: "#19"
+pr: '#19'
 merge: ca108522
 scope: spike
 ---
@@ -15,6 +15,7 @@ scope: spike
 ## TL;DR
 
 🔬 OOM root cause 식별 spike. 2 root cause 정확 식별:
+
 1. `@jest/globals` jest import → babel-jest hoisting 비활성화 → mock silent fail
 2. thenable mock 무한 재귀 (hyphen file 전용)
 
@@ -24,13 +25,13 @@ file 잔존 (thenable). CI 419 변동 없음 (local-only OOM). **rev β 9연속 
 
 ## §1. Plan vs Reality
 
-| 항목 | Plan | Reality |
-|---|---|---|
-| Match Rate | ≥95% | **100%** |
-| Time | 80min | ~60min |
-| Spike scope | 식별만 (30min) | 식별 + surgical fix (60min) |
-| dot file OOM | 해결 시도 | **해결** (-77s) |
-| CI delta | 변동 가능 | 0 (local-only) |
+| 항목         | Plan           | Reality                     |
+| ------------ | -------------- | --------------------------- |
+| Match Rate   | ≥95%           | **100%**                    |
+| Time         | 80min          | ~60min                      |
+| Spike scope  | 식별만 (30min) | 식별 + surgical fix (60min) |
+| dot file OOM | 해결 시도      | **해결** (-77s)             |
+| CI delta     | 변동 가능      | 0 (local-only)              |
 
 ## §2. Root Cause 정리
 
@@ -67,25 +68,25 @@ const mockSupabase = {
 
 ## §3. Effect
 
-| 항목 | Before | After |
-|---|---|---|
-| dot file 시간 | 79s (OOM) | 2.1s |
-| dot file 결과 | 9 fail (가린 OOM) | 9 fail (clean) |
-| hyphen file | OOM | OOM (thenable 잔존) |
-| CI Tests passed | 419 | 419 (local-only fix) |
+| 항목            | Before            | After                |
+| --------------- | ----------------- | -------------------- |
+| dot file 시간   | 79s (OOM)         | 2.1s                 |
+| dot file 결과   | 9 fail (가린 OOM) | 9 fail (clean)       |
+| hyphen file     | OOM               | OOM (thenable 잔존)  |
+| CI Tests passed | 419               | 419 (local-only fix) |
 
 ## §4. rev β 9연속 검증
 
-| # | Cycle | Match | Ejection |
-|---|---|---|---|
-| 1-8 | (이전) | 95-100% | 0 |
-| 9 | **tests-stale-member-extras-spike** | **100%** | **0** |
-| **avg** | | **98.3%** | **0 unplanned** |
+| #       | Cycle                               | Match     | Ejection        |
+| ------- | ----------------------------------- | --------- | --------------- |
+| 1-8     | (이전)                              | 95-100%   | 0               |
+| 9       | **tests-stale-member-extras-spike** | **100%**  | **0**           |
+| **avg** |                                     | **98.3%** | **0 unplanned** |
 
 ## §5. 학습
 
-1. **`@jest/globals`에서 `jest` import 금지** (babel-jest hoisting 비활성화)
-   → memory feedback 사전 학습이 식별 시간 30min 단축
+1. **`@jest/globals`에서 `jest` import 금지** (babel-jest hoisting 비활성화) →
+   memory feedback 사전 학습이 식별 시간 30min 단축
 2. **thenable mock의 `Promise.resolve(this)` = 무한 재귀** (this가 thenable이면)
 3. **Local OOM ≠ CI failure** — DX 개선과 CI 신호 분리
 4. **Spike scope는 fix scope와 분리** (Karpathy §2 simplicity)

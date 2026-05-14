@@ -11,14 +11,14 @@ parent_cycle: tests-route-error-policy
 
 ## Match Rate: 95%
 
-| 항목 | Plan | 구현 | Match |
-|---|---|---|---|
-| Root cause 식별 | fake timer + setTimeout 충돌 | 정확 일치 | ✅ |
-| Fix scope | 4 file replace_all | 4 file (40 occurrences) | ✅ |
-| CI Tests passed delta | 402 → 418 (+16) | **402 → 419 (+17)** | ⚠️ +1 더 |
-| Real time | ~80min | ~70min | ✅ |
-| Source 변경 | 0 (test only) | 0 | ✅ |
-| Ejection 사전 정의 | 12 logic bug | 정확히 잔여 | ✅ |
+| 항목                  | Plan                         | 구현                    | Match    |
+| --------------------- | ---------------------------- | ----------------------- | -------- |
+| Root cause 식별       | fake timer + setTimeout 충돌 | 정확 일치               | ✅       |
+| Fix scope             | 4 file replace_all           | 4 file (40 occurrences) | ✅       |
+| CI Tests passed delta | 402 → 418 (+16)              | **402 → 419 (+17)**     | ⚠️ +1 더 |
+| Real time             | ~80min                       | ~70min                  | ✅       |
+| Source 변경           | 0 (test only)                | 0                       | ✅       |
+| Ejection 사전 정의    | 12 logic bug                 | 정확히 잔여             | ✅       |
 
 ## Findings
 
@@ -28,10 +28,9 @@ parent_cycle: tests-route-error-policy
 
 ## 추가 PASS (+1) 분석
 
-mini-do 측정 환경: local jsdom + 단일 worker
-CI 환경: parallel workers + node env
-→ 1 test의 race condition이 CI에서 우연히 통과 (재현 불안정)
-→ Match Rate 95% (CI 결과를 기준으로 정확)
+mini-do 측정 환경: local jsdom + 단일 worker CI 환경: parallel workers + node
+env → 1 test의 race condition이 CI에서 우연히 통과 (재현 불안정) → Match Rate
+95% (CI 결과를 기준으로 정확)
 
 ## Remaining (별 사이클)
 

@@ -11,7 +11,8 @@ status: draft
 
 ## §0. 컨텍스트
 
-- 부모 사이클 `tests-route-error-policy` (PR #17, route.test.ts 0 fail) 완료 후 다음 큰 효과 사이클
+- 부모 사이클 `tests-route-error-policy` (PR #17, route.test.ts 0 fail) 완료 후
+  다음 큰 효과 사이클
 - 5 realtime 테스트 파일 28 fail 중 timer 패턴 문제 (+16) 일괄 fix
 
 ## §1. 목표 (success criteria)
@@ -34,20 +35,22 @@ status: draft
 
 - `jest.useFakeTimers({ doNotFake: ['queueMicrotask', 'nextTick'] })` 활성 시
   `setTimeout`은 fake mocked
-- test에서 `await new Promise(resolve => setTimeout(resolve, 10))` 사용 →
-  fake setTimeout 콜백이 실제로 호출되지 않아 promise resolve 안 됨 → 5000ms timeout
-- canonical 패턴: `await jest.advanceTimersByTimeAsync(N)` (microtask flush + timer advance)
+- test에서 `await new Promise(resolve => setTimeout(resolve, 10))` 사용 → fake
+  setTimeout 콜백이 실제로 호출되지 않아 promise resolve 안 됨 → 5000ms timeout
+- canonical 패턴: `await jest.advanceTimersByTimeAsync(N)` (microtask flush +
+  timer advance)
 
 ## §3. Fix Pattern (4 files, 26 occurrences total via replace_all)
 
-| File | Occurrences | Δ fail |
-|---|---|---|
-| websocket-manager.test.ts | 16 | 13→2 (-11) |
-| e2e-flow.test.ts | 23 (+1 50ms) | 13→? |
-| sse-manager.test.ts | 1 | 2→2 (no change) |
-| event-emitter.test.ts | 2 | (already pass) |
+| File                      | Occurrences  | Δ fail          |
+| ------------------------- | ------------ | --------------- |
+| websocket-manager.test.ts | 16           | 13→2 (-11)      |
+| e2e-flow.test.ts          | 23 (+1 50ms) | 13→?            |
+| sse-manager.test.ts       | 1            | 2→2 (no change) |
+| event-emitter.test.ts     | 2            | (already pass)  |
 
 전체 변경:
+
 ```diff
 -await new Promise(resolve => setTimeout(resolve, N))
 +await jest.advanceTimersByTimeAsync(N)
@@ -64,16 +67,17 @@ mini-do 측정: **104 passed, 12 failed (+16)**
 
 ## §5. Estimate
 
-| Phase | Real |
-|---|---|
+| Phase                        | Real          |
+| ---------------------------- | ------------- |
 | mini-do (4 file replace_all) | 20min ✅ done |
-| Plan write | 10min |
-| Commit + PR + CI | 30min |
-| Analyze + Report + Archive | 20min |
-| **Total** | **~80min** |
+| Plan write                   | 10min         |
+| Commit + PR + CI             | 30min         |
+| Analyze + Report + Archive   | 20min         |
+| **Total**                    | **~80min**    |
 
 ## §6. 학습
 
 - jest.useFakeTimers + `setTimeout`은 microtask flush 안 됨
 - canonical 패턴: `jest.advanceTimersByTimeAsync(N)` (Jest 27+)
-- doNotFake에 setTimeout 추가는 다른 부작용 (auto-disconnect 테스트가 advance 사용)
+- doNotFake에 setTimeout 추가는 다른 부작용 (auto-disconnect 테스트가 advance
+  사용)

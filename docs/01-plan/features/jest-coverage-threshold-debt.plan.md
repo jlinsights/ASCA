@@ -14,15 +14,19 @@ status: draft
 - `asca-test-suite-debt` 사이클 PR #24 CI 검증에서 발견.
 - main + 모든 PR 의 `Tests` job 이 **`coverage threshold 70%` 미달** 로 exit 1.
   - 실측: statements 5.18%, branches 3.96%, lines 5.2%, functions 4.32%
-  - Test Suites: 13 passed, Tests: 368 passed — **fail 은 coverage 만 원인**, test 자체 GREEN
-- 70% 목표가 실현 불가능한 환경 (test 작성률 vs 코드베이스 규모 불균형). 정책 결정 필요.
+  - Test Suites: 13 passed, Tests: 368 passed — **fail 은 coverage 만 원인**,
+    test 자체 GREEN
+- 70% 목표가 실현 불가능한 환경 (test 작성률 vs 코드베이스 규모 불균형). 정책
+  결정 필요.
 - ⇒ 본 PR 과 무관한 **pre-existing coverage policy debt**. 분리 사이클로 처리.
 
 ## §1. 목표 (success criteria)
 
 - main + 모든 PR 의 `Tests` job exit 0 (coverage threshold 통과 또는 정책 변경)
-- 본 사이클 산출물이 회귀 방지 가드 역할 (threshold 폐지 시 점진적 회복 plan 명시)
-- 후속 사이클 (route-auth-mock / repository-test-mock 등) 의 coverage 기여를 측정 가능한 baseline 확립
+- 본 사이클 산출물이 회귀 방지 가드 역할 (threshold 폐지 시 점진적 회복 plan
+  명시)
+- 후속 사이클 (route-auth-mock / repository-test-mock 등) 의 coverage 기여를
+  측정 가능한 baseline 확립
 
 ## §2. 옵션 분석
 
@@ -36,13 +40,16 @@ status: draft
 
 - **장점**: 분모 축소로 coverage 비율 자연 회복. 70% 유지 가능
 - **단점**: 좁히기 결정 어려움 (어떤 영역 제외?). 잠재 사각지대
-- **후보 제외**: `lib/types/`, `lib/legacy*`, `lib/sync*`, `lib/airtable*`, generated 코드
+- **후보 제외**: `lib/types/`, `lib/legacy*`, `lib/sync*`, `lib/airtable*`,
+  generated 코드
 
 ### Option C: `coverageThreshold` 자체 제거 + per-package threshold 또는 changed-only coverage 도입
 
 - **장점**: 변경된 파일만 검증 → 점진적 강제. 신규 코드는 높은 threshold
-- **단점**: jest 28+ 의 `--changedSince` 또는 `coverageReporters: 'json-summary'` + 별 script 필요
-- **참고**: `jest --coverage --changedSince=main` 은 changed file 만 coverage 측정 가능
+- **단점**: jest 28+ 의 `--changedSince` 또는
+  `coverageReporters: 'json-summary'` + 별 script 필요
+- **참고**: `jest --coverage --changedSince=main` 은 changed file 만 coverage
+  측정 가능
 
 ### Option D: 절충 — Option A + B 결합
 
@@ -53,8 +60,10 @@ status: draft
 ## §3. Root Cause 가설
 
 1. **Test 커버리지 미달 자체** (95%+ 코드 미테스트) — 정책이 현실 반영 안 함
-2. **70% threshold 가 상속된 default** — 초기 설정이 보수적이었으나 코드베이스 성장과 함께 괴리
-3. **collectCoverageFrom 광범위** — `components/**`, `lib/**`, `app/**` 모두 포함. legacy / generated / types 도 분모
+2. **70% threshold 가 상속된 default** — 초기 설정이 보수적이었으나 코드베이스
+   성장과 함께 괴리
+3. **collectCoverageFrom 광범위** — `components/**`, `lib/**`, `app/**` 모두
+   포함. legacy / generated / types 도 분모
 
 ## §4. 작업 분해 (do 후보)
 
@@ -66,7 +75,8 @@ status: draft
 
 ## §5. 비범위 (out of scope)
 
-- test 추가 작성 (커버리지 회복 자체는 후속 사이클 — `test-coverage-recovery-cycle-N`)
+- test 추가 작성 (커버리지 회복 자체는 후속 사이클 —
+  `test-coverage-recovery-cycle-N`)
 - E2E coverage (Playwright) — 다른 메트릭
 - pre-commit hook 변경
 
@@ -85,4 +95,5 @@ status: draft
 
 - 부모 사이클: `asca-test-suite-debt` (PR #24, complete-with-split)
 - 관련 메모리: `project_asca_jest_coverage_threshold_debt_candidate.md`
-- 관련 사이클: `prettier-format-cleanup-debt` (Code Quality fail 의 별 root cause)
+- 관련 사이클: `prettier-format-cleanup-debt` (Code Quality fail 의 별 root
+  cause)
