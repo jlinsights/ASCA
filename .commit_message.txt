@@ -1,1 +1,1 @@
-🚀 perf(web-vitals): 폰트 weight 슬림 + ISR + 이미지 사이즈 축소 + critical CSS 인라인
+📝 docs(plan): Phase 2 component-split + prettier 일괄 정리 (main Code Quality unblock)
