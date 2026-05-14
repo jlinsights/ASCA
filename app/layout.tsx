@@ -20,18 +20,18 @@ const playfair = Playfair_Display({
 // 한국어 산세리프 - Noto Sans KR
 const notoSansKr = Noto_Sans_KR({
   subsets: ['latin'],
-  weight: ['400', '700'],      // 500 제거 (시각 인식 차이 미미, 폰트 파일 1개 절감)
+  weight: ['400', '700'], // 500 제거 (시각 인식 차이 미미, 폰트 파일 1개 절감)
   display: 'swap',
-  preload: true,               // 주요 한국어 폰트는 preload 유지
+  preload: true, // 주요 한국어 폰트는 preload 유지
   variable: '--font-noto-sans-kr',
 })
 
 // 한국어 세리프 - Noto Serif KR (서예 작품 제목용)
 const notoSerifKr = Noto_Serif_KR({
   subsets: ['latin'],
-  weight: ['400', '700'],      // 600 제거 (400과 700으로 충분히 구분)
+  weight: ['400', '700'], // 600 제거 (400과 700으로 충분히 구분)
   display: 'swap',
-  preload: false,              // 서예 작품 페이지 외에는 불필요
+  preload: false, // 서예 작품 페이지 외에는 불필요
   variable: '--font-noto-serif-kr',
 })
 
