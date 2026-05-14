@@ -1,0 +1,596 @@
+# Instincts generated from https://github.com/jlinsights/ASCA
+# Generated: 2026-04-25T12:00:21.626Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: ASCA-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/jlinsights/ASCA
+---
+
+# ASCA Commit Length
+
+## Action
+
+Write moderate-length commit messages (~64 characters)
+
+## Evidence
+
+- Average commit message length: 64 chars
+- Based on 13 commits
+
+---
+id: ASCA-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/jlinsights/ASCA
+---
+
+# ASCA Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: ASCA-import-alias
+trigger: "when importing modules"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/jlinsights/ASCA
+---
+
+# ASCA Import Alias
+
+## Action
+
+Use path aliases (@/, ~/) instead of relative imports
+
+## Evidence
+
+- Import analysis shows alias pattern
+- Example: import { x } from '@/lib/x'
+
+---
+id: ASCA-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/jlinsights/ASCA
+---
+
+# ASCA Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: ASCA-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/jlinsights/ASCA
+---
+
+# ASCA Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: ASCA-workflow-pdca-feature-delivery-cycle
+trigger: "when doing pdca feature delivery cycle"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/jlinsights/ASCA
+---
+
+# ASCA Workflow Pdca Feature Delivery Cycle
+
+## Action
+
+Follow the pdca-feature-delivery-cycle workflow:
+1. Write a detailed plan document outlining issues and implementation stages (docs/01-plan/...)
+2. Write a design document with before/after code, scenarios, and implementation order (docs/02-design/...)
+3. Commit code changes in discrete steps, each targeting specific files/issues (e.g., S1-S7, C1, H1, etc.)
+4. Update .bkit-memory.json to track progress and phases
+5. Analyze implementation vs. plan/design and write an analysis document (docs/03-analysis/...)
+6. Write a final report summarizing the cycle and outcomes (docs/04-report/...)
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: docs/01-plan/features/*.plan.md, docs/02-design/features/*.design.md, docs/03-analysis/*.analysis.md
+
+---
+id: ASCA-workflow-security-fix-implementation
+trigger: "when doing security fix implementation"
+confidence: 0.7
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/jlinsights/ASCA
+---
+
+# ASCA Workflow Security Fix Implementation
+
+## Action
+
+Follow the security-fix-implementation workflow:
+1. Identify the target file and security issue (e.g., C1, C2, H1-H4)
+2. Implement the fix in the relevant file (e.g., enforce auth, restrict access, sanitize errors)
+3. Optionally update related files for consistency or formatting
+4. Verify with tsc or similar checks
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~4x per month
+- Files: lib/graphql/context.ts, app/api/realtime/sse/route.ts, app/api/members/[id]/route.ts
+
+---
+id: ASCA-workflow-post-implementation-autoformat
+trigger: "when doing post implementation autoformat"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/jlinsights/ASCA
+---
+
+# ASCA Workflow Post Implementation Autoformat
+
+## Action
+
+Follow the post-implementation-autoformat workflow:
+1. Identify files changed in recent commits
+2. Run code formatter (e.g., prettier) on those files
+3. Commit the formatting changes separately
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: app/api/graphql/route.ts, .commit_message.txt
+
+---
+id: asca-instinct-file-naming-camelCase
+trigger: "When creating a new file in the codebase"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct File Naming CamelCase
+
+## Action
+
+Name the file using camelCase (e.g., myFeature.ts)
+
+## Evidence
+
+- Pattern in namingConventions.files
+- TypeScript file examples in app/, lib/
+
+---
+id: asca-instinct-function-naming-camelCase
+trigger: "When defining a new function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Function Naming CamelCase
+
+## Action
+
+Name the function using camelCase (e.g., getUserData)
+
+## Evidence
+
+- Pattern in namingConventions.functions
+- TypeScript code style
+
+---
+id: asca-instinct-class-naming-PascalCase
+trigger: "When defining a new class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Class Naming PascalCase
+
+## Action
+
+Name the class using PascalCase (e.g., UserSession)
+
+## Evidence
+
+- Pattern in namingConventions.classes
+
+---
+id: asca-instinct-constant-naming-SCREAMING_SNAKE_CASE
+trigger: "When defining a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Constant Naming SCREAMING_SNAKE_CASE
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE (e.g., MAX_RETRIES)
+
+## Evidence
+
+- Pattern in namingConventions.constants
+
+---
+id: asca-instinct-import-alias
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Import Alias
+
+## Action
+
+Use alias import style instead of relative paths
+
+## Evidence
+
+- Pattern in importStyle: alias
+- Seen in TypeScript code
+
+---
+id: asca-instinct-export-named
+trigger: "When exporting functions or classes"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Export Named
+
+## Action
+
+Use named exports instead of default exports
+
+## Evidence
+
+- Pattern in exportStyle: named
+
+---
+id: asca-instinct-try-catch-error-handling
+trigger: "When handling errors in code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Try Catch Error Handling
+
+## Action
+
+Use try-catch blocks for error handling
+
+## Evidence
+
+- Pattern in errorHandling.style: try-catch
+
+---
+id: asca-instinct-test-location-separate
+trigger: "When adding new tests"
+confidence: 0.7
+domain: testing
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Test Location Separate
+
+## Action
+
+Place test files in a separate directory from source code
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation: separate
+
+---
+id: asca-instinct-git-emoji-prefix-commit
+trigger: "When writing a commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Git Emoji Prefix Commit
+
+## Action
+
+Prefix the commit message with an emoji and a type (e.g., 🔐 fix(security): ...)
+
+## Evidence
+
+- Seen in commit examples: '🔐 fix(security): ...', '📝 plan: ...', '📐 design: ...'
+
+---
+id: asca-instinct-git-commit-message-format
+trigger: "When writing a commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Git Commit Message Format
+
+## Action
+
+Use the format: [emoji] [type(scope)]: [concise description]
+
+## Evidence
+
+- Seen in commit examples
+- Pattern in .commit_message.txt
+
+---
+id: asca-instinct-pdca-plan-doc
+trigger: "When starting a new feature or security hardening initiative"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Pdca Plan Doc
+
+## Action
+
+Write a detailed plan document in docs/01-plan/features/*.plan.md
+
+## Evidence
+
+- Workflow: pdca-feature-delivery-cycle
+- Commit: '📝 plan: ...'
+
+---
+id: asca-instinct-pdca-design-doc
+trigger: "When a plan document exists for a new feature or security initiative"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Pdca Design Doc
+
+## Action
+
+Write a design document in docs/02-design/features/*.design.md
+
+## Evidence
+
+- Workflow: pdca-feature-delivery-cycle
+- Commit: '📐 design: ...'
+
+---
+id: asca-instinct-pdca-code-commit
+trigger: "When implementing a planned feature or fix"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Pdca Code Commit
+
+## Action
+
+Commit code changes in discrete steps, each targeting specific files/issues
+
+## Evidence
+
+- Workflow: pdca-feature-delivery-cycle
+- Commit: '🔐 fix(security): ...'
+
+---
+id: asca-instinct-pdca-update-memory
+trigger: "When a phase of the PDCA cycle is completed"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Pdca Update Memory
+
+## Action
+
+Update .bkit-memory.json to track progress and phases
+
+## Evidence
+
+- Workflow: pdca-feature-delivery-cycle
+- CommitSequence includes .bkit-memory.json
+
+---
+id: asca-instinct-pdca-analysis-doc
+trigger: "When code implementation is complete for a feature or fix"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Pdca Analysis Doc
+
+## Action
+
+Write an analysis document in docs/03-analysis/*.analysis.md comparing implementation to plan/design
+
+## Evidence
+
+- Workflow: pdca-feature-delivery-cycle
+- CommitSequence includes analysis doc
+
+---
+id: asca-instinct-pdca-report-doc
+trigger: "When the PDCA cycle is completed"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Pdca Report Doc
+
+## Action
+
+Write a final report in docs/04-report/features/*.report.md
+
+## Evidence
+
+- Workflow: pdca-feature-delivery-cycle
+- CommitSequence includes report doc
+
+---
+id: asca-instinct-security-fix-identify
+trigger: "When a security issue is reported or detected"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Security Fix Identify
+
+## Action
+
+Identify the target file and security issue (e.g., C1, C2, H1-H4)
+
+## Evidence
+
+- Workflow: security-fix-implementation
+- Commit: '🔐 fix(security): ...'
+
+---
+id: asca-instinct-security-fix-implement
+trigger: "When a security issue and target file are identified"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Security Fix Implement
+
+## Action
+
+Implement the fix in the relevant file (e.g., enforce auth, restrict access, sanitize errors)
+
+## Evidence
+
+- Workflow: security-fix-implementation
+- Commit: '🔐 fix(security): ...'
+
+---
+id: asca-instinct-security-fix-consistency
+trigger: "When a security fix is implemented"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Security Fix Consistency
+
+## Action
+
+Optionally update related files for consistency or formatting
+
+## Evidence
+
+- Workflow: security-fix-implementation
+- CommitSequence step: update related files
+
+---
+id: asca-instinct-security-fix-verify
+trigger: "After implementing a security fix"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Security Fix Verify
+
+## Action
+
+Verify with tsc or similar type checks
+
+## Evidence
+
+- Workflow: security-fix-implementation
+- CommitSequence step: verify with tsc
+
+---
+id: asca-instinct-autoformat-changed-files
+trigger: "When code changes have been made as part of a feature or fix"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: jlinsights/ASCA
+---
+
+# Asca Instinct Autoformat Changed Files
+
+## Action
+
+Run code formatter (e.g., prettier) on files changed in recent commits and commit formatting separately
+
+## Evidence
+
+- Workflow: post-implementation-autoformat
+- CommitSequence: format changed files
+
