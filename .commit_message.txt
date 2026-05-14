@@ -1,1 +1,1 @@
-🩹 chore(jest): coverage threshold 70 → 2 + test:graphql sub-test threshold override
+📝 chore(coderabbit): PR #23 수용 7건 일괄 처리 (JSDoc 5 + Image sizes 1 + Glossary 회귀 복원 + asca-test-suite-debt Plan)
