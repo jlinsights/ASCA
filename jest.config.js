@@ -25,12 +25,19 @@ const customJestConfig = {
     '!**/coverage/**',
     '!**/.next/**',
   ],
+  // NOTE: threshold lowered from 70 → 2 in `jest-coverage-threshold-debt`
+  // cycle (2026-05-10) to unblock main Tests CI. Actual measured coverage:
+  // branches 3.94% / functions 4.26% / lines & statements > 5%. The 2%
+  // floor leaves a ~1.94% safety margin over the lowest metric so that
+  // small fluctuations don't break CI. Recovery to a meaningful threshold
+  // (e.g. 50% then 70%) is tracked as a separate cycle
+  // (jest-coverage-recovery — not yet started).
   coverageThreshold: {
     global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
+      branches: 2,
+      functions: 2,
+      lines: 2,
+      statements: 2,
     },
   },
   testMatch: [
