@@ -1,1 +1,1 @@
-♻️ refactor(component-split): Phase 2 T1 — sac-academy 572→403 + data 분리 (max-lines 14→13)
+♻️ refactor(component-split): Phase 2 T2 — GalleryFilterSections 551→106, 섹션 7개 _sections/ 분리 (max-lines 14→13)
