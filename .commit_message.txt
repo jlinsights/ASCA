@@ -1,1 +1,1 @@
-🛡️ 동적 Tailwind 클래스 차단 ESLint 규칙(no-restricted-syntax) 추가
+📝 DESIGN.md §10에 동적 Tailwind 클래스 금지 가이드라인 추가
