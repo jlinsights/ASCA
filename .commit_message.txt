@@ -1,1 +1,1 @@
-📝 DESIGN.md §10에 동적 Tailwind 클래스 금지 가이드라인 추가
+💄 동적 클래스 수정 파일 prettier 포맷 정리

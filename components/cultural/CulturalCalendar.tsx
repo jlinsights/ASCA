@@ -243,8 +243,7 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
 
   const getSeasonalColor = (season: string) => SEASONAL_BG[season] ?? SEASONAL_BG.default
 
-  const getEventTypeColor = (type: string) =>
-    EVENT_TYPE_CLASSES[type] ?? EVENT_TYPE_CLASSES.default
+  const getEventTypeColor = (type: string) => EVENT_TYPE_CLASSES[type] ?? EVENT_TYPE_CLASSES.default
 
   const formatEventTime = (date: Date, endDate?: Date) => {
     const timeFormat = new Intl.DateTimeFormat('en-US', {

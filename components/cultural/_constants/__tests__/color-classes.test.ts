@@ -23,7 +23,11 @@ describe('color-classes 정적 맵', () => {
     for (const s of Object.values(EVENT_TYPE_CLASSES)) all.push(...Object.values(s))
     for (const s of Object.values(SEASONAL_ACCENT_CLASSES)) all.push(...Object.values(s))
     for (const s of Object.values(STATUS_CLASSES)) all.push(...Object.values(s))
-    all.push(...Object.values(SEASONAL_BG), ...Object.values(WALL_BG), ...Object.values(DIFFICULTY_BG))
+    all.push(
+      ...Object.values(SEASONAL_BG),
+      ...Object.values(WALL_BG),
+      ...Object.values(DIFFICULTY_BG)
+    )
 
     expect(all.length).toBe(89)
     for (const cls of all) {

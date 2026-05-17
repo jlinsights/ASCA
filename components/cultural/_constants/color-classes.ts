@@ -17,13 +17,62 @@ export type EventTypeClassSet = {
 
 // CulturalCalendar.getEventTypeColor 용 — exhibition/workshop/ceremony/festival/lecture/performance
 export const EVENT_TYPE_CLASSES: ClassMap<EventTypeClassSet> = {
-  exhibition: { bg: 'bg-temple-gold', text: 'text-temple-gold', border: 'border-temple-gold', hoverBorder: 'hover:border-temple-gold/40', hoverBg: 'hover:bg-temple-gold/80', bgSoft: 'bg-temple-gold/20' },
-  workshop: { bg: 'bg-summer-jade', text: 'text-summer-jade', border: 'border-summer-jade', hoverBorder: 'hover:border-summer-jade/40', hoverBg: 'hover:bg-summer-jade/80', bgSoft: 'bg-summer-jade/20' },
-  ceremony: { bg: 'bg-vermillion', text: 'text-vermillion', border: 'border-vermillion', hoverBorder: 'hover:border-vermillion/40', hoverBg: 'hover:bg-vermillion/80', bgSoft: 'bg-vermillion/20' },
-  festival: { bg: 'bg-spring-blossom', text: 'text-spring-blossom', border: 'border-spring-blossom', hoverBorder: 'hover:border-spring-blossom/40', hoverBg: 'hover:bg-spring-blossom/80', bgSoft: 'bg-spring-blossom/20' },
-  lecture: { bg: 'bg-celadon-green', text: 'text-celadon-green', border: 'border-celadon-green', hoverBorder: 'hover:border-celadon-green/40', hoverBg: 'hover:bg-celadon-green/80', bgSoft: 'bg-celadon-green/20' },
-  performance: { bg: 'bg-plum-purple', text: 'text-plum-purple', border: 'border-plum-purple', hoverBorder: 'hover:border-plum-purple/40', hoverBg: 'hover:bg-plum-purple/80', bgSoft: 'bg-plum-purple/20' },
-  default: { bg: 'bg-ink-black', text: 'text-ink-black', border: 'border-ink-black', hoverBorder: 'hover:border-ink-black/40', hoverBg: 'hover:bg-ink-black/80', bgSoft: 'bg-ink-black/20' },
+  exhibition: {
+    bg: 'bg-temple-gold',
+    text: 'text-temple-gold',
+    border: 'border-temple-gold',
+    hoverBorder: 'hover:border-temple-gold/40',
+    hoverBg: 'hover:bg-temple-gold/80',
+    bgSoft: 'bg-temple-gold/20',
+  },
+  workshop: {
+    bg: 'bg-summer-jade',
+    text: 'text-summer-jade',
+    border: 'border-summer-jade',
+    hoverBorder: 'hover:border-summer-jade/40',
+    hoverBg: 'hover:bg-summer-jade/80',
+    bgSoft: 'bg-summer-jade/20',
+  },
+  ceremony: {
+    bg: 'bg-vermillion',
+    text: 'text-vermillion',
+    border: 'border-vermillion',
+    hoverBorder: 'hover:border-vermillion/40',
+    hoverBg: 'hover:bg-vermillion/80',
+    bgSoft: 'bg-vermillion/20',
+  },
+  festival: {
+    bg: 'bg-spring-blossom',
+    text: 'text-spring-blossom',
+    border: 'border-spring-blossom',
+    hoverBorder: 'hover:border-spring-blossom/40',
+    hoverBg: 'hover:bg-spring-blossom/80',
+    bgSoft: 'bg-spring-blossom/20',
+  },
+  lecture: {
+    bg: 'bg-celadon-green',
+    text: 'text-celadon-green',
+    border: 'border-celadon-green',
+    hoverBorder: 'hover:border-celadon-green/40',
+    hoverBg: 'hover:bg-celadon-green/80',
+    bgSoft: 'bg-celadon-green/20',
+  },
+  performance: {
+    bg: 'bg-plum-purple',
+    text: 'text-plum-purple',
+    border: 'border-plum-purple',
+    hoverBorder: 'hover:border-plum-purple/40',
+    hoverBg: 'hover:bg-plum-purple/80',
+    bgSoft: 'bg-plum-purple/20',
+  },
+  default: {
+    bg: 'bg-ink-black',
+    text: 'text-ink-black',
+    border: 'border-ink-black',
+    hoverBorder: 'hover:border-ink-black/40',
+    hoverBg: 'hover:bg-ink-black/80',
+    bgSoft: 'bg-ink-black/20',
+  },
 }
 
 export type SeasonalAccentClassSet = {
@@ -36,11 +85,41 @@ export type SeasonalAccentClassSet = {
 
 // CalligraphyHero.getSeasonalAccent 용 — spring/summer/autumn/winter
 export const SEASONAL_ACCENT_CLASSES: ClassMap<SeasonalAccentClassSet> = {
-  spring: { bg: 'bg-spring-blossom', bgSoft10: 'bg-spring-blossom/10', hoverBg: 'hover:bg-spring-blossom/80', border: 'border-spring-blossom', text: 'text-spring-blossom' },
-  summer: { bg: 'bg-summer-jade', bgSoft10: 'bg-summer-jade/10', hoverBg: 'hover:bg-summer-jade/80', border: 'border-summer-jade', text: 'text-summer-jade' },
-  autumn: { bg: 'bg-autumn-gold', bgSoft10: 'bg-autumn-gold/10', hoverBg: 'hover:bg-autumn-gold/80', border: 'border-autumn-gold', text: 'text-autumn-gold' },
-  winter: { bg: 'bg-winter-snow', bgSoft10: 'bg-winter-snow/10', hoverBg: 'hover:bg-winter-snow/80', border: 'border-winter-snow', text: 'text-winter-snow' },
-  default: { bg: 'bg-celadon-green', bgSoft10: 'bg-celadon-green/10', hoverBg: 'hover:bg-celadon-green/80', border: 'border-celadon-green', text: 'text-celadon-green' },
+  spring: {
+    bg: 'bg-spring-blossom',
+    bgSoft10: 'bg-spring-blossom/10',
+    hoverBg: 'hover:bg-spring-blossom/80',
+    border: 'border-spring-blossom',
+    text: 'text-spring-blossom',
+  },
+  summer: {
+    bg: 'bg-summer-jade',
+    bgSoft10: 'bg-summer-jade/10',
+    hoverBg: 'hover:bg-summer-jade/80',
+    border: 'border-summer-jade',
+    text: 'text-summer-jade',
+  },
+  autumn: {
+    bg: 'bg-autumn-gold',
+    bgSoft10: 'bg-autumn-gold/10',
+    hoverBg: 'hover:bg-autumn-gold/80',
+    border: 'border-autumn-gold',
+    text: 'text-autumn-gold',
+  },
+  winter: {
+    bg: 'bg-winter-snow',
+    bgSoft10: 'bg-winter-snow/10',
+    hoverBg: 'hover:bg-winter-snow/80',
+    border: 'border-winter-snow',
+    text: 'text-winter-snow',
+  },
+  default: {
+    bg: 'bg-celadon-green',
+    bgSoft10: 'bg-celadon-green/10',
+    hoverBg: 'hover:bg-celadon-green/80',
+    border: 'border-celadon-green',
+    text: 'text-celadon-green',
+  },
 }
 
 export type StatusClassSet = { bg: string; border: string }
