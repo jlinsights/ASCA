@@ -1,1 +1,1 @@
-♻️ refactor(component-split): Phase 2 T3 — artwork-upload-client 549→193, 섹션 5개 + types _components/ 분리 (max-lines 13→12)
+📝 docs: 동적 Tailwind 클래스 수정 spec·plan 문서 추가
