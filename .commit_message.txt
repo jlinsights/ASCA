@@ -1,1 +1,1 @@
-🐛 color-classes default 키 타입 보장 (ClassMap, noUncheckedIndexedAccess 대응)
+🐛 CulturalCalendar 동적 Tailwind 클래스 → 정적 맵 치환
