@@ -28,6 +28,7 @@ import {
   Search,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { DIFFICULTY_BG } from './_constants/color-classes'
 
 // Types for learning content
 interface LearningResource {
@@ -169,20 +170,8 @@ const LearningHub: React.FC<LearningHubProps> = ({
     return matchesSearch && matchesFilters
   })
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner':
-        return 'summer-jade'
-      case 'intermediate':
-        return 'autumn-gold'
-      case 'advanced':
-        return 'vermillion'
-      case 'master':
-        return 'temple-gold'
-      default:
-        return 'celadon-green'
-    }
-  }
+  const getDifficultyColor = (difficulty: string) =>
+    DIFFICULTY_BG[difficulty] ?? DIFFICULTY_BG.default
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -331,7 +320,7 @@ const LearningHub: React.FC<LearningHubProps> = ({
                     <p className='text-sm text-ink-black/70 mb-3'>{path.description}</p>
 
                     <div className='flex items-center gap-4 text-sm'>
-                      <Badge className={`bg-${getDifficultyColor(path.level)} text-ink-black`}>
+                      <Badge className={`${getDifficultyColor(path.level)} text-ink-black`}>
                         {path.level}
                       </Badge>
                       <span className='text-ink-black/60'>
@@ -376,7 +365,7 @@ const LearningHub: React.FC<LearningHubProps> = ({
             <div className='flex items-center gap-2'>
               <TypeIcon className='w-4 h-4 text-celadon-green' />
               <Badge
-                className={`bg-${getDifficultyColor(resource.difficulty)} text-ink-black text-xs`}
+                className={`${getDifficultyColor(resource.difficulty)} text-ink-black text-xs`}
               >
                 {resource.difficulty}
               </Badge>
