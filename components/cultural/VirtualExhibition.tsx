@@ -22,6 +22,7 @@ import {
   Share2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { WALL_BG } from './_constants/color-classes'
 
 // Types for virtual exhibition
 interface ExhibitionArtwork {
@@ -157,18 +158,7 @@ const VirtualExhibition: React.FC<VirtualExhibitionProps> = ({ exhibition, class
   }
 
   // Get wall color based on style
-  const getWallColor = () => {
-    switch (exhibition.galleryLayout.style) {
-      case 'traditional':
-        return 'rice-paper'
-      case 'modern':
-        return 'west-metal'
-      case 'minimalist':
-        return 'winter-snow'
-      default:
-        return 'rice-paper'
-    }
-  }
+  const getWallColor = () => WALL_BG[exhibition.galleryLayout.style] ?? WALL_BG.default
 
   // Get lighting effect
   const getLightingEffect = () => {
@@ -187,7 +177,7 @@ const VirtualExhibition: React.FC<VirtualExhibitionProps> = ({ exhibition, class
   // Gallery View Component
   const GalleryView = () => (
     <div
-      className={cn('relative w-full h-full overflow-hidden cursor-move', `bg-${getWallColor()}`)}
+      className={cn('relative w-full h-full overflow-hidden cursor-move', getWallColor())}
       style={{
         filter: getLightingEffect(),
         transform: `scale(${zoom}) translate(${position.x}px, ${position.y}px)`,

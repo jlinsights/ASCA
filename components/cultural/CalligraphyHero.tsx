@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ChevronLeft, ChevronRight, Play, Pause, Volume2, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { SEASONAL_ACCENT_CLASSES } from './_constants/color-classes'
 
 // Types for cultural calligraphy showcase
 interface CalligraphyArtwork {
@@ -84,37 +85,8 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
     setCurrentIndex(prev => (prev + 1) % artworks.length)
   }
 
-  const getSeasonalAccent = (season?: string) => {
-    switch (season) {
-      case 'spring':
-        return 'spring-blossom'
-      case 'summer':
-        return 'summer-jade'
-      case 'autumn':
-        return 'autumn-gold'
-      case 'winter':
-        return 'winter-snow'
-      default:
-        return 'celadon-green'
-    }
-  }
-
-  const getElementColor = (element?: string) => {
-    switch (element) {
-      case 'wood':
-        return 'east-wood'
-      case 'fire':
-        return 'south-fire'
-      case 'earth':
-        return 'center-earth'
-      case 'metal':
-        return 'west-metal'
-      case 'water':
-        return 'north-water'
-      default:
-        return 'ink-black'
-    }
-  }
+  const getSeasonalAccent = (season?: string) =>
+    SEASONAL_ACCENT_CLASSES[season ?? ''] ?? SEASONAL_ACCENT_CLASSES.default
 
   if (!artworks.length) {
     return (
@@ -218,7 +190,7 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                   variant='outline'
                   className={cn(
                     'border-temple-gold text-temple-gold font-english text-xs tracking-wider',
-                    `bg-${getSeasonalAccent(currentArtwork?.season || 'spring')}/10`
+                    getSeasonalAccent(currentArtwork?.season || 'spring').bgSoft10
                   )}
                 >
                   {currentArtwork?.artist.school}
@@ -228,8 +200,8 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                     variant='outline'
                     className={cn(
                       'text-xs capitalize',
-                      `border-${getSeasonalAccent(currentArtwork?.season || 'spring')}`,
-                      `text-${getSeasonalAccent(currentArtwork?.season || 'spring')}`
+                      getSeasonalAccent(currentArtwork?.season || 'spring').border,
+                      getSeasonalAccent(currentArtwork?.season || 'spring').text
                     )}
                   >
                     {currentArtwork?.season}
@@ -292,8 +264,8 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                 size='sm'
                 className={cn(
                   'flex-1 font-english font-medium transition-all duration-300',
-                  `bg-${getSeasonalAccent(currentArtwork?.season || 'spring')} text-ink-black`,
-                  `hover:bg-${getSeasonalAccent(currentArtwork?.season || 'spring')}/80`
+                  `${getSeasonalAccent(currentArtwork?.season || 'spring').bg} text-ink-black`,
+                  getSeasonalAccent(currentArtwork?.season || 'spring').hoverBg
                 )}
               >
                 Explore Collection
@@ -349,7 +321,7 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                   className={cn(
                     'h-1 rounded-full transition-all duration-300',
                     index === currentIndex
-                      ? `bg-${getSeasonalAccent(currentArtwork?.season || 'spring')} w-8`
+                      ? `${getSeasonalAccent(currentArtwork?.season || 'spring').bg} w-8`
                       : 'bg-rice-paper/20 w-4 hover:bg-rice-paper/40'
                   )}
                   aria-label={`Go to artwork ${index + 1}`}
