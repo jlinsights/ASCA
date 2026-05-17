@@ -1,6 +1,11 @@
 // 정적 Tailwind 클래스 맵 — 동적 `bg-${token}` 조합 금지(DESIGN.md §10) 대응.
 // 모든 값은 완성된 리터럴 클래스 문자열이어야 Tailwind JIT가 생성한다.
 
+// 모든 클래스 맵은 `default` 키를 fallback으로 보장한다.
+// Record 인덱스 접근은 noUncheckedIndexedAccess 하에 `T | undefined` 지만,
+// 명시 `default` 프로퍼티는 항상 정의돼 `map[key] ?? map.default` 결과가 `T` 로 좁혀진다.
+type ClassMap<T> = Record<string, T> & { default: T }
+
 export type EventTypeClassSet = {
   bg: string
   text: string
@@ -11,7 +16,7 @@ export type EventTypeClassSet = {
 }
 
 // CulturalCalendar.getEventTypeColor 용 — exhibition/workshop/ceremony/festival/lecture/performance
-export const EVENT_TYPE_CLASSES: Record<string, EventTypeClassSet> = {
+export const EVENT_TYPE_CLASSES: ClassMap<EventTypeClassSet> = {
   exhibition: { bg: 'bg-temple-gold', text: 'text-temple-gold', border: 'border-temple-gold', hoverBorder: 'hover:border-temple-gold/40', hoverBg: 'hover:bg-temple-gold/80', bgSoft: 'bg-temple-gold/20' },
   workshop: { bg: 'bg-summer-jade', text: 'text-summer-jade', border: 'border-summer-jade', hoverBorder: 'hover:border-summer-jade/40', hoverBg: 'hover:bg-summer-jade/80', bgSoft: 'bg-summer-jade/20' },
   ceremony: { bg: 'bg-vermillion', text: 'text-vermillion', border: 'border-vermillion', hoverBorder: 'hover:border-vermillion/40', hoverBg: 'hover:bg-vermillion/80', bgSoft: 'bg-vermillion/20' },
@@ -30,7 +35,7 @@ export type SeasonalAccentClassSet = {
 }
 
 // CalligraphyHero.getSeasonalAccent 용 — spring/summer/autumn/winter
-export const SEASONAL_ACCENT_CLASSES: Record<string, SeasonalAccentClassSet> = {
+export const SEASONAL_ACCENT_CLASSES: ClassMap<SeasonalAccentClassSet> = {
   spring: { bg: 'bg-spring-blossom', bgSoft10: 'bg-spring-blossom/10', hoverBg: 'hover:bg-spring-blossom/80', border: 'border-spring-blossom', text: 'text-spring-blossom' },
   summer: { bg: 'bg-summer-jade', bgSoft10: 'bg-summer-jade/10', hoverBg: 'hover:bg-summer-jade/80', border: 'border-summer-jade', text: 'text-summer-jade' },
   autumn: { bg: 'bg-autumn-gold', bgSoft10: 'bg-autumn-gold/10', hoverBg: 'hover:bg-autumn-gold/80', border: 'border-autumn-gold', text: 'text-autumn-gold' },
@@ -41,7 +46,7 @@ export const SEASONAL_ACCENT_CLASSES: Record<string, SeasonalAccentClassSet> = {
 export type StatusClassSet = { bg: string; border: string }
 
 // ArtistPortfolioGrid.getStatusColor 용 — featured/active/historical
-export const STATUS_CLASSES: Record<string, StatusClassSet> = {
+export const STATUS_CLASSES: ClassMap<StatusClassSet> = {
   featured: { bg: 'bg-temple-gold', border: 'border-temple-gold' },
   active: { bg: 'bg-summer-jade', border: 'border-summer-jade' },
   historical: { bg: 'bg-autumn-gold', border: 'border-autumn-gold' },
@@ -49,7 +54,7 @@ export const STATUS_CLASSES: Record<string, StatusClassSet> = {
 }
 
 // CulturalCalendar.getSeasonalColor 용 — bg 클래스만 필요
-export const SEASONAL_BG: Record<string, string> = {
+export const SEASONAL_BG: ClassMap<string> = {
   spring: 'bg-spring-blossom',
   summer: 'bg-summer-jade',
   autumn: 'bg-autumn-gold',
@@ -58,7 +63,7 @@ export const SEASONAL_BG: Record<string, string> = {
 }
 
 // VirtualExhibition.getWallColor 용 — galleryLayout.style 키
-export const WALL_BG: Record<string, string> = {
+export const WALL_BG: ClassMap<string> = {
   traditional: 'bg-rice-paper',
   modern: 'bg-west-metal',
   minimalist: 'bg-winter-snow',
@@ -66,7 +71,7 @@ export const WALL_BG: Record<string, string> = {
 }
 
 // LearningHub.getDifficultyColor 용 — beginner/intermediate/advanced/master
-export const DIFFICULTY_BG: Record<string, string> = {
+export const DIFFICULTY_BG: ClassMap<string> = {
   beginner: 'bg-summer-jade',
   intermediate: 'bg-autumn-gold',
   advanced: 'bg-vermillion',

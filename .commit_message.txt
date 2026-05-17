@@ -1,1 +1,1 @@
-✨ cultural 컴포넌트 정적 Tailwind 클래스 맵 추가
+🐛 color-classes default 키 타입 보장 (ClassMap, noUncheckedIndexedAccess 대응)
