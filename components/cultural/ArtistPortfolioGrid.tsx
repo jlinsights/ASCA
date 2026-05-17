@@ -20,6 +20,7 @@ import {
   Share2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { STATUS_CLASSES } from './_constants/color-classes'
 
 // Types for artist portfolio
 interface Artist {
@@ -138,18 +139,7 @@ const ArtistPortfolioGrid: React.FC<ArtistPortfolioGridProps> = ({
     [artists]
   )
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'featured':
-        return 'temple-gold'
-      case 'active':
-        return 'summer-jade'
-      case 'historical':
-        return 'autumn-gold'
-      default:
-        return 'celadon-green'
-    }
-  }
+  const getStatusColor = (status: string) => STATUS_CLASSES[status] ?? STATUS_CLASSES.default
 
   const getCardHeight = (index: number) => {
     if (currentLayout !== 'masonry') return 'auto'
@@ -206,7 +196,7 @@ const ArtistPortfolioGrid: React.FC<ArtistPortfolioGridProps> = ({
         <Badge
           className={cn(
             'absolute top-3 left-3 text-xs font-medium',
-            `bg-${getStatusColor(artist.status)} text-ink-black border-${getStatusColor(artist.status)}`
+            `${getStatusColor(artist.status).bg} text-ink-black ${getStatusColor(artist.status).border}`
           )}
         >
           {artist.status}

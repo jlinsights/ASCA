@@ -1,1 +1,1 @@
-🐛 VirtualExhibition 동적 Tailwind 클래스 → 정적 맵 치환
+🐛 ArtistPortfolioGrid 동적 Tailwind 클래스 → 정적 맵 치환
