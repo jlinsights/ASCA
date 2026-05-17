@@ -19,6 +19,7 @@ import {
   Sun,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { EVENT_TYPE_CLASSES, SEASONAL_BG } from './_constants/color-classes'
 
 // Types for cultural events
 interface CulturalEvent {
@@ -240,39 +241,9 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
     })
   }
 
-  const getSeasonalColor = (season: string) => {
-    switch (season) {
-      case 'spring':
-        return 'spring-blossom'
-      case 'summer':
-        return 'summer-jade'
-      case 'autumn':
-        return 'autumn-gold'
-      case 'winter':
-        return 'winter-snow'
-      default:
-        return 'celadon-green'
-    }
-  }
+  const getSeasonalColor = (season: string) => SEASONAL_BG[season] ?? SEASONAL_BG.default
 
-  const getEventTypeColor = (type: string) => {
-    switch (type) {
-      case 'exhibition':
-        return 'temple-gold'
-      case 'workshop':
-        return 'summer-jade'
-      case 'ceremony':
-        return 'vermillion'
-      case 'festival':
-        return 'spring-blossom'
-      case 'lecture':
-        return 'celadon-green'
-      case 'performance':
-        return 'plum-purple'
-      default:
-        return 'ink-black'
-    }
-  }
+  const getEventTypeColor = (type: string) => EVENT_TYPE_CLASSES[type] ?? EVENT_TYPE_CLASSES.default
 
   const formatEventTime = (date: Date, endDate?: Date) => {
     const timeFormat = new Intl.DateTimeFormat('en-US', {
@@ -295,7 +266,7 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
       className={cn(
         'group hover:shadow-lg transition-all duration-300 border-celadon-green/20',
         compact ? 'p-2' : 'p-4',
-        `hover:border-${getEventTypeColor(event.type)}/40`
+        getEventTypeColor(event.type).hoverBorder
       )}
     >
       <CardContent className={cn('p-0', !compact && 'space-y-3')}>
@@ -320,7 +291,7 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
               variant='outline'
               className={cn(
                 'text-xs',
-                `border-${getEventTypeColor(event.type)} text-${getEventTypeColor(event.type)}`
+                `${getEventTypeColor(event.type).border} ${getEventTypeColor(event.type).text}`
               )}
             >
               {event.type}
@@ -388,7 +359,7 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
                 size='sm'
                 className={cn(
                   'flex-1 font-english',
-                  `bg-${getEventTypeColor(event.type)} text-ink-black hover:bg-${getEventTypeColor(event.type)}/80`
+                  `${getEventTypeColor(event.type).bg} text-ink-black ${getEventTypeColor(event.type).hoverBg}`
                 )}
               >
                 {event.registrationRequired ? 'Register' : 'Learn More'}
@@ -441,7 +412,7 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
                     <div
                       className={cn(
                         'w-4 h-4 rounded-full mx-auto',
-                        `bg-${getSeasonalColor(traditionalDate.season)}`
+                        getSeasonalColor(traditionalDate.season)
                       )}
                     />
                   )}
@@ -517,7 +488,7 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
                         key={event.id}
                         className={cn(
                           'text-xs p-1 rounded mb-1 line-clamp-1 cursor-pointer hover:opacity-80',
-                          `bg-${getEventTypeColor(event.type)}/20 text-${getEventTypeColor(event.type)}`
+                          `${getEventTypeColor(event.type).bgSoft} ${getEventTypeColor(event.type).text}`
                         )}
                       >
                         {event.title.original}
@@ -634,7 +605,7 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
                         className={cn(
                           'cursor-pointer transition-colors capitalize',
                           selectedFilters.includes(type)
-                            ? `bg-${getEventTypeColor(type)} text-ink-black`
+                            ? `${getEventTypeColor(type).bg} text-ink-black`
                             : 'border-ink-black/20 hover:bg-ink-black/5'
                         )}
                         onClick={() => {
@@ -659,7 +630,7 @@ const CulturalCalendar: React.FC<CulturalCalendarProps> = ({
                         className={cn(
                           'cursor-pointer transition-colors capitalize',
                           selectedFilters.includes(season)
-                            ? `bg-${getSeasonalColor(season)} text-ink-black`
+                            ? `${getSeasonalColor(season)} text-ink-black`
                             : 'border-ink-black/20 hover:bg-ink-black/5'
                         )}
                         onClick={() => {
