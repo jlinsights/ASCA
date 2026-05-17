@@ -1,1 +1,1 @@
-💄 동적 클래스 수정 파일 prettier 포맷 정리
+💄 superpowers spec·plan 문서 prettier 포맷 정리
