@@ -7,7 +7,14 @@
     "react-hooks/exhaustive-deps": "warn",
     "prefer-const": "error",
     "no-var": "error",
-    "max-lines": ["warn", { "max": 500, "skipBlankLines": true, "skipComments": true }]
+    "max-lines": ["warn", { "max": 500, "skipBlankLines": true, "skipComments": true }],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "TemplateElement[tail=false][value.raw=/(^|[ :])(bg|text|border|ring|from|to|via|fill|stroke)-$/]",
+        "message": "동적 Tailwind 클래스 금지 — `bg-${...}` 등은 JIT가 생성하지 못해 프로덕션 CSS에서 누락됩니다. 정적 클래스 lookup 맵(components/cultural/_constants/color-classes.ts 패턴)을 사용하세요. DESIGN.md §10 참조."
+      }
+    ]
   },
   "overrides": [
     {
