@@ -81,7 +81,6 @@ const config = {
 
         // Cultural Accents
         'temple-gold': '#d4af37', // Temple decoration
-        'moon-silver': '#c0c0c0', // Moonlight reflection
         'plum-purple': '#8e4585', // Plum blossom
 
         // Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정렬)

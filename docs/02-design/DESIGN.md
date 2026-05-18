@@ -72,7 +72,6 @@ colors:
   celadon-green: '#88A891' # 청자색
   stone-gray: '#707070' # 석조 회색
   temple-gold: '#d4af37' # 사찰 금색 (차분한 고전 금색 — Brand Gold 와 구분)
-  moon-silver: '#c0c0c0' # 달빛 은색
   plum-purple: '#8e4585' # 매화 자색
 
   # Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정본)
