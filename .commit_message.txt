@@ -1,1 +1,1 @@
-💄 superpowers spec·plan 문서 prettier 포맷 정리
+🗑️ 미사용 색상 토큰 moon-silver 제거 (DESIGN.md + tailwind.config)
