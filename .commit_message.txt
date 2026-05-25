@@ -1,1 +1,1 @@
-🔒 feat(security): asca-csrf-origin-check — middleware Origin/Referer 가드 + 거짓 CSRF 검증 제거
+📊 docs(asca-csrf-origin-check): Check + Report 추가 — Match 98%, archive 대기
