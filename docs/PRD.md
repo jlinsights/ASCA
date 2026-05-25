@@ -954,7 +954,7 @@ font-family:
 - **입력 검증**: 모든 사용자 입력 검증 및 살균
 - **SQL 인젝션 방지**: 매개변수화된 쿼리 사용
 - **XSS 방지**: Content Security Policy 적용
-- **CSRF 방지**: CSRF 토큰 검증
+- **CSRF 방지**: middleware Origin/Referer 검증 (OWASP Standard Header) + Clerk SameSite=Lax 세션 쿠키 이중 방어
 
 ### 7.2 개인정보 보호
 
