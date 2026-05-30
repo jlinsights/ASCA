@@ -15,6 +15,7 @@
 | tests-stale-member-schema-rewrite |    90%     | 2026-05-02 | [Plan](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.plan.md) / [Analysis](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.analysis.md) / [Report](tests-stale-member-schema-rewrite/tests-stale-member-schema-rewrite.report.md) |
 | asca-csrf-origin-check            |    98%     | 2026-05-30 | [Plan](asca-csrf-origin-check/asca-csrf-origin-check.plan.md) / [Design](asca-csrf-origin-check/asca-csrf-origin-check.design.md) / [Analysis](asca-csrf-origin-check/asca-csrf-origin-check.analysis.md) / [Report](asca-csrf-origin-check/asca-csrf-origin-check.report.md) |
 | asca-csrf-tls-scheme-check        |    —       | 2026-05-30 | [Plan](asca-csrf-tls-scheme-check/asca-csrf-tls-scheme-check.plan.md) (짧은 사이클, parent #33 후속, PR #35 admin merge `a05056b2`) |
+| warning-cleanup-cycle-2 (stale)   |    —       | 2026-05-30 | [README](warning-cleanup-cycle-2-stale/README.md) / [Plan](warning-cleanup-cycle-2-stale/warning-cleanup-cycle-2.plan.md) / [Design](warning-cleanup-cycle-2-stale/warning-cleanup-cycle-2.design.md) — 2026-04-22 시작, 5주+ 방치, analysis/report 미작성 stale archive |
 
 ## Highlights
 

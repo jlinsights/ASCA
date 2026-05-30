@@ -1,1 +1,1 @@
-📁 archive(pdca): asca-csrf-origin-check 98% + asca-csrf-tls-scheme-check → docs/archive/2026-05/ (PR #33 #35 admin merge)
+📁 archive(pdca): warning-cleanup-cycle-2 stale (2026-04-22 시작, 5주+ 방치, analysis/report 미작성) → docs/archive/2026-05/warning-cleanup-cycle-2-stale/
