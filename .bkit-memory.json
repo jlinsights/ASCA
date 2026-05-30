@@ -5,7 +5,7 @@
   "parallelFeatures": [
     {
       "feature": "asca-csrf-origin-check",
-      "phase": "completed",
+      "phase": "archived",
       "completedAt": "2026-05-25",
       "matchRate": 98,
       "planPath": "docs/01-plan/features/asca-csrf-origin-check.plan.md",
@@ -27,7 +27,11 @@
         "asca-webhook-signature-audit (Toss/Stripe 통합 시)",
         "asca-get-mutation-audit (GET state-change 발견 시)"
       ],
-      "recommendation": "report-completed (>=90%, archive 가능 단 PR #33 merge 후)"
+      "recommendation": "report-completed (>=90%, archive 가능 단 PR #33 merge 후)",
+      "archivedAt": "2026-05-30",
+      "archivedTo": "docs/archive/2026-05/asca-csrf-origin-check/",
+      "mergeCommit": "6be3e322",
+      "mergedPr": 33
     },
     {
       "feature": "asca-community-page-rollout",
@@ -242,6 +246,19 @@
         "prettier-format-cleanup-debt"
       ],
       "recommendation": "admin-merge or 2 신규 split (coverage+prettier) 후 normal merge"
+    },
+    {
+      "feature": "asca-csrf-tls-scheme-check",
+      "phase": "archived",
+      "startedAt": "2026-05-25",
+      "archivedAt": "2026-05-30",
+      "archivedTo": "docs/archive/2026-05/asca-csrf-tls-scheme-check/",
+      "planPath": "docs/archive/2026-05/asca-csrf-tls-scheme-check/asca-csrf-tls-scheme-check.plan.md",
+      "parentCycle": "asca-csrf-origin-check",
+      "scope": "production HTTPS scheme 강제 (downgrade attack 방지), parent #33 후속 짧은 사이클 ~30분",
+      "mergeCommit": "a05056b2",
+      "mergedPr": 35,
+      "note": "PR #34 (closed, base branch 삭제) → PR #35 rebase onto main, 짧은 사이클 plan only"
     }
   ],
   "planPath": "docs/01-plan/features/warning-cleanup-cycle-2.plan.md",
