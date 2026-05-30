@@ -4,6 +4,32 @@
   "startedAt": "2026-04-22",
   "parallelFeatures": [
     {
+      "feature": "asca-csrf-origin-check",
+      "phase": "completed",
+      "completedAt": "2026-05-25",
+      "matchRate": 98,
+      "planPath": "docs/01-plan/features/asca-csrf-origin-check.plan.md",
+      "designPath": "docs/02-design/features/asca-csrf-origin-check.design.md",
+      "analysisPath": "docs/03-analysis/asca-csrf-origin-check.analysis.md",
+      "reportPath": "docs/04-report/features/asca-csrf-origin-check.report.md",
+      "branch": "security/csrf-origin-check",
+      "commit": "2d5b1ecf",
+      "pr": 33,
+      "parentCycle": "asca-api-security-hardening",
+      "scope": "거짓 CSRF 검증 제거 + middleware Origin/Referer 가드 추가 (OWASP Standard Header)",
+      "optionChosen": "A (Origin/Referer 단독, Clerk SameSite=Lax 이중 방어)",
+      "followupCandidates": [
+        "asca-csrf-tls-scheme-check (MEDIUM, ~30분)",
+        "asca-audit-logger-edge-migration (HIGH, ~2-3h)",
+        "asca-middleware-edge-test-infra (LOW)",
+        "asca-csrf-double-submit (옵션 B trigger 대기)",
+        "asca-admin-server-actions (옵션 C trigger 대기)",
+        "asca-webhook-signature-audit (Toss/Stripe 통합 시)",
+        "asca-get-mutation-audit (GET state-change 발견 시)"
+      ],
+      "recommendation": "report-completed (>=90%, archive 가능 단 PR #33 merge 후)"
+    },
+    {
       "feature": "asca-community-page-rollout",
       "phase": "completed",
       "completedAt": "2026-05-10",

@@ -13,7 +13,6 @@ export interface SecureAPIConfig {
   }
   requiredPermissions?: string[]
   logActions?: boolean
-  validateCSRF?: boolean
 }
 
 export interface SecureAPIContext {
@@ -33,7 +32,6 @@ export function createSecureAPI(config: SecureAPIConfig = {}, handler: SecureAPI
     customRateLimit,
     requiredPermissions = [],
     logActions = true,
-    validateCSRF = false,
   } = config
 
   return async (request: NextRequest): Promise<NextResponse> => {
@@ -56,17 +54,7 @@ export function createSecureAPI(config: SecureAPIConfig = {}, handler: SecureAPI
         return rateLimitResponse
       }
 
-      // 2. CSRF 검증 (POST, PUT, DELETE 요청에만)
-      if (validateCSRF && ['POST', 'PUT', 'DELETE'].includes(request.method)) {
-        const csrfError = await validateCSRFToken(request)
-        if (csrfError) {
-          auditLogger.logSuspiciousActivity(request, 'CSRF validation failed', {
-            method: request.method,
-            hasToken: request.headers.has('x-csrf-token'),
-          })
-          return csrfError
-        }
-      }
+      // 2. CSRF 검증은 middleware.ts 의 Origin/Referer guard 로 일원화 (asca-csrf-origin-check, 2026-05-25).
 
       // 3. 인증 확인
       if (requireAuth) {
@@ -171,39 +159,6 @@ export function createSecureAPI(config: SecureAPIConfig = {}, handler: SecureAPI
 }
 
 /**
- * CSRF 토큰 검증
- */
-async function validateCSRFToken(request: NextRequest): Promise<NextResponse | null> {
-  const csrfToken = request.headers.get('x-csrf-token')
-  const sessionToken = request.headers.get('authorization')
-
-  if (!csrfToken) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'CSRF token required',
-        code: 'CSRF_TOKEN_MISSING',
-      },
-      { status: 403 }
-    )
-  }
-
-  // 간단한 CSRF 검증 (프로덕션에서는 더 강력한 검증 필요)
-  if (!sessionToken || !csrfToken.includes(sessionToken.slice(-8))) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Invalid CSRF token',
-        code: 'CSRF_TOKEN_INVALID',
-      },
-      { status: 403 }
-    )
-  }
-
-  return null
-}
-
-/**
  * 보안 헤더 추가
  */
 function addSecurityHeaders(response: NextResponse): void {
@@ -249,7 +204,6 @@ export const SecurityPresets = {
     rateLimitPreset: 'strict' as const,
     requiredPermissions: ['admin'],
     logActions: true,
-    validateCSRF: true,
   },
 
   // 시스템 관리 API (매우 제한적)
@@ -258,7 +212,6 @@ export const SecurityPresets = {
     rateLimitPreset: 'strict' as const,
     requiredPermissions: ['system', 'admin'],
     logActions: true,
-    validateCSRF: true,
     customRateLimit: {
       maxRequests: 5,
       windowMs: 60 * 1000, // 1분에 5회

@@ -4,7 +4,13 @@ import type { AuthUser } from '@/lib/auth/middleware'
 
 export interface SecurityEvent {
   timestamp: string
-  type: 'auth_success' | 'auth_failure' | 'rate_limit' | 'suspicious_activity' | 'admin_action'
+  type:
+    | 'auth_success'
+    | 'auth_failure'
+    | 'rate_limit'
+    | 'suspicious_activity'
+    | 'admin_action'
+    | 'csrf_origin_mismatch'
   severity: 'low' | 'medium' | 'high' | 'critical'
   source: {
     ip: string
@@ -139,6 +145,29 @@ export class SecurityAuditLogger {
       details: {
         activity,
         ...details,
+      },
+    })
+  }
+
+  /**
+   * CSRF Origin/Referer 검증 실패 로그
+   */
+  public logCSRFOriginMismatch(
+    request: NextRequest,
+    result: {
+      reason?: string
+      receivedOrigin?: string | null
+      matchedAgainst?: string[]
+    }
+  ): void {
+    this.logEvent({
+      type: 'csrf_origin_mismatch',
+      severity: 'high',
+      source: this.extractSourceInfo(request),
+      details: {
+        reason: result.reason ?? 'unknown',
+        receivedOrigin: result.receivedOrigin ?? null,
+        matchedAgainst: result.matchedAgainst ?? [],
       },
     })
   }
