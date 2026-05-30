@@ -125,6 +125,21 @@ describe('checkOrigin — 10 시나리오 (design §5.1)', () => {
     }
     expect(() => checkOrigin(req, env)).toThrow('CSRF_ENV_MISCONFIGURED')
   })
+
+  test('11. production http Origin (enforceHttps default true) → scheme_mismatch', () => {
+    const req = makeRequest({ origin: 'http://asca.kr' })
+    const result = checkOrigin(req, ENV_PROD)
+    expect(result.ok).toBe(false)
+    expect(result.reason).toBe('scheme_mismatch')
+    expect(result.receivedOrigin).toBe('http://asca.kr')
+  })
+
+  test('12. production http Origin + enforceHttps:false (opt-out) → ok', () => {
+    const req = makeRequest({ origin: 'http://asca.kr' })
+    const env: OriginCheckEnv = { ...ENV_PROD, enforceHttps: false }
+    const result = checkOrigin(req, env)
+    expect(result.ok).toBe(true)
+  })
 })
 
 describe('buildAllowedHosts — 3 추가 케이스', () => {
