@@ -1,1 +1,1 @@
-🔒 feat(security): asca-csrf-tls-scheme-check — production HTTPS scheme 강제 (parent #33 후속)
+📁 archive(pdca): asca-csrf-origin-check 98% + asca-csrf-tls-scheme-check → docs/archive/2026-05/ (PR #33 #35 admin merge)
