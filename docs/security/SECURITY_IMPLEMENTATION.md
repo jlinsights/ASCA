@@ -94,6 +94,9 @@ const moderateLimit = rateLimit({
 > `CSRF_ALLOWED_ORIGINS` csv 로 구성. 자세한 설계는
 > `docs/02-design/features/asca-csrf-origin-check.design.md` 참조.
 > `secure-api.ts` 의 `validateCSRF` 옵션은 제거됨.
+> **TLS scheme 검증 (2026-05-25 추가, asca-csrf-tls-scheme-check 사이클)**:
+> production 환경에서 `http://*` Origin 자동 거부 (`scheme_mismatch`). 비표준
+> 환경은 `CSRF_ENFORCE_HTTPS=false` 로 opt-out 가능.
 
 **미리 정의된 설정**:
 

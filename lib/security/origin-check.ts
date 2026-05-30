@@ -12,11 +12,22 @@ export interface OriginCheckEnv {
   vercelUrl: string | undefined
   allowedOrigins: string | undefined
   nodeEnv: string | undefined
+  /**
+   * HTTPS scheme 강제. undefined 시 `nodeEnv === 'production'` 자동 활성.
+   * env CSRF_ENFORCE_HTTPS=false 로 명시 opt-out 가능 (production HTTPS off
+   * 같은 비표준 환경 대비, 일반 사용에선 default 권장).
+   */
+  enforceHttps?: boolean
 }
 
 export interface OriginCheckResult {
   ok: boolean
-  reason?: 'missing_headers' | 'invalid_url' | 'host_mismatch' | 'env_misconfigured'
+  reason?:
+    | 'missing_headers'
+    | 'invalid_url'
+    | 'host_mismatch'
+    | 'scheme_mismatch'
+    | 'env_misconfigured'
   receivedOrigin?: string | null
   matchedAgainst?: string[]
 }
@@ -111,8 +122,10 @@ export function checkOrigin(
     }
   }
 
-  const hostname = parseHostname(candidateUrl)
-  if (hostname === null) {
+  let parsedUrl: URL
+  try {
+    parsedUrl = new URL(candidateUrl)
+  } catch {
     return {
       ok: false,
       reason: 'invalid_url',
@@ -121,6 +134,18 @@ export function checkOrigin(
     }
   }
 
+  const shouldEnforceHttps =
+    env.enforceHttps ?? env.nodeEnv === 'production'
+  if (shouldEnforceHttps && parsedUrl.protocol !== 'https:') {
+    return {
+      ok: false,
+      reason: 'scheme_mismatch',
+      receivedOrigin: candidateUrl,
+      matchedAgainst: allowedHosts,
+    }
+  }
+
+  const hostname = parsedUrl.hostname
   if (!allowedHosts.includes(hostname)) {
     return {
       ok: false,
@@ -137,10 +162,16 @@ export function checkOrigin(
  * process.env 캡처. test 에서는 env 인수를 직접 주입.
  */
 function readEnvFromProcess(): OriginCheckEnv {
+  const rawEnforce = process.env.CSRF_ENFORCE_HTTPS
+  let enforceHttps: boolean | undefined
+  if (rawEnforce === 'true') enforceHttps = true
+  else if (rawEnforce === 'false') enforceHttps = false
+
   return {
     appUrl: process.env.NEXT_PUBLIC_APP_URL,
     vercelUrl: process.env.VERCEL_URL,
     allowedOrigins: process.env.CSRF_ALLOWED_ORIGINS,
     nodeEnv: process.env.NODE_ENV,
+    enforceHttps,
   }
 }
