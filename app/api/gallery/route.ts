@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { error as logError } from '@/lib/logging/structured-logger'
 import { GalleryItem } from '@/lib/types/gallery/gallery-legacy'
 
 const PAGE_SIZE = 24
@@ -80,8 +81,8 @@ export async function GET(req: NextRequest) {
         },
       }
     )
-  } catch (error) {
-    console.error('[Gallery API]', error)
+  } catch (err) {
+    logError('[Gallery API] Failed to load gallery data', err instanceof Error ? err : undefined)
     return NextResponse.json({ error: 'Failed to load gallery data' }, { status: 500 })
   }
 }

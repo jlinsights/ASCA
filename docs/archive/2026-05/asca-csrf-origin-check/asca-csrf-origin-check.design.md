@@ -23,9 +23,9 @@ revision_history:
 > **Summary**: Clerk SameSite=Lax 세션 쿠키에 server-side Origin/Referer 검증을
 > 미들웨어 단계에 결합. `secure-api.ts` 의 거짓 CSRF 검증 4개 사이트 제거.
 >
-> **Project**: ASCA **Version**: 0.1.0 **Author**: jhlim725
-> **Date**: 2026-05-25 **Status**: Draft
-> **Plan Doc**: [asca-csrf-origin-check.plan.md](../../01-plan/features/asca-csrf-origin-check.plan.md)
+> **Project**: ASCA **Version**: 0.1.0 **Author**: jhlim725 **Date**: 2026-05-25
+> **Status**: Draft **Plan Doc**:
+> [asca-csrf-origin-check.plan.md](../../01-plan/features/asca-csrf-origin-check.plan.md)
 
 ---
 
@@ -33,8 +33,8 @@ revision_history:
 
 ### 1.1 Design Goals
 
-- **거짓 보안 0**: `csrfToken.includes(slice(-8))` 검증 함수 + 옵션 + preset
-  4개 참조 전부 제거.
+- **거짓 보안 0**: `csrfToken.includes(slice(-8))` 검증 함수 + 옵션 + preset 4개
+  참조 전부 제거.
 - **OWASP 호환 1차 방어**: middleware 단계에서 mutating method 의 Origin/Referer
   헤더가 화이트리스트 호스트와 일치하는지 검사 (정확 hostname 매칭).
 - **Edge runtime 호환**: `URL` + `String` ops 만 사용 (Node API/외부 라이브러리
@@ -45,19 +45,21 @@ revision_history:
 
 ### 1.2 Design Principles (asca-api-security-hardening 와 동일 원칙 계승)
 
-- **재사용 우선**: 기존 `auditLogger` 인스턴스·로그 포맷·`extractSourceInfo` 재사용.
-- **명시적 거부**: Origin 불일치 시 403 + 구조화 audit event, silently fail 금지.
+- **재사용 우선**: 기존 `auditLogger` 인스턴스·로그 포맷·`extractSourceInfo`
+  재사용.
+- **명시적 거부**: Origin 불일치 시 403 + 구조화 audit event, silently fail
+  금지.
 - **Fail-closed**: production 환경에서 `NEXT_PUBLIC_APP_URL` 미설정 → middleware
   진입 시 throw (startup 실패가 silent allow 보다 안전).
 - **Bisect-safe**: 각 작업 단계가 단일 commit 으로 lint·type-check GREEN.
 
 ### 1.3 환경변수 매핑 (Plan rev α → Design 정정)
 
-| Plan 기재                                  | 실제 ASCA 환경변수                             |
-| ------------------------------------------ | ---------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL` (오기재)            | `NEXT_PUBLIC_APP_URL` ← 사용                   |
-| `process.env.VERCEL_URL`                   | Vercel 자동 주입 (preview 도메인)              |
-| `CSRF_ALLOWED_ORIGINS` (신규)              | comma-separated, preview/staging/외부 도메인용 |
+| Plan 기재                       | 실제 ASCA 환경변수                             |
+| ------------------------------- | ---------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL` (오기재) | `NEXT_PUBLIC_APP_URL` ← 사용                   |
+| `process.env.VERCEL_URL`        | Vercel 자동 주입 (preview 도메인)              |
+| `CSRF_ALLOWED_ORIGINS` (신규)   | comma-separated, preview/staging/외부 도메인용 |
 
 ---
 
@@ -106,17 +108,17 @@ Next.js 14 + `@clerk/nextjs/server` 의 `clerkMiddleware` 는 **단일 middlewar
 **왜 callback 안에 두어도 "Clerk auth 이전"이 보장되는가:**
 
 - `clerkMiddleware((auth, request) => {...})` callback 진입 시점에는 Clerk SDK
-  내부에서 세션 쿠키 파싱·`Auth` 객체 구성은 완료되지만,
-  redirect/401 같은 부수효과는 **`auth.protect()` 호출 시에만** 발생.
-- guard 가 callback 첫 줄에서 `NextResponse.json(..., {status: 403})` 으로
-  early return 하면 Clerk 의 `auth.protect()` 가 호출되지 않으므로, 사용자
-  관점에서 "Clerk auth 보다 먼저 차단" 효과를 얻는다.
-- Clerk 의 세션 파싱 자체는 부수효과 없는 read-only 동작이므로, guard 가
-  나중에 실행되더라도 정보 누설은 발생하지 않음.
+  내부에서 세션 쿠키 파싱·`Auth` 객체 구성은 완료되지만, redirect/401 같은
+  부수효과는 **`auth.protect()` 호출 시에만** 발생.
+- guard 가 callback 첫 줄에서 `NextResponse.json(..., {status: 403})` 으로 early
+  return 하면 Clerk 의 `auth.protect()` 가 호출되지 않으므로, 사용자 관점에서
+  "Clerk auth 보다 먼저 차단" 효과를 얻는다.
+- Clerk 의 세션 파싱 자체는 부수효과 없는 read-only 동작이므로, guard 가 나중에
+  실행되더라도 정보 누설은 발생하지 않음.
 
-이 보장은 Clerk `@clerk/nextjs` ≥ 5.x 의 `clerkMiddleware` API 계약에
-의존한다. 본 사이클 시점 실제 버전: **`@clerk/nextjs ^6.39.1`** (v1.1 sanity
-검증). 메이저 업그레이드 시 재검증 필요 (T7 회귀 체크에 포함).
+이 보장은 Clerk `@clerk/nextjs` ≥ 5.x 의 `clerkMiddleware` API 계약에 의존한다.
+본 사이클 시점 실제 버전: **`@clerk/nextjs ^6.39.1`** (v1.1 sanity 검증). 메이저
+업그레이드 시 재검증 필요 (T7 회귀 체크에 포함).
 
 ### 2.2 모듈 구성
 
@@ -143,15 +145,19 @@ docs/security/SECURITY_IMPLEMENTATION.md [MOD] CSRF 절 재작성
  * Edge runtime safe (URL + string ops only).
  */
 export interface OriginCheckEnv {
-  appUrl: string | undefined          // process.env.NEXT_PUBLIC_APP_URL
-  vercelUrl: string | undefined       // process.env.VERCEL_URL (Vercel 자동)
-  allowedOrigins: string | undefined  // process.env.CSRF_ALLOWED_ORIGINS (csv)
-  nodeEnv: string | undefined         // process.env.NODE_ENV
+  appUrl: string | undefined // process.env.NEXT_PUBLIC_APP_URL
+  vercelUrl: string | undefined // process.env.VERCEL_URL (Vercel 자동)
+  allowedOrigins: string | undefined // process.env.CSRF_ALLOWED_ORIGINS (csv)
+  nodeEnv: string | undefined // process.env.NODE_ENV
 }
 
 export interface OriginCheckResult {
   ok: boolean
-  reason?: 'missing_headers' | 'invalid_url' | 'host_mismatch' | 'env_misconfigured'
+  reason?:
+    | 'missing_headers'
+    | 'invalid_url'
+    | 'host_mismatch'
+    | 'env_misconfigured'
   receivedOrigin?: string | null
   matchedAgainst?: string[]
 }
@@ -218,12 +224,19 @@ export default clerkMiddleware(async (auth, request) => {
   // 안전성: Clerk SDK 가 callback 진입 전 세션 쿠키를 파싱하지만 redirect/401
   // 같은 부수효과는 auth.protect() 호출 시에만 발생. early return 으로 그
   // 호출을 차단하므로 cross-site 요청은 Clerk 영향 없이 403 종료된다.
-  if (MUTATING_METHODS.has(request.method) && !WEBHOOK_PATH.test(request.nextUrl.pathname)) {
+  if (
+    MUTATING_METHODS.has(request.method) &&
+    !WEBHOOK_PATH.test(request.nextUrl.pathname)
+  ) {
     const result = checkOrigin(request)
     if (!result.ok) {
       auditLogger.logCSRFOriginMismatch(request, result)
       return NextResponse.json(
-        { success: false, error: 'CSRF origin validation failed', code: 'CSRF_ORIGIN_MISMATCH' },
+        {
+          success: false,
+          error: 'CSRF origin validation failed',
+          code: 'CSRF_ORIGIN_MISMATCH',
+        },
         { status: 403 }
       )
     }
@@ -235,7 +248,9 @@ export default clerkMiddleware(async (auth, request) => {
   }
 })
 
-export const config = { /* 기존 그대로 */ }
+export const config = {
+  /* 기존 그대로 */
+}
 ```
 
 ### 3.3 `lib/security/audit-logger.ts` 확장
@@ -385,30 +400,30 @@ buildAllowedHosts(env):
 
 ### 5.1 `lib/security/origin-check.test.ts` (10 케이스)
 
-| #   | 시나리오                                       | Origin 헤더                  | Referer 헤더            | env (APP_URL)              | 기대 result.ok | reason                |
-| --- | ---------------------------------------------- | ---------------------------- | ----------------------- | -------------------------- | -------------- | --------------------- |
-| 1   | 같은 도메인 production 요청                    | `https://asca.kr`            | -                       | `https://asca.kr`          | true           | -                     |
-| 2   | cross-site 요청                                | `https://evil.com`           | -                       | `https://asca.kr`          | false          | host_mismatch         |
-| 3   | Origin 누락, Referer fallback                  | (none)                       | `https://asca.kr/admin` | `https://asca.kr`          | true           | -                     |
-| 4   | Origin 누락, Referer 도메인 불일치             | (none)                       | `https://evil.com/x`    | `https://asca.kr`          | false          | host_mismatch         |
-| 5   | Origin/Referer 둘 다 누락                      | (none)                       | (none)                  | `https://asca.kr`          | false          | missing_headers       |
-| 6   | Origin = `null` (sandbox iframe)               | `null`                       | -                       | `https://asca.kr`          | false          | invalid_url           |
-| 7   | Vercel preview 도메인                          | `https://asca-pr-31.vercel.app` | -                    | (APP_URL 미설정, VERCEL_URL=`asca-pr-31.vercel.app`) | true | - |
-| 8   | CSRF_ALLOWED_ORIGINS csv 매칭                  | `https://staging.asca.kr`    | -                       | APP_URL=`https://asca.kr`, ALLOWED=`https://staging.asca.kr,https://preview.asca.kr` | true | - |
-| 9   | dev fallback (localhost)                       | `http://localhost:3000`      | -                       | (env 미설정, NODE_ENV=development) | true   | -                     |
-| 10  | production env 누락 → throw                    | (any)                        | -                       | (env 미설정, NODE_ENV=production)  | -      | throws `CSRF_ENV_MISCONFIGURED` |
+| #   | 시나리오                           | Origin 헤더                     | Referer 헤더            | env (APP_URL)                                                                        | 기대 result.ok | reason                          |
+| --- | ---------------------------------- | ------------------------------- | ----------------------- | ------------------------------------------------------------------------------------ | -------------- | ------------------------------- |
+| 1   | 같은 도메인 production 요청        | `https://asca.kr`               | -                       | `https://asca.kr`                                                                    | true           | -                               |
+| 2   | cross-site 요청                    | `https://evil.com`              | -                       | `https://asca.kr`                                                                    | false          | host_mismatch                   |
+| 3   | Origin 누락, Referer fallback      | (none)                          | `https://asca.kr/admin` | `https://asca.kr`                                                                    | true           | -                               |
+| 4   | Origin 누락, Referer 도메인 불일치 | (none)                          | `https://evil.com/x`    | `https://asca.kr`                                                                    | false          | host_mismatch                   |
+| 5   | Origin/Referer 둘 다 누락          | (none)                          | (none)                  | `https://asca.kr`                                                                    | false          | missing_headers                 |
+| 6   | Origin = `null` (sandbox iframe)   | `null`                          | -                       | `https://asca.kr`                                                                    | false          | invalid_url                     |
+| 7   | Vercel preview 도메인              | `https://asca-pr-31.vercel.app` | -                       | (APP_URL 미설정, VERCEL_URL=`asca-pr-31.vercel.app`)                                 | true           | -                               |
+| 8   | CSRF_ALLOWED_ORIGINS csv 매칭      | `https://staging.asca.kr`       | -                       | APP_URL=`https://asca.kr`, ALLOWED=`https://staging.asca.kr,https://preview.asca.kr` | true           | -                               |
+| 9   | dev fallback (localhost)           | `http://localhost:3000`         | -                       | (env 미설정, NODE_ENV=development)                                                   | true           | -                               |
+| 10  | production env 누락 → throw        | (any)                           | -                       | (env 미설정, NODE_ENV=production)                                                    | -              | throws `CSRF_ENV_MISCONFIGURED` |
 
 추가 `buildAllowedHosts` 유닛 케이스 (3 개): dedupe / order / dev fallback.
 
 ### 5.2 middleware 통합 테스트 (선택, jest-environment-edge 또는 mock)
 
-| 시나리오                                | 메서드 | 경로                        | Origin           | 기대 응답                |
-| --------------------------------------- | ------ | --------------------------- | ---------------- | ------------------------ |
-| GET 같은 도메인                         | GET    | `/api/artists`              | `https://asca.kr`| Clerk 단계로 진행        |
-| POST 같은 도메인                        | POST   | `/api/artists`              | `https://asca.kr`| Clerk 단계로 진행        |
-| POST cross-site                         | POST   | `/api/artists`              | `https://evil.com`| 403 `CSRF_ORIGIN_MISMATCH` + audit log |
-| Webhook POST (Origin 없음)              | POST   | `/api/webhooks/clerk`       | (none)           | guard skip → Clerk 단계 통과 |
-| OPTIONS preflight                       | OPTIONS| `/api/admin/anything`       | `https://evil.com`| guard skip → 통과         |
+| 시나리오                   | 메서드  | 경로                  | Origin             | 기대 응답                              |
+| -------------------------- | ------- | --------------------- | ------------------ | -------------------------------------- |
+| GET 같은 도메인            | GET     | `/api/artists`        | `https://asca.kr`  | Clerk 단계로 진행                      |
+| POST 같은 도메인           | POST    | `/api/artists`        | `https://asca.kr`  | Clerk 단계로 진행                      |
+| POST cross-site            | POST    | `/api/artists`        | `https://evil.com` | 403 `CSRF_ORIGIN_MISMATCH` + audit log |
+| Webhook POST (Origin 없음) | POST    | `/api/webhooks/clerk` | (none)             | guard skip → Clerk 단계 통과           |
+| OPTIONS preflight          | OPTIONS | `/api/admin/anything` | `https://evil.com` | guard skip → 통과                      |
 
 ### 5.3 회귀 검증
 
@@ -423,21 +438,21 @@ buildAllowedHosts(env):
 
 ### 6.1 제거되는 위험 (이전 → 이후)
 
-| 항목                            | 이전                                                | 이후                                       |
-| ------------------------------- | --------------------------------------------------- | ------------------------------------------ |
-| CSRF 토큰 우회 가능성           | 세션 JWT 마지막 8자 substring 만 알면 통과         | N/A (검증 자체 제거)                       |
-| Cross-site mutating 요청        | 거부 메커니즘 0 (validateCSRF 활성화 라우트 없음)  | middleware 단계 403                        |
-| 거짓 보안에 의한 잘못된 안정감 | docs/PRD.md 에 "CSRF 검증" 명시                    | 실제 동작과 문서 정합                      |
+| 항목                           | 이전                                              | 이후                  |
+| ------------------------------ | ------------------------------------------------- | --------------------- |
+| CSRF 토큰 우회 가능성          | 세션 JWT 마지막 8자 substring 만 알면 통과        | N/A (검증 자체 제거)  |
+| Cross-site mutating 요청       | 거부 메커니즘 0 (validateCSRF 활성화 라우트 없음) | middleware 단계 403   |
+| 거짓 보안에 의한 잘못된 안정감 | docs/PRD.md 에 "CSRF 검증" 명시                   | 실제 동작과 문서 정합 |
 
 ### 6.2 잔존 위험 (사이클 종료 후 documented)
 
 - **subdomain 공격**: 정확 hostname 매칭이라 `asca.kr` 와 `evil.asca.kr` 분리
-  보호. v1.1 강화로 `*.vercel.app` 와일드카드는 코드 수준에서 차단됨
-  (§4.1) — `VERCEL_URL` 은 자기 preview 호스트만 자동 주입하므로 다른 팀
-  preview 호스트는 화이트리스트에 들어오지 않음. 단, **운영 가이드**: ASCA
-  팀의 preview 도메인을 누군가가 fork 하여 같은 `vercel.app` 풀에서 띄울 가능성
-  은 인정 — preview 환경에서 production admin 데이터 접근은 권장 안함 (별
-  사이클 `asca-preview-admin-isolation` 후보).
+  보호. v1.1 강화로 `*.vercel.app` 와일드카드는 코드 수준에서 차단됨 (§4.1) —
+  `VERCEL_URL` 은 자기 preview 호스트만 자동 주입하므로 다른 팀 preview 호스트는
+  화이트리스트에 들어오지 않음. 단, **운영 가이드**: ASCA 팀의 preview 도메인을
+  누군가가 fork 하여 같은 `vercel.app` 풀에서 띄울 가능성 은 인정 — preview
+  환경에서 production admin 데이터 접근은 권장 안함 (별 사이클
+  `asca-preview-admin-isolation` 후보).
 - **Origin 헤더 신뢰**: 브라우저가 보내는 Origin 은 일반 클라이언트가 위조 못함
   (네트워크 레벨 공격은 HTTPS 가 차단). non-browser client (curl 등) 는 임의
   Origin 가능 → 그러나 이 경우 Clerk 세션 쿠키 자체가 없어 auth 단계에서 거부.
@@ -475,14 +490,14 @@ buildAllowedHosts(env):
 
 ## 8. Open Questions (Plan 미해결 / Design 에서 결정)
 
-| #   | 질문                                                          | 결정                                                                                          |
-| --- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Q1  | Plan rev α 의 `NEXT_PUBLIC_SITE_URL` ↔ 실제 `NEXT_PUBLIC_APP_URL` | **APP_URL 사용** (§1.3 정정). Plan 다음 revision 에 동기화.                              |
-| Q2  | preview 도메인 화이트리스트 전략                              | **`VERCEL_URL` 자동 + `CSRF_ALLOWED_ORIGINS` 명시 csv 병행**. 와일드카드는 미지원 (보안 우선) |
-| Q3  | webhook 경로 매칭 방식                                        | **prefix regex `/^\/api\/webhooks\//`**. v1.1 grep 실측: 현재 ASCA 표면 `app/api/webhooks/clerk/route.ts` 1곳만 존재, `app/api/integrations/*` 디렉토리 미존재. 향후 Toss/Stripe 추가 시 list 화 또는 regex 확장. Do T1 단계에서 webhook 경로 grep 회귀 테스트 1건 추가 |
-| Q4  | dev 환경에서 localhost 외 다른 host (예: `*.local`)           | **deferred** — 발생 시 `CSRF_ALLOWED_ORIGINS` 로 처리, 코드 변경 없음                          |
-| Q5  | OPTIONS preflight 처리                                        | **MUTATING_METHODS 에 미포함 → 자동 skip**. CORS preflight 는 별도 (현재 ASCA same-origin만)   |
-| Q6  | csv 파싱 시 trailing slash / scheme 정규화                    | **`parseHostname` 가 URL 객체로 파싱 → hostname 만 추출, 정규화 자동**                         |
+| #   | 질문                                                               | 결정                                                                                                                                                                                                                                                                    |
+| --- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Q1  | Plan rev α 의 `NEXT_PUBLIC_SITE_URL` ↔ 실제 `NEXT_PUBLIC_APP_URL` | **APP_URL 사용** (§1.3 정정). Plan 다음 revision 에 동기화.                                                                                                                                                                                                             |
+| Q2  | preview 도메인 화이트리스트 전략                                   | **`VERCEL_URL` 자동 + `CSRF_ALLOWED_ORIGINS` 명시 csv 병행**. 와일드카드는 미지원 (보안 우선)                                                                                                                                                                           |
+| Q3  | webhook 경로 매칭 방식                                             | **prefix regex `/^\/api\/webhooks\//`**. v1.1 grep 실측: 현재 ASCA 표면 `app/api/webhooks/clerk/route.ts` 1곳만 존재, `app/api/integrations/*` 디렉토리 미존재. 향후 Toss/Stripe 추가 시 list 화 또는 regex 확장. Do T1 단계에서 webhook 경로 grep 회귀 테스트 1건 추가 |
+| Q4  | dev 환경에서 localhost 외 다른 host (예: `*.local`)                | **deferred** — 발생 시 `CSRF_ALLOWED_ORIGINS` 로 처리, 코드 변경 없음                                                                                                                                                                                                   |
+| Q5  | OPTIONS preflight 처리                                             | **MUTATING_METHODS 에 미포함 → 자동 skip**. CORS preflight 는 별도 (현재 ASCA same-origin만)                                                                                                                                                                            |
+| Q6  | csv 파싱 시 trailing slash / scheme 정규화                         | **`parseHostname` 가 URL 객체로 파싱 → hostname 만 추출, 정규화 자동**                                                                                                                                                                                                  |
 
 ---
 
@@ -490,8 +505,10 @@ buildAllowedHosts(env):
 
 - OWASP CSRF Prevention Cheat Sheet (2024) — Standard Header Verification
 - Clerk Cookie Settings — SameSite=Lax 기본
-- Next.js 14 Middleware — Edge runtime 제약 (`URL`, `Headers`, `Request` 만 사용)
-- 부모 사이클 design: `docs/02-design/features/asca-api-security-hardening.design.md`
+- Next.js 14 Middleware — Edge runtime 제약 (`URL`, `Headers`, `Request` 만
+  사용)
+- 부모 사이클 design:
+  `docs/02-design/features/asca-api-security-hardening.design.md`
 - 신규 사이클 후보 (Plan §4 비범위 참조): `asca-csrf-double-submit`,
   `asca-admin-server-actions`, `asca-webhook-signature-audit`,
   `asca-get-mutation-audit`
