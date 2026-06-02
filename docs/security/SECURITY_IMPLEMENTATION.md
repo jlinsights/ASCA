@@ -86,17 +86,16 @@ const moderateLimit = rateLimit({
 - 자동 보안 헤더 추가
 - 에러 처리 및 로깅
 
-> **CSRF 보호 (2026-05-25 갱신, asca-csrf-origin-check 사이클)**:
-> CSRF 검증은 `middleware.ts` 의 `csrfOriginGuard` 로 일원화됨. OWASP CSRF
-> Prevention Cheat Sheet 의 **Standard Header Verification** 패턴 (Origin /
-> Referer 헤더 정확 hostname 매칭) + Clerk 의 `SameSite=Lax` 세션 쿠키 이중
-> 방어. 화이트리스트는 `NEXT_PUBLIC_APP_URL` + `VERCEL_URL` 자동 +
-> `CSRF_ALLOWED_ORIGINS` csv 로 구성. 자세한 설계는
-> `docs/02-design/features/asca-csrf-origin-check.design.md` 참조.
-> `secure-api.ts` 의 `validateCSRF` 옵션은 제거됨.
-> **TLS scheme 검증 (2026-05-25 추가, asca-csrf-tls-scheme-check 사이클)**:
-> production 환경에서 `http://*` Origin 자동 거부 (`scheme_mismatch`). 비표준
-> 환경은 `CSRF_ENFORCE_HTTPS=false` 로 opt-out 가능.
+> **CSRF 보호 (2026-05-25 갱신, asca-csrf-origin-check 사이클)**: CSRF 검증은
+> `middleware.ts` 의 `csrfOriginGuard` 로 일원화됨. OWASP CSRF Prevention Cheat
+> Sheet 의 **Standard Header Verification** 패턴 (Origin / Referer 헤더 정확
+> hostname 매칭) + Clerk 의 `SameSite=Lax` 세션 쿠키 이중 방어. 화이트리스트는
+> `NEXT_PUBLIC_APP_URL` + `VERCEL_URL` 자동 + `CSRF_ALLOWED_ORIGINS` csv 로
+> 구성. 자세한 설계는 `docs/02-design/features/asca-csrf-origin-check.design.md`
+> 참조. `secure-api.ts` 의 `validateCSRF` 옵션은 제거됨. **TLS scheme 검증
+> (2026-05-25 추가, asca-csrf-tls-scheme-check 사이클)**: production 환경에서
+> `http://*` Origin 자동 거부 (`scheme_mismatch`). 비표준 환경은
+> `CSRF_ENFORCE_HTTPS=false` 로 opt-out 가능.
 
 **미리 정의된 설정**:
 

@@ -134,8 +134,7 @@ export function checkOrigin(
     }
   }
 
-  const shouldEnforceHttps =
-    env.enforceHttps ?? env.nodeEnv === 'production'
+  const shouldEnforceHttps = env.enforceHttps ?? env.nodeEnv === 'production'
   if (shouldEnforceHttps && parsedUrl.protocol !== 'https:') {
     return {
       ok: false,
