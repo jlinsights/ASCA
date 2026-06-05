@@ -50,6 +50,7 @@ jobs:
           NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/"
           NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/"
           NEXT_PUBLIC_APP_URL="http://localhost:3000"
+          NEXT_PUBLIC_E2E_DISABLE_CLERK="true"
           EOF
           cp .env.test .env.local  # safety net for any non-Next consumer
 

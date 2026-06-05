@@ -24,6 +24,18 @@ export function ClientProviders({ children }: ClientProvidersProps) {
       })
   )
 
+  const appProviders = (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+        <LanguageProvider>{children}</LanguageProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  )
+
+  if (process.env.NEXT_PUBLIC_E2E_DISABLE_CLERK === 'true') {
+    return appProviders
+  }
+
   return (
     <ClerkProvider
       localization={koKR}
@@ -31,16 +43,7 @@ export function ClientProviders({ children }: ClientProvidersProps) {
       signUpUrl='/sign-up'
       afterSignOutUrl='/'
     >
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LanguageProvider>{children}</LanguageProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
+      {appProviders}
     </ClerkProvider>
   )
 }
