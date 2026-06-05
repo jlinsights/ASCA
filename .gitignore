@@ -43,6 +43,9 @@ next-env.d.ts
 coverage/
 .nyc_output/
 .eslintcache
+playwright-report/
+test-results/
+.playwright-browsers/
 .vercel
 ops/venv/
 
