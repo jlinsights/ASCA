@@ -43,6 +43,8 @@ next-env.d.ts
 coverage/
 .nyc_output/
 .eslintcache
+playwright-report/
+test-results/
 .vercel
 ops/venv/
 

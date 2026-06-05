@@ -85,6 +85,8 @@ pnpm-lock.yaml
 # Test outputs
 coverage/
 junit.xml
+playwright-report/
+test-results/
 
 # Marketing/agent context (markdown tables would break under prettier)
 .agents/ 
