@@ -45,6 +45,7 @@ coverage/
 .eslintcache
 playwright-report/
 test-results/
+.playwright-browsers/
 .vercel
 ops/venv/
 

@@ -15,6 +15,27 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { LogOut, User as UserIcon, Settings } from 'lucide-react'
 
 export function HeaderAuthSection() {
+  if (process.env.NEXT_PUBLIC_E2E_DISABLE_CLERK === 'true') {
+    return <StaticAuthLinks />
+  }
+
+  return <ClerkHeaderAuthSection />
+}
+
+function StaticAuthLinks() {
+  return (
+    <div className='flex items-center space-x-3'>
+      <Button variant='ghost' size='sm' className='text-sm' asChild>
+        <Link href='/sign-in'>로그인</Link>
+      </Button>
+      <Button size='sm' className='bg-celadon-green hover:bg-celadon-green/90 text-sm' asChild>
+        <Link href='/sign-up'>회원가입</Link>
+      </Button>
+    </div>
+  )
+}
+
+function ClerkHeaderAuthSection() {
   const { isLoaded, isSignedIn, user } = useUser()
   const { signOut } = useClerk()
 

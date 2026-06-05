@@ -27,12 +27,18 @@ jest.mock('@/lib/security/rate-limit', () => ({
   },
 }))
 
+jest.mock('@clerk/nextjs/server', () => ({
+  auth: jest.fn().mockResolvedValue({ userId: 'test-user-id' }),
+}))
+
 import { describe, test, expect, beforeEach } from '@jest/globals'
 import { NextRequest } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import { withPerformanceLog } from '@/lib/db'
 import { GET, POST } from '../route'
 
 const mockWithPerformanceLog = withPerformanceLog as jest.MockedFunction<typeof withPerformanceLog>
+const mockAuth = auth as unknown as jest.MockedFunction<() => Promise<{ userId: string | null }>>
 
 describe('GET /api/members', () => {
   beforeEach(() => {
@@ -159,7 +165,7 @@ describe('GET /api/members', () => {
     await GET(request)
 
     // Assert
-    expect(mockWithPerformanceLog).toHaveBeenCalledWith('members.list', expect.any(Function))
+    expect(mockWithPerformanceLog).toHaveBeenCalledWith('members.listPublic', expect.any(Function))
   })
 })
 
@@ -173,6 +179,24 @@ describe('POST /api/members', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    mockAuth.mockResolvedValue({ userId: 'test-user-id' })
+  })
+
+  test('should return 401 when authentication is missing', async () => {
+    mockAuth.mockResolvedValueOnce({ userId: null })
+
+    const request = new NextRequest('http://localhost:3000/api/members', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validBody),
+    })
+
+    const response = await POST(request)
+    const data = await response.json()
+
+    expect(response.status).toBe(401)
+    expect(data.success).toBe(false)
+    expect(data.error.code).toBe('UNAUTHORIZED')
   })
 
   test('should create member and return 201 with valid data', async () => {
