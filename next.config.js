@@ -30,13 +30,21 @@ const nextConfig = {
     imageSizes: [16, 48, 96, 256, 512, 1024],
     qualities: [75, 85, 90, 95, 100], // 커스텀 품질 설정 지원 (100은 라이트박스용)
     minimumCacheTTL: 86400, // 24시간 캐시 (고화질 이미지)
-    dangerouslyAllowSVG: true,
+    dangerouslyAllowSVG: false,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: '**.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.curator.io',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.curator.io',
       },
     ],
     // 고화질 갤러리 이미지 최적화
@@ -94,7 +102,8 @@ const nextConfig = {
       'react-virtuoso',
       'framer-motion',
     ],
-    optimizeCss: true, // critters 기반 critical CSS 인라인화
+    // Keep CSS optimization on Next defaults; forcing optimizeCss can trigger
+    // missing .next/browser/default-stylesheet.css during static prerendering.
     gzipSize: true,
   },
 

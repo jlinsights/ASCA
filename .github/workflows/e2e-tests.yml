@@ -37,10 +37,21 @@ jobs:
       - name: Setup environment variables
         run: |
           # Next.js with NODE_ENV=test loads .env.test (NOT .env.local).
-          # See: https://nextjs.org/docs/app/building-your-application/configuring/environment-variables
-          cp .env.example .env.test
-          cp .env.example .env.local  # safety net for any non-Next consumer
-          # Add any additional environment variables needed for testing
+          # Use structurally valid CI placeholders so Clerk validates during dev-server startup.
+          cat > .env.test <<'EOF'
+          DATABASE_URL="postgresql://ci:ci@localhost:5432/asca_ci"
+          NEXT_PUBLIC_SUPABASE_URL="https://example.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY="ci-anon-key"
+          SUPABASE_SERVICE_ROLE_KEY="ci-service-role-key"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_ZHVtbXkuY2xlcmsuYWNjb3VudHMuZGV2JA"
+          CLERK_SECRET_KEY="sk_test_ci"
+          NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+          NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+          NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/"
+          NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/"
+          NEXT_PUBLIC_APP_URL="http://localhost:3000"
+          EOF
+          cp .env.test .env.local  # safety net for any non-Next consumer
 
       - name: Run Playwright tests
         run: npm run test:e2e:ci
