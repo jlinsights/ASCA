@@ -113,7 +113,7 @@ jobs:
         run: npm run build
         env:
           CI_LOW_MEMORY_BUILD: '1'
-          NODE_OPTIONS: '--max-old-space-size=1024'
+          NODE_OPTIONS: '--max-old-space-size=4096'
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -171,7 +171,7 @@ jobs:
         run: npm run build
         env:
           CI_LOW_MEMORY_BUILD: '1'
-          NODE_OPTIONS: '--max-old-space-size=1024'
+          NODE_OPTIONS: '--max-old-space-size=4096'
 
       - name: Deploy to production
         # 실제 배포 환경에 맞게 수정 필요
