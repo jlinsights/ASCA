@@ -4,6 +4,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
+const lowMemoryBuild = process.env.CI_LOW_MEMORY_BUILD === '1'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 프로덕션 빌드에서 console 제거
@@ -67,36 +69,46 @@ const nextConfig = {
   },
 
   // 실험적 기능으로 성능 향상
-  experimental: {
-    optimizePackageImports: [
-      'lucide-react',
-      '@radix-ui/react-icons',
-      '@radix-ui/react-accordion',
-      '@radix-ui/react-alert-dialog',
-      '@radix-ui/react-avatar',
-      '@radix-ui/react-checkbox',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-dropdown-menu',
-      '@radix-ui/react-label',
-      '@radix-ui/react-popover',
-      '@radix-ui/react-progress',
-      '@radix-ui/react-scroll-area',
-      '@radix-ui/react-select',
-      '@radix-ui/react-separator',
-      '@radix-ui/react-slider',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-switch',
-      '@radix-ui/react-tabs',
-      '@radix-ui/react-toast',
-      '@radix-ui/react-tooltip',
-      'recharts',
-      'date-fns',
-      'react-virtuoso',
-      'framer-motion',
-    ],
-    optimizeCss: true, // critters 기반 critical CSS 인라인화
-    gzipSize: true,
-  },
+  experimental: lowMemoryBuild
+    ? {
+        cpus: 1,
+        memoryBasedWorkersCount: false,
+        webpackBuildWorker: false,
+        webpackMemoryOptimizations: true,
+        turbopackMemoryLimit: 1024,
+        optimizeCss: false,
+        gzipSize: false,
+      }
+    : {
+        optimizePackageImports: [
+          'lucide-react',
+          '@radix-ui/react-icons',
+          '@radix-ui/react-accordion',
+          '@radix-ui/react-alert-dialog',
+          '@radix-ui/react-avatar',
+          '@radix-ui/react-checkbox',
+          '@radix-ui/react-dialog',
+          '@radix-ui/react-dropdown-menu',
+          '@radix-ui/react-label',
+          '@radix-ui/react-popover',
+          '@radix-ui/react-progress',
+          '@radix-ui/react-scroll-area',
+          '@radix-ui/react-select',
+          '@radix-ui/react-separator',
+          '@radix-ui/react-slider',
+          '@radix-ui/react-slot',
+          '@radix-ui/react-switch',
+          '@radix-ui/react-tabs',
+          '@radix-ui/react-toast',
+          '@radix-ui/react-tooltip',
+          'recharts',
+          'date-fns',
+          'react-virtuoso',
+          'framer-motion',
+        ],
+        optimizeCss: true, // critters 기반 critical CSS 인라인화
+        gzipSize: true,
+      },
 
   // @clerk/nextjs는 번들에 포함해야 React 컨텍스트가 일치함 (serverExternalPackages 제외)
 
