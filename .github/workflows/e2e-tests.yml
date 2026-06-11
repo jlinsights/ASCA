@@ -40,6 +40,10 @@ jobs:
           # See: https://nextjs.org/docs/app/building-your-application/configuring/environment-variables
           cp .env.example .env.test
           cp .env.example .env.local  # safety net for any non-Next consumer
+          # Clerk validates the publishable key format at runtime. Use a syntactically
+          # valid non-secret test key so unauthenticated public-route E2E checks can boot.
+          printf '\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_dGVzdC5jbGVyay5hY2NvdW50cy5kZXYk"\n' >> .env.test
+          printf 'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_dGVzdC5jbGVyay5hY2NvdW50cy5kZXYk"\n' >> .env.local
           # Add any additional environment variables needed for testing
 
       - name: Run Playwright tests
@@ -48,6 +52,7 @@ jobs:
           CI: true
           PLAYWRIGHT_BASE_URL: http://localhost:3000
           NODE_ENV: test
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: 'pk_test_dGVzdC5jbGVyay5hY2NvdW50cy5kZXYk'
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
