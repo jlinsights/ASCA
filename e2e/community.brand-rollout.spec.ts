@@ -100,7 +100,7 @@ test.describe('community / brand-rollout — 정회원 분기 면적 < 15% (OQ#4
   test('MembershipBranch height < 페이지 height × 15%', async ({ page }) => {
     await gotoCommunityWithLanguage(page, 'ko')
     const membership = page.locator('section[aria-labelledby="community-membership-heading"]')
-    const main = page.locator('main')
+    const main = page.locator('#main-content')
     const membershipBox = await membership.boundingBox()
     const mainBox = await main.boundingBox()
     expect(membershipBox).not.toBeNull()
