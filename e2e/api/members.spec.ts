@@ -9,6 +9,10 @@ import { test, expect } from '@playwright/test'
  */
 
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000'
+const MUTATION_HEADERS = {
+  Origin: BASE_URL,
+  Referer: `${BASE_URL}/`,
+}
 
 test.describe('Members API - GET /api/members', () => {
   test('should return members list successfully', async ({ request }) => {
@@ -164,6 +168,7 @@ test.describe('Members API - POST /api/members', () => {
     }
 
     const response = await request.post(`${BASE_URL}/api/members`, {
+      headers: MUTATION_HEADERS,
       data: newMember,
     })
 
@@ -187,6 +192,7 @@ test.describe('Members API - POST /api/members', () => {
     }
 
     const response = await request.post(`${BASE_URL}/api/members`, {
+      headers: MUTATION_HEADERS,
       data: newMember,
     })
 
@@ -210,6 +216,7 @@ test.describe('Members API - POST /api/members', () => {
     }
 
     const response = await request.post(`${BASE_URL}/api/members`, {
+      headers: MUTATION_HEADERS,
       data: invalidMember,
     })
 
@@ -218,7 +225,7 @@ test.describe('Members API - POST /api/members', () => {
     const data = await response.json()
 
     expect(data.success).toBe(false)
-    expect(data.error).toContain('이메일')
+    expect(data.error?.message || data.error).toContain('이메일')
   })
 
   test('should handle duplicate email gracefully', async ({ request }) => {
@@ -232,6 +239,7 @@ test.describe('Members API - POST /api/members', () => {
 
     // Create first member
     const firstResponse = await request.post(`${BASE_URL}/api/members`, {
+      headers: MUTATION_HEADERS,
       data: memberData,
     })
 
@@ -239,6 +247,7 @@ test.describe('Members API - POST /api/members', () => {
 
     // Try to create second member with same email
     const secondResponse = await request.post(`${BASE_URL}/api/members`, {
+      headers: MUTATION_HEADERS,
       data: memberData,
     })
 
@@ -257,6 +266,7 @@ test.describe('Members API - POST /api/members', () => {
     }
 
     const response = await request.post(`${BASE_URL}/api/members`, {
+      headers: MUTATION_HEADERS,
       data: newMember,
     })
 
@@ -278,6 +288,7 @@ test.describe('Members API - Error Handling', () => {
     const response = await request.post(`${BASE_URL}/api/members`, {
       data: 'invalid json',
       headers: {
+        ...MUTATION_HEADERS,
         'Content-Type': 'application/json',
       },
     })
