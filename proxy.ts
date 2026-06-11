@@ -15,7 +15,7 @@ const isProtectedRoute = createRouteMatcher([
   '/commissioning-application(.*)',
 ])
 
-export default clerkMiddleware(async (auth, request) => {
+export const proxy = clerkMiddleware(async (auth, request) => {
   // [1] CSRF Origin guard — Clerk auth 이전 (callback 첫 줄, design §2.1.1).
   //
   // Clerk SDK 가 callback 진입 전 세션 쿠키를 파싱하지만 redirect/401 같은
