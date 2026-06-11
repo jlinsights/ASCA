@@ -29,7 +29,7 @@ import { rateLimit, RateLimitPresets } from '@/lib/security/rate-limit'
 import { withPerformanceLog } from '@/lib/db'
 import { z } from 'zod'
 
-const isE2ETest = process.env.NODE_ENV === 'test' || Boolean(process.env.PLAYWRIGHT_BASE_URL)
+const isE2ETest = Boolean(process.env.PLAYWRIGHT_BASE_URL)
 
 type E2EMember = {
   id: string
