@@ -1,9 +1,17 @@
 {
-  "activeFeature": null,
-  "phase": "archived",
+  "activeFeature": "asca-component-split-phase-3-4",
+  "phase": "plan",
   "startedAt": "2026-04-22",
   "parallelFeatures": [
     {
+      "feature": "asca-component-split-phase-3-4",
+      "phase": "plan",
+      "startedAt": "2026-06-15",
+      "planPath": "docs/01-plan/features/asca-component-split-phase-3-4.plan.md",
+      "scope": "max-lines(500) 초과 10파일 정리(Phase 1-2 후 잔여). 실측 분류: V components/ui/sidebar.tsx(736)=shadcn vendor→eslint 예외(분리 X), G1~G4 gallery(StrokeAnimationPlayer 901·ArtworkComparison 821·GalleryGrid 820·ZoomableImageViewer 702)=로직무거움 우선분리, C1~C4 cultural(558~745), A1 bylaws-content(763)=콘텐츠. CLAUDE.md Large File Refactoring Process(subcomponent→hook→data externalize). R-1 sidebar=vendor 예외, R-2 점진 PR(gallery→cultural→bylaws), R-3 기존 테스트 무수정 통과+DOM 등가. SC=lint max-lines 0·389 green·동작 무변경. CI Code Quality=prettier 주의(신규 md format 필수).",
+      "source": "/check lint max-lines 10건 + CLAUDE.md 500줄 룰 + parent component-split Phase 1-2",
+      "nextStep": "/pdca design 또는 Phase 3a(sidebar 예외)+gallery do 직행"
+    },
       "feature": "asca-jest-teardown-leak",
       "phase": "archived",
       "completedAt": "2026-06-15",
