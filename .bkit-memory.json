@@ -1,8 +1,18 @@
 {
-  "activeFeature": null,
-  "phase": "archived",
+  "activeFeature": "asca-jest-teardown-leak",
+  "phase": "do",
   "startedAt": "2026-04-22",
   "parallelFeatures": [
+    {
+      "feature": "asca-jest-teardown-leak",
+      "phase": "do",
+      "startedAt": "2026-06-14",
+      "planPath": "docs/01-plan/features/asca-jest-teardown-leak.plan.md",
+      "scope": "jest 'worker failed to exit gracefully' open-handle 누수 제거. 근본원인=StructuredLogger(lib/logging/structured-logger.ts:435 모듈 import시 getInstance→constructor:172→startProcessing:397 setInterval 100ms)가 테스트에서 안 꺼짐(--detectOpenHandles 6핸들 전부 동일). R-1=startProcessing interval .unref()(1줄, 프로덕션 무변경, child logger도 동일 경로라 일괄 해결).",
+      "doResult": "✅ Do 완료(2026-06-15). startProcessing() setInterval에 `if(typeof unref==='function') unref()` 추가(브라우저 안전). 검증 전부 충족: SC-1 detectOpenHandles에서 'Jest has detected open handles' 사라짐(6→0), SC-2 test:ci force-exit 경고 0·exit 0, SC-3 389 pass·tsc 0·lint 0 errors(10 max-lines warning 불변), SC-4 프로덕션 무변경(코드 diff=unref 가드 1블록). 기능 코드 1파일.",
+      "source": "/check 2026-06-13 test:ci 경고 + jest --detectOpenHandles 2026-06-14",
+      "nextStep": "커밋/PR → /pdca report"
+    },
     {
       "feature": "asca-csrf-origin-check",
       "phase": "archived",
