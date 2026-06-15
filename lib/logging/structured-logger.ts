@@ -397,6 +397,11 @@ export class StructuredLogger {
     this.processingInterval = setInterval(() => {
       this.processQueue()
     }, 100)
+    // 이 타이머가 Node 프로세스 종료(특히 jest 테스트 teardown)를 막지 않게 한다.
+    // 프로덕션 동작은 동일 — 앱이 살아있는 동안 큐 처리는 그대로 동작한다.
+    if (typeof this.processingInterval.unref === 'function') {
+      this.processingInterval.unref()
+    }
   }
 
   private async processQueue(): Promise<void> {
