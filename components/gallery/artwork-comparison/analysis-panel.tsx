@@ -22,7 +22,13 @@ export function AnalysisPanel({ showAnalysis, analysis, onClose }: AnalysisPanel
             <BookOpen className='w-5 h-5 text-temple-gold' />
             Comparative Analysis
           </CardTitle>
-          <Button size='sm' variant='outline' onClick={onClose} className='border-ink-black/20'>
+          <Button
+            size='sm'
+            variant='outline'
+            onClick={onClose}
+            className='border-ink-black/20'
+            aria-label='Close analysis panel'
+          >
             ✕
           </Button>
         </div>
@@ -32,8 +38,8 @@ export function AnalysisPanel({ showAnalysis, analysis, onClose }: AnalysisPanel
         <div>
           <h4 className='font-semibold text-ink-black mb-3'>Similarities</h4>
           <ul className='space-y-2'>
-            {analysis.similarities.map((similarity, index) => (
-              <li key={index} className='flex items-start gap-2 text-sm'>
+            {analysis.similarities.map(similarity => (
+              <li key={similarity} className='flex items-start gap-2 text-sm'>
                 <div className='w-2 h-2 bg-summer-jade rounded-full mt-2 flex-shrink-0' />
                 <span className='text-ink-black/80'>{similarity}</span>
               </li>
@@ -45,8 +51,8 @@ export function AnalysisPanel({ showAnalysis, analysis, onClose }: AnalysisPanel
         <div>
           <h4 className='font-semibold text-ink-black mb-3'>Key Differences</h4>
           <ul className='space-y-2'>
-            {analysis.differences.map((difference, index) => (
-              <li key={index} className='flex items-start gap-2 text-sm'>
+            {analysis.differences.map(difference => (
+              <li key={difference} className='flex items-start gap-2 text-sm'>
                 <div className='w-2 h-2 bg-vermillion rounded-full mt-2 flex-shrink-0' />
                 <span className='text-ink-black/80'>{difference}</span>
               </li>
@@ -84,8 +90,8 @@ export function AnalysisPanel({ showAnalysis, analysis, onClose }: AnalysisPanel
           <div>
             <h4 className='font-semibold text-ink-black mb-3'>Educational Notes</h4>
             <div className='space-y-2'>
-              {analysis.educational_notes.map((note, index) => (
-                <div key={index} className='bg-temple-gold/10 rounded-md p-3'>
+              {analysis.educational_notes.map(note => (
+                <div key={note} className='bg-temple-gold/10 rounded-md p-3'>
                   <p className='text-sm text-ink-black/80'>{note}</p>
                 </div>
               ))}

@@ -41,7 +41,11 @@ export function OverviewTab({
             <div className='text-center'>
               <div className='text-3xl font-bold text-temple-gold mb-2'>{userProgress.level}</div>
               <div className='text-sm text-ink-black/70'>Current Level</div>
-              <Progress value={(userProgress.experience % 1000) / 10} className='mt-2 h-2' />
+              <Progress
+                value={(userProgress.experience % 1000) / 10}
+                aria-label='Experience progress to next level'
+                className='mt-2 h-2'
+              />
             </div>
 
             <div className='text-center'>
@@ -133,8 +137,17 @@ export function OverviewTab({
             {learningPaths.slice(0, 2).map(path => (
               <div
                 key={path.id}
-                className='p-4 border border-celadon-green/20 rounded-lg hover:bg-silk-cream/50 transition-colors cursor-pointer'
+                role='button'
+                tabIndex={0}
+                aria-label={`Select learning path: ${path.title}`}
+                className='p-4 border border-celadon-green/20 rounded-lg hover:bg-silk-cream/50 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-celadon-green focus-visible:outline-none'
                 onClick={() => onSelectPath(path.id)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    onSelectPath(path.id)
+                  }
+                }}
               >
                 <div className='flex items-start justify-between'>
                   <div className='flex-1'>

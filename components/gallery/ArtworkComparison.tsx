@@ -52,6 +52,7 @@ function ArtworkComparison({
     addArtwork,
     removeArtwork,
     handleZoom,
+    handlePan,
     resetView,
     handleMouseDown,
     handleMouseMove,
@@ -270,6 +271,7 @@ function ArtworkComparison({
         onMouseUp={handleMouseUp}
         onWheel={handleWheel}
         onZoom={handleZoom}
+        onPan={handlePan}
         onResetView={resetView}
       />
 

@@ -1,5 +1,6 @@
 'use client'
 
+import { useId } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Type,
@@ -24,6 +25,8 @@ interface AccessibilityPanelProps {
 }
 
 export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPanelProps) {
+  const id = useId()
+
   return (
     <div className='space-y-6'>
       {/* Typography Controls */}
@@ -36,13 +39,20 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
         <div className='space-y-4'>
           {/* Font Size */}
           <div className='flex items-center justify-between'>
-            <label className='text-sm text-ink-black/70'>Font Size</label>
-            <div className='flex items-center gap-2'>
+            <span id={`${id}-font-size`} className='text-sm text-ink-black/70'>
+              Font Size
+            </span>
+            <div
+              role='group'
+              aria-labelledby={`${id}-font-size`}
+              className='flex items-center gap-2'
+            >
               <Button
                 size='sm'
                 variant='outline'
                 onClick={() => updateSetting('fontSize', Math.max(12, settings.fontSize - 2))}
                 className='h-8 w-8 p-0'
+                aria-label='Decrease font size'
               >
                 <Minus className='w-3 h-3' />
               </Button>
@@ -52,6 +62,7 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
                 variant='outline'
                 onClick={() => updateSetting('fontSize', Math.min(24, settings.fontSize + 2))}
                 className='h-8 w-8 p-0'
+                aria-label='Increase font size'
               >
                 <Plus className='w-3 h-3' />
               </Button>
@@ -60,8 +71,11 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
 
           {/* Font Family */}
           <div>
-            <label className='text-sm text-ink-black/70 mb-2 block'>Font Family</label>
+            <label htmlFor={`${id}-font-family`} className='text-sm text-ink-black/70 mb-2 block'>
+              Font Family
+            </label>
             <select
+              id={`${id}-font-family`}
               value={settings.fontFamily}
               onChange={e => updateSetting('fontFamily', e.target.value)}
               className='w-full p-2 border border-celadon-green/20 rounded-md bg-rice-paper text-sm'
@@ -76,8 +90,14 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
 
           {/* Line Height */}
           <div className='flex items-center justify-between'>
-            <label className='text-sm text-ink-black/70'>Line Height</label>
-            <div className='flex items-center gap-2'>
+            <span id={`${id}-line-height`} className='text-sm text-ink-black/70'>
+              Line Height
+            </span>
+            <div
+              role='group'
+              aria-labelledby={`${id}-line-height`}
+              className='flex items-center gap-2'
+            >
               <Button
                 size='sm'
                 variant='outline'
@@ -85,6 +105,7 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
                   updateSetting('lineHeight', Math.max(1.2, settings.lineHeight - 0.1))
                 }
                 className='h-8 w-8 p-0'
+                aria-label='Decrease line height'
               >
                 <Minus className='w-3 h-3' />
               </Button>
@@ -96,6 +117,7 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
                   updateSetting('lineHeight', Math.min(2.0, settings.lineHeight + 0.1))
                 }
                 className='h-8 w-8 p-0'
+                aria-label='Increase line height'
               >
                 <Plus className='w-3 h-3' />
               </Button>
@@ -114,8 +136,11 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
         <div className='space-y-4'>
           {/* Contrast */}
           <div>
-            <label className='text-sm text-ink-black/70 mb-2 block'>Contrast</label>
+            <label htmlFor={`${id}-contrast`} className='text-sm text-ink-black/70 mb-2 block'>
+              Contrast
+            </label>
             <select
+              id={`${id}-contrast`}
               value={settings.contrast}
               onChange={e => updateSetting('contrast', e.target.value)}
               className='w-full p-2 border border-celadon-green/20 rounded-md bg-rice-paper text-sm'
@@ -128,8 +153,10 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
 
           {/* Color Scheme */}
           <div>
-            <label className='text-sm text-ink-black/70 mb-2 block'>Color Scheme</label>
-            <div className='flex gap-2'>
+            <span id={`${id}-color-scheme`} className='text-sm text-ink-black/70 mb-2 block'>
+              Color Scheme
+            </span>
+            <div role='group' aria-labelledby={`${id}-color-scheme`} className='flex gap-2'>
               {[
                 { value: 'light', icon: Sun, label: 'Light' },
                 { value: 'dark', icon: Moon, label: 'Dark' },
@@ -141,6 +168,7 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
                   variant={settings.colorScheme === value ? 'default' : 'outline'}
                   onClick={() => updateSetting('colorScheme', value)}
                   className='flex-1'
+                  aria-pressed={settings.colorScheme === value}
                 >
                   <Icon className='w-3 h-3 mr-1' />
                   {label}
@@ -151,12 +179,16 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
 
           {/* Motion */}
           <div className='flex items-center justify-between'>
-            <label className='text-sm text-ink-black/70'>Reduce Motion</label>
+            <span id={`${id}-reduce-motion`} className='text-sm text-ink-black/70'>
+              Reduce Motion
+            </span>
             <Button
               size='sm'
               variant={settings.motionReduced ? 'default' : 'outline'}
               onClick={() => updateSetting('motionReduced', !settings.motionReduced)}
               className='h-8'
+              aria-labelledby={`${id}-reduce-motion`}
+              aria-pressed={settings.motionReduced}
             >
               {settings.motionReduced ? 'On' : 'Off'}
             </Button>
@@ -180,10 +212,13 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
             { key: 'captionsEnabled', label: 'Captions', icon: Captions },
           ].map(({ key, label, icon: Icon }) => (
             <div key={key} className='flex items-center justify-between'>
-              <label className='text-sm text-ink-black/70 flex items-center gap-2'>
+              <span
+                id={`${id}-nav-${key}`}
+                className='text-sm text-ink-black/70 flex items-center gap-2'
+              >
                 <Icon className='w-3 h-3' />
                 {label}
-              </label>
+              </span>
               <Button
                 size='sm'
                 variant={settings[key as keyof AccessibilitySettings] ? 'default' : 'outline'}
@@ -194,6 +229,8 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
                   )
                 }
                 className='h-8'
+                aria-labelledby={`${id}-nav-${key}`}
+                aria-pressed={Boolean(settings[key as keyof AccessibilitySettings])}
               >
                 {settings[key as keyof AccessibilitySettings] ? 'On' : 'Off'}
               </Button>

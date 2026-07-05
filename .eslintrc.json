@@ -70,6 +70,27 @@
       "rules": {
         "max-lines": "off"
       }
+    },
+    {
+      // a11y 회귀 게이트 — asca-a11y-cleanup 사이클에서 정리된 디렉터리만 error 승격.
+      // 전역 승격은 기존 위반 218건(99파일)이라 불가 — 롤아웃은 asca-a11y-rules-rollout 후속 사이클.
+      "files": [
+        "components/gallery/artwork-comparison/**/*.tsx",
+        "components/gallery/gallery-grid/**/*.tsx",
+        "components/gallery/stroke-animation/**/*.tsx",
+        "components/gallery/zoomable-image-viewer/**/*.tsx",
+        "components/cultural/cultural-accessibility/**/*.tsx",
+        "components/cultural/cultural-calendar/**/*.tsx",
+        "components/cultural/learning-hub/**/*.tsx",
+        "components/cultural/virtual-exhibition/**/*.tsx"
+      ],
+      "rules": {
+        "jsx-a11y/label-has-associated-control": "error",
+        "jsx-a11y/control-has-associated-label": "error",
+        "jsx-a11y/click-events-have-key-events": "error",
+        "jsx-a11y/no-static-element-interactions": "error",
+        "react/no-array-index-key": "error"
+      }
     }
   ]
 }
