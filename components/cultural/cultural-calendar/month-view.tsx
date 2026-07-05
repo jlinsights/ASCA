@@ -79,14 +79,14 @@ export function MonthView({
 
           {/* Calendar Days */}
           <div className='grid grid-cols-7 gap-2'>
-            {days.map(({ date, isCurrentMonth }, index) => {
+            {days.map(({ date, isCurrentMonth }) => {
               const dayEvents = getEventsForDate(date)
               const traditionalDayData = getTraditionalDate(date)
               const isToday = date.toDateString() === new Date().toDateString()
 
               return (
                 <div
-                  key={index}
+                  key={date.getTime()}
                   className={cn(
                     'min-h-24 p-2 rounded-lg border transition-colors cursor-pointer',
                     isCurrentMonth
@@ -113,9 +113,9 @@ export function MonthView({
 
                   {/* Traditional Festivals */}
                   {showTraditionalFestivals &&
-                    traditionalDayData.festivals?.map((festival, i) => (
+                    traditionalDayData.festivals?.map(festival => (
                       <div
-                        key={i}
+                        key={festival}
                         className='text-xs text-vermillion font-medium mb-1 line-clamp-1'
                       >
                         {festival}

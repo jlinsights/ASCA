@@ -262,6 +262,7 @@ export function useArtworkComparison({
     addArtwork,
     removeArtwork,
     handleZoom,
+    handlePan,
     resetView,
     handleMouseDown,
     handleMouseMove,

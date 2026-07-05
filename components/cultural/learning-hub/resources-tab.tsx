@@ -44,6 +44,7 @@ export function ResourcesTab({
               <input
                 type='text'
                 placeholder='Search resources...'
+                aria-label='Search resources'
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
                 className='w-full pl-10 pr-4 py-2 rounded-md border border-celadon-green/20 bg-rice-paper text-sm'
@@ -51,6 +52,7 @@ export function ResourcesTab({
             </div>
 
             <select
+              aria-label='Filter by difficulty'
               value={filters.difficulty || ''}
               onChange={e =>
                 setFilters(prev => ({ ...prev, difficulty: e.target.value || undefined }))
@@ -65,6 +67,7 @@ export function ResourcesTab({
             </select>
 
             <select
+              aria-label='Filter by type'
               value={filters.type || ''}
               onChange={e => setFilters(prev => ({ ...prev, type: e.target.value || undefined }))}
               className='p-2 rounded-md border border-celadon-green/20 bg-rice-paper text-sm'
@@ -78,6 +81,7 @@ export function ResourcesTab({
             </select>
 
             <select
+              aria-label='Filter by duration'
               value={filters.duration || ''}
               onChange={e =>
                 setFilters(prev => ({ ...prev, duration: e.target.value || undefined }))

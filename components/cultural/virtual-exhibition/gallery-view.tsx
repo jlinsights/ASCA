@@ -30,6 +30,8 @@ export function GalleryView({
 }: GalleryViewProps) {
   return (
     <div
+      role='application'
+      aria-label={`Virtual gallery: ${exhibition.title}. Drag to pan the view.`}
       className={cn('relative w-full h-full overflow-hidden cursor-move', wallColor)}
       style={{
         filter: lightingEffect,
@@ -47,13 +49,22 @@ export function GalleryView({
       {exhibition.artworks.map(artwork => (
         <div
           key={artwork.id}
-          className='absolute group cursor-pointer transition-all duration-300 hover:scale-105'
+          role='button'
+          tabIndex={0}
+          aria-label={`View artwork: ${artwork.title.english}`}
+          className='absolute group cursor-pointer transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-temple-gold focus-visible:outline-none'
           style={{
             left: `${artwork.position.x}%`,
             top: `${artwork.position.y}%`,
             transform: 'translate(-50%, -50%)',
           }}
           onClick={() => onSelectArtwork(artwork)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              onSelectArtwork(artwork)
+            }
+          }}
         >
           {/* Artwork Frame */}
           <div className='relative'>
