@@ -1,17 +1,26 @@
 {
-  "activeFeature": "asca-component-split-phase-3-4",
-  "phase": "design",
+  "activeFeature": null,
+  "phase": "archived",
   "startedAt": "2026-04-22",
   "parallelFeatures": [
     {
       "feature": "asca-component-split-phase-3-4",
-      "phase": "design",
+      "phase": "archived",
       "startedAt": "2026-06-15",
-      "planPath": "docs/01-plan/features/asca-component-split-phase-3-4.plan.md",
-      "designPath": "docs/02-design/features/asca-component-split-phase-3-4.design.md",
+      "planPath": "docs/archive/2026-07/asca-component-split-phase-3-4/asca-component-split-phase-3-4.plan.md",
+      "designPath": "docs/archive/2026-07/asca-component-split-phase-3-4/asca-component-split-phase-3-4.design.md",
       "scope": "max-lines(500) 초과 10파일 정리(Phase 1-2 후 잔여). 실측 분류: V components/ui/sidebar.tsx(736)=shadcn vendor→eslint 예외(분리 X), G1~G4 gallery(StrokeAnimationPlayer 901·ArtworkComparison 821·GalleryGrid 820·ZoomableImageViewer 702)=로직무거움 우선분리, C1~C4 cultural(558~745), A1 bylaws-content(763)=콘텐츠. CLAUDE.md Large File Refactoring Process(subcomponent→hook→data externalize). R-1 sidebar=vendor 예외, R-2 점진 PR(gallery→cultural→bylaws), R-3 기존 테스트 무수정 통과+DOM 등가. SC=lint max-lines 0·389 green·동작 무변경. CI Code Quality=prettier 주의(신규 md format 필수).",
       "source": "/check lint max-lines 10건 + CLAUDE.md 500줄 룰 + parent component-split Phase 1-2",
-      "nextStep": "design 완료(2026-06-16) → /pdca do. PR1=Phase 3a sidebar eslint 단일파일 예외(즉효) → PR2~ gallery G1~G4 분리(파일별). 비파괴 진입점·shell≤350 원칙"
+      "nextStep": "archived — 후속 asca-a11y-cleanup 별도 사이클",
+      "matchRate": 100,
+      "completedAt": "2026-07-05",
+      "archivedAt": "2026-07-05",
+      "archivedTo": "docs/archive/2026-07/asca-component-split-phase-3-4/",
+      "analysisPath": "docs/archive/2026-07/asca-component-split-phase-3-4/asca-component-split-phase-3-4.analysis.md",
+      "reportPath": "docs/archive/2026-07/asca-component-split-phase-3-4/asca-component-split-phase-3-4.report.md",
+      "mergedPrs": [39, 40, 41, 42],
+      "mergeCommits": ["31f95e56", "b8d402d0", "d86d5285", "95edd07d"],
+      "outcome": "✅ Report+Archive (100%). max-lines 10→0. 9파일 비파괴 분리(경로·export 불변)+sidebar 단일파일 예외, 4 PR squash 머지, 머지된 main 전 게이트 green(lint 0·tsc 0·test:ci 389/389·build·design 3게이트). verbatim 추출·내부정의컴포넌트→안정화(DOM등가)·bylaws 텍스트 12469자 일치. 후속: asca-a11y-cleanup(CodeRabbit pre-existing a11y 55건 별도 사이클)."
     },
     {
       "feature": "asca-jest-teardown-leak",
@@ -360,15 +369,11 @@
     "status": "success"
   },
   "lastArchived": {
-    "feature": "asca-csrf-tls-scheme-check",
-    "date": "2026-05-30",
-    "commit": "a05056b2",
-    "mergedPr": 35,
-    "archivedTo": "docs/archive/2026-05/",
-    "concurrentArchives": [
-      "asca-csrf-origin-check (PR #33)",
-      "warning-cleanup-cycle-2 (stale 2026-04-22)"
-    ]
+    "feature": "asca-component-split-phase-3-4",
+    "date": "2026-07-05",
+    "matchRate": 100,
+    "mergedPrs": [39, 40, 41, 42],
+    "archivedTo": "docs/archive/2026-07/asca-component-split-phase-3-4/"
   },
   "staleResolved": {
     "feature": "warning-cleanup-cycle-2",
