@@ -63,6 +63,13 @@
         "no-console": "off",
         "max-lines": "off"
       }
+    },
+    {
+      // shadcn/ui vendor (radix slot·cva·forwardRef) — 상류 재생성/업데이트와 발산 방지: 분리하지 않고 단일 파일 예외 (design §4)
+      "files": ["components/ui/sidebar.tsx"],
+      "rules": {
+        "max-lines": "off"
+      }
     }
   ]
 }
