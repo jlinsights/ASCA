@@ -89,9 +89,9 @@ export function ResourceCard({
 
           {/* Tags */}
           <div className='flex flex-wrap gap-1 mb-3'>
-            {resource.tags.slice(0, compact ? 2 : 3).map((tag, index) => (
+            {resource.tags.slice(0, compact ? 2 : 3).map(tag => (
               <Badge
-                key={index}
+                key={tag}
                 variant='outline'
                 className='text-xs border-celadon-green/30 text-celadon-green'
               >

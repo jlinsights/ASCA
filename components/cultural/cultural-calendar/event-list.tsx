@@ -103,9 +103,9 @@ export function EventCard({ event, compact = false }: EventCardProps) {
 
             {/* Tags */}
             <div className='flex flex-wrap gap-1'>
-              {event.tags.slice(0, 3).map((tag, index) => (
+              {event.tags.slice(0, 3).map(tag => (
                 <Badge
-                  key={index}
+                  key={tag}
                   variant='secondary'
                   className='text-xs bg-celadon-green/10 text-celadon-green border-celadon-green/20'
                 >

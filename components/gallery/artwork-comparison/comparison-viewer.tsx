@@ -1,6 +1,6 @@
 'use client'
 
-import type { MouseEvent, WheelEvent, MutableRefObject } from 'react'
+import type { KeyboardEvent, MouseEvent, WheelEvent, MutableRefObject } from 'react'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,7 @@ interface ComparisonViewProps {
   onMouseUp: (index: number) => void
   onWheel: (index: number, e: WheelEvent) => void
   onZoom: (index: number, delta: number, centerX?: number, centerY?: number) => void
+  onPan: (index: number, deltaX: number, deltaY: number) => void
   onResetView: (index?: number) => void
 }
 
@@ -32,8 +33,42 @@ export function ComparisonView({
   onMouseUp,
   onWheel,
   onZoom,
+  onPan,
   onResetView,
 }: ComparisonViewProps) {
+  const handleViewerKeyDown = (index: number, e: KeyboardEvent<HTMLDivElement>) => {
+    const panStep = 20
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault()
+        onPan(index, panStep, 0)
+        break
+      case 'ArrowRight':
+        e.preventDefault()
+        onPan(index, -panStep, 0)
+        break
+      case 'ArrowUp':
+        e.preventDefault()
+        onPan(index, 0, panStep)
+        break
+      case 'ArrowDown':
+        e.preventDefault()
+        onPan(index, 0, -panStep)
+        break
+      case '+':
+      case '=':
+        e.preventDefault()
+        onZoom(index, 0.2)
+        break
+      case '-':
+        e.preventDefault()
+        onZoom(index, -0.2)
+        break
+      default:
+        break
+    }
+  }
+
   const renderImageViewer = (artwork: Artwork, index: number) => {
     const viewerState = viewerStates[index]
     const primaryImage = artwork.images.find(img => img.type === 'primary') || artwork.images[0]
@@ -42,13 +77,17 @@ export function ComparisonView({
 
     return (
       <div
-        className='relative bg-ink-black/5 rounded-lg overflow-hidden cursor-grab active:cursor-grabbing'
+        role='application'
+        tabIndex={0}
+        aria-label={`Artwork viewer: ${artwork.title.english}. Use arrow keys to pan, plus and minus to zoom.`}
+        className='relative bg-ink-black/5 rounded-lg overflow-hidden cursor-grab active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-celadon-green focus-visible:outline-none'
         style={{ height: '400px' }}
         onMouseDown={e => onMouseDown(index, e)}
         onMouseMove={e => onMouseMove(index, e)}
         onMouseUp={() => onMouseUp(index)}
         onMouseLeave={() => onMouseUp(index)}
         onWheel={e => onWheel(index, e)}
+        onKeyDown={e => handleViewerKeyDown(index, e)}
       >
         <div
           className='relative w-full h-full flex items-center justify-center'
@@ -130,6 +169,7 @@ export function ComparisonView({
             variant='ghost'
             onClick={() => onZoom(index, 0.2)}
             className='h-8 w-8 p-0'
+            aria-label='Zoom in'
           >
             <ZoomIn className='w-4 h-4' />
           </Button>
@@ -138,6 +178,7 @@ export function ComparisonView({
             variant='ghost'
             onClick={() => onZoom(index, -0.2)}
             className='h-8 w-8 p-0'
+            aria-label='Zoom out'
           >
             <ZoomOut className='w-4 h-4' />
           </Button>
@@ -146,6 +187,7 @@ export function ComparisonView({
             variant='ghost'
             onClick={() => onResetView(index)}
             className='h-8 w-8 p-0'
+            aria-label='Reset view'
           >
             <RotateCcw className='w-4 h-4' />
           </Button>

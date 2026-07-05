@@ -49,6 +49,7 @@ export function DetailView({
                 variant='secondary'
                 onClick={() => onZoom(0.2)}
                 className='bg-silk-cream/20 text-rice-paper hover:bg-silk-cream/30'
+                aria-label='Zoom in'
               >
                 <ZoomIn className='w-4 h-4' />
               </Button>
@@ -57,6 +58,7 @@ export function DetailView({
                 variant='secondary'
                 onClick={() => onZoom(-0.2)}
                 className='bg-silk-cream/20 text-rice-paper hover:bg-silk-cream/30'
+                aria-label='Zoom out'
               >
                 <ZoomOut className='w-4 h-4' />
               </Button>
@@ -65,6 +67,7 @@ export function DetailView({
                 variant='secondary'
                 onClick={onResetView}
                 className='bg-silk-cream/20 text-rice-paper hover:bg-silk-cream/30'
+                aria-label='Reset view'
               >
                 <RotateCcw className='w-4 h-4' />
               </Button>
@@ -73,7 +76,7 @@ export function DetailView({
             {/* Detail Markers */}
             {selectedArtwork.image.details.map((detail, index) => (
               <div
-                key={index}
+                key={detail}
                 className='absolute w-3 h-3 bg-temple-gold rounded-full border-2 border-rice-paper cursor-pointer hover:scale-150 transition-transform duration-200'
                 style={{
                   left: `${20 + index * 15}%`,
@@ -170,6 +173,7 @@ export function DetailView({
                   src={selectedArtwork.audio.url}
                   controls
                   className='w-full mb-2'
+                  aria-label={`Audio guide: ${selectedArtwork.title.english}`}
                 />
                 <p className='text-rice-paper/70 text-sm leading-relaxed'>
                   {selectedArtwork.audio.transcript}
@@ -186,12 +190,14 @@ export function DetailView({
               <Button
                 variant='outline'
                 className='border-rice-paper/30 text-rice-paper hover:bg-rice-paper/10'
+                aria-label='Download artwork image'
               >
                 <Download className='w-4 h-4' />
               </Button>
               <Button
                 variant='outline'
                 className='border-rice-paper/30 text-rice-paper hover:bg-rice-paper/10'
+                aria-label='Share artwork'
               >
                 <Share2 className='w-4 h-4' />
               </Button>

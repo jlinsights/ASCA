@@ -40,6 +40,7 @@ export function PlaybackControls({
         onClick={onPrevious}
         disabled={playbackState.currentStroke === 0}
         className='border-ink-black/20'
+        aria-label='Previous stroke'
       >
         <SkipBack className='w-4 h-4' />
       </Button>
@@ -49,6 +50,7 @@ export function PlaybackControls({
           size='sm'
           onClick={onPause}
           className='bg-celadon-green text-ink-black hover:bg-celadon-green/80'
+          aria-label='Pause animation'
         >
           <Pause className='w-4 h-4' />
         </Button>
@@ -57,12 +59,19 @@ export function PlaybackControls({
           size='sm'
           onClick={onPlay}
           className='bg-celadon-green text-ink-black hover:bg-celadon-green/80'
+          aria-label='Play animation'
         >
           <Play className='w-4 h-4' />
         </Button>
       )}
 
-      <Button size='sm' variant='outline' onClick={onStop} className='border-ink-black/20'>
+      <Button
+        size='sm'
+        variant='outline'
+        onClick={onStop}
+        className='border-ink-black/20'
+        aria-label='Stop animation'
+      >
         <Square className='w-4 h-4' />
       </Button>
 
@@ -72,6 +81,7 @@ export function PlaybackControls({
         onClick={onNext}
         disabled={playbackState.currentStroke === strokesCount - 1}
         className='border-ink-black/20'
+        aria-label='Next stroke'
       >
         <SkipForward className='w-4 h-4' />
       </Button>
@@ -89,6 +99,7 @@ export function PlaybackControls({
               }))
             }
             className='h-8 w-8 p-0 border-ink-black/20'
+            aria-label='Decrease speed'
           >
             <Minus className='w-3 h-3' />
           </Button>
@@ -105,6 +116,7 @@ export function PlaybackControls({
               }))
             }
             className='h-8 w-8 p-0 border-ink-black/20'
+            aria-label='Increase speed'
           >
             <Plus className='w-3 h-3' />
           </Button>
@@ -116,6 +128,7 @@ export function PlaybackControls({
         variant='outline'
         onClick={() => setShowSettings(!showSettings)}
         className='border-ink-black/20 ml-4'
+        aria-label='Toggle settings'
       >
         <Settings className='w-4 h-4' />
       </Button>

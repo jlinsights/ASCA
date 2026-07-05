@@ -192,9 +192,9 @@ export function GalleryItemCard({
           <h3 className='text-white text-lg font-bold mb-2 line-clamp-2'>{item.title}</h3>
           <p className='text-gray-200 text-sm mb-3 line-clamp-2'>{item.description}</p>
           <div className='flex flex-wrap gap-1'>
-            {item.tags.slice(0, 3).map((tag, tagIndex) => (
+            {item.tags.slice(0, 3).map(tag => (
               <span
-                key={tagIndex}
+                key={tag}
                 className='px-2 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-md'
               >
                 #{tag}

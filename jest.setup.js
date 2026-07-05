@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom'
+import 'jest-axe/extend-expect'
 
 // jest worker process listener cap 풀기 — Next.js 14 unhandled-rejection
 // polyfill 이 worker 모듈 reload 시 internal queue 에 listener 누적해

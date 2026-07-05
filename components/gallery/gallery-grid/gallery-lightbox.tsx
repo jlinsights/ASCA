@@ -213,7 +213,7 @@ export function GalleryLightbox({
               <div className='flex flex-wrap gap-2'>
                 {selectedImage.tags.map((tag, index) => (
                   <motion.span
-                    key={index}
+                    key={tag}
                     className='px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-default'
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}

@@ -1,8 +1,20 @@
 {
-  "activeFeature": null,
-  "phase": "archived",
+  "activeFeature": "asca-a11y-cleanup",
+  "phase": "plan",
   "startedAt": "2026-04-22",
   "parallelFeatures": [
+    {
+      "feature": "asca-a11y-cleanup",
+      "phase": "do",
+      "startedAt": "2026-07-05",
+      "planPath": "docs/01-plan/features/asca-a11y-cleanup.plan.md",
+      "designPath": "docs/02-design/features/asca-a11y-cleanup.design.md",
+      "scope": "PR #40·#41 CodeRabbit 55건 전수 분류 → In Scope 15 스레드(a11y 12 + array-index key 3, ~36 인스턴스): 아이콘 버튼 aria-label 3·라벨-컨트롤 연결 5(~17개)·키보드 접근 3·lightbox 포커스 트랩 1·index key 3(5리스트) + jest-axe·jsx-a11y 룰 활성화 게이트. Out: 기능버그 17(→asca-gallery-cultural-bugfix 후보)·JSDoc 12·perf 4·타입/중복 7.",
+      "source": "component-split phase-3-4 후속 — PR #40(gallery 30)·#41(cultural 25) CodeRabbit pre-existing 지적",
+      "designDecisions": "D-1 룰 전역 불가(실측 218건/99파일, lint:strict max-warnings 0 충돌)→대상 8디렉터리 override error 한정·롤아웃은 asca-a11y-rules-rollout 후속. D-2 대상내 lint 39건=CodeRabbit 상위집합, 전부 수정. D-3 lightbox 포커스트랩=Radix 전환 기각(구조불변 원칙)→자체 useFocusTrap 훅(~60줄, Tab순환·Escape·복귀). D-4 2 PR: PR-1 속성+key+게이트(fail-injection 필수), PR-2 lightbox 트랩 격리. 실측보정: playback 버튼 8개(5 아님)·detail-view audio 네이티브 양호·lightbox Escape도 부재·id는 전부 useId()",
+      "doProgress": "PR-1+PR-2 스코프 구현 완료(2026-07-05, 미커밋): 컴포넌트 16파일 a11y 속성·key 수정, .eslintrc override(8디렉터리 5룰 error, fail-injection exit1 검증), jest-axe 10.0 도입+스모크 9컴포넌트(axe가 신규 결함 1건 추가 발견: overview-tab Progress aria-label→수정), hooks/use-focus-trap.ts+lightbox 통합+트랩 테스트 3케이스. 게이트: tsc 0·대상 lint 0·prettier·build·test 398+3. 구현 노트: no-array-index-key는 `${str}-${index}` 복합키도 거부→순수 콘텐츠 key, control-has-associated-label은 래핑 label 미인식→가시 텍스트와 동일한 aria-label 병기, handlePan 훅 기존재→반환에 추가해 키보드 팬 배선",
+      "nextStep": "커밋/PR 생성(사용자 승인 대기) → /pdca analyze asca-a11y-cleanup"
+    },
     {
       "feature": "asca-component-split-phase-3-4",
       "phase": "archived",
