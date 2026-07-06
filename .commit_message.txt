@@ -1,1 +1,1 @@
-📁 archive(pdca): asca-a11y-cleanup 아카이브 — 문서 4종 docs/archive/2026-07/ 이관, _INDEX 갱신, .bkit-memory phase=archived (Match 100%, PR #43 db11ce80·#44 713747cf)
+🐛 fix(gallery): bugfix 1/3 — comparison isAnalyzing 가드(ref 재진입 차단)·grid 폴백·ref 정리, gallery-item scale-0 버튼 복구, GalleryGrid onEvent 배선, zoom fullscreen 동기화 + 동작테스트 5케이스(fail-first)
