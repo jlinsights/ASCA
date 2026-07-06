@@ -4,6 +4,7 @@ import type { MouseEvent } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { GalleryItem } from '@/lib/types/gallery/gallery-legacy'
+import { useFocusTrap } from '@/hooks/use-focus-trap'
 import { getCategoryIcon, getCategoryName } from './gallery-grid.utils'
 
 interface GalleryLightboxProps {
@@ -21,6 +22,11 @@ export function GalleryLightbox({
   onNavigate,
   onShareClick,
 }: GalleryLightboxProps) {
+  const trapRef = useFocusTrap<HTMLDivElement>({
+    active: Boolean(selectedImage),
+    onEscape: onClose,
+  })
+
   return (
     <AnimatePresence>
       {selectedImage && (
@@ -45,6 +51,8 @@ export function GalleryLightbox({
           />
 
           <motion.div
+            ref={trapRef}
+            tabIndex={-1}
             initial={{ scale: 0.8, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 50 }}

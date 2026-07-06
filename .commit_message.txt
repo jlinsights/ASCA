@@ -1,1 +1,1 @@
-♿ fix(a11y): a11y-cleanup 1/2 — gallery·cultural 16파일 접근성 속성·key 정리 + 회귀 게이트(.eslintrc 8디렉터리 jsx-a11y 5룰 error, jest-axe 스모크 9컴포넌트), aria-label 19·라벨연결 21·키보드 3·콘텐츠 key 10
+♿ fix(a11y): a11y-cleanup 2/2 — useFocusTrap 훅 신규 + gallery-lightbox 포커스 트랩·Escape 닫기·포커스 복귀, 트랩 동작 테스트 3케이스
