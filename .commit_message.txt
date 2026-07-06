@@ -1,1 +1,1 @@
-♿ fix(a11y): a11y-cleanup 2/2 — useFocusTrap 훅 신규 + gallery-lightbox 포커스 트랩·Escape 닫기·포커스 복귀, 트랩 동작 테스트 3케이스
+📁 archive(pdca): asca-a11y-cleanup 아카이브 — 문서 4종 docs/archive/2026-07/ 이관, _INDEX 갱신, .bkit-memory phase=archived (Match 100%, PR #43 db11ce80·#44 713747cf)
