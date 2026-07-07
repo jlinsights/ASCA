@@ -43,6 +43,12 @@ export function useStrokeAnimation({
   const animationRef = useRef<number | null>(null)
   const startTimeRef = useRef<number | null>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
+  // pause 시점까지의 스케일된 elapsed — play()가 이어서 재생할 수 있게 보존 (A-1)
+  const pausedElapsedRef = useRef(0)
+  // loopMode 'all' 재시작 타이머 핸들 — stop/unmount 시 정리 (A-3)
+  const loopTimeoutsRef = useRef<Array<ReturnType<typeof setTimeout>>>([])
+  // 배경 문자 이미지 1회 로드 캐시 — RAF 매 프레임 new Image() 방지 (A-4)
+  const characterImageRef = useRef<HTMLImageElement | null>(null)
 
   // Animation dimensions
   const canvasWidth = 800
@@ -234,10 +240,12 @@ export function useStrokeAnimation({
       if (!ctx) return
 
       if (!startTimeRef.current) {
-        startTimeRef.current = timestamp
+        // pause 후 재개 시 저장된 elapsed만큼 시작점을 당겨 이어서 재생 (A-1)
+        startTimeRef.current = timestamp - pausedElapsedRef.current / settings.playbackSpeed
       }
 
       const elapsed = (timestamp - startTimeRef.current) * settings.playbackSpeed
+      pausedElapsedRef.current = elapsed
       const currentStroke = strokes[playbackState.currentStroke]
 
       if (!currentStroke) return
@@ -247,15 +255,12 @@ export function useStrokeAnimation({
       // Clear canvas and redraw
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
-      // Redraw background
-      if (characterImage) {
-        const img = new Image()
-        img.src = characterImage
-        if (img.complete) {
-          ctx.globalAlpha = 0.1
-          ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight)
-          ctx.globalAlpha = 1
-        }
+      // Redraw background — 캐시된 이미지만 사용 (A-4)
+      const backgroundImage = characterImageRef.current
+      if (backgroundImage?.complete) {
+        ctx.globalAlpha = 0.1
+        ctx.drawImage(backgroundImage, 0, 0, canvasWidth, canvasHeight)
+        ctx.globalAlpha = 1
       }
 
       if (settings.showTiming) {
@@ -291,6 +296,14 @@ export function useStrokeAnimation({
       if (strokeProgress >= 1) {
         onStrokeComplete?.(playbackState.currentStroke)
 
+        // Loop current stroke — advance/complete 분기에 진입하지 않는다 (A-2)
+        if (settings.loopMode === 'single') {
+          startTimeRef.current = timestamp
+          pausedElapsedRef.current = 0
+          animationRef.current = requestAnimationFrame(animate)
+          return
+        }
+
         if (playbackState.currentStroke < strokes.length - 1) {
           // Move to next stroke
           if (settings.autoAdvance) {
@@ -299,6 +312,7 @@ export function useStrokeAnimation({
               currentStroke: prev.currentStroke + 1,
             }))
             startTimeRef.current = timestamp
+            pausedElapsedRef.current = 0
           } else {
             // Pause at end of stroke
             setPlaybackState(prev => ({ ...prev, isPlaying: false }))
@@ -313,8 +327,8 @@ export function useStrokeAnimation({
           onAnimationComplete?.()
 
           if (settings.loopMode === 'all') {
-            // Reset and restart animation
-            setTimeout(() => {
+            // Reset and restart animation — 타이머 핸들은 stop/unmount에서 정리 (A-3)
+            const restartTimeout = setTimeout(() => {
               setPlaybackState({
                 isPlaying: false,
                 currentStroke: 0,
@@ -323,12 +337,15 @@ export function useStrokeAnimation({
                 isComplete: false,
               })
               startTimeRef.current = null
+              pausedElapsedRef.current = 0
 
-              setTimeout(() => {
+              const resumeTimeout = setTimeout(() => {
                 setPlaybackState(prev => ({ ...prev, isPlaying: true }))
                 animationRef.current = requestAnimationFrame(animate)
               }, 100)
+              loopTimeoutsRef.current.push(resumeTimeout)
             }, 1000)
+            loopTimeoutsRef.current.push(restartTimeout)
           }
         }
       }
@@ -345,14 +362,19 @@ export function useStrokeAnimation({
       settings.autoAdvance,
       settings.loopMode,
       settings.showTiming,
-      characterImage,
       drawStroke,
       onStrokeComplete,
       onAnimationComplete,
     ]
   )
 
+  const clearLoopTimeouts = useCallback(() => {
+    loopTimeoutsRef.current.forEach(clearTimeout)
+    loopTimeoutsRef.current = []
+  }, [])
+
   const resetAnimation = useCallback(() => {
+    clearLoopTimeouts()
     setPlaybackState({
       isPlaying: false,
       currentStroke: 0,
@@ -361,12 +383,13 @@ export function useStrokeAnimation({
       isComplete: false,
     })
     startTimeRef.current = null
+    pausedElapsedRef.current = 0
 
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current)
       animationRef.current = null
     }
-  }, [])
+  }, [clearLoopTimeouts])
 
   const play = useCallback(() => {
     if (playbackState.isComplete && settings.loopMode === 'none') {
@@ -402,6 +425,7 @@ export function useStrokeAnimation({
         currentProgress: 0,
       }))
       startTimeRef.current = null
+      pausedElapsedRef.current = 0
     }
   }
 
@@ -413,6 +437,7 @@ export function useStrokeAnimation({
         currentProgress: 0,
       }))
       startTimeRef.current = null
+      pausedElapsedRef.current = 0
     }
   }
 
@@ -420,14 +445,33 @@ export function useStrokeAnimation({
   // Effects
   // ===============================
 
+  // 배경 문자 이미지 1회 로드 캐시 (A-4)
+  useEffect(() => {
+    if (!characterImage) {
+      characterImageRef.current = null
+      return undefined
+    }
+
+    const img = new Image()
+    img.onload = () => {
+      characterImageRef.current = img
+    }
+    img.src = characterImage
+
+    return () => {
+      img.onload = null
+    }
+  }, [characterImage])
+
   useEffect(() => {
     initializeAnimation()
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
+      clearLoopTimeouts()
     }
-  }, [initializeAnimation])
+  }, [initializeAnimation, clearLoopTimeouts])
 
   useEffect(() => {
     if (playbackState.isPlaying) {
