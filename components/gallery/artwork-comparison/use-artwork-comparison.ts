@@ -27,6 +27,7 @@ export function useArtworkComparison({
     { scale: 1, offsetX: 0, offsetY: 0, isDragging: false, dragStart: { x: 0, y: 0 } },
   ])
   const [analysis, setAnalysis] = useState<ComparisonAnalysis | null>(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showAnalysis, setShowAnalysis] = useState(false)
   const [activeImage, setActiveImage] = useState<{ artworkIndex: number; imageIndex: number }>({
@@ -36,6 +37,8 @@ export function useArtworkComparison({
 
   const containerRef = useRef<HTMLDivElement>(null)
   const imageRefs = useRef<(HTMLImageElement | null)[]>([])
+  // isAnalyzing state는 렌더 클로저에 갇혀 동기 연속 클릭을 못 막는다 — ref로 재진입 차단
+  const isAnalyzingRef = useRef(false)
 
   // Initialize viewer states when artworks change
   useEffect(() => {
@@ -233,8 +236,10 @@ export function useArtworkComparison({
   // ===============================
 
   const requestAnalysis = async () => {
-    if (!onAnalysisRequest || selectedArtworks.length < 2) return
+    if (!onAnalysisRequest || selectedArtworks.length < 2 || isAnalyzingRef.current) return
 
+    isAnalyzingRef.current = true
+    setIsAnalyzing(true)
     try {
       const artworkIds = selectedArtworks.map(artwork => artwork.id)
       const analysisResult = await onAnalysisRequest(artworkIds)
@@ -245,6 +250,9 @@ export function useArtworkComparison({
         'Failed to get comparison analysis',
         error instanceof Error ? error : new Error(String(error))
       )
+    } finally {
+      isAnalyzingRef.current = false
+      setIsAnalyzing(false)
     }
   }
 
@@ -254,6 +262,7 @@ export function useArtworkComparison({
     setComparisonMode,
     viewerStates,
     analysis,
+    isAnalyzing,
     isFullscreen,
     setIsFullscreen,
     showAnalysis,

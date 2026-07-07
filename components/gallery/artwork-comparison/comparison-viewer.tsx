@@ -99,7 +99,7 @@ export function ComparisonView({
           <div className='relative w-full h-full max-w-2xl max-h-[80vh]'>
             <Image
               ref={(el: HTMLImageElement | null) => {
-                if (el) imageRefs.current[index] = el
+                imageRefs.current[index] = el
               }}
               src={primaryImage.urls.large}
               alt={artwork.title.english}
@@ -260,6 +260,16 @@ export function ComparisonView({
         <Card className='text-center py-12'>
           <CardContent>
             <p className='text-ink-black/60'>Split view mode is under development. Coming soon!</p>
+          </CardContent>
+        </Card>
+      )
+
+    case 'grid':
+      // TODO: Implement grid mode
+      return (
+        <Card className='text-center py-12'>
+          <CardContent>
+            <p className='text-ink-black/60'>Grid mode is under development. Coming soon!</p>
           </CardContent>
         </Card>
       )

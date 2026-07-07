@@ -41,6 +41,37 @@ export default function GalleryGrid({
     navigateImage,
   } = useGalleryGrid({ items })
 
+  // GalleryClient의 onEvent 트래킹 배선 — 훅 핸들러를 래핑해 이벤트 발행
+  const handleImageClickWithEvent = React.useCallback(
+    (item: GalleryItem) => {
+      handleImageClick(item)
+      onEvent?.({
+        type: 'gallery:image_open',
+        payload: { itemId: item.id, category: item.category },
+      })
+    },
+    [handleImageClick, onEvent]
+  )
+
+  const handleShareClickWithEvent = React.useCallback(
+    (e: React.MouseEvent, item: GalleryItem) => {
+      handleShareClick(e, item)
+      onEvent?.({
+        type: 'gallery:share',
+        payload: { itemId: item.id, category: item.category },
+      })
+    },
+    [handleShareClick, onEvent]
+  )
+
+  const navigateImageWithEvent = React.useCallback(
+    (direction: 'prev' | 'next') => {
+      navigateImage(direction)
+      onEvent?.({ type: 'gallery:navigate', payload: { direction } })
+    },
+    [navigateImage, onEvent]
+  )
+
   return (
     <div className={`gallery-grid ${className}`}>
       {/* 현대적인 헤더 및 필터 */}
@@ -246,8 +277,8 @@ export default function GalleryGrid({
                 index={index}
                 isImageLoaded={!!isImageLoaded}
                 hasImageError={hasImageError}
-                onImageClick={handleImageClick}
-                onShareClick={handleShareClick}
+                onImageClick={handleImageClickWithEvent}
+                onShareClick={handleShareClickWithEvent}
                 onImageLoad={handleImageLoad}
                 onImageError={handleImageError}
               />
@@ -261,8 +292,8 @@ export default function GalleryGrid({
         selectedImage={selectedImage}
         filteredItems={filteredItems}
         onClose={() => setSelectedImage(null)}
-        onNavigate={navigateImage}
-        onShareClick={handleShareClick}
+        onNavigate={navigateImageWithEvent}
+        onShareClick={handleShareClickWithEvent}
       />
 
       {/* SNS 공유 모달 */}

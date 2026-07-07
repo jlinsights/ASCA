@@ -1,8 +1,20 @@
 {
-  "activeFeature": null,
-  "phase": "archived",
+  "activeFeature": "asca-gallery-cultural-bugfix",
+  "phase": "plan",
   "startedAt": "2026-04-22",
   "parallelFeatures": [
+    {
+      "feature": "asca-gallery-cultural-bugfix",
+      "phase": "do",
+      "startedAt": "2026-07-06",
+      "planPath": "docs/01-plan/features/asca-gallery-cultural-bugfix.plan.md",
+      "designPath": "docs/02-design/features/asca-gallery-cultural-bugfix.design.md",
+      "designDecisions": "D-1 grid=안내카드 폴백(실구현 금지). D-2 훅 시그니처 추가만(isAnalyzing). D-3 dark cleanup=initialDarkRef 마운트 상태 복원(무조건 remove 위험). D-4 3 PR: PR-1 gallery(B·C·F-1)→PR-2 cultural(D·E·F-2·3)→PR-3 stroke(A, 최고위험 격리). D-5 renderHook+fakeTimers 최초 도입, components/__tests__/. D-6 C-1은 자동테스트 제외(framer jsdom 비결정). 실사: A-1 원인=play()가 startTimeRef null 무조건 리셋·pausedElapsedRef 신설 필요, A-4 RAF 매프레임 new Image() 확인, use-image-zoom엔 fullscreenchange 리스너 기존재(F-1=수동 setState 제거), virtual-exhibition엔 리스너 부재(D-2=신설), 테스트 mock 필요: canvas 2d·matchMedia·HTMLMediaElement.play·fullscreenElement",
+      "scope": "PR #40·#41 CodeRabbit 기능 버그 17건(a11y-cleanup에서 분류·보존): A stroke-animation 4(pause재개·loop single·타이머정리·RAF Image캐시) B artwork-comparison 3(grid 미렌더·isAnalyzing 가드·ref 정리) C gallery-grid 2(scale-0 버튼·onEvent 배선) D virtual-exhibition 3(audio ref 분리·fullscreen 동기화·play 실패) E accessibility 2(auto dark·전역스타일 cleanup) F 개별 3(zoom fullscreen·isToday 하이드레이션·switch 스코프) + G 동작 테스트 신설(renderHook+fake timers)",
+      "source": "asca-a11y-cleanup 후속 — plan §1.3 분류의 기능버그 17건 (archive 700c6b32)",
+      "doProgress": "17/17 구현 완료(2026-07-06, 미커밋) + 테스트 7파일 18케이스(설계 A-1 선택항목도 포함). fail-first RED→GREEN 실증: B-2(2연속 호출)·D-2·D-3·E-1·E-2·A-2·A-3. 구현 노트: B-2 state 가드는 stale closure로 동기 재진입 못 막음→isAnalyzingRef 병행(테스트가 발견), stroke 테스트 RAF timestamp 0은 falsy라 startTime 재초기화 루프→양수 timestamp 필수, A-4 initializeAnimation의 1회성 new Image는 유지(RAF 경로만 캐시, 의도적 편차), E-2 cleanup은 effect 재실행 시 본문 재적용 순서 의존",
+      "nextStep": "게이트(tsc·lint·test:ci·build) 확인 → 커밋/3 PR 승인 대기 → /pdca analyze"
+    },
     {
       "feature": "asca-a11y-cleanup",
       "phase": "archived",
