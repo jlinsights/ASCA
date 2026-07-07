@@ -39,7 +39,7 @@ export function useLearningHub({
           return resource.difficulty === value
         case 'type':
           return resource.type === value
-        case 'duration':
+        case 'duration': {
           const duration = resource.duration
           switch (value) {
             case 'short':
@@ -51,6 +51,7 @@ export function useLearningHub({
             default:
               return true
           }
+        }
         default:
           return true
       }

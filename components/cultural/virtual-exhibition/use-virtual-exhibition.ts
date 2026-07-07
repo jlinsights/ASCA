@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { logger } from '@/lib/utils/logger'
 import { WALL_BG } from '../_constants/color-classes'
 import type { Exhibition, ExhibitionArtwork, ExhibitionView } from './types'
 
@@ -52,25 +53,39 @@ export function useVirtualExhibition({ exhibition }: UseVirtualExhibitionParams)
     setPosition({ x: 0, y: 0 })
   }
 
+  // Fullscreen 상태는 fullscreenchange 이벤트가 단일 소스 — Esc 종료·요청 거부 반영
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [])
+
   // Toggle fullscreen
   const toggleFullscreen = () => {
     if (!isFullscreen) {
-      galleryRef.current?.requestFullscreen()
+      galleryRef.current
+        ?.requestFullscreen()
+        .catch(error => logger.warn('Fullscreen request rejected', { error }))
     } else {
-      document.exitFullscreen()
+      document.exitFullscreen().catch(error => logger.warn('Fullscreen exit rejected', { error }))
     }
-    setIsFullscreen(!isFullscreen)
   }
 
-  // Audio controls
+  // Audio controls — 상태는 실제 재생 결과를 따른다 (자동재생 정책 거부 대응)
   const toggleAudio = () => {
-    if (audioRef.current) {
-      if (audioEnabled) {
-        audioRef.current.pause()
-      } else {
-        audioRef.current.play()
-      }
-      setAudioEnabled(!audioEnabled)
+    if (!audioRef.current) return
+
+    if (audioEnabled) {
+      audioRef.current.pause()
+      setAudioEnabled(false)
+    } else {
+      audioRef.current
+        .play()
+        .then(() => setAudioEnabled(true))
+        .catch(error => logger.warn('Background audio playback rejected', { error }))
     }
   }
 

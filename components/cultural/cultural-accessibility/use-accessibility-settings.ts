@@ -51,10 +51,16 @@ export function useAccessibilitySettings({
   const [isMinimized, setIsMinimized] = useState(false)
 
   const panelRef = useRef<HTMLDivElement>(null)
+  // 마운트 시점의 dark 클래스 상태 — 언마운트 시 사이트 전역 테마로 복원하기 위해 캡처
+  const initialDarkRef = useRef<boolean | null>(null)
 
   // Apply settings to document
   useEffect(() => {
     const root = document.documentElement
+
+    if (initialDarkRef.current === null) {
+      initialDarkRef.current = root.classList.contains('dark')
+    }
 
     // Apply font settings
     root.style.fontSize = `${accessibilitySettings.fontSize}px`
@@ -73,8 +79,17 @@ export function useAccessibilitySettings({
         root.style.filter = 'none'
     }
 
-    // Apply color scheme
-    if (accessibilitySettings.colorScheme !== 'auto') {
+    // Apply color scheme — 'auto'는 시스템 prefers-color-scheme를 따르고 변경도 추적한다
+    let colorSchemeCleanup: (() => void) | undefined
+    if (accessibilitySettings.colorScheme === 'auto') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      root.classList.toggle('dark', mediaQuery.matches)
+      const handleSchemeChange = (e: MediaQueryListEvent) => {
+        root.classList.toggle('dark', e.matches)
+      }
+      mediaQuery.addEventListener('change', handleSchemeChange)
+      colorSchemeCleanup = () => mediaQuery.removeEventListener('change', handleSchemeChange)
+    } else {
       root.classList.toggle('dark', accessibilitySettings.colorScheme === 'dark')
     }
 
@@ -94,6 +109,18 @@ export function useAccessibilitySettings({
 
     // Notify parent of changes
     onSettingsChange?.(accessibilitySettings)
+
+    // 설정 변경·언마운트 시 전역 상태 복원 (재실행 시엔 본문이 즉시 재적용)
+    return () => {
+      colorSchemeCleanup?.()
+      root.style.removeProperty('font-size')
+      root.style.removeProperty('line-height')
+      root.style.removeProperty('letter-spacing')
+      root.style.removeProperty('filter')
+      root.style.removeProperty('--transition-duration')
+      root.classList.remove('focus-visible')
+      root.classList.toggle('dark', initialDarkRef.current === true)
+    }
   }, [accessibilitySettings, onSettingsChange])
 
   // Apply language settings
