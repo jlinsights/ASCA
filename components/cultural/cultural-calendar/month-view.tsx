@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import type { CulturalEvent } from './types'
@@ -23,6 +24,12 @@ export function MonthView({
   showSeasonalThemes,
 }: MonthViewProps) {
   const traditionalDate = getTraditionalDate(currentDate)
+  // 오늘 판정은 클라이언트 마운트 후에만 — 렌더 중 new Date()는 SSR/CSR 하이드레이션 불일치 유발
+  const [todayKey, setTodayKey] = useState<string | null>(null)
+
+  useEffect(() => {
+    setTodayKey(new Date().toDateString())
+  }, [])
 
   return (
     <div className='space-y-6'>
@@ -82,7 +89,7 @@ export function MonthView({
             {days.map(({ date, isCurrentMonth }) => {
               const dayEvents = getEventsForDate(date)
               const traditionalDayData = getTraditionalDate(date)
-              const isToday = date.toDateString() === new Date().toDateString()
+              const isToday = todayKey !== null && date.toDateString() === todayKey
 
               return (
                 <div

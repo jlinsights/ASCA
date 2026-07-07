@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   ZoomIn,
@@ -23,6 +24,9 @@ import { DetailView } from './virtual-exhibition/detail-view'
 // ===============================
 
 function VirtualExhibition({ exhibition, className }: VirtualExhibitionProps) {
+  // 오디오 가이드는 배경음악(audioRef)과 별도 ref — 상세 뷰 개폐가 음악 토글을 끊지 않도록 분리
+  const guideAudioRef = useRef<HTMLAudioElement | null>(null)
+
   const {
     selectedArtwork,
     setSelectedArtwork,
@@ -167,7 +171,7 @@ function VirtualExhibition({ exhibition, className }: VirtualExhibitionProps) {
             zoom={zoom}
             onZoom={handleZoom}
             onResetView={resetView}
-            audioRef={audioRef}
+            audioRef={guideAudioRef}
           />
         )}
       </div>
