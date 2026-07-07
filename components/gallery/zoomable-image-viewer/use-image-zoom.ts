@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { logger } from '@/lib/utils/logger'
 import type { ArtworkImage, ImageRegion } from '@/lib/types/gallery'
 import type { MeasurementTool, ViewerState, ViewerTool } from './types'
 
@@ -285,12 +286,13 @@ export function useImageZoom({
   const toggleFullscreen = useCallback(() => {
     if (!enableFullscreen) return
 
+    // 상태는 fullscreenchange 리스너가 document.fullscreenElement 기준으로 동기화한다
     if (!isFullscreen) {
-      containerRef.current?.requestFullscreen()
-      setIsFullscreen(true)
+      containerRef.current
+        ?.requestFullscreen()
+        .catch(error => logger.warn('Fullscreen request rejected', { error }))
     } else {
-      document.exitFullscreen()
-      setIsFullscreen(false)
+      document.exitFullscreen().catch(error => logger.warn('Fullscreen exit rejected', { error }))
     }
   }, [isFullscreen, enableFullscreen])
 

@@ -44,6 +44,7 @@ function ArtworkComparison({
     setComparisonMode,
     viewerStates,
     analysis,
+    isAnalyzing,
     isFullscreen,
     setIsFullscreen,
     showAnalysis,
@@ -215,10 +216,11 @@ function ArtworkComparison({
             size='sm'
             variant='outline'
             onClick={requestAnalysis}
+            disabled={isAnalyzing}
             className='border-celadon-green text-celadon-green hover:bg-celadon-green hover:text-ink-black'
           >
             <BookOpen className='w-4 h-4 mr-1' />
-            Analyze
+            {isAnalyzing ? 'Analyzing…' : 'Analyze'}
           </Button>
         )}
 

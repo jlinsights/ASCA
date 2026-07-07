@@ -135,7 +135,7 @@ export function GalleryItemCard({
         <div className='absolute top-4 right-4 z-10 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300'>
           <motion.button
             initial={{ scale: 0, rotate: 45 }}
-            animate={{ scale: 0, rotate: 45 }}
+            animate={{ scale: 1, rotate: 0 }}
             whileHover={{ scale: 1.1, rotate: 0 }}
             className='p-2.5 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl transition-all duration-300'
             onClick={e => onShareClick(e, item)}
@@ -158,7 +158,7 @@ export function GalleryItemCard({
 
           <motion.button
             initial={{ scale: 0, rotate: 45 }}
-            animate={{ scale: 0, rotate: 45 }}
+            animate={{ scale: 1, rotate: 0 }}
             whileHover={{ scale: 1.1, rotate: 0 }}
             className='p-2.5 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl transition-all duration-300'
             onClick={e => {
