@@ -1,11 +1,14 @@
 {
   "activeFeature": "asca-gallery-cultural-bugfix",
-  "phase": "plan",
+  "phase": "check",
   "startedAt": "2026-04-22",
   "parallelFeatures": [
     {
       "feature": "asca-gallery-cultural-bugfix",
-      "phase": "do",
+      "phase": "completed",
+      "matchRate": 100,
+      "analysisPath": "docs/03-analysis/asca-gallery-cultural-bugfix.analysis.md",
+      "reportPath": "docs/04-report/asca-gallery-cultural-bugfix.report.md",
       "startedAt": "2026-07-06",
       "planPath": "docs/01-plan/features/asca-gallery-cultural-bugfix.plan.md",
       "designPath": "docs/02-design/features/asca-gallery-cultural-bugfix.design.md",
@@ -13,7 +16,9 @@
       "scope": "PR #40·#41 CodeRabbit 기능 버그 17건(a11y-cleanup에서 분류·보존): A stroke-animation 4(pause재개·loop single·타이머정리·RAF Image캐시) B artwork-comparison 3(grid 미렌더·isAnalyzing 가드·ref 정리) C gallery-grid 2(scale-0 버튼·onEvent 배선) D virtual-exhibition 3(audio ref 분리·fullscreen 동기화·play 실패) E accessibility 2(auto dark·전역스타일 cleanup) F 개별 3(zoom fullscreen·isToday 하이드레이션·switch 스코프) + G 동작 테스트 신설(renderHook+fake timers)",
       "source": "asca-a11y-cleanup 후속 — plan §1.3 분류의 기능버그 17건 (archive 700c6b32)",
       "doProgress": "17/17 구현 완료(2026-07-06, 미커밋) + 테스트 7파일 18케이스(설계 A-1 선택항목도 포함). fail-first RED→GREEN 실증: B-2(2연속 호출)·D-2·D-3·E-1·E-2·A-2·A-3. 구현 노트: B-2 state 가드는 stale closure로 동기 재진입 못 막음→isAnalyzingRef 병행(테스트가 발견), stroke 테스트 RAF timestamp 0은 falsy라 startTime 재초기화 루프→양수 timestamp 필수, A-4 initializeAnimation의 1회성 new Image는 유지(RAF 경로만 캐시, 의도적 편차), E-2 cleanup은 effect 재실행 시 본문 재적용 순서 의존",
-      "nextStep": "게이트(tsc·lint·test:ci·build) 확인 → 커밋/3 PR 승인 대기 → /pdca analyze"
+      "prState": "머지 완료(2026-07-07): PR #45 gallery 3da4ce79 · #46 cultural 37ee2a08 · #47 stroke 60737382 (독립 3분할, 병렬 CI 후 순차 squash+delete-branch). plan·design 문서는 #45에 포함",
+      "checkNote": "gap-detector 17/17 Match 100%, Out-of-scope 침범 0. 관측: 머지 직후 test:ci 1회 3건 간헐 실패(스위트 미특정, 로그 요약만 캡처) → 연속 3회 421/421 GREEN. 재현 시 flaky-suite debt 후보 등재",
+      "nextStep": "/pdca archive asca-gallery-cultural-bugfix — 문서 4종 이관(analysis·report 미커밋, archive 커밋에 포함). 수동 스팟체크(stroke 재생·호버 버튼·음악 토글) 사용자 권장"
     },
     {
       "feature": "asca-a11y-cleanup",
