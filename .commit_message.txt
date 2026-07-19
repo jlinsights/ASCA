@@ -1,1 +1,1 @@
-📋 report(pdca): asca-gallery-cultural-bugfix 완료 보고서 — Match 100%, PR #45·#46·#47 머지, 프로세스 학습 5건·간헐실패 관측 기록, .bkit-memory phase=completed
+🔒 fix(migration): 공개 /api/migration 전면 비활성 + Secure check-status/detect-tables 추가

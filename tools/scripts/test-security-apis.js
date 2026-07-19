@@ -94,6 +94,9 @@ class SecurityTester {
   async testDisabledEndpoints() {
     const disabledEndpoints = [
       '/api/migration/migrate-all',
+      '/api/migration/events',
+      '/api/migration/notices',
+      '/api/migration/test-single',
       '/api/sync/start',
       '/api/sync/stop',
       '/api/admin/stats',
@@ -117,6 +120,8 @@ class SecurityTester {
   async testUnauthenticatedAccess() {
     const secureEndpoints = [
       '/api/secure/migration/migrate-all',
+      '/api/secure/migration/check-status',
+      '/api/secure/migration/detect-tables',
       '/api/secure/sync/start',
       '/api/secure/sync/stop',
       '/api/secure/admin/stats',

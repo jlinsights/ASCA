@@ -1,63 +1,19 @@
 #!/usr/bin/env node
 
 /**
- * Events & Notices 마이그레이션 테스트 스크립트
+ * Events & Notices 마이그레이션 안내
+ *
+ * 공개 `/api/migration/events|notices`는 비활성화되었습니다.
  */
 
-require('dotenv').config({ path: '.env.local' })
+console.log('🧪 Events & Notices 마이그레이션 안내\n')
+console.log('⛔ 공개 HTTP 엔드포인트 비활성화:')
+console.log('   POST /api/migration/events  → 503')
+console.log('   POST /api/migration/notices → 503\n')
 
-async function testEventsNoticesMigration() {
-  console.log('🧪 Events & Notices 마이그레이션 테스트 시작...\n')
+console.log('✅ 권장 경로:')
+console.log('   - CLI: node tools/scripts/direct-migration.js')
+console.log('   - Secure API: POST /api/secure/migration/migrate-all (system/admin)')
+console.log('   - 상태 확인: GET /api/secure/migration/check-status (admin)\n')
 
-  try {
-    // 1. 마이그레이션 상태 확인
-    console.log('1️⃣ 마이그레이션 상태 확인...')
-    const response = await fetch('http://localhost:3000/api/migration/check-status')
-    if (response.ok) {
-      const status = await response.json()
-      console.log('   상태 응답:', JSON.stringify(status, null, 2))
-    } else {
-      console.log('   ❌ 상태 확인 실패')
-    }
-
-    console.log('\n2️⃣ Events 마이그레이션 테스트...')
-    // Events 마이그레이션 테스트
-    try {
-      const eventsResponse = await fetch('http://localhost:3000/api/migration/events', {
-        method: 'POST',
-      })
-      if (eventsResponse.ok) {
-        const result = await eventsResponse.json()
-        console.log('   Events 마이그레이션 결과:', JSON.stringify(result, null, 2))
-      } else {
-        const error = await eventsResponse.json()
-        console.log('   ❌ Events 마이그레이션 실패:', error)
-      }
-    } catch (error) {
-      console.log('   ❌ Events 마이그레이션 오류:', error.message)
-    }
-
-    console.log('\n3️⃣ Notices 마이그레이션 테스트...')
-    // Notices 마이그레이션 테스트
-    try {
-      const noticesResponse = await fetch('http://localhost:3000/api/migration/notices', {
-        method: 'POST',
-      })
-      if (noticesResponse.ok) {
-        const result = await noticesResponse.json()
-        console.log('   Notices 마이그레이션 결과:', JSON.stringify(result, null, 2))
-      } else {
-        const error = await noticesResponse.json()
-        console.log('   ❌ Notices 마이그레이션 실패:', error)
-      }
-    } catch (error) {
-      console.log('   ❌ Notices 마이그레이션 오류:', error.message)
-    }
-
-    console.log('\n✅ 테스트 완료!')
-  } catch (error) {
-    console.error('❌ 테스트 실패:', error)
-  }
-}
-
-testEventsNoticesMigration()
+console.log('참고: events/notices 단독 HTTP 마이그레이션은 더 이상 제공하지 않습니다.')
