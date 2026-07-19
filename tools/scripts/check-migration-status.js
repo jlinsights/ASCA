@@ -41,9 +41,12 @@ if (envExists) {
 console.log('\n📋 마이그레이션 파일 상태:')
 const migrationFiles = [
   'lib/airtable-migration.ts',
+  'lib/migration/http-migration-guard.ts',
   'app/api/migration/migrate-all/route.ts',
   'app/api/migration/check-status/route.ts',
-  'app/admin/migration/page.tsx',
+  'app/api/secure/migration/migrate-all/route.ts',
+  'app/api/secure/migration/check-status/route.ts',
+  'app/api/secure/migration/detect-tables/route.ts',
 ]
 
 migrationFiles.forEach(file => {
@@ -63,8 +66,8 @@ if (!envExists) {
   console.log('   - AIRTABLE_BASE_ID')
 } else {
   console.log('1. 개발 서버 실행: npm run dev')
-  console.log('2. 관리자 페이지 접속: http://localhost:3000/admin/migration')
-  console.log('3. 마이그레이션 실행')
+  console.log('2. Secure API로 상태 확인: GET /api/secure/migration/check-status')
+  console.log('3. 마이그레이션: POST /api/secure/migration/migrate-all 또는 CLI')
 }
 
 console.log('\n🔗 유용한 링크:')
