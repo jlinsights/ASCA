@@ -1,4 +1,4 @@
-import { SQL, eq, and, or, like, desc, asc } from 'drizzle-orm'
+import { SQL, count, eq, and, or, like, desc, asc } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import type { PgTable } from 'drizzle-orm/pg-core'
 
@@ -109,14 +109,14 @@ export abstract class BaseRepository<
     const { page, limit, ...queryOptions } = options
     const offset = (page - 1) * limit
 
-    // Get total count
-    let countQuery = db.select().from(this.table as any)
+    // Get total count via SQL COUNT(*) — 전체 행 로드 금지
+    let countQuery = db.select({ count: count() }).from(this.table as any)
     if (queryOptions.where) {
       countQuery = countQuery.where(queryOptions.where) as typeof countQuery
     }
 
-    const allResults = await countQuery
-    const total = allResults.length
+    const [countResult] = await countQuery
+    const total = countResult?.count ?? 0
 
     // Get paginated data
     const data = await this.findAll({

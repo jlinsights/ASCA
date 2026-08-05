@@ -115,7 +115,6 @@ export const GET = withPermission(Permission.ADMIN_AUDIT_LOGS, async (request, a
       {
         success: false,
         error: 'Failed to fetch logs',
-        message: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     )
@@ -271,7 +270,6 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: 'Failed to query logs',
-          message: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       )

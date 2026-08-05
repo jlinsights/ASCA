@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import type { GraphQLContext } from '../context'
-import * as schema from '@/lib/db/schema-pg'
+import * as schema from '@/lib/db/schema'
 
 /**
  * Type Resolvers

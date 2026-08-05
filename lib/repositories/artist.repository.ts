@@ -1,7 +1,7 @@
 import { eq, like, or, desc, asc } from 'drizzle-orm'
 import { BaseRepository } from './base.repository'
-import { artists } from '@/lib/db/schema-pg'
-import type { Artist, NewArtist } from '@/lib/db/schema-pg'
+import { artists } from '@/lib/db/schema'
+import type { Artist, NewArtist } from '@/lib/db/schema'
 
 /**
  * Artist Repository

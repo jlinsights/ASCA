@@ -7,7 +7,7 @@
 import { describe, test, expect, beforeAll, afterEach, afterAll } from '@jest/globals'
 import { BaseRepository } from '../base.repository'
 import { testDatabaseHelpers, getTestPool } from '@/lib/testing/setup-test-db'
-import { members } from '@/lib/db/schema-pg'
+import { members } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
 // Create a test repository using members table

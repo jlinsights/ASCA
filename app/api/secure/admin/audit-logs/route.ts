@@ -102,7 +102,6 @@ async function secureAuditLogsHandler({ user, request }: SecureAPIContext) {
       {
         success: false,
         message: 'Failed to retrieve audit logs',
-        error: error instanceof Error ? error.message : 'Unknown error',
         code: 'AUDIT_LOG_RETRIEVAL_FAILED',
       },
       { status: 500 }

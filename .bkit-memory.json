@@ -1,8 +1,25 @@
 {
-  "activeFeature": "asca-gallery-cultural-bugfix",
-  "phase": "check",
+  "activeFeature": "asca-schema-unification",
+  "phase": "completed",
   "startedAt": "2026-04-22",
   "parallelFeatures": [
+    {
+      "feature": "asca-schema-unification",
+      "phase": "completed",
+      "startedAt": "2026-07-25",
+      "planPath": "docs/01-plan/features/asca-schema-unification.plan.md",
+      "source": "2026-07-25 /code_analysis 품질 High — schema.ts/schema-pg.ts diff 186줄(전부 timestamp mode:'string' 여부) 드리프트 사본, 정본 3중확인(drizzle.config·db 인스턴스·docs/CLAUDE.md)=schema.ts",
+      "scope": "옵션 A 채택: schema-pg import 6파일 전환(members route·supabase.ts·artist.repository·types.resolver·격리테스트 2) + schema-pg.ts 삭제 + Date→string 직렬화 경계 보정. 물리 스키마 변경 0 — drizzle-kit generate 마이그레이션 0건을 게이트로 증명",
+      "nextStep": "커밋/PR(사용자 지시 대기) → /pdca archive asca-schema-unification",
+      "designPath": "docs/02-design/features/asca-schema-unification.design.md",
+      "designDecisions": "D-1 Serialized<T> 매핑타입(supabase-js 경계 전용, Date→string) — 실사로 supabase-js 런타임=string 확인(admin-api toISOString 기록·artists 페이지 3 소비). D-2 정의 위치 lib/supabase.ts 로컬(YAGNI). D-3 drizzle-kit generate 0건 게이트. D-4 순서 S-3→S-4→S-1→S-5→S-6→S-2→삭제→게이트. 실사: S-3 orderBy 참조 2건뿐(현 타입거짓말), S-4 스칼라 instanceof Date 분기 기보유, S-6 fixture 타임스탬프 0건",
+      "matchRate": 100,
+      "completedAt": "2026-07-25",
+      "analysisPath": "docs/03-analysis/asca-schema-unification.analysis.md",
+      "reportPath": "docs/04-report/asca-schema-unification.report.md",
+      "doProgress": "S-1~S-7 전부 구현(2026-07-25, 미커밋): 5파일 단순 import 전환 + supabase.ts Serialized<T> 분배조건부 경계타입(9종 재export 감쌈, 소비처 4파일 무수정 호환) + schema-pg.ts 삭제. 게이트 6종 GREEN(tsc 0·lint·format·421/421·build 86s·schema.ts git 무수정)",
+      "checkNote": "gap-detector 9/9 Match 100%, Out-of-scope 침범 0. 보정: drizzle-kit generate 1건 생성은 pre-existing 스냅샷 드리프트(db:push 운영) — 분리후보 asca-drizzle-snapshot-drift 등재, 생성물 폐기"
+    },
     {
       "feature": "asca-gallery-cultural-bugfix",
       "phase": "completed",
@@ -52,8 +69,18 @@
       "archivedTo": "docs/archive/2026-07/asca-component-split-phase-3-4/",
       "analysisPath": "docs/archive/2026-07/asca-component-split-phase-3-4/asca-component-split-phase-3-4.analysis.md",
       "reportPath": "docs/archive/2026-07/asca-component-split-phase-3-4/asca-component-split-phase-3-4.report.md",
-      "mergedPrs": [39, 40, 41, 42],
-      "mergeCommits": ["31f95e56", "b8d402d0", "d86d5285", "95edd07d"],
+      "mergedPrs": [
+        39,
+        40,
+        41,
+        42
+      ],
+      "mergeCommits": [
+        "31f95e56",
+        "b8d402d0",
+        "d86d5285",
+        "95edd07d"
+      ],
       "outcome": "✅ Report+Archive (100%). max-lines 10→0. 9파일 비파괴 분리(경로·export 불변)+sidebar 단일파일 예외, 4 PR squash 머지, 머지된 main 전 게이트 green(lint 0·tsc 0·test:ci 389/389·build·design 3게이트). verbatim 추출·내부정의컴포넌트→안정화(DOM등가)·bylaws 텍스트 12469자 일치. 후속: asca-a11y-cleanup(CodeRabbit pre-existing a11y 55건 별도 사이클)."
     },
     {
@@ -406,7 +433,12 @@
     "feature": "asca-component-split-phase-3-4",
     "date": "2026-07-05",
     "matchRate": 100,
-    "mergedPrs": [39, 40, 41, 42],
+    "mergedPrs": [
+      39,
+      40,
+      41,
+      42
+    ],
     "archivedTo": "docs/archive/2026-07/asca-component-split-phase-3-4/"
   },
   "staleResolved": {

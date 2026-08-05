@@ -11,7 +11,7 @@ import { describe, test, expect, beforeEach } from '@jest/globals'
 import { MemberService } from '../member.service'
 import { MemberRepository } from '@/lib/repositories/member.repository'
 import { ApiError } from '@/lib/api/response'
-import type { Member, NewMember } from '@/lib/db/schema-pg'
+import type { Member, NewMember } from '@/lib/db/schema'
 import type { PaginatedResult } from '@/lib/repositories/base.repository'
 
 // Mock the repository

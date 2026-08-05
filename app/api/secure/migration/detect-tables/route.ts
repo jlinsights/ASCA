@@ -79,9 +79,7 @@ async function secureDetectTablesHandler({ user, request }: SecureAPIContext) {
 
     for (const tableName of POSSIBLE_TABLE_NAMES) {
       try {
-        const records = await base(tableName)
-          .select({ maxRecords: 1 })
-          .firstPage()
+        const records = await base(tableName).select({ maxRecords: 1 }).firstPage()
 
         const first = getFirstOrNull(records)
         foundTables.push({
