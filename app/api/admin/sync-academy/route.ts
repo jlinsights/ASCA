@@ -96,6 +96,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, results })
   } catch (error: any) {
     logError('Sync failed', error instanceof Error ? error : undefined)
-    return new NextResponse(`Internal Error: ${error.message}`, { status: 500 })
+    return new NextResponse('Internal server error', { status: 500 })
   }
 }

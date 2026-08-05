@@ -5,7 +5,8 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
 
-    const limit = parseInt(searchParams.get('limit') || '12')
+    const limitParam = parseInt(searchParams.get('limit') || '12', 10)
+    const limit = Number.isNaN(limitParam) ? 12 : Math.min(Math.max(limitParam, 1), 100)
 
     const result = await fetchArtworks(undefined, undefined, limit)
 

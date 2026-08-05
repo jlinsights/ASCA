@@ -13,7 +13,7 @@
 
 import { NextRequest } from 'next/server'
 import { db } from '@/lib/db'
-import { members } from '@/lib/db/schema-pg'
+import { members } from '@/lib/db/schema'
 import { eq, or, like, desc, asc, count } from 'drizzle-orm'
 import {
   memberSearchSchema,
@@ -50,6 +50,24 @@ type E2EMember = {
 }
 
 const e2eCreatedEmails = new Set<string>()
+
+// E2E 계약은 snake_case라 createMemberSchema(camelCase)를 재사용할 수 없음
+const e2eCreateMemberSchema = z.object({
+  email: z
+    .string({ required_error: '이메일은 필수입니다' })
+    .email('이메일 형식이 올바르지 않습니다'),
+  first_name_ko: z.string().min(1, '이름(한글)은 필수입니다'),
+  last_name_ko: z.string().min(1, '성(한글)은 필수입니다'),
+  first_name_en: z.string().optional(),
+  last_name_en: z.string().optional(),
+  phone: z.string().optional(),
+  membership_level_id: z.string().min(1).default('beginner'),
+  membership_status: z
+    .enum(['active', 'inactive', 'suspended', 'pending_approval', 'expelled'])
+    .default('active'),
+  timezone: z.string().default('Asia/Seoul'),
+  preferred_language: z.string().default('ko'),
+})
 
 function getE2EMembers(): E2EMember[] {
   return [
@@ -258,30 +276,36 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   if (isE2ETest) {
-    const body = await request.json().catch(() => null)
-    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    const rawBody = await request.json().catch(() => null)
+    if (!rawBody || typeof rawBody !== 'object' || Array.isArray(rawBody)) {
       return ApiResponse.badRequest('Invalid request body')
     }
-    if (!body.email) {
-      return ApiResponse.badRequest('이메일은 필수입니다')
+    const parsed = e2eCreateMemberSchema.safeParse(rawBody)
+    if (!parsed.success) {
+      const emailIssue = parsed.error.issues.find(issue => issue.path[0] === 'email')
+      return ApiResponse.badRequest(
+        emailIssue ? '이메일은 필수입니다' : '요청 본문이 유효하지 않습니다',
+        parsed.error.format()
+      )
     }
-    if (e2eCreatedEmails.has(body.email)) {
+    const member = parsed.data
+    if (e2eCreatedEmails.has(member.email)) {
       return ApiResponse.conflict('Email already exists')
     }
-    e2eCreatedEmails.add(body.email)
+    e2eCreatedEmails.add(member.email)
 
     return ApiResponse.success({
       id: `test-member-${e2eCreatedEmails.size + 2}`,
-      email: body.email,
-      first_name_ko: body.first_name_ko,
-      last_name_ko: body.last_name_ko,
-      first_name_en: body.first_name_en,
-      last_name_en: body.last_name_en,
-      phone: body.phone,
-      membership_level_id: body.membership_level_id || 'beginner',
-      membership_status: body.membership_status || 'active',
-      timezone: body.timezone || 'Asia/Seoul',
-      preferred_language: body.preferred_language || 'ko',
+      email: member.email,
+      first_name_ko: member.first_name_ko,
+      last_name_ko: member.last_name_ko,
+      first_name_en: member.first_name_en,
+      last_name_en: member.last_name_en,
+      phone: member.phone,
+      membership_level_id: member.membership_level_id,
+      membership_status: member.membership_status,
+      timezone: member.timezone,
+      preferred_language: member.preferred_language,
       is_verified: false,
       is_public: true,
       created_at: new Date().toISOString(),

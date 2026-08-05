@@ -8,7 +8,7 @@ import type {
   NewArtwork,
   Exhibition,
   NewExhibition,
-} from '@/lib/db/schema-pg'
+} from '@/lib/db/schema'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
@@ -118,14 +118,19 @@ export const safeSupabaseAdminCall = async <T>(
 }
 
 // 타입 정의 (Drizzle 스키마에서 추론)
-export type ArtistInsert = NewArtist
-export type ArtistUpdate = Partial<NewArtist>
-export type ArtistRow = Artist
+// supabase-js(PostgREST)는 timestamptz를 ISO 문자열로 반환하므로
+// Drizzle의 Date 타입을 경계에서 string으로 변환해 노출한다
+type SerializedValue<V> = V extends Date ? string : V
+type Serialized<T> = { [K in keyof T]: SerializedValue<T[K]> }
 
-export type ArtworkInsert = NewArtwork
-export type ArtworkUpdate = Partial<NewArtwork>
-export type ArtworkRow = Artwork
+export type ArtistInsert = Serialized<NewArtist>
+export type ArtistUpdate = Partial<Serialized<NewArtist>>
+export type ArtistRow = Serialized<Artist>
 
-export type ExhibitionInsert = NewExhibition
-export type ExhibitionUpdate = Partial<NewExhibition>
-export type ExhibitionRow = Exhibition
+export type ArtworkInsert = Serialized<NewArtwork>
+export type ArtworkUpdate = Partial<Serialized<NewArtwork>>
+export type ArtworkRow = Serialized<Artwork>
+
+export type ExhibitionInsert = Serialized<NewExhibition>
+export type ExhibitionUpdate = Partial<Serialized<NewExhibition>>
+export type ExhibitionRow = Serialized<Exhibition>

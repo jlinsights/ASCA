@@ -96,7 +96,6 @@ export const GET = withPermission(Permission.ADMIN_ANALYTICS, async (request, au
       {
         success: false,
         error: 'Failed to fetch metrics',
-        message: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     )
@@ -153,7 +152,6 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: 'Failed to perform action',
-          message: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       )

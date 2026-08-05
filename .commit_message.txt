@@ -1,1 +1,1 @@
-🔒 fix(migration): 공개 /api/migration 전면 비활성 + Secure check-status/detect-tables 추가
+🔒 fix+refactor: 공개 /api/migration 비활성+Secure 라우트(기존분) · 에러응답 노출 6곳 제거 · members E2E zod 검증 · COUNT(*) 전환 · artworks limit 클램프 · schema-pg 이원화 해소(Serialized 경계타입, PDCA Match 100%)
