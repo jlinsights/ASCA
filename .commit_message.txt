@@ -1,1 +1,1 @@
-🔒 fix+refactor: 공개 /api/migration 비활성+Secure 라우트(기존분) · 에러응답 노출 6곳 제거 · members E2E zod 검증 · COUNT(*) 전환 · artworks limit 클램프 · schema-pg 이원화 해소(Serialized 경계타입, PDCA Match 100%)
+🎨 chore(impeccable): 갤러리 표면 디자인 크리틱 도입 — PRODUCT.md 신규(주 사용자=일반 관람객·서예 애호가) + 루트 DESIGN.md symlink(기존 시스템을 SSOT로 인식시켜 경쟁 월드 생성 방지) + .impeccable/critique 스냅샷(29/36) · 부수 발견: 프로덕션 전면 장애 분석 문서 추가(docs/03-analysis/asca-prod-csp-outage.analysis.md, 미수정)
