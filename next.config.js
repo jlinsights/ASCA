@@ -6,6 +6,132 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const lowMemoryBuild = process.env.CI_LOW_MEMORY_BUILD === '1'
 
+// ─────────────────────────────────────────────────────────────
+// Content-Security-Policy
+//
+// 2026-08 장애 교훈: 프로덕션 CSP가 Clerk 스크립트를 차단해 ClerkProvider가
+// 루트 레이아웃에서 터졌고 전 페이지가 죽었다. build·lint·type-check·test는
+// 전부 통과했다 — 넷 다 클라이언트 런타임을 보지 않는다.
+// 자세한 내용: docs/03-analysis/asca-prod-csp-outage.analysis.md
+//
+// 규칙: 인스턴스 고유 오리진은 하드코딩하지 말고 env에서 파생시킨다.
+//       서드파티를 추가하면 아래 THIRD_PARTY에 벤더 단위로 함께 적는다.
+// ─────────────────────────────────────────────────────────────
+
+/** URL 문자열에서 오리진만 안전하게 추출. 실패 시 null. */
+function originOf(rawUrl) {
+  if (!rawUrl) return null
+  try {
+    return new URL(rawUrl).origin
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Clerk publishable key(`pk_test_<base64(frontendApi)>$`)에서 Frontend API
+ * 오리진을 파생한다. 키가 없거나 형식이 다르면 null — 이 경우 아래 와일드카드가 받는다.
+ */
+function clerkFrontendApiOrigin() {
+  const pk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+  if (!pk) return null
+  const encoded = pk.replace(/^pk_(test|live)_/, '')
+  if (encoded === pk) return null
+  try {
+    const host = Buffer.from(encoded, 'base64').toString('utf8').replace(/\$+$/, '')
+    return /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(host) ? `https://${host}` : null
+  } catch {
+    return null
+  }
+}
+
+const supabaseOrigin = originOf(process.env.NEXT_PUBLIC_SUPABASE_URL)
+const supabaseSocketOrigin = supabaseOrigin ? supabaseOrigin.replace(/^https:/, 'wss:') : null
+const clerkOrigin = clerkFrontendApiOrigin()
+
+/** 소스에서 실제로 로드가 확인된 서드파티만 벤더 단위로 나열한다. */
+const THIRD_PARTY = {
+  // 인스타그램 피드 위젯 — app/exhibitions/*
+  curator: {
+    script: ['https://cdn.curator.io', 'https://*.curator.io'],
+    style: ['https://cdn.curator.io'],
+    img: ['https://cdn.curator.io', 'https://*.curator.io'],
+    connect: ['https://cdn.curator.io', 'https://*.curator.io'],
+    frame: ['https://cdn.curator.io', 'https://*.curator.io'],
+  },
+  // 신청 폼 임베드 — app/application*, app/commissioning-application, app/forms
+  tally: { script: ['https://tally.so'], frame: ['https://tally.so'] },
+  // 배경 영상 — app/application
+  vimeo: {
+    frame: ['https://player.vimeo.com'],
+    img: ['https://i.vimeocdn.com'],
+    script: ['https://f.vimeocdn.com'],
+    connect: ['https://*.vimeocdn.com'],
+  },
+  // 카카오 SDK(공유·지도) — components/seo/kakao-script.tsx, lib/kakao.ts
+  kakao: {
+    script: ['https://t1.kakaocdn.net', 'https://dapi.kakao.com'],
+    connect: ['https://dapi.kakao.com', 'https://kapi.kakao.com'],
+    img: ['https://t1.kakaocdn.net', 'https://k.kakaocdn.net'],
+  },
+  // 채널톡 상담 위젯 — app/contact/*, app/fairness-transparency-hub
+  channelTalk: {
+    script: ['https://cdn.channel.io'],
+    connect: ['https://api.channel.io', 'wss://*.channel.io'],
+    frame: ['https://*.channel.io'],
+    img: ['https://*.channel.io'],
+  },
+  // 뉴스레터 구독 — components/layout/layout-footer.tsx
+  // form: 유일하게 실제로 폼을 외부로 POST하는 벤더다.
+  stibee: {
+    frame: ['https://*.stibee.com'],
+    connect: ['https://*.stibee.com'],
+    form: ['https://*.stibee.com'],
+  },
+  // 음원 임베드 — app/application
+  spotify: { frame: ['https://open.spotify.com'] },
+  // 웹폰트 로더 — 코드에서 webfont.js 로드
+  googleFonts: {
+    script: ['https://ajax.googleapis.com'],
+    style: ['https://fonts.googleapis.com'],
+    font: ['https://fonts.gstatic.com'],
+  },
+  // Cloudflare Images — 정적 이미지 호스팅
+  cloudflareImages: { img: ['https://imagedelivery.net'] },
+}
+
+/** THIRD_PARTY에서 특정 디렉티브에 해당하는 오리진을 모아 중복 제거한다. */
+function vendorOrigins(directive) {
+  return [...new Set(Object.values(THIRD_PARTY).flatMap(v => v[directive] || []))]
+}
+
+/** null을 걸러내고 공백으로 잇는다. */
+function sources(...parts) {
+  return parts.flat().filter(Boolean).join(' ')
+}
+
+const productionCsp = [
+  `default-src 'self'`,
+  // 'unsafe-inline'/'unsafe-eval'은 기존 정책 유지 — 이번 변경 범위 밖.
+  // 제거하려면 nonce 도입이 선행돼야 한다(별도 과제).
+  `script-src ${sources(`'self'`, `'unsafe-inline'`, `'unsafe-eval'`, clerkOrigin, 'https://*.clerk.accounts.dev', vendorOrigins('script'))}`,
+  `style-src ${sources(`'self'`, `'unsafe-inline'`, vendorOrigins('style'))}`,
+  `img-src ${sources(`'self'`, 'data:', 'blob:', clerkOrigin, 'https://img.clerk.com', supabaseOrigin, vendorOrigins('img'))}`,
+  `font-src ${sources(`'self'`, 'data:', vendorOrigins('font'))}`,
+  `connect-src ${sources(`'self'`, clerkOrigin, 'https://*.clerk.accounts.dev', 'https://clerk-telemetry.com', supabaseOrigin, supabaseSocketOrigin, vendorOrigins('connect'))}`,
+  // Clerk은 봇 차단에 Cloudflare Turnstile을 프레임으로 띄운다.
+  `frame-src ${sources(`'self'`, 'https://challenges.cloudflare.com', vendorOrigins('frame'))}`,
+  // Clerk은 blob: 워커를 쓴다. default-src 'self' 폴백으로는 막힌다.
+  `worker-src ${sources(`'self'`, 'blob:')}`,
+  `object-src 'none'`,
+  `base-uri 'self'`,
+  // frame 오리진 전체를 열지 않는다 — 실제로 폼을 POST하는 벤더만.
+  `form-action ${sources(`'self'`, vendorOrigins('form'))}`,
+].join('; ')
+
+const developmentCsp =
+  "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data: blob:; font-src * data:; connect-src * ws: wss:; frame-src *; worker-src * blob:;"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 프로덕션 빌드에서 console 제거
@@ -140,10 +266,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value:
-              process.env.NODE_ENV === 'development'
-                ? "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data: blob:; font-src * data:; connect-src *; frame-src *;"
-                : "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.curator.io https://*.curator.io; style-src 'self' 'unsafe-inline' https://cdn.curator.io; img-src 'self' data: blob: https://cdn.curator.io https://*.curator.io; font-src 'self' data:; connect-src 'self' https://cdn.curator.io https://*.curator.io; frame-src 'self' https://cdn.curator.io https://*.curator.io; object-src 'none'; base-uri 'self'; form-action 'self';",
+            value: process.env.NODE_ENV === 'development' ? developmentCsp : productionCsp,
           },
         ],
       },
