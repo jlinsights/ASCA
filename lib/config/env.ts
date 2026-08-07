@@ -12,11 +12,11 @@ const envSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url().optional().default('http://localhost:3000'),
 
   // Database
-  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
-  DATABASE_REPLICA_URL: z.string().url().optional(),
+  DATABASE_URL: z.string().trim().min(1, 'DATABASE_URL is required'),
+  DATABASE_REPLICA_URL: z.string().trim().url().optional(),
 
   // Supabase
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url('NEXT_PUBLIC_SUPABASE_URL must be a valid URL'),
+  NEXT_PUBLIC_SUPABASE_URL: z.string().trim().url('NEXT_PUBLIC_SUPABASE_URL must be a valid URL'),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, 'NEXT_PUBLIC_SUPABASE_ANON_KEY is required'),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
 

@@ -91,6 +91,24 @@ describe('Environment Configuration', () => {
       }).toThrow()
     })
 
+    test('should trim URL environment variables', () => {
+      process.env = {
+        NODE_ENV: 'test',
+        DATABASE_URL: 'postgresql://localhost:5432/test\n',
+        DATABASE_REPLICA_URL: ' https://replica.example.com ',
+        NEXT_PUBLIC_SUPABASE_URL: 'https://test.supabase.co\n',
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: 'test-anon-key',
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: 'pk_test_xxx',
+        CLERK_SECRET_KEY: 'sk_test_xxx',
+      }
+
+      const { env } = require('../env')
+
+      expect(env.DATABASE_URL).toBe('postgresql://localhost:5432/test')
+      expect(env.DATABASE_REPLICA_URL).toBe('https://replica.example.com')
+      expect(env.NEXT_PUBLIC_SUPABASE_URL).toBe('https://test.supabase.co')
+    })
+
     test('should validate NODE_ENV enum values', () => {
       // Arrange
       process.env = {
