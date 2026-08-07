@@ -1,1 +1,1 @@
-🎨 chore(impeccable): 갤러리 표면 디자인 크리틱 도입 — PRODUCT.md 신규(주 사용자=일반 관람객·서예 애호가) + 루트 DESIGN.md symlink(기존 시스템을 SSOT로 인식시켜 경쟁 월드 생성 방지) + .impeccable/critique 스냅샷(29/36) · 부수 발견: 프로덕션 전면 장애 분석 문서 추가(docs/03-analysis/asca-prod-csp-outage.analysis.md, 미수정)
+🔒 fix: DOMPurify 빌드 경계 수정과 보안 의존성 업데이트
