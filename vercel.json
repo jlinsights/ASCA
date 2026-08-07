@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run build:full",
   "devCommand": "npm run dev",
   "installCommand": "npm ci",
   "headers": [
