@@ -1,1 +1,1 @@
-🚀 fix: Vercel에서 Next.js 전체 프로덕션 빌드 실행
+✅ chore: CI 포맷 검사 대상 파일 정리

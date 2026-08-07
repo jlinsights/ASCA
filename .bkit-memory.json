@@ -69,18 +69,8 @@
       "archivedTo": "docs/archive/2026-07/asca-component-split-phase-3-4/",
       "analysisPath": "docs/archive/2026-07/asca-component-split-phase-3-4/asca-component-split-phase-3-4.analysis.md",
       "reportPath": "docs/archive/2026-07/asca-component-split-phase-3-4/asca-component-split-phase-3-4.report.md",
-      "mergedPrs": [
-        39,
-        40,
-        41,
-        42
-      ],
-      "mergeCommits": [
-        "31f95e56",
-        "b8d402d0",
-        "d86d5285",
-        "95edd07d"
-      ],
+      "mergedPrs": [39, 40, 41, 42],
+      "mergeCommits": ["31f95e56", "b8d402d0", "d86d5285", "95edd07d"],
       "outcome": "✅ Report+Archive (100%). max-lines 10→0. 9파일 비파괴 분리(경로·export 불변)+sidebar 단일파일 예외, 4 PR squash 머지, 머지된 main 전 게이트 green(lint 0·tsc 0·test:ci 389/389·build·design 3게이트). verbatim 추출·내부정의컴포넌트→안정화(DOM등가)·bylaws 텍스트 12469자 일치. 후속: asca-a11y-cleanup(CodeRabbit pre-existing a11y 55건 별도 사이클)."
     },
     {
@@ -433,12 +423,7 @@
     "feature": "asca-component-split-phase-3-4",
     "date": "2026-07-05",
     "matchRate": 100,
-    "mergedPrs": [
-      39,
-      40,
-      41,
-      42
-    ],
+    "mergedPrs": [39, 40, 41, 42],
     "archivedTo": "docs/archive/2026-07/asca-component-split-phase-3-4/"
   },
   "staleResolved": {
