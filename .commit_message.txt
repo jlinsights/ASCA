@@ -1,1 +1,1 @@
-🔒 fix: DOMPurify 빌드 경계 수정과 보안 의존성 업데이트
+🚀 fix: Vercel에서 Next.js 전체 프로덕션 빌드 실행
