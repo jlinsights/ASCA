@@ -48,6 +48,7 @@ function clerkFrontendApiOrigin() {
 const supabaseOrigin = originOf(process.env.NEXT_PUBLIC_SUPABASE_URL)
 const supabaseSocketOrigin = supabaseOrigin ? supabaseOrigin.replace(/^https:/, 'wss:') : null
 const clerkOrigin = clerkFrontendApiOrigin()
+const clerkAccountPortalOrigin = clerkOrigin?.replace('.clerk.accounts.dev', '.accounts.dev')
 
 /** 소스에서 실제로 로드가 확인된 서드파티만 벤더 단위로 나열한다. */
 const THIRD_PARTY = {
@@ -118,7 +119,7 @@ const productionCsp = [
   `style-src ${sources(`'self'`, `'unsafe-inline'`, vendorOrigins('style'))}`,
   `img-src ${sources(`'self'`, 'data:', 'blob:', clerkOrigin, 'https://img.clerk.com', supabaseOrigin, vendorOrigins('img'))}`,
   `font-src ${sources(`'self'`, 'data:', vendorOrigins('font'))}`,
-  `connect-src ${sources(`'self'`, clerkOrigin, 'https://*.clerk.accounts.dev', 'https://clerk-telemetry.com', supabaseOrigin, supabaseSocketOrigin, vendorOrigins('connect'))}`,
+  `connect-src ${sources(`'self'`, clerkOrigin, clerkAccountPortalOrigin, 'https://*.clerk.accounts.dev', 'https://clerk-telemetry.com', supabaseOrigin, supabaseSocketOrigin, vendorOrigins('connect'))}`,
   // Clerk은 봇 차단에 Cloudflare Turnstile을 프레임으로 띄운다.
   `frame-src ${sources(`'self'`, 'https://challenges.cloudflare.com', vendorOrigins('frame'))}`,
   // Clerk은 blob: 워커를 쓴다. default-src 'self' 폴백으로는 막힌다.
