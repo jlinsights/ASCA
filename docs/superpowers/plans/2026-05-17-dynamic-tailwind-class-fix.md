@@ -1,3 +1,22 @@
+> # ✅ 이 계획은 완료됐습니다 — 실행하지 마세요 (2026-09-14 확인)
+>
+> **아래 체크박스 53개는 미완이 아니라 미갱신입니다.** 작업은 끝났는데
+> 체크박스를 표시하지 않은 채 남았습니다. 완료 보고서는 없습니다.
+>
+> **코드로 확인한 근거:**
+> - Task 1 의 산출물 `components/cultural/_constants/color-classes.ts` 와
+>   `components/cultural/_constants/__tests__/color-classes.test.ts` 가 **둘 다 실재**
+> - Task 2~6 의 대상 5개 컴포넌트(`CulturalCalendar` · `CalligraphyHero` ·
+>   `VirtualExhibition` · `ArtistPortfolioGrid` · `LearningHub`)에
+>   **동적 클래스 보간(`bg-${}` · `text-${}` · `border-${}`)이 0건** — 리팩터가 적용된 상태
+>
+> ⚠️ **아래 "For agentic workers" 지시는 무시하세요.** 이 계획을 실행하면 이미
+> 적용된 리팩터를 되돌리거나 충돌시킵니다.
+>
+> ℹ️ 이 버그의 본질은 **Tailwind 가 리터럴 문자열만 스캔**하므로 `bg-${color}` 같은
+> 보간 클래스는 빌드 산출 CSS 에 들어가지 않는다는 것입니다. 그래서 검증은
+> 소스 grep 이 아니라 **컴파일된 CSS** 로 해야 합니다.
+
 # 동적 Tailwind 클래스 버그 수정 — 구현 계획
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use
