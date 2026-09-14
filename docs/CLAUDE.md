@@ -224,21 +224,35 @@ and refactor using this standardized process:
 
 ### 계획 문서 — 체크박스는 진행 상태가 아니다
 
-🔴 **`docs/superpowers/plans/` 의 미완 체크박스를 "남은 일"로 읽지 말 것.** 작업이 끝나도 아무도 돌아가서 체크하지 않는다.
+🔴 **`docs/superpowers/plans/` 의 미완 체크박스를 "남은 일"로 읽지 말 것.**
+작업이 끝나도 아무도 돌아가서 체크하지 않는다.
 
-`2026-05-17-dynamic-tailwind-class-fix` 가 실제로 그랬다 — 체크박스 **53개 전부 미완**인데 상단에는 실행 지시(`**For agentic workers:** REQUIRED SUB-SKILL: …`)가 달려 있었다. 그대로 실행하면 이미 적용된 리팩터를 되돌린다. 2026-09-14 에 **정지 헤더**를 달았다(Task 1 산출물 2파일 실재 + 대상 5개 컴포넌트에 동적 클래스 0건으로 확인).
+`2026-05-17-dynamic-tailwind-class-fix` 가 실제로 그랬다 — 체크박스 **53개 전부
+미완**인데 상단에는 실행
+지시(`**For agentic workers:** REQUIRED SUB-SKILL: …`)가 달려 있었다. 그대로
+실행하면 이미 적용된 리팩터를 되돌린다. 2026-09-14 에 **정지 헤더**를
+달았다(Task 1 산출물 2파일 실재 + 대상 5개 컴포넌트에 동적 클래스 0건으로 확인).
 
-⚠️ **`exhibition-detail-mockup-port.plan.md` 는 다르다 — 진짜 진행 중이다.** 형제 클론 `~/Developer/Projects/ASCA-exhibition-port` 의 `feat/exhibition-detail-port` 브랜치에 고유 커밋 21개(+다른 3개 브랜치에 20개)와 미커밋 변경이 있다. 같은 저장소의 두 번째 작업 클론이므로 **지우거나 stale 로 표시하지 말 것.**
+⚠️ **`exhibition-detail-mockup-port.plan.md` 는 다르다 — 진짜 진행 중이다.**
+형제 클론 `~/Developer/Projects/ASCA-exhibition-port` 의
+`feat/exhibition-detail-port` 브랜치에 고유 커밋 21개(+다른 3개 브랜치에 20개)와
+미커밋 변경이 있다. 같은 저장소의 두 번째 작업 클론이므로 **지우거나 stale 로
+표시하지 말 것.**
 
 ### 동적 Tailwind 클래스 금지
 
-`bg-${color}` 같은 **보간 클래스는 빌드 산출 CSS 에 들어가지 않는다** — Tailwind 는 리터럴 문자열만 스캔한다. 정적 클래스 맵을 쓴다(`components/cultural/_constants/color-classes.ts`).
+`bg-${color}` 같은 **보간 클래스는 빌드 산출 CSS 에 들어가지 않는다** — Tailwind
+는 리터럴 문자열만 스캔한다. 정적 클래스 맵을
+쓴다(`components/cultural/_constants/color-classes.ts`).
 
-⚠️ **검증은 소스 grep 이 아니라 컴파일된 CSS 로 한다.** 소스에서 클래스명을 찾는 방식은 이 버그를 원리적으로 못 잡는다.
+⚠️ **검증은 소스 grep 이 아니라 컴파일된 CSS 로 한다.** 소스에서 클래스명을 찾는
+방식은 이 버그를 원리적으로 못 잡는다.
 
 ### 문서에 개수를 적지 않는다
 
-숫자는 썩고 대개 중복돼 조용히 갈라진다. 개수가 필요하면 출처를 가리킬 것 — 테스트 수는 `npm test`, 컴포넌트 수는 파일 시스템. 여기 남아도 되는 숫자는 **코드가 강제하는 정책값**뿐이다.
+숫자는 썩고 대개 중복돼 조용히 갈라진다. 개수가 필요하면 출처를 가리킬 것 —
+테스트 수는 `npm test`, 컴포넌트 수는 파일 시스템. 여기 남아도 되는 숫자는
+**코드가 강제하는 정책값**뿐이다.
 
 ## Important File Locations
 
