@@ -6,7 +6,7 @@
  *
  * 현재: text fallback (Noto Serif CJK + DESIGN.md display-lg).
  * SVG 친필 자산(`public/brand/hanja-mark.svg`) 도착 후 이 파일 단일 교체로 대응.
- * 가운뎃점은 인주색(vermillion #e63946) — 한자 표지 유일한 컬러 액센트.
+ * 가운뎃점은 인주색(vermillion #a8201a) — 한자 표지 유일한 컬러 액센트.
  */
 
 import { cn } from '@/lib/utils'
@@ -53,7 +53,7 @@ export function HanjaMark({
       <span aria-hidden='true'>法古創新</span>
       <span
         aria-hidden='true'
-        className='mx-3 md:mx-4 inline-block align-middle text-[color:var(--vermillion,#e63946)]'
+        className='mx-3 md:mx-4 inline-block align-middle text-[color:var(--vermillion,#a8201a)]'
       >
         ·
       </span>

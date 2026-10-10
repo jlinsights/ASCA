@@ -16,13 +16,13 @@ export const InkMeteors = ({
 
   const colorClasses = {
     'ink-black':
-      'bg-ink-black shadow-[0_0_0_1px_#1a1a1a20] before:from-[#1a1a1a] before:to-transparent',
+      'bg-ink-black shadow-[0_0_0_1px_#0b173320] before:from-ink-black before:to-transparent',
     'scholar-red':
-      'bg-scholar-red shadow-[0_0_0_1px_#af262620] before:from-[#af2626] before:to-transparent',
+      'bg-scholar-red shadow-[0_0_0_1px_rgb(var(--scholar-red-rgb)/0.125)] before:from-scholar-red before:to-transparent',
     'bamboo-green':
       'bg-bamboo-green shadow-[0_0_0_1px_#6b7c3220] before:from-[#6b7c32] before:to-transparent',
     'temple-gold':
-      'bg-temple-gold shadow-[0_0_0_1px_#d4af3720] before:from-[#d4af37] before:to-transparent',
+      'bg-temple-gold shadow-[0_0_0_1px_#d4a84a20] before:from-temple-gold before:to-transparent',
   }
 
   return (

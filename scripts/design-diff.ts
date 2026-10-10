@@ -58,6 +58,29 @@ for (const [key, val] of Object.entries(tailwindColors)) {
   }
 }
 
+// Theme-aware literals: tailwind `rgb(var(--x-rgb) / <alpha-value>)` resolves through the
+// light-mode `:root` channel triplet in app/globals.css, which must equal the DESIGN.md hex.
+const GLOBALS_PATH = resolve(__dirname, '../app/globals.css')
+const globalsCss = readFileSync(GLOBALS_PATH, 'utf8')
+const rootBlock = globalsCss.slice(globalsCss.indexOf(':root {'), globalsCss.indexOf('.dark {'))
+function resolveChannelVar(value: string): string | null {
+  const name = value.match(/^rgb\(var\(--([\w-]+)\) \/ <alpha-value>\)$/)?.[1]
+  if (!name) return null
+  const triplet = rootBlock.match(new RegExp(`--${name}:\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)\\s*;`))
+  if (!triplet) return `unresolved --${name}`
+  return (
+    '#' +
+    triplet
+      .slice(1, 4)
+      .map(n => Number(n).toString(16).padStart(2, '0'))
+      .join('')
+  )
+}
+for (const [key, val] of Object.entries(flattened)) {
+  const hex = resolveChannelVar(val)
+  if (hex) flattened[key] = hex
+}
+
 const errors: string[] = []
 let literalChecked = 0
 

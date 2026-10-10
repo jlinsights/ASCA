@@ -99,7 +99,7 @@ export function HeroSection() {
               <Link href='/exhibitions'>
                 <Button
                   size='lg'
-                  className='group h-14 px-8 text-lg bg-celadon-green hover:bg-celadon-green/90 text-rice-paper shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
+                  className='group h-14 px-8 text-lg bg-celadon-green hover:bg-celadon-green/90 text-ink-black shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
                 >
                   <Sparkles className='mr-2 h-5 w-5 group-hover:rotate-12 transition-transform' />
                   전시회 둘러보기
@@ -111,7 +111,7 @@ export function HeroSection() {
                 <Button
                   size='lg'
                   variant='outline'
-                  className='group h-14 px-8 text-lg border-2 border-scholar-red text-scholar-red hover:bg-scholar-red hover:text-rice-paper shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
+                  className='group h-14 px-8 text-lg border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
                 >
                   작품 감상하기
                   <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />

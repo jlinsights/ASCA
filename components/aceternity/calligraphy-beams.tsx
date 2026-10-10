@@ -51,8 +51,8 @@ export const CalligraphyBeams = ({ className }: { className?: string }) => {
               gradientUnits='userSpaceOnUse'
             >
               <stop stopColor='#6b7c32' stopOpacity='0' />
-              <stop offset='0.325' stopColor='#af2626' />
-              <stop offset='0.7' stopColor='#d4af37' />
+              <stop offset='0.325' stopColor='#2a3f7a' />
+              <stop offset='0.7' stopColor='#d4a84a' />
               <stop offset='1' stopColor='#1e3a8a' stopOpacity='0' />
             </linearGradient>
           ))}

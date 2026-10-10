@@ -14,13 +14,13 @@ export const random = (min: number, max: number) => {
 
 // Traditional East Asian color palette for calligraphy-themed effects
 export const culturalColors = [
-  '#af2626', // scholar-red
+  '#2a3f7a', // scholar-red (navy-600 — 캔버스·SVG 는 테마 변수를 못 읽음)
   '#4a7c59', // east-wood
   '#d73527', // south-fire
   '#1e3a8a', // north-water
   '#6b7c32', // bamboo-green
   '#8e4585', // plum-purple
-  '#d4af37', // temple-gold
+  '#d4a84a', // temple-gold
 ]
 
 // Generate gradient string for backgrounds with cultural colors
@@ -84,7 +84,7 @@ export const generateBambooPattern = (color: string = '#6b7c32', opacity: number
 }
 
 // Generate traditional dots pattern (representing calligraphy dots)
-export const generateCalligraphyDots = (color: string = '#1a1a1a', opacity: number = 0.1) => {
+export const generateCalligraphyDots = (color: string = '#0b1733', opacity: number = 0.1) => {
   return createPattern(
     'calligraphy-dots',
     `
@@ -98,7 +98,7 @@ export const generateCalligraphyDots = (color: string = '#1a1a1a', opacity: numb
 
 // Shimmer effect utility with ink-like appearance
 export const getInkShimmerGradient = (direction: string = 'to right') => {
-  return `linear-gradient(${direction}, transparent 0%, rgba(26,26,26,0.3) 50%, transparent 100%)`
+  return `linear-gradient(${direction}, transparent 0%, rgba(11,23,51,0.3) 50%, transparent 100%)`
 }
 
 // Text gradient utility using traditional colors
@@ -134,9 +134,9 @@ export const generateInkSpread = () => {
 
   // Create gradient that mimics ink spreading
   const gradient = ctx.createRadialGradient(60, 60, 0, 60, 60, 60)
-  gradient.addColorStop(0, 'rgba(26, 26, 26, 0.4)')
-  gradient.addColorStop(0.5, 'rgba(26, 26, 26, 0.2)')
-  gradient.addColorStop(1, 'rgba(26, 26, 26, 0)')
+  gradient.addColorStop(0, 'rgba(11, 23, 51, 0.4)')
+  gradient.addColorStop(0.5, 'rgba(11, 23, 51, 0.2)')
+  gradient.addColorStop(1, 'rgba(11, 23, 51, 0)')
 
   ctx.fillStyle = gradient
   ctx.fillRect(0, 0, 120, 120)
@@ -175,7 +175,7 @@ export const generatePaperTexture = () => {
   canvas.height = 200
 
   // Base paper color
-  ctx.fillStyle = '#faf7f0'
+  ctx.fillStyle = '#fbf5e4'
   ctx.fillRect(0, 0, 200, 200)
 
   // Add subtle texture

@@ -70,7 +70,7 @@ export const FloatingCulturalNav = ({
           className={cn(
             'flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-stone-gray/20 dark:border-rice-paper/20 rounded-full',
             'dark:bg-lacquer-black/80 bg-silk-cream/80 backdrop-blur-md',
-            'shadow-[0px_2px_3px_-1px_rgba(26,26,26,0.1),0px_1px_0px_0px_rgba(175,38,38,0.02),0px_0px_0px_1px_rgba(107,124,50,0.08)]',
+            'shadow-[0px_2px_3px_-1px_rgba(11,23,51,0.1),0px_1px_0px_0px_rgba(11,23,51,0.02),0px_0px_0px_1px_rgba(107,124,50,0.08)]',
             'z-[5000] pr-2 pl-8 py-2 items-center justify-center space-x-4',
             className
           )}

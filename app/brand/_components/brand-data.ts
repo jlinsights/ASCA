@@ -37,24 +37,28 @@ export interface ColorSwatch {
 
 export const PRIMARY_COLORS: ColorSwatch[] = [
   {
-    name: 'Traditional Ink Black',
-    hex: '#1a1a1a',
-    description: '먹의 깊이와 전통의 권위를 상징하는 주요 배경색',
+    name: 'Navy 900 深藍',
+    hex: '#0b1733',
+    description: '먹을 머금은 깊은 남색 — 본문 글자와 어두운 바탕의 기본색',
   },
   {
-    name: 'Rice Paper White',
-    hex: '#f5f5f0',
-    description: '한지의 따스한 질감과 순수함을 담은 기본 폰트 색상',
+    name: 'Paper 宣紙',
+    hex: '#fbf8ef',
+    description: '선지의 따스한 질감을 담은 밝은 면 — 라이트 모드 바탕과 다크 모드 글자',
     textDark: true,
   },
   {
-    name: 'Celadon Green',
-    hex: '#88A891',
-    description: '동아시아 청자의 고요함과 지혜를 표현하는 포인트 컬러',
+    name: 'Gold 700 古金',
+    hex: '#a77d24',
+    description: '글자와 면에 모두 쓰는 절제된 금색 — 버튼·링크·인터랙티브 요소',
     textDark: true,
   },
   { name: 'Terra Red', hex: '#9B4444', description: '전통 도장의 주홍색에서 영감받은 강조색' },
-  { name: 'Stone Gray', hex: '#707070', description: '동양 문인석의 고전적 품격을 담은 중성색' },
+  {
+    name: 'Stone 700',
+    hex: '#424a5e',
+    description: '남색 기운의 중성색 — 보조 텍스트(paper 위 AA)',
+  },
   {
     name: 'Sage Green',
     hex: '#B7C4B7',
@@ -76,9 +80,10 @@ export const PRIMARY_COLORS: ColorSwatch[] = [
   { name: 'Medium Orchid', hex: '#c14af2', description: '동양 난초의 기품과 창의성을 상징' },
   { name: 'Royal Blue', hex: '#275eea', description: '청화백자의 깊고 맑은 청색에서 영감' },
   {
-    name: 'Scholar Red',
-    hex: '#af2626',
-    description: '동아시아 학자들이 사용한 주묵의 강렬한 붉은색',
+    name: 'Gold 500 正金',
+    hex: '#d4a84a',
+    description: '시그니처 금색 — 헤어라인·장식·큰 글자 전용(본문 글자 금지)',
+    textDark: true,
   },
   { name: 'Menu', hex: '#363636', description: 'UI 메뉴에 최적화된 가독성 높은 어두운 회색' },
 ]
@@ -173,9 +178,12 @@ export const LOGO_SECTIONS = [
     items: [
       {
         label: '주요 색상',
-        text: 'Traditional Ink Black(#1a1a1a)와 Rice Paper White(#f5f5f0)를 기본으로 사용',
+        text: 'Navy 900(#0b1733)과 Paper(#fbf8ef)를 기본으로 사용',
       },
-      { label: '보조 색상', text: '특별한 경우 Celadon Green(#88A891) 사용 가능' },
+      {
+        label: '보조 색상',
+        text: '강조에는 금색(Gold 700 #a77d24 · Gold 500 #d4a84a)을 절제해 사용',
+      },
       { label: '배경별 조정', text: '어두운 배경에는 흰색 로고, 밝은 배경에는 검정 로고를 사용' },
       {
         label: '단일 색상 원칙',

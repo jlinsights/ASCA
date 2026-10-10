@@ -132,7 +132,7 @@ const CalligraphyHero: React.FC<CalligraphyHeroProps> = ({
                     className='object-contain rounded-lg shadow-2xl transition-transform duration-700 group-hover:scale-105'
                     sizes='(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw'
                     style={{
-                      filter: 'drop-shadow(0 25px 50px rgba(26, 26, 26, 0.2))',
+                      filter: 'drop-shadow(0 25px 50px rgba(11, 23, 51, 0.2))',
                     }}
                   />
 

@@ -381,7 +381,7 @@ export const translations: TranslationData = {
     reset: '重置',
 
     // 홈 페이지
-    artGalleryExhibition: '东方书法协会',
+    artGalleryExhibition: '东洋书艺协会',
     journeyThroughArts: '正法的传承，创新的和谐',
     // brand-rollout L1·L2 SSOT (brand-guidelines §1·§8)
     homeHeroL1: '法古創新，人書俱老。',
@@ -445,11 +445,11 @@ export const translations: TranslationData = {
     communityMembershipCtaLabel: '正會員介紹',
     aboutTitle: '关于',
     aboutText:
-      '社团法人东方书法协会通过正法的传承发展与创新的和谐实现，引领东方书法文化的发展与普及。',
+      '社团法人东洋书艺协会通过正法的传承发展与创新的和谐实现，引领东洋书艺文化的发展与普及。',
     gallerySpace: '画廊空间',
     whereArtsBecome: '艺术成为现实的地方',
     ourSpace: '我们的空间',
-    ourSpaceText: '位于首尔城北区的东方书法协会为体验和学习书法文化提供最佳环境。',
+    ourSpaceText: '位于首尔城北区的东洋书艺协会为体验和学习书法文化提供最佳环境。',
 
     // 작품 페이지
     artCollection: '艺术收藏',
