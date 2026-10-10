@@ -270,9 +270,9 @@ const config = {
         loose: '2',
       },
       fontFamily: {
-        // Primary Typography System (최적화된 next/font/google 폰트 사용)
+        // Primary Typography System — Pretendard(CDN) 우선, Noto Sans KR(next/font) 폴백
         sans: [
-          'var(--font-inter)',
+          "'Pretendard'",
           'var(--font-noto-sans-kr)',
           "'Noto Sans CJK SC'",
           "'Noto Sans CJK TC'",

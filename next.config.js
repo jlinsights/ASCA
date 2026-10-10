@@ -97,6 +97,11 @@ const THIRD_PARTY = {
     style: ['https://fonts.googleapis.com'],
     font: ['https://fonts.gstatic.com'],
   },
+  // Pretendard 본문 글꼴(dynamic-subset) — app/layout.tsx PRETENDARD_CSS
+  pretendard: {
+    style: ['https://cdn.jsdelivr.net'],
+    font: ['https://cdn.jsdelivr.net'],
+  },
   // Cloudflare Images — 정적 이미지 호스팅
   cloudflareImages: { img: ['https://imagedelivery.net'] },
 }
