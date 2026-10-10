@@ -16,13 +16,13 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         celadon:
-          'bg-[#88A891] text-[#1a1a1a] border border-[#88A891] hover:bg-[#B7C4B7] hover:border-[#B7C4B7] hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5',
-        sage: 'bg-[#B7C4B7] text-[#1a1a1a] border border-[#B7C4B7] hover:bg-[#88A891] hover:border-[#88A891] transition-all duration-300 hover:-translate-y-0.5',
+          'bg-celadon-green text-ink-black border border-celadon-green hover:bg-sage-green hover:border-sage-green hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5',
+        sage: 'bg-sage-green text-ink-black border border-sage-green hover:bg-celadon-green hover:border-celadon-green transition-all duration-300 hover:-translate-y-0.5',
         terra:
-          'bg-[#9B4444] text-[#f5f5f0] border border-[#9B4444] hover:bg-[#8a3a3a] hover:border-[#8a3a3a] hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5',
+          'bg-terra-red text-rice-paper border border-terra-red hover:bg-terra-red/90 hover:border-terra-red/90 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5',
         traditional:
-          'bg-[#1a1a1a] text-[#f5f5f0] border border-[#707070] hover:bg-[#2a2a2a] hover:border-[#88A891] transition-all duration-300',
-        rice: 'bg-[#f5f5f0] text-[#1a1a1a] border border-[#f5f5f0] hover:bg-[#B7C4B7] hover:text-[#1a1a1a] transition-all duration-300',
+          'bg-ink-black text-rice-paper border border-stone-gray hover:bg-ink-black/90 hover:border-celadon-green transition-all duration-300',
+        rice: 'bg-rice-paper text-ink-black border border-rice-paper hover:bg-sage-green hover:text-ink-black transition-all duration-300',
       },
       size: {
         default: 'h-10 px-4 py-2',

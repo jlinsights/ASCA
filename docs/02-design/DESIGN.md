@@ -1,6 +1,6 @@
 ---
 name: ASCA Design System
-version: 1.3.0-alpha
+version: 2.0.0-alpha
 description: >-
   사단법인 동양서예협회(ASCA) 웹사이트의 디자인 시스템 명세. 전통 동아시아
   예술의 색채·서체·질감을 현대 디지털 인터페이스 언어로 재해석한 토큰 집합. 본
@@ -16,35 +16,33 @@ references:
 # ─────────────────────────────────────────────
 # COLORS — 브랜드 팔레트 + shadcn 시맨틱 슬롯 (구현 = app/globals.css :root)
 # YAML 키 primary/secondary 는 Tailwind bg-primary/bg-secondary 와 동일 의미.
-# 브랜드 「주 녹색」은 celadon-green / accent 슬롯 — §2.1 본문 참조.
+# 2026-10-10 ASCA Ink System(Navy & Gold) 채택 — 토큰 이름은 유지, 값만 교체. §2.0 참조.
 # ─────────────────────────────────────────────
 colors:
   # shadcn 시맨틱 슬롯 (WCAG 검증·design-lint 대상 — globals.css OKLCH의 HEX 근사)
-  primary: '#af2626' # Scholar Red — bg-primary / --primary (주 CTA·강조 버튼)
-  primary-foreground: '#fafafa' # 옅은 텍스트 on primary (~ oklch 0.98)
-  secondary: '#f0f0eb' # Warm surface — bg-secondary / --secondary (보조 표면·칩)
-  secondary-foreground: '#333333' # 짙은 텍스트 on secondary (~ oklch 0.2)
-  accent: '#88A891' # Celadon — bg-accent / --accent (hover·선택·포커스 링)
-  accent-foreground: '#1a1a1a'
-  highlight: '#ffcc00' # Brand Gold — 수상·기념·프리미엄. bg-brand-gold 로 접근
-  highlight-foreground: '#1a1a1a'
-  destructive: '#dc2626'
-  destructive-foreground: '#ffffff' # 백색 — Rice Paper(#f5f5f0)는 4.42:1로 AA 미달
-  success: '#4a7c59' # East Wood — 동방목
-  warning: '#fdb462' # Autumn Gold — 가을 황금
-  info: '#1e3a8a' # North Water — 북방수
-  muted: '#f0f0eb' # Warm Muted Bg (globals.css --muted oklch 0.94 근사)
-  muted-foreground:
-    '#6a6a6a' # Darker Gray — muted bg 위 AA 4.72:1 통과
-    # Note: 장식 토큰 stone-gray(#707070)와 별도 — semantic 슬롯
+  primary: '#0b1733' # navy-900 深藍 — bg-primary / --primary (주 CTA·강조 버튼)
+  primary-foreground: '#fbf8ef' # paper — 16.69:1
+  secondary: '#f5e9c8' # gold-200 — 보조 표면·칩
+  secondary-foreground: '#0b1733'
+  accent: '#d4a84a' # gold-500 正金 — hover·선택
+  accent-foreground: '#0b1733' # 8.02:1
+  highlight: '#d4a84a' # gold-500 — 수상·기념·프리미엄
+  highlight-foreground: '#0b1733'
+  destructive: '#a8201a' # seal-red 朱印 — 오류·낙관에만
+  destructive-foreground: '#ffffff' # 7.28:1
+  success: '#3f7a4e'
+  warning: '#a77d24' # gold-700
+  info: '#2a3f7a' # navy-600
+  muted: '#f4efdd' # paper-2
+  muted-foreground: '#424a5e' # stone-700 — muted 위 7.69:1
 
   # Surface (라이트 모드 기준)
-  background: '#f5f5f0' # Rice Paper White
-  foreground: '#1a1a1a' # Ink Black
-  card: '#fdfdfb'
-  border: '#e2e2dd'
-  input: '#d9d9d4'
-  ring: '#88A891'
+  background: '#fbf8ef' # paper 宣紙
+  foreground: '#0b1733' # navy-900
+  card: '#ffffff'
+  border: '#e5e0ce' # warm paper border
+  input: '#d9d3bf'
+  ring: '#c89729' # gold-600
 
   # Obang (오방색) — 동아시아 우주관의 5방위
   east-wood: '#4a7c59' # 동방-목-봄
@@ -60,18 +58,18 @@ colors:
   winter-snow: '#ffffff' # 겨울 설백
 
   # Calligraphy Materials (서예 재료)
-  ink-black: '#1a1a1a' # 먹색
-  rice-paper: '#f5f5f0' # 한지
+  ink-black: '#0b1733' # navy-900 · 본문 먹색
+  rice-paper: '#fbf8ef' # paper 宣紙
   bamboo-green: '#6b7c32' # 대나무 붓대
-  silk-cream: '#faf7f0' # 비단 종이
-  lacquer-black: '#0d1b2a' # 옻칠 벼루
-  vermillion: '#e63946' # 주인(朱印) 낙관
+  silk-cream: '#fbf5e4' # gold-100 cream paper
+  lacquer-black: '#070d1a' # navy-950 墨玄
+  vermillion: '#a8201a' # seal-red 朱印 낙관
 
   # Cultural Accents
-  scholar-red: '#af2626' # 선비 홍색
-  celadon-green: '#88A891' # 청자색
-  stone-gray: '#707070' # 석조 회색
-  temple-gold: '#d4af37' # 사찰 금색 (차분한 고전 금색 — Brand Gold 와 구분)
+  scholar-red: '#0b1733' # navy-900 — 이름만 유지(구 선비 홍색, 주 CTA 클래스)
+  celadon-green: '#a77d24' # gold-700 — 이름만 유지(구 청자색). 글자로도 paper 위 3.53:1
+  stone-gray: '#424a5e' # stone-700 — paper 위 AA
+  temple-gold: '#d4a84a' # gold-500 正金
   plum-purple: '#8e4585' # 매화 자색
 
   # Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정본)
@@ -89,16 +87,16 @@ colors:
 # ─────────────────────────────────────────────
 typography:
   display-lg:
-    fontFamily: 'var(--font-playfair), var(--font-noto-serif-kr), serif'
+    fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
     fontSize: '3.75rem' # 60px
   display-md:
-    fontFamily: 'var(--font-playfair), var(--font-noto-serif-kr), serif'
+    fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
     fontSize: '3rem' # 48px
   headline-lg:
-    fontFamily: 'var(--font-playfair), var(--font-noto-serif-kr), serif'
+    fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
     fontSize: '2.25rem' # 36px
   headline-md:
-    fontFamily: 'var(--font-playfair), var(--font-noto-serif-kr), serif'
+    fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
     fontSize: '1.875rem' # 30px
   title-lg:
     fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
@@ -136,13 +134,13 @@ layout:
     { sm: '640px', md: '768px', lg: '1024px', xl: '1280px', 2xl: '1400px' }
 
 # ─────────────────────────────────────────────
-# SHAPES — 기본 0.5rem (--radius)
+# SHAPES — 기본 0.375rem / 6px (--radius)
 # ─────────────────────────────────────────────
 rounded:
   none: '0rem' # 0px
-  sm: '0.25rem' # 4px  (실 계산: var(--radius) - 4px)
-  md: '0.375rem' # 6px  (실 계산: var(--radius) - 2px)
-  lg: '0.5rem' # 8px  (--radius)
+  sm: '0.125rem' # 2px  (실 계산: var(--radius) - 4px)
+  md: '0.25rem' # 4px  (실 계산: var(--radius) - 2px)
+  lg: '0.375rem' # 6px  (--radius) — Ink System 기본 반경
   xl: '1rem' # 16px
   2xl: '1.5rem' # 24px
   full: '9999px'
@@ -158,26 +156,30 @@ spacing:
   xl: '3rem' # 48px
 
 # ─────────────────────────────────────────────
-# ELEVATION — 따뜻한 먹색 기반 섀도우 (hsl 20 6% 20%)
+# ELEVATION — 남색 기반 섀도우 (hsl 222 54% 8%)
 # ─────────────────────────────────────────────
 elevation:
-  2xs: '0 1px 2px 0 hsl(20 6% 20% / 0.04)'
-  xs: '0 1px 3px 0 hsl(20 6% 20% / 0.06)'
-  sm: '0 1px 3px 0 hsl(20 6% 20% / 0.08), 0 1px 2px -1px hsl(20 6% 20% / 0.06)'
+  # navy-tinted (hsl 222 54% 8%), never neutral black — Ink System
+  2xs: '0 1px 2px 0 hsl(222 54% 8% / 0.06)'
+  xs: '0 1px 3px 0 hsl(222 54% 8% / 0.08)'
+  sm:
+    '0 2px 4px -1px hsl(222 54% 8% / 0.1), 0 1px 2px -1px hsl(222 54% 8% / 0.06)'
   md:
-    '0 4px 8px -2px hsl(20 6% 20% / 0.1), 0 2px 4px -2px hsl(20 6% 20% / 0.06)'
+    '0 8px 16px -4px hsl(222 54% 8% / 0.12), 0 4px 8px -2px hsl(222 54% 8% /
+    0.08)'
   lg:
-    '0 8px 16px -4px hsl(20 6% 20% / 0.1), 0 4px 6px -2px hsl(20 6% 20% / 0.05)'
+    '0 16px 32px -8px hsl(222 54% 8% / 0.14), 0 8px 16px -4px hsl(222 54% 8% /
+    0.08)'
   xl:
-    '0 16px 32px -8px hsl(20 6% 20% / 0.12), 0 8px 16px -4px hsl(20 6% 20% /
-    0.06)'
-  2xl: '0 24px 48px -12px hsl(20 6% 20% / 0.18)'
+    '0 24px 48px -12px hsl(222 54% 8% / 0.18), 0 12px 24px -6px hsl(222 54% 8% /
+    0.1)'
+  2xl: '0 32px 64px -16px hsl(222 54% 8% / 0.22)'
 
 # ─────────────────────────────────────────────
 # MOTION — 먹의 번짐에서 영감
 # ─────────────────────────────────────────────
 motion:
-  duration: { fast: '150ms', normal: '250ms', slow: '400ms' }
+  duration: { fast: '150ms', normal: '260ms', slow: '420ms', brush: '720ms' }
   ease:
     out: 'cubic-bezier(0.16, 1, 0.3, 1)' # 붓을 들어올리는 느낌
     in-out: 'cubic-bezier(0.45, 0, 0.55, 1)' # 필압의 자연스러운 흐름
@@ -210,53 +212,65 @@ ASCA는 서예라는 **무형의 정신성**을 디지털 인터페이스로 옮
 
 ## 2. Colors
 
-### 2.1 브랜드 의미론 vs shadcn 슬롯 (구현 SSOT)
+### 2.0 ASCA Ink System 채택 (2026-10-10)
 
-브랜드 가이드에서는 **청자 녹(Celadon)** 이 식별의 중심이고, **선비 홍(Scholar
-Red)** 이 단호한 강조로 쓰인다. 반면 **shadcn / Tailwind** 는 관례상 **주
-버튼·주 CTA에 채도 높은 색(`primary` 슬롯)** 을 두므로, 본 프로젝트 구현
-(`app/globals.css`)에서는 **Primary 슬롯 = Scholar Red**, **Accent 슬롯 =
-Celadon** 으로 맞춘다. 문서·기획에서「브랜드 주녹으로 버튼」이라고 할 때는
-`bg-accent`, `bg-celadon-green`, 브랜드 유틸 클래스를 쓰고, 기본 shadcn `Button`
-의 기본 강조 배경은 `bg-primary`(홍색)임을 전제한다.
+정본은 Claude Design 프로젝트 **"ASCA Design System"**(ASCA Ink System — Navy &
+Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 강조, 따뜻한
+宣紙(`#fbf8ef`)를 밝은 면으로 쓰고, 朱印 홍색(`#a8201a`)은 낙관·오류에만 쓴다.
+박물관 도록 같은 절제가 원칙이다.
 
-#### 2.1.1 브랜드 의미론 (기획·카피·/brand 내러티브)
+**토큰 이름은 유지하고 값만 바꿨다.** 기존 클래스(`bg-scholar-red`,
+`text-celadon-green` …)가 수백 곳에 있어, 이름을 바꾸는 대신 값을 Ink System
+색으로 돌렸다. 그래서 **이름이 색을 말해 주지 않는다** — 새 코드는 아래 표의
+시맨틱 슬롯(`bg-primary`, `bg-accent` …)을 쓴다.
 
-Obang / Materials 와 함께 쓰는 **문화적 이름**이다. Tailwind 클래스를 고를 때는
-오른쪽「구현 참고」열을 따른다.
+| 기존 이름       | 이제의 값 | Ink System 이름 | 비고                                                   |
+| --------------- | --------- | --------------- | ------------------------------------------------------ |
+| `scholar-red`   | `#0b1733` | navy-900 深藍   | 주 CTA (구 선비 홍). 다크=gold-400, 다크 채움=navy-600 |
+| `ink-black`     | `#0b1733` | navy-900        | 본문 먹색                                              |
+| `celadon-green` | `#a77d24` | gold-700 古金   | 글자·배경 겸용 금색 (구 청자). paper 위 글자 3.53:1    |
+| `temple-gold`   | `#d4a84a` | gold-500 正金   | 시그니처 금색 — 장식·큰 글자                           |
+| `rice-paper`    | `#fbf8ef` | paper 宣紙      | 밝은 면                                                |
+| `silk-cream`    | `#fbf5e4` | gold-100        | cream paper                                            |
+| `lacquer-black` | `#070d1a` | navy-950 墨玄   | 가장 깊은 바탕                                         |
+| `vermillion`    | `#a8201a` | seal-red 朱印   | 낙관 전용 — 버튼·글자 강조 금지                        |
+| `stone-gray`    | `#424a5e` | stone-700       | 보조 텍스트                                            |
 
-| 브랜드 의미            | 대표 HEX  | 용도 (내러티브)          | 구현 시 Tailwind / 변수 참고                                   |
-| ---------------------- | --------- | ------------------------ | -------------------------------------------------------------- |
-| 브랜드 주녹 (Celadon)  | `#88A891` | 브랜드 식별, 차분한 강조 | `bg-accent`, `bg-celadon-green`, `--accent`, `--celadon-green` |
-| 선비 홍 (Scholar Red)  | `#af2626` | 단호한 강조, 주요 CTA    | `bg-primary`, `text-primary`, `--primary`                      |
-| 브랜드 금 (Brand Gold) | `#ffcc00` | 수상·프리미엄·기념 배지  | `bg-brand-gold`, `{colors.highlight}`                          |
+언어 우선순위는 **한국어 우선**을 유지한다(Ink System 원안은 번체 우선).
+슬로건도 기존 브랜드 선언(法古創新 · 人書俱老)을 유지한다. 번체 한자 처리 규칙은
+§3 과 BRAND 규칙을 따른다.
 
-#### 2.1.2 shadcn 시맨틱 슬롯 — `app/globals.css` 와 1:1 (코드 SSOT)
+### 2.1 shadcn 시맨틱 슬롯 — `app/globals.css` 와 1:1 (코드 SSOT)
 
-일반 UI는 아래 **슬롯 이름**으로 구현한다. 값은 라이트 모드 OKLCH의 HEX
-근사이며, 정확한 값은 `globals.css` 를 본다.
+| 슬롯                      | Tailwind 예               | 라이트                | 다크                  | 용도                    |
+| ------------------------- | ------------------------- | --------------------- | --------------------- | ----------------------- |
+| `--primary`               | `bg-primary`              | `#0b1733` navy-900    | `#d4a84a` gold-500    | 주 버튼·강한 CTA        |
+| `--primary-foreground`    | `text-primary-foreground` | `#fbf8ef`             | `#070d1a`             | primary 면 위 텍스트    |
+| `--secondary`             | `bg-secondary`            | `#f5e9c8` gold-200    | `#1d2e5c` navy-700    | 보조 버튼·칩            |
+| `--accent`                | `bg-accent`               | `#d4a84a` gold-500    | `#e2c074` gold-400    | hover·선택·하이라이트   |
+| `--muted` / `-foreground` | `bg-muted`                | `#f4efdd` / `#424a5e` | `#142244` / `#9eb0d6` | 옅은 패널 / 보조 텍스트 |
+| `--destructive`           | `bg-destructive`          | `#a8201a` seal-red    | `#c94a3f`             | 삭제·검증 오류          |
+| `--ring`                  | `ring-ring`               | `#c89729` gold-600    | `#e2c074`             | 포커스 링               |
+| `{colors.highlight}`      | `bg-highlight`            | `#d4a84a`             | —                     | 수상·프리미엄 배지      |
 
-| 슬롯                     | Tailwind 예                 | 대표 HEX (근사) | 브랜드 대응     | 용도                                        |
-| ------------------------ | --------------------------- | --------------- | --------------- | ------------------------------------------- |
-| `--primary`              | `bg-primary`                | `#af2626`       | Scholar Red     | 기본 primary 버튼, 강한 CTA                 |
-| `--primary-foreground`   | `text-primary-foreground`   | `#fafafa`       | (대비용 라이트) | primary 면 위 텍스트                        |
-| `--secondary`            | `bg-secondary`              | `#f0f0eb`       | 무채 보조 표면  | 보조 버튼·칩·옅은 패널 (**홍색 아님**)      |
-| `--secondary-foreground` | `text-secondary-foreground` | `#333333`       | (대비용 먹색)   | secondary 면 위 텍스트                      |
-| `--accent`               | `bg-accent`                 | `#88A891`       | Celadon         | hover·선택·드롭다운 하이라이트, `ring`      |
-| `--accent-foreground`    | `text-accent-foreground`    | `#1a1a1a`       | 먹색            | accent 면 위 본문                           |
-| `--destructive`          | `bg-destructive`            | `#dc2626`       | (일반 오류)     | 삭제·검증 오류 (`primary` 슬롯과 용도 분리) |
-| `{colors.highlight}`     | `bg-brand-gold` 등          | `#ffcc00`       | Brand Gold      | §2.5 프리미엄 배지                          |
+다크 모드에서는 Ink System 원안대로 **금색이 primary 로 올라온다**(남색 바탕 위
+남색 버튼은 보이지 않으므로).
 
-**흔한 실수:** `bg-primary` 는 Celadon 이 아니며, `bg-secondary` 는 Scholar Red
-가 아니다. 브랜드 녹색 CTA는 `bg-accent` 또는 `bg-celadon-green` 을 쓴다.
+#### 2.1.1 상태·피드백
 
-#### 2.1.3 상태·피드백 (YAML·Tailwind 확장과 동일 이름)
+| 토큰 / Tailwind | HEX                  | 용도      |
+| --------------- | -------------------- | --------- |
+| `success`       | `#3f7a4e`            | 완료·승인 |
+| `warning`       | `#a77d24` (gold-700) | 주의·임박 |
+| `info`          | `#2a3f7a` (navy-600) | 정보·안내 |
 
-| 토큰 / Tailwind     | HEX       | 용도      |
-| ------------------- | --------- | --------- |
-| `success` / 녹 계열 | `#4a7c59` | 완료·승인 |
-| `warning`           | `#fdb462` | 주의·임박 |
-| `info`              | `#1e3a8a` | 정보·안내 |
+#### 2.1.2 금색은 글자로 쓰지 않는다
+
+`#d4a84a`(gold-500)는 paper 위 2.08:1 — **본문 글자 금지**, 헤어라인·배경·큰
+장식 글자만. 금색 글자가 필요하면 gold-700(`text-celadon-green`, 3.53:1, 큰 글자
+한정) 또는 gold-800(`#8a661c`, 4.95:1)을 쓴다. 금색 면 위 글자는
+남색(`text-ink-black`, 4.73:1 on gold-700 · 8.02:1 on gold-500)이고, **흰 글자는
+금색 면 위에서 AA 미달**이다.
 
 ### 2.2 Surface 레이어 — 배경/테두리
 
@@ -294,36 +308,28 @@ Obang / Materials 와 함께 쓰는 **문화적 이름**이다. Tailwind 클래�
 - **Cultural**: 브랜드 맥락에서만 (작가 소개, 작품 리스트 등)
 - **Decorative**: /brand 페이지, 랜딩 히어로, 시즈널 배너 외 금지
 
-**Temple Gold vs Brand Gold 혼동 방지:**
-
-| 토큰                                         | Tailwind 클래스  | HEX       | 성격              | 언제                                      |
-| -------------------------------------------- | ---------------- | --------- | ----------------- | ----------------------------------------- |
-| `{colors.highlight}` = `{colors.brand-gold}` | `bg-brand-gold`  | `#ffcc00` | 선명, 채도 높음   | 수상·NEW·프리미엄 배지 등 **알림성 강조** |
-| `{colors.temple-gold}`                       | `bg-temple-gold` | `#d4af37` | 차분, 올리브 기미 | 전통·유물·장식 프레임 등 **고전적 깊이**  |
-
-둘을 같은 화면에서 동시에 쓰지 않는다.
-
-**주의 — `bg-accent` 는 Gold 가 아니다:** `bg-accent` / `hover:bg-accent` 는
-shadcn 규약상 **Celadon Green** 기반 부드러운 배경 (드롭다운 hover, 메뉴 선택
-상태 등). 프리미엄 강조에는 반드시 `bg-brand-gold` 를 쓴다.
+**`brand-gold`(`#ffcc00`)는 레거시다.** Ink System 은 "plastic gold" 를 쓰지
+않는다 — 금색은 `#d4a84a`(gold-500) 하나다. `highlight` 슬롯과 `temple-gold` 는
+이미 gold-500 으로 옮겼다. `brand-gold` 는 /brand 페이지의 기존 공식 색
+표기(`brand-data.ts`) 때문에 값을 남겼으며, 새 UI 에는 쓰지 않는다. /brand
+페이지 내용 갱신은 별도 작업이다.
 
 ### 2.6 WCAG 검증 쌍
 
-아래 페어는 **front matter `colors` 의 리터럴 HEX**(§2.1.2 슬롯과 동기화)에 대해
-WCAG AA (4.5:1) 이상을 충족한다. 정량 값은 `npm run design:wcag` 출력이
-정본이다.
+아래 페어는 **front matter `colors` 의 리터럴 HEX** 에 대해 계산한 값이다. 정량
+값은 `npm run design:wcag` 출력이 정본이다.
 
-- `{colors.foreground}` on `{colors.background}` — 15.9:1 ✅
-- `{colors.primary-foreground}` on `{colors.primary}` — Scholar Red 슬롯, 6.4:1
+- `{colors.foreground}` on `{colors.background}` (navy on paper) — 16.69:1 ✅
+- `{colors.primary-foreground}` on `{colors.primary}` — 16.69:1 ✅
+- `{colors.secondary-foreground}` on `{colors.secondary}` — 14.67:1 ✅
+- `{colors.accent-foreground}` on `{colors.accent}` (navy on gold-500) — 8.02:1
   ✅
-- `{colors.secondary-foreground}` on `{colors.secondary}` — 무채 보조 표면 슬롯,
-  11.1:1 ✅
-- `{colors.accent-foreground}` on `{colors.accent}` (`#1a1a1a` on `#88A891`) —
-  6.7:1 ✅
-- `{colors.highlight-foreground}` on `{colors.highlight}` (`#1a1a1a` on
-  `#ffcc00`) — 11.5:1 ✅
-- `{colors.terra-red}` (`#9b4444`) on `{colors.rice-paper}` (`#f5f5f0`) — 6.8:1
-  ✅
+- `{colors.destructive-foreground}` on `{colors.destructive}` — 7.28:1 ✅
+- `{colors.muted-foreground}` on `{colors.muted}` — 7.69:1 ✅
+- 다크: paper on navy-950 18.28:1 · navy-950 on gold-500 8.78:1 · navy-300 on
+  navy-800 7.18:1 ✅
+- ⚠️ gold-500 글자 on paper — 2.08:1 ❌ (§2.1.2)
+- ⚠️ 흰 글자 on `celadon-green`(gold-700) — 3.75:1 (큰 글자만)
 - ⚠️ `{colors.sage-green}` (`#b7c4b7`) 흰 배경 — 약 2.1:1 ❌ (텍스트 금지, 배경
   틴트/보더만)
 - ⚠️ `{colors.spring-green}` (`#09f557`) 흰 배경 — 약 1.5:1 ❌ (텍스트 절대
@@ -372,17 +378,17 @@ WCAG AA (4.5:1) 이상을 충족한다. 정량 값은 `npm run design:wcag` 출�
 
 #### 3.5.1 Font Families (확장 — front matter 외부)
 
-| 토큰          | 정의                                                                                            | 적용                       |
-| ------------- | ----------------------------------------------------------------------------------------------- | -------------------------- |
-| `sans`        | `var(--font-inter), var(--font-noto-sans-kr), "Noto Sans CJK SC/TC/JP", system-ui, sans-serif`  | UI 본문                    |
-| `serif`       | `var(--font-playfair), var(--font-noto-serif-kr), "Source Han Serif SC/TC", "Noto Serif CJK *"` | 헤드라인·인용              |
-| `calligraphy` | `"Source Han Serif SC/TC/KR/JP", "Noto Serif CJK *", "KaiTi", "STKaiti", serif`                 | 작품 정보, 한자            |
-| `brush`       | `"Ma Shan Zheng", "Long Cang", "Source Han Serif SC", "Noto Serif CJK SC", cursive`             | 데코레이티브 (히어로 한정) |
-| `mono`        | `"JetBrains Mono", "SF Mono", "Monaco", "Consolas", monospace`                                  | 코드, 좌표                 |
-| `korean`      | `var(--font-noto-serif-kr), "Source Han Serif KR", "Nanum Myeongjo", "Batang", serif`           | 한국어 강조                |
-| `chinese`     | `"Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "Microsoft YaHei", serif`                | 중국어 강조                |
-| `japanese`    | `"Noto Serif CJK JP", "Source Han Serif JP", "Yu Mincho", "Hiragino Mincho Pro", serif`         | 일본어 강조                |
-| `english`     | `"Playfair Display", "Crimson Text", "Georgia", serif`                                          | 영어 강조                  |
+| 토큰          | 정의                                                                                                                  | 적용                       |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `sans`        | `var(--font-inter), var(--font-noto-sans-kr), "Noto Sans CJK SC/TC/JP", system-ui, sans-serif`                        | UI 본문                    |
+| `serif`       | `var(--font-display)` (Cormorant Garamond), `var(--font-noto-serif-kr), "Source Han Serif SC/TC", "Noto Serif CJK *"` | 헤드라인·인용              |
+| `calligraphy` | `"Source Han Serif SC/TC/KR/JP", "Noto Serif CJK *", "KaiTi", "STKaiti", serif`                                       | 작품 정보, 한자            |
+| `brush`       | `"Ma Shan Zheng", "Long Cang", "Source Han Serif SC", "Noto Serif CJK SC", cursive`                                   | 데코레이티브 (히어로 한정) |
+| `mono`        | `"JetBrains Mono", "SF Mono", "Monaco", "Consolas", monospace`                                                        | 코드, 좌표                 |
+| `korean`      | `var(--font-noto-serif-kr), "Source Han Serif KR", "Nanum Myeongjo", "Batang", serif`                                 | 한국어 강조                |
+| `chinese`     | `"Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "Microsoft YaHei", serif`                                      | 중국어 강조                |
+| `japanese`    | `"Noto Serif CJK JP", "Source Han Serif JP", "Yu Mincho", "Hiragino Mincho Pro", serif`                               | 일본어 강조                |
+| `english`     | `"Playfair Display", "Crimson Text", "Georgia", serif`                                                                | 영어 강조                  |
 
 #### 3.5.2 Scale Mapping (Tailwind 13단계 ↔ canonical)
 

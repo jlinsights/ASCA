@@ -15,15 +15,15 @@ const badgeVariants = cva(
           'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
         outline: 'text-foreground',
         traditional:
-          'border-transparent bg-[#88A891] text-[#1a1a1a] hover:bg-[#B7C4B7] transition-all duration-300',
+          'border-transparent bg-celadon-green text-ink-black hover:bg-sage-green transition-all duration-300',
         innovation:
-          'border-transparent bg-[#B7C4B7] text-[#1a1a1a] hover:bg-[#88A891] transition-all duration-300',
+          'border-transparent bg-sage-green text-ink-black hover:bg-celadon-green transition-all duration-300',
         special:
-          'border-transparent bg-[#9B4444] text-[#f5f5f0] hover:bg-[#8a3a3a] transition-all duration-300',
+          'border-transparent bg-terra-red text-rice-paper hover:bg-terra-red/90 transition-all duration-300',
         neutral:
-          'border-transparent bg-[#707070] text-[#f5f5f0] hover:bg-[#5a5a5a] transition-all duration-300',
-        rice: 'border-[#88A891] bg-[#f5f5f0] text-[#1a1a1a] hover:bg-[#88A891] hover:text-[#f5f5f0] transition-all duration-300',
-        ink: 'border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0] hover:bg-[#2a2a2a] transition-all duration-300',
+          'border-transparent bg-stone-gray text-rice-paper hover:bg-stone-gray/90 transition-all duration-300',
+        rice: 'border-celadon-green bg-rice-paper text-ink-black hover:bg-celadon-green transition-all duration-300',
+        ink: 'border-rice-paper bg-ink-black text-rice-paper hover:bg-ink-black/90 transition-all duration-300',
       },
     },
     defaultVariants: {

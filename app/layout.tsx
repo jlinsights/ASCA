@@ -1,5 +1,11 @@
 import type { Metadata } from 'next'
-import { Inter, Playfair_Display, Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google'
+import {
+  Inter,
+  Cormorant_Garamond,
+  Noto_Sans_KR,
+  Noto_Serif_KR,
+  Noto_Serif_TC,
+} from 'next/font/google'
 import './globals.css'
 import { ClientProviders } from '@/components/client-providers'
 
@@ -10,11 +16,22 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-// 장식 폰트 - Playfair Display
-const playfair = Playfair_Display({
+// 영문 디스플레이 - Cormorant Garamond (ASCA Ink System, DESIGN.md §3)
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
   display: 'swap',
-  variable: '--font-playfair',
+  variable: '--font-display',
+})
+
+// 번체 한자 - Noto Serif TC (협회명·슬로건 등 [lang=zh-Hant] / .cjk-tc-strict 전용, BRAND.md §3)
+const notoSerifTc = Noto_Serif_TC({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  display: 'swap',
+  preload: false,
+  variable: '--font-noto-serif-tc',
 })
 
 // 한국어 산세리프 - Noto Sans KR
@@ -54,13 +71,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd />
       </head>
       <body
-        className={`${inter.variable} ${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans bg-background transition-colors duration-300`}
+        className={`${inter.variable} ${cormorant.variable} ${notoSansKr.variable} ${notoSerifKr.variable} ${notoSerifTc.variable} font-sans bg-background transition-colors duration-300`}
         suppressHydrationWarning={true}
       >
         <ClientProviders>
           <a
             href='#main-content'
-            className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-celadon-green focus:text-white focus:rounded-md focus:text-sm focus:font-medium'
+            className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-celadon-green focus:text-ink-black focus:rounded-md focus:text-sm focus:font-medium'
           >
             본문으로 건너뛰기
           </a>
