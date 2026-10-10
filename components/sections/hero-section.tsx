@@ -111,7 +111,7 @@ export function HeroSection() {
                 <Button
                   size='lg'
                   variant='outline'
-                  className='group h-14 px-8 text-lg border-2 border-temple-gold text-temple-gold hover:bg-temple-gold hover:text-ink-black shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
+                  className='group h-14 px-8 text-lg border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
                 >
                   작품 감상하기
                   <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
