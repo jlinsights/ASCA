@@ -25,8 +25,9 @@ interface ArtistFiltersProps {
   onReset: () => void
 }
 
-const MEMBERSHIP_OPTIONS = ['준회원', '정회원', '특별회원', '명예회원']
-const ARTIST_TYPE_OPTIONS = ['공모작가', '청년작가', '일반작가', '추천작가', '초대작가']
+// 실제 artists.membership_type / artist_type 값 기준(ASCA-2026, 2026-10-11). 회원 구분은 서버에서 부분 일치로 거른다.
+const MEMBERSHIP_OPTIONS = ['준회원', '공모작가', '추천작가', '초대작가', '원로작가', '명예회원']
+const ARTIST_TYPE_OPTIONS = ['일반작가', '공모작가']
 const SPECIALTY_OPTIONS = [
   '전통서예',
   '현대서예',
