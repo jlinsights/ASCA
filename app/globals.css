@@ -359,11 +359,13 @@
     --scholar-red: #e2c074; /* gold-400 — 남색 바탕 위 주 강조 */
     --scholar-red-rgb: 226 192 116;
   }
-  /* 다크에서 scholar-red 를 '채움'으로 쓰는 곳은 거의 흰 글자를 얹는다(text-white 등).
-     금색 위 흰 글자는 1.6:1 이라, 채움일 때만 navy-600 으로 바꿔 흰 글자를 살린다. */
-  .dark .bg-scholar-red,
-  .dark .hover\:bg-scholar-red:hover,
-  .dark .group:hover .group-hover\:bg-scholar-red {
+  /* 다크에서 scholar-red 채움(gold-400) 위에 밝은 글자를 얹은 곳은 1.6:1 이다.
+     그 조합일 때만 navy-600 으로 바꿔 밝은 글자를 살린다. 밝은 글자가 없는 채움
+     (Button·Badge 기본 text-primary-foreground = navy-950, 장식 점)은 금색 그대로 둔다
+     — 거기에 navy-600 을 깔면 navy-950 글자와 1.93:1 이 된다. */
+  .dark .bg-scholar-red:is(.text-white, .text-rice-paper),
+  .dark .hover\:bg-scholar-red:is(.hover\:text-white, .hover\:text-rice-paper):hover,
+  .dark .group:hover .group-hover\:bg-scholar-red.group-hover\:text-white {
     --scholar-red-rgb: 42 63 122;
   }
   .theme {
