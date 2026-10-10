@@ -10,17 +10,17 @@ const cardVariants = cva(
       variant: {
         default: 'bg-card border-border',
         traditional:
-          'bg-gradient-to-br from-[rgba(245,245,240,0.05)] to-[rgba(183,196,183,0.03)] border-[rgba(136,168,145,0.2)] backdrop-blur-sm',
+          'bg-gradient-to-br from-[rgba(251,248,239,0.05)] to-[rgba(183,196,183,0.03)] border-[rgba(167,125,36,0.2)] backdrop-blur-sm',
         artwork:
-          'bg-gradient-to-br from-[rgba(245,245,240,0.08)] to-[rgba(245,245,240,0.02)] border-[rgba(245,245,240,0.15)] relative overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-gradient-to-r before:from-[#88A891] before:to-[#B7C4B7]',
-        glass: 'bg-[rgba(245,245,240,0.03)] border-[rgba(245,245,240,0.08)] backdrop-blur-md',
+          'bg-gradient-to-br from-[rgba(251,248,239,0.08)] to-[rgba(251,248,239,0.02)] border-[rgba(251,248,239,0.15)] relative overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-gradient-to-r before:from-celadon-green before:to-sage-green',
+        glass: 'bg-[rgba(251,248,239,0.03)] border-[rgba(251,248,239,0.08)] backdrop-blur-md',
         elevated: 'bg-card border-border shadow-lg hover:shadow-xl',
       },
       hover: {
         none: '',
         lift: 'hover:-translate-y-1 hover:shadow-lg',
         scale: 'hover:scale-[1.02]',
-        glow: 'hover:shadow-[0_0_20px_rgba(136,168,145,0.3)]',
+        glow: 'hover:shadow-[0_0_20px_rgba(167,125,36,0.3)]',
       },
     },
     defaultVariants: {

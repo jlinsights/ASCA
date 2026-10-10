@@ -38,7 +38,7 @@ export function SealMark({
       aria-label={ariaLabel}
       className={cn(
         'inline-flex items-center justify-center font-serif font-medium leading-none',
-        'bg-[color:var(--vermillion)] text-[color:var(--rice-paper,#f5f5f0)]',
+        'bg-[color:var(--vermillion)] text-[color:var(--rice-paper,#fbf8ef)]',
         '-rotate-2 shadow-sm select-none',
         VARIANT_CLASS[variant],
         className

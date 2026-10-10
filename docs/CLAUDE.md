@@ -220,6 +220,11 @@ and refactor using this standardized process:
 
 - Use brand color variables from Tailwind config
 - Follow component variants: celadon, sage, terra, traditional
+- ⚠️ 2026-10-10 부터 색은 **ASCA Ink System(Navy & Gold)** 이다.
+  `celadon-green`·`scholar-red` 같은 이름은 기존 클래스를 살리려 남긴 것이고
+  **값은 금색·남색**이다(DESIGN.md §2.0 대조표). 새 코드는 시맨틱
+  슬롯(`bg-primary`·`bg-accent`·`text-muted-foreground`)을 쓴다.
+  금색(`#d4a84a`)은 글자로 쓰지 않는다(§2.1.2)
 - Maintain Korean calligraphy aesthetic in UI
 
 ### 계획 문서 — 체크박스는 진행 상태가 아니다

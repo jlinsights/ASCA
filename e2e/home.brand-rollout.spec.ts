@@ -49,7 +49,7 @@ test.describe('home / brand-rollout — 4언어 × 5섹션 회귀', () => {
       test('Hero 가운뎃점이 인주색(--vermillion)으로 렌더된다', async ({ page }) => {
         await gotoHomeWithLanguage(page, lang)
         const hanjaMark = page.getByRole('img', { name: '법고창신 인서구로' })
-        // HanjaMark 내부 가운뎃점 span — text-[color:var(--vermillion,#e63946)]
+        // HanjaMark 내부 가운뎃점 span — text-[color:var(--vermillion,#a8201a)]
         const dot = hanjaMark.locator('span').nth(1)
         await expect(dot).toContainText('·')
       })

@@ -53,12 +53,15 @@ const config = {
           DEFAULT: 'var(--card)',
           foreground: 'var(--card-foreground)',
         },
-        // Traditional East Asian Color Palette (Obang Colors + Cultural Extensions)
-        'ink-black': '#1a1a1a',
-        'rice-paper': '#f5f5f0',
-        'scholar-red': '#af2626',
-        'celadon-green': '#88A891',
-        'stone-gray': '#707070',
+        // ASCA Ink System (Navy & Gold) — DESIGN.md §2. 이름은 기존 클래스를 그대로 살리기 위해
+        // 유지하고 값만 바꿨다. 이름의 원래 색(청자·선비홍)은 더 이상 의미하지 않는다.
+        'ink-black': '#0b1733', // navy-900 · 본문 먹색
+        'rice-paper': '#fbf8ef', // paper · 宣紙
+        // 다크 모드에서 gold-400 으로 바뀐다 — 남색 바탕 위 남색 글자가 사라지지 않도록.
+        // 값은 app/globals.css --scholar-red-rgb, 검증은 scripts/design-diff.ts
+        'scholar-red': 'rgb(var(--scholar-red-rgb) / <alpha-value>)', // navy-900 · 주 CTA (구 Scholar Red)
+        'celadon-green': '#a77d24', // gold-700 · 글자·배경 겸용 금색 (구 Celadon)
+        'stone-gray': '#424a5e', // stone-700 · 보조 텍스트 (paper 위 AA)
 
         // Traditional Five Elements Colors (Obang)
         'east-wood': '#4a7c59', // Spring/Wood - Eastern Direction
@@ -75,12 +78,12 @@ const config = {
 
         // Calligraphy Materials
         'bamboo-green': '#6b7c32', // Bamboo brush handle
-        'silk-cream': '#faf7f0', // Silk paper texture
-        'lacquer-black': '#0d1b2a', // Lacquer ink stone
-        vermillion: '#e63946', // Traditional red seal
+        'silk-cream': '#fbf5e4', // gold-100 · cream paper
+        'lacquer-black': '#070d1a', // navy-950 · 墨玄
+        vermillion: '#a8201a', // seal-red · 朱印 (낙관 전용)
 
         // Cultural Accents
-        'temple-gold': '#d4af37', // Temple decoration
+        'temple-gold': '#d4a84a', // gold-500 · 正金 시그니처 금색
         'plum-purple': '#8e4585', // Plum blossom
 
         // Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정렬)
@@ -95,11 +98,11 @@ const config = {
         // Semantic literals (DESIGN.md SSoT) — bg-highlight, text-success 등 직접 접근용
         // shadcn semantic 슬롯(primary/secondary/...)은 var(--*) 경로 유지, 본 5개는
         // hex 직결로 design-diff 대상이 된다
-        highlight: '#ffcc00', // = brand-gold alias, 수상·기념·프리미엄
-        'highlight-foreground': '#1a1a1a',
-        success: '#4a7c59', // = east-wood
-        warning: '#fdb462', // = autumn-gold
-        info: '#1e3a8a', // = north-water
+        highlight: '#d4a84a', // gold-500 · 수상·기념·프리미엄
+        'highlight-foreground': '#0b1733',
+        success: '#3f7a4e',
+        warning: '#a77d24', // gold-700
+        info: '#2a3f7a', // navy-600
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -278,7 +281,7 @@ const config = {
           'sans-serif',
         ],
         serif: [
-          'var(--font-playfair)',
+          'var(--font-display)',
           'var(--font-noto-serif-kr)',
           "'Source Han Serif SC'",
           "'Source Han Serif TC'",
@@ -330,7 +333,9 @@ const config = {
           "'Hiragino Mincho Pro'",
           'serif',
         ],
-        english: ["'Playfair Display'", "'Crimson Text'", "'Georgia'", 'serif'],
+        english: ['var(--font-display)', "'Cormorant Garamond'", "'Georgia'", 'serif'],
+        // 번체 한자 — 협회명·슬로건·서체명 등 브랜드 한자 (BRAND.md §3)
+        tc: ['var(--font-noto-serif-tc)', "'Source Han Serif TC'", "'Noto Serif TC'", 'serif'],
 
         // Specialized Typography
         mono: ["'JetBrains Mono'", "'SF Mono'", "'Monaco'", "'Consolas'", 'monospace'],

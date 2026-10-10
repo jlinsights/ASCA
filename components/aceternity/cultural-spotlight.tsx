@@ -11,8 +11,8 @@ type CulturalSpotlightProps = {
 
 export const CulturalSpotlight = ({ className, fill, variant = 'ink' }: CulturalSpotlightProps) => {
   const variantColors = {
-    ink: fill || '#1a1a1a',
-    gold: fill || '#d4af37',
+    ink: fill || '#0b1733',
+    gold: fill || '#d4a84a',
     jade: fill || '#7dd3c0',
   }
 
