@@ -310,8 +310,13 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
             </nav>
 
             {/* Desktop Auth & Controls */}
-            <div className='hidden md:flex items-center space-x-2 lg:space-x-3'>
+            <div
+              data-testid='header-desktop-controls'
+              className='hidden md:flex items-center space-x-2 lg:space-x-3'
+            >
               <HeaderAuthSection />
+
+              <LanguageSelector variant='compact' />
 
               <ThemeToggle onToggle={handleThemeToggle} />
             </div>

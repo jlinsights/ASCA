@@ -1,1 +1,1 @@
-📝 docs: CLAUDE.md·AGENTS.md 에 운영 환경과 데이터 섹션 추가 — build:full·DATABASE_URL 빌드 조건, ASCA-2026(artists 만 데이터·옛 마이그레이션 재실행 금지), execute_sql·DB 덤프 커밋 금지, 두 데이터 계층, PostgREST 1,000행·직함 공백 함정, 도메인이 아직 Webflow. 스키마 동기화는 감지·기록만, b:studio 오타 수정
+🌐 feat: 데스크톱 헤더에 언어 선택기(한·영·일·중) 표시 — import 만 되고 렌더되지 않던 LanguageSelector 를 테마 토글 옆에 배치, 회귀 테스트 추가
