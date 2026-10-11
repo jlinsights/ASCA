@@ -33,7 +33,6 @@ CREATE TABLE artists (
 
 ### 스키마 검증
 - [scripts/check-artworks-schema.js](mdc:scripts/check-artworks-schema.js): 스키마 검증 도구
-- [scripts/test-supabase-artworks.js](mdc:scripts/test-supabase-artworks.js): 연결 테스트
 
 ### 데이터 정리
 - [scripts/check-supabase-schema.js](mdc:scripts/check-supabase-schema.js): 스키마 구조 확인

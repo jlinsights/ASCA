@@ -53,11 +53,6 @@ yarn dev
 node scripts/create-artworks-table.sql
 ```
 
-### 연결 테스트
-```bash
-node scripts/test-supabase-artworks.js
-```
-
 ## 문제 해결
 
 ### 일반적인 오류

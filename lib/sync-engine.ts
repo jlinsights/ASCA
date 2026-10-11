@@ -5,7 +5,7 @@ import Airtable from 'airtable'
  * Airtable ↔ Supabase 실시간 동기화 엔진
  *
  * 주요 기능:
- * 1. 스키마 동기화 (필드 추가/삭제)
+ * 1. 스키마 차이 감지 (sync_logs 에 기록만 — 적용은 마이그레이션으로)
  * 2. 데이터 동기화 (레코드 생성/수정/삭제)
  * 3. 충돌 해결
  * 4. 실시간 감지 및 처리
@@ -123,8 +123,8 @@ export class SyncEngine {
       // 스키마 차이점 분석
       const differences = this.analyzeSchemaChanges(airtableFields, supabaseColumns || [])
 
-      // 필요한 스키마 변경 적용
-      await this.applySchemaChanges(supabaseTableName, differences)
+      // 감지만 하고 기록한다 — 적용은 사람이 마이그레이션으로
+      await this.reportSchemaChanges(supabaseTableName, differences)
     } catch (error) {}
   }
 
@@ -222,69 +222,21 @@ export class SyncEngine {
   }
 
   /**
-   * 스키마 변경사항 적용
+   * 스키마 차이 기록 (적용하지 않음)
+   * 샘플 10건으로 추론한 타입이라 틀릴 수 있고, 운영 테이블 DDL 은 마이그레이션으로만 바꾼다.
+   * 그래서 임의 SQL 을 실행하는 RPC 도 두지 않는다.
    */
-  private async applySchemaChanges(tableName: string, changes: SchemaChange[]) {
+  private async reportSchemaChanges(tableName: string, changes: SchemaChange[]) {
     for (const change of changes) {
-      try {
-        await this.executeSchemaChange(tableName, change)
-
-        // 로그 기록
-        await this.supabase.from('sync_logs').insert({
-          sync_type: 'schema',
-          source_system: 'airtable',
-          target_system: 'supabase',
-          table_name: tableName,
-          operation: change.type,
-          changes: change,
-          status: 'success',
-        })
-      } catch (error) {
-        // 에러 로그 기록
-        await this.supabase.from('sync_logs').insert({
-          sync_type: 'schema',
-          source_system: 'airtable',
-          target_system: 'supabase',
-          table_name: tableName,
-          operation: change.type,
-          changes: change,
-          status: 'failed',
-          error_message: error instanceof Error ? error.message : String(error),
-        })
-      }
-    }
-  }
-
-  /**
-   * 스키마 변경 SQL 실행
-   */
-  private async executeSchemaChange(tableName: string, change: SchemaChange) {
-    if (!validateTableName(tableName)) {
-      throw new Error(`Invalid table name: ${tableName}`)
-    }
-    if (!validateColumnName(change.columnName)) {
-      throw new Error(`Invalid column name: ${change.columnName}`)
-    }
-    if (change.dataType && !validateDataType(change.dataType)) {
-      throw new Error(`Invalid data type: ${change.dataType}`)
-    }
-
-    let sql = ''
-
-    switch (change.type) {
-      case 'add_column':
-        sql = `ALTER TABLE ${tableName} ADD COLUMN IF NOT EXISTS "${change.columnName}" ${change.dataType}`
-        break
-      case 'modify_column':
-        sql = `ALTER TABLE ${tableName} ALTER COLUMN "${change.columnName}" TYPE ${change.dataType} USING "${change.columnName}"::${change.dataType}`
-        break
-      case 'drop_column':
-        sql = `ALTER TABLE ${tableName} DROP COLUMN IF EXISTS "${change.columnName}"`
-        break
-    }
-
-    if (sql) {
-      const { error } = await this.supabase.rpc('execute_sql', { sql_query: sql })
+      const { error } = await this.supabase.from('sync_logs').insert({
+        sync_type: 'schema',
+        source_system: 'airtable',
+        target_system: 'supabase',
+        table_name: tableName,
+        operation: change.type,
+        changes: change,
+        status: 'detected',
+      })
       if (error) throw error
     }
   }
@@ -476,40 +428,6 @@ export class SyncEngine {
 
     return result
   }
-}
-
-// SQL Injection 방어를 위한 유효성 검증
-const ALLOWED_TABLES = ['artists', 'artworks', 'exhibitions', 'events', 'news'] as const
-type AllowedTable = (typeof ALLOWED_TABLES)[number]
-
-const SAFE_COLUMN_PATTERN = /^[a-z][a-z0-9_]{0,62}$/
-
-const ALLOWED_DATA_TYPES = [
-  'TEXT',
-  'VARCHAR(255)',
-  'INTEGER',
-  'BIGINT',
-  'BOOLEAN',
-  'TIMESTAMP',
-  'TIMESTAMPTZ',
-  'DATE',
-  'JSONB',
-  'UUID',
-  'NUMERIC',
-  'REAL',
-  'DOUBLE PRECISION',
-] as const
-
-function validateTableName(name: string): boolean {
-  return (ALLOWED_TABLES as readonly string[]).includes(name.toLowerCase())
-}
-
-function validateColumnName(name: string): boolean {
-  return SAFE_COLUMN_PATTERN.test(name)
-}
-
-function validateDataType(type: string): boolean {
-  return (ALLOWED_DATA_TYPES as readonly string[]).includes(type.toUpperCase())
 }
 
 // 타입 정의
