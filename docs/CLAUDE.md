@@ -36,7 +36,7 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 
 - 옛 프로젝트 `fiaoduraycyjselasmdn` 은 400일 넘게 정지돼 **복구 불가**다.
 - **데이터가 있는 테이블은 `artists` 뿐이다.** 공지·전시·행사·작품 등 공개 CMS
-  테이블은 `supabase/migrations/20261011000001_asca2026_public_cms_tables.sql`
+  테이블은 `supabase/migrations/20261010233903_asca2026_public_cms_tables.sql`
   로 만든 **빈 테이블**이다. 그 이전 마이그레이션은 옛 스키마(auth.users FK,
   user_metadata 관리자 정책, 없는 'korean' 검색 설정)라 **재실행하지 말 것.**
 - 홈·연혁 콘텐츠는 저장소 데이터에서 온다:
