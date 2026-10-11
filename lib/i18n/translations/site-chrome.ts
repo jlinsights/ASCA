@@ -80,6 +80,7 @@ export const siteChromeTranslations: TranslationData = {
     siteFtAddress: '서울시 성북구 보문로 105',
     siteFtBuilding: '보림빌딩',
     siteFtBank: '무통장 입금계좌: 신한은행',
+    siteFtNewsletter: '뉴스레터 구독',
   },
   en: {
     siteNavArtists: 'Artists',
@@ -157,6 +158,7 @@ export const siteChromeTranslations: TranslationData = {
     siteFtAddress: '105 Bomun-ro, Seongbuk-gu, Seoul',
     siteFtBuilding: 'Borim Building',
     siteFtBank: 'Bank transfer: Shinhan Bank',
+    siteFtNewsletter: 'Subscribe to Newsletter',
   },
   ja: {
     siteNavArtists: '作家',
@@ -234,6 +236,7 @@ export const siteChromeTranslations: TranslationData = {
     siteFtAddress: 'ソウル市城北区普門路105',
     siteFtBuilding: 'ボリムビル',
     siteFtBank: '振込口座: 新韓銀行',
+    siteFtNewsletter: 'ニュースレター購読',
   },
   zh: {
     siteNavArtists: '艺术家',
@@ -311,5 +314,6 @@ export const siteChromeTranslations: TranslationData = {
     siteFtAddress: '首尔市城北区普门路105',
     siteFtBuilding: '宝林大厦',
     siteFtBank: '汇款账户: 新韩银行',
+    siteFtNewsletter: '订阅通讯',
   },
 }

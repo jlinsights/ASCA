@@ -30,6 +30,16 @@ describe('LayoutFooter — 번역', () => {
     expect(screen.getByRole('heading', { name: '전시' })).toBeInTheDocument()
   })
 
+  // 회귀: 번역 키 'subscribeNewsletter' 가 어느 표에도 없어 키 이름이 그대로 노출됐다.
+  it.each([
+    ['ko', '뉴스레터 구독'],
+    ['en', 'Subscribe to Newsletter'],
+  ])('%s: 뉴스레터 링크가 키 이름이 아닌 문구로 보인다', async (lang, label) => {
+    renderFooter(lang)
+    expect(await screen.findByRole('link', { name: label })).toBeInTheDocument()
+    expect(screen.queryByText('subscribeNewsletter')).not.toBeInTheDocument()
+  })
+
   it('ja: 섹션 제목·법적 고지·후원 기관이 일본어로 바뀐다', async () => {
     renderFooter('ja')
     expect(await screen.findByRole('link', { name: '利用規約' })).toBeInTheDocument()

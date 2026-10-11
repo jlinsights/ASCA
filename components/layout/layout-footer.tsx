@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { TranslatedContent } from '../translated-content'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useLanguage } from '@/contexts/language-context'
@@ -215,7 +214,7 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
               rel='noopener noreferrer'
               className='text-xs uppercase tracking-wider hover:text-[#fcfcfc]/80 transition-colors'
             >
-              <TranslatedContent textKey='subscribeNewsletter' />
+              {t('siteFtNewsletter')}
             </Link>
 
             <div className='hidden md:block w-px h-8 bg-[#fcfcfc]/20'></div>

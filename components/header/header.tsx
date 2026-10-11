@@ -228,9 +228,9 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
               <Logo width={150} height={50} className='h-10 md:h-12 lg:h-14 w-auto' />
             </a>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation — 4개 언어 메뉴가 한 줄에 들어가는 xl(1280px) 이상에서만. 그 아래는 햄버거 메뉴 */}
             <nav
-              className='hidden md:flex items-center space-x-3 lg:space-x-8'
+              className='hidden xl:flex items-center space-x-4 2xl:space-x-8'
               role='navigation'
               aria-label={t('siteMainNav')}
             >
@@ -245,7 +245,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                 >
                   <Link
                     href={menu.href}
-                    className="flex items-center gap-1 text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
+                    className="flex items-center gap-1 whitespace-nowrap text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
                     aria-haspopup={menu.subItems?.length ? 'menu' : undefined}
                     aria-expanded={menu.subItems?.length ? activeDropdown === menu.key : undefined}
                   >
@@ -303,7 +303,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
               {/* Additional Menu Items */}
               <Link
                 href='/search'
-                className='text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2'
+                className='whitespace-nowrap text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2'
               >
                 {t('siteNavSearch')}
               </Link>
@@ -312,7 +312,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
             {/* Desktop Auth & Controls */}
             <div
               data-testid='header-desktop-controls'
-              className='hidden md:flex items-center space-x-2 lg:space-x-3'
+              className='hidden xl:flex items-center space-x-3'
             >
               <HeaderAuthSection />
 
@@ -322,7 +322,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
             </div>
 
             {/* Mobile Controls */}
-            <div className='md:hidden flex items-center gap-2'>
+            <div className='xl:hidden flex items-center gap-2'>
               <ThemeToggle onToggle={handleThemeToggle} />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -345,7 +345,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
         {isMenuOpen && (
           <div
             id='mobile-menu'
-            className='md:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg'
+            className='xl:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg'
           >
             <nav
               className='container mx-auto px-4 py-6 space-y-2'
