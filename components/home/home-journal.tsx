@@ -29,7 +29,8 @@ export function HomeJournal({ posts }: HomeJournalProps) {
               {post.date}
             </time>
             <div>
-              <h3 className='asca-news__title'>
+              {/* 블로그 글은 한국어로 쓰였다 — 화면 언어와 별개로 읽기 언어를 밝힌다 */}
+              <h3 className='asca-news__title' lang='ko'>
                 {/* 글 본문은 협회 블로그에 있다 — /blog 목록과 같은 외부 링크 */}
                 <a href={post.href} target='_blank' rel='noopener noreferrer'>
                   {post.title}

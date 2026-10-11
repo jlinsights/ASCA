@@ -1,5 +1,8 @@
+'use client'
+
 import { Building2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { useLanguage } from '@/contexts/language-context'
 import { historyEvents, groupByYear } from '../_data/history-events'
 import { HistoryTimelineCard } from './history-timeline-card'
 
@@ -7,6 +10,7 @@ import { HistoryTimelineCard } from './history-timeline-card'
  * History timeline grouping events by year (descending) with a sticky year badge per group.
  */
 export function HistoryTimeline() {
+  const { t } = useLanguage()
   const yearGroups = groupByYear(historyEvents)
 
   return (
@@ -34,7 +38,7 @@ export function HistoryTimeline() {
         <div className='text-center py-8'>
           <div className='inline-flex items-center gap-2 text-muted-foreground'>
             <Building2 className='w-5 h-5' />
-            <span className='text-sm'>1997년부터 이어온 동양서예의 전통과 역사</span>
+            <span className='text-sm'>{t('historyClosing')}</span>
           </div>
         </div>
       </div>

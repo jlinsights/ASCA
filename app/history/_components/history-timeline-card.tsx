@@ -1,7 +1,11 @@
+'use client'
+
 import { Calendar, MapPin } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import { useLanguage } from '@/contexts/language-context'
 import { typeConfig, type HistoryEvent } from '../_data/history-events'
+import { localizeHistoryEvent } from '../_data/history-i18n'
 
 interface HistoryTimelineCardProps {
   event: HistoryEvent
@@ -10,7 +14,9 @@ interface HistoryTimelineCardProps {
 /**
  * Single timeline card rendering an event's type badge, title, subtitle, venue, and date.
  */
-export function HistoryTimelineCard({ event }: HistoryTimelineCardProps) {
+export function HistoryTimelineCard({ event: source }: HistoryTimelineCardProps) {
+  const { language, t } = useLanguage()
+  const event = localizeHistoryEvent(source, language)
   const config = typeConfig[event.type]
   const Icon = config.icon
 
@@ -23,7 +29,7 @@ export function HistoryTimelineCard({ event }: HistoryTimelineCardProps) {
           <div className='flex flex-wrap items-center gap-2 mb-2'>
             <Badge variant='outline' className={`text-xs ${config.color}`}>
               <Icon className='w-3 h-3 mr-1' />
-              {config.label}
+              {t(config.labelKey)}
             </Badge>
           </div>
 
