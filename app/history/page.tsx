@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HistoryHero } from './_components/history-hero'
 import { HistoryTimeline } from './_components/history-timeline'
 
 export const metadata: Metadata = {
@@ -15,18 +16,7 @@ export const metadata: Metadata = {
 export default function HistoryPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            History
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>연 혁</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-            1997년 韓·中·日 書藝文化交流聯合會展을 시작으로, 동양서예의 전통을 계승하고 발전시켜 온
-            협회의 발자취를 소개합니다.
-          </p>
-        </div>
-      </section>
+      <HistoryHero />
 
       <HistoryTimeline />
 

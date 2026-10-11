@@ -403,28 +403,29 @@ export const historyEvents: HistoryEvent[] = [
 export const typeConfig: Record<
   HistoryEventType,
   {
-    label: string
+    /** lib/i18n/translations/about.ts 의 번역 키 */
+    labelKey: string
     icon: typeof Award
     color: string
   }
 > = {
   exhibition: {
-    label: '전시',
+    labelKey: 'historyTypeExhibition',
     icon: Award,
     color: 'bg-blue-500/10 text-blue-600 border-blue-200',
   },
   event: {
-    label: '행사',
+    labelKey: 'historyTypeEvent',
     icon: Calendar,
     color: 'bg-green-500/10 text-green-600 border-green-200',
   },
   milestone: {
-    label: '이정표',
+    labelKey: 'historyTypeMilestone',
     icon: Landmark,
     color: 'bg-scholar-red/10 text-scholar-red border-scholar-red/20',
   },
   appointment: {
-    label: '취임',
+    labelKey: 'historyTypeAppointment',
     icon: Users,
     color: 'bg-purple-500/10 text-purple-600 border-purple-200',
   },

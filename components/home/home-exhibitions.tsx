@@ -3,6 +3,7 @@
 import { Calendar, MapPin } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 import type { HistoryEvent } from '@/app/history/_data/history-events'
+import { localizeHistoryEvent } from '@/app/history/_data/history-i18n'
 import { HomeSectionHead } from './home-section-head'
 
 interface HomeExhibitionsProps {
@@ -10,7 +11,7 @@ interface HomeExhibitionsProps {
 }
 
 export function HomeExhibitions({ exhibitions }: HomeExhibitionsProps) {
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
   if (exhibitions.length === 0) return null
 
   return (
@@ -23,34 +24,36 @@ export function HomeExhibitions({ exhibitions }: HomeExhibitionsProps) {
         more={{ label: t('homeExhibitionsMore'), href: '/history' }}
       />
       <ul className='asca-exlist'>
-        {exhibitions.map(ex => (
-          <li key={ex.id} className='asca-ex'>
-            <p className='asca-ex__date'>
-              <span className='d'>{String(ex.month).padStart(2, '0')}</span>
-              <span className='m'>{ex.year}</span>
-            </p>
-            <div>
-              <h3 className='asca-ex__title'>{ex.title}</h3>
-              {ex.subtitle && <p className='asca-ex__sub'>{ex.subtitle}</p>}
-              {(ex.date || ex.venue) && (
-                <p className='asca-ex__meta'>
-                  {ex.date && (
-                    <>
-                      <Calendar aria-hidden='true' />
-                      {ex.date}
-                    </>
-                  )}
-                  {ex.venue && (
-                    <>
-                      <MapPin aria-hidden='true' />
-                      {ex.venue}
-                    </>
-                  )}
-                </p>
-              )}
-            </div>
-          </li>
-        ))}
+        {exhibitions
+          .map(source => localizeHistoryEvent(source, language))
+          .map(ex => (
+            <li key={ex.id} className='asca-ex'>
+              <p className='asca-ex__date'>
+                <span className='d'>{String(ex.month).padStart(2, '0')}</span>
+                <span className='m'>{ex.year}</span>
+              </p>
+              <div>
+                <h3 className='asca-ex__title'>{ex.title}</h3>
+                {ex.subtitle && <p className='asca-ex__sub'>{ex.subtitle}</p>}
+                {(ex.date || ex.venue) && (
+                  <p className='asca-ex__meta'>
+                    {ex.date && (
+                      <>
+                        <Calendar aria-hidden='true' />
+                        {ex.date}
+                      </>
+                    )}
+                    {ex.venue && (
+                      <>
+                        <MapPin aria-hidden='true' />
+                        {ex.venue}
+                      </>
+                    )}
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
       </ul>
     </section>
   )
