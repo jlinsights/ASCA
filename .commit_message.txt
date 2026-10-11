@@ -1,1 +1,1 @@
-🐛 fix: 공지 페이지 번역 키 노출(noticeInquiry 등 7개 4개 언어 추가, 회귀 테스트)·가짜 연락처를 협회 공식 연락처로 교체·배경 영상 대체 바탕을 검정→페이지 바탕색(Vimeo 차단 시 남색 글씨가 안 보이던 문제)
+🗃️ chore: ASCA-2026 공개 CMS 테이블(공지·전시·행사·작품) 마이그레이션 — 작가 FK 를 artists 로, user_metadata 관리자 정책 제거, 'korean'→'simple' 검색, 깨진 exhibition_details 뷰 수정, 쓰기는 service_role 만
