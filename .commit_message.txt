@@ -1,1 +1,1 @@
-🐛 fix: Noto Serif TC 를 next/font 에서 빼고 Google Fonts 스타일시트로 직접 로드 — #49 이후 Vercel 빌드가 next/font 로더(loader.js:122 'reading 1' TypeError)에서 죽던 문제 우회. CSS 변수 --font-noto-serif-tc 는 globals.css :root 에서 정의, CSP 는 기존 googleFonts 오리진으로 충분
+🐛 fix: 저장소에 한 번도 없던 /patterns/korean-pattern.png 참조 제거 — 영상 배경·주요 전시 섹션이 매 페이지 404 를 내던 장식 레이어

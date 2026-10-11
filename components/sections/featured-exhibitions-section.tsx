@@ -83,11 +83,6 @@ export function FeaturedExhibitionsSection() {
 
   return (
     <section className='relative py-20 md:py-32 bg-gradient-to-b from-background via-rice-paper/30 to-background dark:via-stone-gray/10 overflow-hidden'>
-      {/* Decorative Background Pattern */}
-      <div className='absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none'>
-        <div className="absolute inset-0 bg-[url('/patterns/korean-pattern.png')] bg-repeat" />
-      </div>
-
       <div className='relative z-10 container mx-auto px-4'>
         {/* Section Header */}
         <div className='max-w-3xl mx-auto text-center mb-16'>
