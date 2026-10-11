@@ -17,11 +17,7 @@ export function VideoBackground() {
         />
       </div>
 
-      {/* Subtle patterns and overlays for readability */}
-      <div className='absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none'>
-        <div className="absolute inset-0 bg-[url('/patterns/korean-pattern.png')] bg-repeat" />
-      </div>
-
+      {/* Overlays for readability */}
       <div className='absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent pointer-events-none' />
       <div className='absolute inset-0 bg-white/10 dark:bg-black/30 mix-blend-overlay pointer-events-none' />
 
