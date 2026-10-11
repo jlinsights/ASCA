@@ -58,8 +58,8 @@ describe('Header — 메뉴 번역', () => {
   it('모바일 메뉴에 언어 선택기가 있다', async () => {
     const user = userEvent.setup()
     renderWithLanguage('zh', <Header transparentOnTop />)
-    await user.click(await screen.findByRole('button', { name: '打开菜单' }))
-    const mobileNav = screen.getByRole('navigation', { name: '移动菜单' })
+    await user.click(await screen.findByRole('button', { name: '打開菜單' }))
+    const mobileNav = screen.getByRole('navigation', { name: '移動菜單' })
     expect(
       within(mobileNav).getByRole('button', { name: /Current language: 中文/ })
     ).toBeInTheDocument()

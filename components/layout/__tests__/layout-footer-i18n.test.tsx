@@ -1,3 +1,5 @@
+import { existsSync } from 'fs'
+import path from 'path'
 import { render, screen } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { LayoutFooter } from '../layout-footer'
@@ -51,6 +53,21 @@ describe('LayoutFooter — 번역', () => {
     renderFooter('en')
     expect(await screen.findByText(/Registration No\./)).toBeInTheDocument()
     expect(screen.getByText(/Bomun-ro/)).toBeInTheDocument()
+  })
+})
+
+// 회귀: /about·/about/history·/organization·/news 는 페이지가 없어 프로덕션에서 404 였다.
+describe('footer-data — 내부 링크는 실제 페이지로 간다', () => {
+  const internal = Object.values(footerLinks)
+    .flat()
+    .filter(item => !item.external)
+    .map(item => (item.href.split('?')[0] ?? '').replace(/\/$/, ''))
+
+  it.each(internal)('%s', route => {
+    const dir = path.join(process.cwd(), 'app', route)
+    expect(existsSync(path.join(dir, 'page.tsx')) || existsSync(path.join(dir, 'page.ts'))).toBe(
+      true
+    )
   })
 })
 

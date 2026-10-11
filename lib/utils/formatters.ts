@@ -56,7 +56,7 @@ export const formatViewCount = (
  */
 export const formatDate = (
   date: Date | string,
-  locale: 'ko-KR' | 'en-US' | 'ja-JP' | 'zh-CN' = 'ko-KR',
+  locale: 'ko-KR' | 'en-US' | 'ja-JP' | 'zh-CN' | 'zh-TW' = 'ko-KR',
   options?: Intl.DateTimeFormatOptions
 ): string => {
   const dateObj = typeof date === 'string' ? new Date(date) : date
@@ -108,11 +108,11 @@ export const formatRelativeTime = (
       now: 'たった今',
     },
     zh: {
-      minute: '分钟',
-      hour: '小时',
+      minute: '分鐘',
+      hour: '小時',
       day: '天',
       ago: '前',
-      now: '刚刚',
+      now: '剛剛',
     },
   }
 

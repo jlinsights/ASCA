@@ -39,7 +39,7 @@ export const LANGUAGE_METADATA: Record<Language, LanguageMetadata> = {
     label: '中文',
     flag: '🇨🇳',
     dir: 'ltr',
-    locale: 'zh-CN',
+    locale: 'zh-TW',
     fallback: 'ko',
   },
 }
