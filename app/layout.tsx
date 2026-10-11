@@ -46,6 +46,7 @@ import { JsonLd } from '@/components/json-ld'
 import { KakaoScript } from '@/components/seo/kakao-script'
 import { VideoBackground } from '@/components/layout/video-background'
 import { Header } from '@/components/header/header'
+import { SkipLink } from '@/components/layout/skip-link'
 
 // root layout은 정적 콘텐츠 이모저모를 렌더링하므로 force-dynamic 불필요
 
@@ -68,12 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         suppressHydrationWarning={true}
       >
         <ClientProviders>
-          <a
-            href='#main-content'
-            className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-celadon-green focus:text-ink-black focus:rounded-md focus:text-sm focus:font-medium'
-          >
-            본문으로 건너뛰기
-          </a>
+          <SkipLink />
           <VideoBackground />
           <div className='min-h-screen flex flex-col relative'>
             <Header transparentOnTop={true} />
