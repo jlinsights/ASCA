@@ -39,7 +39,7 @@ export const footerLinks: Record<FooterLinkSection, FooterLink[]> = {
     { labelKey: 'siteArtistInvited', href: '/artists?type=초대작가' },
   ],
   about: [
-    { labelKey: 'siteAboutOverview', href: '/about' },
+    { labelKey: 'siteAboutOverview', href: '/introductions' },
     {
       labelKey: 'siteAboutArticles',
       href: 'https://docs.google.com/document/d/1on5DqNNLBXvr_wvvapz5zhWFPR1dPlHKaZ6y3bgIWuE/edit?usp=sharing',
@@ -70,14 +70,12 @@ export const footerLinks: Record<FooterLinkSection, FooterLink[]> = {
       href: 'https://docs.google.com/document/d/1PCt1HOOuilplQg47c5GrK6nHbWozkzrJWJhLUVnOtOQ/edit?usp=sharing',
       external: true,
     },
-    { labelKey: 'siteAboutHistory', href: '/about/history' },
-    { labelKey: 'siteAboutOrganization', href: '/organization' },
+    { labelKey: 'siteAboutHistory', href: '/history' },
     { labelKey: 'siteAboutBrand', href: '/brand' },
   ],
   news: [
     { labelKey: 'siteNewsNotices', href: '/notice' },
     { labelKey: 'siteNewsEvents', href: '/events' },
-    { labelKey: 'siteNewsNews', href: '/news' },
     { labelKey: 'siteNavGallery', href: '/gallery' },
   ],
   legal: [
