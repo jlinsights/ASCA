@@ -97,6 +97,11 @@ const VENUES: Record<string, Phrase> = {
     ja: 'ソウル芸術の殿堂 書芸博物館',
     zh: '首爾藝術殿堂 書藝博物館',
   },
+  '예술의전당 서울서예박물관 제1전시실 (2층)': {
+    en: 'Seoul Calligraphy Art Museum, Seoul Arts Center — Gallery 1 (2F)',
+    ja: 'ソウル芸術の殿堂 書芸博物館 第1展示室(2階)',
+    zh: '首爾藝術殿堂 書藝博物館 第1展覽室(2樓)',
+  },
   '인사동 한국미술관 3층 전관': {
     en: 'Hankook Art Museum, Insa-dong (entire 3rd floor)',
     ja: '仁寺洞 韓国美術館 3階全館',
@@ -138,6 +143,14 @@ const extraordinaryMeeting = (year: string): Phrase => ({
 
 // 행사명·부제: 한국어로 된 것만 이벤트 id 로 옮긴다.
 const TITLES: Record<string, { title?: Phrase; subtitle?: Phrase }> = {
+  // 영어 부제(New Horizons in East Asian Calligraphy)는 원래 있던 공식 표기라 그대로 둔다
+  '2026-4': {
+    title: {
+      en: 'Seogyeong (書境): New Horizons — The Present and Future of East Asian Calligraphy',
+      ja: '書境 新たな地平 — 東洋書芸の現在と未来',
+      zh: '書境 新的地平線 — 東洋書藝的現在與未來',
+    },
+  },
   '2025-11': { title: extraordinaryMeeting('2025') },
   '2025-2a': { title: appointmentCeremony('2025') },
   '2025-2b': {
