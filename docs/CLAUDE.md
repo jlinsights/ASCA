@@ -294,8 +294,7 @@ and refactor using this standardized process:
 
 1. Use `npm run b:studio` for visual inspection
 2. Check schema with `scripts/check-supabase-schema.js`
-3. Test connections with `scripts/test-supabase-artworks.js`
-4. Monitor sync status via admin dashboard
+3. Monitor sync status via admin dashboard
 
 The project emphasizes type safety, multilingual support, and robust data
 synchronization between multiple systems.

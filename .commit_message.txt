@@ -1,1 +1,1 @@
-🗃️ chore: ASCA-2026 공개 CMS 테이블(공지·전시·행사·작품) 마이그레이션 — 작가 FK 를 artists 로, user_metadata 관리자 정책 제거, 'korean'→'simple' 검색, 깨진 exhibition_details 뷰 수정, 쓰기는 service_role 만
+🔒 fix: Airtable 스키마 동기화가 execute_sql RPC 로 운영 테이블을 ALTER/DROP 하던 경로 제거 — 차이는 sync_logs 에 'detected' 로 기록만, 같은 RPC 로 테이블을 만들고 테스트 작가를 넣던 개발 스크립트 삭제
