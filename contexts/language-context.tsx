@@ -136,6 +136,15 @@ const legacyTranslations: Record<Language, Record<string, string>> = {
     remove: '제거',
     submit: '제출',
     reset: '초기화',
+
+    // 공지사항 (app/notice)
+    notice: '공지사항',
+    importantNotice: '중요 공지',
+    generalNotice: '일반 공지',
+    noticeInquiry: '공지사항 문의',
+    noticeInquiryText: '공지사항에 대해 궁금한 점은 협회 사무국으로 연락해 주세요.',
+    previous: '이전',
+    next: '다음',
   },
 
   en: {
@@ -230,6 +239,15 @@ const legacyTranslations: Record<Language, Record<string, string>> = {
     remove: 'Remove',
     submit: 'Submit',
     reset: 'Reset',
+
+    // Notices (app/notice)
+    notice: 'Notices',
+    importantNotice: 'Important',
+    generalNotice: 'General Notices',
+    noticeInquiry: 'Questions about notices',
+    noticeInquiryText: 'For questions about a notice, please contact the association office.',
+    previous: 'Previous',
+    next: 'Next',
   },
 
   ja: {
@@ -323,6 +341,15 @@ const legacyTranslations: Record<Language, Record<string, string>> = {
     remove: '削除',
     submit: '送信',
     reset: 'リセット',
+
+    // お知らせ (app/notice)
+    notice: 'お知らせ',
+    importantNotice: '重要なお知らせ',
+    generalNotice: '一般のお知らせ',
+    noticeInquiry: 'お知らせに関するお問い合わせ',
+    noticeInquiryText: 'お知らせについてのご質問は、協会事務局までご連絡ください。',
+    previous: '前へ',
+    next: '次へ',
   },
 
   zh: {
@@ -415,6 +442,15 @@ const legacyTranslations: Record<Language, Record<string, string>> = {
     remove: '移除',
     submit: '提交',
     reset: '重置',
+
+    // 公告 (app/notice)
+    notice: '公告',
+    importantNotice: '重要公告',
+    generalNotice: '一般公告',
+    noticeInquiry: '公告咨询',
+    noticeInquiryText: '如对公告有疑问，请联系协会秘书处。',
+    previous: '上一页',
+    next: '下一页',
   },
 }
 

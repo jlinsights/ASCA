@@ -409,8 +409,15 @@ export default function NoticePage() {
               <CardContent className='p-6 text-center'>
                 <h3 className='text-lg font-bold mb-2 text-foreground'>{t('noticeInquiry')}</h3>
                 <p className='text-muted-foreground mb-2'>{t('noticeInquiryText')}</p>
+                {/* 연락처는 하단 푸터(layout-footer)의 협회 공식 정보와 같아야 한다 */}
                 <p className='text-muted-foreground font-medium'>
-                  전화: 02-1234-5678 | 이메일: info@asca.or.kr
+                  <a href='tel:0502-5550-8700' className='hover:text-foreground'>
+                    ☎︎ 0502-5550-8700
+                  </a>
+                  {' | '}
+                  <a href='mailto:info@orientalcalligraphy.org' className='hover:text-foreground'>
+                    info@orientalcalligraphy.org
+                  </a>
                 </p>
               </CardContent>
             </Card>
