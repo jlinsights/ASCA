@@ -4,7 +4,9 @@ import { useRef } from 'react'
 
 export function VideoBackground() {
   return (
-    <div className='fixed inset-0 z-[-1] select-none pointer-events-none overflow-hidden bg-black'>
+    // 바탕은 영상이 아직 안 떴거나 막혔을 때(중국 등 Vimeo 차단 지역, 사내망) 보이는 색이다.
+    // 영상 자체가 밝은 한지 톤이라 검정 대신 페이지 바탕색을 깔아야 남색 글씨가 읽힌다.
+    <div className='fixed inset-0 z-[-1] select-none pointer-events-none overflow-hidden bg-background'>
       <div className='absolute inset-0 w-full h-full'>
         <iframe
           src='https://player.vimeo.com/video/51843128?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1'
