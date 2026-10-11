@@ -9,10 +9,60 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 
 - **Dual Database System**: Supabase (PostgreSQL) primary + Airtable external
   CMS
-- **Bidirectional Sync**: Custom real-time synchronization between databases
+- **Airtable Sync**: Data sync from Airtable; schema differences are only
+  detected and logged (see "Sync System")
 - **Multi-language Support**: Korean (default), English, Japanese, Chinese
 - **Admin Dashboard**: Complete CMS for managing artists, artworks, exhibitions
 - **Advanced Gallery**: Filtering, categorization, and viewing features
+
+## 운영 환경과 데이터 (2026-10-11 기준)
+
+### 배포 — Vercel `asca-main`
+
+- `vercel.json` 의 빌드 명령은 **`npm run build:full`** 이다. page-data 수집이
+  켜져 `lib/config/env.ts` 의 zod 검증이 돌고, **`DATABASE_URL` 이 없으면 빌드가
+  죽는다.** Production·Preview 양쪽에 있어야 한다.
+- 로컬·CI 의 `npm run build` 는 compile-only 라 이 실패를 **못 잡는다.** 배포
+  검증은 `NODE_ENV=production npm run build:full` 로 한다(셸에
+  `NODE_ENV=development` 가 남아 있으면 prerender 가 `useContext` null 로
+  죽는다).
+- Hobby 플랜이라 동시 빌드 1개 — Preview 는 Production 뒤에서 대기한다.
+- 프로덕션 주소는 `asca-main.vercel.app` 이다. ⚠️ `orientalcalligraphy.org`
+  루트· `www` 의 DNS(Cloudflare)는 아직 **Webflow** 를 가리킨다. 이 저장소를
+  배포해도 그 도메인은 바뀌지 않는다(하위 도메인 anam·heelang·catalog2025·jury
+  는 각각 다른 Vercel 프로젝트).
+
+### Supabase — `ASCA-2026` (`caxjyimsuvjnbmjoxfad`)
+
+- 옛 프로젝트 `fiaoduraycyjselasmdn` 은 400일 넘게 정지돼 **복구 불가**다.
+- **데이터가 있는 테이블은 `artists` 뿐이다.** 공지·전시·행사·작품 등 공개 CMS
+  테이블은 `supabase/migrations/20261011000001_asca2026_public_cms_tables.sql`
+  로 만든 **빈 테이블**이다. 그 이전 마이그레이션은 옛 스키마(auth.users FK,
+  user_metadata 관리자 정책, 없는 'korean' 검색 설정)라 **재실행하지 말 것.**
+- 홈·연혁 콘텐츠는 저장소 데이터에서 온다:
+  `app/history/_data/history-events.ts`, `lib/data/blog-posts.json`.
+- RLS: 공개 테이블은 **읽기만 공개, 쓰기는 service_role 만.**
+- 🔴 **`execute_sql` 같은 임의 SQL RPC 를 만들지 말 것.** 구조 변경은
+  마이그레이션으로만 한다.
+- 🔴 **DB 덤프를 커밋하지 말 것.** 이 저장소는 공개다. 2026-07 덤프(개인정보
+  포함)가 커밋돼 있어 2026-10-11 에 이력에서 지웠다.
+
+### 데이터 계층이 둘이다
+
+- **supabase-js** (`NEXT_PUBLIC_SUPABASE_URL` + 키) — 공개 페이지 조회
+  (`lib/api/artists.ts` 등)
+- **Drizzle** (`DATABASE_URL`, `lib/db/index.ts`) — 트랜잭션 풀러(6543)라
+  `prepare: false`
+
+### 조회 함정
+
+- PostgREST 는 한 번에 **최대 1,000행**만 준다. 목록은 `range()` +
+  `count: 'exact'` 로 페이지를 나눈다(`/api/artists?q&page&limit&title…`).
+- `or()` 필터에 사용자 입력을 그대로 넣지 말 것 — `sanitizeSearchTerm` 을
+  거친다.
+- `artists.membership_type` 은 쉼표로 이은 복수 역할이고, 직함은 음절 사이에
+  공백이 들어간 값('고 문')이 있다 — 그래서 `=` 대신 `lib/api/artists.ts` 의
+  `spacingTolerantPattern` 으로 `ilike` 한다.
 
 ## Primary Commands
 
@@ -50,9 +100,10 @@ npm run test:coverage    # Generate test coverage report
 
 ### Database System
 
-- **Primary**: Supabase PostgreSQL (live production data)
-- **Schema**: 12 main tables with multi-language fields
-- **Sync Engine**: Custom bidirectional Airtable ↔ Supabase synchronization
+- **Primary**: Supabase PostgreSQL — project `ASCA-2026` (see above)
+- **Schema**: content tables with multi-language fields
+- **Sync Engine**: Airtable → Supabase data sync (schema changes are not
+  applied)
 - **ORM**: Drizzle with type-safe queries in `lib/db/queries.ts`
 
 ### Key Tables
@@ -214,6 +265,8 @@ and refactor using this standardized process:
 - Airtable integration in `lib/airtable.ts`
 - Migration engine in `lib/airtable-migration.ts`
 - Real-time sync in `lib/sync-engine.ts`
+- Schema sync is **report-only**: differences between Airtable and Supabase are
+  written to `sync_logs` with status `detected`. Apply them with a migration
 - Never modify sync tables directly - use sync endpoints
 
 ### Brand Consistency
@@ -292,7 +345,7 @@ and refactor using this standardized process:
 
 ### Database Debugging
 
-1. Use `npm run b:studio` for visual inspection
+1. Use `npm run db:studio` for visual inspection
 2. Check schema with `scripts/check-supabase-schema.js`
 3. Monitor sync status via admin dashboard
 

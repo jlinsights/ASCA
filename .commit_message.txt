@@ -1,1 +1,1 @@
-📝 docs: docs/CLAUDE.md 를 미러링한 루트 AGENTS.md 추가(Ink System 색 안내·삭제된 스크립트 참조까지 동기화) + 2026-09-19 성능·빌드 분석 문서
+📝 docs: CLAUDE.md·AGENTS.md 에 운영 환경과 데이터 섹션 추가 — build:full·DATABASE_URL 빌드 조건, ASCA-2026(artists 만 데이터·옛 마이그레이션 재실행 금지), execute_sql·DB 덤프 커밋 금지, 두 데이터 계층, PostgREST 1,000행·직함 공백 함정, 도메인이 아직 Webflow. 스키마 동기화는 감지·기록만, b:studio 오타 수정
