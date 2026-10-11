@@ -1,1 +1,1 @@
-🐛 fix: 저장소에 한 번도 없던 /patterns/korean-pattern.png 참조 제거 — 영상 배경·주요 전시 섹션이 매 페이지 404 를 내던 장식 레이어
+📝 docs: docs/CLAUDE.md 를 미러링한 루트 AGENTS.md 추가(Ink System 색 안내·삭제된 스크립트 참조까지 동기화) + 2026-09-19 성능·빌드 분석 문서
