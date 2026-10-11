@@ -12,8 +12,16 @@ const PRETENDARD_CSS =
 // Variable woff2, Latin subset — public/fonts/playfair-display/ (OFL)
 const playfair = localFont({
   src: [
-    { path: '../public/fonts/playfair-display/PlayfairDisplay-Latin-Variable.woff2', weight: '400 700', style: 'normal' },
-    { path: '../public/fonts/playfair-display/PlayfairDisplay-Latin-Italic-Variable.woff2', weight: '400 700', style: 'italic' },
+    {
+      path: '../public/fonts/playfair-display/PlayfairDisplay-Latin-Variable.woff2',
+      weight: '400 700',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/playfair-display/PlayfairDisplay-Latin-Italic-Variable.woff2',
+      weight: '400 700',
+      style: 'italic',
+    },
   ],
   display: 'swap',
   variable: '--font-display',
