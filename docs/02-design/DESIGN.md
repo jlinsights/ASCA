@@ -99,16 +99,16 @@ typography:
     fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
     fontSize: '1.875rem' # 30px
   title-lg:
-    fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
+    fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
     fontSize: '1.5rem' # 24px
   body-lg:
-    fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
+    fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
     fontSize: '1.125rem' # 18px
   body-md:
-    fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
+    fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
     fontSize: '1rem' # 16px
   label-sm:
-    fontFamily: 'var(--font-inter), var(--font-noto-sans-kr), sans-serif'
+    fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
     fontSize: '0.875rem' # 14px
 
 # ─────────────────────────────────────────────
@@ -343,7 +343,8 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 
 ### 3.1 폰트 선택 규칙
 
-1. **본문(UI)**: `{typography.family.sans}` — Inter + Noto Sans KR + CJK
+1. **본문(UI)**: `{typography.family.sans}` — Pretendard + Noto Sans KR(폴백) +
+   CJK
 2. **헤딩·인용**: `{typography.family.serif}` — Playfair Display + Noto Serif KR
 3. **서예 인용(원문)**: `{typography.family.calligraphy}` — Source Han Serif +
    KaiTi
@@ -378,17 +379,17 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 
 #### 3.5.1 Font Families (확장 — front matter 외부)
 
-| 토큰          | 정의                                                                                                                  | 적용                       |
-| ------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `sans`        | `var(--font-inter), var(--font-noto-sans-kr), "Noto Sans CJK SC/TC/JP", system-ui, sans-serif`                        | UI 본문                    |
-| `serif`       | `var(--font-display)` (Cormorant Garamond), `var(--font-noto-serif-kr), "Source Han Serif SC/TC", "Noto Serif CJK *"` | 헤드라인·인용              |
-| `calligraphy` | `"Source Han Serif SC/TC/KR/JP", "Noto Serif CJK *", "KaiTi", "STKaiti", serif`                                       | 작품 정보, 한자            |
-| `brush`       | `"Ma Shan Zheng", "Long Cang", "Source Han Serif SC", "Noto Serif CJK SC", cursive`                                   | 데코레이티브 (히어로 한정) |
-| `mono`        | `"JetBrains Mono", "SF Mono", "Monaco", "Consolas", monospace`                                                        | 코드, 좌표                 |
-| `korean`      | `var(--font-noto-serif-kr), "Source Han Serif KR", "Nanum Myeongjo", "Batang", serif`                                 | 한국어 강조                |
-| `chinese`     | `"Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "Microsoft YaHei", serif`                                      | 중국어 강조                |
-| `japanese`    | `"Noto Serif CJK JP", "Source Han Serif JP", "Yu Mincho", "Hiragino Mincho Pro", serif`                               | 일본어 강조                |
-| `english`     | `"Playfair Display", "Crimson Text", "Georgia", serif`                                                                | 영어 강조                  |
+| 토큰          | 정의                                                                                                                | 적용                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `sans`        | `"Pretendard", var(--font-noto-sans-kr), "Noto Sans CJK SC/TC/JP", system-ui, sans-serif`                           | UI 본문                    |
+| `serif`       | `var(--font-display)` (Playfair Display), `var(--font-noto-serif-kr), "Source Han Serif SC/TC", "Noto Serif CJK *"` | 헤드라인·인용              |
+| `calligraphy` | `"Source Han Serif SC/TC/KR/JP", "Noto Serif CJK *", "KaiTi", "STKaiti", serif`                                     | 작품 정보, 한자            |
+| `brush`       | `"Ma Shan Zheng", "Long Cang", "Source Han Serif SC", "Noto Serif CJK SC", cursive`                                 | 데코레이티브 (히어로 한정) |
+| `mono`        | `"JetBrains Mono", "SF Mono", "Monaco", "Consolas", monospace`                                                      | 코드, 좌표                 |
+| `korean`      | `var(--font-noto-serif-kr), "Source Han Serif KR", "Nanum Myeongjo", "Batang", serif`                               | 한국어 강조                |
+| `chinese`     | `"Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "Microsoft YaHei", serif`                                    | 중국어 강조                |
+| `japanese`    | `"Noto Serif CJK JP", "Source Han Serif JP", "Yu Mincho", "Hiragino Mincho Pro", serif`                             | 일본어 강조                |
+| `english`     | `"Playfair Display", "Crimson Text", "Georgia", serif`                                                              | 영어 강조                  |
 
 #### 3.5.2 Scale Mapping (Tailwind 13단계 ↔ canonical)
 

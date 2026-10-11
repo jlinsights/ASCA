@@ -1,1 +1,1 @@
-🔒 fix: Airtable 스키마 동기화가 execute_sql RPC 로 운영 테이블을 ALTER/DROP 하던 경로 제거 — 차이는 sync_logs 에 'detected' 로 기록만, 같은 RPC 로 테이블을 만들고 테스트 작가를 넣던 개발 스크립트 삭제
+🐛 fix: Noto Serif TC 를 next/font 에서 빼고 Google Fonts 스타일시트로 직접 로드 — #49 이후 Vercel 빌드가 next/font 로더(loader.js:122 'reading 1' TypeError)에서 죽던 문제 우회. CSS 변수 --font-noto-serif-tc 는 globals.css :root 에서 정의, CSP 는 기존 googleFonts 오리진으로 충분

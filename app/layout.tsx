@@ -1,45 +1,34 @@
 import type { Metadata } from 'next'
-import {
-  Inter,
-  Cormorant_Garamond,
-  Noto_Sans_KR,
-  Noto_Serif_KR,
-  Noto_Serif_TC,
-} from 'next/font/google'
+import { Playfair_Display, Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google'
 import './globals.css'
 import { ClientProviders } from '@/components/client-providers'
 
-// 주 폰트 - Inter (영문)
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-})
+// UI 본문 - Pretendard (한글+라틴). next/font 에 없어 공식 dynamic-subset CDN 으로 싣는다.
+// 버전을 고정해야 CSP(next.config.js THIRD_PARTY.pretendard)와 캐시가 어긋나지 않는다.
+const PRETENDARD_CSS =
+  'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css'
 
-// 영문 디스플레이 - Cormorant Garamond (ASCA Ink System, DESIGN.md §3)
-const cormorant = Cormorant_Garamond({
+// 영문 디스플레이 - Playfair Display (ASCA Ink System, DESIGN.md §3)
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '700'],
   style: ['normal', 'italic'],
   display: 'swap',
   variable: '--font-display',
 })
 
 // 번체 한자 - Noto Serif TC (협회명·슬로건 등 [lang=zh-Hant] / .cjk-tc-strict 전용, BRAND.md §3)
-const notoSerifTc = Noto_Serif_TC({
-  subsets: ['latin'],
-  weight: ['600', '700'],
-  display: 'swap',
-  preload: false,
-  variable: '--font-noto-serif-tc',
-})
+// next/font 로 받으면 Vercel 빌드가 loader 에서 죽는다(#49 이후 'reading 1' TypeError) — Google Fonts CSS 로 직접 싣는다.
+// unicode-range 조각이라 실제로 쓰인 글자만 받는다. CSS 변수는 globals.css :root 에서 정의한다.
+const NOTO_SERIF_TC_CSS =
+  'https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&display=swap'
 
-// 한국어 산세리프 - Noto Sans KR
+// 한국어 산세리프 폴백 - Noto Sans KR (Pretendard 가 못 실렸을 때만 쓰인다)
 const notoSansKr = Noto_Sans_KR({
   subsets: ['latin'],
   weight: ['400', '700'], // 500 제거 (시각 인식 차이 미미, 폰트 파일 1개 절감)
   display: 'swap',
-  preload: true, // 주요 한국어 폰트는 preload 유지
+  preload: false, // 주 폰트는 Pretendard — 폴백까지 preload 하면 첫 화면에 두 벌을 받는다
   variable: '--font-noto-sans-kr',
 })
 
@@ -66,12 +55,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='ko' suppressHydrationWarning>
       <head>
+        <link rel='preconnect' href='https://cdn.jsdelivr.net' crossOrigin='anonymous' />
+        <link rel='stylesheet' href={PRETENDARD_CSS} crossOrigin='anonymous' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
+        <link rel='stylesheet' href={NOTO_SERIF_TC_CSS} />
         <KakaoScript />
         {/* Global JSON-LD for AEO */}
         <JsonLd />
       </head>
       <body
-        className={`${inter.variable} ${cormorant.variable} ${notoSansKr.variable} ${notoSerifKr.variable} ${notoSerifTc.variable} font-sans bg-background transition-colors duration-300`}
+        className={`${playfair.variable} ${notoSansKr.variable} ${notoSerifKr.variable} font-sans bg-background transition-colors duration-300`}
         suppressHydrationWarning={true}
       >
         <ClientProviders>

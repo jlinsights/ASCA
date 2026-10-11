@@ -1,0 +1,716 @@
+/* =====================================================================
+   ASCA Ink System — 홈 (Editorial 시안)
+   출처: Claude Design 'ASCA Design System' ui_kits/web/kit.css + ui_kits/site/site.css
+   홈에서 쓰는 규칙만 옮기고 .asca-home 아래로 가뒀다. 색 사다리(--navy-*, --gold-*,
+   --paper*)는 app/globals.css 의 것을 그대로 쓰고, 시안의 의미 토큰만 여기서 정의한다.
+   ===================================================================== */
+
+.asca-home {
+  --gold-300: #ecd6a1;
+  --stone-700: #424a5e;
+
+  --bg: var(--paper);
+  --fg: var(--navy-900);
+  --fg-muted: var(--stone-700);
+  --surface-2: var(--paper-2);
+  --border: #e5e0ce;
+  --border-soft: #efeadc;
+  --border-strong: var(--navy-900);
+  /* paper 위 작은 금색 글자는 gold-800 이어야 4.9:1 (gold-700 은 3.5:1) */
+  --accent-text: var(--gold-800);
+  --ring: var(--gold-600);
+
+  --font-h-display:
+    var(--font-display), var(--font-noto-serif-tc), var(--font-noto-serif-kr), Georgia, serif;
+  --font-h-sans: 'Pretendard', var(--font-noto-sans-kr), system-ui, sans-serif;
+  --font-h-tc: var(--font-display), var(--font-noto-serif-tc), 'Noto Serif TC', serif;
+  --font-h-kr-serif: var(--font-display), var(--font-noto-serif-kr), serif;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-normal: 260ms;
+
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-h-sans);
+}
+
+.dark .asca-home {
+  --bg: var(--navy-950);
+  --fg: var(--paper);
+  --fg-muted: var(--navy-300);
+  --surface-2: var(--navy-800);
+  --border: #1f2b4c;
+  --border-soft: #16213f;
+  --border-strong: var(--gold-500);
+  --accent-text: var(--gold-400);
+  --ring: var(--gold-400);
+}
+
+.asca-home ::selection {
+  background: var(--gold-300);
+  color: var(--navy-900);
+}
+.dark .asca-home ::selection {
+  background: var(--gold-500);
+  color: var(--navy-950);
+}
+
+.asca-home :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.asca-home .tc {
+  font-family: var(--font-h-tc);
+}
+
+/* ---------- Buttons ---------- */
+.asca-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 13px 24px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-family: var(--font-h-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-normal) var(--ease-out),
+    color var(--dur-normal) var(--ease-out),
+    border-color var(--dur-normal) var(--ease-out),
+    box-shadow var(--dur-normal) var(--ease-out);
+}
+.asca-btn svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.75;
+}
+.asca-btn--primary {
+  background: var(--navy-900);
+  border-color: var(--navy-900);
+  color: var(--paper);
+}
+/* 금색 밑줄이 가운데로 모이며 진해진다 — transform 만 움직인다 */
+.asca-btn--primary::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 7px;
+  height: 1px;
+  background: var(--gold-500);
+  opacity: 0.6;
+  transform: scaleX(1);
+  transition:
+    opacity var(--dur-normal),
+    transform var(--dur-normal) var(--ease-out);
+}
+.asca-btn--primary:hover {
+  background: var(--navy-700);
+  box-shadow: 0 6px 16px -4px rgb(11 23 51 / 0.4);
+}
+.asca-btn--primary:hover::after {
+  opacity: 1;
+  transform: scaleX(1.05);
+}
+.asca-btn--link {
+  padding: 13px 0;
+  border: 0;
+  border-bottom: 1px solid var(--fg);
+  border-radius: 0;
+  background: transparent;
+  color: var(--fg);
+}
+.asca-btn--link:hover {
+  color: var(--accent-text);
+  border-bottom-color: var(--accent-text);
+}
+.asca-btn--ghost {
+  padding: 10px 0;
+  background: transparent;
+  color: inherit;
+}
+.asca-btn--ghost:hover {
+  color: var(--accent-text);
+}
+.asca-btn--gold {
+  background: var(--gold-500);
+  border-color: var(--gold-600);
+  color: var(--navy-900);
+}
+.asca-btn--gold:hover {
+  background: var(--gold-400);
+}
+.asca-btn--on-ink {
+  border-color: var(--paper);
+  color: var(--paper);
+}
+.asca-btn--on-ink:hover {
+  background: var(--paper);
+  color: var(--navy-900);
+}
+
+.dark .asca-home .asca-btn--primary {
+  background: var(--gold-500);
+  border-color: var(--gold-500);
+  color: var(--navy-950);
+}
+.dark .asca-home .asca-btn--primary::after {
+  background: var(--navy-950);
+}
+.dark .asca-home .asca-btn--primary:hover {
+  background: var(--gold-400);
+}
+.dark .asca-home .asca-btn--link:hover,
+.dark .asca-home .asca-btn--ghost:hover {
+  color: var(--gold-400);
+  border-bottom-color: var(--gold-400);
+}
+
+/* ---------- Eyebrow ---------- */
+.asca-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-h-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.asca-eyebrow::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--border-strong);
+}
+.on-ink .asca-eyebrow {
+  color: var(--gold-400);
+}
+.on-ink .asca-eyebrow::before {
+  background: var(--gold-400);
+}
+
+/* =====================================================================
+   Hero — Editorial: paper ground, featured image right, stats ledger below
+   ===================================================================== */
+.asca-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.asca-hero__frame {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 72px;
+  align-items: end;
+  max-width: 1440px;
+  margin: 0 auto;
+  /* 고정 헤더(64px) 아래에서 시작한다 */
+  padding: 136px 40px 56px;
+}
+.asca-hero__feature {
+  position: relative;
+  order: 2;
+  margin: 0;
+}
+.asca-hero__feature-img {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  box-shadow:
+    0 30px 60px -20px rgb(11 23 51 / 0.25),
+    0 10px 20px -8px rgb(11 23 51 / 0.15);
+}
+.dark .asca-home .asca-hero__feature-img {
+  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.6);
+}
+.asca-hero__seal {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: var(--seal-red);
+  color: var(--paper);
+  font-family: var(--font-h-tc);
+  font-size: 26px;
+  font-weight: 700;
+  transform: rotate(-4deg);
+  box-shadow: 0 6px 18px rgb(168 32 26 / 0.45);
+}
+.asca-hero__copy {
+  order: 1;
+  padding-bottom: 24px;
+}
+.asca-hero__eyebrow {
+  margin-bottom: 36px;
+}
+.asca-hero__title {
+  margin: 0 0 28px;
+  font-family: var(--font-h-display);
+  font-size: clamp(44px, 7.4vw, 104px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  word-break: keep-all;
+}
+.asca-hero__slogan {
+  margin: 0 0 24px;
+  padding-left: 18px;
+  border-left: 2px solid var(--gold-500);
+  font-family: var(--font-h-tc);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  color: var(--fg);
+}
+.asca-slogan-gloss {
+  display: block;
+  margin-top: 0.6em;
+  font-family: var(--font-h-kr-serif);
+  font-size: 0.6em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+.asca-hero__lede {
+  max-width: 460px;
+  margin: 0 0 40px;
+  font-size: 15.5px;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  color: var(--fg);
+  word-break: keep-all;
+}
+.asca-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Stats ledger */
+.asca-hero__ledger {
+  border-top: 1px solid var(--border);
+}
+.asca-hero__ledger-inner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.asca-hero__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* 1fr 칸이 긴 라벨(영문 등)에 밀려 320px 화면을 넘지 않게 */
+  min-width: 0;
+  overflow-wrap: anywhere;
+  margin: 0;
+  padding: 28px 32px;
+  border-left: 1px solid var(--border);
+}
+.asca-hero__stat:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.asca-hero__stat dd {
+  order: 1;
+  margin: 0;
+  font-family: var(--font-h-display);
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+.asca-hero__stat dd em {
+  margin-left: 4px;
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--fg-muted);
+}
+.asca-hero__stat dt {
+  order: 2;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  word-break: keep-all;
+}
+
+/* =====================================================================
+   Section shell
+   ===================================================================== */
+.asca-section {
+  position: relative;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 96px 40px;
+}
+.asca-section__head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.asca-section__tc {
+  margin: 14px 0 6px;
+  font-family: var(--font-h-tc);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent-text);
+}
+.asca-section__title {
+  margin: 0 0 12px;
+  font-family: var(--font-h-display);
+  font-size: clamp(32px, 4.4vw, 56px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  word-break: keep-all;
+}
+
+/* ---------- Exhibition ledger (site.css .s-event) ---------- */
+.asca-exlist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border-strong);
+}
+.asca-ex {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+}
+.asca-ex__date {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.asca-ex__date .d {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--fg);
+}
+.asca-ex__date .m {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+}
+.asca-ex__title {
+  margin: 0 0 6px;
+  font-family: var(--font-h-tc);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+}
+.asca-ex__sub {
+  margin: 0 0 6px;
+  font-family: var(--font-h-tc);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+}
+.asca-ex__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+.asca-ex__meta svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+.asca-ex__meta svg:not(:first-child) {
+  margin-left: 10px;
+}
+
+/* ---------- Journal ledger (kit.css .asca-news) ---------- */
+.asca-news__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border-strong);
+}
+.asca-news__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 24px;
+  gap: 24px;
+  align-items: baseline;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background-color var(--dur-fast);
+}
+.asca-news__item:hover {
+  background: var(--surface-2);
+}
+.asca-news__date {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+}
+.asca-news__title {
+  margin: 0;
+  font-family: var(--font-h-kr-serif);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  word-break: keep-all;
+}
+.asca-news__title a {
+  color: var(--fg);
+  text-decoration: none;
+}
+/* 행 전체가 링크 영역 */
+.asca-news__title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.asca-news__item:hover .asca-news__title a {
+  color: var(--accent-text);
+}
+.asca-news__arrow {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.5;
+  color: var(--gold-600);
+}
+
+/* =====================================================================
+   Join — ink section
+   ===================================================================== */
+.asca-join {
+  background: var(--navy-950);
+  color: var(--paper);
+}
+.dark .asca-home .asca-join {
+  background: var(--navy-900);
+  border-top: 1px solid rgb(212 168 74 / 0.18);
+}
+.asca-join__rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold-500) 10%,
+    var(--gold-500) 90%,
+    transparent
+  );
+}
+.asca-join__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 64px;
+  align-items: end;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 112px 40px;
+}
+.asca-join__tc {
+  margin: 14px 0 6px;
+  font-family: var(--font-h-tc);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--gold-400);
+}
+.asca-join__title {
+  margin: 0 0 20px;
+  font-family: var(--font-h-display);
+  font-size: clamp(32px, 4.4vw, 56px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+  word-break: keep-all;
+}
+.asca-join__lede {
+  max-width: 460px;
+  margin: 0;
+  font-family: var(--font-h-kr-serif);
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--navy-300);
+  word-break: keep-all;
+}
+.asca-join__cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 16px;
+}
+.asca-join :focus-visible {
+  outline-color: var(--gold-400);
+}
+
+/* ---------- Tablet ≤ 960px ---------- */
+@media (max-width: 960px) {
+  .asca-hero__frame {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 104px 24px 48px;
+  }
+  .asca-hero__feature {
+    order: 1;
+  }
+  .asca-hero__copy {
+    order: 2;
+  }
+  .asca-hero__feature-img {
+    aspect-ratio: 16 / 10;
+  }
+  .asca-hero__ledger-inner {
+    grid-template-columns: 1fr 1fr;
+    padding: 0 24px;
+  }
+  .asca-hero__stat:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .asca-hero__stat:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
+  }
+  .asca-section {
+    padding: 80px 24px;
+  }
+  .asca-news__item {
+    grid-template-columns: 110px minmax(0, 1fr) 20px;
+  }
+  .asca-join__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 88px 24px;
+  }
+  .asca-join__cta {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- Phone ≤ 640px ---------- */
+@media (max-width: 640px) {
+  .asca-hero__frame {
+    gap: 28px;
+    padding: 88px 16px 40px;
+  }
+  .asca-hero__feature-img {
+    aspect-ratio: 4 / 3;
+  }
+  .asca-hero__seal {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+  .asca-hero__slogan {
+    font-size: 20px;
+  }
+  .asca-hero__lede {
+    margin-bottom: 28px;
+    font-size: 15px;
+  }
+  .asca-hero__cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .asca-hero__cta .asca-btn {
+    justify-content: center;
+    min-height: 48px;
+  }
+  .asca-hero__ledger-inner {
+    padding: 0 16px;
+  }
+  .asca-hero__stat {
+    padding: 20px 12px 20px 16px;
+  }
+  .asca-hero__stat dd {
+    font-size: 32px;
+  }
+  .asca-section {
+    padding: 64px 16px;
+  }
+  .asca-section__head {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .asca-section__tc {
+    font-size: 18px;
+  }
+  .asca-ex {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 16px;
+  }
+  .asca-ex__date .d {
+    font-size: 30px;
+  }
+  .asca-news__item {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 22px 0;
+  }
+  .asca-news__date {
+    font-size: 14px;
+  }
+  .asca-news__title {
+    font-size: 18px;
+  }
+  .asca-news__arrow {
+    display: none;
+  }
+  .asca-join__inner {
+    padding: 72px 16px;
+  }
+  .asca-join__cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .asca-join__cta .asca-btn {
+    justify-content: center;
+    min-height: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asca-home *,
+  .asca-home *::before,
+  .asca-home *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

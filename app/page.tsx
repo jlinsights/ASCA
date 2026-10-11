@@ -1,19 +1,13 @@
-import { LayoutFooter } from '@/components/layout/layout-footer'
-import { HeroSection } from '@/components/sections/hero-section'
-import { PhilosophySection } from '@/components/sections/philosophy-section'
-import { WhatWeDoSection } from '@/components/sections/what-we-do-section'
-import { BrandMessageSection } from '@/components/sections/brand-message-section'
-import { ClosingCtaSection } from '@/components/sections/closing-cta-section'
-import dynamic from 'next/dynamic'
 import { Metadata } from 'next'
-
-const FeaturedExhibitionsSection = dynamic(
-  () =>
-    import('@/components/sections/featured-exhibitions-section').then(
-      mod => mod.FeaturedExhibitionsSection
-    ),
-  { loading: () => <div className='h-96 animate-pulse bg-muted/20' /> }
-)
+import { LayoutFooter } from '@/components/layout/layout-footer'
+import { historyEvents } from '@/app/history/_data/history-events'
+import blogPosts from '@/lib/data/blog-posts.json'
+import { getHomeStats, getLatestPosts, getRecentExhibitions } from '@/components/home/home-data'
+import { HomeHero } from '@/components/home/home-hero'
+import { HomeExhibitions } from '@/components/home/home-exhibitions'
+import { HomeJournal } from '@/components/home/home-journal'
+import { HomeJoin } from '@/components/home/home-join'
+import '@/components/home/home.css'
 
 export const metadata: Metadata = {
   title: '사단법인 동양서예협회',
@@ -27,29 +21,22 @@ export const metadata: Metadata = {
   },
 }
 
+// 홈 콘텐츠는 저장소의 연혁·블로그 기록에서 서버에서 계산해 넘긴다.
+// (Supabase CMS 프로젝트가 복구 불가 상태라 CMS 의존 섹션은 두지 않는다.)
+const RECENT_EXHIBITIONS = 4
+const LATEST_POSTS = 4
+
 export default function Home() {
+  const stats = getHomeStats(historyEvents)
+  const exhibitions = getRecentExhibitions(historyEvents, RECENT_EXHIBITIONS)
+  const posts = getLatestPosts(blogPosts, LATEST_POSTS)
+
   return (
-    <div className='min-h-screen bg-transparent'>
-      <main className='flex-1'>
-        {/* Hero Section */}
-        <HeroSection />
-
-        {/* Philosophy Section — brand-rollout D2 */}
-        <PhilosophySection />
-
-        {/* What We Do Section — brand-rollout D3 */}
-        <WhatWeDoSection />
-
-        {/* Brand Message Section — brand-rollout D4 */}
-        <BrandMessageSection />
-
-        {/* Featured Exhibitions Section */}
-        <FeaturedExhibitionsSection />
-
-        {/* Closing CTA Section — brand-rollout D5 */}
-        <ClosingCtaSection />
-      </main>
-
+    <div className='asca-home min-h-screen'>
+      <HomeHero stats={stats} />
+      <HomeExhibitions exhibitions={exhibitions} />
+      <HomeJournal posts={posts} />
+      <HomeJoin />
       <LayoutFooter />
     </div>
   )

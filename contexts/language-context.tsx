@@ -15,6 +15,9 @@ import {
   getTranslationSync,
 } from '@/lib/i18n'
 import type { Language, LanguageConfig, TranslationNamespaces } from '@/lib/i18n/types'
+// 동기 폴백용 정적 번역표. 비동기 캐시(translationLoader)는 기본 언어(ko)에서
+// 로드가 끝나도 다시 그리지 않아, 이 표 없이는 첫 렌더·SSR 에 키 이름이 새어 나간다.
+import { translations as staticTranslations } from '@/lib/i18n/translations'
 
 // 기존 호환성을 위한 타입
 type LanguageContextType = {
@@ -503,7 +506,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       }
 
       // 기존 번역 데이터에서 폴백
-      return legacyTranslations[language]?.[key] || key
+      return legacyTranslations[language]?.[key] || staticTranslations[language]?.[key] || key
     },
     [language]
   )
