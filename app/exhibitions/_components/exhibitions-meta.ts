@@ -9,24 +9,18 @@ export const statusColors = {
   past: 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-950/30 dark:text-slate-300 dark:border-slate-800',
 } as const
 
-export const statusLabels = {
-  upcoming: '예정',
-  current: '진행중',
-  past: '종료',
+/** lib/i18n/translations/exhibitions.ts 의 번역 키 */
+export const statusLabelKeys = {
+  upcoming: 'exStatusUpcoming',
+  current: 'exStatusCurrent',
+  past: 'exStatusPast',
 } as const
 
-export function formatExhibitionDate(dateString: string): string {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('ko-KR', {
+/** locale 은 사이트 언어의 로케일(ko-KR·en-US·ja-JP·zh-TW) */
+export function formatExhibitionDate(dateString: string, locale: string): string {
+  return new Date(dateString).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   })
-}
-
-export function formatPrice(price: number, currency: string): string {
-  if (currency === 'KRW') {
-    return `₩${price.toLocaleString()}`
-  }
-  return `$${price.toLocaleString()}`
 }

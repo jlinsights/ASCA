@@ -18,24 +18,23 @@ import { getExhibitions } from '@/lib/supabase/cms'
 import type { Exhibition, SearchFilters, PaginationParams } from '@/lib/types/cms-legacy'
 import { EmptyState } from '@/components/ui/empty-state'
 import { ExhibitionCard } from './_components/exhibition-card'
-import { ExhibitionDetailDialog } from './_components/exhibition-detail-dialog'
 
 export default function ExhibitionsPage() {
   const { t } = useLanguage()
   const [exhibitions, setExhibitions] = useState<Exhibition[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // 번역 키를 담는다 — 문구를 담으면 언어를 바꿔도 처음 언어로 남는다
+  const [errorKey, setErrorKey] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
-  const [selectedExhibition, setSelectedExhibition] = useState<Exhibition | null>(null)
-  const [likedExhibitions, setLikedExhibitions] = useState<Set<string>>(new Set())
 
   const fetchExhibitions = useCallback(async () => {
     try {
       setLoading(true)
+      setErrorKey(null)
       const filters: SearchFilters = {}
 
       if (searchQuery) filters.query = searchQuery
@@ -51,8 +50,8 @@ export default function ExhibitionsPage() {
       const response = await getExhibitions(filters, pagination)
       setExhibitions(response.data)
       setTotalPages(response.totalPages)
-    } catch (err) {
-      setError('전시회 정보를 불러오는데 실패했습니다.')
+    } catch {
+      setErrorKey('exPageLoadError')
     } finally {
       setLoading(false)
     }
@@ -72,25 +71,13 @@ export default function ExhibitionsPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const toggleLike = (exhibitionId: string) => {
-    setLikedExhibitions(prev => {
-      const newSet = new Set(prev)
-      if (newSet.has(exhibitionId)) {
-        newSet.delete(exhibitionId)
-      } else {
-        newSet.add(exhibitionId)
-      }
-      return newSet
-    })
-  }
-
   if (loading) {
     return (
       <main className='min-h-screen bg-transparent'>
         <section className='container mx-auto px-4 py-16'>
           <div className='max-w-6xl mx-auto text-center'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto'></div>
-            <p className='mt-4 text-muted-foreground font-medium'>전시회 정보를 불러오는 중...</p>
+            <p className='mt-4 text-muted-foreground font-medium'>{t('exPageLoading')}</p>
           </div>
         </section>
         <LayoutFooter />
@@ -98,15 +85,15 @@ export default function ExhibitionsPage() {
     )
   }
 
-  if (error) {
+  if (errorKey) {
     return (
       <main className='min-h-screen bg-transparent'>
         <section className='container mx-auto px-4 py-16'>
           <div className='max-w-6xl mx-auto text-center'>
             <div className='bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-6'>
-              <p className='text-red-700 dark:text-red-300 font-medium'>{error}</p>
+              <p className='text-red-700 dark:text-red-300 font-medium'>{t(errorKey)}</p>
               <Button onClick={fetchExhibitions} className='mt-4' variant='outline'>
-                다시 시도
+                {t('exPageRetry')}
               </Button>
             </div>
           </div>
@@ -128,9 +115,7 @@ export default function ExhibitionsPage() {
             <h1 className='text-4xl font-bold mb-4 text-foreground tracking-tight'>
               {t('exhibition')}
             </h1>
-            <p className='text-lg text-muted-foreground font-medium'>
-              동양서예협회의 다양한 전시회를 만나보세요
-            </p>
+            <p className='text-lg text-muted-foreground font-medium'>{t('exPageLede')}</p>
           </div>
 
           {/* 검색 및 필터 */}
@@ -140,7 +125,7 @@ export default function ExhibitionsPage() {
                 <div className='flex-1 relative'>
                   <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
                   <Input
-                    placeholder='전시회 검색...'
+                    placeholder={t('exPageSearchPlaceholder')}
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     onKeyPress={e => e.key === 'Enter' && handleSearch()}
@@ -148,7 +133,7 @@ export default function ExhibitionsPage() {
                   />
                 </div>
                 <Button onClick={handleSearch} className='md:w-auto font-medium'>
-                  검색
+                  {t('siteNavSearch')}
                 </Button>
                 <Button
                   variant='outline'
@@ -156,7 +141,7 @@ export default function ExhibitionsPage() {
                   className='md:w-auto border-border/50'
                 >
                   <Filter className='h-4 w-4 mr-2' />
-                  필터
+                  {t('exPageFilter')}
                 </Button>
               </div>
 
@@ -164,16 +149,18 @@ export default function ExhibitionsPage() {
                 <div className='border-t border-border/30 pt-4'>
                   <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
                     <div>
-                      <label className='text-sm font-medium mb-2 block text-foreground'>상태</label>
+                      <label className='text-sm font-medium mb-2 block text-foreground'>
+                        {t('exPageStatus')}
+                      </label>
                       <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                         <SelectTrigger className='border-border/50'>
-                          <SelectValue placeholder='상태 선택' />
+                          <SelectValue placeholder={t('exPageStatusPlaceholder')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value='all'>전체</SelectItem>
-                          <SelectItem value='current'>진행중</SelectItem>
-                          <SelectItem value='upcoming'>예정</SelectItem>
-                          <SelectItem value='past'>종료</SelectItem>
+                          <SelectItem value='all'>{t('exPageStatusAll')}</SelectItem>
+                          <SelectItem value='current'>{t('exStatusCurrent')}</SelectItem>
+                          <SelectItem value='upcoming'>{t('exStatusUpcoming')}</SelectItem>
+                          <SelectItem value='past'>{t('exStatusPast')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -188,7 +175,7 @@ export default function ExhibitionsPage() {
             <div className='mb-12'>
               <div className='flex items-center gap-2 mb-6'>
                 <Star className='h-5 w-5 text-amber-500' />
-                <h2 className='text-2xl font-bold text-foreground'>주요 전시회</h2>
+                <h2 className='text-2xl font-bold text-foreground'>{t('exPageFeatured')}</h2>
               </div>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {featuredExhibitions.map(exhibition => (
@@ -201,7 +188,7 @@ export default function ExhibitionsPage() {
           {/* 일반 전시회 */}
           {regularExhibitions.length > 0 && (
             <div>
-              <h2 className='text-2xl font-bold mb-6 text-foreground'>전시회 목록</h2>
+              <h2 className='text-2xl font-bold mb-6 text-foreground'>{t('exPageList')}</h2>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {regularExhibitions.map(exhibition => (
                   <ExhibitionCard key={exhibition.id} exhibition={exhibition} />
@@ -214,8 +201,8 @@ export default function ExhibitionsPage() {
           {exhibitions.length === 0 && (
             <EmptyState
               icon={<Star className='w-6 h-6 text-muted-foreground' />}
-              title='전시회가 없습니다'
-              description='검색 조건을 변경하거나 나중에 다시 확인해주세요.'
+              title={t('exPageEmptyTitle')}
+              description={t('exPageEmptyDesc')}
             />
           )}
 
@@ -231,7 +218,7 @@ export default function ExhibitionsPage() {
                   className='border-border/50'
                 >
                   <ChevronLeft className='h-4 w-4' />
-                  이전
+                  {t('exPagePrev')}
                 </Button>
 
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -257,7 +244,7 @@ export default function ExhibitionsPage() {
                   disabled={currentPage === totalPages}
                   className='border-border/50'
                 >
-                  다음
+                  {t('exPageNext')}
                   <ChevronRight className='h-4 w-4' />
                 </Button>
               </div>
@@ -265,14 +252,6 @@ export default function ExhibitionsPage() {
           )}
         </div>
       </section>
-
-      {/* 전시회 상세 모달 */}
-      <ExhibitionDetailDialog
-        exhibition={selectedExhibition}
-        onClose={() => setSelectedExhibition(null)}
-        isLiked={selectedExhibition ? likedExhibitions.has(selectedExhibition.id) : false}
-        onToggleLike={toggleLike}
-      />
 
       <LayoutFooter />
     </main>

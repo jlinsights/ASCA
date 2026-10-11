@@ -11,9 +11,22 @@ export interface HistoryEvent {
   venue?: string
   date?: string
   type: HistoryEventType
+  /** 온라인으로 열린 회차 (/exhibitions/online 에 나온다) */
+  online?: boolean
 }
 
 export const historyEvents: HistoryEvent[] = [
+  {
+    // 2026 특별기획전 — 예전 /exhibitions/upcoming 에 있던 항목. 사용자 확인(2026-10-11)으로 실제 전시
+    id: '2026-4',
+    year: 2026,
+    month: 4,
+    title: '서경(書境) 새로운 지평 - 동양서예의 현재와 미래',
+    subtitle: 'New Horizons in East Asian Calligraphy',
+    venue: '예술의전당 서울서예박물관 제1전시실 (2층)',
+    date: '2026년 4월 15일(수) ~ 4월 28일(화)',
+    type: 'exhibition',
+  },
   {
     id: '2025-11',
     year: 2025,
@@ -155,6 +168,7 @@ export const historyEvents: HistoryEvent[] = [
     venue: '예술의전당 서울서예박물관',
     date: '2020년 10월 10일 ~ 10월 20일 (코로나19로 인터넷 전시 대체)',
     type: 'exhibition',
+    online: true,
   },
   {
     id: '2019-7',

@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar, MapPin, Eye, Star, Ticket, User, Users, ExternalLink } from 'lucide-react'
 import type { Exhibition } from '@/lib/types/cms-legacy'
-import { statusColors, statusLabels, formatExhibitionDate } from './exhibitions-meta'
+import { useLanguage } from '@/contexts/language-context'
+import { statusColors, statusLabelKeys, formatExhibitionDate } from './exhibitions-meta'
 
 interface ExhibitionCardProps {
   exhibition: Exhibition
@@ -15,6 +16,9 @@ interface ExhibitionCardProps {
 }
 
 export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardProps) {
+  const { t, metadata } = useLanguage()
+  const locale = metadata.locale
+  const statusKey = statusLabelKeys[exhibition.status as keyof typeof statusLabelKeys]
   return (
     <Card
       className={`group overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ${
@@ -38,7 +42,7 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
             {/* 상태 배지 */}
             <div className='absolute top-3 right-3'>
               <Badge className={statusColors[exhibition.status as keyof typeof statusColors]}>
-                {statusLabels[exhibition.status as keyof typeof statusLabels]}
+                {statusKey ? t(statusKey) : exhibition.status}
               </Badge>
             </div>
 
@@ -47,7 +51,7 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
               <div className='absolute top-3 left-3'>
                 <Badge className='bg-amber-500 text-white border-0 shadow-md'>
                   <Star className='h-3 w-3 mr-1' />
-                  주요
+                  {t('exCardFeatured')}
                 </Badge>
               </div>
             )}
@@ -85,8 +89,8 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
             <div className='flex items-center gap-2 text-muted-foreground'>
               <Calendar className='h-4 w-4 text-primary' />
               <span className='font-medium'>
-                {formatExhibitionDate(exhibition.start_date)} -{' '}
-                {formatExhibitionDate(exhibition.end_date)}
+                {formatExhibitionDate(exhibition.start_date, locale)} -{' '}
+                {formatExhibitionDate(exhibition.end_date, locale)}
               </span>
             </div>
 
@@ -100,7 +104,7 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
             {exhibition.curator && (
               <div className='flex items-center gap-2 text-muted-foreground'>
                 <User className='h-4 w-4 text-primary' />
-                <span>큐레이터: {exhibition.curator}</span>
+                <span>{t('exCardCurator').replace('{n}', exhibition.curator)}</span>
               </div>
             )}
 
@@ -109,7 +113,9 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
                 {exhibition.max_capacity && (
                   <div className='flex items-center gap-1 text-muted-foreground'>
                     <Users className='h-4 w-4' />
-                    <span className='text-xs'>{exhibition.max_capacity}명</span>
+                    <span className='text-xs'>
+                      {t('exCardCapacity').replace('{n}', String(exhibition.max_capacity))}
+                    </span>
                   </div>
                 )}
                 <Link href={`/exhibitions/${exhibition.id}`}>
@@ -119,7 +125,7 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
                     className='text-xs hover:bg-primary hover:text-primary-foreground transition-colors'
                   >
                     <ExternalLink className='h-3 w-3 mr-1' />
-                    상세보기
+                    {t('exCardDetails')}
                   </Button>
                 </Link>
               </div>
@@ -127,7 +133,12 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
               {exhibition.ticket_price && (
                 <div className='flex items-center gap-1 text-primary font-bold'>
                   <Ticket className='h-4 w-4' />
-                  <span>{exhibition.ticket_price.toLocaleString()}원</span>
+                  <span>
+                    {t('exCardPrice').replace(
+                      '{n}',
+                      exhibition.ticket_price.toLocaleString(locale)
+                    )}
+                  </span>
                 </div>
               )}
             </div>
