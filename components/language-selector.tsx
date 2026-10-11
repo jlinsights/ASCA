@@ -179,7 +179,7 @@ export function LanguageSelector({
                       disabled:opacity-50 disabled:cursor-not-allowed
                       ${
                         isSelected
-                          ? 'bg-accent/20 text-accent-foreground font-medium'
+                          ? 'bg-accent/20 text-foreground font-medium'
                           : 'text-foreground'
                       }
                     `}
