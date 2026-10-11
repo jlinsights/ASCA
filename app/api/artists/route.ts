@@ -7,8 +7,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
 
     // 쿼리 파라미터 파싱
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
+    // NaN·음수·과대값은 getArtists 의 pageRange 가 1..MAX 로 자른다
+    const page = Number(searchParams.get('page') || '1')
+    const limit = Number(searchParams.get('limit') || '24')
+    const search = searchParams.get('q') || undefined
     const membershipType = searchParams.get('membershipType')
     const artistType = searchParams.get('artistType')
     const specialty = searchParams.get('specialty')
@@ -16,9 +18,11 @@ export async function GET(request: NextRequest) {
 
     // filters 객체 구성
     const filters = {
+      search,
       membershipType: membershipType ? [membershipType] : undefined,
       artistType: artistType ? [artistType] : undefined,
       specialties: specialty ? [specialty] : undefined,
+      title: title ? [title] : undefined,
     }
 
     const result = await getArtists(

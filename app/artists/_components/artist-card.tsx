@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArtistShareButton } from '@/components/kakao/kakao-share-button'
-import type { ArtistRow as Artist } from '@/lib/supabase'
+import type { PublicArtist as Artist } from '@/lib/api/artist-mapper'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 
 interface ArtistCardProps {
@@ -100,29 +100,29 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           <div className='flex flex-col gap-2 pt-2 border-t border-border/30 dark:border-border/20'>
             <div className='flex items-center justify-between text-sm'>
               <span className='text-muted-foreground'>회원 구분</span>
-              <span className='font-medium text-foreground'>{(artist as any).membership_type}</span>
+              <span className='font-medium text-foreground'>{artist.membershipType}</span>
             </div>
             <div className='flex items-center justify-between text-sm'>
               <span className='text-muted-foreground'>작가 유형</span>
-              <span className='font-medium text-foreground'>{(artist as any).artist_type}</span>
+              <span className='font-medium text-foreground'>{artist.artistType}</span>
             </div>
-            {(artist as any).title && (
+            {artist.title && (
               <div className='flex items-center justify-between text-sm'>
                 <span className='text-muted-foreground'>직위</span>
-                <span className='font-medium text-foreground'>{(artist as any).title}</span>
+                <span className='font-medium text-foreground'>{artist.title}</span>
               </div>
             )}
           </div>
         ) : (
           <div className='text-xs text-muted-foreground space-y-1 pt-2 border-t border-border/30 dark:border-border/20'>
             <div className='flex items-center justify-between'>
-              <span className='text-foreground font-medium'>{(artist as any).membership_type}</span>
+              <span className='text-foreground font-medium'>{artist.membershipType}</span>
               <span>•</span>
-              <span className='text-foreground font-medium'>{(artist as any).artist_type}</span>
+              <span className='text-foreground font-medium'>{artist.artistType}</span>
             </div>
-            {(artist as any).title && (
+            {artist.title && (
               <div className='text-center'>
-                <span className='text-foreground font-medium'>{(artist as any).title}</span>
+                <span className='text-foreground font-medium'>{artist.title}</span>
               </div>
             )}
           </div>
