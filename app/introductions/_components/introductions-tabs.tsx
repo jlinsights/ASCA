@@ -37,7 +37,7 @@ export function IntroductionsTabs() {
       >
         <TabsList className='mb-8'>
           {SUPPORTED_LANGUAGES.map(lang => (
-            <TabsTrigger key={lang} value={lang}>
+            <TabsTrigger key={lang} value={lang} lang={lang}>
               {chairmanMessages[lang].tabLabel}
             </TabsTrigger>
           ))}
