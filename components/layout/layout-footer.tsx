@@ -161,28 +161,28 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
               />
             </Link>
             <div className='mt-4 space-y-1'>
-              <p className='text-xs text-[#fcfcfc]/70'>고유번호: 209-82-11380</p>
+              <p className='text-xs text-[#fcfcfc]/70'>{t('siteFtRegNo')}: 209-82-11380</p>
               <p className='text-xs text-[#fcfcfc]/70'>☎︎ 0502-5550-8700</p>
               <p className='text-xs text-[#fcfcfc]/70'>FAX: 0504-256-6600</p>
               <p className='text-xs text-[#fcfcfc]/70'>info@orientalcalligraphy.org</p>
-              <p className='text-xs text-[#fcfcfc]/70'>〒02872 서울시 성북구 보문로 105</p>
-              <p className='text-xs text-[#fcfcfc]/70'>보림빌딩</p>
-              <p className='text-xs text-[#fcfcfc]/70'>무통장 입금계좌: 신한은행 100-028-611714</p>
+              <p className='text-xs text-[#fcfcfc]/70'>〒02872 {t('siteFtAddress')}</p>
+              <p className='text-xs text-[#fcfcfc]/70'>{t('siteFtBuilding')}</p>
+              <p className='text-xs text-[#fcfcfc]/70'>{t('siteFtBank')} 100-028-611714</p>
             </div>
           </div>
 
           {[
-            { title: '전시', items: footerLinks.exhibitions },
-            { title: '작품', items: footerLinks.artworks },
-            { title: '작가', items: footerLinks.artists },
-            { title: '소개', items: footerLinks.about },
-            { title: '소식', items: footerLinks.news },
+            { titleKey: 'siteFtExhibitions', items: footerLinks.exhibitions },
+            { titleKey: 'siteFtArtworks', items: footerLinks.artworks },
+            { titleKey: 'siteFtArtists', items: footerLinks.artists },
+            { titleKey: 'siteFtAbout', items: footerLinks.about },
+            { titleKey: 'siteFtNews', items: footerLinks.news },
           ].map(section => (
-            <div key={section.title}>
-              <h3 className='text-sm font-medium mb-4'>{section.title}</h3>
+            <div key={section.titleKey}>
+              <h3 className='text-sm font-medium mb-4'>{t(section.titleKey)}</h3>
               <ul className='space-y-2'>
                 {section.items.map(item => (
-                  <li key={item.title}>
+                  <li key={t(item.labelKey)}>
                     {item.external ? (
                       <a
                         href={item.href}
@@ -190,14 +190,14 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
                         rel='noopener noreferrer'
                         className='text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors'
                       >
-                        {item.title}
+                        {t(item.labelKey)}
                       </a>
                     ) : (
                       <Link
                         href={item.href}
                         className='text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors'
                       >
-                        {item.title}
+                        {t(item.labelKey)}
                       </Link>
                     )}
                   </li>
@@ -223,11 +223,11 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
             <div className='flex flex-wrap justify-center gap-4 md:gap-6'>
               {footerLinks.legal.map(item => (
                 <Link
-                  key={item.title}
+                  key={t(item.labelKey)}
                   href={item.href}
                   className='text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors'
                 >
-                  {item.title}
+                  {t(item.labelKey)}
                 </Link>
               ))}
             </div>
@@ -238,13 +238,13 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
           <div className='flex flex-wrap justify-center items-center gap-6 md:gap-8 opacity-60 mb-6'>
             {footerLinks.sponsors.map(item => (
               <Link
-                key={item.title}
+                key={t(item.labelKey)}
                 href={item.href}
                 target='_blank'
                 rel='noopener noreferrer'
                 className='text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors'
               >
-                {item.title}
+                {t(item.labelKey)}
               </Link>
             ))}
           </div>
