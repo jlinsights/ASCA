@@ -177,11 +177,7 @@ export function LanguageSelector({
                       flex items-center justify-between gap-3
                       hover:bg-accent/10 focus:bg-accent/10 focus:outline-none
                       disabled:opacity-50 disabled:cursor-not-allowed
-                      ${
-                        isSelected
-                          ? 'bg-accent/20 text-foreground font-medium'
-                          : 'text-foreground'
-                      }
+                      ${isSelected ? 'bg-accent/20 text-foreground font-medium' : 'text-foreground'}
                     `}
                     disabled={isDisabled}
                     aria-label={`Select ${lang.label} language`}
