@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useUser, useClerk, SignInButton, SignUpButton } from '@clerk/nextjs'
 import { Button } from '../ui/button'
+import { useLanguage } from '@/contexts/language-context'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +18,7 @@ import { LogOut, User as UserIcon, Settings } from 'lucide-react'
 export function HeaderAuthSection() {
   const { isLoaded, isSignedIn, user } = useUser()
   const { signOut } = useClerk()
+  const { t } = useLanguage()
 
   if (!isLoaded) {
     return <div className='w-8 h-8 rounded-full bg-muted animate-pulse' />
@@ -27,12 +29,12 @@ export function HeaderAuthSection() {
       <div className='flex items-center space-x-3'>
         <SignInButton mode='redirect'>
           <Button variant='ghost' size='sm' className='text-sm'>
-            로그인
+            {t('siteSignIn')}
           </Button>
         </SignInButton>
         <SignUpButton mode='redirect'>
           <Button size='sm' className='bg-celadon-green hover:bg-celadon-green/90 text-sm'>
-            회원가입
+            {t('siteSignUp')}
           </Button>
         </SignUpButton>
       </div>
@@ -55,7 +57,9 @@ export function HeaderAuthSection() {
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm font-medium leading-none'>{user.fullName || '내 계정'}</p>
+            <p className='text-sm font-medium leading-none'>
+              {user.fullName || t('siteMyAccount')}
+            </p>
             <p className='text-xs leading-none text-muted-foreground'>
               {user.emailAddresses[0]?.emailAddress}
             </p>
@@ -65,13 +69,13 @@ export function HeaderAuthSection() {
         <DropdownMenuItem asChild>
           <Link href='/profile/edit' className='cursor-pointer'>
             <UserIcon className='mr-2 h-4 w-4' />
-            <span>프로필</span>
+            <span>{t('siteProfile')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href='/profile/applications' className='cursor-pointer'>
             <Settings className='mr-2 h-4 w-4' />
-            <span>내 신청</span>
+            <span>{t('siteMyApplications')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -80,7 +84,7 @@ export function HeaderAuthSection() {
           className='cursor-pointer text-scholar-red'
         >
           <LogOut className='mr-2 h-4 w-4' />
-          <span>로그아웃</span>
+          <span>{t('siteSignOut')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

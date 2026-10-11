@@ -2,6 +2,7 @@ import type { Language, TranslationData } from './types'
 import { navigationTranslations } from './translations/navigation'
 import { artworksTranslations } from './translations/artworks'
 import { homeTranslations } from './translations/home'
+import { siteChromeTranslations } from './translations/site-chrome'
 
 // 통합된 번역 데이터
 export const translations: TranslationData = {
@@ -9,6 +10,7 @@ export const translations: TranslationData = {
     ...navigationTranslations.ko,
     ...artworksTranslations.ko,
     ...homeTranslations.ko,
+    ...siteChromeTranslations.ko,
 
     // 공통 UI 요소
     loading: '로딩 중...',
@@ -126,6 +128,7 @@ export const translations: TranslationData = {
     ...navigationTranslations.en,
     ...artworksTranslations.en,
     ...homeTranslations.en,
+    ...siteChromeTranslations.en,
 
     // 공통 UI 요소
     loading: 'Loading...',
@@ -252,6 +255,7 @@ export const translations: TranslationData = {
     ...navigationTranslations.ja,
     ...artworksTranslations.ja,
     ...homeTranslations.ja,
+    ...siteChromeTranslations.ja,
 
     // 공통 UI 요소
     loading: '読み込み中...',
@@ -369,6 +373,7 @@ export const translations: TranslationData = {
     ...navigationTranslations.zh,
     ...artworksTranslations.zh,
     ...homeTranslations.zh,
+    ...siteChromeTranslations.zh,
 
     // 공통 UI 요소
     loading: '加载中...',

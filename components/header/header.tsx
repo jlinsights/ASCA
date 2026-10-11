@@ -44,71 +44,71 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
 
   const menuStructure = [
     {
-      title: '작가',
+      titleKey: 'siteNavArtists',
       key: 'artists',
       href: '/artists',
       subItems: [
-        { title: '작가 소개', href: '/artists' },
-        { title: '공모작가', href: '/artists?type=공모작가' },
-        { title: '청년작가', href: '/artists?type=청년작가' },
-        { title: '추천작가', href: '/artists?type=추천작가' },
-        { title: '초대작가', href: '/artists?type=초대작가' },
+        { titleKey: 'siteNavArtistsIntro', href: '/artists' },
+        { titleKey: 'siteArtistContest', href: '/artists?type=공모작가' },
+        { titleKey: 'siteArtistYoung', href: '/artists?type=청년작가' },
+        { titleKey: 'siteArtistRecommended', href: '/artists?type=추천작가' },
+        { titleKey: 'siteArtistInvited', href: '/artists?type=초대작가' },
       ],
     },
     {
-      title: '작품',
+      titleKey: 'siteNavArtworks',
       key: 'artworks',
       href: '/artworks',
       subItems: [
-        { title: '전체 작품', href: '/artworks' },
-        { title: '한글서예', href: '/artworks?category=한글서예' },
-        { title: '한자서예', href: '/artworks?category=한자서예' },
-        { title: '문인화', href: '/artworks?category=문인화' },
-        { title: '수묵화', href: '/artworks?category=수묵화' },
-        { title: '민화', href: '/artworks?category=민화' },
-        { title: '현대서예', href: '/artworks?category=현대서예' },
-        { title: '캘리그라피', href: '/artworks?category=캘리그라피' },
-        { title: '전각', href: '/artworks?category=전각' },
-        { title: '서각', href: '/artworks?category=서각' },
+        { titleKey: 'siteNavArtworksAll', href: '/artworks' },
+        { titleKey: 'siteCatHangeul', href: '/artworks?category=한글서예' },
+        { titleKey: 'siteCatHanja', href: '/artworks?category=한자서예' },
+        { titleKey: 'siteCatLiterati', href: '/artworks?category=문인화' },
+        { titleKey: 'siteCatInk', href: '/artworks?category=수묵화' },
+        { titleKey: 'siteCatFolk', href: '/artworks?category=민화' },
+        { titleKey: 'siteCatModern', href: '/artworks?category=현대서예' },
+        { titleKey: 'siteCatCalligraphy', href: '/artworks?category=캘리그라피' },
+        { titleKey: 'siteCatSeal', href: '/artworks?category=전각' },
+        { titleKey: 'siteCatWood', href: '/artworks?category=서각' },
       ],
     },
     {
-      title: '전시회',
+      titleKey: 'siteNavExhibitions',
       key: 'exhibitions',
       href: '/exhibitions',
       subItems: [
-        { title: '현재 전시', href: '/exhibitions/current' },
-        { title: '예정 전시', href: '/exhibitions/upcoming' },
-        { title: '지난 전시', href: '/exhibitions/past' },
-        { title: '온라인 전시', href: '/exhibitions/online' },
+        { titleKey: 'siteExCurrent', href: '/exhibitions/current' },
+        { titleKey: 'siteExUpcoming', href: '/exhibitions/upcoming' },
+        { titleKey: 'siteExPast', href: '/exhibitions/past' },
+        { titleKey: 'siteExOnline', href: '/exhibitions/online' },
       ],
     },
     {
-      title: '공모전',
+      titleKey: 'siteNavContests',
       key: 'contests',
       href: '/contests',
       subItems: [
-        { title: '진행중 공모전', href: '/contests?status=open' },
-        { title: '마감된 공모전', href: '/contests?status=closed' },
-        { title: '내 신청 현황', href: '/profile/applications' },
+        { titleKey: 'siteContestOpen', href: '/contests?status=open' },
+        { titleKey: 'siteContestClosed', href: '/contests?status=closed' },
+        { titleKey: 'siteContestMine', href: '/profile/applications' },
       ],
     },
     {
-      title: '갤러리',
+      titleKey: 'siteNavGallery',
       key: 'gallery',
       href: '/gallery',
       subItems: [
-        { title: '협회 활동', href: '/gallery' },
-        { title: '행사 사진', href: '/events' },
+        { titleKey: 'siteGalleryActivities', href: '/gallery' },
+        { titleKey: 'siteGalleryEvents', href: '/events' },
       ],
     },
     {
-      title: '강좌',
+      titleKey: 'siteNavAcademy',
       key: 'academy',
       href: '/academy',
     },
     {
-      title: '블로그',
+      titleKey: 'siteNavBlog',
       key: 'blog',
       href: '/blog',
     },
@@ -228,11 +228,11 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
               <Logo width={150} height={50} className='h-10 md:h-12 lg:h-14 w-auto' />
             </a>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation — 4개 언어 메뉴가 한 줄에 들어가는 xl(1280px) 이상에서만. 그 아래는 햄버거 메뉴 */}
             <nav
-              className='hidden md:flex items-center space-x-3 lg:space-x-8'
+              className='hidden xl:flex items-center space-x-4 2xl:space-x-8'
               role='navigation'
-              aria-label='주 메뉴'
+              aria-label={t('siteMainNav')}
             >
               {menuStructure.map(menu => (
                 <div
@@ -245,11 +245,11 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                 >
                   <Link
                     href={menu.href}
-                    className="flex items-center gap-1 text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
+                    className="flex items-center gap-1 whitespace-nowrap text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
                     aria-haspopup={menu.subItems?.length ? 'menu' : undefined}
                     aria-expanded={menu.subItems?.length ? activeDropdown === menu.key : undefined}
                   >
-                    {menu.title}
+                    {t(menu.titleKey)}
                     {(menu.subItems?.length ?? 0) > 0 && (
                       <ChevronDown
                         className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === menu.key ? 'rotate-180' : ''}`}
@@ -262,7 +262,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                   {(menu.subItems?.length ?? 0) > 0 && (
                     <div
                       role='menu'
-                      aria-label={`${menu.title} 하위 메뉴`}
+                      aria-label={`${t(menu.titleKey)} ${t('siteSubmenu')}`}
                       className={`absolute top-full left-0 w-48 glass-panel rounded-lg transition-all duration-200 z-50 ${
                         activeDropdown === menu.key
                           ? 'opacity-100 visible translate-y-0'
@@ -281,7 +281,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                               role='menuitem'
                               className='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                             >
-                              {subItem.title}
+                              {t(subItem.titleKey)}
                             </a>
                           ) : (
                             <Link
@@ -290,7 +290,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                               role='menuitem'
                               className='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                             >
-                              {subItem.title}
+                              {t(subItem.titleKey)}
                             </Link>
                           )
                         })}
@@ -303,16 +303,16 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
               {/* Additional Menu Items */}
               <Link
                 href='/search'
-                className='text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2'
+                className='whitespace-nowrap text-sm font-medium hover:text-foreground/80 transition-colors py-4 px-2'
               >
-                검색
+                {t('siteNavSearch')}
               </Link>
             </nav>
 
             {/* Desktop Auth & Controls */}
             <div
               data-testid='header-desktop-controls'
-              className='hidden md:flex items-center space-x-2 lg:space-x-3'
+              className='hidden xl:flex items-center space-x-3'
             >
               <HeaderAuthSection />
 
@@ -322,12 +322,12 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
             </div>
 
             {/* Mobile Controls */}
-            <div className='md:hidden flex items-center gap-2'>
+            <div className='xl:hidden flex items-center gap-2'>
               <ThemeToggle onToggle={handleThemeToggle} />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className='flex items-center justify-center min-w-[44px] min-h-[44px] rounded-md text-foreground hover:bg-foreground/10 active:bg-foreground/20 transition-colors'
-                aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+                aria-label={isMenuOpen ? t('siteMenuClose') : t('siteMenuOpen')}
                 aria-expanded={isMenuOpen}
                 aria-controls='mobile-menu'
               >
@@ -345,12 +345,12 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
         {isMenuOpen && (
           <div
             id='mobile-menu'
-            className='md:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg'
+            className='xl:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg'
           >
             <nav
               className='container mx-auto px-4 py-6 space-y-2'
               role='navigation'
-              aria-label='모바일 메뉴'
+              aria-label={t('siteMobileNav')}
             >
               {menuStructure.map(menu => (
                 <div key={menu.key} className='space-y-1'>
@@ -360,13 +360,13 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                       className='flex-1 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      {menu.title}
+                      {t(menu.titleKey)}
                     </Link>
                     {(menu.subItems?.length ?? 0) > 0 && (
                       <button
                         onClick={() => toggleMobileDropdown(menu.key)}
                         className='p-2 hover:bg-foreground/5 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green'
-                        aria-label={`${menu.title} 하위 메뉴 ${mobileDropdowns[menu.key] ? '닫기' : '열기'}`}
+                        aria-label={`${t(menu.titleKey)} ${t('siteSubmenu')}`}
                         aria-expanded={mobileDropdowns[menu.key]}
                         aria-controls={`mobile-submenu-${menu.key}`}
                       >
@@ -383,7 +383,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                     <div
                       id={`mobile-submenu-${menu.key}`}
                       role='menu'
-                      aria-label={`${menu.title} 하위 메뉴`}
+                      aria-label={`${t(menu.titleKey)} ${t('siteSubmenu')}`}
                       className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
                         mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                       }`}
@@ -400,7 +400,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                             className='block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                             onClick={() => setIsMenuOpen(false)}
                           >
-                            {subItem.title}
+                            {t(subItem.titleKey)}
                           </a>
                         ) : (
                           <Link
@@ -410,7 +410,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                             className='block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                             onClick={() => setIsMenuOpen(false)}
                           >
-                            {subItem.title}
+                            {t(subItem.titleKey)}
                           </Link>
                         )
                       })}
@@ -419,14 +419,8 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                 </div>
               ))}
 
-              <div className='pt-2 border-t border-border/50'>
-                <Link
-                  href='/blog'
-                  className='block text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors'
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  블로그
-                </Link>
+              <div className='pt-4 border-t border-border/50'>
+                <LanguageSelector variant='mobile' />
               </div>
 
               <HeaderMobileAuth onCloseMenu={() => setIsMenuOpen(false)} />
