@@ -12,10 +12,11 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 - **Airtable Sync**: Data sync from Airtable; schema differences are only
   detected and logged (see "Sync System")
 - **Multi-language Support**: Korean (default), English, Japanese, Chinese
+  (Traditional, `zh-TW`) — see "UI 번역 (i18n)"
 - **Admin Dashboard**: Complete CMS for managing artists, artworks, exhibitions
 - **Advanced Gallery**: Filtering, categorization, and viewing features
 
-## 운영 환경과 데이터 (2026-10-11 기준)
+## 운영 환경과 데이터 (2026-10-12 기준)
 
 ### 배포 — Vercel `asca-main`
 
@@ -26,6 +27,9 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   검증은 `NODE_ENV=production npm run build:full` 로 한다(셸에
   `NODE_ENV=development` 가 남아 있으면 prerender 가 `useContext` null 로
   죽는다).
+- 빌드 명령은 먼저 `.next/cache/webpack` 을 지운다. 빌드 캐시 때문에 Preview·
+  Production 이 **옛 Tailwind CSS 를 그대로 내보내** 새 클래스가 빠진 적이 있다
+  (CI 는 통과). **지우지 말 것.** UI 변경은 배포본의 CSS 로 확인한다.
 - Hobby 플랜이라 동시 빌드 1개 — Preview 는 Production 뒤에서 대기한다.
 - 프로덕션 주소는 `asca-main.vercel.app` 이다. ⚠️ `orientalcalligraphy.org`
   루트· `www` 의 DNS(Cloudflare)는 아직 **Webflow** 를 가리킨다. 이 저장소를
@@ -41,6 +45,11 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   user_metadata 관리자 정책, 없는 'korean' 검색 설정)라 **재실행하지 말 것.**
 - 홈·연혁 콘텐츠는 저장소 데이터에서 온다:
   `app/history/_data/history-events.ts`, `lib/data/blog-posts.json`.
+- 전시 하위 페이지(`/exhibitions/current·upcoming·past·online`)도 연혁 데이터로
+  만든다 — `app/exhibitions/_data/exhibition-records.ts` 가 월 단위로 이번 달·
+  예정·지난 전시를 가르고, 온라인은 `online: true` 기록이다. **새 전시는
+  `history-events.ts` 에 추가한다.** 예시·가짜 전시를 넣지 말 것.
+- `/exhibitions` 목록 자체는 CMS(빈 테이블)를 읽어 빈 상태가 정상이다.
 - RLS: 공개 테이블은 **읽기만 공개, 쓰기는 service_role 만.**
 - 🔴 **`execute_sql` 같은 임의 SQL RPC 를 만들지 말 것.** 구조 변경은
   마이그레이션으로만 한다.
@@ -143,6 +152,30 @@ All content tables use consistent multilingual structure:
 - `title`, `titleKo`, `titleEn`, `titleCn`, `titleJp`
 - `description`, `descriptionKo`, `descriptionEn`, `descriptionCn`,
   `descriptionJp`
+
+### UI 번역 (i18n)
+
+화면 문구는 DB 필드가 아니라 클라이언트 번역표로 바꾼다. 언어: `ko`(기본)·`en`·
+`ja`·`zh`. **중국어는 번체(`zh-TW`)로 통일한다** — 간체를 쓰지 말 것.
+`lib/i18n/__tests__/zh-traditional.test.ts` 는 2026-10-11 에 섞여 있던 간체 글자
+목록만 막으므로, 새 간체 글자는 통과할 수 있다.
+
+- 컴포넌트에서는 `useLanguage()`(`contexts/language-context.tsx`)의 `t(key)`·
+  `language` 를 쓴다. 날짜·숫자는 `metadata.locale` 로 포맷한다.
+- 선택한 언어는 `localStorage` 의 `asca-language` 에 저장된다. URL 에 언어가
+  없으므로(로케일 라우팅 없음) 서버 렌더·메타데이터는 한국어다.
+- 번역표는 `lib/i18n/translations/*.ts` 에 화면 단위로 둔다(`site-chrome`·
+  `about`·`exhibitions`·`home` 등). **새 파일은 `lib/i18n/translations.ts` 의
+  4개 언어 블록 모두에 펼쳐 넣어야** `t()` 가 찾는다. 키 접두사로 화면을
+  구분한다 (`site*`·`intro*`·`history*`·`ex*`).
+- 4개 언어 키가 빠짐없이 같아야 한다. 빠진 키는 화면에 키 이름이 그대로 나온다.
+- 연혁 기록은 `app/history/_data/history-i18n.ts` 가 바꾼다. 날짜는 규칙으로,
+  제목·장소는 표로 바꾸고, 한자로 된 공식 전시명은 그대로 둔다.
+- 한국어로만 존재하는 본문(블로그 제목 등)은 요소에 `lang='ko'` 를 단다
+  (`components/home/home-journal.tsx`). 화면 검사는 이 요소를 뺀다.
+- 번역 검증은 단위 테스트만으로 부족하다. 배포본을 언어별로 열어 **화면에 남은
+  한글 텍스트를 센다**. 같은 스크립트를 한국어로도 돌려 0 이 아닌 값이 나오는지
+  확인해야 측정이 유효하다(대조군).
 
 ## Admin System
 
