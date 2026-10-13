@@ -63,37 +63,74 @@ const config = {
         'celadon-green': '#a77d24', // gold-700 · 글자·배경 겸용 금색 (구 Celadon)
         'stone-gray': '#424a5e', // stone-700 · 보조 텍스트 (paper 위 AA)
 
+        // Ink System 사다리 — 하드코딩 팔레트(gray-*, blue-* …)를 옮겨 올 자리.
+        // 다크 모드에서 값이 바뀌지 않는 절대색이다. 모드를 따라야 하면 시맨틱 슬롯을 쓴다.
+        // stone 은 Tailwind 기본 stone 위에 덮어쓴다(남색 기운 중성색). 50·400·600·800·950 은
+        // Tailwind 기본값(따뜻한 회색)이 남아 Ink System 밖이다 — 쓰지 말 것 (DESIGN.md §2.0.1).
+        navy: {
+          950: '#070d1a',
+          900: '#0b1733',
+          800: '#142244',
+          700: '#1d2e5c',
+          600: '#2a3f7a',
+          500: '#3a54a0',
+          400: '#6a82c0',
+          300: '#9eb0d6',
+        },
+        gold: {
+          900: '#6b4e14',
+          800: '#8a661c',
+          700: '#a77d24',
+          600: '#c89729',
+          500: '#d4a84a',
+          400: '#e2c074',
+          300: '#ecd6a1',
+          200: '#f5e9c8',
+          100: '#fbf5e4',
+        },
+        stone: {
+          900: '#1a1d2a',
+          700: '#424a5e',
+          500: '#6b7385',
+          300: '#b8bccb',
+          200: '#d7dae3',
+          100: '#edeff3',
+        },
+        paper: { DEFAULT: '#fbf8ef', 2: '#f4efdd' },
+        seal: { DEFAULT: '#a8201a', soft: '#c94a3f' },
+
+        // 아래 장식색들은 이름만 남기고 값을 Ink System 으로 옮겼다(2026-10-13).
+        // 원래 색(오방·계절·문인화 초록·난초 보라 등)은 더 이상 의미하지 않는다. DESIGN.md §2.0
         // Traditional Five Elements Colors (Obang)
-        'east-wood': '#4a7c59', // Spring/Wood - Eastern Direction
-        'south-fire': '#d73527', // Summer/Fire - Southern Direction
-        'center-earth': '#f4e2d7', // Late Summer/Earth - Center
-        'west-metal': '#f2f2f2', // Autumn/Metal - Western Direction
-        'north-water': '#1e3a8a', // Winter/Water - Northern Direction
+        'east-wood': '#3f7a4e', // success
+        'south-fire': '#a8201a', // seal-red
+        'center-earth': '#f4efdd', // paper-2
+        'west-metal': '#edeff3', // stone-100
+        'north-water': '#1d2e5c', // navy-700
 
         // Cultural Seasonal Palette
-        'spring-blossom': '#fad0c4', // Cherry blossom pink
-        'summer-jade': '#7dd3c0', // Jade green
-        'autumn-gold': '#fdb462', // Golden leaf
-        'winter-snow': '#ffffff', // Pure snow white
+        'spring-blossom': '#fbf5e4', // gold-100
+        'summer-jade': '#9eb0d6', // navy-300
+        'autumn-gold': '#e2c074', // gold-400
+        'winter-snow': '#ffffff',
 
         // Calligraphy Materials
-        'bamboo-green': '#6b7c32', // Bamboo brush handle
+        'bamboo-green': '#3f7a4e', // success
         'silk-cream': '#fbf5e4', // gold-100 · cream paper
         'lacquer-black': '#070d1a', // navy-950 · 墨玄
         vermillion: '#a8201a', // seal-red · 朱印 (낙관 전용)
 
         // Cultural Accents
         'temple-gold': '#d4a84a', // gold-500 · 正金 시그니처 금색
-        'plum-purple': '#8e4585', // Plum blossom
+        'plum-purple': '#2a3f7a', // navy-600
 
-        // Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정렬)
-        // Source of truth: app/brand/_components/brand-data.ts
-        'terra-red': '#9b4444', // 전통 도장 주홍 (Scholar Red 보조)
-        'sage-green': '#b7c4b7', // 문인화 절제된 초록 (Celadon Green 보조)
-        'spring-green': '#09f557', // 생동감·새 시작 (장식 악센트 한정)
-        'brand-gold': '#ffcc00', // 브랜드 공식 금색 (Temple Gold #d4af37 과 구분)
-        'medium-orchid': '#c14af2', // 동양 난초 기품 (장식 악센트 한정)
-        'royal-blue': '#275eea', // 청화백자 청색 (장식 악센트 한정)
+        // 옛 Brand Extended Palette — 이름만 유지
+        'terra-red': '#c94a3f', // seal-red-soft
+        'sage-green': '#b8bccb', // stone-300
+        'spring-green': '#3f7a4e', // success
+        'brand-gold': '#d4a84a', // gold-500 (구 #ffcc00 는 Ink System 밖)
+        'medium-orchid': '#3a54a0', // navy-500
+        'royal-blue': '#3a54a0', // navy-500
 
         // Semantic literals (DESIGN.md SSoT) — bg-highlight, text-success 등 직접 접근용
         // shadcn semantic 슬롯(primary/secondary/...)은 var(--*) 경로 유지, 본 5개는

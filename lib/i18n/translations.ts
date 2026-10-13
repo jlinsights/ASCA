@@ -5,6 +5,7 @@ import { homeTranslations } from './translations/home'
 import { siteChromeTranslations } from './translations/site-chrome'
 import { aboutTranslations } from './translations/about'
 import { exhibitionsTranslations } from './translations/exhibitions'
+import { brandTranslations } from './translations/brand'
 
 // 통합된 번역 데이터
 export const translations: TranslationData = {
@@ -15,6 +16,7 @@ export const translations: TranslationData = {
     ...siteChromeTranslations.ko,
     ...aboutTranslations.ko,
     ...exhibitionsTranslations.ko,
+    ...brandTranslations.ko,
 
     // 공통 UI 요소
     loading: '로딩 중...',
@@ -135,6 +137,7 @@ export const translations: TranslationData = {
     ...siteChromeTranslations.en,
     ...aboutTranslations.en,
     ...exhibitionsTranslations.en,
+    ...brandTranslations.en,
 
     // 공통 UI 요소
     loading: 'Loading...',
@@ -264,6 +267,7 @@ export const translations: TranslationData = {
     ...siteChromeTranslations.ja,
     ...aboutTranslations.ja,
     ...exhibitionsTranslations.ja,
+    ...brandTranslations.ja,
 
     // 공통 UI 요소
     loading: '読み込み中...',
@@ -384,6 +388,7 @@ export const translations: TranslationData = {
     ...siteChromeTranslations.zh,
     ...aboutTranslations.zh,
     ...exhibitionsTranslations.zh,
+    ...brandTranslations.zh,
 
     // 공통 UI 요소
     loading: '加載中...',

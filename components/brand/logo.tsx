@@ -21,9 +21,9 @@ interface LogoProps {
 /**
  * 동양서예협회(ASCA) 로고 컴포넌트
  *
- * 테마에 따라 자동으로 적절한 로고 버전을 선택합니다.
- * - 라이트 모드: 흰색 배경용 로고 (검은색 텍스트)
- * - 다크 모드: 검은색 배경용 로고 (흰색 텍스트)
+ * 테마에 따라 자동으로 적절한 로고 버전을 선택합니다 (ASCA Ink System).
+ * - 라이트 모드: 남색 로고 (선지 바탕용)
+ * - 다크 모드: 흰색 로고 (먹 바탕용)
  *
  * @example
  * ```tsx
@@ -44,10 +44,13 @@ export function Logo({ width = 120, height = 40, className = '', variant = 'tagl
   }, [])
 
   // 로고 변형에 따른 기본 경로 설정
+  // 태그라인 로고는 ASCA Ink System 색판(남색 = 선지 바탕, 흰색 = 먹 바탕)을 쓴다.
+  // 슬로건 로고는 Ink System 색판이 아직 없어 옛 흑백 판을 그대로 쓴다.
   const getLogoPath = (isDark: boolean) => {
-    const bgType = isDark ? 'black BG' : 'white BG'
-    const logoType = variant === 'slogan' ? 'Slogan' : 'Tagline'
-    return `/logo/Logo & ${logoType}_${bgType}.png`
+    if (variant === 'slogan') {
+      return `/logo/Logo & Slogan_${isDark ? 'black BG' : 'white BG'}.png`
+    }
+    return isDark ? '/logo/asca-logo-white.png' : '/logo/asca-logo-navy.png'
   }
 
   // 서버 사이드 렌더링 중에는 라이트 모드 로고를 기본으로 표시

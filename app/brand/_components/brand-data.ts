@@ -1,232 +1,270 @@
-export const BRAND_IDENTITY_ITEMS = [
-  {
-    title: '正法의 계승 발전',
-    description:
-      '동양 예술의 오랜 정신과 가치를 계승하며, 한·중·일 서예의 풍부한 문화적 유산을 존중합니다.',
-  },
-  {
-    title: '創新의 조화로운 구현',
-    description: '전통 서예의 현대적 재해석과 실험적 시도를 통해 새로운 예술 언어를 창조합니다.',
-  },
-  {
-    title: '조화와 균형',
-    description: '전통과 현대, 동양과 서양, 정신과 기술의 균형 있는 융합을 추구합니다.',
-  },
-  {
-    title: '예술적 탁월함',
-    description:
-      '세심한 붓놀림부터 작품의 구성까지, 모든 단계에서 최고의 예술적 완성도를 추구합니다.',
-  },
-  {
-    title: '문화적 유산',
-    description:
-      '동아시아 서예와 문화예술을 보존하고 계승하며 미래 세대를 위한 문화적 다리를 놓습니다.',
-  },
-  {
-    title: '글로벌 비전',
-    description: '국경과 언어를 초월하여 세계와 소통하는 열린 예술 정신을 지향합니다.',
-  },
-] as const
+// 브랜드·스타일 가이드(/brand) 데이터. 값은 ASCA Ink System 토큰과 같아야 한다.
+// 정본: docs/02-design/DESIGN.md · app/globals.css · tailwind.config.ts
+// 화면 문구는 lib/i18n/translations/brand.ts 의 키로 둔다. 여기에는 번역하지 않는 상수만 둔다.
 
-export interface ColorSwatch {
-  name: string
-  hex: string
-  description: string
-  textDark?: boolean
+export interface BrandSection {
+  id: string
+  navKey: string
 }
 
-export const PRIMARY_COLORS: ColorSwatch[] = [
-  {
-    name: 'Navy 900 深藍',
-    hex: '#0b1733',
-    description: '먹을 머금은 깊은 남색 — 본문 글자와 어두운 바탕의 기본색',
-  },
-  {
-    name: 'Paper 宣紙',
-    hex: '#fbf8ef',
-    description: '선지의 따스한 질감을 담은 밝은 면 — 라이트 모드 바탕과 다크 모드 글자',
-    textDark: true,
-  },
-  {
-    name: 'Gold 700 古金',
-    hex: '#a77d24',
-    description: '글자와 면에 모두 쓰는 절제된 금색 — 버튼·링크·인터랙티브 요소',
-    textDark: true,
-  },
-  { name: 'Terra Red', hex: '#9B4444', description: '전통 도장의 주홍색에서 영감받은 강조색' },
-  {
-    name: 'Stone 700',
-    hex: '#424a5e',
-    description: '남색 기운의 중성색 — 보조 텍스트(paper 위 AA)',
-  },
-  {
-    name: 'Sage Green',
-    hex: '#B7C4B7',
-    description: '문인화의 절제된 초록빛을 현대적으로 재해석',
-    textDark: true,
-  },
-  {
-    name: 'Spring Green',
-    hex: '#09f557',
-    description: '자연의 생동감과 새로운 시작을 상징',
-    textDark: true,
-  },
-  {
-    name: 'Gold',
-    hex: '#ffcc00',
-    description: '전통 금박의 격조 높은 화려함을 담은 액센트',
-    textDark: true,
-  },
-  { name: 'Medium Orchid', hex: '#c14af2', description: '동양 난초의 기품과 창의성을 상징' },
-  { name: 'Royal Blue', hex: '#275eea', description: '청화백자의 깊고 맑은 청색에서 영감' },
-  {
-    name: 'Gold 500 正金',
-    hex: '#d4a84a',
-    description: '시그니처 금색 — 헤어라인·장식·큰 글자 전용(본문 글자 금지)',
-    textDark: true,
-  },
-  { name: 'Menu', hex: '#363636', description: 'UI 메뉴에 최적화된 가독성 높은 어두운 회색' },
+export const BRAND_SECTIONS: readonly BrandSection[] = [
+  { id: 'essence', navKey: 'brandNavEssence' },
+  { id: 'names', navKey: 'brandNavNames' },
+  { id: 'logo', navKey: 'brandNavLogo' },
+  { id: 'color', navKey: 'brandNavColor' },
+  { id: 'type', navKey: 'brandNavType' },
+  { id: 'voice', navKey: 'brandNavVoice' },
+  { id: 'elements', navKey: 'brandNavElements' },
+  { id: 'components', navKey: 'brandNavComponents' },
+  { id: 'imagery', navKey: 'brandNavImagery' },
 ]
 
-export const NEUTRAL_COLORS: ColorSwatch[] = [
-  {
-    name: 'Neutral 100',
-    hex: '#ffffff',
-    description: '순수한 백색으로 여백과 빛을 표현',
-    textDark: true,
-  },
-  {
-    name: 'Neutral 200',
-    hex: '#f7f7fb',
-    description: '미세한 푸른 기가 있는 부드러운 배경색',
-    textDark: true,
-  },
-  {
-    name: 'Neutral 300',
-    hex: '#f3f3f3',
-    description: '섹션 구분과 카드 배경에 적합한 은은한 회색',
-    textDark: true,
-  },
-  { name: 'Neutral 400', hex: '#9d9d9d', description: '부가 텍스트와 아이콘에 적합한 중간 회색' },
-  {
-    name: 'Neutral 500',
-    hex: '#696969',
-    description: '기본 텍스트와 UI 요소에 사용되는 진한 회색',
-  },
-  { name: 'Neutral 600', hex: '#363636', description: '강조 텍스트와 버튼에 적합한 짙은 회색' },
-  { name: 'Neutral 700', hex: '#232323', description: '제목과 중요 요소를 위한 거의 검은색' },
-  { name: 'Neutral 800', hex: '#070707', description: '최대 강조와 대비를 위한 심연의 검은색' },
+/** 협회 슬로건 — 모든 언어에서 한자 그대로 둔다(BRAND.md §4). */
+export const BRAND_SLOGAN = '法古創新 · 人書俱老'
+
+export interface ClassicalCompound {
+  tc: string
+  glossKey: string
+}
+
+export const CLASSICAL_COMPOUNDS: readonly ClassicalCompound[] = [
+  { tc: '法古創新', glossKey: 'brandCompound1' },
+  { tc: '人書俱老', glossKey: 'brandCompound2' },
+  { tc: '東洋書藝', glossKey: 'brandCompound3' },
+  { tc: '行雲流水', glossKey: 'brandCompound4' },
 ]
 
-export const LOGO_SECTIONS = [
+export interface OfficialName {
+  labelKey: string
+  value: string
+  /** 표기의 언어 — 화면 언어와 달라도 글꼴·읽기가 맞도록 lang 속성으로 단다. */
+  lang: 'ko' | 'zh-Hant' | 'en'
+  useKey: string
+}
+
+export const OFFICIAL_NAMES: readonly OfficialName[] = [
   {
-    title: '로고 주요 요소',
-    items: [
-      {
-        label: '자연스러운 붓 획',
-        text: '서예가의 붓놀림이 느껴지는 브러시 스트로크 캘리그래피로 전통적 서예의 정수를 표현',
-      },
-      {
-        label: '여백의 미',
-        text: "동양 예술의 핵심 철학인 '여백'을 로고에 적용하여 숨쉬는 공간감 창출",
-      },
-      { label: '대칭적 균형', text: '상하 대칭의 잎사귀 모티프로 자연과 조화, 성장의 상징성 부여' },
-      {
-        label: '서체의 대비',
-        text: '캘리그래피와 현대적 산세리프 서체의 조합으로 전통과 현대의 공존 표현',
-      },
-    ],
+    labelKey: 'brandNameKoFull',
+    value: '사단법인 동양서예협회',
+    lang: 'ko',
+    useKey: 'brandNameUseLegal',
   },
   {
-    title: '타이포그래피 계층 구조',
-    items: [
-      {
-        label: '메인 로고타입',
-        text: "손글씨 스타일의 'Oriental Calligraphy'는 동양 서예의 유연함과 예술성을 강조",
-      },
-      {
-        label: '서브 태그라인',
-        text: "모던한 산세리프체의 'WHERE TRADITION FLOWS CONTEMPORARY'로 현대적 메시지 전달",
-      },
-      {
-        label: '대비와 조화',
-        text: '두 서체의 의도적 대비를 통해 전통과 현대가 공존하는 브랜드 가치 표현',
-      },
-      {
-        label: '시각적 리듬감',
-        text: '서체 크기와 두께의 다양성으로 시선의 흐름과 계층적 중요도 구현',
-      },
-    ],
+    labelKey: 'brandNameKoShort',
+    value: '동양서예협회',
+    lang: 'ko',
+    useKey: 'brandNameUseGeneral',
   },
   {
-    title: '여백 활용 (Clear Space)',
-    items: [
-      { label: '최소 여백 확보', text: '로고 높이의 1/3 이상의 여백을 모든 방향에서 확보' },
-      {
-        label: '시각적 순수성',
-        text: '다른 그래픽 요소나 텍스트가 로고의 인식을 방해하지 않도록 보호 영역 설정',
-      },
-      {
-        label: '내부 공간 조절',
-        text: "텍스트와 잎사귀 모티프 사이의 간격을 통해 '숨'이 느껴지는 공간 구성",
-      },
-      { label: '절대 최소 여백', text: '어떤 상황에서도 로고 주변 20px 이상의 여백 유지 필수' },
-    ],
+    labelKey: 'brandNameHanja',
+    value: '東洋書藝協會',
+    lang: 'zh-Hant',
+    useKey: 'brandNameUseCatalog',
   },
   {
-    title: '컬러 적용 가이드라인',
-    items: [
-      {
-        label: '주요 색상',
-        text: 'Navy 900(#0b1733)과 Paper(#fbf8ef)를 기본으로 사용',
-      },
-      {
-        label: '보조 색상',
-        text: '강조에는 금색(Gold 700 #a77d24 · Gold 500 #d4a84a)을 절제해 사용',
-      },
-      { label: '배경별 조정', text: '어두운 배경에는 흰색 로고, 밝은 배경에는 검정 로고를 사용' },
-      {
-        label: '단일 색상 원칙',
-        text: '그라데이션이나 다중 색상 적용은 지양하고 단일 색상 사용을 원칙으로 함',
-      },
-    ],
+    labelKey: 'brandNameHanjaFull',
+    value: '社團法人 東洋書藝協會',
+    lang: 'zh-Hant',
+    useKey: 'brandNameUseOfficial',
   },
   {
-    title: '크기 규정 (Size Specifications)',
-    items: [
-      { label: '디지털 최소 크기', text: '너비 120px / 높이 80px 이상으로 사용하여 가독성 보장' },
-      { label: '인쇄물 최소 크기', text: '너비 30mm / 높이 20mm 이상 적용으로 디테일 보존' },
-      { label: '대형 출력물', text: '비율을 정확히 유지하며 해상도 저하 없이 확대 사용' },
-      {
-        label: '응용 매체별 규정',
-        text: '웹, 인쇄물, 사인물 등 매체 특성에 맞는 최적화된 크기 가이드라인 준수',
-      },
-    ],
+    labelKey: 'brandNameEnFull',
+    value: 'The Asian Society of Calligraphic Arts',
+    lang: 'en',
+    useKey: 'brandNameUseEnglish',
   },
+  { labelKey: 'brandNameEnShort', value: 'ASCA', lang: 'en', useKey: 'brandNameUseShort' },
+]
+
+export interface LogoVariant {
+  src: string
+  labelKey: string
+  ground: 'paper' | 'ink'
+}
+
+export const LOGO_VARIANTS: readonly LogoVariant[] = [
+  { src: '/logo/asca-logo-navy.png', labelKey: 'brandLogoNavy', ground: 'paper' },
+  { src: '/logo/asca-logo-white.png', labelKey: 'brandLogoWhite', ground: 'ink' },
+  { src: '/logo/asca-logo-gold.png', labelKey: 'brandLogoGold', ground: 'ink' },
+]
+
+export const LOGO_RULE_KEYS = [
+  'brandLogoRule1',
+  'brandLogoRule2',
+  'brandLogoRule3',
+  'brandLogoRule4',
 ] as const
 
-export const LOGO_DOS = [
-  '원본 비율을 항상 정확히 유지하기',
-  '지정된 브랜드 컬러만 사용하기',
-  '모든 방향에서 충분한 여백 확보하기',
-  '배경과 최적의 대비를 이루는 버전 선택하기',
-  '고해상도 원본 파일 형식(SVG, AI) 활용하기',
-  '매체별 권장 최소 크기 준수하기',
+export interface Swatch {
+  name: string
+  hex: string
+  /** 이 색 위에 올릴 글자색 — WCAG AA 를 넘는 쪽 */
+  on: 'light' | 'dark'
+}
+
+export interface CoreSwatch extends Swatch {
+  usageKey: string
+}
+
+export const CORE_SWATCHES: readonly CoreSwatch[] = [
+  { name: 'Navy 900 · 深藍', hex: '#0b1733', on: 'light', usageKey: 'brandSwatchNavy' },
+  { name: 'Gold 500 · 正金', hex: '#d4a84a', on: 'dark', usageKey: 'brandSwatchGold' },
+  { name: 'Paper · 宣紙', hex: '#fbf8ef', on: 'dark', usageKey: 'brandSwatchPaper' },
+  { name: 'Seal Red · 朱印', hex: '#a8201a', on: 'light', usageKey: 'brandSwatchSeal' },
 ]
 
-export const LOGO_DONTS = [
-  '로고 비율 왜곡하거나 임의로 변경하지 않기',
-  '지정되지 않은 컬러나 그라데이션 적용하지 않기',
-  '복잡한 이미지나 패턴 위에 직접 배치하지 않기',
-  '로고 회전하거나 기울이지 않기',
-  '그림자, 윤곽선, 광택 등의 효과 추가하지 않기',
-  '로고 구성 요소의 위치나 크기 임의 변경하지 않기',
+export interface Ladder {
+  titleKey: string
+  steps: readonly Swatch[]
+}
+
+export const COLOR_LADDERS: readonly Ladder[] = [
+  {
+    titleKey: 'brandColorNavy',
+    steps: [
+      { name: '950', hex: '#070d1a', on: 'light' },
+      { name: '900', hex: '#0b1733', on: 'light' },
+      { name: '800', hex: '#142244', on: 'light' },
+      { name: '700', hex: '#1d2e5c', on: 'light' },
+      { name: '600', hex: '#2a3f7a', on: 'light' },
+      { name: '500', hex: '#3a54a0', on: 'light' },
+      { name: '400', hex: '#6a82c0', on: 'dark' },
+      { name: '300', hex: '#9eb0d6', on: 'dark' },
+    ],
+  },
+  {
+    titleKey: 'brandColorGold',
+    steps: [
+      { name: '900', hex: '#6b4e14', on: 'light' },
+      { name: '800', hex: '#8a661c', on: 'light' },
+      { name: '700', hex: '#a77d24', on: 'dark' },
+      { name: '600', hex: '#c89729', on: 'dark' },
+      { name: '500', hex: '#d4a84a', on: 'dark' },
+      { name: '400', hex: '#e2c074', on: 'dark' },
+      { name: '300', hex: '#ecd6a1', on: 'dark' },
+      { name: '200', hex: '#f5e9c8', on: 'dark' },
+      { name: '100', hex: '#fbf5e4', on: 'dark' },
+    ],
+  },
+  {
+    titleKey: 'brandColorStone',
+    steps: [
+      { name: '900', hex: '#1a1d2a', on: 'light' },
+      { name: '700', hex: '#424a5e', on: 'light' },
+      { name: '500', hex: '#6b7385', on: 'light' },
+      { name: '300', hex: '#b8bccb', on: 'dark' },
+      { name: '200', hex: '#d7dae3', on: 'dark' },
+      { name: '100', hex: '#edeff3', on: 'dark' },
+    ],
+  },
 ]
 
-export const SIDEBAR_SECTIONS = [
-  { id: 'brand-identity', label: '브랜드 아이덴티티' },
-  { id: 'logo-identity', label: '로고 아이덴티티' },
-  { id: 'color-palette', label: '컬러 팔레트' },
-  { id: 'tagline', label: '태그라인' },
-  { id: 'slogan', label: '슬로건' },
-] as const
+export interface SemanticRole {
+  token: string
+  light: string
+  dark: string
+}
+
+/** shadcn 시맨틱 슬롯 — app/globals.css :root / .dark 와 같은 값 */
+export const SEMANTIC_ROLES: readonly SemanticRole[] = [
+  { token: 'background', light: '#fbf8ef', dark: '#070d1a' },
+  { token: 'foreground', light: '#0b1733', dark: '#fbf8ef' },
+  { token: 'card', light: '#ffffff', dark: '#0b1733' },
+  { token: 'primary', light: '#0b1733', dark: '#d4a84a' },
+  { token: 'accent', light: '#d4a84a', dark: '#e2c074' },
+  { token: 'muted', light: '#f4efdd', dark: '#142244' },
+  { token: 'muted-foreground', light: '#424a5e', dark: '#9eb0d6' },
+  { token: 'border', light: '#e5e0ce', dark: '#1f2b4c' },
+  { token: 'destructive', light: '#a8201a', dark: '#c94a3f' },
+]
+
+export interface TypeSpecimen {
+  roleKey: string
+  family: string
+  /** 견본 글자. null 이면 화면 언어 문장(brandTypeSample)을 쓴다. */
+  sample: string | null
+  lang?: 'ko' | 'zh-Hant' | 'en'
+  className: string
+}
+
+export const TYPE_SPECIMENS: readonly TypeSpecimen[] = [
+  {
+    roleKey: 'brandTypeLatin',
+    family: 'Playfair Display',
+    sample: 'The Asian Society of Calligraphic Arts',
+    lang: 'en',
+    className: 'brand-spec--latin',
+  },
+  {
+    roleKey: 'brandTypeHanja',
+    family: 'Noto Serif TC · Source Han Serif TC',
+    sample: '東洋書藝協會',
+    lang: 'zh-Hant',
+    className: 'brand-spec--hanja',
+  },
+  {
+    roleKey: 'brandTypeKrSerif',
+    family: 'Noto Serif KR',
+    sample: '동양서예협회',
+    lang: 'ko',
+    className: 'brand-spec--kr-serif',
+  },
+  {
+    roleKey: 'brandTypeSans',
+    family: 'Pretendard',
+    sample: null,
+    className: 'brand-spec--sans',
+  },
+]
+
+/** 크기 단계(px) — colors_and_type.css --text-* */
+export const TYPE_SCALE: readonly number[] = [12, 14, 16, 18, 20, 24, 30, 36, 48, 64, 80, 112]
+
+export const TYPE_RULE_KEYS = ['brandTypeRule1', 'brandTypeRule2', 'brandTypeRule3'] as const
+
+export const VOICE_DO_KEYS = ['brandVoiceDo1', 'brandVoiceDo2', 'brandVoiceDo3'] as const
+export const VOICE_DONT_KEYS = ['brandVoiceDont1', 'brandVoiceDont2', 'brandVoiceDont3'] as const
+
+export interface RadiusStep {
+  name: string
+  px: number
+}
+
+export const RADII: readonly RadiusStep[] = [
+  { name: 'none', px: 0 },
+  { name: 'xs', px: 2 },
+  { name: 'sm', px: 4 },
+  { name: 'base', px: 6 },
+  { name: 'md', px: 10 },
+  { name: 'xl', px: 20 },
+]
+
+export const SHADOWS = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+
+export interface MotionStep {
+  name: string
+  ms: number
+}
+
+export const MOTION: readonly MotionStep[] = [
+  { name: 'fast', ms: 150 },
+  { name: 'normal', ms: 260 },
+  { name: 'slow', ms: 420 },
+  { name: 'brush', ms: 720 },
+]
+
+export const MOTION_EASE = 'cubic-bezier(0.16, 1, 0.3, 1)'
+
+export interface PhotoTreatment {
+  modifier: 'ink' | 'paper' | 'warm'
+  labelKey: string
+}
+
+export const PHOTO_TREATMENTS: readonly PhotoTreatment[] = [
+  { modifier: 'ink', labelKey: 'brandPhotoInk' },
+  { modifier: 'paper', labelKey: 'brandPhotoPaper' },
+  { modifier: 'warm', labelKey: 'brandPhotoWarm' },
+]
+
+/** 사진 처리 견본 — 저장소에 이미 있는 서예 사진 */
+export const PHOTO_SAMPLE = '/images/artworks/calligraphy-scene-2.jpg'

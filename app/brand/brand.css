@@ -1,0 +1,1033 @@
+/* 브랜드·스타일 가이드(/brand) — ASCA Ink System 견본 페이지.
+   모든 규칙은 .asca-brand 아래로 묶어 다른 화면에 새지 않게 한다.
+   색은 app/globals.css 토큰만 쓴다(라이트·다크 자동 전환). 히어로만 모드와 무관한 먹 바탕이다. */
+
+.asca-brand {
+  --brand-tc:
+    var(--font-display), 'Source Han Serif TC', 'Noto Serif TC', var(--font-noto-serif-kr), serif;
+  --brand-kr-serif: var(--font-display), var(--font-noto-serif-kr), 'Noto Serif KR', serif;
+  --brand-hairline: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold-500) 12%,
+    var(--gold-500) 88%,
+    transparent
+  );
+  --brand-gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --brand-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--background);
+  color: var(--foreground);
+  /* 사이트 헤더(components/header/header.tsx)는 맨 위에서 투명한 fixed 다. 남색 글자 헤더가
+     먹 바탕 히어로 위에 얹히면 보이지 않으므로, 헤더 높이(h-14 / md:h-16)만큼 선지 띠를 둔다. */
+  padding-top: 3.5rem;
+}
+@media (min-width: 768px) {
+  .asca-brand {
+    padding-top: 4rem;
+  }
+}
+
+/* 한국어는 낱말 중간에서 줄을 바꾸지 않는다(‘가이/드’ 방지) */
+.asca-brand {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.asca-brand [lang='zh-Hant'] {
+  font-family: var(--brand-tc);
+  font-feature-settings: 'locl' on;
+}
+
+.asca-brand :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  box-shadow: var(--shadow-gold-glow);
+}
+
+/* ── Hero — 먹 바탕, 금색 헤어라인, 낙관 ─────────────────────────────── */
+.brand-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 80% at 92% 0%, rgb(212 168 74 / 0.16), transparent 60%),
+    radial-gradient(50% 70% at 0% 100%, rgb(29 46 92 / 0.9), transparent 70%), var(--navy-900);
+  color: var(--paper);
+  padding: clamp(4.5rem, 3rem + 6vw, 8rem) var(--brand-gutter) clamp(4rem, 3rem + 4vw, 6.5rem);
+}
+.dark .brand-hero {
+  background:
+    radial-gradient(60% 80% at 92% 0%, rgb(226 192 116 / 0.14), transparent 60%),
+    radial-gradient(50% 70% at 0% 100%, rgb(29 46 92 / 0.7), transparent 70%), var(--navy-950);
+  border-bottom: 1px solid var(--border);
+}
+.brand-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('/images/hero_bg_calligraphy.png') right center / cover no-repeat;
+  mix-blend-mode: screen;
+  filter: grayscale(1) contrast(1.05);
+  opacity: 0.14;
+}
+.brand-hero__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+.brand-hero__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-400);
+}
+.brand-hero__title {
+  margin-top: 1.25rem;
+  font-family: var(--brand-kr-serif);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.brand-hero__slogan {
+  margin-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+  font-family: var(--brand-tc);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  color: var(--gold-300);
+}
+.brand-hero__gloss {
+  margin-top: 0.75rem;
+  font-family: var(--brand-kr-serif);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  color: var(--navy-300);
+}
+.brand-hero__rule {
+  height: 1px;
+  max-width: 36rem;
+  margin: clamp(2rem, 1.5rem + 2vw, 2.75rem) 0;
+  background: var(--brand-hairline);
+}
+.brand-hero__lede {
+  max-width: 44rem;
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.8;
+  color: rgb(251 248 239 / 0.82);
+}
+.brand-hero__seal {
+  position: absolute;
+  right: var(--brand-gutter);
+  bottom: clamp(1.5rem, 1rem + 2vw, 3rem);
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 4px;
+  background: var(--seal-red);
+  color: var(--paper);
+  font-family: var(--brand-tc);
+  font-weight: 700;
+  font-size: 2rem;
+  transform: rotate(-4deg);
+  box-shadow:
+    0 0 0 2px rgb(168 32 26 / 0.35),
+    0 10px 24px -8px rgb(168 32 26 / 0.55);
+}
+
+/* ── 본문 레이아웃 — 목차 + 섹션 ────────────────────────────────────── */
+.brand-body {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 var(--brand-gutter) clamp(4rem, 3rem + 4vw, 6rem);
+  display: grid;
+  /* minmax(0, …) — 좁은 화면의 가로 목차 띠가 열 너비를 밀어내지 않게 한다 */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 clamp(2rem, 1rem + 3vw, 4rem);
+}
+@media (min-width: 1024px) {
+  .brand-body {
+    grid-template-columns: 13rem minmax(0, 1fr);
+  }
+}
+
+.brand-toc {
+  position: sticky;
+  top: 3.5rem; /* 헤더(h-14) 바로 아래 */
+  z-index: 10;
+  margin: 0 calc(var(--brand-gutter) * -1);
+  padding: 0.5rem var(--brand-gutter);
+  background: color-mix(in srgb, var(--background) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.brand-toc__label {
+  display: none;
+}
+.brand-toc__list {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.brand-toc__list::-webkit-scrollbar {
+  display: none;
+}
+.brand-toc__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  transition: color 150ms var(--brand-ease);
+}
+.brand-toc__link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  bottom: 0.4rem;
+  height: 1px;
+  background: var(--gold-500);
+  transition:
+    left 260ms var(--brand-ease),
+    right 260ms var(--brand-ease);
+}
+.brand-toc__link:hover,
+.brand-toc__link[aria-current='true'] {
+  color: var(--foreground);
+}
+.brand-toc__link:hover::after,
+.brand-toc__link[aria-current='true']::after {
+  left: 0.75rem;
+  right: 0.75rem;
+}
+.brand-toc__contact {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .brand-toc {
+    top: 6.5rem;
+    align-self: start;
+    margin: 0;
+    padding: 4.5rem 0 0;
+    background: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .brand-toc__label {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  .brand-toc__list {
+    flex-direction: column;
+    gap: 0;
+    overflow: visible;
+    border-left: 1px solid var(--border);
+  }
+  .brand-toc__link {
+    min-height: 2.25rem;
+    padding: 0 1rem;
+  }
+  .brand-toc__link::after {
+    left: -1px;
+    right: auto;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1px;
+    height: auto;
+    opacity: 0;
+    transition: opacity 260ms var(--brand-ease);
+  }
+  .brand-toc__link:hover::after,
+  .brand-toc__link[aria-current='true']::after {
+    left: -1px;
+    right: auto;
+    opacity: 1;
+  }
+  .brand-toc__contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+  }
+  .brand-toc__contact:hover {
+    color: var(--foreground);
+  }
+}
+
+/* ── 섹션 머리 ─────────────────────────────────────────────────────── */
+.brand-section {
+  scroll-margin-top: 8rem;
+  padding-top: clamp(3.5rem, 2.5rem + 3vw, 5rem);
+}
+.brand-section + .brand-section {
+  margin-top: clamp(3.5rem, 2.5rem + 3vw, 5rem);
+  border-top: 1px solid var(--border);
+}
+.brand-section__head {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: clamp(2rem, 1.5rem + 1.5vw, 2.75rem);
+}
+.brand-section__index {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.brand-section__num {
+  font-family: var(--font-display), serif;
+  font-size: 0.9375rem;
+  letter-spacing: 0.04em;
+}
+.brand-section__title {
+  font-family: var(--brand-kr-serif);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.brand-section__lede {
+  max-width: 44rem;
+  line-height: 1.8;
+  color: var(--muted-foreground);
+}
+.brand-subhead {
+  margin: 2.5rem 0 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.brand-rule {
+  height: 1px;
+  background: var(--brand-hairline);
+}
+.brand-rules {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 44rem;
+  counter-reset: rule;
+}
+.brand-rules li {
+  position: relative;
+  padding-left: 2rem;
+  line-height: 1.7;
+  counter-increment: rule;
+}
+.brand-rules li::before {
+  content: counter(rule, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  font-family: var(--font-display), serif;
+  font-size: 0.8125rem;
+  color: var(--accent-text);
+}
+
+/* ── 01 브랜드 정신 ─────────────────────────────────────────────────── */
+.brand-compounds {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+.brand-compound {
+  padding: 1.75rem 1.5rem 1.5rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  transition: background-color 260ms var(--brand-ease);
+}
+.brand-compound:hover {
+  background: var(--muted);
+}
+.brand-compound__tc {
+  font-family: var(--brand-tc);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+.brand-compound__gloss {
+  margin-top: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* ── 02 공식 명칭 ───────────────────────────────────────────────────── */
+.brand-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.brand-table th,
+.brand-table td {
+  padding: 1rem 1rem 1rem 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: baseline;
+}
+.brand-table thead th {
+  padding-top: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+}
+.brand-table tbody th {
+  width: 11rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+.brand-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.brand-name[lang='zh-Hant'] {
+  letter-spacing: 0.06em;
+}
+.brand-name[lang='en'] {
+  font-family: var(--font-display), serif;
+  font-weight: 500;
+}
+.brand-table__use {
+  color: var(--muted-foreground);
+}
+@media (max-width: 640px) {
+  .brand-table--names thead {
+    display: none;
+  }
+  .brand-table--names tr {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand-table--names th,
+  .brand-table--names td {
+    padding: 0;
+    border: 0;
+  }
+  .brand-table--names tbody th {
+    width: auto;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ── 03 로고 ───────────────────────────────────────────────────────── */
+.brand-logos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.brand-logo {
+  display: grid;
+  gap: 0.75rem;
+}
+.brand-logo__plate {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  padding: 2.5rem;
+  border: 1px solid var(--border);
+}
+.brand-logo__plate--paper {
+  background: var(--paper);
+}
+.brand-logo__plate--ink {
+  background: var(--navy-900);
+  border-color: var(--navy-800);
+}
+.brand-logo__plate img {
+  width: 100%;
+  max-width: 13rem;
+  height: auto;
+}
+.brand-logo__label {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* ── 04 색 ─────────────────────────────────────────────────────────── */
+.brand-core {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem;
+}
+.brand-chip {
+  display: grid;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--card);
+  cursor: copy;
+  transition: border-color 260ms var(--brand-ease);
+}
+.brand-chip:hover {
+  border-color: var(--gold-500);
+}
+.brand-chip__fill {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  min-height: 7.5rem;
+  padding: 1rem;
+  font-family: var(--font-display), serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+}
+.brand-chip__fill--light {
+  color: var(--paper);
+}
+.brand-chip__fill--dark {
+  color: var(--navy-900);
+}
+.brand-chip__meta {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.875rem 1rem 1rem;
+}
+.brand-chip__name {
+  font-weight: 600;
+}
+.brand-chip__usage {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+.brand-ladder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));
+  border: 1px solid var(--border);
+}
+.brand-step {
+  display: grid;
+  align-content: end;
+  gap: 0.125rem;
+  min-height: 5.5rem;
+  padding: 0.625rem;
+  border: 0;
+  text-align: left;
+  font-size: 0.75rem;
+  cursor: copy;
+  transition: transform 260ms var(--brand-ease);
+}
+.brand-step:hover {
+  position: relative;
+  z-index: 1;
+  box-shadow: inset 0 -2px 0 var(--gold-500);
+}
+.brand-step--light {
+  color: var(--paper);
+}
+.brand-step--dark {
+  color: var(--navy-900);
+}
+.brand-step__name {
+  font-weight: 600;
+}
+.brand-step__hex {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  opacity: 0.85;
+}
+.brand-note {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 44rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-left: 2px solid var(--gold-500);
+  background: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+.brand-dot {
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-right: 0.5rem;
+  vertical-align: -0.1em;
+  border: 1px solid rgb(11 23 51 / 0.15);
+  border-radius: 999px;
+}
+.brand-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+}
+
+/* ── 05 글꼴 ───────────────────────────────────────────────────────── */
+.brand-specs {
+  display: grid;
+  border-top: 1px solid var(--border);
+}
+.brand-spec {
+  display: grid;
+  gap: 0.5rem 2rem;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+@media (min-width: 768px) {
+  .brand-spec {
+    grid-template-columns: 12rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+.brand-spec__role {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.brand-spec__family {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+.brand-spec__sample {
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+}
+.brand-spec--latin {
+  font-family: var(--font-display), serif;
+  font-weight: 500;
+  font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.75rem);
+  letter-spacing: -0.01em;
+}
+.brand-spec--hanja {
+  font-family: var(--brand-tc);
+  font-weight: 700;
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  letter-spacing: 0.08em;
+}
+.brand-spec--kr-serif {
+  font-family: var(--brand-kr-serif);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+}
+.brand-spec--sans {
+  font-family: 'Pretendard', var(--font-noto-sans-kr), sans-serif;
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  line-height: 1.6;
+}
+.brand-scale {
+  display: grid;
+  gap: 0.25rem;
+}
+.brand-scale__row {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.brand-scale__px {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+.brand-scale__sample {
+  font-family: var(--font-display), var(--font-noto-serif-kr), serif;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* ── 06 말투 ───────────────────────────────────────────────────────── */
+.brand-voice {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.brand-voice__col {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.brand-voice__col--dont {
+  background: var(--muted);
+}
+.brand-voice__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+.brand-voice__head svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.brand-voice__col--do .brand-voice__head svg {
+  color: var(--success);
+}
+.brand-voice__col--dont .brand-voice__head svg {
+  color: var(--destructive);
+}
+.brand-voice__list {
+  display: grid;
+  gap: 0.75rem;
+  line-height: 1.7;
+}
+
+/* ── 07 형태 요소 ──────────────────────────────────────────────────── */
+.brand-elements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.brand-tile {
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.brand-tile__label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.brand-tile__note {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.brand-radii {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.brand-radius {
+  display: grid;
+  justify-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+}
+.brand-radius__box {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--foreground);
+  border-top-color: var(--gold-500);
+  border-right-color: var(--gold-500);
+  background: var(--muted);
+}
+.brand-shadows {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.brand-shadow {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: var(--card);
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+}
+.brand-motion {
+  display: grid;
+  gap: 0.5rem;
+}
+.brand-motion__row {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+.brand-motion__track {
+  position: relative;
+  height: 2px;
+  background: var(--border);
+}
+.brand-motion__dot {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0.625rem;
+  height: 0.625rem;
+  margin-top: -0.3125rem;
+  border-radius: 999px;
+  background: var(--gold-500);
+  transition-property: left;
+  transition-timing-function: var(--brand-ease);
+}
+.brand-motion:hover .brand-motion__dot,
+.brand-motion:focus-within .brand-motion__dot {
+  left: calc(100% - 0.625rem);
+}
+.brand-seal-demo {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.brand-seal {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 3px;
+  background: var(--seal-red);
+  color: var(--paper);
+  font-family: var(--brand-tc);
+  font-weight: 700;
+  font-size: 1.25rem;
+  transform: rotate(-3deg);
+}
+.brand-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: var(--foreground);
+}
+.brand-icons svg {
+  width: 1.375rem;
+  height: 1.375rem;
+  stroke-width: 1.5;
+}
+
+/* ── 08 컴포넌트 ───────────────────────────────────────────────────── */
+.brand-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.brand-field {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 22rem;
+}
+.brand-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.brand-card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  padding: 1.75rem 1.5rem 1.5rem;
+  border: 1px solid var(--border);
+  transition: border-color 260ms var(--brand-ease);
+}
+.brand-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--brand-hairline);
+}
+.brand-card--paper {
+  background: var(--card);
+}
+.brand-card--paper:hover {
+  border-color: var(--gold-500);
+}
+.brand-card--ink {
+  background: var(--navy-900);
+  border-color: var(--navy-800);
+  color: var(--paper);
+}
+.dark .brand-card--ink {
+  background: var(--navy-800);
+}
+.brand-card__eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.brand-card--ink .brand-card__eyebrow {
+  color: var(--gold-400);
+}
+.brand-card__title {
+  font-family: var(--brand-kr-serif);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.brand-card__body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+.brand-card--ink .brand-card__body {
+  color: var(--navy-300);
+}
+.brand-card--artwork {
+  padding: 0;
+  background: var(--card);
+}
+.brand-card--artwork:hover {
+  background: var(--muted);
+}
+.brand-card__panel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  background: radial-gradient(circle at 40% 35%, var(--gold-100), var(--paper-2) 70%);
+  color: var(--navy-900);
+}
+.dark .brand-card__panel {
+  background: radial-gradient(circle at 40% 35%, var(--navy-700), var(--navy-900) 70%);
+  color: var(--paper);
+}
+.brand-card__glyph {
+  font-family: var(--brand-tc);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 1.5rem + 0.8vw, 2.25rem);
+  letter-spacing: 0.08em;
+  line-height: 1;
+  writing-mode: vertical-rl;
+}
+.brand-card__panel .brand-seal {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  width: 2.375rem;
+  height: 2.375rem;
+  font-size: 1rem;
+}
+.brand-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+/* ── 09 이미지 ─────────────────────────────────────────────────────── */
+.brand-photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.brand-photo {
+  display: grid;
+  gap: 0.75rem;
+}
+.brand-photo__frame {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  aspect-ratio: 4 / 5;
+  background: var(--navy-900);
+}
+.brand-photo__frame img {
+  object-fit: cover;
+}
+.brand-photo__frame--ink img {
+  filter: grayscale(0.9) contrast(1.08) brightness(0.85);
+}
+.brand-photo__frame--ink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(11 23 51 / 0.25) 0%,
+    rgb(11 23 51 / 0.55) 50%,
+    rgb(7 13 26 / 0.92) 100%
+  );
+}
+.brand-photo__frame--paper {
+  background: var(--paper);
+  border: 1px solid var(--border);
+}
+.brand-photo__frame--paper img {
+  filter: grayscale(1) contrast(1.12);
+  mix-blend-mode: multiply;
+}
+.brand-photo__frame--warm {
+  background: var(--paper-2);
+  border: 1px solid var(--border);
+}
+.brand-photo__frame--warm img {
+  filter: saturate(0.7) sepia(0.12) contrast(1.02);
+}
+.brand-photo__caption {
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 1;
+  font-family: var(--brand-tc);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  color: var(--paper);
+}
+.brand-photo__label {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.brand-source {
+  margin-top: clamp(3.5rem, 2.5rem + 3vw, 5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asca-brand *,
+  .asca-brand *::before,
+  .asca-brand *::after {
+    transition: none !important;
+  }
+}
+
+/* 태블릿 — 헤더가 md:h-16 이라 목차 띠도 그만큼 내린다 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .brand-toc {
+    top: 4rem;
+  }
+}
+
+/* 폰 — 낙관을 줄이고 히어로 아래 여백을 늘려 설명 글과 겹치지 않게 한다 */
+@media (max-width: 640px) {
+  .brand-hero {
+    padding-bottom: 6rem;
+  }
+  .brand-hero__seal {
+    bottom: 1.5rem;
+    width: 3.25rem;
+    height: 3.25rem;
+    font-size: 1.5rem;
+  }
+}
