@@ -21,10 +21,10 @@ export default function EmailRefusePage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-red-50/50 to-background dark:from-red-950/20'>
+      <section className='py-12 md:py-20 bg-gradient-to-b from-destructive/5 to-background'>
         <div className='container mx-auto px-4 text-center'>
           <div className='flex items-center justify-center gap-3 mb-6'>
-            <Ban className='h-8 w-8 md:h-10 md:w-10 text-red-600' />
+            <Ban className='h-8 w-8 md:h-10 md:w-10 text-destructive' />
             <h1 className='text-3xl md:text-5xl font-bold tracking-tight'>이메일 무단수집 거부</h1>
           </div>
           <p className='text-lg md:text-xl text-muted-foreground mb-6 max-w-3xl mx-auto'>
@@ -35,11 +35,11 @@ export default function EmailRefusePage() {
               <AlertTriangle className='h-3 w-3 mr-1' />
               법적 보호
             </Badge>
-            <Badge variant='outline' className='text-sm border-red-200'>
+            <Badge variant='outline' className='text-sm border-destructive/30'>
               <Scale className='h-3 w-3 mr-1' />
               정보통신망법
             </Badge>
-            <Badge variant='outline' className='text-sm border-red-200'>
+            <Badge variant='outline' className='text-sm border-destructive/30'>
               <Shield className='h-3 w-3 mr-1' />
               개인정보보호
             </Badge>
@@ -51,19 +51,19 @@ export default function EmailRefusePage() {
       <section className='container mx-auto px-4 py-8 md:py-12'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 기본 원칙 */}
-          <Card className='border-l-4 border-l-red-500'>
+          <Card className='border-l-4 border-l-destructive'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-6'>
-                <Mail className='h-6 w-6 text-red-600' />
+                <Mail className='h-6 w-6 text-destructive' />
                 <h2 className='text-2xl md:text-3xl font-bold'>무단수집 거부 원칙</h2>
               </div>
 
-              <div className='bg-red-50 dark:bg-red-950/30 p-6 rounded-lg border border-red-200 dark:border-red-800 mb-6'>
+              <div className='bg-destructive/5 p-6 rounded-lg border border-destructive/30 mb-6'>
                 <div className='flex items-start gap-3'>
-                  <AlertTriangle className='h-5 w-5 text-red-600 mt-1 flex-shrink-0' />
+                  <AlertTriangle className='h-5 w-5 text-destructive mt-1 flex-shrink-0' />
                   <div className='space-y-3'>
-                    <p className='font-semibold text-red-800 dark:text-red-200'>중요 공지사항</p>
-                    <p className='text-sm md:text-base text-red-700 dark:text-red-300'>
+                    <p className='font-semibold text-foreground'>중요 공지사항</p>
+                    <p className='text-sm md:text-base text-muted-foreground'>
                       동양서예협회 홈페이지에 게시된 이메일 주소가 전자우편 수집 프로그램이나 그밖의
                       기술적 장치를 이용하여 무단으로 수집되는 것을 거부하며, 이를 위반 시
                       정보통신망법에 의해 형사처벌됨을 유념하시기 바랍니다.
@@ -74,14 +74,12 @@ export default function EmailRefusePage() {
 
               <div className='space-y-6'>
                 <div className='grid md:grid-cols-2 gap-6'>
-                  <div className='bg-amber-50 dark:bg-amber-950/30 p-4 rounded-lg border border-amber-200 dark:border-amber-800'>
+                  <div className='bg-warning/5 p-4 rounded-lg border border-warning/30'>
                     <div className='flex items-center gap-2 mb-3'>
-                      <Scale className='h-5 w-5 text-amber-600' />
-                      <h3 className='font-semibold text-amber-800 dark:text-amber-200'>
-                        법적 처벌
-                      </h3>
+                      <Scale className='h-5 w-5 text-warning dark:text-gold-400' />
+                      <h3 className='font-semibold text-foreground'>법적 처벌</h3>
                     </div>
-                    <p className='text-sm text-amber-700 dark:text-amber-300'>
+                    <p className='text-sm text-muted-foreground'>
                       이메일을 기술적 장치를 사용하여 무단으로 수집, 판매·유통하거나 이를 이용한
                       자는
                       <strong className='block mt-1'>
@@ -91,21 +89,21 @@ export default function EmailRefusePage() {
                     </p>
                   </div>
 
-                  <div className='bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800'>
+                  <div className='bg-info/5 p-4 rounded-lg border border-info/30'>
                     <div className='flex items-center gap-2 mb-3'>
-                      <Phone className='h-5 w-5 text-blue-600' />
-                      <h3 className='font-semibold text-blue-800 dark:text-blue-200'>신고 안내</h3>
+                      <Phone className='h-5 w-5 text-info dark:text-navy-300' />
+                      <h3 className='font-semibold text-foreground'>신고 안내</h3>
                     </div>
-                    <p className='text-sm text-blue-700 dark:text-blue-300'>
+                    <p className='text-sm text-muted-foreground'>
                       기술적 장치를 사용한 이메일주소 무단수집 피해를 당하신 경우
                     </p>
                     <div className='mt-2 space-y-1 text-sm'>
                       <div className='flex items-center gap-2'>
-                        <Phone className='h-3 w-3 text-blue-600' />
+                        <Phone className='h-3 w-3 text-info dark:text-navy-300' />
                         <span className='font-medium'>전용전화: 1336</span>
                       </div>
                       <div className='flex items-center gap-2'>
-                        <ExternalLink className='h-3 w-3 text-blue-600' />
+                        <ExternalLink className='h-3 w-3 text-info dark:text-navy-300' />
                         <span className='font-medium'>spamcop.or.kr</span>
                       </div>
                     </div>
@@ -116,24 +114,22 @@ export default function EmailRefusePage() {
           </Card>
 
           {/* 법령 조항 */}
-          <Card className='border-l-4 border-l-slate-500'>
+          <Card className='border-l-4 border-l-muted-foreground'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-6'>
-                <FileText className='h-6 w-6 text-slate-600' />
+                <FileText className='h-6 w-6 text-muted-foreground' />
                 <h2 className='text-2xl md:text-3xl font-bold'>관련 법령</h2>
                 <Badge variant='secondary'>정보통신망법 제50조의2</Badge>
               </div>
 
-              <div className='bg-slate-50 dark:bg-slate-950/30 p-6 rounded-lg border border-slate-200 dark:border-slate-800'>
+              <div className='bg-muted/50 p-6 rounded-lg border border-border'>
                 <h3 className='text-xl font-bold mb-4 text-center'>
                   정보통신망법 제50조의2 (전자우편주소의 무단 수집행위 등 금지)
                 </h3>
 
                 <div className='space-y-6'>
-                  <div className='border-l-4 border-l-blue-500 pl-4'>
-                    <h4 className='font-semibold text-lg mb-2 text-blue-800 dark:text-blue-200'>
-                      제1항
-                    </h4>
+                  <div className='border-l-4 border-l-info pl-4'>
+                    <h4 className='font-semibold text-lg mb-2 text-foreground'>제1항</h4>
                     <p className='text-sm md:text-base text-muted-foreground'>
                       누구든지 전자우편주소의 수집을 거부하는 의사가 명시된 인터넷 홈페이지에서
                       자동으로 전자우편주소를 수집하는 프로그램 그 밖의 기술적 장치를 이용하여
@@ -141,20 +137,16 @@ export default function EmailRefusePage() {
                     </p>
                   </div>
 
-                  <div className='border-l-4 border-l-emerald-500 pl-4'>
-                    <h4 className='font-semibold text-lg mb-2 text-emerald-800 dark:text-emerald-200'>
-                      제2항
-                    </h4>
+                  <div className='border-l-4 border-l-success pl-4'>
+                    <h4 className='font-semibold text-lg mb-2 text-foreground'>제2항</h4>
                     <p className='text-sm md:text-base text-muted-foreground'>
                       누구든지 제1항의 규정을 위반하여 수집된 전자우편주소를 판매·유통 하여서는
                       아니된다.
                     </p>
                   </div>
 
-                  <div className='border-l-4 border-l-purple-500 pl-4'>
-                    <h4 className='font-semibold text-lg mb-2 text-purple-800 dark:text-purple-200'>
-                      제3항
-                    </h4>
+                  <div className='border-l-4 border-l-highlight pl-4'>
+                    <h4 className='font-semibold text-lg mb-2 text-foreground'>제3항</h4>
                     <p className='text-sm md:text-base text-muted-foreground'>
                       누구든지 제1항 및 제2항의 규정에 의하여 수집·판매 및 유통이 금지된
                       전자우편주소임을 알고 이를 정보전송에 이용하여서는 아니된다.
@@ -162,14 +154,12 @@ export default function EmailRefusePage() {
                   </div>
                 </div>
 
-                <div className='mt-6 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg'>
+                <div className='mt-6 p-4 bg-warning/5 border border-warning/30 rounded-lg'>
                   <div className='flex items-center gap-2 mb-2'>
-                    <AlertTriangle className='h-4 w-4 text-amber-600' />
-                    <span className='font-semibold text-amber-800 dark:text-amber-200'>
-                      위반시 처벌
-                    </span>
+                    <AlertTriangle className='h-4 w-4 text-warning dark:text-gold-400' />
+                    <span className='font-semibold text-foreground'>위반시 처벌</span>
                   </div>
-                  <p className='text-sm text-amber-700 dark:text-amber-300'>
+                  <p className='text-sm text-muted-foreground'>
                     위 조항을 위반할 경우 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」에 따라
                     벌금형에 처해집니다.
                   </p>
@@ -179,41 +169,41 @@ export default function EmailRefusePage() {
           </Card>
 
           {/* 신고 방법 */}
-          <Card className='border-l-4 border-l-green-500'>
+          <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-6'>
-                <Shield className='h-6 w-6 text-green-600' />
+                <Shield className='h-6 w-6 text-success' />
                 <h2 className='text-2xl md:text-3xl font-bold'>신고 및 제보</h2>
-                <Badge variant='outline' className='border-green-200'>
+                <Badge variant='outline' className='border-success/30'>
                   불법스팸대응센터
                 </Badge>
               </div>
 
-              <div className='bg-green-50 dark:bg-green-950/30 p-6 rounded-lg border border-green-200 dark:border-green-800'>
-                <h3 className='text-xl font-bold mb-4 text-green-800 dark:text-green-200'>
+              <div className='bg-success/5 p-6 rounded-lg border border-success/30'>
+                <h3 className='text-xl font-bold mb-4 text-foreground'>
                   이메일 무단수집 피해 신고 방법
                 </h3>
 
                 <div className='grid md:grid-cols-2 gap-6'>
-                  <div className='bg-white dark:bg-slate-900 p-4 rounded-lg border'>
+                  <div className='bg-card p-4 rounded-lg border'>
                     <div className='flex items-center gap-3 mb-3'>
-                      <Phone className='h-6 w-6 text-green-600' />
+                      <Phone className='h-6 w-6 text-success' />
                       <h4 className='font-semibold'>전화 신고</h4>
                     </div>
                     <div className='space-y-2'>
-                      <p className='text-2xl font-bold text-green-600'>☎ 1336</p>
+                      <p className='text-2xl font-bold text-success'>☎ 1336</p>
                       <p className='text-sm text-muted-foreground'>불법스팸대응센터 전용전화</p>
                       <p className='text-xs text-muted-foreground'>평일 09:00 ~ 18:00</p>
                     </div>
                   </div>
 
-                  <div className='bg-white dark:bg-slate-900 p-4 rounded-lg border'>
+                  <div className='bg-card p-4 rounded-lg border'>
                     <div className='flex items-center gap-3 mb-3'>
-                      <ExternalLink className='h-6 w-6 text-blue-600' />
+                      <ExternalLink className='h-6 w-6 text-info dark:text-navy-300' />
                       <h4 className='font-semibold'>온라인 신고</h4>
                     </div>
                     <div className='space-y-2'>
-                      <p className='font-mono text-blue-600'>spamcop.or.kr</p>
+                      <p className='font-mono text-info dark:text-navy-300'>spamcop.or.kr</p>
                       <p className='text-sm text-muted-foreground'>불법스팸대응센터 홈페이지</p>
                       <Button
                         variant='outline'
@@ -228,11 +218,9 @@ export default function EmailRefusePage() {
                   </div>
                 </div>
 
-                <div className='mt-4 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg'>
-                  <p className='text-sm font-medium text-blue-800 dark:text-blue-200 mb-2'>
-                    📌 신고시 필요 정보
-                  </p>
-                  <ul className='text-sm text-blue-700 dark:text-blue-300 space-y-1'>
+                <div className='mt-4 p-4 bg-info/5 border border-info/30 rounded-lg'>
+                  <p className='text-sm font-medium text-foreground mb-2'>📌 신고시 필요 정보</p>
+                  <ul className='text-sm text-muted-foreground space-y-1'>
                     <li>• 무단수집이 의심되는 웹사이트 주소</li>
                     <li>• 수집된 것으로 추정되는 이메일 주소</li>
                     <li>• 스팸메일 발송 증거 자료</li>

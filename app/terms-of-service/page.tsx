@@ -55,10 +55,10 @@ export default function TermsOfServicePage() {
           </Card>
 
           {/* 이용자의 정의 */}
-          <Card className='border-l-4 border-l-blue-500'>
+          <Card className='border-l-4 border-l-info'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <User className='h-5 w-5 text-blue-500' />
+                <User className='h-5 w-5 text-info dark:text-navy-300' />
                 <h2 className='text-xl md:text-2xl font-bold'>제2조 이용자의 정의</h2>
               </div>
               <p className='text-sm md:text-base text-muted-foreground'>
@@ -69,10 +69,10 @@ export default function TermsOfServicePage() {
           </Card>
 
           {/* 회원 가입 */}
-          <Card className='border-l-4 border-l-emerald-500'>
+          <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Shield className='h-5 w-5 text-emerald-500' />
+                <Shield className='h-5 w-5 text-success' />
                 <h2 className='text-xl md:text-2xl font-bold'>제3조 회원 가입</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
@@ -166,15 +166,15 @@ export default function TermsOfServicePage() {
           <Separator />
 
           {/* 이용자의 의무 */}
-          <Card className='border-l-4 border-l-amber-500'>
+          <Card className='border-l-4 border-l-warning'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <AlertCircle className='h-5 w-5 text-amber-500' />
+                <AlertCircle className='h-5 w-5 text-warning dark:text-gold-400' />
                 <h2 className='text-xl md:text-2xl font-bold'>제12조 이용자의 의무</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
                 <p>① 이용자는 다음 행위를 하여서는 안됩니다.</p>
-                <div className='bg-amber-50 dark:bg-amber-950/30 p-4 rounded-lg space-y-2 border border-amber-200 dark:border-amber-800'>
+                <div className='bg-warning/5 p-4 rounded-lg space-y-2 border border-warning/30'>
                   <p>1. 신청 또는 변경시 허위내용의 등록</p>
                   <p>2. 타인의 정보 도용</p>
                   <p>3. 동양서예협회에 게시된 정보의 변경</p>
@@ -213,10 +213,10 @@ export default function TermsOfServicePage() {
           </Card>
 
           {/* 저작권의 귀속 및 이용제한 */}
-          <Card className='border-l-4 border-l-purple-500'>
+          <Card className='border-l-4 border-l-highlight'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Scale className='h-5 w-5 text-purple-500' />
+                <Scale className='h-5 w-5 text-gold-700 dark:text-gold-400' />
                 <h2 className='text-xl md:text-2xl font-bold'>제14조 저작권의 귀속 및 이용제한</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
