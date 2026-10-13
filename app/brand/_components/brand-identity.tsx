@@ -1,31 +1,104 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { BRAND_IDENTITY_ITEMS } from './brand-data'
+'use client'
 
-export function BrandIdentity() {
+import Image from 'next/image'
+import { cn } from '@/lib/utils'
+import { useLanguage } from '@/contexts/language-context'
+import { BrandSection } from './brand-section'
+import { CLASSICAL_COMPOUNDS, LOGO_RULE_KEYS, LOGO_VARIANTS, OFFICIAL_NAMES } from './brand-data'
+
+/** 01 브랜드 정신 — 네 개의 사자성어와 풀이 */
+export function BrandEssence({ index }: { index: number }) {
+  const { t } = useLanguage()
   return (
-    <section id='brand-identity' className='scroll-mt-24'>
-      <h2 className='text-2xl font-bold mb-3'>브랜드 아이덴티티</h2>
-      <p className='text-muted-foreground mb-8 leading-relaxed'>
-        동양서예협회의 브랜드 아이덴티티는 수천 년의 서예 전통과 현대적 감각이 조화롭게 어우러진
-        철학을 담고 있습니다. 붓과 먹의 정신을 이어받아 현대 사회에서 동양 서예의 아름다움과 깊이를
-        전달합니다.
-      </p>
-
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-        {BRAND_IDENTITY_ITEMS.map(item => (
-          <Card
-            key={item.title}
-            className='group transition-all hover:shadow-lg hover:-translate-y-1 border-l-4 border-l-transparent hover:border-l-scholar-red'
-          >
-            <CardContent className='p-5'>
-              <h3 className='font-bold text-base mb-2 text-scholar-red group-hover:text-scholar-red/80 transition-colors'>
-                {item.title}
-              </h3>
-              <p className='text-sm text-muted-foreground leading-relaxed'>{item.description}</p>
-            </CardContent>
-          </Card>
+    <BrandSection
+      id='essence'
+      index={index}
+      eyebrow='Essence'
+      title={t('brandEssenceTitle')}
+      lede={t('brandEssenceLede')}
+    >
+      <ul className='brand-compounds'>
+        {CLASSICAL_COMPOUNDS.map(compound => (
+          <li key={compound.tc} className='brand-compound'>
+            <p className='brand-compound__tc' lang='zh-Hant'>
+              {compound.tc}
+            </p>
+            <p className='brand-compound__gloss'>{t(compound.glossKey)}</p>
+          </li>
         ))}
-      </div>
-    </section>
+      </ul>
+    </BrandSection>
+  )
+}
+
+/** 02 공식 명칭 — BRAND.md §1 */
+export function BrandNames({ index }: { index: number }) {
+  const { t } = useLanguage()
+  return (
+    <BrandSection
+      id='names'
+      index={index}
+      eyebrow='Naming'
+      title={t('brandNamesTitle')}
+      lede={t('brandNamesLede')}
+    >
+      <table className='brand-table brand-table--names'>
+        <thead>
+          <tr>
+            <th scope='col'>{t('brandNameForm')}</th>
+            <th scope='col'>{t('brandNameValue')}</th>
+            <th scope='col'>{t('brandNameUse')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {OFFICIAL_NAMES.map(name => (
+            <tr key={name.labelKey}>
+              <th scope='row'>{t(name.labelKey)}</th>
+              <td>
+                <span className='brand-name' lang={name.lang}>
+                  {name.value}
+                </span>
+              </td>
+              <td className='brand-table__use'>{t(name.useKey)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </BrandSection>
+  )
+}
+
+/** 03 로고 — 바탕별 세 가지 색 */
+export function BrandLogo({ index }: { index: number }) {
+  const { t } = useLanguage()
+  return (
+    <BrandSection
+      id='logo'
+      index={index}
+      eyebrow='Logo'
+      title={t('brandLogoTitle')}
+      lede={t('brandLogoLede')}
+    >
+      <ul className='brand-logos'>
+        {LOGO_VARIANTS.map(variant => (
+          <li key={variant.src} className='brand-logo'>
+            <div className={cn('brand-logo__plate', `brand-logo__plate--${variant.ground}`)}>
+              <Image
+                src={variant.src}
+                alt={`Oriental Calligraphy — ${t(variant.labelKey)}`}
+                width={505}
+                height={325}
+              />
+            </div>
+            <p className='brand-logo__label'>{t(variant.labelKey)}</p>
+          </li>
+        ))}
+      </ul>
+      <ol className='brand-rules' style={{ marginTop: '2rem' }}>
+        {LOGO_RULE_KEYS.map(key => (
+          <li key={key}>{t(key)}</li>
+        ))}
+      </ol>
+    </BrandSection>
   )
 }

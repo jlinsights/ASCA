@@ -44,23 +44,29 @@ colors:
   input: '#d9d3bf'
   ring: '#c89729' # gold-600
 
-  # Obang (오방색) — 동아시아 우주관의 5방위
-  east-wood: '#4a7c59' # 동방-목-봄
-  south-fire: '#d73527' # 남방-화-여름
-  center-earth: '#f4e2d7' # 중앙-토-환절기
-  west-metal: '#f2f2f2' # 서방-금-가을
-  north-water: '#1e3a8a' # 북방-수-겨울
+  # Ink System 기본면 (Tailwind bg-paper / bg-seal — 사다리 navy-* gold-* stone-* 는 §2.0)
+  paper: '#fbf8ef' # 宣紙 — bg-paper, bg-paper-2(#f4efdd)
+  seal: '#a8201a' # 朱印 — bg-seal, bg-seal-soft(#c94a3f). 낙관·오류 전용
+
+  # 아래 장식색은 2026-10-13 부터 이름만 유지하고 값은 Ink System 으로 옮겼다.
+  # 원래 의미(오방·계절·문인화 초록·난초 보라)는 더 이상 없다. 새 코드는 쓰지 말 것.
+  # Obang (오방색)
+  east-wood: '#3f7a4e' # = success
+  south-fire: '#a8201a' # = seal-red
+  center-earth: '#f4efdd' # = paper-2
+  west-metal: '#edeff3' # = stone-100
+  north-water: '#1d2e5c' # = navy-700
 
   # Seasonal (계절)
-  spring-blossom: '#fad0c4' # 벚꽃 분홍
-  summer-jade: '#7dd3c0' # 여름 옥색
-  autumn-gold: '#fdb462' # 가을 황금
-  winter-snow: '#ffffff' # 겨울 설백
+  spring-blossom: '#fbf5e4' # = gold-100
+  summer-jade: '#9eb0d6' # = navy-300
+  autumn-gold: '#e2c074' # = gold-400
+  winter-snow: '#ffffff'
 
   # Calligraphy Materials (서예 재료)
   ink-black: '#0b1733' # navy-900 · 본문 먹색
   rice-paper: '#fbf8ef' # paper 宣紙
-  bamboo-green: '#6b7c32' # 대나무 붓대
+  bamboo-green: '#3f7a4e' # = success
   silk-cream: '#fbf5e4' # gold-100 cream paper
   lacquer-black: '#070d1a' # navy-950 墨玄
   vermillion: '#a8201a' # seal-red 朱印 낙관
@@ -70,16 +76,15 @@ colors:
   celadon-green: '#a77d24' # gold-700 — 이름만 유지(구 청자색). 글자로도 paper 위 3.53:1
   stone-gray: '#424a5e' # stone-700 — paper 위 AA
   temple-gold: '#d4a84a' # gold-500 正金
-  plum-purple: '#8e4585' # 매화 자색
+  plum-purple: '#2a3f7a' # = navy-600
 
-  # Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정본)
-  # Source: app/brand/_components/brand-data.ts
-  brand-gold: '#ffcc00' # 브랜드 공식 금색 — semantic `highlight` / bg-brand-gold
-  terra-red: '#9b4444' # 전통 도장 주홍 — Scholar Red 의 차분한 보조
-  sage-green: '#b7c4b7' # 문인화 절제된 초록 — Celadon Green 의 저채도 변형
-  spring-green: '#09f557' # 생동·새 시작 — 장식 악센트 한정, UI 금지
-  medium-orchid: '#c14af2' # 동양 난초 기품 — 장식 악센트 한정, UI 금지
-  royal-blue: '#275eea' # 청화백자 청색 — 장식 악센트 한정, UI 금지
+  # 옛 Brand Extended Palette — 이름만 유지
+  brand-gold: '#d4a84a' # = gold-500 (구 #ffcc00 는 Ink System 밖)
+  terra-red: '#c94a3f' # = seal-red-soft
+  sage-green: '#b8bccb' # = stone-300
+  spring-green: '#3f7a4e' # = success
+  medium-orchid: '#3a54a0' # = navy-500
+  royal-blue: '#3a54a0' # = navy-500
 
 # ─────────────────────────────────────────────
 # TYPOGRAPHY — Google DESIGN.md spec canonical tokens
@@ -240,6 +245,25 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 슬로건도 기존 브랜드 선언(法古創新 · 人書俱老)을 유지한다. 번체 한자 처리 규칙은
 §3 과 BRAND 규칙을 따른다.
 
+#### 2.0.1 Ink 사다리 — `navy-*` · `gold-*` · `stone-*` · `paper` · `seal` (2026-10-13)
+
+하드코딩 팔레트(`gray-*`, `blue-*` …)를 Ink System 으로 옮길 자리다. 값은
+`app/globals.css` 의 `--navy-*` 등과 같고, **다크 모드에서 바뀌지 않는
+절대색**이다. 모드를 따라야 하는 곳은 §2.1 시맨틱 슬롯을 쓴다.
+
+| 사다리  | 단계                                                | Tailwind 예                          |
+| ------- | --------------------------------------------------- | ------------------------------------ |
+| `navy`  | 950 · 900 · 800 · 700 · 600 · 500 · 400 · 300       | `bg-navy-900`, `text-navy-300`       |
+| `gold`  | 900 · 800 · 700 · 600 · 500 · 400 · 300 · 200 · 100 | `text-gold-800`, `bg-gold-100`       |
+| `stone` | 900 · 700 · 500 · 300 · 200 · 100                   | `text-stone-700`, `border-stone-200` |
+| `paper` | DEFAULT · 2                                         | `bg-paper`, `bg-paper-2`             |
+| `seal`  | DEFAULT · soft                                      | `bg-seal` (낙관·오류 전용)           |
+
+- `stone` 은 Tailwind 기본 `stone` 위에 덮어쓴다. **50·400·600·800·950 은
+  Tailwind 기본값(따뜻한 회색)이라 Ink System 밖이다** — 쓰지 말 것.
+- paper 위 작은 금색 글자는 `gold-800`(4.9:1). `gold-500` 은 글자로 쓰지 않는다.
+- 사다리 견본과 화면 역할표는 `/brand` 페이지에 있다.
+
 ### 2.1 shadcn 시맨틱 슬롯 — `app/globals.css` 와 1:1 (코드 SSOT)
 
 | 슬롯                      | Tailwind 예               | 라이트                | 다크                  | 용도                    |
@@ -288,31 +312,25 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 `ink-black`·`rice-paper`·`vermillion`·`silk-cream`은 서예 작품의 물성을 재현할
 때 쓴다. 작품 상세 페이지, 작가 소개, 낙관 요소가 전형적 사용처.
 
-### 2.5 Brand Extended Palette — 브랜드 가이드 정본
+### 2.5 옛 Brand Extended Palette — 이름만 남음 (2026-10-13)
 
-`app/brand/_components/brand-data.ts` 의 PRIMARY_COLORS 를 Tailwind·DESIGN.md 로
-정렬한 팔레트. **/brand 페이지에 실제 노출되는 공식 색상**이다.
+/brand 페이지가 ASCA Ink System 가이드로 바뀌면서 옛 확장 6색(구 `brand-data.ts`
+PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 **이름만 남기고
+값을 Ink System 으로 옮겼다.** 새 코드는 쓰지 말 것.
 
-| 토큰                     | HEX       | Tier         | 허용 사용처                                                                     |
-| ------------------------ | --------- | ------------ | ------------------------------------------------------------------------------- |
-| `{colors.brand-gold}`    | `#ffcc00` | **Semantic** | `highlight` 슬롯 — 수상·프리미엄·기념. `bg-brand-gold` / `text-brand-gold` 사용 |
-| `{colors.terra-red}`     | `#9b4444` | Cultural     | Scholar Red 대비 차분한 보조 강조 (인용 블록, 섹션 헤더 밑줄)                   |
-| `{colors.sage-green}`    | `#b7c4b7` | Cultural     | Celadon Green 의 저채도 변형 (배경 틴트, 메타 정보)                             |
-| `{colors.spring-green}`  | `#09f557` | Decorative   | **UI 금지** — 브랜드 가이드·문화 캠페인 장식에만                                |
-| `{colors.medium-orchid}` | `#c14af2` | Decorative   | **UI 금지** — 시즈널 캠페인 장식에만                                            |
-| `{colors.royal-blue}`    | `#275eea` | Decorative   | **UI 금지** — 문화 캠페인 장식에만                                              |
+| 토큰            | 옛 값     | 이제의 값 | Ink System 이름 |
+| --------------- | --------- | --------- | --------------- |
+| `brand-gold`    | `#ffcc00` | `#d4a84a` | gold-500        |
+| `terra-red`     | `#9b4444` | `#c94a3f` | seal-red-soft   |
+| `sage-green`    | `#b7c4b7` | `#b8bccb` | stone-300       |
+| `spring-green`  | `#09f557` | `#3f7a4e` | success         |
+| `medium-orchid` | `#c14af2` | `#3a54a0` | navy-500        |
+| `royal-blue`    | `#275eea` | `#3a54a0` | navy-500        |
 
-**Tier 의미:**
-
-- **Semantic**: 일반 UI 작업에 쓸 수 있음 (§2.1과 동급)
-- **Cultural**: 브랜드 맥락에서만 (작가 소개, 작품 리스트 등)
-- **Decorative**: /brand 페이지, 랜딩 히어로, 시즈널 배너 외 금지
-
-**`brand-gold`(`#ffcc00`)는 레거시다.** Ink System 은 "plastic gold" 를 쓰지
-않는다 — 금색은 `#d4a84a`(gold-500) 하나다. `highlight` 슬롯과 `temple-gold` 는
-이미 gold-500 으로 옮겼다. `brand-gold` 는 /brand 페이지의 기존 공식 색
-표기(`brand-data.ts`) 때문에 값을 남겼으며, 새 UI 에는 쓰지 않는다. /brand
-페이지 내용 갱신은 별도 작업이다.
+같은 날 오방·계절·서예 재료 장식색(`east-wood`, `summer-jade`, `autumn-gold`,
+`bamboo-green`, `plum-purple` …)도 같은 방식으로 옮겼다 — 값은 front matter
+주석이 정본이다. 브랜드 가이드의 정본은 이제 `/brand` 페이지
+(`app/brand/_components/brand-data.ts`)와 이 문서다.
 
 ### 2.6 WCAG 검증 쌍
 
@@ -447,8 +465,9 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
   `winter-snow`): 카테고리 라벨 장식
 - **Calligraphy 4색** (`bamboo-green`, `silk-cream`, `lacquer-black`,
   `vermillion`): 작품 메타데이터 색상
-- **Brand Extended 6색** (`terra-red`, `sage-green`, `spring-green`,
-  `brand-gold`, `medium-orchid`, `royal-blue`): brand 페이지 정체성 표시 전용
+- **옛 Brand Extended 6색** (`terra-red`, `sage-green`, `spring-green`,
+  `brand-gold`, `medium-orchid`, `royal-blue`): 이름만 남은 별칭 — 값은 Ink
+  System(§2.5)
 
 > **Rationale**: 전통 동아시아 5방위·계절·서예 색상은 의미 전달·장식 목적의 시각
 > 표현이지 본문 텍스트 contrast 대상 아님. 텍스트 위에 사용 시 shadcn semantic
@@ -634,9 +653,9 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 - Decorative 티어(`spring-green`, `medium-orchid`, `royal-blue`)를 UI에 쓰지
   않는다
 - `sage-green`·`spring-green`을 텍스트 색상으로 쓰지 않는다 (WCAG 미달)
-- `brand-gold`와 `temple-gold`를 같은 화면에서 동시에 쓰지 않는다
-- **프리미엄 강조에 `bg-accent` 를 쓰지 않는다** (accent 는 shadcn hover 배경,
-  Celadon Green). 반드시 `bg-brand-gold` 사용
+- 옛 장식색 이름(`brand-gold`, `terra-red`, `summer-jade` …)을 새 코드에 쓰지
+  않는다 — 값이 Ink System 으로 옮겨져 이름이 색을 말해 주지 않는다(§2.5)
+- 프리미엄·수상 강조는 `bg-highlight`(gold-500) 를 쓴다
 - `brush` 폰트를 본문·네비게이션에 쓰지 않는다 (히어로 외 금지)
 - 섀도우를 순수 `#000` opacity로 만들지 않는다 (먹색 hsl 사용)
 - `scale(1.05)` 이상의 호버 스케일은 금지 (1.02 한계)

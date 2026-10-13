@@ -1,1 +1,1 @@
-📝 docs: CLAUDE.md·AGENTS.md 에 UI 번역(i18n) 구조·번체 규칙, 전시 하위 페이지 데이터 출처, 빌드 캐시 삭제 이유 추가
+🎨 feat: /brand 를 ASCA Ink System 브랜드·스타일 가이드로 재작성 + 사다리 토큰·장식색 정렬, 헤더 로고·파비콘을 남색·금색으로 교체

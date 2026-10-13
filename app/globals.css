@@ -275,6 +275,8 @@
     --navy-800: #142244;
     --navy-700: #1d2e5c;
     --navy-600: #2a3f7a;
+    --navy-500: #3a54a0;
+    --navy-400: #6a82c0;
     --navy-300: #9eb0d6;
     --gold-900: #6b4e14;
     --gold-800: #8a661c;
@@ -282,25 +284,43 @@
     --gold-600: #c89729;
     --gold-500: #d4a84a;
     --gold-400: #e2c074;
+    --gold-300: #ecd6a1;
     --gold-200: #f5e9c8;
     --gold-100: #fbf5e4;
     --paper: #fbf8ef;
     --paper-2: #f4efdd;
+    --ink: #0b1733;
+    --ink-soft: #3a3e4f;
+    --stone-900: #1a1d2a;
+    --stone-700: #424a5e;
+    --stone-500: #6b7385;
+    --stone-300: #b8bccb;
+    --stone-200: #d7dae3;
+    --stone-100: #edeff3;
     --seal-red: #a8201a;
+    --seal-red-soft: #c94a3f;
     --shadow-gold-glow: 0 0 0 4px hsl(43 62% 56% / 0.18);
     --ease-ink: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Ink System 시맨틱 보조 (colors_and_type.css) — shadcn 슬롯에 없는 것만 */
+    --surface: #ffffff;
+    --surface-2: #f4efdd;
+    --fg-subtle: #6b7385; /* stone-500 */
+    --border-soft: #efeadc;
+    --success: #3f7a4e;
+    --accent-text: #8a661c; /* gold-800 — paper 위 작은 금색 글자는 이것 (4.9:1) */
 
     /* 브랜드 가이드라인 전용 컬러 변수 (이름 유지 · 값은 Ink System) */
     --ink-black: #0b1733;
     --rice-paper: #fbf8ef;
-    --sage-green: #b7c4b7;
-    --terra-red: #9b4444;
+    --sage-green: #b8bccb; /* stone-300 */
+    --terra-red: #c94a3f; /* seal-red-soft */
     --stone-gray: #424a5e;
     --celadon-green: #a77d24;
-    --spring-green: #09f557;
+    --spring-green: #3f7a4e; /* success */
     --gold: #d4a84a;
-    --medium-orchid: #c14af2;
-    --royal-blue: #275eea;
+    --medium-orchid: #3a54a0; /* navy-500 */
+    --royal-blue: #3a54a0; /* navy-500 */
     --scholar-red: #0b1733;
     --scholar-red-rgb: 11 23 51; /* tailwind scholar-red — 다크에서 gold-400 */
     --vermillion: #a8201a; /* 주인(朱印) 낙관 — 한자 표지 가운뎃점 전용 */
@@ -308,15 +328,15 @@
 
     /* 시맨틱 색상 매핑은 docs/02-design/DESIGN.md §2.1 을 참조. */
 
-    /* 뉴트럴 컬러 */
+    /* 뉴트럴 컬러 — Ink System stone 사다리(남색 기운 중성색)로 정렬 */
     --neutral-100: #ffffff;
-    --neutral-200: #f7f7fb;
-    --neutral-300: #f3f3f3;
-    --neutral-400: #9d9d9d;
-    --neutral-500: #696969;
-    --neutral-600: #363636;
-    --neutral-700: #232323;
-    --neutral-800: #070707;
+    --neutral-200: #edeff3; /* stone-100 */
+    --neutral-300: #d7dae3; /* stone-200 */
+    --neutral-400: #b8bccb; /* stone-300 */
+    --neutral-500: #6b7385; /* stone-500 */
+    --neutral-600: #424a5e; /* stone-700 */
+    --neutral-700: #1a1d2a; /* stone-900 */
+    --neutral-800: #070d1a; /* navy-950 */
 
     /* UI 컴포넌트 - 라이트모드 */
     --glass-bg: rgba(11, 23, 51, 0.02);
@@ -409,8 +429,14 @@
     --glass-hover: rgba(251, 248, 239, 0.08);
 
     --rice-paper: #fbf8ef;
-    --sage-green: #c5d2c5;
+    --sage-green: #9eb0d6; /* navy-300 */
     --celadon-green: #e2c074;
+
+    --surface: #0b1733;
+    --surface-2: #142244;
+    --fg-subtle: #8795b5;
+    --border-soft: #16213f;
+    --accent-text: #e2c074; /* gold-400 */
     --chart-1: #d4a84a;
     --chart-2: #9eb0d6;
     --chart-3: #8795b5;
