@@ -81,12 +81,12 @@ export function ContestSummary({
       )}
 
       {status === 'upcoming' && (
-        <Card className='border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20'>
+        <Card className='border-info/30 bg-info/5'>
           <CardContent className='pt-6 flex items-start gap-3'>
-            <Info className='h-5 w-5 text-blue-600 mt-0.5 shrink-0' />
+            <Info className='h-5 w-5 text-info dark:text-navy-300 mt-0.5 shrink-0' />
             <div>
-              <p className='font-medium text-blue-800 dark:text-blue-300 mb-1'>개최 예정</p>
-              <p className='text-sm text-blue-700 dark:text-blue-400'>
+              <p className='font-medium text-foreground mb-1'>개최 예정</p>
+              <p className='text-sm text-muted-foreground'>
                 {title}은 아직 개최 전입니다. 일정이 확정되면 공지사항을 통해 안내드리겠습니다.
               </p>
             </div>

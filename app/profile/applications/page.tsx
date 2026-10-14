@@ -135,7 +135,7 @@ export default function MyApplicationsPage() {
 
           <Card>
             <CardContent className='p-4 text-center'>
-              <Eye className='w-6 h-6 mx-auto mb-2 text-blue-600' />
+              <Eye className='w-6 h-6 mx-auto mb-2 text-info dark:text-navy-300' />
               <div className='text-2xl font-bold text-foreground'>
                 {applications.filter(a => a.status === 'under_review').length}
               </div>

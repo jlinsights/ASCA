@@ -225,7 +225,7 @@ const mockTierInfo: MembershipTierInfo = {
   nameKo: '인증 서예가',
   nameEn: 'Certified Master',
   level: 3,
-  color: '#8B5CF6',
+  color: '#a77d24',
   icon: '🏆',
   annualFee: 200000,
   currency: 'KRW',

@@ -63,7 +63,7 @@ export default function MemberApplicationPage() {
             value={formData.full_name_ko}
             onChange={handleChange}
             required
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
             placeholder='홍길동'
           />
         </div>
@@ -75,7 +75,7 @@ export default function MemberApplicationPage() {
             name='full_name_en'
             value={formData.full_name_en}
             onChange={handleChange}
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
             placeholder='Hong Gil-dong'
           />
         </div>
@@ -88,7 +88,7 @@ export default function MemberApplicationPage() {
             value={formData.phone_number}
             onChange={handleChange}
             required
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
             placeholder='010-1234-5678'
           />
         </div>
@@ -101,7 +101,7 @@ export default function MemberApplicationPage() {
             value={formData.email}
             onChange={handleChange}
             required
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
             placeholder='hong@example.com'
           />
         </div>
@@ -113,7 +113,7 @@ export default function MemberApplicationPage() {
             name='nationality'
             value={formData.nationality}
             onChange={handleChange}
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
           />
         </div>
 
@@ -124,7 +124,7 @@ export default function MemberApplicationPage() {
             name='calligraphy_experience'
             value={formData.calligraphy_experience}
             onChange={handleChange}
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
             placeholder='5'
             min='0'
           />
@@ -134,7 +134,7 @@ export default function MemberApplicationPage() {
           <button
             type='submit'
             disabled={createMember.isPending}
-            className='flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50'
+            className='flex-1 bg-info text-white py-3 rounded-lg font-medium hover:bg-info/90 disabled:opacity-50'
           >
             {createMember.isPending ? '제출 중...' : '신청하기'}
           </button>
@@ -142,7 +142,7 @@ export default function MemberApplicationPage() {
           <button
             type='button'
             onClick={() => router.back()}
-            className='px-6 py-3 border rounded-lg font-medium hover:bg-gray-50'
+            className='px-6 py-3 border rounded-lg font-medium hover:bg-muted'
           >
             취소
           </button>
@@ -154,13 +154,13 @@ export default function MemberApplicationPage() {
         <h2 className='text-xl font-semibold mb-4'>회원 등급 안내</h2>
         <div className='space-y-3'>
           {tiersData?.membership_tiers?.map((tier: any) => (
-            <div key={tier.id} className='p-4 bg-gray-50 rounded-lg'>
+            <div key={tier.id} className='p-4 bg-muted rounded-lg'>
               <div className='flex justify-between items-center'>
                 <div>
                   <span className='font-medium'>{tier.name_ko}</span>
-                  <span className='text-sm text-gray-600 ml-2'>Level {tier.level}</span>
+                  <span className='text-sm text-muted-foreground ml-2'>Level {tier.level}</span>
                 </div>
-                <span className='text-blue-600 font-semibold'>
+                <span className='text-info dark:text-navy-300 font-semibold'>
                   {tier.annual_fee?.toLocaleString()}원/년
                 </span>
               </div>

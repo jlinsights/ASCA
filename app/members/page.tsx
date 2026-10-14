@@ -27,10 +27,10 @@ export default function MembersPage() {
   if (error) {
     return (
       <div className='container mx-auto p-8'>
-        <div className='bg-red-50 border border-red-200 rounded-lg p-4 text-red-800'>
+        <div className='bg-seal/5 border border-seal/30 rounded-lg p-4 text-foreground'>
           <strong>Error:</strong> {(error as Error).message}
         </div>
-        <div className='mt-4 text-sm text-gray-600'>
+        <div className='mt-4 text-sm text-muted-foreground'>
           Rails 서버가 실행 중인지 확인해주세요: http://localhost:3000
         </div>
       </div>
@@ -46,7 +46,7 @@ export default function MembersPage() {
         <h1 className='text-3xl font-bold'>회원 목록</h1>
         <Link
           href='/members/apply'
-          className='bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700'
+          className='bg-info text-white px-6 py-2 rounded-lg hover:bg-info/90'
         >
           회원 신청
         </Link>
@@ -73,25 +73,25 @@ export default function MembersPage() {
       {/* Members Table */}
       <div className='bg-white rounded-lg shadow overflow-hidden'>
         <table className='w-full'>
-          <thead className='bg-gray-50'>
+          <thead className='bg-muted'>
             <tr>
-              <th className='px-6 py-3 text-left text-sm font-medium text-gray-700'>회원번호</th>
-              <th className='px-6 py-3 text-left text-sm font-medium text-gray-700'>이름</th>
-              <th className='px-6 py-3 text-left text-sm font-medium text-gray-700'>등급</th>
-              <th className='px-6 py-3 text-left text-sm font-medium text-gray-700'>상태</th>
-              <th className='px-6 py-3 text-left text-sm font-medium text-gray-700'>가입일</th>
+              <th className='px-6 py-3 text-left text-sm font-medium text-foreground'>회원번호</th>
+              <th className='px-6 py-3 text-left text-sm font-medium text-foreground'>이름</th>
+              <th className='px-6 py-3 text-left text-sm font-medium text-foreground'>등급</th>
+              <th className='px-6 py-3 text-left text-sm font-medium text-foreground'>상태</th>
+              <th className='px-6 py-3 text-left text-sm font-medium text-foreground'>가입일</th>
             </tr>
           </thead>
-          <tbody className='divide-y divide-gray-200'>
+          <tbody className='divide-y divide-border'>
             {members.length === 0 ? (
               <tr>
-                <td colSpan={5} className='px-6 py-8 text-center text-gray-500'>
+                <td colSpan={5} className='px-6 py-8 text-center text-muted-foreground'>
                   회원이 없습니다.
                 </td>
               </tr>
             ) : (
               members.map((member: any) => (
-                <tr key={member.id} className='hover:bg-gray-50'>
+                <tr key={member.id} className='hover:bg-muted'>
                   <td className='px-6 py-4 text-sm'>{member.membership_number || '-'}</td>
                   <td className='px-6 py-4 text-sm font-medium'>
                     {member.full_name_ko || member.full_name}
@@ -101,16 +101,16 @@ export default function MembersPage() {
                     <span
                       className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${
                         member.status === 'active'
-                          ? 'bg-green-100 text-green-800'
+                          ? 'bg-success/10 text-foreground'
                           : member.status === 'pending_approval'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-gray-100 text-gray-800'
+                            ? 'bg-warning/10 text-foreground'
+                            : 'bg-muted text-foreground'
                       }`}
                     >
                       {member.status}
                     </span>
                   </td>
-                  <td className='px-6 py-4 text-sm text-gray-600'>
+                  <td className='px-6 py-4 text-sm text-muted-foreground'>
                     {member.join_date
                       ? new Date(member.join_date).toLocaleDateString('ko-KR')
                       : '-'}
@@ -128,7 +128,7 @@ export default function MembersPage() {
           <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}
-            className='px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50'
+            className='px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted'
           >
             Previous
           </button>
@@ -140,7 +140,7 @@ export default function MembersPage() {
           <button
             onClick={() => setPage(p => Math.min(meta.total_pages, p + 1))}
             disabled={page === meta.total_pages}
-            className='px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50'
+            className='px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted'
           >
             Next
           </button>

@@ -77,12 +77,12 @@ export function AwardCategoriesList({ categories, status, hasDbData }: AwardCate
       </div>
 
       {!hasDbData && (
-        <Card className='mt-8 border-amber-200 bg-amber-50/50 dark:border-amber-800 dark:bg-amber-950/20'>
+        <Card className='mt-8 border-warning/30 bg-warning/5'>
           <CardContent className='pt-6 flex items-start gap-3'>
-            <Info className='h-5 w-5 text-amber-600 mt-0.5 shrink-0' />
+            <Info className='h-5 w-5 text-warning dark:text-gold-400 mt-0.5 shrink-0' />
             <div>
-              <p className='font-medium text-amber-800 dark:text-amber-300 mb-1'>데이터 안내</p>
-              <p className='text-sm text-amber-700 dark:text-amber-400'>
+              <p className='font-medium text-foreground mb-1'>데이터 안내</p>
+              <p className='text-sm text-muted-foreground'>
                 현재 표시되는 수상자 정보는 일부 샘플 데이터입니다. 전체 수상자 명단은 데이터베이스
                 시딩 후 자동으로 업데이트됩니다.
               </p>

@@ -90,13 +90,13 @@ export function ExhibitionManagementClient() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'upcoming':
-        return 'bg-blue-50 text-blue-700 border-blue-200'
+        return 'bg-info/5 text-muted-foreground border-info/30'
       case 'current':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+        return 'bg-success/5 text-muted-foreground border-success/30'
       case 'past':
-        return 'bg-slate-50 text-slate-700 border-slate-200'
+        return 'bg-muted text-foreground border-border'
       default:
-        return 'bg-slate-50 text-slate-700 border-slate-200'
+        return 'bg-muted text-foreground border-border'
     }
   }
 
@@ -139,21 +139,23 @@ export function ExhibitionManagementClient() {
 
             <Card>
               <CardContent className='p-4 text-center'>
-                <div className='text-3xl font-bold text-blue-600 mb-1'>{stats.upcoming}</div>
+                <div className='text-3xl font-bold text-info dark:text-navy-300 mb-1'>
+                  {stats.upcoming}
+                </div>
                 <div className='text-sm text-muted-foreground'>예정</div>
               </CardContent>
             </Card>
 
             <Card>
               <CardContent className='p-4 text-center'>
-                <div className='text-3xl font-bold text-emerald-600 mb-1'>{stats.current}</div>
+                <div className='text-3xl font-bold text-success mb-1'>{stats.current}</div>
                 <div className='text-sm text-muted-foreground'>진행중</div>
               </CardContent>
             </Card>
 
             <Card>
               <CardContent className='p-4 text-center'>
-                <div className='text-3xl font-bold text-slate-600 mb-1'>{stats.past}</div>
+                <div className='text-3xl font-bold text-muted-foreground mb-1'>{stats.past}</div>
                 <div className='text-sm text-muted-foreground'>종료</div>
               </CardContent>
             </Card>

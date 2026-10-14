@@ -33,10 +33,10 @@ import type { Notice, SearchFilters, PaginationParams } from '@/lib/types/cms-le
 import Link from 'next/link'
 
 const categoryColors = {
-  general: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-  event: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-  announcement: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-  urgent: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+  general: 'bg-info/10 text-foreground',
+  event: 'bg-success/10 text-foreground',
+  announcement: 'bg-highlight/10 text-foreground',
+  urgent: 'bg-seal/10 text-foreground',
 }
 const categoryLabels = {
   general: '일반',
@@ -143,8 +143,8 @@ export default function NoticePage() {
       <main className='min-h-screen bg-transparent'>
         <section className='container mx-auto px-4 py-16'>
           <div className='max-w-4xl mx-auto text-center'>
-            <div className='bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-6'>
-              <p className='text-red-700 dark:text-red-300 font-medium'>{error}</p>
+            <div className='bg-seal/5 border border-seal/30 rounded-lg p-6'>
+              <p className='text-muted-foreground font-medium'>{error}</p>
               <Button onClick={fetchNotices} className='mt-4' variant='outline'>
                 다시 시도
               </Button>
@@ -225,13 +225,13 @@ export default function NoticePage() {
           {pinnedNotices.length > 0 && (
             <div className='mb-8'>
               <div className='flex items-center gap-2 mb-6'>
-                <Pin className='h-5 w-5 text-red-500' />
+                <Pin className='h-5 w-5 text-destructive' />
                 <h2 className='text-xl font-bold text-foreground'>{t('importantNotice')}</h2>
               </div>
               <div className='space-y-4'>
                 {pinnedNotices.map(notice => (
                   <Link key={notice.id} href={`/notice/${notice.id}`} className='block'>
-                    <Card className='border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20 shadow-sm hover:shadow-md transition-all duration-200'>
+                    <Card className='border-seal/30 bg-seal/5 shadow-sm hover:shadow-md transition-all duration-200'>
                       <CardContent className='p-6'>
                         <div className='flex items-start justify-between mb-4'>
                           <div className='flex items-center gap-3'>
