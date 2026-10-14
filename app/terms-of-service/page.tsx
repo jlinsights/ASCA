@@ -10,7 +10,7 @@ export default function TermsOfServicePage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
+      <section className='py-12 md:py-20 bg-gradient-to-b from-muted to-background'>
         <div className='container mx-auto px-4 text-center'>
           <div className='flex items-center justify-center gap-3 mb-6'>
             <ScrollText className='h-8 w-8 md:h-10 md:w-10 text-scholar-red' />
@@ -55,10 +55,10 @@ export default function TermsOfServicePage() {
           </Card>
 
           {/* 이용자의 정의 */}
-          <Card className='border-l-4 border-l-blue-500'>
+          <Card className='border-l-4 border-l-info'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <User className='h-5 w-5 text-blue-500' />
+                <User className='h-5 w-5 text-info dark:text-navy-300' />
                 <h2 className='text-xl md:text-2xl font-bold'>제2조 이용자의 정의</h2>
               </div>
               <p className='text-sm md:text-base text-muted-foreground'>
@@ -69,10 +69,10 @@ export default function TermsOfServicePage() {
           </Card>
 
           {/* 회원 가입 */}
-          <Card className='border-l-4 border-l-emerald-500'>
+          <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Shield className='h-5 w-5 text-emerald-500' />
+                <Shield className='h-5 w-5 text-success' />
                 <h2 className='text-xl md:text-2xl font-bold'>제3조 회원 가입</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
@@ -84,7 +84,7 @@ export default function TermsOfServicePage() {
                   ② 동양서예협회는 제1항과 같이 회원으로 가입할 것을 신청한 자가 다음 각 호에
                   해당하지 않는 한 신청한 자를 회원으로 등록합니다.
                 </p>
-                <div className='bg-muted/50 p-4 rounded-lg space-y-2'>
+                <div className='bg-muted p-4 rounded-lg space-y-2'>
                   <p>
                     1. 가입신청자가 본 약관 제7조 제3항에 의하여 이전에 회원자격을 상실한 적이 있는
                     경우. 다만 제7조 제3항에 의한 회원자격 상실 후 1개월이 경과한 자로서 서협의
@@ -113,7 +113,7 @@ export default function TermsOfServicePage() {
               <h2 className='text-xl md:text-2xl font-bold mb-4'>제4조 서비스의 제공 및 변경</h2>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
                 <p>① 동양서예협회는 다음과 같은 업무를 수행합니다.</p>
-                <div className='bg-muted/50 p-4 rounded-lg space-y-2'>
+                <div className='bg-muted p-4 rounded-lg space-y-2'>
                   <p>1. 회원정보 관리업무</p>
                   <p>2. 회원제 서비스 제공업무</p>
                   <p>3. 기타 동양서예협회가 정하는 업무</p>
@@ -166,15 +166,15 @@ export default function TermsOfServicePage() {
           <Separator />
 
           {/* 이용자의 의무 */}
-          <Card className='border-l-4 border-l-amber-500'>
+          <Card className='border-l-4 border-l-warning'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <AlertCircle className='h-5 w-5 text-amber-500' />
+                <AlertCircle className='h-5 w-5 text-warning dark:text-gold-400' />
                 <h2 className='text-xl md:text-2xl font-bold'>제12조 이용자의 의무</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
                 <p>① 이용자는 다음 행위를 하여서는 안됩니다.</p>
-                <div className='bg-amber-50 dark:bg-amber-950/30 p-4 rounded-lg space-y-2 border border-amber-200 dark:border-amber-800'>
+                <div className='bg-warning/5 p-4 rounded-lg space-y-2 border border-warning/30'>
                   <p>1. 신청 또는 변경시 허위내용의 등록</p>
                   <p>2. 타인의 정보 도용</p>
                   <p>3. 동양서예협회에 게시된 정보의 변경</p>
@@ -213,10 +213,10 @@ export default function TermsOfServicePage() {
           </Card>
 
           {/* 저작권의 귀속 및 이용제한 */}
-          <Card className='border-l-4 border-l-purple-500'>
+          <Card className='border-l-4 border-l-highlight'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Scale className='h-5 w-5 text-purple-500' />
+                <Scale className='h-5 w-5 text-gold-700 dark:text-gold-400' />
                 <h2 className='text-xl md:text-2xl font-bold'>제14조 저작권의 귀속 및 이용제한</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
@@ -268,7 +268,7 @@ export default function TermsOfServicePage() {
           </Card>
 
           {/* 부칙 */}
-          <Card className='bg-muted/30'>
+          <Card className='bg-muted'>
             <CardContent className='p-6 md:p-8'>
               <h2 className='text-xl md:text-2xl font-bold mb-4'>부칙</h2>
               <p className='text-sm md:text-base text-muted-foreground font-medium'>

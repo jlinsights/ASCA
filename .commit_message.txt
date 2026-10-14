@@ -1,1 +1,1 @@
-🎨 feat: /brand 를 ASCA Ink System 브랜드·스타일 가이드로 재작성 + 사다리 토큰·장식색 정렬, 헤더 로고·파비콘을 남색·금색으로 교체
+🐛 fix: 법적 고지 페이지의 destructive/N·muted/N 투명도 클래스가 CSS 변수 색이라 생성되지 않던 문제를 seal/N·bg-muted 로 교체

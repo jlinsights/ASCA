@@ -10,10 +10,10 @@ export default function PrivacyPolicyPage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
+      <section className='py-12 md:py-20 bg-gradient-to-b from-muted to-background'>
         <div className='container mx-auto px-4 text-center'>
           <div className='flex items-center justify-center gap-3 mb-6'>
-            <Shield className='h-8 w-8 md:h-10 md:w-10 text-blue-600' />
+            <Shield className='h-8 w-8 md:h-10 md:w-10 text-info dark:text-navy-300' />
             <h1 className='text-3xl md:text-5xl font-bold tracking-tight'>개인정보처리방침</h1>
           </div>
           <p className='text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl mx-auto'>
@@ -29,10 +29,10 @@ export default function PrivacyPolicyPage() {
       <section className='container mx-auto px-4 py-8 md:py-12'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 목적 */}
-          <Card className='border-l-4 border-l-blue-600'>
+          <Card className='border-l-4 border-l-info'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <FileText className='h-5 w-5 text-blue-600' />
+                <FileText className='h-5 w-5 text-info dark:text-navy-300' />
                 <h2 className='text-xl md:text-2xl font-bold'>제1조 목적</h2>
               </div>
               <p className='text-sm md:text-base text-muted-foreground'>
@@ -47,10 +47,10 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 개인정보 처리의 원칙 */}
-          <Card className='border-l-4 border-l-emerald-500'>
+          <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Lock className='h-5 w-5 text-emerald-500' />
+                <Lock className='h-5 w-5 text-success' />
                 <h2 className='text-xl md:text-2xl font-bold'>제2조 개인정보 처리의 원칙</h2>
               </div>
               <p className='text-sm md:text-base text-muted-foreground'>
@@ -63,10 +63,10 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 본 방침의 공개 */}
-          <Card className='border-l-4 border-l-amber-500'>
+          <Card className='border-l-4 border-l-warning'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Eye className='h-5 w-5 text-amber-500' />
+                <Eye className='h-5 w-5 text-warning dark:text-gold-400' />
                 <h2 className='text-xl md:text-2xl font-bold'>제3조 본 방침의 공개</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
           <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Database className='h-5 w-5 text-purple-500' />
+                <Database className='h-5 w-5 text-gold-700 dark:text-gold-400' />
                 <h2 className='text-xl md:text-2xl font-bold'>
                   제5조 개인정보의 수집 및 처리 목적
                 </h2>
@@ -97,7 +97,7 @@ export default function PrivacyPolicyPage() {
                   목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 개인정보보호법
                   제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.
                 </p>
-                <div className='bg-purple-50 dark:bg-purple-950/30 p-4 rounded-lg space-y-2 border border-purple-200 dark:border-purple-800'>
+                <div className='bg-highlight/5 p-4 rounded-lg space-y-2 border border-highlight/30'>
                   <p>1. 홈페이지 회원 가입 및 관리</p>
                   <p>2. 재화 또는 서비스 제공</p>
                   <p>3. 마케팅 및 광고에의 활용</p>
@@ -116,7 +116,7 @@ export default function PrivacyPolicyPage() {
                     ① 회사는 회원가입, 상담, 서비스 신청 등을 위해 아래와 같은 개인정보를 수집하고
                     있습니다.
                   </h3>
-                  <div className='bg-muted/50 p-4 rounded-lg space-y-2'>
+                  <div className='bg-muted p-4 rounded-lg space-y-2'>
                     <p>
                       <strong>회원가입시:</strong> 필수항목 - 아이디, 비밀번호, 이름, 생년월일,
                       성별, 전화번호, 휴대전화번호, 이메일, 주소
@@ -131,7 +131,7 @@ export default function PrivacyPolicyPage() {
                     ② 서비스 이용과정이나 사업처리 과정에서 아래와 같은 정보들이 생성되어 수집될 수
                     있습니다.
                   </h3>
-                  <div className='bg-muted/50 p-4 rounded-lg'>
+                  <div className='bg-muted p-4 rounded-lg'>
                     <p>서비스 이용기록, 접속 로그, 쿠키, 접속 IP 정보, 결제기록</p>
                   </div>
                 </div>
@@ -151,7 +151,7 @@ export default function PrivacyPolicyPage() {
                   수집시에 동의 받은 개인정보 보유, 이용 기간 내에서 개인정보를 처리, 보유합니다.
                 </p>
                 <p>② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다.</p>
-                <div className='bg-muted/50 p-4 rounded-lg space-y-2'>
+                <div className='bg-muted p-4 rounded-lg space-y-2'>
                   <p>
                     <strong>홈페이지 회원가입 및 관리:</strong> 사업자/단체 홈페이지 탈퇴시까지
                   </p>
@@ -177,10 +177,10 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 정보주체의 권리·의무 및 행사방법 */}
-          <Card className='border-l-4 border-l-green-500'>
+          <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <User className='h-5 w-5 text-green-500' />
+                <User className='h-5 w-5 text-success' />
                 <h2 className='text-xl md:text-2xl font-bold'>
                   제10조 정보주체의 권리·의무 및 행사방법
                 </h2>
@@ -190,7 +190,7 @@ export default function PrivacyPolicyPage() {
                   ① 정보주체는 회사에 대해 언제든지 다음 각 호의 개인정보 보호 관련 권리를 행사할 수
                   있습니다.
                 </p>
-                <div className='bg-green-50 dark:bg-green-950/30 p-4 rounded-lg space-y-2 border border-green-200 dark:border-green-800'>
+                <div className='bg-success/5 p-4 rounded-lg space-y-2 border border-success/30'>
                   <p>1. 개인정보 처리현황 통지요구</p>
                   <p>2. 개인정보 열람요구</p>
                   <p>3. 오류 등이 있을 경우 정정·삭제요구</p>
@@ -217,7 +217,7 @@ export default function PrivacyPolicyPage() {
                   때에는 지체없이 해당 개인정보를 파기합니다.
                 </p>
                 <div className='space-y-3'>
-                  <div className='bg-muted/50 p-4 rounded-lg'>
+                  <div className='bg-muted p-4 rounded-lg'>
                     <h3 className='font-semibold text-foreground mb-2'>파기절차</h3>
                     <p>
                       이용자가 입력한 정보는 목적 달성 후 별도의 DB에 옮겨져(종이의 경우 별도의
@@ -225,7 +225,7 @@ export default function PrivacyPolicyPage() {
                       파기됩니다.
                     </p>
                   </div>
-                  <div className='bg-muted/50 p-4 rounded-lg'>
+                  <div className='bg-muted p-4 rounded-lg'>
                     <h3 className='font-semibold text-foreground mb-2'>파기방법</h3>
                     <p>전자적 파일 형태의 정보는 기록을 재생할 수 없는 기술적 방법을 사용합니다.</p>
                   </div>
@@ -235,10 +235,10 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 개인정보의 안전성 확보조치 */}
-          <Card className='border-l-4 border-l-red-500'>
+          <Card className='border-l-4 border-l-destructive'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Shield className='h-5 w-5 text-red-500' />
+                <Shield className='h-5 w-5 text-destructive' />
                 <h2 className='text-xl md:text-2xl font-bold'>제12조 개인정보의 안전성 확보조치</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
@@ -247,7 +247,7 @@ export default function PrivacyPolicyPage() {
                   및 물리적 조치를 하고 있습니다.
                 </p>
                 <div className='grid md:grid-cols-2 gap-4'>
-                  <div className='bg-red-50 dark:bg-red-950/30 p-4 rounded-lg border border-red-200 dark:border-red-800'>
+                  <div className='bg-seal/5 p-4 rounded-lg border border-seal/30'>
                     <h3 className='font-semibold text-foreground mb-2'>기술적 조치</h3>
                     <ul className='space-y-1 text-sm'>
                       <li>• 개인정보처리시스템 등의 접근권한 관리</li>
@@ -256,7 +256,7 @@ export default function PrivacyPolicyPage() {
                       <li>• 보안프로그램 설치 및 갱신</li>
                     </ul>
                   </div>
-                  <div className='bg-red-50 dark:bg-red-950/30 p-4 rounded-lg border border-red-200 dark:border-red-800'>
+                  <div className='bg-seal/5 p-4 rounded-lg border border-seal/30'>
                     <h3 className='font-semibold text-foreground mb-2'>관리적 조치</h3>
                     <ul className='space-y-1 text-sm'>
                       <li>• 개인정보 취급직원의 최소화 및 교육</li>
@@ -274,7 +274,7 @@ export default function PrivacyPolicyPage() {
           <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Settings className='h-5 w-5 text-orange-500' />
+                <Settings className='h-5 w-5 text-warning dark:text-gold-400' />
                 <h2 className='text-xl md:text-2xl font-bold'>
                   제13조 개인정보 자동 수집 장치의 설치·운영 및 거부
                 </h2>
@@ -288,7 +288,7 @@ export default function PrivacyPolicyPage() {
                   ② 쿠키는 웹사이트를 운영하는데 이용되는 서버(http)가 이용자의 컴퓨터 브라우저에게
                   보내는 소량의 정보이며 이용자들의 PC 컴퓨터내의 하드디스크에 저장되기도 합니다.
                 </p>
-                <div className='bg-orange-50 dark:bg-orange-950/30 p-4 rounded-lg border border-orange-200 dark:border-orange-800'>
+                <div className='bg-warning/5 p-4 rounded-lg border border-warning/30'>
                   <h3 className='font-semibold text-foreground mb-2'>쿠키 설정 거부 방법</h3>
                   <div className='space-y-2 text-sm'>
                     <p>
@@ -343,7 +343,7 @@ export default function PrivacyPolicyPage() {
                     </div>
                   </div>
 
-                  <div className='bg-muted/50 p-4 rounded-lg'>
+                  <div className='bg-muted p-4 rounded-lg'>
                     <h3 className='font-semibold text-foreground mb-3'>개인정보 보호 담당자</h3>
                     <div className='space-y-2 text-sm'>
                       <p>
@@ -369,10 +369,10 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 권익침해에 대한 구제방법 */}
-          <Card className='border-l-4 border-l-purple-500'>
+          <Card className='border-l-4 border-l-highlight'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <AlertTriangle className='h-5 w-5 text-purple-500' />
+                <AlertTriangle className='h-5 w-5 text-gold-700 dark:text-gold-400' />
                 <h2 className='text-xl md:text-2xl font-bold'>제37조 권익침해에 대한 구제방법</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
@@ -382,7 +382,7 @@ export default function PrivacyPolicyPage() {
                   있습니다.
                 </p>
 
-                <div className='bg-purple-50 dark:bg-purple-950/30 p-4 rounded-lg border border-purple-200 dark:border-purple-800'>
+                <div className='bg-highlight/5 p-4 rounded-lg border border-highlight/30'>
                   <h3 className='font-semibold text-foreground mb-3'>관련 기관 연락처</h3>
                   <div className='space-y-2 text-sm'>
                     <p>
@@ -414,7 +414,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 부칙 */}
-          <Card className='bg-muted/30'>
+          <Card className='bg-muted'>
             <CardContent className='p-6 md:p-8'>
               <h2 className='text-xl md:text-2xl font-bold mb-4'>부칙</h2>
               <div className='space-y-2 text-sm md:text-base text-muted-foreground'>
@@ -430,7 +430,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* Contact Information */}
-          <Card className='bg-gradient-to-r from-blue-600/5 to-blue-600/10 border-blue-600/20'>
+          <Card className='bg-gradient-to-r from-info/5 to-info/10 border-info/20'>
             <CardContent className='p-6 md:p-8 text-center'>
               <h3 className='text-lg md:text-xl font-bold mb-4'>개인정보 관련 문의사항</h3>
               <p className='text-sm md:text-base text-muted-foreground mb-4'>
