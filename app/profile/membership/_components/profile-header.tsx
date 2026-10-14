@@ -225,7 +225,7 @@ const mockTierInfo: MembershipTierInfo = {
   nameKo: '인증 서예가',
   nameEn: 'Certified Master',
   level: 3,
-  color: '#8B5CF6',
+  color: '#a77d24',
   icon: '🏆',
   annualFee: 200000,
   currency: 'KRW',
@@ -347,10 +347,7 @@ export function ProfileHeader({
             <div className='flex gap-2'>
               {isEditing ? (
                 <>
-                  <Button
-                    onClick={handleSaveProfile}
-                    className='bg-emerald-600 hover:bg-emerald-700'
-                  >
+                  <Button onClick={handleSaveProfile} className='bg-success hover:bg-success/90'>
                     <Save className='h-4 w-4 mr-2' />
                     저장
                   </Button>

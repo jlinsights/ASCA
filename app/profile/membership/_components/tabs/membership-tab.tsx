@@ -62,8 +62,8 @@ export function MembershipTab({ profile, tierInfo }: MembershipTabProps) {
                   key={index}
                   className='flex items-center gap-3 p-3 border border-border rounded-lg'
                 >
-                  <div className='w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center'>
-                    <TrendingUp className='h-4 w-4 text-blue-600' />
+                  <div className='w-8 h-8 rounded-full bg-info/10 flex items-center justify-center'>
+                    <TrendingUp className='h-4 w-4 text-info dark:text-navy-300' />
                   </div>
                   <div className='flex-1'>
                     <div className='font-medium text-sm'>{resolveActionLabel(entry.action)}</div>
@@ -141,7 +141,7 @@ function resolveStatusLabel(status: string): string {
 }
 
 function resolveStatusColor(status: string): string {
-  if (status === 'completed') return 'bg-green-100 text-green-800'
-  if (status === 'pending') return 'bg-yellow-100 text-yellow-800'
-  return 'bg-red-100 text-red-800'
+  if (status === 'completed') return 'bg-success/10 text-foreground'
+  if (status === 'pending') return 'bg-warning/10 text-foreground'
+  return 'bg-seal/10 text-foreground'
 }

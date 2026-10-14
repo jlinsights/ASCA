@@ -38,10 +38,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 const categoryColors = {
-  general: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-  event: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-  announcement: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-  urgent: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+  general: 'bg-info/10 text-foreground',
+  event: 'bg-success/10 text-foreground',
+  announcement: 'bg-highlight/10 text-foreground',
+  urgent: 'bg-seal/10 text-foreground',
 }
 
 const categoryLabels = {
@@ -194,7 +194,7 @@ export default function NoticeDetailPage() {
       <div className='min-h-screen bg-transparent'>
         <main className='container mx-auto px-4 py-8'>
           <div className='text-center py-12'>
-            <AlertCircle className='h-16 w-16 text-red-600 mx-auto mb-4' />
+            <AlertCircle className='h-16 w-16 text-destructive mx-auto mb-4' />
             <h3 className='text-lg font-semibold text-foreground mb-2'>오류가 발생했습니다</h3>
             <p className='text-muted-foreground mb-4'>{error}</p>
             <Link href='/notice'>

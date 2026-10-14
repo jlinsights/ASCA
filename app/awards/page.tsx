@@ -31,35 +31,35 @@ const awardCategories = [
     name: '대상',
     nameEn: 'Grand Prize',
     icon: Crown,
-    color: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+    color: 'bg-warning/10 text-foreground border-warning/30',
   },
   {
     id: 'excellence',
     name: '최우수상',
     nameEn: 'Excellence Award',
     icon: Trophy,
-    color: 'bg-amber-100 text-amber-800 border-amber-300',
+    color: 'bg-warning/10 text-foreground border-warning/30',
   },
   {
     id: 'merit',
     name: '우수상',
     nameEn: 'Merit Award',
     icon: Medal,
-    color: 'bg-blue-100 text-blue-800 border-blue-300',
+    color: 'bg-info/10 text-foreground border-info/30',
   },
   {
     id: 'special',
     name: '특선',
     nameEn: 'Special Selection',
     icon: Star,
-    color: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+    color: 'bg-info/10 text-foreground border-info/30',
   },
   {
     id: 'selected',
     name: '입선',
     nameEn: 'Selected',
     icon: CheckCircle,
-    color: 'bg-gray-100 text-gray-700 border-gray-300',
+    color: 'bg-muted text-foreground border-border',
   },
 ]
 
@@ -123,8 +123,8 @@ const contestYears = [
 ]
 
 const statusConfig = {
-  upcoming: { label: '예정', className: 'bg-blue-100 text-blue-800' },
-  completed: { label: '완료', className: 'bg-green-100 text-green-800' },
+  upcoming: { label: '예정', className: 'bg-info/10 text-foreground' },
+  completed: { label: '완료', className: 'bg-success/10 text-foreground' },
 }
 
 export default function AwardsPage() {

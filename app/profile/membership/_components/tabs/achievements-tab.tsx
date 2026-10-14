@@ -25,13 +25,13 @@ export function AchievementsTab({ profile }: AchievementsTabProps) {
               className='p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors'
             >
               <div className='flex items-start gap-3'>
-                <div className='w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center flex-shrink-0'>
+                <div className='w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center flex-shrink-0'>
                   {achievement.type === 'award' ? (
-                    <Trophy className='h-5 w-5 text-amber-600' />
+                    <Trophy className='h-5 w-5 text-warning dark:text-gold-400' />
                   ) : achievement.type === 'exhibition' ? (
-                    <Eye className='h-5 w-5 text-blue-600' />
+                    <Eye className='h-5 w-5 text-info dark:text-navy-300' />
                   ) : (
-                    <Star className='h-5 w-5 text-purple-600' />
+                    <Star className='h-5 w-5 text-gold-700 dark:text-gold-400' />
                   )}
                 </div>
                 <div className='flex-1'>
