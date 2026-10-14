@@ -1,1 +1,1 @@
-🎨 refactor: 법적 고지 4개 페이지(이메일 무단수집 거부·저작권·개인정보·이용약관)의 Tailwind 팔레트 색을 Ink System 의미 토큰으로 교체
+🐛 fix: 법적 고지 페이지의 destructive/N·muted/N 투명도 클래스가 CSS 변수 색이라 생성되지 않던 문제를 seal/N·bg-muted 로 교체

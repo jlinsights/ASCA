@@ -21,7 +21,7 @@ export default function EmailRefusePage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-destructive/5 to-background'>
+      <section className='py-12 md:py-20 bg-gradient-to-b from-seal/5 to-background'>
         <div className='container mx-auto px-4 text-center'>
           <div className='flex items-center justify-center gap-3 mb-6'>
             <Ban className='h-8 w-8 md:h-10 md:w-10 text-destructive' />
@@ -35,11 +35,11 @@ export default function EmailRefusePage() {
               <AlertTriangle className='h-3 w-3 mr-1' />
               법적 보호
             </Badge>
-            <Badge variant='outline' className='text-sm border-destructive/30'>
+            <Badge variant='outline' className='text-sm border-seal/30'>
               <Scale className='h-3 w-3 mr-1' />
               정보통신망법
             </Badge>
-            <Badge variant='outline' className='text-sm border-destructive/30'>
+            <Badge variant='outline' className='text-sm border-seal/30'>
               <Shield className='h-3 w-3 mr-1' />
               개인정보보호
             </Badge>
@@ -58,7 +58,7 @@ export default function EmailRefusePage() {
                 <h2 className='text-2xl md:text-3xl font-bold'>무단수집 거부 원칙</h2>
               </div>
 
-              <div className='bg-destructive/5 p-6 rounded-lg border border-destructive/30 mb-6'>
+              <div className='bg-seal/5 p-6 rounded-lg border border-seal/30 mb-6'>
                 <div className='flex items-start gap-3'>
                   <AlertTriangle className='h-5 w-5 text-destructive mt-1 flex-shrink-0' />
                   <div className='space-y-3'>
@@ -122,7 +122,7 @@ export default function EmailRefusePage() {
                 <Badge variant='secondary'>정보통신망법 제50조의2</Badge>
               </div>
 
-              <div className='bg-muted/50 p-6 rounded-lg border border-border'>
+              <div className='bg-muted p-6 rounded-lg border border-border'>
                 <h3 className='text-xl font-bold mb-4 text-center'>
                   정보통신망법 제50조의2 (전자우편주소의 무단 수집행위 등 금지)
                 </h3>
@@ -232,7 +232,7 @@ export default function EmailRefusePage() {
           </Card>
 
           {/* 게시 정보 */}
-          <Card className='bg-muted/50 border-2 border-dashed'>
+          <Card className='bg-muted border-2 border-dashed'>
             <CardContent className='p-6 text-center'>
               <div className='flex items-center justify-center gap-2 mb-2'>
                 <FileText className='h-5 w-5 text-muted-foreground' />

@@ -10,7 +10,7 @@ export default function TermsOfServicePage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
+      <section className='py-12 md:py-20 bg-gradient-to-b from-muted to-background'>
         <div className='container mx-auto px-4 text-center'>
           <div className='flex items-center justify-center gap-3 mb-6'>
             <ScrollText className='h-8 w-8 md:h-10 md:w-10 text-scholar-red' />
@@ -84,7 +84,7 @@ export default function TermsOfServicePage() {
                   ② 동양서예협회는 제1항과 같이 회원으로 가입할 것을 신청한 자가 다음 각 호에
                   해당하지 않는 한 신청한 자를 회원으로 등록합니다.
                 </p>
-                <div className='bg-muted/50 p-4 rounded-lg space-y-2'>
+                <div className='bg-muted p-4 rounded-lg space-y-2'>
                   <p>
                     1. 가입신청자가 본 약관 제7조 제3항에 의하여 이전에 회원자격을 상실한 적이 있는
                     경우. 다만 제7조 제3항에 의한 회원자격 상실 후 1개월이 경과한 자로서 서협의
@@ -113,7 +113,7 @@ export default function TermsOfServicePage() {
               <h2 className='text-xl md:text-2xl font-bold mb-4'>제4조 서비스의 제공 및 변경</h2>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>
                 <p>① 동양서예협회는 다음과 같은 업무를 수행합니다.</p>
-                <div className='bg-muted/50 p-4 rounded-lg space-y-2'>
+                <div className='bg-muted p-4 rounded-lg space-y-2'>
                   <p>1. 회원정보 관리업무</p>
                   <p>2. 회원제 서비스 제공업무</p>
                   <p>3. 기타 동양서예협회가 정하는 업무</p>
@@ -268,7 +268,7 @@ export default function TermsOfServicePage() {
           </Card>
 
           {/* 부칙 */}
-          <Card className='bg-muted/30'>
+          <Card className='bg-muted'>
             <CardContent className='p-6 md:p-8'>
               <h2 className='text-xl md:text-2xl font-bold mb-4'>부칙</h2>
               <p className='text-sm md:text-base text-muted-foreground font-medium'>

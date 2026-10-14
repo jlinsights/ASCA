@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
+      <section className='py-12 md:py-20 bg-gradient-to-b from-muted to-background'>
         <div className='container mx-auto px-4 text-center'>
           <div className='flex items-center justify-center gap-3 mb-6'>
             <Shield className='h-8 w-8 md:h-10 md:w-10 text-info dark:text-navy-300' />
@@ -116,7 +116,7 @@ export default function PrivacyPolicyPage() {
                     ① 회사는 회원가입, 상담, 서비스 신청 등을 위해 아래와 같은 개인정보를 수집하고
                     있습니다.
                   </h3>
-                  <div className='bg-muted/50 p-4 rounded-lg space-y-2'>
+                  <div className='bg-muted p-4 rounded-lg space-y-2'>
                     <p>
                       <strong>회원가입시:</strong> 필수항목 - 아이디, 비밀번호, 이름, 생년월일,
                       성별, 전화번호, 휴대전화번호, 이메일, 주소
@@ -131,7 +131,7 @@ export default function PrivacyPolicyPage() {
                     ② 서비스 이용과정이나 사업처리 과정에서 아래와 같은 정보들이 생성되어 수집될 수
                     있습니다.
                   </h3>
-                  <div className='bg-muted/50 p-4 rounded-lg'>
+                  <div className='bg-muted p-4 rounded-lg'>
                     <p>서비스 이용기록, 접속 로그, 쿠키, 접속 IP 정보, 결제기록</p>
                   </div>
                 </div>
@@ -151,7 +151,7 @@ export default function PrivacyPolicyPage() {
                   수집시에 동의 받은 개인정보 보유, 이용 기간 내에서 개인정보를 처리, 보유합니다.
                 </p>
                 <p>② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다.</p>
-                <div className='bg-muted/50 p-4 rounded-lg space-y-2'>
+                <div className='bg-muted p-4 rounded-lg space-y-2'>
                   <p>
                     <strong>홈페이지 회원가입 및 관리:</strong> 사업자/단체 홈페이지 탈퇴시까지
                   </p>
@@ -217,7 +217,7 @@ export default function PrivacyPolicyPage() {
                   때에는 지체없이 해당 개인정보를 파기합니다.
                 </p>
                 <div className='space-y-3'>
-                  <div className='bg-muted/50 p-4 rounded-lg'>
+                  <div className='bg-muted p-4 rounded-lg'>
                     <h3 className='font-semibold text-foreground mb-2'>파기절차</h3>
                     <p>
                       이용자가 입력한 정보는 목적 달성 후 별도의 DB에 옮겨져(종이의 경우 별도의
@@ -225,7 +225,7 @@ export default function PrivacyPolicyPage() {
                       파기됩니다.
                     </p>
                   </div>
-                  <div className='bg-muted/50 p-4 rounded-lg'>
+                  <div className='bg-muted p-4 rounded-lg'>
                     <h3 className='font-semibold text-foreground mb-2'>파기방법</h3>
                     <p>전자적 파일 형태의 정보는 기록을 재생할 수 없는 기술적 방법을 사용합니다.</p>
                   </div>
@@ -247,7 +247,7 @@ export default function PrivacyPolicyPage() {
                   및 물리적 조치를 하고 있습니다.
                 </p>
                 <div className='grid md:grid-cols-2 gap-4'>
-                  <div className='bg-destructive/5 p-4 rounded-lg border border-destructive/30'>
+                  <div className='bg-seal/5 p-4 rounded-lg border border-seal/30'>
                     <h3 className='font-semibold text-foreground mb-2'>기술적 조치</h3>
                     <ul className='space-y-1 text-sm'>
                       <li>• 개인정보처리시스템 등의 접근권한 관리</li>
@@ -256,7 +256,7 @@ export default function PrivacyPolicyPage() {
                       <li>• 보안프로그램 설치 및 갱신</li>
                     </ul>
                   </div>
-                  <div className='bg-destructive/5 p-4 rounded-lg border border-destructive/30'>
+                  <div className='bg-seal/5 p-4 rounded-lg border border-seal/30'>
                     <h3 className='font-semibold text-foreground mb-2'>관리적 조치</h3>
                     <ul className='space-y-1 text-sm'>
                       <li>• 개인정보 취급직원의 최소화 및 교육</li>
@@ -343,7 +343,7 @@ export default function PrivacyPolicyPage() {
                     </div>
                   </div>
 
-                  <div className='bg-muted/50 p-4 rounded-lg'>
+                  <div className='bg-muted p-4 rounded-lg'>
                     <h3 className='font-semibold text-foreground mb-3'>개인정보 보호 담당자</h3>
                     <div className='space-y-2 text-sm'>
                       <p>
@@ -414,7 +414,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 부칙 */}
-          <Card className='bg-muted/30'>
+          <Card className='bg-muted'>
             <CardContent className='p-6 md:p-8'>
               <h2 className='text-xl md:text-2xl font-bold mb-4'>부칙</h2>
               <div className='space-y-2 text-sm md:text-base text-muted-foreground'>
