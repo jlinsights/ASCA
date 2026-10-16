@@ -110,7 +110,7 @@ export function OverviewTab({ profile, activities }: OverviewTabProps) {
 
 const STAT_COLORS: Record<string, string> = {
   blue: 'text-info dark:text-navy-300',
-  green: 'text-success',
+  green: 'text-success dark:text-foreground',
   purple: 'text-gold-700 dark:text-gold-400',
   amber: 'text-warning dark:text-gold-400',
 }

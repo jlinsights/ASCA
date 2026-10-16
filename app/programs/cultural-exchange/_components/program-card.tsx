@@ -46,7 +46,7 @@ export function ProgramCard({ program, onSelect }: ProgramCardProps) {
         </div>
         {program.isFeatured && (
           <div className='absolute top-4 right-4'>
-            <Badge className='bg-amber-500 text-white'>
+            <Badge className='bg-warning text-white'>
               <Star className='w-3 h-3 mr-1' />
               추천
             </Badge>

@@ -31,30 +31,32 @@ export default function CulturalExchangePage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950'>
+      <section className='bg-gradient-to-r from-info/5 to-highlight/5'>
         <div className='container mx-auto px-4 py-16'>
           <div className='text-center max-w-3xl mx-auto'>
             <div className='flex items-center justify-center gap-3 mb-6'>
-              <Globe className='w-8 h-8 text-blue-600' />
+              <Globe className='w-8 h-8 text-info dark:text-navy-300' />
               <h1 className='text-4xl md:text-5xl font-bold'>문화교류 프로그램</h1>
-              <Sparkles className='w-8 h-8 text-purple-600' />
+              <Sparkles className='w-8 h-8 text-gold-700 dark:text-gold-400' />
             </div>
             <p className='text-lg md:text-xl text-muted-foreground mb-8'>
               세계 각국의 서예 전통을 배우고, 국제적인 예술가 네트워크를 구축하세요
             </p>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto'>
               <div className='text-center'>
-                <div className='text-3xl font-bold text-blue-600 mb-2'>{programs.length}</div>
+                <div className='text-3xl font-bold text-info dark:text-navy-300 mb-2'>
+                  {programs.length}
+                </div>
                 <div className='text-sm text-muted-foreground'>진행 프로그램</div>
               </div>
               <div className='text-center'>
-                <div className='text-3xl font-bold text-green-600 mb-2'>
+                <div className='text-3xl font-bold text-success dark:text-foreground mb-2'>
                   {programs.filter(p => p.status === 'open_for_applications').length}
                 </div>
                 <div className='text-sm text-muted-foreground'>모집 중</div>
               </div>
               <div className='text-center'>
-                <div className='text-3xl font-bold text-purple-600 mb-2'>
+                <div className='text-3xl font-bold text-gold-700 dark:text-gold-400 mb-2'>
                   {programs.reduce((sum, p) => sum + p.currentParticipants, 0)}
                 </div>
                 <div className='text-sm text-muted-foreground'>총 참가자</div>

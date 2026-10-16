@@ -79,7 +79,7 @@ export function EventCard({ event }: EventCardProps) {
     <Card
       className={`group overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ${
         event.is_featured
-          ? 'border-amber-200 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20'
+          ? 'border-warning/30 bg-warning/5'
           : 'border-border/50 hover:border-border'
       }`}
     >
@@ -108,7 +108,7 @@ export function EventCard({ event }: EventCardProps) {
           {/* 중요 행사 표시 */}
           {event.is_featured && (
             <div className='absolute top-3 right-3'>
-              <Badge className='bg-amber-500 text-white border-0 shadow-md'>
+              <Badge className='bg-warning text-white border-0 shadow-md'>
                 <Star className='h-3 w-3 mr-1' />
                 {language === 'ko' ? '주요' : 'Featured'}
               </Badge>

@@ -74,17 +74,17 @@ function SearchContent() {
   const getContentTypeColor = (type: string) => {
     switch (type) {
       case 'notice':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+        return 'bg-info/10 text-foreground'
       case 'exhibition':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+        return 'bg-highlight/10 text-foreground'
       case 'event':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+        return 'bg-success/10 text-foreground'
       case 'artist':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+        return 'bg-warning/10 text-foreground'
       case 'artwork':
-        return 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200'
+        return 'bg-highlight/10 text-foreground'
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+        return 'bg-muted text-foreground'
     }
   }
 

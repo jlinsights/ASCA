@@ -172,7 +172,7 @@ export default function EmailRefusePage() {
           <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-6'>
-                <Shield className='h-6 w-6 text-success' />
+                <Shield className='h-6 w-6 text-success dark:text-foreground' />
                 <h2 className='text-2xl md:text-3xl font-bold'>신고 및 제보</h2>
                 <Badge variant='outline' className='border-success/30'>
                   불법스팸대응센터
@@ -187,11 +187,13 @@ export default function EmailRefusePage() {
                 <div className='grid md:grid-cols-2 gap-6'>
                   <div className='bg-card p-4 rounded-lg border'>
                     <div className='flex items-center gap-3 mb-3'>
-                      <Phone className='h-6 w-6 text-success' />
+                      <Phone className='h-6 w-6 text-success dark:text-foreground' />
                       <h4 className='font-semibold'>전화 신고</h4>
                     </div>
                     <div className='space-y-2'>
-                      <p className='text-2xl font-bold text-success'>☎ 1336</p>
+                      <p className='text-2xl font-bold text-success dark:text-foreground'>
+                        ☎ 1336
+                      </p>
                       <p className='text-sm text-muted-foreground'>불법스팸대응센터 전용전화</p>
                       <p className='text-xs text-muted-foreground'>평일 09:00 ~ 18:00</p>
                     </div>
