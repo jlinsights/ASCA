@@ -40,9 +40,12 @@ export function ProgramCard({ program, onSelect }: ProgramCardProps) {
           <Badge className={cn('text-white', typeConfig.color)}>
             {typeConfig.icon} {typeConfig.name}
           </Badge>
-          <Badge className={cn(statusConfig_.bgColor, statusConfig_.color)}>
-            {statusConfig_.name}
-          </Badge>
+          {/* 틴트 배경이 반투명이라 사진 위에서는 불투명 바탕을 깐다 */}
+          <span className='rounded-full bg-card'>
+            <Badge className={cn(statusConfig_.bgColor, statusConfig_.color)}>
+              {statusConfig_.name}
+            </Badge>
+          </span>
         </div>
         {program.isFeatured && (
           <div className='absolute top-4 right-4'>
