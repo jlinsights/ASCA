@@ -93,8 +93,8 @@ export function EventCard({ event }: EventCardProps) {
           />
           <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent' />
 
-          {/* 상태 배지 */}
-          <div className='absolute top-3 left-3'>
+          {/* 상태 배지 — 틴트 배경이 반투명이라 사진 위에서는 불투명 바탕을 깐다 */}
+          <div className='absolute top-3 left-3 rounded-full bg-card'>
             <Badge className={statusColors[event.status as keyof typeof statusColors]}>
               <div className='flex items-center gap-1'>
                 {getStatusIcon(event.status)}
