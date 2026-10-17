@@ -1,1 +1,1 @@
-🎨 refactor: UI 공용 컴포넌트·관리자·회원·연혁 등 남은 페이지의 팔레트 색과 차트 hex 를 Ink System 토큰으로 교체 (그룹 A4)
+🐛 fix: shadcn 색 슬롯을 color-mix 로 감싸 bg-primary/10 같은 투명도 클래스가 실제로 칠해지게 하고 design-diff 가 감싼 값을 globals.css hex 로 검증하게 함

@@ -76,8 +76,23 @@ function resolveChannelVar(value: string): string | null {
       .join('')
   )
 }
+// shadcn slots: tailwind `color-mix(in srgb, var(--x) calc(<alpha-value> * 100%), transparent)`
+// (tailwind.config.ts withAlpha) resolves through the light-mode `:root` hex of --x.
+function resolveColorMixVar(value: string): string | null {
+  const name = value.match(
+    /^color-mix\(in srgb, var\(--([\w-]+)\) calc\(<alpha-value> \* 100%\), transparent\)$/
+  )?.[1]
+  if (!name) return null
+  const hex = rootBlock.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{3,8})\\s*;`))?.[1]
+  return hex ?? `unresolved --${name}`
+}
+// shadcn slots resolved through globals.css — checked DESIGN → tailwind only. They were var()
+// before withAlpha and never part of the literal-hex reverse check.
+const cssVarSlots = new Set<string>()
 for (const [key, val] of Object.entries(flattened)) {
-  const hex = resolveChannelVar(val)
+  const mixHex = resolveColorMixVar(val)
+  if (mixHex) cssVarSlots.add(key)
+  const hex = resolveChannelVar(val) ?? mixHex
   if (hex) flattened[key] = hex
 }
 
@@ -107,6 +122,7 @@ for (const [name, value] of Object.entries(design.colors)) {
 // Tailwind → DESIGN (literal hex only)
 for (const [name, value] of Object.entries(flattened)) {
   if (typeof value !== 'string' || !value.startsWith('#')) continue
+  if (cssVarSlots.has(name)) continue
   if (!(name in design.colors)) {
     errors.push(`[missing in DESIGN.md] tailwind.${name} = ${value}`)
   }
