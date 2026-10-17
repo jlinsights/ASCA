@@ -1,5 +1,12 @@
 import type { Config } from 'tailwindcss'
 
+// shadcn 슬롯은 app/globals.css 의 hex 변수(var(--primary) 등)를 그대로 읽는다.
+// Tailwind 3 는 var() 색에 투명도를 붙일 수 없어 bg-primary/10 같은 클래스가 CSS 를 만들지 않았다.
+// color-mix 로 감싸면 /N 클래스가 실제로 칠해지고, 라이트·다크 값은 변수 쪽에서 계속 바뀐다.
+// (scholar-red 는 RGB 삼중값 변수 방식 — 새 변수를 늘리지 않으려고 여기서는 color-mix 를 쓴다)
+const withAlpha = (name: string) =>
+  `color-mix(in srgb, var(--${name}) calc(<alpha-value> * 100%), transparent)`
+
 const config = {
   darkMode: ['class'],
   content: [
@@ -20,38 +27,38 @@ const config = {
     },
     extend: {
       colors: {
-        border: 'var(--border)',
-        input: 'var(--input)',
-        ring: 'var(--ring)',
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        border: withAlpha('border'),
+        input: withAlpha('input'),
+        ring: withAlpha('ring'),
+        background: withAlpha('background'),
+        foreground: withAlpha('foreground'),
         primary: {
-          DEFAULT: 'var(--primary)',
-          foreground: 'var(--primary-foreground)',
+          DEFAULT: withAlpha('primary'),
+          foreground: withAlpha('primary-foreground'),
         },
         secondary: {
-          DEFAULT: 'var(--secondary)',
-          foreground: 'var(--secondary-foreground)',
+          DEFAULT: withAlpha('secondary'),
+          foreground: withAlpha('secondary-foreground'),
         },
         destructive: {
-          DEFAULT: 'var(--destructive)',
-          foreground: 'var(--destructive-foreground)',
+          DEFAULT: withAlpha('destructive'),
+          foreground: withAlpha('destructive-foreground'),
         },
         muted: {
-          DEFAULT: 'var(--muted)',
-          foreground: 'var(--muted-foreground)',
+          DEFAULT: withAlpha('muted'),
+          foreground: withAlpha('muted-foreground'),
         },
         accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
+          DEFAULT: withAlpha('accent'),
+          foreground: withAlpha('accent-foreground'),
         },
         popover: {
-          DEFAULT: 'var(--popover)',
-          foreground: 'var(--popover-foreground)',
+          DEFAULT: withAlpha('popover'),
+          foreground: withAlpha('popover-foreground'),
         },
         card: {
-          DEFAULT: 'var(--card)',
-          foreground: 'var(--card-foreground)',
+          DEFAULT: withAlpha('card'),
+          foreground: withAlpha('card-foreground'),
         },
         // ASCA Ink System (Navy & Gold) — DESIGN.md §2. 이름은 기존 클래스를 그대로 살리기 위해
         // 유지하고 값만 바꿨다. 이름의 원래 색(청자·선비홍)은 더 이상 의미하지 않는다.
