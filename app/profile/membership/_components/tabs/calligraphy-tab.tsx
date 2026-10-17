@@ -31,7 +31,7 @@ export function CalligraphyTab({ profile }: CalligraphyTabProps) {
               </div>
               <div>
                 <div className='text-sm text-muted-foreground'>교육 경력</div>
-                <div className='text-2xl font-bold text-success'>
+                <div className='text-2xl font-bold text-success dark:text-foreground'>
                   {profile.teachingExperience}년
                 </div>
               </div>

@@ -72,7 +72,7 @@ export default function TermsOfServicePage() {
           <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Shield className='h-5 w-5 text-success' />
+                <Shield className='h-5 w-5 text-success dark:text-foreground' />
                 <h2 className='text-xl md:text-2xl font-bold'>제3조 회원 가입</h2>
               </div>
               <div className='space-y-4 text-sm md:text-base text-muted-foreground'>

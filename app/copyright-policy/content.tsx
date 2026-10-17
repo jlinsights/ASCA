@@ -84,7 +84,7 @@ export default function CopyrightPolicyContent() {
               <div className='grid md:grid-cols-3 gap-4'>
                 <div className='bg-success/5 p-4 rounded-lg border border-success/30'>
                   <div className='flex items-center gap-2 mb-3'>
-                    <Palette className='h-5 w-5 text-success' />
+                    <Palette className='h-5 w-5 text-success dark:text-foreground' />
                     <h3 className='font-semibold text-foreground'>작품 보호</h3>
                   </div>
                   <p className='text-sm text-muted-foreground'>

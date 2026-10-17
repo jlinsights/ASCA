@@ -55,7 +55,7 @@ export function ProgramDetailModal({ program, onClose }: ProgramDetailModalProps
               <div className='space-y-2'>
                 {program.requirements.map((req, index) => (
                   <div key={index} className='flex items-center gap-2'>
-                    <CheckCircle className='w-4 h-4 text-green-600' />
+                    <CheckCircle className='w-4 h-4 text-success dark:text-foreground' />
                     <span className='text-sm'>{req.description}</span>
                     {req.mandatory && (
                       <Badge variant='secondary' className='text-xs'>
@@ -72,7 +72,7 @@ export function ProgramDetailModal({ program, onClose }: ProgramDetailModalProps
               <div className='space-y-2'>
                 {program.benefits.map((benefit, index) => (
                   <div key={index} className='flex items-center gap-2'>
-                    <Star className='w-4 h-4 text-amber-500' />
+                    <Star className='w-4 h-4 text-warning dark:text-gold-400' />
                     <span className='text-sm'>{benefit.description}</span>
                     {benefit.value && (
                       <Badge variant='outline' className='text-xs'>

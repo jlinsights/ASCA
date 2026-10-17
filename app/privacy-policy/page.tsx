@@ -50,7 +50,7 @@ export default function PrivacyPolicyPage() {
           <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <Lock className='h-5 w-5 text-success' />
+                <Lock className='h-5 w-5 text-success dark:text-foreground' />
                 <h2 className='text-xl md:text-2xl font-bold'>제2조 개인정보 처리의 원칙</h2>
               </div>
               <p className='text-sm md:text-base text-muted-foreground'>
@@ -180,7 +180,7 @@ export default function PrivacyPolicyPage() {
           <Card className='border-l-4 border-l-success'>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
-                <User className='h-5 w-5 text-success' />
+                <User className='h-5 w-5 text-success dark:text-foreground' />
                 <h2 className='text-xl md:text-2xl font-bold'>
                   제10조 정보주체의 권리·의무 및 행사방법
                 </h2>

@@ -164,43 +164,43 @@ export const programTypeConfig: Record<
   cultural_immersion: {
     name: '문화체험',
     icon: '🏛️',
-    color: 'bg-blue-500',
+    color: 'bg-info',
     description: '현지 문화에 깊이 몰입하는 체험형 프로그램',
   },
   artist_residency: {
     name: '아티스트 레지던시',
     icon: '🎨',
-    color: 'bg-purple-500',
+    color: 'bg-highlight',
     description: '작품 활동에 집중할 수 있는 창작 지원 프로그램',
   },
   workshop_series: {
     name: '워크샵 시리즈',
     icon: '🛠️',
-    color: 'bg-green-500',
+    color: 'bg-success',
     description: '체계적인 기법 학습을 위한 단계별 워크샵',
   },
   exhibition_exchange: {
     name: '전시교류',
     icon: '🖼️',
-    color: 'bg-amber-500',
+    color: 'bg-warning',
     description: '작품 전시를 통한 국제적 문화교류',
   },
   academic_collaboration: {
     name: '학술교류',
     icon: '🎓',
-    color: 'bg-indigo-500',
+    color: 'bg-info',
     description: '연구 및 학술적 성과 공유 프로그램',
   },
   youth_program: {
     name: '청년 프로그램',
     icon: '🌟',
-    color: 'bg-pink-500',
+    color: 'bg-highlight',
     description: '젊은 서예가들을 위한 특별 프로그램',
   },
   master_class: {
     name: '마스터클래스',
     icon: '👨‍🏫',
-    color: 'bg-red-500',
+    color: 'bg-destructive',
     description: '거장들과 함께하는 고급 기법 교육',
   },
 }
@@ -213,10 +213,22 @@ export const statusConfig: Record<
     bgColor: string
   }
 > = {
-  planning: { name: '기획 중', color: 'text-gray-600', bgColor: 'bg-gray-100' },
-  open_for_applications: { name: '모집 중', color: 'text-green-600', bgColor: 'bg-green-100' },
-  applications_closed: { name: '모집 마감', color: 'text-orange-600', bgColor: 'bg-orange-100' },
-  in_progress: { name: '진행 중', color: 'text-blue-600', bgColor: 'bg-blue-100' },
-  completed: { name: '완료', color: 'text-purple-600', bgColor: 'bg-purple-100' },
-  cancelled: { name: '취소', color: 'text-red-600', bgColor: 'bg-red-100' },
+  planning: { name: '기획 중', color: 'text-muted-foreground', bgColor: 'bg-muted' },
+  open_for_applications: {
+    name: '모집 중',
+    color: 'text-success dark:text-foreground',
+    bgColor: 'bg-success/10',
+  },
+  applications_closed: {
+    name: '모집 마감',
+    color: 'text-warning dark:text-gold-400',
+    bgColor: 'bg-warning/10',
+  },
+  in_progress: { name: '진행 중', color: 'text-info dark:text-navy-300', bgColor: 'bg-info/10' },
+  completed: {
+    name: '완료',
+    color: 'text-gold-700 dark:text-gold-400',
+    bgColor: 'bg-highlight/10',
+  },
+  cancelled: { name: '취소', color: 'text-destructive', bgColor: 'bg-seal/10' },
 }

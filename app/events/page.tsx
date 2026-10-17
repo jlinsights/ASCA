@@ -189,9 +189,9 @@ export default function EventsPage() {
         {/* 에러 상태 */}
         {error && (
           <div className='text-center py-12'>
-            <div className='bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto'>
-              <AlertCircle className='h-8 w-8 text-red-500 mx-auto mb-4' />
-              <p className='text-red-700 dark:text-red-300 font-medium'>{error}</p>
+            <div className='bg-seal/5 border border-seal/30 rounded-lg p-6 max-w-md mx-auto'>
+              <AlertCircle className='h-8 w-8 text-destructive mx-auto mb-4' />
+              <p className='text-muted-foreground font-medium'>{error}</p>
               <Button onClick={fetchEvents} variant='outline' className='mt-4'>
                 {language === 'ko' ? '다시 시도' : 'Try Again'}
               </Button>
@@ -204,8 +204,8 @@ export default function EventsPage() {
           <>
             {events.length === 0 ? (
               <div className='text-center py-12'>
-                <div className='bg-slate-50 dark:bg-slate-950/30 border border-slate-200 dark:border-slate-800 rounded-lg p-8 max-w-md mx-auto'>
-                  <Calendar className='h-16 w-16 text-slate-300 mx-auto mb-4' />
+                <div className='bg-muted border border-border rounded-lg p-8 max-w-md mx-auto'>
+                  <Calendar className='h-16 w-16 text-muted-foreground mx-auto mb-4' />
                   <h3 className='text-lg font-bold text-foreground mb-2'>
                     {language === 'ko' ? '행사가 없습니다' : 'No events found'}
                   </h3>
@@ -222,7 +222,7 @@ export default function EventsPage() {
                 {events.some(event => event.is_featured) && (
                   <div className='mb-12'>
                     <h2 className='text-2xl font-bold text-foreground mb-6 flex items-center gap-2'>
-                      <Star className='h-6 w-6 text-amber-500' />
+                      <Star className='h-6 w-6 text-warning dark:text-gold-400' />
                       {language === 'ko' ? '주요 행사' : 'Featured Events'}
                     </h2>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>

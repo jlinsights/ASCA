@@ -148,7 +148,9 @@ export function ExhibitionManagementClient() {
 
             <Card>
               <CardContent className='p-4 text-center'>
-                <div className='text-3xl font-bold text-success mb-1'>{stats.current}</div>
+                <div className='text-3xl font-bold text-success dark:text-foreground mb-1'>
+                  {stats.current}
+                </div>
                 <div className='text-sm text-muted-foreground'>진행중</div>
               </CardContent>
             </Card>
