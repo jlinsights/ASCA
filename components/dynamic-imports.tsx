@@ -19,7 +19,7 @@ const LoadingSpinner = () => (
 // 에러 폴백 컴포넌트
 const ErrorFallback = ({ error, retry }: { error?: Error; retry?: () => void }) => (
   <div className='flex flex-col items-center justify-center p-8 text-center'>
-    <div className='text-red-500 mb-2'>❌</div>
+    <div className='text-destructive mb-2'>❌</div>
     <p className='text-sm text-muted-foreground mb-4'>
       컴포넌트를 불러오는 중 오류가 발생했습니다.
     </p>

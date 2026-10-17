@@ -426,12 +426,12 @@ export const typeConfig: Record<
   exhibition: {
     labelKey: 'historyTypeExhibition',
     icon: Award,
-    color: 'bg-blue-500/10 text-blue-600 border-blue-200',
+    color: 'bg-info/10 text-info dark:text-navy-300 border-info/30',
   },
   event: {
     labelKey: 'historyTypeEvent',
     icon: Calendar,
-    color: 'bg-green-500/10 text-green-600 border-green-200',
+    color: 'bg-success/10 text-success dark:text-foreground border-success/30',
   },
   milestone: {
     labelKey: 'historyTypeMilestone',
@@ -441,7 +441,7 @@ export const typeConfig: Record<
   appointment: {
     labelKey: 'historyTypeAppointment',
     icon: Users,
-    color: 'bg-purple-500/10 text-purple-600 border-purple-200',
+    color: 'bg-highlight/10 text-gold-700 dark:text-gold-400 border-highlight/30',
   },
 }
 

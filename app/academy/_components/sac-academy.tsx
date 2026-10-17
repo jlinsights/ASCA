@@ -165,7 +165,7 @@ export function SacAcademy() {
                           {course.period}
                         </span>
                         {isNewCourse(course.createdAt) && (
-                          <Badge className='bg-rose-500 hover:bg-rose-600 text-white text-[10px] px-1.5 py-0.5 h-auto'>
+                          <Badge className='bg-seal hover:bg-seal/90 text-white text-[10px] px-1.5 py-0.5 h-auto'>
                             NEW
                           </Badge>
                         )}

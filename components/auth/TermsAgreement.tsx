@@ -72,7 +72,7 @@ export function TermsAgreement({ onAgree }: TermsAgreementProps) {
         <div className='space-y-3'>
           <div className='flex items-center justify-between'>
             <h3 className='text-lg font-semibold flex items-center'>
-              이용약관 동의 <span className='text-rose-500 text-sm ml-2'>(필수)</span>
+              이용약관 동의 <span className='text-destructive text-sm ml-2'>(필수)</span>
             </h3>
             <div className='flex items-center space-x-2'>
               <Checkbox
@@ -331,7 +331,8 @@ export function TermsAgreement({ onAgree }: TermsAgreementProps) {
         <div className='space-y-3'>
           <div className='flex items-center justify-between'>
             <h3 className='text-lg font-semibold flex items-center'>
-              개인정보 수집 및 이용 동의 <span className='text-rose-500 text-sm ml-2'>(필수)</span>
+              개인정보 수집 및 이용 동의{' '}
+              <span className='text-destructive text-sm ml-2'>(필수)</span>
             </h3>
             <div className='flex items-center space-x-2'>
               <Checkbox

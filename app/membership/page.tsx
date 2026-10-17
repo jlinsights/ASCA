@@ -51,7 +51,7 @@ const MEMBER_TIERS: MemberTier[] = [
     annualFee: '30,000원',
     registrationFee: '입회비 10,000원',
     ageOrRequirement: '40세 이하 작가로서 협회의 이념과 목적에 동의하는 자',
-    color: 'text-emerald-600',
+    color: 'text-success dark:text-foreground',
   },
   {
     id: 'general',
@@ -61,7 +61,7 @@ const MEMBER_TIERS: MemberTier[] = [
     annualFee: '50,000원',
     registrationFee: '입회비 20,000원',
     ageOrRequirement: '41세 이상 작가로서 협회의 이념과 목적에 동의하는 자',
-    color: 'text-blue-600',
+    color: 'text-info dark:text-navy-300',
   },
   {
     id: 'recommended',
@@ -71,7 +71,7 @@ const MEMBER_TIERS: MemberTier[] = [
     annualFee: '80,000원',
     registrationFee: '승급시 등록비 30,000원',
     ageOrRequirement: '3년 이상 청년/일반작가 활동 + 입상 점수 15점 이상 + 이사회 심의',
-    color: 'text-amber-600',
+    color: 'text-warning dark:text-gold-400',
   },
   {
     id: 'invited',
@@ -91,7 +91,7 @@ const MEMBER_TIERS: MemberTier[] = [
     annualFee: '200,000원',
     registrationFee: '발전기금 2,000,000원',
     ageOrRequirement: '초대작가 중 별도 활동 기준 충족 + 이사회 추천 + 총회 만장일치 승인',
-    color: 'text-purple-600',
+    color: 'text-gold-700 dark:text-gold-400',
   },
 ]
 
