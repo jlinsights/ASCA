@@ -140,7 +140,7 @@ export function MembershipList({
                     </div>
 
                     <div className='text-center'>
-                      <div className='text-sm font-medium text-amber-600 mb-1'>
+                      <div className='text-sm font-medium text-warning dark:text-gold-400 mb-1'>
                         {member.participationScore}점
                       </div>
                       <div className='text-xs text-muted-foreground'>참여 점수</div>

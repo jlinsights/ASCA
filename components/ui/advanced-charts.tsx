@@ -35,12 +35,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
 import { Download, Maximize2, Minimize2, RefreshCw, TrendingUp, TrendingDown } from 'lucide-react'
 
-// Color palettes for different themes
+// Color palettes for different themes — Ink System 값만 쓴다 (tailwind.config.ts navy·gold·seal·stone)
+// recharts 는 SVG 속성에 hex 를 직접 받으므로 클래스 대신 값을 둔다.
 const colorPalettes = {
-  default: ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00ff00', '#ff00ff'],
-  calligraphy: ['#2D4A5A', '#8B4513', '#DAA520', '#8FBC8F', '#CD853F', '#B22222'],
-  performance: ['#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16'],
-  accessibility: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#6B7280'],
+  // navy-500 · gold-500 · success · seal-soft · navy-400 · gold-700
+  default: ['#3a54a0', '#d4a84a', '#3f7a4e', '#c94a3f', '#6a82c0', '#a77d24'],
+  // navy-700 · seal · gold-500 · success · gold-700 · navy-400 — 먹·낙관·금 중심
+  calligraphy: ['#1d2e5c', '#a8201a', '#d4a84a', '#3f7a4e', '#a77d24', '#6a82c0'],
+  // 좋음 → 나쁨: success · warning · seal, 이어서 highlight · navy-500 · navy-400
+  performance: ['#3f7a4e', '#a77d24', '#a8201a', '#d4a84a', '#3a54a0', '#6a82c0'],
+  // 명도 차이가 큰 순서: navy-500 · gold-500 · success · seal · stone-500 · gold-300
+  accessibility: ['#3a54a0', '#d4a84a', '#3f7a4e', '#a8201a', '#6b7385', '#ecd6a1'],
 }
 
 // Custom tooltip component
@@ -234,9 +239,9 @@ export function PerformanceMetricCard({ metric, className }: PerformanceMetricCa
   const getTrendIcon = () => {
     switch (metric.trend) {
       case 'up':
-        return <TrendingUp className='w-4 h-4 text-green-500' />
+        return <TrendingUp className='w-4 h-4 text-success dark:text-foreground' />
       case 'down':
-        return <TrendingDown className='w-4 h-4 text-red-500' />
+        return <TrendingDown className='w-4 h-4 text-destructive' />
       default:
         return <div className='w-4 h-4' />
     }
@@ -245,9 +250,9 @@ export function PerformanceMetricCard({ metric, className }: PerformanceMetricCa
   const getTrendColor = () => {
     switch (metric.trend) {
       case 'up':
-        return 'text-green-500'
+        return 'text-success dark:text-foreground'
       case 'down':
-        return 'text-red-500'
+        return 'text-destructive'
       default:
         return 'text-muted-foreground'
     }
@@ -300,7 +305,7 @@ export function PerformanceMetricCard({ metric, className }: PerformanceMetricCa
                   <div
                     className={cn(
                       'h-full transition-all duration-300',
-                      metric.value >= metric.target ? 'bg-green-500' : 'bg-yellow-500'
+                      metric.value >= metric.target ? 'bg-success' : 'bg-warning'
                     )}
                     style={{
                       width: `${Math.min((metric.value / metric.target) * 100, 100)}%`,

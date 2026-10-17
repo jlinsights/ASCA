@@ -143,7 +143,7 @@ export default function ContestsPage() {
 
           <Card>
             <CardContent className='p-6 text-center'>
-              <Clock className='w-8 h-8 mx-auto mb-2 text-emerald-600' />
+              <Clock className='w-8 h-8 mx-auto mb-2 text-success dark:text-foreground' />
               <div className='text-2xl font-bold text-foreground'>{openContests.length}</div>
               <div className='text-sm text-muted-foreground'>접수중</div>
             </CardContent>
@@ -151,7 +151,7 @@ export default function ContestsPage() {
 
           <Card>
             <CardContent className='p-6 text-center'>
-              <Calendar className='w-8 h-8 mx-auto mb-2 text-blue-600' />
+              <Calendar className='w-8 h-8 mx-auto mb-2 text-info dark:text-navy-300' />
               <div className='text-2xl font-bold text-foreground'>{upcomingContests.length}</div>
               <div className='text-sm text-muted-foreground'>예정</div>
             </CardContent>

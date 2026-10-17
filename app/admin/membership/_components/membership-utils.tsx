@@ -8,15 +8,15 @@ export const getTierInfo = (tierLevel: number) => {
 export const getStatusBadge = (status: string) => {
   switch (status) {
     case 'active':
-      return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300'
+      return 'bg-success/10 text-foreground'
     case 'pending_approval':
-      return 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300'
+      return 'bg-warning/10 text-foreground'
     case 'inactive':
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
+      return 'bg-muted text-foreground'
     case 'suspended':
-      return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+      return 'bg-seal/10 text-foreground'
     default:
-      return 'bg-gray-100 text-gray-800'
+      return 'bg-muted text-foreground'
   }
 }
 

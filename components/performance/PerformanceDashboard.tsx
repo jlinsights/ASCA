@@ -197,18 +197,18 @@ function PerformanceInsights({ monitor }: PerformanceInsightsProps) {
               <div
                 className={`p-1 rounded-full ${
                   insight.type === 'success'
-                    ? 'bg-green-100'
+                    ? 'bg-success/10'
                     : insight.type === 'warning'
-                      ? 'bg-yellow-100'
-                      : 'bg-red-100'
+                      ? 'bg-warning/10'
+                      : 'bg-seal/10'
                 }`}
               >
                 {insight.type === 'success' ? (
-                  <CheckCircle className='h-4 w-4 text-green-600' />
+                  <CheckCircle className='h-4 w-4 text-success dark:text-foreground' />
                 ) : insight.type === 'warning' ? (
-                  <AlertTriangle className='h-4 w-4 text-yellow-600' />
+                  <AlertTriangle className='h-4 w-4 text-warning dark:text-gold-400' />
                 ) : (
-                  <XCircle className='h-4 w-4 text-red-600' />
+                  <XCircle className='h-4 w-4 text-destructive' />
                 )}
               </div>
               <div>

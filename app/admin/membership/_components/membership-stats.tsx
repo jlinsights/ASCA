@@ -22,7 +22,10 @@ export function MembershipStats({ stats }: MembershipStatsProps) {
           <CardContent>
             <div className='text-2xl font-bold'>{stats.totalMembers.toLocaleString()}</div>
             <p className='text-xs text-muted-foreground'>
-              <span className='text-emerald-600'>+{stats.newMembersThisMonth}</span> 이번 달
+              <span className='text-success dark:text-foreground'>
+                +{stats.newMembersThisMonth}
+              </span>{' '}
+              이번 달
             </p>
           </CardContent>
         </Card>
@@ -30,7 +33,7 @@ export function MembershipStats({ stats }: MembershipStatsProps) {
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>승인 대기</CardTitle>
-            <AlertCircle className='h-4 w-4 text-amber-500' />
+            <AlertCircle className='h-4 w-4 text-warning dark:text-gold-400' />
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>{stats.pendingApplications}</div>

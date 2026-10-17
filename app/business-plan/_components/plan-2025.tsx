@@ -101,7 +101,7 @@ export function Plan2025() {
             <ul className='space-y-1.5'>
               {STRATEGY_ITEMS.map(item => (
                 <li key={item} className='flex gap-2 text-sm text-muted-foreground'>
-                  <span className='mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500/60' />
+                  <span className='mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success/60' />
                   {item}
                 </li>
               ))}
@@ -225,8 +225,8 @@ export function Plan2025() {
               </div>
             </div>
           </div>
-          <div className='mt-4 rounded-lg bg-green-500/10 border border-green-500/20 p-3 text-center'>
-            <span className='text-sm font-semibold text-green-600 dark:text-green-400'>
+          <div className='mt-4 rounded-lg bg-success/10 border border-success/20 p-3 text-center'>
+            <span className='text-sm font-semibold text-success dark:text-foreground'>
               예상 순수지: ₩763,848
             </span>
           </div>

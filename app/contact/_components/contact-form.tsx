@@ -39,9 +39,9 @@ export function ContactForm() {
 
   if (isSubmitted) {
     return (
-      <Card className='border-green-500/30 bg-green-50/50 dark:bg-green-950/20'>
+      <Card className='border-success/30 bg-success/5'>
         <CardContent className='flex flex-col items-center justify-center py-12 text-center'>
-          <div className='flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600 mb-4'>
+          <div className='flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success dark:text-foreground mb-4'>
             <Send className='h-5 w-5' />
           </div>
           <h3 className='text-lg font-semibold mb-2'>메세지가 전송되었습니다.</h3>

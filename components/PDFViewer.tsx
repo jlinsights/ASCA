@@ -55,7 +55,7 @@ export function PDFViewer({ fileUrl, className = '' }: PDFViewerProps) {
   if (error) {
     return (
       <div className='flex flex-col items-center justify-center h-64 bg-muted rounded-lg border-2 border-dashed border-muted-foreground/25'>
-        <AlertCircle className='h-12 w-12 text-red-500 mb-4' />
+        <AlertCircle className='h-12 w-12 text-destructive mb-4' />
         <h3 className='text-lg font-medium text-foreground mb-2'>
           {language === 'ko' ? 'PDF 로드 실패' : 'Failed to load PDF'}
         </h3>
@@ -134,7 +134,7 @@ export function PDFViewer({ fileUrl, className = '' }: PDFViewerProps) {
 
       {/* PDF 뷰어 영역 */}
       <div
-        className='relative bg-gray-100 dark:bg-gray-900'
+        className='relative bg-muted'
         style={{ height: isFullscreen ? 'calc(100vh - 120px)' : '500px' }}
       >
         {isLoading && (

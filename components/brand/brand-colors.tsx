@@ -18,7 +18,7 @@ export function BrandColors() {
             배경색으로 사용
           </div>
         </div>
-        <div className='color-swatch bg-rice-paper text-ink-black border border-gray-200'>
+        <div className='color-swatch bg-rice-paper text-ink-black border border-border'>
           Rice Paper White
           <br />
           #f5f5f0

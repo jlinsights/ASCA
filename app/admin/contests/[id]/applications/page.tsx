@@ -199,7 +199,9 @@ export default function AdminContestApplicationsPage() {
               <CardTitle className='text-sm font-medium text-muted-foreground'>접수됨</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold text-blue-600'>{stats.submitted}</div>
+              <div className='text-2xl font-bold text-info dark:text-navy-300'>
+                {stats.submitted}
+              </div>
             </CardContent>
           </Card>
           <Card>
@@ -207,7 +209,9 @@ export default function AdminContestApplicationsPage() {
               <CardTitle className='text-sm font-medium text-muted-foreground'>검토중</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold text-yellow-600'>{stats.underReview}</div>
+              <div className='text-2xl font-bold text-warning dark:text-gold-400'>
+                {stats.underReview}
+              </div>
             </CardContent>
           </Card>
           <Card>

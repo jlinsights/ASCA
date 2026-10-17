@@ -377,8 +377,8 @@ export function ImageViewer({
           {showInfo && description && (
             <div className='absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-6 text-white z-40'>
               <h4 className='font-medium mb-2'>{title}</h4>
-              <p className='text-sm text-gray-300 mb-1'>작가: {artist}</p>
-              <p className='text-sm text-gray-300'>{description}</p>
+              <p className='text-sm text-white/75 mb-1'>작가: {artist}</p>
+              <p className='text-sm text-white/75'>{description}</p>
             </div>
           )}
 
