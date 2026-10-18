@@ -148,22 +148,36 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
               ))}
             </ul>
           </div>
-          <div className='mt-6 flex flex-wrap gap-x-6 gap-y-1'>
-            {footerLinks.sponsors.map(item => (
-              <a
-                key={item.labelKey}
-                href={item.href}
-                target='_blank'
-                rel='noopener noreferrer'
-                className={linkStyle}
-              >
-                {t(item.labelKey)}
-              </a>
-            ))}
+          <div className='mt-12 flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between'>
+            <p className='order-2 text-xs leading-relaxed text-rice-paper/70 xl:order-1'>
+              © The Asian Society of Calligraphic Arts (ASCA). All rights reserved.
+            </p>
+            <ul className='order-1 grid grid-cols-2 items-center gap-x-6 gap-y-8 sm:flex sm:flex-wrap sm:gap-8 xl:order-2 xl:shrink-0'>
+              {footerLinks.sponsors.map(item => (
+                <li key={item.labelKey}>
+                  <a
+                    href={item.href}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='flex h-20 items-center justify-center rounded-sm transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:w-32'
+                  >
+                    {item.logo ? (
+                      <Image
+                        src={item.logo.src}
+                        alt={t(item.labelKey)}
+                        width={item.logo.width}
+                        height={item.logo.height}
+                        sizes='128px'
+                        className='h-20 w-32 max-w-full object-contain'
+                      />
+                    ) : (
+                      <span className='text-sm text-rice-paper/80'>{t(item.labelKey)}</span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
-          <p className='mt-6 text-xs leading-relaxed text-rice-paper/70'>
-            © The Asian Society of Calligraphic Arts (ASCA). All rights reserved.
-          </p>
         </div>
       </div>
     </footer>
