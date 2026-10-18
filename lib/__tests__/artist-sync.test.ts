@@ -42,4 +42,25 @@ describe('archive-safe artist mapping', () => {
     expect(mapArtistSync({ Email: null, name: '작가' }).contacts).toEqual({ email: null })
     expect(mapArtistSync({ name: '작가' }).contacts).toEqual({})
   })
+  it('preserves the multilingual and attachment field names declared by AirtableArtist', () => {
+    expect(
+      mapArtistSync({
+        'Name (English)': 'Artist',
+        'Name (Japanese)': '作家',
+        'Bio (Korean)': '소개',
+        'Bio (English)': 'Biography',
+        'Bio (Japanese)': '紹介',
+        'Bio (Chinese)': '簡介',
+        'Profile Image': [{ url: 'https://example.com/legacy.jpg' }],
+      }).artist
+    ).toEqual({
+      name_en: 'Artist',
+      name_ja: '作家',
+      bio: '소개',
+      bio_en: 'Biography',
+      bio_ja: '紹介',
+      bio_zh: '簡介',
+      profile_image: 'https://example.com/legacy.jpg',
+    })
+  })
 })

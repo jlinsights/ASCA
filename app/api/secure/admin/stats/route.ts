@@ -36,8 +36,8 @@ async function secureAdminStatsHandler({ user, request }: SecureAPIContext) {
     ] = await Promise.all([
       supabase.from('notices').select('*', { count: 'exact', head: true }),
       supabase.from('exhibitions').select('*', { count: 'exact', head: true }),
-      supabase.from('events').select('*', { count: 'exact', head: true }),
-      supabase.from('artists').select('*', { count: 'exact', head: true }),
+      supabase.from('events').select('id', { count: 'exact', head: true }),
+      supabase.from('artists').select('id', { count: 'exact', head: true }),
       supabase.from('artworks').select('*', { count: 'exact', head: true }),
       supabase.from('files').select('*', { count: 'exact', head: true }),
     ])

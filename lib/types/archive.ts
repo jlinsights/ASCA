@@ -2,6 +2,7 @@ import type { Database } from './database.generated'
 
 type Tables = Database['public']['Tables']
 export type ArchiveArtistRow = Tables['artists']['Row']
+export type PublicArchiveArtist = Omit<ArchiveArtistRow, 'claimed_by_user_id'>
 export type ArchiveArtworkRow = Tables['artworks']['Row']
 export type ArtistContactRow = Tables['artist_contacts']['Row']
 export type ArtistRecordRow = Tables['artist_records']['Row']

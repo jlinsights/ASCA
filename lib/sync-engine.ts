@@ -247,22 +247,19 @@ export class SyncEngine {
    */
   async syncAllData() {
     const tables = ['Artists', 'Artworks', 'Exhibitions']
-
     for (const tableName of tables) {
-      try {
-        await this.syncTableData(tableName)
-      } catch (error) {
-        throw error
-      }
+      await this.syncTableData(tableName)
     }
   }
 
-  /**
-   * 개별 테이블 데이터 동기화
-   */
+  /** Artist failures must be visible; legacy non-artist failure handling is unchanged. */
   async syncTableData(airtableTableName: string) {
-    const records = await this.airtableBase(airtableTableName).select().all()
-    for (const record of records) await this.syncSingleRecord(airtableTableName, record)
+    try {
+      const records = await this.airtableBase(airtableTableName).select().all()
+      for (const record of records) await this.syncSingleRecord(airtableTableName, record)
+    } catch (error) {
+      if (airtableTableName.toLowerCase() === 'artists') throw error
+    }
   }
 
   /** Artist identity is idempotent; archive-owned fields never enter the payload. */
@@ -283,18 +280,16 @@ export class SyncEngine {
       }
       return
     }
-    // Preserve the existing non-artist mapping contract.
-    const table = tableName.toLowerCase()
-    const mapped = this.mapAirtableToSupabase(record.fields, tableName)
-    const { data, error: readError } = await this.supabase
-      .from(table)
-      .select('id')
-      .eq('airtable_id', record.id)
-    if (readError) throw readError
-    const { error } = data?.length
-      ? await this.supabase.from(table).update(mapped).eq('airtable_id', record.id)
-      : await this.supabase.from(table).insert({ ...mapped, airtable_id: record.id })
-    if (error) throw error
+    // Preserve per-record failure isolation for legacy non-artist synchronization.
+    try {
+      const table = tableName.toLowerCase()
+      const mapped = this.mapAirtableToSupabase(record.fields, tableName)
+      const { data } = await this.supabase.from(table).select('id').eq('airtable_id', record.id)
+      const { error } = data?.length
+        ? await this.supabase.from(table).update(mapped).eq('airtable_id', record.id)
+        : await this.supabase.from(table).insert({ ...mapped, airtable_id: record.id })
+      if (error) throw error
+    } catch (error) {}
   }
 
   /**

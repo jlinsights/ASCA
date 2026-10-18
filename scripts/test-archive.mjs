@@ -1,3 +1,4 @@
+import { PUBLIC_ARTIST_COLUMNS } from '../lib/api/public-artist-columns.ts'
 import { SyncEngine } from '../lib/sync-engine.ts'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { artists, artworks } from '../lib/db/schema.ts'
@@ -133,6 +134,7 @@ try {
     assert.equal(detail.artworks.length, 1)
     checks++
     await rejects('select * from artist_contacts', '42501')
+    await rejects('select claimed_by_user_id from artists', '42501')
     await rejects('select original_path from artwork_images', '42501')
     await rejects('select luma_url from events', '42501')
     assert.deepEqual(
@@ -153,6 +155,16 @@ try {
     await db.query('reset role')
   }
   await db.query('set role service_role')
+  await db.query('update artists set claimed_by_user_id=$1 where id=$2', [
+    'user_service_only',
+    publicArtist,
+  ])
+  assert.equal(
+    (await rows('select claimed_by_user_id from artists where id=$1', [publicArtist]))[0]
+      .claimed_by_user_id,
+    'user_service_only'
+  )
+  checks++
   await db.query(`update artworks set status='published' where id=$1`, [pending])
   await db.query(`update artist_records set is_asca_verified=true where artwork_id=$1`, [published])
   await count('select count(*) from artist_contacts', 1)
@@ -203,7 +215,13 @@ try {
     null
   )
   checks++
-  const apiArtists = await ok(await anon.from('artists').select('*'))
+  assert.ok((await anon.from('artists').select('*')).error)
+  checks++
+  assert.ok((await anon.from('artists').select('claimed_by_user_id')).error)
+  checks++
+  const apiArtists = await ok(await anon.from('artists').select(PUBLIC_ARTIST_COLUMNS))
+  assert.equal('claimed_by_user_id' in apiArtists[0], false)
+  checks++
   assert.equal(apiArtists.length, 1)
   assert.equal('email' in apiArtists[0], false)
   checks++
