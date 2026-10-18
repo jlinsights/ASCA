@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { PageHero } from '@/components/layout/page-hero'
+import { ContestFlipbook } from '@/components/contests/contest-flipbook'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -130,6 +131,8 @@ export default function ContestsPage() {
           title='공모전'
           subtitle='다양한 예술 공모전에 도전하고 여러분의 재능을 펼쳐보세요'
         />
+
+        <ContestFlipbook />
 
         {/* Statistics */}
         <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
