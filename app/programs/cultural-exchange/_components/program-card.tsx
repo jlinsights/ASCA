@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Calendar, Clock, MapPin, Users, Star, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { formatDate } from '@/lib/utils/formatters'
 import type { CulturalExchangeProgramInfo } from '@/lib/types/membership'
 import { programTypeConfig, statusConfig } from './program-data'
 
@@ -75,7 +76,13 @@ export function ProgramCard({ program, onSelect }: ProgramCardProps) {
           <div className='grid grid-cols-2 gap-4 text-sm'>
             <div className='flex items-center gap-2'>
               <Calendar className='w-4 h-4 text-muted-foreground' />
-              <span>{program.startDate.toLocaleDateString()}</span>
+              <span>
+                {/* 서버(UTC·en-US)와 브라우저가 같은 글자를 만들도록 로케일·시간대를 고정 */}
+                {formatDate(program.startDate, 'ko-KR', {
+                  month: 'numeric',
+                  timeZone: 'Asia/Seoul',
+                })}
+              </span>
             </div>
             <div className='flex items-center gap-2'>
               <Clock className='w-4 h-4 text-muted-foreground' />
@@ -120,7 +127,7 @@ export function ProgramCard({ program, onSelect }: ProgramCardProps) {
 
           <div className='flex items-center justify-between'>
             <div>
-              <div className='text-2xl font-bold'>₩{program.fee.toLocaleString()}</div>
+              <div className='text-2xl font-bold'>₩{program.fee.toLocaleString('ko-KR')}</div>
               <div className='text-xs text-muted-foreground'>
                 {program.accommodationProvided && '숙박 포함'}
                 {program.mealsProvided && ' • 식사 포함'}

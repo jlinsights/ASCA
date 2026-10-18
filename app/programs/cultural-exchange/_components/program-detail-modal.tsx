@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { CheckCircle, Star } from 'lucide-react'
+import { formatDate } from '@/lib/utils/formatters'
 import type { CulturalExchangeProgramInfo } from '@/lib/types/membership'
 
 interface ProgramDetailModalProps {
@@ -41,7 +42,7 @@ export function ProgramDetailModal({ program, onClose }: ProgramDetailModalProps
                 </div>
                 <div>
                   <span className='text-muted-foreground'>참가비:</span>
-                  <span className='ml-2'>₩{program.fee.toLocaleString()}</span>
+                  <span className='ml-2'>₩{program.fee.toLocaleString('ko-KR')}</span>
                 </div>
                 <div>
                   <span className='text-muted-foreground'>모집인원:</span>
@@ -89,7 +90,12 @@ export function ProgramDetailModal({ program, onClose }: ProgramDetailModalProps
                 지금 신청하기
               </Button>
               <p className='text-xs text-center text-muted-foreground mt-2'>
-                신청 마감: {program.applicationDeadline?.toLocaleDateString()}
+                신청 마감:{' '}
+                {program.applicationDeadline &&
+                  formatDate(program.applicationDeadline, 'ko-KR', {
+                    month: 'numeric',
+                    timeZone: 'Asia/Seoul',
+                  })}
               </p>
             </div>
           </div>
