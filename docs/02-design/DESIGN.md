@@ -74,7 +74,7 @@ colors:
 
   # Brand Extended Palette (brand-data.ts 공식 PRIMARY_COLORS 정본)
   # Source: app/brand/_components/brand-data.ts
-  brand-gold: '#ffcc00' # 브랜드 공식 금색 — semantic `highlight` / bg-brand-gold
+  brand-gold: '#ffcc00' # 레거시 브랜드 금색 — /brand 기존 표기 전용, 새 UI 금지
   terra-red: '#9b4444' # 전통 도장 주홍 — Scholar Red 의 차분한 보조
   sage-green: '#b7c4b7' # 문인화 절제된 초록 — Celadon Green 의 저채도 변형
   spring-green: '#09f557' # 생동·새 시작 — 장식 악센트 한정, UI 금지
@@ -179,7 +179,7 @@ elevation:
 # MOTION — 먹의 번짐에서 영감
 # ─────────────────────────────────────────────
 motion:
-  duration: { fast: '150ms', normal: '260ms', slow: '420ms', brush: '720ms' }
+  duration: { fast: '150ms', normal: '250ms', slow: '400ms', brush: '720ms' }
   ease:
     out: 'cubic-bezier(0.16, 1, 0.3, 1)' # 붓을 들어올리는 느낌
     in-out: 'cubic-bezier(0.45, 0, 0.55, 1)' # 필압의 자연스러운 흐름
@@ -288,23 +288,23 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 `ink-black`·`rice-paper`·`vermillion`·`silk-cream`은 서예 작품의 물성을 재현할
 때 쓴다. 작품 상세 페이지, 작가 소개, 낙관 요소가 전형적 사용처.
 
-### 2.5 Brand Extended Palette — 브랜드 가이드 정본
+### 2.5 Brand Extended Palette — 기존 브랜드 표기
 
-`app/brand/_components/brand-data.ts` 의 PRIMARY_COLORS 를 Tailwind·DESIGN.md 로
-정렬한 팔레트. **/brand 페이지에 실제 노출되는 공식 색상**이다.
+`app/brand/_components/brand-data.ts`에는 Ink System과 레거시 색상 표기가 함께
+남아 있다. 아래 확장 팔레트는 브랜드 표현용이며, 일반 UI의 기준은 §2.1이다.
 
-| 토큰                     | HEX       | Tier         | 허용 사용처                                                                     |
-| ------------------------ | --------- | ------------ | ------------------------------------------------------------------------------- |
-| `{colors.brand-gold}`    | `#ffcc00` | **Semantic** | `highlight` 슬롯 — 수상·프리미엄·기념. `bg-brand-gold` / `text-brand-gold` 사용 |
-| `{colors.terra-red}`     | `#9b4444` | Cultural     | Scholar Red 대비 차분한 보조 강조 (인용 블록, 섹션 헤더 밑줄)                   |
-| `{colors.sage-green}`    | `#b7c4b7` | Cultural     | Celadon Green 의 저채도 변형 (배경 틴트, 메타 정보)                             |
-| `{colors.spring-green}`  | `#09f557` | Decorative   | **UI 금지** — 브랜드 가이드·문화 캠페인 장식에만                                |
-| `{colors.medium-orchid}` | `#c14af2` | Decorative   | **UI 금지** — 시즈널 캠페인 장식에만                                            |
-| `{colors.royal-blue}`    | `#275eea` | Decorative   | **UI 금지** — 문화 캠페인 장식에만                                              |
+| 토큰                     | HEX       | Tier       | 허용 사용처                                                   |
+| ------------------------ | --------- | ---------- | ------------------------------------------------------------- |
+| `{colors.brand-gold}`    | `#ffcc00` | **Legacy** | /brand 기존 표기만 유지. 새 UI에서는 `bg-highlight` 사용      |
+| `{colors.terra-red}`     | `#9b4444` | Cultural   | Scholar Red 대비 차분한 보조 강조 (인용 블록, 섹션 헤더 밑줄) |
+| `{colors.sage-green}`    | `#b7c4b7` | Cultural   | Celadon Green 의 저채도 변형 (배경 틴트, 메타 정보)           |
+| `{colors.spring-green}`  | `#09f557` | Decorative | **UI 금지** — 브랜드 가이드·문화 캠페인 장식에만              |
+| `{colors.medium-orchid}` | `#c14af2` | Decorative | **UI 금지** — 시즈널 캠페인 장식에만                          |
+| `{colors.royal-blue}`    | `#275eea` | Decorative | **UI 금지** — 문화 캠페인 장식에만                            |
 
 **Tier 의미:**
 
-- **Semantic**: 일반 UI 작업에 쓸 수 있음 (§2.1과 동급)
+- **Legacy**: 기존 브랜드 표기 호환용이며 새 UI에는 사용하지 않음
 - **Cultural**: 브랜드 맥락에서만 (작가 소개, 작품 리스트 등)
 - **Decorative**: /brand 페이지, 랜딩 히어로, 시즈널 배너 외 금지
 
@@ -355,7 +355,7 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 ### 3.2 언어별 자동 전환
 
 `lang` 속성에 따라 CSS가 자동으로 최적 폰트를 선택한다. 다국어 페이지에서는
-`html[lang="ko|en|zh|jp"]`에 의존하고, 인라인 `font-family`를 덮어쓰지 않는다.
+`html[lang="ko|en|zh|ja"]`에 의존하고, 인라인 `font-family`를 덮어쓰지 않는다.
 
 ### 3.3 스케일
 
@@ -421,9 +421,8 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 ### 3.6 Color Pair Policy (WCAG)
 
 > **Hard-fail pairs (verified by `npm run design:wcag`)** —
-> `scripts/design-lint.ts` 실행 시 11개 페어 모두 WCAG 2.1 AA 통과 필수.
-> **P2**·**L2**는 `primary` 슬롯(Scholar Red), **P3**는 `secondary` 슬롯(무채
-> 표면) — §2.1.2와 YAML `colors` 정의와 일치한다.
+> `scripts/design-lint.ts`가 정의한 페어는 모두 WCAG 2.1 AA 통과 필수.
+> **P2**·**L2**는 남색 `primary`, **P3**는 밝은 금색 `secondary` 슬롯이다.
 
 | 페어 | foreground / background                  | 최소 비율 | 크기       |
 | ---- | ---------------------------------------- | --------- | ---------- |
@@ -458,8 +457,9 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 
 ### 4.1 컨테이너
 
-`gallery-container` (max 1400px, padding 2rem) 를 표준으로 쓴다. 예외는 풀블리드
-히어로뿐.
+`gallery-container`는 최대 1400px, 기본 좌우 `px-6`(1.5rem), 768px 이하
+`px-4`(1rem)다. Tailwind `container`의 padding 2rem과 구분한다. 풀블리드
+히어로는 별도 레이아웃을 사용한다.
 
 ### 4.2 스페이싱
 
@@ -474,8 +474,8 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 
 ## 5. Shapes
 
-반경은 `{rounded.*}` 4단계로 제한. 개별 컴포넌트에서 `rounded-[Npx]` 임의값
-금지.
+반경은 front matter의 `{rounded.*}` 토큰으로 제한. 개별 컴포넌트에서
+`rounded-[Npx]` 임의값 금지.
 
 | 용도            | 토큰          |
 | --------------- | ------------- |
@@ -487,7 +487,7 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 
 ## 6. Elevation & Depth
 
-섀도우는 차갑지 않다. 먹색 기반 `hsl(20 6% 20%)`를 쓰므로 일반 검은 그림자와
+라이트 모드 섀도우는 남색 기반 `hsl(222 54% 8%)`를 쓴다. 임의의 검은 그림자와
 섞지 않는다. 다크 모드는 순수 검정 + 높은 opacity로 자동 전환된다.
 
 - 기본 카드: `shadow-sm`
@@ -568,7 +568,7 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 3. `@layer components`에 추가, `app/globals.css` 맨 아래
    `/* ADDED: YYYY-MM-DD */` 주석
 
-### 8.5 Component Tokens (이전 front-matter `components:` 블록)
+### 8.7 Component Tokens (이전 front-matter `components:` 블록)
 
 > 비-canonical 구조(`tokens:` nested)로 Google CLI 파서가 실패해 2026-04-25
 > prose로 이전. Tailwind/CSS 클래스 정의의 정본은 `app/globals.css`의
@@ -576,28 +576,28 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 
 #### gallery-container
 
-| 속성      | 값                      |
-| --------- | ----------------------- |
-| max-width | `1400px`                |
-| padding   | `{spacing.md}` (1.5rem) |
+| 속성      | 값                           |
+| --------- | ---------------------------- |
+| max-width | `1400px`                     |
+| padding   | 기본 1.5rem, 768px 이하 1rem |
 
 #### gallery-card
 
-| 속성             | 값                                                |
-| ---------------- | ------------------------------------------------- |
-| backgroundColor  | `{colors.rice-paper}`                             |
-| border           | `1px solid rgba(136, 168, 145, 0.2)` (celadon/20) |
-| rounded          | `{rounded.lg}` (0.5rem)                           |
-| hover.translateY | `-4px`                                            |
-| hover.shadow     | `{elevation.xl}`                                  |
+| 속성             | 값                                              |
+| ---------------- | ----------------------------------------------- |
+| backgroundColor  | `{colors.rice-paper}`                           |
+| border           | `border-celadon-green/20`, 다크 `border-border` |
+| rounded          | `{rounded.lg}` (0.375rem)                       |
+| hover.translateY | `-4px`                                          |
+| hover.shadow     | `{elevation.xl}`                                |
 
 #### gallery-card-glass
 
-| 속성            | 값                         |
-| --------------- | -------------------------- |
-| backgroundColor | `rgba(245, 245, 240, 0.8)` |
-| backdropBlur    | `12px`                     |
-| border          | `rgba(136, 168, 145, 0.1)` |
+| 속성            | 값                                                 |
+| --------------- | -------------------------------------------------- |
+| backgroundColor | `bg-rice-paper/80`, 다크 `bg-card/80`              |
+| backdropBlur    | `12px`                                             |
+| border          | `border-celadon-green/10`, 다크 `border-border/30` |
 
 #### gallery-btn (variants: default | outline | ghost | secondary)
 
@@ -617,13 +617,29 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 | backdropBlur    | `12px`                            |
 | border          | `1px solid rgba(255,255,255,0.2)` |
 
+### 8.8 작가·작품 탐색 UI
+
+`components/gallery/discovery-toolbar.tsx`를 공통 패턴으로 사용한다.
+
+- 검색·정렬은 상단에 두고, 상세 조건은 `lg` 미만에서 접기 버튼으로 노출한다.
+- 입력과 주요 조작은 `h-12`, 조건 칩은 `min-h-12`를 사용한다.
+- 입력에는 보이는 label을 제공하고, 아이콘 버튼에는 동작을 설명하는 접근성
+  이름을 둔다.
+- 선택 조건은 개별 해제와 전체 초기화를 제공한다. 해제 후 검색 입력으로 포커스를
+  돌린다.
+- 결과 상태는 `role="status"`, `aria-live="polite"`로 알린다.
+- 로딩·검색 결과 없음·미등록 데이터·조회 오류를 구분한다. 문구는 루트
+  `copy.md`와 `components/gallery/discovery-copy.ts`를 참조한다.
+- 배경·테두리·텍스트는 `card`, `border`, `foreground`, `muted-foreground`를
+  사용한다.
+
 ## 9. Do's and Don'ts
 
 ### ✅ Do
 
 - 의미론 토큰(`primary`/`secondary`/...)을 먼저 쓴다
 - CJK 본문은 `leading-relaxed`, 영문은 `leading-normal`
-- 반경은 `{rounded.*}` 4단계 내에서 선택
+- 반경은 `{rounded.*}`에 정의된 토큰에서 선택
 - 다크 모드는 `.dark` 클래스 기반 자동 전환에 맡긴다
 - 새로운 색을 추가하기 전에 기존 Obang/Materials에 적합한 것이 있는지 확인한다
 - WCAG AA 4.5:1 이상을 새 조합마다 측정한다
@@ -635,8 +651,9 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
   않는다
 - `sage-green`·`spring-green`을 텍스트 색상으로 쓰지 않는다 (WCAG 미달)
 - `brand-gold`와 `temple-gold`를 같은 화면에서 동시에 쓰지 않는다
-- **프리미엄 강조에 `bg-accent` 를 쓰지 않는다** (accent 는 shadcn hover 배경,
-  Celadon Green). 반드시 `bg-brand-gold` 사용
+- 레거시 `bg-brand-gold`를 새 UI에 쓰지 않는다. 수상·프리미엄 표시는
+  `bg-highlight text-highlight-foreground`, 상호작용 강조는 `bg-accent`를
+  사용한다.
 - `brush` 폰트를 본문·네비게이션에 쓰지 않는다 (히어로 외 금지)
 - 섀도우를 순수 `#000` opacity로 만들지 않는다 (먹색 hsl 사용)
 - `scale(1.05)` 이상의 호버 스케일은 금지 (1.02 한계)
@@ -653,8 +670,8 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
    컴포넌트
 2. **토큰 참조 문법**: `{colors.primary}`, `{typography.scale.lg}` — 본문에서
    규칙을 인용할 때 사용. **`{colors.primary}`는 YAML·Tailwind `primary` 슬롯
-   (Scholar Red, §2.1.2)** 이지 브랜드 「주녹」이 아님 — 녹색 CTA는 §2.1.1 표의
-   `accent` / `celadon-green` 참조.
+   (라이트 남색, 다크 금색, §2.1)** 이다. `celadon-green`은 레거시 이름이며 현재
+   값은 gold-700이다. 이름으로 색상을 추정하지 않는다.
 3. **토큰이 없을 때**: 절대 임의 값을 만들지 않는다. 사용자에게 **"DESIGN.md에
    토큰이 없어 추가가 필요하다"** 고 보고한 뒤 승인받고 본 문서를 먼저 수정한다.
 4. **컴포넌트가 없을 때**: `components/` 하위에 만들되, 기존 `gallery-*` 네이밍
@@ -672,12 +689,19 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 ## 11. Maintenance
 
 - **오너**: @jhlim725
-- **변경 주기**: 토큰 변경 시 `.commit_message.txt` + Git 커밋 필수
-- **Breaking Change**: `version` 메이저 증가 (현재 1.2.1-alpha)
-- **검증**: 토큰 추가/변경 시 `npm run build` + `npm run type-check` +
-  `npm run design:wcag` + `npm run design:diff` 통과 권장
+- **변경 기록**: 문서·토큰 변경 시 `.commit_message.txt`를 갱신한다. Git 커밋은
+  사용자의 명시적 요청이 있을 때만 수행한다.
+- **Breaking Change**: 토큰 계약을 깨는 변경은 front matter `version`의 메이저를
+  증가시킨다.
+- **검증**: 문서 변경은 포맷과 `design:lint`·`design:wcag`·`design:diff`를
+  확인한다. 토큰 구현 변경은 타입 검사와
+  `NODE_ENV=production npm run build:full`도 확인한다. 검사 통과가 모든 화면의
+  접근성을 증명하지는 않으므로 실제 화면을 별도로 검증한다.
 
 ### Changelog
+
+- **2.0.0-alpha 문서 정비** — Ink System의 레거시 금색 사용 제한, 컨테이너·반경·
+  모션·그림자 정의를 현재 구현과 대조하고 탐색 UI 및 검증 지침을 보완.
 
 - **1.3.0-alpha** (2026-05-10) — **Enterprise Phase 확장**: 관리자 대시보드,
   감사 로그, 에이전트 모니터링 UI 패턴 추가 (§8.4, §8.5). 리스크 점수 기반 시각

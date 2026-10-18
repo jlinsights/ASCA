@@ -1,1 +1,1 @@
-📝 docs: ASCA README와 에이전트 지침의 환경·검증·운영 안내 갱신
+📝 docs: ASCA 디자인·카피 가이드의 Ink System 및 탐색 UI 기준 정비
