@@ -9,6 +9,8 @@ import {
   real,
   doublePrecision,
   uuid,
+  numeric,
+  date,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
@@ -30,6 +32,21 @@ export const users = pgTable('users', {
 export const artists = pgTable('artists', {
   id: text('id').primaryKey(),
   userId: text('user_id').references(() => users.id),
+  artNameKo: text('art_name_ko'),
+  artNameHanja: text('art_name_hanja'),
+  calligraphyStyles: text('calligraphy_styles').array().notNull().default([]),
+  teacherArtistId: uuid('teacher_artist_id'),
+  teacherName: text('teacher_name'),
+  branchName: text('branch_name'),
+  certificationGrade: text('certification_grade'),
+  certifiedAt: date('certified_at'),
+  archiveBio: text('archive_bio'),
+  archiveBioEn: text('archive_bio_en'),
+  profileImagePath: text('profile_image_path'),
+  visibility: text('visibility', { enum: ['public', 'members', 'hidden'] })
+    .notNull()
+    .default('public'),
+  claimedByUserId: text('claimed_by_user_id'),
   name: text('name').notNull(),
   nameKo: text('name_ko'),
   nameEn: text('name_en'),
@@ -53,6 +70,7 @@ export const artists = pgTable('artists', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
+// Archive additions are managed by supabase/migrations (not a blanket db:push).
 // 작품 테이블
 export const artworks = pgTable('artworks', {
   id: text('id').primaryKey(),
@@ -60,6 +78,20 @@ export const artworks = pgTable('artworks', {
     .references(() => artists.id)
     .notNull(),
   title: text('title').notNull(),
+  titleHanja: text('title_hanja'),
+  transcription: text('transcription'),
+  interpretation: text('interpretation'),
+  interpretationEn: text('interpretation_en'),
+  sourceText: text('source_text'),
+  sealDescription: text('seal_description'),
+  widthCm: numeric('width_cm', { precision: 10, scale: 2 }),
+  heightCm: numeric('height_cm', { precision: 10, scale: 2 }),
+  status: text('status', {
+    enum: ['draft', 'pending_review', 'published', 'archived', 'in-exhibition'],
+  }).default('draft'),
+  createdBy: text('created_by', { enum: ['artist', 'admin'] })
+    .notNull()
+    .default('admin'),
   titleKo: text('title_ko'),
   titleEn: text('title_en'),
   titleCn: text('title_cn'),
@@ -86,6 +118,49 @@ export const artworks = pgTable('artworks', {
   metadata: jsonb('metadata'), // JSON 형태로 추가 정보 저장
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+// Archive tables use the UUID physical schema from Supabase migrations.
+export const artistContacts = pgTable('artist_contacts', {
+  artistId: uuid('artist_id').primaryKey(),
+  email: text('email'),
+  phone: text('phone'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const artworkImages = pgTable('artwork_images', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  artworkId: uuid('artwork_id').notNull(),
+  thumbPath: text('thumb_path').notNull(),
+  webPath: text('web_path').notNull(),
+  originalPath: text('original_path').notNull(),
+  sortOrder: integer('sort_order').notNull().default(0),
+  isPrimary: boolean('is_primary').notNull().default(false),
+  width: integer('width').notNull(),
+  height: integer('height').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const artistRecords = pgTable('artist_records', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  artistId: uuid('artist_id').notNull(),
+  artworkId: uuid('artwork_id'),
+  recordType: text('record_type', {
+    enum: ['award', 'exhibition', 'submission', 'certification'],
+  }).notNull(),
+  title: text('title').notNull(),
+  organizer: text('organizer'),
+  year: integer('year'),
+  awardLevel: text('award_level'),
+  isAscaVerified: boolean('is_asca_verified').notNull().default(false),
+  source: text('source', { enum: ['asca_archive', 'self_reported', 'admin'] })
+    .notNull()
+    .default('self_reported'),
+  contestRef: text('contest_ref'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
 // 전시회 테이블
@@ -190,6 +265,11 @@ export const news = pgTable('news', {
 
 // 이벤트 테이블
 export const events = pgTable('events', {
+  exhibitionId: uuid('exhibition_id'),
+  lumaUrl: text('luma_url'),
+  lumaVisibility: text('luma_visibility', { enum: ['public', 'members', 'hidden'] })
+    .notNull()
+    .default('hidden'),
   id: text('id').primaryKey(),
   title: text('title').notNull(),
   titleKo: text('title_ko'),

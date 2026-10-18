@@ -1,8 +1,13 @@
+import {
+  publicExhibitionArtistCondition,
+  publicExhibitionArtworkCondition,
+} from '@/lib/db/archive-access'
+import { publicArtistCondition, publicArtworkCondition } from '@/lib/db/archive-access'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { createIdLoader, DataLoader } from '@/lib/optimization/dataloader'
 import { error as logError } from '@/lib/logging'
-import { eq, inArray } from 'drizzle-orm'
+import { and, eq, inArray } from 'drizzle-orm'
 import * as schema from '@/lib/db/schema'
 import type { User } from '@/lib/db/schema'
 
@@ -166,14 +171,14 @@ function createDataLoaders() {
 
     artistLoader: createIdLoader(async (ids: readonly string[]) => {
       const artists = await db.query.artists.findMany({
-        where: inArray(schema.artists.id, [...ids]),
+        where: and(publicArtistCondition(), inArray(schema.artists.id, [...ids])),
       })
       return artists
     }),
 
     artworkLoader: createIdLoader(async (ids: readonly string[]) => {
       const artworks = await db.query.artworks.findMany({
-        where: inArray(schema.artworks.id, [...ids]),
+        where: and(publicArtworkCondition(), inArray(schema.artworks.id, [...ids])),
       })
       return artworks
     }),
@@ -181,7 +186,7 @@ function createDataLoaders() {
     artworksByArtistLoader: new DataLoader<string, any[]>({
       batchLoadFn: async (artistIds: readonly string[]) => {
         const artworks = await db.query.artworks.findMany({
-          where: inArray(schema.artworks.artistId, [...artistIds]),
+          where: and(publicArtworkCondition(), inArray(schema.artworks.artistId, [...artistIds])),
         })
 
         // Group artworks by artistId
@@ -208,14 +213,20 @@ function createDataLoaders() {
 
     exhibitionArtworkLoader: createIdLoader(async (ids: readonly string[]) => {
       const exhibitionArtworks = await db.query.exhibitionArtworks.findMany({
-        where: inArray(schema.exhibitionArtworks.id, [...ids]),
+        where: and(
+          publicExhibitionArtworkCondition(),
+          inArray(schema.exhibitionArtworks.id, [...ids])
+        ),
       })
       return exhibitionArtworks
     }),
 
     exhibitionArtistLoader: createIdLoader(async (ids: readonly string[]) => {
       const exhibitionArtists = await db.query.exhibitionArtists.findMany({
-        where: inArray(schema.exhibitionArtists.id, [...ids]),
+        where: and(
+          publicExhibitionArtistCondition(),
+          inArray(schema.exhibitionArtists.id, [...ids])
+        ),
       })
       return exhibitionArtists
     }),
