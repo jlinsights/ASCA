@@ -100,3 +100,57 @@ export const footerLinks: Record<FooterLinkSection, FooterLink[]> = {
     { labelKey: 'siteSponsorMcst', href: 'https://www.mcst.go.kr/kor/main.jsp', external: true },
   ],
 }
+
+export const footerSections: { titleKey: string; items: FooterLink[] }[] = [
+  {
+    titleKey: 'members',
+    items: [
+      { labelKey: 'advisor', href: '/board-members' },
+      { labelKey: 'korea', href: '/artists/country/korea' },
+      { labelKey: 'advisory', href: '/board-members' },
+      { labelKey: 'china', href: '/artists/country/china' },
+      { labelKey: 'directors', href: '/board-members' },
+      { labelKey: 'japan', href: '/artists/country/japan' },
+      { labelKey: 'siteArtistRecommended', href: '/artists' },
+      { labelKey: 'general', href: '/artists' },
+      { labelKey: 'siteArtistYoung', href: '/artists' },
+    ],
+  },
+  {
+    titleKey: 'information',
+    items: [
+      { labelKey: 'siteFtAbout', href: '/introductions' },
+      { labelKey: 'greetings', href: '/greetings' },
+      { labelKey: 'siteAboutBrand', href: '/brand' },
+      { labelKey: 'mission', href: '/mission' },
+      { labelKey: 'business', href: '/business-plan' },
+      { labelKey: 'newsletters', href: 'https://orientalcalligraphy.stibee.com/', external: true },
+      { labelKey: 'siteAboutHistory', href: '/history' },
+      { labelKey: 'partners', href: '/partners' },
+      { labelKey: 'contact', href: '/contact' },
+    ],
+  },
+  {
+    titleKey: 'rules',
+    items: [
+      footerLinks.about[1]!,
+      footerLinks.about[3]!,
+      footerLinks.about[4]!,
+      { labelKey: 'membership', href: '/membership' },
+      footerLinks.about[2]!,
+      footerLinks.about[5]!,
+      footerLinks.about[6]!,
+    ],
+  },
+  {
+    titleKey: 'support',
+    items: [
+      { labelKey: 'contact', href: '/contact' },
+      { labelKey: 'siteNewsNotices', href: '/notice' },
+      { labelKey: 'forms', href: '/forms' },
+      { labelKey: 'fundraising', href: '/fundraising' },
+      { labelKey: 'siteNavAcademy', href: '/academy' },
+      { labelKey: 'application', href: '/application-for-recommended-invited-calligrapher' },
+    ],
+  },
+]
