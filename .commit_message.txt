@@ -1,1 +1,1 @@
-🔥 chore: 어디서도 import 하지 않는 components/ui/advanced-charts.tsx·shared-components.tsx 삭제
+🎨 refactor: 작가·작품 페이지의 팔레트 색을 Ink System 토큰으로 교체하고 작가 유형은 등급(초대 남색·추천 금색)만, 전문 분야는 중립 배지로 정리 (그룹 B1)

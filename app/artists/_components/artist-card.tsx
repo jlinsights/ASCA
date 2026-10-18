@@ -31,8 +31,8 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
     : 'text-xs text-muted-foreground line-clamp-2 leading-relaxed'
 
   const cardShadowClass = isPc
-    ? 'group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 dark:shadow-gray-900/20 dark:hover:shadow-gray-900/40'
-    : 'group overflow-hidden border-0 shadow-md dark:shadow-gray-900/20'
+    ? 'group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 dark:shadow-black/20 dark:hover:shadow-black/40'
+    : 'group overflow-hidden border-0 shadow-md dark:shadow-black/20'
 
   const cardContentClass = isPc
     ? 'p-6 space-y-4 bg-gradient-to-b from-background to-muted/10 dark:from-background dark:to-muted/5'

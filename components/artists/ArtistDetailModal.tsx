@@ -296,7 +296,7 @@ export default function ArtistDetailModal({
                     <Card key={index}>
                       <CardContent className='p-4'>
                         <div className='flex items-center gap-3'>
-                          <Award className='h-5 w-5 text-yellow-500' />
+                          <Award className='h-5 w-5 text-warning dark:text-gold-400' />
                           <span className='font-medium'>{award}</span>
                         </div>
                       </CardContent>

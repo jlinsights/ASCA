@@ -124,7 +124,7 @@ export default function ArtistPage() {
     return (
       <main className='min-h-screen bg-transparent'>
         <div className='container mx-auto px-4 py-16 text-center'>
-          <p className='text-red-500'>{error || '작가를 찾을 수 없습니다.'}</p>
+          <p className='text-destructive'>{error || '작가를 찾을 수 없습니다.'}</p>
           <Link href='/artists'>
             <Button className='mt-4'>작가 목록으로 돌아가기</Button>
           </Link>
@@ -195,16 +195,16 @@ export default function ArtistPage() {
 
               {/* Membership, Artist Type, and Title */}
               <div className='flex flex-wrap gap-3 mb-6'>
-                <Badge variant='default' className='bg-blue-100 text-blue-800 hover:bg-blue-200'>
+                <Badge variant='default' className='bg-info/10 text-foreground hover:bg-info/20'>
                   {/* artist.membershipType placeholder */}
                   Member
                 </Badge>
-                <Badge variant='outline' className='border-green-200 text-green-800'>
+                <Badge variant='outline' className='border-success/30 text-foreground'>
                   {/* artist.artistType placeholder */}
                   Artist
                 </Badge>
                 {/* artist.title && (
-                  <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200">
+                  <Badge variant="secondary" className="bg-highlight/10 text-foreground border-highlight/30 hover:bg-highlight/20">
                     {artist.title}
                   </Badge>
                 ) */}
@@ -290,7 +290,9 @@ export default function ArtistPage() {
                     />
                     {artwork.featured && (
                       <div className='absolute top-2 right-2'>
-                        <Badge className='bg-red-600 text-white'>추천</Badge>
+                        <Badge className='bg-highlight text-highlight-foreground hover:bg-highlight'>
+                          추천
+                        </Badge>
                       </div>
                     )}
                   </div>
@@ -304,10 +306,10 @@ export default function ArtistPage() {
                       <span
                         className={`text-xs px-2 py-1 rounded ${
                           artwork.availability === 'available'
-                            ? 'bg-green-100 text-green-800'
+                            ? 'bg-success/10 text-foreground'
                             : artwork.availability === 'sold'
-                              ? 'bg-red-100 text-red-800'
-                              : 'bg-yellow-100 text-yellow-800'
+                              ? 'bg-seal/10 text-foreground'
+                              : 'bg-warning/10 text-foreground'
                         }`}
                       >
                         {artwork.availability === 'available'

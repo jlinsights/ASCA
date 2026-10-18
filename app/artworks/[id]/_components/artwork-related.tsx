@@ -34,7 +34,9 @@ export function ArtworkRelated({ artworks }: ArtworkRelatedProps) {
                 />
                 {artwork.isFeatured && (
                   <div className='absolute top-2 right-2'>
-                    <Badge className='bg-red-600 text-white'>추천</Badge>
+                    <Badge className='bg-highlight text-highlight-foreground hover:bg-highlight'>
+                      추천
+                    </Badge>
                   </div>
                 )}
               </div>

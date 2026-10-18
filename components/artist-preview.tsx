@@ -43,26 +43,33 @@ export function ArtistPreview({ formData, skills, awards, exhibitions }: ArtistP
             {/* 기본 정보 */}
             <div className='flex-1 space-y-4'>
               <div>
-                <h1 className='text-3xl font-bold text-gray-900'>{formData.name}</h1>
+                <h1 className='text-3xl font-bold text-foreground'>{formData.name}</h1>
                 {formData.name_en && (
-                  <p className='text-lg text-gray-600 mt-1'>{formData.name_en}</p>
+                  <p className='text-lg text-muted-foreground mt-1'>{formData.name_en}</p>
                 )}
-                {formData.name_ja && <p className='text-sm text-gray-500'>{formData.name_ja}</p>}
-                {formData.name_zh && <p className='text-sm text-gray-500'>{formData.name_zh}</p>}
+                {formData.name_ja && (
+                  <p className='text-sm text-muted-foreground'>{formData.name_ja}</p>
+                )}
+                {formData.name_zh && (
+                  <p className='text-sm text-muted-foreground'>{formData.name_zh}</p>
+                )}
               </div>
 
               {/* 배지들 */}
               <div className='flex flex-wrap gap-2'>
-                <Badge variant='outline' className='bg-blue-100 text-blue-800 border-blue-200'>
+                <Badge variant='outline' className='bg-info/10 text-foreground border-info/30'>
                   {formData.membership_type}
                 </Badge>
-                <Badge variant='outline' className='bg-green-100 text-green-800 border-green-200'>
+                <Badge
+                  variant='outline'
+                  className='bg-success/10 text-foreground border-success/30'
+                >
                   {formData.artist_type}
                 </Badge>
                 {formData.title && (
                   <Badge
                     variant='outline'
-                    className='bg-purple-100 text-purple-800 border-purple-200'
+                    className='bg-highlight/10 text-foreground border-highlight/30'
                   >
                     {formData.title}
                   </Badge>
@@ -73,14 +80,14 @@ export function ArtistPreview({ formData, skills, awards, exhibitions }: ArtistP
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-sm'>
                 {formData.birth_year && (
                   <div>
-                    <span className='font-medium text-gray-700'>출생년도:</span>
-                    <span className='ml-2 text-gray-600'>{formData.birth_year}년</span>
+                    <span className='font-medium text-foreground'>출생년도:</span>
+                    <span className='ml-2 text-muted-foreground'>{formData.birth_year}년</span>
                   </div>
                 )}
                 {formData.nationality && (
                   <div>
-                    <span className='font-medium text-gray-700'>국적:</span>
-                    <span className='ml-2 text-gray-600'>{formData.nationality}</span>
+                    <span className='font-medium text-foreground'>국적:</span>
+                    <span className='ml-2 text-muted-foreground'>{formData.nationality}</span>
                   </div>
                 )}
               </div>
@@ -98,29 +105,31 @@ export function ArtistPreview({ formData, skills, awards, exhibitions }: ArtistP
           <CardContent>
             <div className='space-y-4'>
               <div>
-                <h4 className='font-medium text-gray-700 mb-2'>한국어</h4>
-                <p className='text-gray-600 leading-relaxed whitespace-pre-wrap'>{formData.bio}</p>
+                <h4 className='font-medium text-foreground mb-2'>한국어</h4>
+                <p className='text-muted-foreground leading-relaxed whitespace-pre-wrap'>
+                  {formData.bio}
+                </p>
               </div>
               {formData.bio_en && (
                 <div>
-                  <h4 className='font-medium text-gray-700 mb-2'>English</h4>
-                  <p className='text-gray-600 leading-relaxed whitespace-pre-wrap'>
+                  <h4 className='font-medium text-foreground mb-2'>English</h4>
+                  <p className='text-muted-foreground leading-relaxed whitespace-pre-wrap'>
                     {formData.bio_en}
                   </p>
                 </div>
               )}
               {formData.bio_ja && (
                 <div>
-                  <h4 className='font-medium text-gray-700 mb-2'>日本語</h4>
-                  <p className='text-gray-600 leading-relaxed whitespace-pre-wrap'>
+                  <h4 className='font-medium text-foreground mb-2'>日本語</h4>
+                  <p className='text-muted-foreground leading-relaxed whitespace-pre-wrap'>
                     {formData.bio_ja}
                   </p>
                 </div>
               )}
               {formData.bio_zh && (
                 <div>
-                  <h4 className='font-medium text-gray-700 mb-2'>中文</h4>
-                  <p className='text-gray-600 leading-relaxed whitespace-pre-wrap'>
+                  <h4 className='font-medium text-foreground mb-2'>中文</h4>
+                  <p className='text-muted-foreground leading-relaxed whitespace-pre-wrap'>
                     {formData.bio_zh}
                   </p>
                 </div>
@@ -159,7 +168,7 @@ export function ArtistPreview({ formData, skills, awards, exhibitions }: ArtistP
               {awards.map((award, index) => (
                 <li key={index} className='flex items-start gap-2'>
                   <span className='w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0'></span>
-                  <span className='text-gray-700'>{award}</span>
+                  <span className='text-foreground'>{award}</span>
                 </li>
               ))}
             </ul>
@@ -178,7 +187,7 @@ export function ArtistPreview({ formData, skills, awards, exhibitions }: ArtistP
               {exhibitions.map((exhibition, index) => (
                 <li key={index} className='flex items-start gap-2'>
                   <span className='w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0'></span>
-                  <span className='text-gray-700'>{exhibition}</span>
+                  <span className='text-foreground'>{exhibition}</span>
                 </li>
               ))}
             </ul>
