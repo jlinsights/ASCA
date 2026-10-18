@@ -2,257 +2,168 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
 import { useLanguage } from '@/contexts/language-context'
+import { footerLinks, footerSections } from './footer-data'
+import { footerCopy } from './footer-copy'
 
 interface LayoutFooterProps {
   variant?: 'default' | 'simple'
 }
-
-function SponsorLogo({
-  src,
-  alt,
-  width,
-  height,
-  className,
-  fallbackSrc,
-  fallbackClassName,
-}: {
-  src: string
-  alt: string
-  width: number
-  height: number
-  className?: string
-  fallbackSrc?: string
-  fallbackClassName?: string
-}) {
-  const [imageError, setImageError] = useState(false)
-  const [currentSrc, setCurrentSrc] = useState(src)
-  const [usingFallback, setUsingFallback] = useState(false)
-
-  const handleImageError = () => {
-    if (fallbackSrc && currentSrc === src) {
-      setCurrentSrc(fallbackSrc)
-      setUsingFallback(true)
-    } else {
-      setImageError(true)
-    }
-  }
-
-  if (imageError) {
-    return (
-      <div className={`flex items-center justify-center text-xs text-[#fcfcfc]/40 ${className}`}>
-        {alt}
-      </div>
-    )
-  }
-
-  const imageClassName = usingFallback && fallbackClassName ? fallbackClassName : className
-
-  return (
-    <Image
-      src={currentSrc}
-      alt={alt}
-      width={width}
-      height={height}
-      className={imageClassName}
-      onError={handleImageError}
-    />
-  )
-}
-
-import { footerLinks } from './footer-data'
+const linkStyle =
+  'inline-flex min-h-11 items-center py-2 text-sm leading-relaxed text-rice-paper/80 transition-colors hover:text-rice-paper hover:underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent'
 
 export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
-  const { t } = useLanguage()
-
-  if (variant === 'simple') {
-    return (
-      <footer className='gallery-card bg-ink-black text-rice-paper mt-16'>
-        <div className='gallery-container py-12'>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-            <div>
-              <div className='flex items-center space-x-3 mb-4'>
-                <div className='w-8 h-8 bg-celadon-green rounded-full flex items-center justify-center'>
-                  <span className='font-calligraphy text-rice-paper font-bold'>書</span>
-                </div>
-                <h3 className='font-calligraphy text-lg font-bold'>ASCA</h3>
-              </div>
-              <p className='text-rice-paper/80 text-sm leading-relaxed'>
-                <span className='font-calligraphy text-temple-gold'>正法</span>의 계승,
-                <span className='font-calligraphy text-celadon-green'>創新</span>의 조화 - 동양 서예
-                문화의 발전과 보급을 선도합니다.
-              </p>
-            </div>
-
-            <div>
-              <h4 className='font-semibold mb-4 text-temple-gold'>퀵 링크</h4>
-              <ul className='space-y-2 text-sm'>
-                <li>
-                  <Link
-                    href='/exhibitions'
-                    className='text-rice-paper/80 hover:text-celadon-green transition-colors'
-                  >
-                    {t('exhibition')}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/artworks'
-                    className='text-rice-paper/80 hover:text-celadon-green transition-colors'
-                  >
-                    {t('artworks')}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/artists'
-                    className='text-rice-paper/80 hover:text-celadon-green transition-colors'
-                  >
-                    {t('artists')}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/about'
-                    className='text-rice-paper/80 hover:text-celadon-green transition-colors'
-                  >
-                    {t('about')}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className='font-semibold mb-4 text-temple-gold'>연락처</h4>
-              <div className='text-sm text-rice-paper/80 space-y-2'>
-                <p>사단법인 동양서예협회</p>
-                <p>서울특별시 중구</p>
-                <p>전화: 02-123-4567</p>
-                <p>이메일: info@orientalcalligraphy.org</p>
-              </div>
-            </div>
-          </div>
-
-          <div className='border-t border-rice-paper/20 mt-8 pt-8 text-center'>
-            <p className='text-rice-paper/60 text-sm'>
-              © 2024 사단법인 동양서예협회 (ASCA). All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
-    )
-  }
-
+  const { t, language } = useLanguage()
+  const copy = footerCopy[language]
+  const label = (key: string) => (key in copy ? copy[key as keyof typeof copy] : t(key))
   return (
-    <footer className='bg-[#222222] text-[#fcfcfc] dark:bg-[#111111] py-12'>
-      <div className='container mx-auto px-4'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 mb-12'>
-          <div className='md:col-span-1 lg:col-span-1'>
-            <Link href='/' className='block mb-4'>
+    <footer className='bg-ink-black text-rice-paper'>
+      <div className='container mx-auto px-6 py-12 md:px-8 md:py-16 lg:py-20'>
+        <div
+          className={variant === 'default' ? 'grid gap-12 lg:grid-cols-3 lg:gap-16' : 'max-w-xl'}
+        >
+          <div className='min-w-0'>
+            <Link
+              href='/'
+              className='inline-block max-w-full rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent'
+            >
               <Image
-                src='/logo/Logo & Tagline_black BG.png'
-                alt='동양서예협회 | Oriental Calligraphy Association'
-                width={200}
-                height={80}
-                className='h-16 w-auto object-contain'
-                priority
+                src='/logo/asca-hanja-white.avif'
+                alt={copy.name}
+                width={480}
+                height={68}
+                className='h-auto w-full max-w-sm object-contain'
               />
             </Link>
-            <div className='mt-4 space-y-1'>
-              <p className='text-xs text-[#fcfcfc]/70'>{t('siteFtRegNo')}: 209-82-11380</p>
-              <p className='text-xs text-[#fcfcfc]/70'>☎︎ 0502-5550-8700</p>
-              <p className='text-xs text-[#fcfcfc]/70'>FAX: 0504-256-6600</p>
-              <p className='text-xs text-[#fcfcfc]/70'>info@orientalcalligraphy.org</p>
-              <p className='text-xs text-[#fcfcfc]/70'>〒02872 {t('siteFtAddress')}</p>
-              <p className='text-xs text-[#fcfcfc]/70'>{t('siteFtBuilding')}</p>
-              <p className='text-xs text-[#fcfcfc]/70'>{t('siteFtBank')} 100-028-611714</p>
-            </div>
+            <p className='mt-8 text-sm text-rice-paper/80'>{t('siteFtRegNo')} 209-82-11380</p>
+            <address className='mt-6 space-y-6 text-sm not-italic leading-loose text-rice-paper/80'>
+              <p>
+                <span className='mb-1 block font-medium text-rice-paper'>{copy.headquarters}</span>
+                〒02873
+                <br />
+                {copy.address}
+                <br />
+                {copy.building}
+              </p>
+              <p>
+                <span className='mb-1 block font-medium text-rice-paper'>{copy.office}</span>
+                〒10467
+                <br />
+                {copy.officeAddress}
+                <br />
+                {copy.officeBuilding}
+              </p>
+              <div>
+                <a href='tel:050255508700' className={linkStyle}>
+                  {copy.phone} 0502-5550-8700
+                </a>
+                <p>FAX 0504-256-6600</p>
+                <a href='mailto:info@orientalcalligraphy.org' className={`${linkStyle} break-all`}>
+                  info@orientalcalligraphy.org
+                </a>
+              </div>
+            </address>
+            <p className='mt-6 text-sm leading-loose text-rice-paper/80'>
+              <span className='block font-medium text-rice-paper'>{t('siteFtBank')}</span>
+              100-028-611714
+            </p>
+            <a
+              href='https://pf.kakao.com/_xkchGj'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='mt-6 inline-flex items-center gap-4 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent'
+            >
+              <Image
+                src='/logo/kakao-channel-qr.png'
+                alt={copy.qrAlt}
+                width={112}
+                height={112}
+                unoptimized
+                className='h-28 w-28 shrink-0 bg-white object-contain'
+              />
+              <span className='text-sm leading-relaxed'>
+                {copy.kakao}
+                <span className='mt-1 block text-xs text-rice-paper/70'>{copy.qrHelp}</span>
+              </span>
+            </a>
           </div>
-
-          {[
-            { titleKey: 'siteFtExhibitions', items: footerLinks.exhibitions },
-            { titleKey: 'siteFtArtworks', items: footerLinks.artworks },
-            { titleKey: 'siteFtArtists', items: footerLinks.artists },
-            { titleKey: 'siteFtAbout', items: footerLinks.about },
-            { titleKey: 'siteFtNews', items: footerLinks.news },
-          ].map(section => (
-            <div key={section.titleKey}>
-              <h3 className='text-sm font-medium mb-4'>{t(section.titleKey)}</h3>
-              <ul className='space-y-2'>
-                {section.items.map(item => (
-                  <li key={t(item.labelKey)}>
-                    {item.external ? (
-                      <a
-                        href={item.href}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors'
-                      >
-                        {t(item.labelKey)}
-                      </a>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className='text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors'
-                      >
-                        {t(item.labelKey)}
-                      </Link>
-                    )}
-                  </li>
+          {variant === 'default' && (
+            <nav
+              aria-label={copy.navigation}
+              className='grid content-start gap-x-12 gap-y-12 sm:grid-cols-2 lg:col-span-2 lg:gap-y-16'
+            >
+              {footerSections.map(section => (
+                <section key={section.titleKey}>
+                  <h2 className='mb-5 font-serif text-2xl font-normal leading-snug'>
+                    {label(section.titleKey)}
+                  </h2>
+                  <ul className='grid grid-cols-2 gap-x-4 gap-y-2'>
+                    {section.items.map(item => (
+                      <li key={item.labelKey} className='min-w-0'>
+                        <Link
+                          href={item.href}
+                          target={item.external ? '_blank' : undefined}
+                          rel={item.external ? 'noopener noreferrer' : undefined}
+                          className={linkStyle}
+                        >
+                          {label(item.labelKey)}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+              <div className='flex flex-wrap gap-x-6 gap-y-2 border-t border-rice-paper/20 pt-6 sm:col-span-2'>
+                {[
+                  { labelKey: 'siteFtExhibitions', href: '/exhibitions' },
+                  { labelKey: 'siteFtArtworks', href: '/artworks' },
+                  { labelKey: 'siteNavContests', href: '/contests' },
+                  { labelKey: 'siteNavGallery', href: '/gallery' },
+                ].map(item => (
+                  <Link key={item.labelKey} href={item.href} className={linkStyle}>
+                    {t(item.labelKey)}
+                  </Link>
                 ))}
-              </ul>
-            </div>
-          ))}
+              </div>
+            </nav>
+          )}
         </div>
-
-        <div className='border-t border-[#fcfcfc]/10 pt-6 mt-8'>
-          <div className='flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-6'>
-            <Link
+        <div className='mt-12 border-t border-rice-paper/20 pt-6 md:mt-16'>
+          <div className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
+            <a
               href='https://orientalcalligraphy.stibee.com/subscribe/'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-xs uppercase tracking-wider hover:text-[#fcfcfc]/80 transition-colors'
+              className={linkStyle}
             >
               {t('siteFtNewsletter')}
-            </Link>
-
-            <div className='hidden md:block w-px h-8 bg-[#fcfcfc]/20'></div>
-
-            <div className='flex flex-wrap justify-center gap-4 md:gap-6'>
+            </a>
+            <ul className='flex flex-wrap gap-x-6 gap-y-1'>
               {footerLinks.legal.map(item => (
-                <Link
-                  key={t(item.labelKey)}
-                  href={item.href}
-                  className='text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors'
-                >
-                  {t(item.labelKey)}
-                </Link>
+                <li key={item.labelKey}>
+                  <Link href={item.href} className={linkStyle}>
+                    {t(item.labelKey)}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
-        </div>
-
-        <div className='border-t border-[#fcfcfc]/10 pt-6 mt-6'>
-          <div className='flex flex-wrap justify-center items-center gap-6 md:gap-8 opacity-60 mb-6'>
+          <div className='mt-6 flex flex-wrap gap-x-6 gap-y-1'>
             {footerLinks.sponsors.map(item => (
-              <Link
-                key={t(item.labelKey)}
+              <a
+                key={item.labelKey}
                 href={item.href}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors'
+                className={linkStyle}
               >
                 {t(item.labelKey)}
-              </Link>
+              </a>
             ))}
           </div>
-
-          <div className='text-center'>
-            <p className='text-xs text-[#fcfcfc]/60'>
-              © The Asian Society of Calligraphic Arts (ASCA). All rights reserved.
-            </p>
-          </div>
+          <p className='mt-6 text-xs leading-relaxed text-rice-paper/70'>
+            © The Asian Society of Calligraphic Arts (ASCA). All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
