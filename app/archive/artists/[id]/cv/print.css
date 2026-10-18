@@ -1,0 +1,45 @@
+@media print {
+  @page archive-cv {
+    size: A4;
+    margin: 16mm;
+  }
+  body:has(.archive-cv) header,
+  body:has(.archive-cv) nav,
+  body:has(.archive-cv) footer,
+  body:has(.archive-cv) .fixed,
+  body:has(.archive-cv) .cv-controls {
+    display: none !important;
+  }
+  body:has(.archive-cv),
+  body:has(.archive-cv) main,
+  body:has(.archive-cv) .min-h-screen,
+  body:has(.archive-cv) .archive-shell {
+    min-height: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+  body:has(.archive-cv) {
+    page: archive-cv;
+  }
+  body:has(.archive-cv) .archive-shell > .container {
+    padding: 0;
+    max-width: none;
+  }
+  .archive-cv {
+    page: archive-cv;
+    max-width: none;
+    width: 100%;
+    @apply text-navy-900 bg-white;
+  }
+  .archive-cv * {
+    color: inherit !important;
+    box-shadow: none !important;
+  }
+  .archive-cv h2,
+  .archive-cv h3 {
+    break-after: avoid;
+  }
+  .archive-cv .cv-entry {
+    break-inside: avoid;
+  }
+}

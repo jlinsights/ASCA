@@ -28,11 +28,23 @@ interface AdminNavigationProps {
 
 export const AdminNavigation = React.memo(
   ({ currentPage: propCurrentPage }: AdminNavigationProps = {}) => {
-    const { language } = useLanguage()
+    const { language, t } = useLanguage()
     const pathname = usePathname()
 
     const navItems = useMemo(
       () => [
+        {
+          key: 'archiveExhibitions',
+          href: '/admin/archive/exhibitions',
+          icon: Palette,
+          label: t('axManageExhibitions'),
+        },
+        {
+          key: 'archive',
+          href: '/admin/archive/reviews',
+          icon: FileText,
+          label: t('arReviewTitle'),
+        },
         {
           key: 'notices',
           href: '/admin/notices',
@@ -82,7 +94,7 @@ export const AdminNavigation = React.memo(
           label: language === 'ko' ? '실시간 동기화' : 'Real-time Sync',
         },
       ],
-      [language]
+      [language, t]
     )
 
     // Determine current page from prop or pathname

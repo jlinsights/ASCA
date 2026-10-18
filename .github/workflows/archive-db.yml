@@ -22,6 +22,8 @@ jobs:
         run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor
       - name: Upgrade populated historical schema
         run: node scripts/test-archive-upgrade.mjs
+      - name: Test review transitions, permissions and recovery
+        run: node --conditions=react-server --import tsx scripts/test-archive-reviews.mjs
       - name: Test actual roles, API and Storage
         run: node --import tsx scripts/test-archive.mjs
       - name: Test archive UI public queries

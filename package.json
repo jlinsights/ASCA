@@ -17,7 +17,7 @@
     "dev:host": "next dev -H 0.0.0.0",
     "dev:port": "next dev -p 3001",
     "build": "next build --webpack --experimental-build-mode compile",
-    "build:full": "next build --webpack",
+    "build:full": "rimraf .next/cache/webpack && next build --webpack",
     "build:debug": "NEXT_DEBUG=1 next build",
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",

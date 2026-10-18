@@ -3,6 +3,66 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      archive_reviews: {
+        Row: {
+          action: string
+          artwork_id: string
+          cleanup_paths: string[]
+          completed_at: string | null
+          created_at: string
+          id: string
+          images: Json
+          lease_token: string
+          leased_at: string
+          reason: string
+          reviewer_id: string
+          state: string
+        }
+        Insert: {
+          action: string
+          artwork_id: string
+          cleanup_paths?: string[]
+          completed_at?: string | null
+          created_at?: string
+          id: string
+          images?: Json
+          lease_token: string
+          leased_at?: string
+          reason?: string
+          reviewer_id: string
+          state?: string
+        }
+        Update: {
+          action?: string
+          artwork_id?: string
+          cleanup_paths?: string[]
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          images?: Json
+          lease_token?: string
+          leased_at?: string
+          reason?: string
+          reviewer_id?: string
+          state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'archive_reviews_artwork_id_fkey'
+            columns: ['artwork_id']
+            isOneToOne: false
+            referencedRelation: 'artworks'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'archive_reviews_artwork_id_fkey'
+            columns: ['artwork_id']
+            isOneToOne: false
+            referencedRelation: 'public_artworks'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       artist_contacts: {
         Row: {
           artist_id: string
@@ -1074,6 +1134,10 @@ export type Database = {
       }
     }
     Functions: {
+      finish_archive_review: {
+        Args: { p_id: string; p_lease_token: string; p_success: boolean }
+        Returns: Json
+      }
       increment_event_views: {
         Args: { event_uuid: string }
         Returns: undefined
@@ -1087,6 +1151,18 @@ export type Database = {
         Returns: undefined
       }
       is_archive_path: { Args: { value: string }; Returns: boolean }
+      prepare_archive_review: {
+        Args: {
+          p_action: string
+          p_artwork_id: string
+          p_expected_updated_at: string
+          p_id: string
+          p_lease_token: string
+          p_reason: string
+          p_reviewer_id: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       artwork_category:
