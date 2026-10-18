@@ -1,4 +1,5 @@
 import { archiveTranslations } from './translations/archive'
+import { authTranslations } from './translations/auth'
 import type { Language, TranslationData } from './types'
 import { navigationTranslations } from './translations/navigation'
 import { artworksTranslations } from './translations/artworks'
@@ -19,6 +20,7 @@ export const translations: TranslationData = {
     ...exhibitionsTranslations.ko,
     ...brandTranslations.ko,
     ...archiveTranslations.ko,
+    ...authTranslations.ko,
 
     // 공통 UI 요소
     loading: '로딩 중...',
@@ -141,6 +143,7 @@ export const translations: TranslationData = {
     ...exhibitionsTranslations.en,
     ...brandTranslations.en,
     ...archiveTranslations.en,
+    ...authTranslations.en,
 
     // 공통 UI 요소
     loading: 'Loading...',
@@ -272,6 +275,7 @@ export const translations: TranslationData = {
     ...exhibitionsTranslations.ja,
     ...brandTranslations.ja,
     ...archiveTranslations.ja,
+    ...authTranslations.ja,
 
     // 공통 UI 요소
     loading: '読み込み中...',
@@ -394,6 +398,7 @@ export const translations: TranslationData = {
     ...exhibitionsTranslations.zh,
     ...brandTranslations.zh,
     ...archiveTranslations.zh,
+    ...authTranslations.zh,
 
     // 공통 UI 요소
     loading: '加載中...',
