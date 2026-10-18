@@ -1,3 +1,4 @@
+import { PUBLIC_ARTIST_COLUMNS } from './public-artist-columns'
 import { ensureSupabase, type ArtistRow, type ArtistInsert, type ArtistUpdate } from '../supabase'
 import { AppError } from '@/lib/utils/error-handler'
 import { log } from '@/lib/utils/logger'
@@ -80,7 +81,7 @@ export async function getArtists(
     // 탈퇴 회원은 공개 목록에서 뺀다.
     let query = supabase
       .from('artists')
-      .select('*', { count: 'exact' })
+      .select(PUBLIC_ARTIST_COLUMNS, { count: 'exact' })
       .or(`membership_type.is.null,membership_type.not.ilike.*${WITHDRAWN}*`)
 
     const search = sanitizeSearchTerm(filters?.search)
@@ -124,13 +125,13 @@ export async function getArtists(
 /**
  * 특정 작가 조회
  */
-export async function getArtist(id: string): Promise<Artist | null> {
+export async function getArtist(id: string): Promise<ArtistDbRow | null> {
   try {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
     const { data: artistData, error: artistError } = await supabase
       .from('artists')
-      .select('*')
+      .select(PUBLIC_ARTIST_COLUMNS)
       .eq('id', id)
       .single()
     if (artistError) {
@@ -199,7 +200,7 @@ export async function deleteArtist(id: string): Promise<void> {
     if (!supabase) throw new Error('Supabase client not available')
     const { data: deletedArtistData, error: deleteArtistError } = await supabase
       .from('artists')
-      .select('*')
+      .select(PUBLIC_ARTIST_COLUMNS)
       .eq('id', id)
       .single()
     if (deleteArtistError) {
@@ -215,13 +216,13 @@ export async function deleteArtist(id: string): Promise<void> {
 /**
  * 작가명으로 검색
  */
-export async function searchArtists(query: string, limit: number = 20): Promise<Artist[]> {
+export async function searchArtists(query: string, limit: number = 20): Promise<ArtistDbRow[]> {
   try {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
     const { data: searchedArtistsData, error: searchArtistsError } = await supabase
       .from('artists')
-      .select('*')
+      .select(PUBLIC_ARTIST_COLUMNS)
       .or(`name.ilike.%${query}%,bio.ilike.%${query}%,nationality.ilike.%${query}%`)
       .limit(limit)
     if (searchArtistsError) {
@@ -238,13 +239,13 @@ export async function searchArtists(query: string, limit: number = 20): Promise<
 /**
  * 국적별 작가 조회
  */
-export async function getArtistsByNationality(nationality: string): Promise<Artist[]> {
+export async function getArtistsByNationality(nationality: string): Promise<ArtistDbRow[]> {
   try {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
     const { data: artistsByNationalityData, error: artistsByNationalityError } = await supabase
       .from('artists')
-      .select('*')
+      .select(PUBLIC_ARTIST_COLUMNS)
       .eq('nationality', nationality)
       .order('name')
     if (artistsByNationalityError) {
@@ -258,13 +259,13 @@ export async function getArtistsByNationality(nationality: string): Promise<Arti
   }
 }
 
-export async function getFeaturedArtists(limit: number = 6): Promise<Artist[]> {
+export async function getFeaturedArtists(limit: number = 6): Promise<ArtistDbRow[]> {
   try {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
     const { data: featuredArtistsData, error: featuredArtistsError } = await supabase
       .from('artists')
-      .select('*')
+      .select(PUBLIC_ARTIST_COLUMNS)
       .order('created_at', { ascending: false })
       .limit(limit)
     if (featuredArtistsError) {

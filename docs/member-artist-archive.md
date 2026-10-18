@@ -44,6 +44,10 @@ service_role로 작성해야 하며, 소유권 문자열을 요청 본문만 보
 인증 변경·게시 권한도 서버에서 별도로 확인해야 한다. 신규 작성 API는 이번 범위
 밖이다.
 
+Clerk `claimed_by_user_id`는 컬럼 권한으로 공개·일반 인증 조회를 차단한다. 기존
+공개 작가 API는 명시적 공개 컬럼 목록을 사용하며 `artists.select('*')`는 권한
+오류가 정상이다. 서버 service_role만 소유자 ID를 읽고 쓴다.
+
 공개 PostgREST에서 `artwork_images`는 original_path를 제외한 명시적 컬럼으로
 조회해야 한다. `select('*')`는 권한 오류가 정상이다. 연락처는 테이블 자체를
 차단한다. `events.luma_url`의 직접 조회도 차단하고 `public_events`에서 공개
@@ -107,6 +111,13 @@ node scripts/build-archive-local.mjs
 데이터는 사용하지 않는다. CI에 Archive database 작업을 추가했다. Supabase
 Preview와 Vercel Preview는 외부 연동 검사이므로 GitHub 결과를 별도로 확인해야
 한다. 로컬 성공이 Preview 성공을 뜻하지 않는다.
+
+새 앱 코드는 신규 컬럼과 `public_events` 뷰에 의존한다. 반대로 기존 앱의
+`events.select('*')`·`artists.select('*')`는 컬럼 권한 제한 적용 후 실패할 수
+있으므로 DB만 운영에 먼저 적용한 채 이전 앱을 계속 서비스하면 안 된다. 후속 운영
+배포는 작업창에서 DB와 앱을 연속 적용하거나, 먼저 작가·이벤트 조회의 공개 컬럼을
+명시하는 준비 릴리스를 거쳐 진행한다. 마이그레이션이 없는 운영 DB를 쓰는 Vercel
+Preview만으로 새 조회의 정상 동작을 확인했다고 판단하지 않는다.
 
 운영 적용은 이 PR에 포함하지 않는다. 배포 전 백업·대상 프로젝트·기존
 마이그레이션 이력을 확인하고, 실패 시 데이터 삭제가 아닌 전진 마이그레이션으로

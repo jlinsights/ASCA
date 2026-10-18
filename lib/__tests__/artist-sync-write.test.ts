@@ -49,4 +49,11 @@ describe('artist sync writes', () => {
     )
     await expect(new SyncEngine().syncTableData('Artists')).rejects.toThrow('contact failure')
   })
+  it('preserves legacy non-artist failure isolation while reporting artist failures', async () => {
+    const engine = new SyncEngine()
+    // Non-artist paths have no upsert transport in this mock and used to be ignored.
+    await expect(engine.syncTableData('Artworks')).resolves.toBeUndefined()
+    single.mockResolvedValue({ data: null, error: new Error('artist write failed') })
+    await expect(engine.syncTableData('Artists')).rejects.toThrow('artist write failed')
+  })
 })

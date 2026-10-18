@@ -3,6 +3,13 @@ const aliases: Record<string, string> = {
   'Name (Korean)': 'name',
   name_korean: 'name',
   Name: 'name',
+  'Name (English)': 'name_en',
+  'Name (Japanese)': 'name_ja',
+  'Bio (Korean)': 'bio',
+  'Bio (English)': 'bio_en',
+  'Bio (Japanese)': 'bio_ja',
+  'Bio (Chinese)': 'bio_zh',
+  'Profile Image': 'profile_image',
   'Name (Chinese)': 'name_zh',
   name_chinese: 'name_zh',
   'Membership Type': 'membership_type',
@@ -37,6 +44,12 @@ export function mapArtistSync(fields: Record<string, unknown>) {
     const normalized = aliases[key] ?? key.toLowerCase().replace(/[^a-z0-9_]/g, '_')
     if (normalized === 'email' || normalized === 'phone') {
       if (value === null || typeof value === 'string') contacts[normalized] = value
+    } else if (normalized === 'profile_image' && Array.isArray(value)) {
+      const first = value[0]
+      artist.profile_image =
+        first && typeof first === 'object' && 'url' in first && typeof first.url === 'string'
+          ? first.url
+          : null
     } else if (allowed.has(normalized)) {
       artist[normalized] = value
     } else if (key === 'DOB' || key === 'Date of Birth' || key === 'date_of_birth') {

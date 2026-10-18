@@ -1,1 +1,1 @@
-🗄️ feat: 회원 작가 아카이브 스키마·공개 권한·Storage·동기화 보호 및 DB 검증 추가
+🛡️ fix: Clerk 소유자 ID 비공개 처리와 Airtable 기존 필드·오류 격리 보존
