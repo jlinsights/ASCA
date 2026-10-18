@@ -11,7 +11,7 @@ export type ArtworkCategory =
   | 'installation'
   | 'video-art'
 
-export type ArtworkStatus = 'draft' | 'published' | 'archived' | 'in-exhibition'
+export type ArtworkStatus = 'draft' | 'pending_review' | 'published' | 'archived' | 'in-exhibition'
 
 export type DimensionUnit = 'cm' | 'inch' | 'mm'
 
@@ -151,6 +151,7 @@ export const ARTWORK_STATUS_LABELS: Record<
   ArtworkStatus,
   { ko: string; en: string; color: string }
 > = {
+  pending_review: { ko: '검토 대기', en: 'Pending review', color: 'bg-muted' },
   draft: { ko: '임시저장', en: 'Draft', color: 'bg-gray-500' },
   published: { ko: '공개', en: 'Published', color: 'bg-green-500' },
   archived: { ko: '보관됨', en: 'Archived', color: 'bg-yellow-500' },

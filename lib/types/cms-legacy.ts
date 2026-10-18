@@ -86,6 +86,9 @@ export interface Event {
     | 'ceremony'
     | 'meeting'
     | 'other'
+    | 'viewing'
+    | 'opening'
+    | 'award_ceremony'
   status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled'
   is_featured: boolean
   is_published: boolean

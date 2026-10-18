@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import Airtable from 'airtable'
+import { mapArtistSync } from './artist-sync'
 
 /**
  * Airtable ↔ Supabase 실시간 동기화 엔진
@@ -246,61 +247,48 @@ export class SyncEngine {
    */
   async syncAllData() {
     const tables = ['Artists', 'Artworks', 'Exhibitions']
-
     for (const tableName of tables) {
-      try {
-        await this.syncTableData(tableName)
-      } catch (error) {}
+      await this.syncTableData(tableName)
     }
   }
 
-  /**
-   * 개별 테이블 데이터 동기화
-   */
+  /** Artist failures must be visible; legacy non-artist failure handling is unchanged. */
   async syncTableData(airtableTableName: string) {
-    const supabaseTableName = airtableTableName.toLowerCase()
-
     try {
-      // Airtable 데이터 가져오기
-      const airtableRecords = await this.airtableBase(airtableTableName).select().all()
-
-      // Supabase 데이터와 비교하여 동기화
-      for (const record of airtableRecords) {
-        await this.syncSingleRecord(airtableTableName, record)
-      }
-    } catch (error) {}
+      const records = await this.airtableBase(airtableTableName).select().all()
+      for (const record of records) await this.syncSingleRecord(airtableTableName, record)
+    } catch (error) {
+      if (airtableTableName.toLowerCase() === 'artists') throw error
+    }
   }
 
-  /**
-   * 개별 레코드 동기화
-   */
-  private async syncSingleRecord(tableName: string, airtableRecord: any) {
-    const supabaseTableName = tableName.toLowerCase()
-    const mappedData = this.mapAirtableToSupabase(airtableRecord.fields, tableName)
-
-    try {
-      // Supabase에서 기존 레코드 찾기
-      const { data: existingRecords } = await this.supabase
-        .from(supabaseTableName)
-        .select('*')
-        .eq('airtable_id', airtableRecord.id)
-
-      if (existingRecords && existingRecords.length > 0) {
-        // 업데이트
-        const { error } = await this.supabase
-          .from(supabaseTableName)
-          .update(mappedData)
-          .eq('airtable_id', airtableRecord.id)
-
-        if (error) throw error
-      } else {
-        // 새로 삽입
-        const { error } = await this.supabase
-          .from(supabaseTableName)
-          .insert({ ...mappedData, airtable_id: airtableRecord.id })
-
-        if (error) throw error
+  /** Artist identity is idempotent; archive-owned fields never enter the payload. */
+  private async syncSingleRecord(tableName: string, record: any) {
+    if (tableName.toLowerCase() === 'artists') {
+      const { artist, contacts } = mapArtistSync(record.fields)
+      const { data, error } = await this.supabase
+        .from('artists')
+        .upsert({ ...artist, airtable_id: record.id }, { onConflict: 'airtable_id' })
+        .select('id')
+        .single()
+      if (error) throw error
+      if (Object.keys(contacts).length > 0) {
+        const { error: contactError } = await this.supabase
+          .from('artist_contacts')
+          .upsert({ artist_id: data.id, ...contacts }, { onConflict: 'artist_id' })
+        if (contactError) throw contactError
       }
+      return
+    }
+    // Preserve per-record failure isolation for legacy non-artist synchronization.
+    try {
+      const table = tableName.toLowerCase()
+      const mapped = this.mapAirtableToSupabase(record.fields, tableName)
+      const { data } = await this.supabase.from(table).select('id').eq('airtable_id', record.id)
+      const { error } = data?.length
+        ? await this.supabase.from(table).update(mapped).eq('airtable_id', record.id)
+        : await this.supabase.from(table).insert({ ...mapped, airtable_id: record.id })
+      if (error) throw error
     } catch (error) {}
   }
 
