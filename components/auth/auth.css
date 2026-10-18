@@ -192,7 +192,12 @@
     inset: 0;
     z-index: 1;
     background:
-      linear-gradient(to top, hsl(222 64% 6% / 0.92) 0%, hsl(222 64% 6% / 0.55) 32%, transparent 62%),
+      linear-gradient(
+        to top,
+        hsl(222 64% 6% / 0.92) 0%,
+        hsl(222 64% 6% / 0.55) 32%,
+        transparent 62%
+      ),
       linear-gradient(to bottom, hsl(222 64% 6% / 0.35), transparent 22%);
     pointer-events: none;
   }
