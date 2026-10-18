@@ -228,7 +228,10 @@ export async function getEvents(
 ): Promise<PaginatedResponse<Event>> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  let query = supabase.from('events').select('*', { count: 'exact' }).eq('is_published', true)
+  let query = supabase
+    .from('public_events')
+    .select('*', { count: 'exact' })
+    .eq('is_published', true)
 
   // Apply filters
   if (filters.query) {
@@ -277,7 +280,7 @@ export async function getEventById(id: string): Promise<Event | null> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
-    .from('events')
+    .from('public_events')
     .select('*')
     .eq('id', id)
     .eq('is_published', true)
@@ -383,7 +386,7 @@ export async function getFeaturedContent() {
       .order('start_date', { ascending: false })
       .limit(3),
     supabase
-      .from('events')
+      .from('public_events')
       .select('*')
       .eq('is_published', true)
       .eq('is_featured', true)
@@ -469,7 +472,7 @@ export async function getRelatedEvents(
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
   const { data, error } = await supabase
-    .from('events')
+    .from('public_events')
     .select('*')
     .eq('is_published', true)
     .eq('event_type', eventType)
