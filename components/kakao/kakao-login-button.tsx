@@ -7,6 +7,7 @@ import { LogIn, LogOut, User, MessageCircle } from 'lucide-react'
 import { loginWithKakao, logoutFromKakao, getKakaoUserInfo, KakaoUserInfo } from '@/lib/kakao'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { KAKAO_BUTTON_CLASSES } from './kakao-brand'
 
 interface KakaoLoginButtonProps {
   // 버튼 스타일링
@@ -169,16 +170,7 @@ export function KakaoLoginButton({
       disabled={isLoading}
       className={`
         ${getButtonSize()}
-        ${
-          isLoggedIn
-            ? 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-gray-300'
-            : 'bg-yellow-400 hover:bg-yellow-500 text-yellow-900 border-yellow-400 hover:border-yellow-500'
-        }
-        dark:${
-          isLoggedIn
-            ? 'bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 dark:border-gray-600'
-            : 'bg-yellow-500 dark:hover:bg-yellow-600 dark:text-yellow-50 dark:border-yellow-500'
-        }
+        ${isLoggedIn ? 'bg-muted hover:bg-muted/80 text-foreground border-border' : KAKAO_BUTTON_CLASSES}
         transition-all duration-200 flex items-center gap-2
         ${className}
       `}
