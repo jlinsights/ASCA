@@ -22,9 +22,7 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
   return (
     <Card
       className={`group overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ${
-        featured
-          ? 'border-amber-200 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20'
-          : 'border-border/50 hover:border-border'
+        featured ? 'border-warning/30 bg-warning/5' : 'border-border/50 hover:border-border'
       }`}
     >
       <div className='relative'>
@@ -39,8 +37,8 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
             />
             <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent' />
 
-            {/* 상태 배지 */}
-            <div className='absolute top-3 right-3'>
+            {/* 상태 배지 — 틴트 배경이 반투명이라 사진 위에서는 불투명 바탕을 깐다 */}
+            <div className='absolute top-3 right-3 rounded-full bg-card'>
               <Badge className={statusColors[exhibition.status as keyof typeof statusColors]}>
                 {statusKey ? t(statusKey) : exhibition.status}
               </Badge>
@@ -49,7 +47,7 @@ export function ExhibitionCard({ exhibition, featured = false }: ExhibitionCardP
             {/* 주요 전시회 표시 */}
             {exhibition.is_featured && (
               <div className='absolute top-3 left-3'>
-                <Badge className='bg-amber-500 text-white border-0 shadow-md'>
+                <Badge className='bg-highlight text-highlight-foreground border-0 shadow-md'>
                   <Star className='h-3 w-3 mr-1' />
                   {t('exCardFeatured')}
                 </Badge>

@@ -34,8 +34,8 @@ const VARIANTS: Record<
     emptyKey: 'exCurrentEmpty',
   },
   upcoming: {
-    hero: 'bg-gradient-to-b from-blue-50 to-background dark:from-blue-950/20',
-    badge: 'bg-blue-600 text-white',
+    hero: 'bg-gradient-to-b from-info/5 to-background',
+    badge: 'bg-info text-white',
     badgeKey: 'siteExUpcoming',
     titleKey: 'exUpcomingTitle',
     ledeKey: 'exUpcomingLede',
@@ -43,7 +43,7 @@ const VARIANTS: Record<
   },
   past: {
     hero: 'bg-transparent',
-    badge: 'bg-amber-600 text-white',
+    badge: 'bg-warning text-ink-black',
     badgeKey: 'siteExPast',
     titleKey: 'exPastTitle',
     ledeKey: 'exPastLede',
@@ -51,7 +51,7 @@ const VARIANTS: Record<
   },
   online: {
     hero: 'bg-transparent',
-    badge: 'bg-purple-600 text-white',
+    badge: 'bg-highlight text-highlight-foreground',
     badgeKey: 'siteExOnline',
     titleKey: 'exOnlineTitle',
     ledeKey: 'exOnlineLede',

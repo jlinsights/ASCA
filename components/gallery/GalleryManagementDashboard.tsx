@@ -331,7 +331,7 @@ const GalleryManagementDashboard: React.FC<GalleryManagementDashboardProps> = ({
       {/* Tab Content */}
       <ErrorBoundary
         fallback={
-          <div className='p-4 m-4 bg-red-50 text-red-800 rounded-md'>
+          <div className='p-4 m-4 bg-seal/5 text-foreground rounded-md'>
             오류: 탭 컴포넌트를 불러올 수 없습니다.
           </div>
         }

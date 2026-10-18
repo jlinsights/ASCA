@@ -2,9 +2,9 @@
 // warning-cleanup-cycle-2 Stage 5a-1/4: exhibitions/[id]/page.tsx 분리 대상
 
 export const statusColors = {
-  upcoming: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-  current: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-  past: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300',
+  upcoming: 'bg-info/10 text-foreground',
+  current: 'bg-success/10 text-foreground',
+  past: 'bg-muted text-foreground',
 } as const
 
 export function formatExhibitionDate(dateString: string): string {

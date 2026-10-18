@@ -90,8 +90,8 @@ export default function ExhibitionsPage() {
       <main className='min-h-screen bg-transparent'>
         <section className='container mx-auto px-4 py-16'>
           <div className='max-w-6xl mx-auto text-center'>
-            <div className='bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-6'>
-              <p className='text-red-700 dark:text-red-300 font-medium'>{t(errorKey)}</p>
+            <div className='bg-seal/5 border border-seal/30 rounded-lg p-6'>
+              <p className='text-muted-foreground font-medium'>{t(errorKey)}</p>
               <Button onClick={fetchExhibitions} className='mt-4' variant='outline'>
                 {t('exPageRetry')}
               </Button>
@@ -174,7 +174,7 @@ export default function ExhibitionsPage() {
           {featuredExhibitions.length > 0 && (
             <div className='mb-12'>
               <div className='flex items-center gap-2 mb-6'>
-                <Star className='h-5 w-5 text-amber-500' />
+                <Star className='h-5 w-5 text-warning dark:text-gold-400' />
                 <h2 className='text-2xl font-bold text-foreground'>{t('exPageFeatured')}</h2>
               </div>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>

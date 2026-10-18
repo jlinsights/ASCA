@@ -55,7 +55,7 @@ export function GalleryItemCard({
       }}
     >
       <div
-        className='relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl dark:shadow-gray-900/50 dark:hover:shadow-gray-900/80 transition-all duration-500'
+        className='relative bg-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl dark:shadow-black/50 dark:hover:shadow-black/80 transition-all duration-500'
         style={{
           aspectRatio: getRandomAspectRatio(index),
           minHeight: '250px',
@@ -63,10 +63,10 @@ export function GalleryItemCard({
       >
         {/* 스켈레톤 로더 */}
         {!isImageLoaded && !hasImageError && (
-          <div className='absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 bg-[length:200%_100%] animate-shimmer'>
+          <div className='absolute inset-0 animate-pulse bg-gradient-to-r from-muted via-muted to-muted bg-[length:200%_100%] animate-shimmer'>
             <div className='absolute inset-0 flex items-center justify-center'>
               <svg
-                className='w-12 h-12 text-gray-400 dark:text-gray-500 animate-spin'
+                className='w-12 h-12 text-muted-foreground animate-spin'
                 fill='none'
                 viewBox='0 0 24 24'
               >
@@ -90,9 +90,9 @@ export function GalleryItemCard({
 
         {/* 에러 플레이스홀더 */}
         {hasImageError && (
-          <div className='absolute inset-0 bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center'>
+          <div className='absolute inset-0 bg-muted flex flex-col items-center justify-center'>
             <svg
-              className='w-16 h-16 text-gray-400 dark:text-gray-600 mb-4'
+              className='w-16 h-16 text-muted-foreground mb-4'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -104,7 +104,7 @@ export function GalleryItemCard({
                 d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
               />
             </svg>
-            <p className='text-sm text-gray-500 dark:text-gray-400'>이미지를 불러올 수 없습니다</p>
+            <p className='text-sm text-muted-foreground'>이미지를 불러올 수 없습니다</p>
           </div>
         )}
 
@@ -126,7 +126,7 @@ export function GalleryItemCard({
 
         {/* 카테고리 배지 */}
         <div className='absolute top-4 left-4 z-10'>
-          <span className='px-3 py-1 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-xs font-semibold text-gray-800 dark:text-gray-200 rounded-full shadow-sm'>
+          <span className='px-3 py-1 bg-card/90 backdrop-blur-sm text-xs font-semibold text-foreground rounded-full shadow-sm'>
             {getCategoryIcon(item.category)} {getCategoryName(item.category)}
           </span>
         </div>
@@ -137,12 +137,12 @@ export function GalleryItemCard({
             initial={{ scale: 0, rotate: 45 }}
             animate={{ scale: 1, rotate: 0 }}
             whileHover={{ scale: 1.1, rotate: 0 }}
-            className='p-2.5 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl transition-all duration-300'
+            className='p-2.5 bg-card/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-card hover:shadow-xl transition-all duration-300'
             onClick={e => onShareClick(e, item)}
             aria-label='공유하기'
           >
             <svg
-              className='w-4 h-4 text-gray-700 dark:text-gray-300'
+              className='w-4 h-4 text-foreground'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -160,7 +160,7 @@ export function GalleryItemCard({
             initial={{ scale: 0, rotate: 45 }}
             animate={{ scale: 1, rotate: 0 }}
             whileHover={{ scale: 1.1, rotate: 0 }}
-            className='p-2.5 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl transition-all duration-300'
+            className='p-2.5 bg-card/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-card hover:shadow-xl transition-all duration-300'
             onClick={e => {
               e.stopPropagation()
               onImageClick(item)
@@ -168,7 +168,7 @@ export function GalleryItemCard({
             aria-label='전체화면 보기'
           >
             <svg
-              className='w-4 h-4 text-gray-700 dark:text-gray-300'
+              className='w-4 h-4 text-foreground'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -190,7 +190,7 @@ export function GalleryItemCard({
           whileHover={{ y: 0 }}
         >
           <h3 className='text-white text-lg font-bold mb-2 line-clamp-2'>{item.title}</h3>
-          <p className='text-gray-200 text-sm mb-3 line-clamp-2'>{item.description}</p>
+          <p className='text-white/80 text-sm mb-3 line-clamp-2'>{item.description}</p>
           <div className='flex flex-wrap gap-1'>
             {item.tags.slice(0, 3).map(tag => (
               <span

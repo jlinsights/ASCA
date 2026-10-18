@@ -57,7 +57,7 @@ export function GalleryLightbox({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 50 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className='relative max-w-7xl max-h-full bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-2xl'
+            className='relative max-w-7xl max-h-full bg-card rounded-3xl overflow-hidden shadow-2xl'
             onClick={e => e.stopPropagation()}
           >
             {/* 상단 헤더 */}
@@ -67,7 +67,7 @@ export function GalleryLightbox({
                   <h2 id='lightbox-title' className='text-2xl font-bold mb-1'>
                     {selectedImage.title}
                   </h2>
-                  <p id='lightbox-description' className='text-gray-200 text-sm'>
+                  <p id='lightbox-description' className='text-white/80 text-sm'>
                     {selectedImage.description}
                   </p>
                 </div>
@@ -99,7 +99,7 @@ export function GalleryLightbox({
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={onClose}
-                    className='p-3 bg-white/20 backdrop-blur-sm text-white rounded-2xl hover:bg-red-500/70 transition-all duration-300 shadow-lg'
+                    className='p-3 bg-white/20 backdrop-blur-sm text-white rounded-2xl hover:bg-seal/70 transition-all duration-300 shadow-lg'
                     aria-label='닫기'
                   >
                     <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -169,7 +169,7 @@ export function GalleryLightbox({
             </motion.button>
 
             {/* 이미지 컨테이너 */}
-            <div className='relative bg-gray-50 flex items-center justify-center min-h-[60vh] max-h-[85vh]'>
+            <div className='relative bg-muted flex items-center justify-center min-h-[60vh] max-h-[85vh]'>
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -190,7 +190,7 @@ export function GalleryLightbox({
 
             {/* 하단 정보 패널 */}
             <motion.div
-              className='p-8 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800'
+              className='p-8 bg-card border-t border-border'
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
@@ -198,20 +198,18 @@ export function GalleryLightbox({
               <div className='flex items-start justify-between mb-4'>
                 <div className='flex-1'>
                   <div className='flex items-center space-x-3 mb-3'>
-                    <span className='px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-semibold rounded-full'>
+                    <span className='px-3 py-1 bg-info/10 text-foreground text-sm font-semibold rounded-full'>
                       {getCategoryIcon(selectedImage.category)}{' '}
                       {getCategoryName(selectedImage.category)}
                     </span>
                     {selectedImage.eventDate && (
-                      <span className='text-gray-500 dark:text-gray-400 text-sm'>
+                      <span className='text-muted-foreground text-sm'>
                         {selectedImage.eventDate}
                       </span>
                     )}
                   </div>
-                  <h3 className='text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
-                    {selectedImage.title}
-                  </h3>
-                  <p className='text-gray-600 dark:text-gray-400 text-lg leading-relaxed'>
+                  <h3 className='text-2xl font-bold text-foreground mb-2'>{selectedImage.title}</h3>
+                  <p className='text-muted-foreground text-lg leading-relaxed'>
                     {selectedImage.description}
                   </p>
                 </div>
@@ -222,7 +220,7 @@ export function GalleryLightbox({
                 {selectedImage.tags.map((tag, index) => (
                   <motion.span
                     key={tag}
-                    className='px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-default'
+                    className='px-3 py-2 bg-muted text-foreground text-sm rounded-xl transition-colors cursor-default'
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.4 + index * 0.05 }}
@@ -234,12 +232,12 @@ export function GalleryLightbox({
               </div>
 
               {/* 이미지 네비게이션 정보 */}
-              <div className='mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400'>
+              <div className='mt-6 pt-4 border-t border-border flex items-center justify-between text-sm text-muted-foreground'>
                 <span>
                   {filteredItems.findIndex(item => item.id === selectedImage.id) + 1} /{' '}
                   {filteredItems.length}
                 </span>
-                <span className='text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-2 py-1 rounded'>
+                <span className='text-xs bg-muted text-muted-foreground px-2 py-1 rounded'>
                   ESC로 닫기 | ← → 키로 이동
                 </span>
               </div>
