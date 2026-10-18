@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { GalleryItem } from '@/lib/types/gallery/gallery-legacy'
+import { KAKAO_BUTTON_CLASSES } from '@/components/kakao/kakao-brand'
 import {
   shareToKakao,
   shareToFacebook,
@@ -81,15 +82,16 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
       id: 'kakao',
       name: '카카오톡',
       icon: '💬',
-      color: 'bg-yellow-400 hover:bg-yellow-500',
-      textColor: 'text-yellow-900',
+      color: KAKAO_BUTTON_CLASSES,
+      textColor: '',
       onClick: handleKakaoShare,
     },
     {
       id: 'facebook',
       name: '페이스북',
       icon: '📘',
-      color: 'bg-blue-600 hover:bg-blue-700',
+      // 플랫폼 브랜드 색 — Ink System 토큰 대상 아님
+      color: 'bg-[#1877F2] hover:bg-[#1877F2]/90',
       textColor: 'text-white',
       onClick: handleFacebookShare,
     },
@@ -121,13 +123,13 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
           className={`social-share ${className}`}
         >
           {/* 메인 공유 컨테이너 */}
-          <div className='bg-white rounded-2xl shadow-2xl p-6 w-80 max-w-sm mx-auto'>
+          <div className='bg-card rounded-2xl shadow-2xl p-6 w-80 max-w-sm mx-auto'>
             {/* 헤더 */}
             <div className='flex items-center justify-between mb-4'>
-              <h3 className='text-lg font-semibold text-gray-900'>작품 공유하기</h3>
+              <h3 className='text-lg font-semibold text-foreground'>작품 공유하기</h3>
               <button
                 onClick={onClose}
-                className='p-2 hover:bg-gray-100 rounded-full transition-colors'
+                className='p-2 hover:bg-muted rounded-full transition-colors'
                 aria-label='닫기'
               >
                 ✕
@@ -135,13 +137,13 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
             </div>
 
             {/* 작품 미리보기 */}
-            <div className='flex items-center space-x-3 mb-6 p-3 bg-gray-50 rounded-lg'>
-              <div className='relative w-12 h-12 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0'>
+            <div className='flex items-center space-x-3 mb-6 p-3 bg-muted rounded-lg'>
+              <div className='relative w-12 h-12 bg-muted rounded-lg overflow-hidden flex-shrink-0'>
                 <Image src={item.src} alt={item.title} fill sizes='48px' className='object-cover' />
               </div>
               <div className='flex-1 min-w-0'>
-                <p className='font-medium text-gray-900 text-sm truncate'>{item.title}</p>
-                <p className='text-gray-500 text-xs truncate'>{item.description}</p>
+                <p className='font-medium text-foreground text-sm truncate'>{item.title}</p>
+                <p className='text-muted-foreground text-xs truncate'>{item.description}</p>
               </div>
             </div>
 
@@ -172,7 +174,7 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
             </div>
 
             {/* 구분선 */}
-            <div className='border-t border-gray-200 my-4'></div>
+            <div className='border-t border-border my-4'></div>
 
             {/* 추가 공유 옵션 */}
             <div className='space-y-2'>
@@ -183,7 +185,7 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
                   whileTap={{ scale: 0.99 }}
                   onClick={handleNativeShare}
                   disabled={isSharing}
-                  className='w-full flex items-center justify-center space-x-2 py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium text-sm text-gray-700 transition-colors'
+                  className='w-full flex items-center justify-center space-x-2 py-3 px-4 bg-muted hover:bg-muted/70 rounded-xl font-medium text-sm text-foreground transition-colors'
                 >
                   <span>📤</span>
                   <span>기본 공유</span>
@@ -199,8 +201,8 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
                   w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl font-medium text-sm transition-all
                   ${
                     copied
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                      ? 'bg-success/10 text-muted-foreground'
+                      : 'bg-muted hover:bg-muted/70 text-foreground'
                   }
                 `}
               >
@@ -214,10 +216,10 @@ export default function SocialShare({ item, isOpen, onClose, className = '' }: S
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className='absolute inset-0 bg-white bg-opacity-90 rounded-2xl flex items-center justify-center'
+                className='absolute inset-0 bg-card/90 rounded-2xl flex items-center justify-center'
               >
-                <div className='flex items-center space-x-2 text-gray-600'>
-                  <div className='animate-spin w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full'></div>
+                <div className='flex items-center space-x-2 text-muted-foreground'>
+                  <div className='animate-spin w-5 h-5 border-2 border-border border-t-info rounded-full'></div>
                   <span className='text-sm'>공유 중...</span>
                 </div>
               </motion.div>
