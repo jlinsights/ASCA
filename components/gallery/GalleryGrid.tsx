@@ -79,7 +79,7 @@ export default function GalleryGrid({
         {/* 헤더 섹션 */}
         <div className='text-center space-y-4'>
           <motion.h1
-            className='text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-gray-100 dark:via-gray-300 dark:to-gray-100 bg-clip-text text-transparent'
+            className='text-4xl md:text-5xl font-bold text-foreground'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -87,7 +87,7 @@ export default function GalleryGrid({
             갤러리
           </motion.h1>
           <motion.p
-            className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'
+            className='text-lg text-muted-foreground max-w-2xl mx-auto'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -107,7 +107,7 @@ export default function GalleryGrid({
             갤러리 검색
           </label>
           <div
-            className='absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500'
+            className='absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground'
             aria-hidden='true'
           >
             <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -127,13 +127,13 @@ export default function GalleryGrid({
             onChange={e => setSearchQuery(e.target.value)}
             aria-label='갤러리 작품 검색'
             aria-describedby='search-results-count'
-            className='w-full pl-12 pr-6 py-4 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/50 focus:border-blue-300 dark:focus:border-blue-600 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-gray-900/20'
+            className='w-full pl-12 pr-6 py-4 bg-card border-2 border-border rounded-2xl text-lg text-foreground placeholder:text-muted-foreground focus:ring-4 focus:ring-info/30 focus:border-info/30 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-black/20'
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
               aria-label='검색어 지우기'
-              className='absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 rounded'
+              className='absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-info/30 rounded'
             >
               <svg
                 className='w-5 h-5'
@@ -166,10 +166,10 @@ export default function GalleryGrid({
             onClick={() => setSelectedCategory('all')}
             aria-pressed={selectedCategory === 'all'}
             aria-label={`전체 카테고리 (${items.length}개 작품)`}
-            className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 ${
+            className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-info/30 ${
               selectedCategory === 'all'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md dark:shadow-gray-900/20'
+                ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                : 'bg-card text-foreground hover:bg-muted border-2 border-border hover:border-info/30 hover:shadow-md dark:shadow-black/20'
             }`}
             whileHover={{ scale: selectedCategory === 'all' ? 1.05 : 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -185,10 +185,10 @@ export default function GalleryGrid({
               onClick={() => setSelectedCategory(category.id)}
               aria-pressed={selectedCategory === category.id}
               aria-label={`${category.name} 카테고리 (${category.count}개 작품)`}
-              className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 ${
+              className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-info/30 ${
                 selectedCategory === category.id
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md dark:shadow-gray-900/20'
+                  ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                  : 'bg-card text-foreground hover:bg-muted border-2 border-border hover:border-info/30 hover:shadow-md dark:shadow-black/20'
               }`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -219,19 +219,17 @@ export default function GalleryGrid({
               <div className='text-6xl mb-4' aria-hidden='true'>
                 🔍
               </div>
-              <p className='text-xl text-gray-500 dark:text-gray-400 mb-2'>검색 결과가 없습니다</p>
-              <p className='text-gray-400 dark:text-gray-500'>다른 키워드로 시도해보세요</p>
+              <p className='text-xl text-muted-foreground mb-2'>검색 결과가 없습니다</p>
+              <p className='text-muted-foreground'>다른 키워드로 시도해보세요</p>
             </div>
           ) : (
-            <div className='flex items-center justify-center space-x-2 text-gray-600 dark:text-gray-400'>
-              <span className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
+            <div className='flex items-center justify-center space-x-2 text-muted-foreground'>
+              <span className='text-2xl font-bold text-info dark:text-navy-300'>
                 {filteredItems.length}
               </span>
               <span>개의 작품</span>
               {searchQuery && (
-                <span className='text-sm text-gray-500 dark:text-gray-500'>
-                  "{searchQuery}" 검색 결과
-                </span>
+                <span className='text-sm text-muted-foreground'>"{searchQuery}" 검색 결과</span>
               )}
             </div>
           )}
