@@ -1,1 +1,1 @@
-🐛 fix: 카카오 로그인·공유 버튼을 공식 가이드 색(#FEE500·검정 85%)으로 맞추고 다크 모드에서 흰 글자가 노란 바탕에 묻히던 문제 수정
+🔥 chore: 어디서도 import 하지 않는 components/ui/advanced-charts.tsx·shared-components.tsx 삭제
