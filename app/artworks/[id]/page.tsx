@@ -60,7 +60,7 @@ export default function ArtworkDetailPage() {
     return (
       <main className='min-h-screen'>
         <div className='container mx-auto px-4 py-16 text-center'>
-          <p className='text-red-500'>{error || '작품을 찾을 수 없습니다.'}</p>
+          <p className='text-destructive'>{error || '작품을 찾을 수 없습니다.'}</p>
           <Link href='/artworks'>
             <Button className='mt-4'>작품 목록으로 돌아가기</Button>
           </Link>

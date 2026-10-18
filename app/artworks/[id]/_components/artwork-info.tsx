@@ -47,24 +47,24 @@ function ArtworkHeader({ artwork, isLiked, onToggleLike }: ArtworkInfoProps) {
         <div className='flex-1'>
           <div className='flex flex-wrap gap-2 mb-3'>
             {artwork.isFeatured && (
-              <Badge className='bg-red-600 text-white'>
+              <Badge className='bg-highlight text-highlight-foreground hover:bg-highlight'>
                 <Star className='w-3 h-3 mr-1' />
                 추천작품
               </Badge>
             )}
-            <Badge variant='outline' className='border-blue-200 text-blue-800'>
+            <Badge variant='outline' className='border-info/30 text-foreground'>
               {getCategoryLabel(artwork.category)}
             </Badge>
-            <Badge variant='outline' className='border-green-200 text-green-800'>
+            <Badge variant='outline' className='border-success/30 text-foreground'>
               {getStyleLabel(artwork.style)}
             </Badge>
             {artwork.font && (
-              <Badge variant='outline' className='border-purple-200 text-purple-800'>
+              <Badge variant='outline' className='border-highlight/30 text-foreground'>
                 {artwork.font}
               </Badge>
             )}
             {artwork.paperSize && (
-              <Badge variant='outline' className='border-orange-200 text-orange-800'>
+              <Badge variant='outline' className='border-warning/30 text-foreground'>
                 {artwork.paperSize}
               </Badge>
             )}
@@ -88,7 +88,7 @@ function ArtworkHeader({ artwork, isLiked, onToggleLike }: ArtworkInfoProps) {
             onClick={onToggleLike}
             className='flex items-center gap-2'
           >
-            <Heart className={`h-4 w-4 ${isLiked ? 'fill-current text-red-500' : ''}`} />
+            <Heart className={`h-4 w-4 ${isLiked ? 'fill-current text-destructive' : ''}`} />
             {artwork.likes + (isLiked ? 1 : 0)}
           </Button>
           <Button variant='outline' size='sm'>
@@ -144,7 +144,7 @@ function ArtworkQuickInfo({ artwork }: { artwork: Artwork }) {
     <div className='grid grid-cols-2 gap-4'>
       <Card className='p-4'>
         <div className='flex items-center gap-3'>
-          <Palette className='h-5 w-5 text-blue-600' />
+          <Palette className='h-5 w-5 text-info dark:text-navy-300' />
           <div>
             <p className='text-xs text-muted-foreground'>재료</p>
             <p className='text-sm font-medium'>{artwork.medium}</p>
@@ -153,7 +153,7 @@ function ArtworkQuickInfo({ artwork }: { artwork: Artwork }) {
       </Card>
       <Card className='p-4'>
         <div className='flex items-center gap-3'>
-          <Info className='h-5 w-5 text-green-600' />
+          <Info className='h-5 w-5 text-success dark:text-foreground' />
           <div>
             <p className='text-xs text-muted-foreground'>상태</p>
             <p className='text-sm font-medium'>{artwork.condition || '우수'}</p>
@@ -240,7 +240,7 @@ function ArtworkDetails({ artwork }: { artwork: Artwork }) {
       {artwork.certification && (
         <div className='flex justify-between py-3 border-b'>
           <span className='text-muted-foreground'>진품보증</span>
-          <Badge variant='outline' className='text-green-600 border-green-600'>
+          <Badge variant='outline' className='text-success dark:text-foreground border-success'>
             <Award className='w-3 h-3 mr-1' />
             인증완료
           </Badge>
