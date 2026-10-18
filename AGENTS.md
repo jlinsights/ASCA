@@ -15,7 +15,21 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 - **Admin Dashboard**: Complete CMS for managing artists, artworks, exhibitions
 - **Advanced Gallery**: Filtering, categorization, and viewing features
 
-## 운영 환경과 데이터 (2026-10-11 기준)
+## 작업 원칙
+
+- 한국어로 응답하고 파일 작업과 셸의 작업 위치에는 절대 경로를 사용한다.
+- 변경 전 대상 파일과 관련 코드를 읽고, 시작 시 `git status --short --branch`로
+  기존 변경을 확인한다. 사용자의 미커밋 변경은 보존한다.
+- 명시적 요청 없이 커밋·푸시·병합하지 않는다.
+- 변경 시 `.commit_message.txt`를 먼저 읽고, 이모지를 포함한 한국어 한 줄로
+  덮어쓴다. revert 작업이면 비운다.
+- `AGENTS.md`와 `docs/CLAUDE.md`의 공통 본문은 함께 갱신한다.
+- 일반 설치·사용 안내는 `README.md`, 실행 명령은 `package.json`, 환경 변수는
+  `.env.example`과 `lib/config/env.ts`를 기준으로 한다.
+- 코드 검사, 빌드, 배포, 인증된 브라우저 확인은 서로 다른 검증이다. 실제로
+  통과한 범위만 완료로 보고한다.
+
+## 운영 환경과 데이터
 
 ### 배포 — Vercel `asca-main`
 
@@ -26,26 +40,30 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   검증은 `NODE_ENV=production npm run build:full` 로 한다(셸에
   `NODE_ENV=development` 가 남아 있으면 prerender 가 `useContext` null 로
   죽는다).
-- Hobby 플랜이라 동시 빌드 1개 — Preview 는 Production 뒤에서 대기한다.
-- 프로덕션 주소는 `asca-main.vercel.app` 이다. ⚠️ `orientalcalligraphy.org`
-  루트· `www` 의 DNS(Cloudflare)는 아직 **Webflow** 를 가리킨다. 이 저장소를
-  배포해도 그 도메인은 바뀌지 않는다(하위 도메인 anam·heelang·catalog2025·jury
-  는 각각 다른 Vercel 프로젝트).
+- 배포 프로젝트 참조는 `asca-main`, 주소는 `asca-main.vercel.app`이다. 실제
+  배포·플랜·DNS 연결 상태는 작업 시 확인한다. 이 저장소의 배포와
+  `orientalcalligraphy.org` 도메인 연결 변경은 별도 작업이다.
+- 필수 환경 변수는 `DATABASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`,
+  `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`,
+  `CLERK_SECRET_KEY`다. 정확한 검증 규칙은 `lib/config/env.ts`를 따른다.
+- `DATABASE_URL`은 PostgreSQL 연결 문자열이다. SQLite 파일 URL을 사용하지
+  않는다. service role 키와 서버 비밀키는 클라이언트 코드나 저장소에 넣지
+  않는다.
 
-### Supabase — `ASCA-2026` (`caxjyimsuvjnbmjoxfad`)
+### Supabase와 마이그레이션
 
-- 옛 프로젝트 `fiaoduraycyjselasmdn` 은 400일 넘게 정지돼 **복구 불가**다.
-- **데이터가 있는 테이블은 `artists` 뿐이다.** 공지·전시·행사·작품 등 공개 CMS
-  테이블은 `supabase/migrations/20261010233903_asca2026_public_cms_tables.sql`
-  로 만든 **빈 테이블**이다. 그 이전 마이그레이션은 옛 스키마(auth.users FK,
-  user_metadata 관리자 정책, 없는 'korean' 검색 설정)라 **재실행하지 말 것.**
-- 홈·연혁 콘텐츠는 저장소 데이터에서 온다:
+- 프로젝트 참조는 `ASCA-2026` (`caxjyimsuvjnbmjoxfad`)이다. 작업 대상은 실제
+  환경 설정과 대조하고, 테이블의 데이터 유무는 조회 후 판단한다.
+- 공개 CMS 테이블 생성 이력은
+  `supabase/migrations/20261010233903_asca2026_public_cms_tables.sql`을
+  참조한다. 그 이전 마이그레이션에는 옛 프로젝트의 auth.users FK, 관리자 정책,
+  검색 설정이 있으므로 현재 DB에 일괄 재실행하지 않는다.
+- 홈·연혁 콘텐츠는 저장소 데이터도 사용한다:
   `app/history/_data/history-events.ts`, `lib/data/blog-posts.json`.
-- RLS: 공개 테이블은 **읽기만 공개, 쓰기는 service_role 만.**
-- 🔴 **`execute_sql` 같은 임의 SQL RPC 를 만들지 말 것.** 구조 변경은
-  마이그레이션으로만 한다.
-- 🔴 **DB 덤프를 커밋하지 말 것.** 이 저장소는 공개다. 2026-07 덤프(개인정보
-  포함)가 커밋돼 있어 2026-10-11 에 이력에서 지웠다.
+- 공개 CMS의 RLS는 읽기 공개, 쓰기 service_role 제한을 유지한다.
+- `execute_sql` 같은 임의 SQL RPC를 만들지 않는다. 구조 변경은 마이그레이션으로
+  한다.
+- DB 덤프·개인정보·자격 증명은 커밋하지 않는다.
 
 ### 데이터 계층이 둘이다
 
@@ -71,10 +89,21 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 ```bash
 npm run dev              # Development server using Webpack (Recommended)
 npm run dev:turbo        # Turbo mode development (May have ESM issues with Clerk)
-npm run build            # Production build
+npm run build            # Compile-only build (not deployment validation)
+NODE_ENV=production npm run build:full # Full deployment build
 npm run start            # Start production server
 npm run pre-commit       # Full quality check before commits
 ```
+
+### Local Setup
+
+- Next.js의 Node.js 요구 버전은 설치된 `node_modules/next/package.json`의
+  `engines`를 확인한다. 루트 `package.json`의 하한만 믿지 않는다.
+- 잠금 파일 기준 설치는 `npm ci`를 사용한다. peer dependency 옵션은 `.npmrc`에
+  있다.
+- `.env.example`을 참고해 `.env.local`을 준비하되 기존 파일을 덮어쓰지 않는다.
+- `gallery:generate`는 현재 npm 스크립트가 아니다. 갤러리 명령은
+  `package.json`을 확인한다.
 
 ### Database Management
 
@@ -82,7 +111,7 @@ npm run pre-commit       # Full quality check before commits
 npm run db:studio        # Open Drizzle Studio GUI (key tool)
 npm run db:push          # Apply schema changes to database
 npm run db:seed          # Seed development data
-npm run db:reset         # Complete reset: drop + push + seed
+npm run db:check         # Check migration consistency
 npm run db:generate      # Generate migrations from schema
 ```
 
@@ -146,11 +175,13 @@ All content tables use consistent multilingual structure:
 
 ## Admin System
 
-### Special Admin Account
+### 관리자 인증
 
-- Email: `info@orientalcalligraphy.org`
-- Auto-login without password
-- Full CMS access at `/admin`
+- `/admin`은 `app/admin/layout.tsx`의 `AdminProtectedRoute`를 사용한다.
+- 요청 인증 처리는 `proxy.ts`와 Clerk 설정, 권한 판단은 관리자 관련 구현을
+  확인한다.
+- 특정 이메일만으로 무인증 로그인이나 전체 권한을 가정하지 않는다.
+- 관리자 동작은 실제 Clerk 세션과 해당 역할로 검증한다.
 
 ### Key Admin Features
 
@@ -256,7 +287,9 @@ and refactor using this standardized process:
 
 1. Modify schema in `lib/db/schema.ts` (not schema-pg.ts)
 2. Run `npm run db:generate` to create migration
-3. Apply with `npm run db:push`
+3. 대상 DB와 백업을 확인한 뒤 변경 목적에 맞게 `db:migrate` 또는 `db:push`를
+   적용한다. `scripts/db-check-backup.ts`는 운영 환경에서 백업 확인을 요구하지만
+   백업을 생성하거나 존재를 검증하지는 않는다. 확인 절차를 우회하지 않는다.
 4. Update query functions in `lib/db/queries.ts`
 5. Test with `npm run db:studio` visual interface
 
@@ -283,19 +316,14 @@ and refactor using this standardized process:
 ### 계획 문서 — 체크박스는 진행 상태가 아니다
 
 🔴 **`docs/superpowers/plans/` 의 미완 체크박스를 "남은 일"로 읽지 말 것.**
-작업이 끝나도 아무도 돌아가서 체크하지 않는다.
+체크박스와 문서의 실행 지시만으로 구현을 시작하지 않는다. 대상 파일, 테스트,
+현재 Git 이력을 대조해 이미 적용된 작업을 확인한다.
 
-`2026-05-17-dynamic-tailwind-class-fix` 가 실제로 그랬다 — 체크박스 **53개 전부
-미완**인데 상단에는 실행
-지시(`**For agentic workers:** REQUIRED SUB-SKILL: …`)가 달려 있었다. 그대로
-실행하면 이미 적용된 리팩터를 되돌린다. 2026-09-14 에 **정지 헤더**를
-달았다(Task 1 산출물 2파일 실재 + 대상 5개 컴포넌트에 동적 클래스 0건으로 확인).
-
-⚠️ **`exhibition-detail-mockup-port.plan.md` 는 다르다 — 진짜 진행 중이다.**
-형제 클론 `~/Developer/Projects/ASCA-exhibition-port` 의
-`feat/exhibition-detail-port` 브랜치에 고유 커밋 21개(+다른 3개 브랜치에 20개)와
-미커밋 변경이 있다. 같은 저장소의 두 번째 작업 클론이므로 **지우거나 stale 로
-표시하지 말 것.**
+`exhibition-detail-mockup-port.plan.md`처럼 형제 클론과 연결된 계획은
+`/Users/jaehong/Developer/Projects/ASCA-exhibition-port`의 존재와 현재 Git
+상태를 확인한 뒤 판단한다. 과거 브랜치·커밋 수·미커밋 상태를 영구적인 진행
+근거로 사용하지 않으며, 확인 없이 클론을 삭제하거나 계획을 stale로 분류하지
+않는다.
 
 ### 동적 Tailwind 클래스 금지
 
@@ -330,7 +358,10 @@ and refactor using this standardized process:
 
 - Database tests: `npx tsx lib/db/test.ts`
 - Component tests with React Testing Library
-- Admin functionality testing via `/admin/dev-login`
+- 관리자 기능은 실제 Clerk 로그인과 역할별 권한으로 검증한다.
+  `/admin/dev-login`은 현재 존재하는 테스트 경로로 가정하지 않는다.
+- 문서만 변경하면 링크·npm 명령·포맷·`git diff --check`를 검증한다. 앱 테스트를
+  실행하지 않았다면 그 범위를 명시한다.
 - Use `npm run pre-commit` before any commits
 
 ## Common Workflows
@@ -346,7 +377,8 @@ and refactor using this standardized process:
 ### Database Debugging
 
 1. Use `npm run db:studio` for visual inspection
-2. Check schema with `scripts/check-supabase-schema.js`
+2. Use `npm run db:check` for migration consistency; inspect the target DB
+   separately
 3. Monitor sync status via admin dashboard
 
 The project emphasizes type safety, multilingual support, and robust data
