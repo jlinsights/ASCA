@@ -1,4 +1,8 @@
-import { eq } from 'drizzle-orm'
+import {
+  publicExhibitionArtistCondition,
+  publicExhibitionArtworkCondition,
+} from '@/lib/db/archive-access'
+import { and, eq } from 'drizzle-orm'
 import type { GraphQLContext } from '../context'
 import * as schema from '@/lib/db/schema'
 
@@ -171,7 +175,10 @@ export const typeResolvers = {
 
     exhibitionParticipations: async (parent: any, _: any, context: GraphQLContext) => {
       const participations = await context.db.query.exhibitionArtists.findMany({
-        where: eq(schema.exhibitionArtists.artistId, parent.id),
+        where: and(
+          publicExhibitionArtistCondition(),
+          eq(schema.exhibitionArtists.artistId, parent.id)
+        ),
       })
       return participations
     },
@@ -215,7 +222,10 @@ export const typeResolvers = {
 
     exhibitionArtworks: async (parent: any, _: any, context: GraphQLContext) => {
       const exhibitionArtworks = await context.db.query.exhibitionArtworks.findMany({
-        where: eq(schema.exhibitionArtworks.artworkId, parent.id),
+        where: and(
+          publicExhibitionArtworkCondition(),
+          eq(schema.exhibitionArtworks.artworkId, parent.id)
+        ),
       })
       return exhibitionArtworks
     },
@@ -251,7 +261,10 @@ export const typeResolvers = {
   Exhibition: {
     artworks: async (parent: any, _: any, context: GraphQLContext) => {
       const exhibitionArtworks = await context.db.query.exhibitionArtworks.findMany({
-        where: eq(schema.exhibitionArtworks.exhibitionId, parent.id),
+        where: and(
+          publicExhibitionArtworkCondition(),
+          eq(schema.exhibitionArtworks.exhibitionId, parent.id)
+        ),
         orderBy: [schema.exhibitionArtworks.displayOrder],
       })
       return exhibitionArtworks
@@ -259,7 +272,10 @@ export const typeResolvers = {
 
     artists: async (parent: any, _: any, context: GraphQLContext) => {
       const exhibitionArtists = await context.db.query.exhibitionArtists.findMany({
-        where: eq(schema.exhibitionArtists.exhibitionId, parent.id),
+        where: and(
+          publicExhibitionArtistCondition(),
+          eq(schema.exhibitionArtists.exhibitionId, parent.id)
+        ),
       })
       return exhibitionArtists
     },

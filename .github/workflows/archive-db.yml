@@ -1,0 +1,38 @@
+name: Archive database
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+jobs:
+  archive-db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.75.0
+      - name: Start clean local Supabase
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor
+      - name: Upgrade populated historical schema
+        run: node scripts/test-archive-upgrade.mjs
+      - name: Test actual roles, API and Storage
+        run: node --import tsx scripts/test-archive.mjs
+      - name: Test archive UI public queries
+        run: node --conditions=react-server --import tsx scripts/test-archive-ui.mjs
+      - name: Check generated types
+        run: |
+          supabase gen types typescript --local --schema public > /tmp/archive-database.types.ts
+          npx prettier --stdin-filepath lib/types/database.generated.ts < /tmp/archive-database.types.ts > /tmp/archive-database.formatted.ts
+          diff -u lib/types/database.generated.ts /tmp/archive-database.formatted.ts
+      - name: Full application build against local DB
+        run: |
+          node scripts/build-archive-local.mjs
+      - if: always()
+        run: supabase stop --no-backup

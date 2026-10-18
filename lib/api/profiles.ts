@@ -1,3 +1,4 @@
+import { PUBLIC_ARTIST_COLUMNS } from './public-artist-columns'
 // Artist Profile API functions
 
 import { getSupabaseClient } from '@/lib/supabase'
@@ -21,13 +22,19 @@ export async function fetchArtistProfile(
     return { data: null, error: { message: 'Supabase not configured' } }
   }
 
-  const { data, error } = await supabase.from('artists').select('*').eq('id', id).single()
+  const { data, error } = await supabase
+    .from('artists')
+    .select(PUBLIC_ARTIST_COLUMNS)
+    .eq('id', id)
+    .single()
 
   if (error) {
     return { data: null, error }
   }
 
-  return { data: data as ArtistProfile, error: null }
+  // Preserve the legacy editor response contract; its UI model predates the physical schema.
+  // The explicit projection above never retrieves contacts or Clerk ownership metadata.
+  return { data: data as unknown as ArtistProfile, error: null }
 }
 
 /**

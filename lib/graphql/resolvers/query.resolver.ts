@@ -1,3 +1,4 @@
+import { publicArtistCondition, publicArtworkCondition } from '@/lib/db/archive-access'
 import { eq, and, or, like, desc, asc, inArray, sql } from 'drizzle-orm'
 import type { GraphQLContext } from '../context'
 import { requireAuth } from '../context'
@@ -152,7 +153,7 @@ export const queryResolvers = {
   ) => {
     const { first, after, isActive } = args
 
-    const conditions = []
+    const conditions = [publicArtistCondition()]
     if (isActive !== undefined) {
       conditions.push(eq(schema.artists.isActive, isActive))
     }
@@ -191,10 +192,13 @@ export const queryResolvers = {
     context: GraphQLContext
   ) => {
     const artists = await context.db.query.artists.findMany({
-      where: or(
-        like(schema.artists.name, `%${query}%`),
-        like(schema.artists.nameKo, `%${query}%`),
-        like(schema.artists.nameEn, `%${query}%`)
+      where: and(
+        publicArtistCondition(),
+        or(
+          like(schema.artists.name, `%${query}%`),
+          like(schema.artists.nameKo, `%${query}%`),
+          like(schema.artists.nameEn, `%${query}%`)
+        )
       ),
       limit,
     })
@@ -224,7 +228,7 @@ export const queryResolvers = {
   ) => {
     const { first, category, artistId, isFeatured, isForSale } = args
 
-    const conditions = []
+    const conditions = [publicArtworkCondition()]
     if (category) {
       conditions.push(eq(schema.artworks.category, category as any))
     }
@@ -272,11 +276,14 @@ export const queryResolvers = {
     context: GraphQLContext
   ) => {
     const artworks = await context.db.query.artworks.findMany({
-      where: or(
-        like(schema.artworks.title, `%${query}%`),
-        like(schema.artworks.titleKo, `%${query}%`),
-        like(schema.artworks.titleEn, `%${query}%`),
-        like(schema.artworks.description, `%${query}%`)
+      where: and(
+        publicArtworkCondition(),
+        or(
+          like(schema.artworks.title, `%${query}%`),
+          like(schema.artworks.titleKo, `%${query}%`),
+          like(schema.artworks.titleEn, `%${query}%`),
+          like(schema.artworks.description, `%${query}%`)
+        )
       ),
       limit,
     })
