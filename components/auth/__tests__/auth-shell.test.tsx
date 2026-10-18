@@ -72,3 +72,56 @@ describe('AuthShell', () => {
     expect(screen.getByRole('heading', { level: 1 })).not.toHaveTextContent('')
   })
 })
+
+// Clerk 회원가입 폼의 이름 줄을 흉내 낸다 — Clerk 는 항상 이름→성 순서로 그린다.
+function ClerkNameRow() {
+  return (
+    <div className='cl-formFieldRow cl-formFieldRow__name'>
+      <div className='cl-formField cl-formField__firstName'>
+        <input name='firstName' aria-label='given' />
+      </div>
+      <div className='cl-formField cl-formField__lastName'>
+        <input name='lastName' aria-label='family' />
+      </div>
+    </div>
+  )
+}
+
+const fieldOrder = (root: HTMLElement) =>
+  [...root.querySelectorAll('.cl-formFieldRow__name input')].map(el => el.getAttribute('name'))
+
+function renderSignUpWith(children: React.ReactNode, lang: string) {
+  window.localStorage.setItem('asca-language', lang)
+  return render(
+    <LanguageProvider>
+      <AuthShell variant='sign-up'>{children}</AuthShell>
+    </LanguageProvider>
+  )
+}
+
+describe('AuthShell 이름 칸 순서', () => {
+  // 한·중·일은 성이 먼저다. DOM 순서를 바꾸므로 화면 순서와 Tab 순서가 함께 바뀐다.
+  it.each(['ko', 'ja', 'zh'])('%s: 성 칸이 이름 칸보다 앞선다', async lang => {
+    const { container } = renderSignUpWith(<ClerkNameRow />, lang)
+    await waitFor(() => expect(fieldOrder(container)).toEqual(['lastName', 'firstName']))
+  })
+
+  // 첫 렌더는 기본 언어(ko)라 성→이름으로 바뀌었다가, 저장된 en 이 적용되면 되돌아와야 한다.
+  it('en: 언어가 바뀌면 이름→성 순서로 되돌린다', async () => {
+    const { container } = renderSignUpWith(<ClerkNameRow />, 'en')
+    await waitFor(() => expect(document.documentElement.lang).toBe('en'))
+    await waitFor(() => expect(fieldOrder(container)).toEqual(['firstName', 'lastName']))
+  })
+
+  it('Clerk 위젯이 나중에 그려져도 순서를 맞춘다', async () => {
+    const { container, rerender } = renderSignUpWith(null, 'ko')
+    rerender(
+      <LanguageProvider>
+        <AuthShell variant='sign-up'>
+          <ClerkNameRow />
+        </AuthShell>
+      </LanguageProvider>
+    )
+    await waitFor(() => expect(fieldOrder(container)).toEqual(['lastName', 'firstName']))
+  })
+})
