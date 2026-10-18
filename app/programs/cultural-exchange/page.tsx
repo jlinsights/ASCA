@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { TaiwanTripFlipbook } from '@/components/programs/taiwan-trip-flipbook'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -67,6 +68,8 @@ export default function CulturalExchangePage() {
       </section>
 
       <div className='container mx-auto px-4 py-8'>
+        <TaiwanTripFlipbook />
+
         <Tabs defaultValue='programs' className='space-y-6'>
           <TabsList>
             <TabsTrigger value='programs'>프로그램 목록</TabsTrigger>
