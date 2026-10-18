@@ -1,0 +1,280 @@
+/* =====================================================================
+   ASCA Ink System — 로그인·회원가입
+   폼 단과 작품 패널(족자처럼 안쪽으로 들인 액자)을 나란히 둔다. 참고 레이아웃은
+   Mobbin 의 Ferndesk·ZARA·Lovable 로그인(폼 단 + 전면 이미지 + 이미지 위 캡션).
+   색 사다리(--navy-*, --gold-*, --paper*)는 app/globals.css 의 것을 쓴다.
+   ===================================================================== */
+
+.asca-auth {
+  --bg: var(--paper);
+  --fg: var(--navy-900);
+  --fg-muted: var(--stone-700, #424a5e);
+  --rule: #e5e0ce;
+  /* paper 위 작은 금색 글자는 gold-800 이어야 AA */
+  --accent-text: var(--gold-800);
+  --ring: var(--gold-600);
+  --header-h: 3.5rem;
+  --font-a-display:
+    var(--font-display), var(--font-noto-serif-tc), var(--font-noto-serif-kr), Georgia, serif;
+  --font-a-tc: var(--font-display), var(--font-noto-serif-tc), 'Noto Serif TC', serif;
+  --font-a-sans: 'Pretendard', var(--font-noto-sans-kr), system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100svh;
+  padding-top: var(--header-h);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-a-sans);
+}
+
+@media (min-width: 768px) {
+  .asca-auth {
+    --header-h: 4rem;
+  }
+}
+
+.dark .asca-auth {
+  --bg: var(--navy-950);
+  --fg: var(--paper);
+  --fg-muted: var(--navy-300);
+  --rule: #1f2b4c;
+  --accent-text: var(--gold-400);
+  --ring: var(--gold-400);
+}
+
+/* ── 폼 단 ─────────────────────────────────────────────────────────── */
+
+.asca-auth__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: clamp(2.5rem, 6vw, 4.5rem) 1.25rem 1.5rem;
+}
+
+.asca-auth__form-inner {
+  width: 100%;
+  max-width: 25rem;
+  margin-inline: auto;
+}
+
+.asca-auth__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  color: var(--accent-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.asca-auth__eyebrow::before {
+  content: '';
+  width: 1.75rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.asca-auth__title {
+  margin: 0;
+  font-family: var(--font-a-display);
+  font-size: clamp(2rem, 1.4rem + 2.2vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
+.asca-auth__lede {
+  margin: 1rem 0 0;
+  max-width: 34ch;
+  color: var(--fg-muted);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+
+.asca-auth__widget {
+  margin-top: 2.25rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+}
+
+.asca-auth__switch {
+  margin: 1.75rem 0 0;
+  color: var(--fg-muted);
+  font-size: 0.875rem;
+}
+
+.asca-auth__link {
+  color: var(--fg);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--gold-500);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color 150ms var(--ease-out);
+}
+
+.asca-auth__link:hover {
+  text-decoration-color: currentColor;
+}
+
+.asca-auth__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1.25rem;
+  color: var(--fg-muted);
+  font-size: 0.75rem;
+}
+
+.asca-auth__legal a {
+  transition: color 150ms var(--ease-out);
+}
+
+.asca-auth__legal a:hover {
+  color: var(--fg);
+}
+
+.asca-auth :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── 작품 패널 ─────────────────────────────────────────────────────── */
+
+.asca-auth__art {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .asca-auth {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  }
+
+  .asca-auth__form {
+    padding-inline: 3rem;
+  }
+
+  .asca-auth__art {
+    position: sticky;
+    top: calc(var(--header-h) + 0.75rem);
+    display: block;
+    height: calc(100svh - var(--header-h) - 1.5rem);
+    margin: 0.75rem 0.75rem 0.75rem 0;
+    overflow: hidden;
+    border-radius: 0.375rem;
+    background: var(--navy-950);
+    /* 족자 테두리 — 안쪽 금선 */
+    box-shadow:
+      inset 0 0 0 1px hsl(42 60% 56% / 0.35),
+      0 24px 48px -24px hsl(222 54% 8% / 0.45);
+    isolation: isolate;
+  }
+
+  .asca-auth__art-img {
+    object-fit: cover;
+    transform: scale(1.04);
+    animation: asca-auth-settle 1.6s var(--ease-out) both;
+  }
+
+  /* 캡션 가독을 위한 먹빛 그러데이션 */
+  .asca-auth__art::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(to top, hsl(222 64% 6% / 0.92) 0%, hsl(222 64% 6% / 0.55) 32%, transparent 62%),
+      linear-gradient(to bottom, hsl(222 64% 6% / 0.35), transparent 22%);
+    pointer-events: none;
+  }
+}
+
+.asca-auth__seal {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: var(--seal-red);
+  color: var(--paper);
+  font-family: var(--font-a-tc);
+  font-size: 1.375rem;
+  font-weight: 700;
+  transform: rotate(-4deg);
+  box-shadow: 0 2px 0 hsl(3 73% 20% / 0.6);
+}
+
+.asca-auth__caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  display: grid;
+  gap: 0.625rem;
+  padding: 2.5rem clamp(2rem, 4vw, 3.5rem);
+  color: var(--paper);
+}
+
+.asca-auth__caption-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--gold-400);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.asca-auth__caption-label::after {
+  content: '';
+  flex: 0 0 2.5rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.asca-auth__caption-phrase {
+  font-family: var(--font-a-tc);
+  font-size: clamp(1.75rem, 1rem + 1.8vw, 2.625rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+}
+
+.asca-auth__caption-gloss {
+  max-width: 36ch;
+  color: hsl(43 60% 94% / 0.82);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+@keyframes asca-auth-settle {
+  from {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asca-auth__art-img {
+    animation: none;
+  }
+}

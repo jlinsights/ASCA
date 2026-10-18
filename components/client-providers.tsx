@@ -1,11 +1,10 @@
 'use client'
 
 import { ReactNode, useState } from 'react'
-import { ClerkProvider } from '@clerk/nextjs'
-import { koKR } from '@clerk/localizations'
 import { ThemeProvider } from 'next-themes'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { LanguageProvider } from '@/contexts/language-context'
+import { LocalizedClerkProvider } from '@/components/auth/localized-clerk-provider'
 
 interface ClientProvidersProps {
   children: ReactNode
@@ -24,23 +23,21 @@ export function ClientProviders({ children }: ClientProvidersProps) {
       })
   )
 
+  // Clerk 위젯 언어가 사이트 언어를 따라가도록 LanguageProvider 가 ClerkProvider 를 감싼다.
   return (
-    <ClerkProvider
-      localization={koKR}
-      signInUrl='/sign-in'
-      signUpUrl='/sign-up'
-      afterSignOutUrl='/'
-    >
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LanguageProvider>{children}</LanguageProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </ClerkProvider>
+    <LanguageProvider>
+      <LocalizedClerkProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </QueryClientProvider>
+      </LocalizedClerkProvider>
+    </LanguageProvider>
   )
 }
