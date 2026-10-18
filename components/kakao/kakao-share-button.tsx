@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Share2, MessageCircle } from 'lucide-react'
 import { shareToKakaoTalk, KakaoShareTemplate } from '@/lib/kakao'
+import { KAKAO_BUTTON_CLASSES } from './kakao-brand'
 
 interface KakaoShareButtonProps {
   // 공유할 콘텐츠 정보
@@ -169,10 +170,7 @@ export function KakaoShareButton({
       disabled={isSharing}
       className={`
         ${getButtonSize()}
-        bg-yellow-400 hover:bg-yellow-500 text-yellow-900 
-        border-yellow-400 hover:border-yellow-500
-        dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:text-yellow-50
-        dark:border-yellow-500 dark:hover:border-yellow-600
+        ${KAKAO_BUTTON_CLASSES}
         transition-all duration-200 flex items-center gap-2
         ${isIconOnly ? 'p-0 rounded-full' : ''}
         ${className}

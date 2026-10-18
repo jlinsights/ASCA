@@ -1,1 +1,1 @@
-🐛 fix: shadcn 색 슬롯을 color-mix 로 감싸 bg-primary/10 같은 투명도 클래스가 실제로 칠해지게 하고 design-diff 가 감싼 값을 globals.css hex 로 검증하게 함
+🐛 fix: 카카오 로그인·공유 버튼을 공식 가이드 색(#FEE500·검정 85%)으로 맞추고 다크 모드에서 흰 글자가 노란 바탕에 묻히던 문제 수정
