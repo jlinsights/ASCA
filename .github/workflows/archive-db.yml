@@ -24,6 +24,8 @@ jobs:
         run: node scripts/test-archive-upgrade.mjs
       - name: Test actual roles, API and Storage
         run: node --import tsx scripts/test-archive.mjs
+      - name: Test archive UI public queries
+        run: node --conditions=react-server --import tsx scripts/test-archive-ui.mjs
       - name: Check generated types
         run: |
           supabase gen types typescript --local --schema public > /tmp/archive-database.types.ts

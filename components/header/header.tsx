@@ -49,6 +49,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
       href: '/artists',
       subItems: [
         { titleKey: 'siteNavArtistsIntro', href: '/artists' },
+        { titleKey: 'arTitle', href: '/archive' },
         { titleKey: 'siteArtistContest', href: '/artists?type=공모작가' },
         { titleKey: 'siteArtistYoung', href: '/artists?type=청년작가' },
         { titleKey: 'siteArtistRecommended', href: '/artists?type=추천작가' },

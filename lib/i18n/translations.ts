@@ -1,3 +1,4 @@
+import { archiveTranslations } from './translations/archive'
 import type { Language, TranslationData } from './types'
 import { navigationTranslations } from './translations/navigation'
 import { artworksTranslations } from './translations/artworks'
@@ -17,6 +18,7 @@ export const translations: TranslationData = {
     ...aboutTranslations.ko,
     ...exhibitionsTranslations.ko,
     ...brandTranslations.ko,
+    ...archiveTranslations.ko,
 
     // 공통 UI 요소
     loading: '로딩 중...',
@@ -138,6 +140,7 @@ export const translations: TranslationData = {
     ...aboutTranslations.en,
     ...exhibitionsTranslations.en,
     ...brandTranslations.en,
+    ...archiveTranslations.en,
 
     // 공통 UI 요소
     loading: 'Loading...',
@@ -268,6 +271,7 @@ export const translations: TranslationData = {
     ...aboutTranslations.ja,
     ...exhibitionsTranslations.ja,
     ...brandTranslations.ja,
+    ...archiveTranslations.ja,
 
     // 공통 UI 요소
     loading: '読み込み中...',
@@ -389,6 +393,7 @@ export const translations: TranslationData = {
     ...aboutTranslations.zh,
     ...exhibitionsTranslations.zh,
     ...brandTranslations.zh,
+    ...archiveTranslations.zh,
 
     // 공통 UI 요소
     loading: '加載中...',
