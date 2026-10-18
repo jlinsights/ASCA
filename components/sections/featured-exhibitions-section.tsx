@@ -32,7 +32,7 @@ const getExhibitionTypeStyle = (type: ExhibitionType) => {
     회원전: { color: 'bg-temple-gold', label: '회원전' },
     추천작가전: { color: 'bg-autumn-gold', label: '추천작가전' },
     초대작가전: { color: 'bg-plum-blossom', label: '초대작가전' },
-    온라인전시: { color: 'bg-indigo-600', label: '온라인전시' },
+    온라인전시: { color: 'bg-info', label: '온라인전시' },
   }
   return styles[type]
 }
