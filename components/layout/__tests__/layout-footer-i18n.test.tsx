@@ -6,6 +6,7 @@ import { LayoutFooter } from '../layout-footer'
 import { footerLinks, footerSections } from '../footer-data'
 import { footerCopy } from '../footer-copy'
 import { translations } from '@/lib/i18n/translations'
+import { findRegulation } from '@/lib/regulations/catalog'
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -101,10 +102,15 @@ describe('footer-data — 내부 링크는 실제 페이지로 간다', () => {
     .map(item => (item.href.split('?')[0] ?? '').replace(/\/$/, ''))
 
   it.each(internal)('%s', route => {
+    // /regulations/[slug] 은 목록(REGULATIONS)에 있는 slug 만 정적으로 만든다
+    const regulationSlug = /^\/regulations\/([^/]+)$/.exec(route)?.[1]
+    if (regulationSlug) expect(findRegulation(regulationSlug)).toBeDefined()
     const dir = path.join(
       process.cwd(),
       'app',
-      route.replace(/\/artists\/country\/[^/]+$/, '/artists/country/[country]')
+      route
+        .replace(/\/artists\/country\/[^/]+$/, '/artists/country/[country]')
+        .replace(/^\/regulations\/[^/]+$/, '/regulations/[slug]')
     )
     expect(existsSync(path.join(dir, 'page.tsx')) || existsSync(path.join(dir, 'page.ts'))).toBe(
       true

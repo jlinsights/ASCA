@@ -7,6 +7,8 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
+    // marked 의 기본 진입점은 ESM 이고 next/jest 는 node_modules 를 변환하지 않는다 → UMD 판을 쓴다
+    '^marked$': '<rootDir>/node_modules/marked/lib/marked.umd.js',
     '^@/components/(.*)$': '<rootDir>/components/$1',
     '^@/lib/(.*)$': '<rootDir>/lib/$1',
     '^@/app/(.*)$': '<rootDir>/app/$1',

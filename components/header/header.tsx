@@ -11,6 +11,7 @@ import { ThemeTransition } from '../theme-transition'
 import { LanguageSelector } from '../language-selector'
 import { Logo } from '../brand/logo'
 import { useLanguage } from '@/contexts/language-context'
+import { REGULATIONS, REGULATIONS_BASE_PATH, regulationHref } from '@/lib/regulations/catalog'
 
 // 메뉴 구조 정의
 
@@ -101,6 +102,18 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
       subItems: [
         { titleKey: 'siteGalleryActivities', href: '/gallery' },
         { titleKey: 'siteGalleryEvents', href: '/events' },
+      ],
+    },
+    {
+      titleKey: 'regsMenu',
+      key: 'regulations',
+      href: REGULATIONS_BASE_PATH,
+      subItems: [
+        { titleKey: 'regsAll', href: REGULATIONS_BASE_PATH },
+        ...REGULATIONS.map(entry => ({
+          titleKey: entry.nameKey,
+          href: regulationHref(entry.slug),
+        })),
       ],
     },
     {

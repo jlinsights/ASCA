@@ -332,7 +332,7 @@ export default function FormsPage() {
               연혁
             </Link>
             <Link
-              href='/articles-of-incorporation-and-bylaws'
+              href='/regulations'
               className='text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
             >
               정관

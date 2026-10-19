@@ -70,5 +70,5 @@ export const QUICK_LINKS = [
   { label: '연혁', href: '/history' },
   { label: '임원', href: '/board-members' },
   { label: '유관단체', href: '/partners' },
-  { label: '정관', href: '/articles-of-incorporation-and-bylaws' },
+  { label: '정관', href: '/regulations' },
 ] as const

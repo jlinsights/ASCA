@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { defaultSEO } from '@/lib/seo-constants'
+import { REGULATIONS, REGULATIONS_BASE_PATH, regulationHref } from '@/lib/regulations/catalog'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = defaultSEO.url
@@ -22,6 +23,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/privacy-policy',
     '/copyright-policy',
     '/email-refuse',
+    REGULATIONS_BASE_PATH,
+    ...REGULATIONS.map(entry => regulationHref(entry.slug)),
   ]
 
   return routes.map(route => ({
