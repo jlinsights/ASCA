@@ -41,36 +41,13 @@ export const footerLinks: Record<FooterLinkSection, FooterLink[]> = {
   ],
   about: [
     { labelKey: 'siteAboutOverview', href: '/introductions' },
-    {
-      labelKey: 'siteAboutArticles',
-      href: 'https://docs.google.com/document/d/1on5DqNNLBXvr_wvvapz5zhWFPR1dPlHKaZ6y3bgIWuE/edit?usp=sharing',
-      external: true,
-    },
-    {
-      labelKey: 'siteAboutBylaws',
-      href: 'https://docs.google.com/document/d/1LqwokChxq-7qgus7B3ntAKl2skP-Ch31co7kyDs4RDE/edit?usp=sharing',
-      external: true,
-    },
-    {
-      labelKey: 'siteAboutOperations',
-      href: 'https://docs.google.com/document/d/1x65nBE0Auk-_8UMF0sWpBpbyyI3aKmYKwGGo_Htvenw/edit?usp=sharing',
-      external: true,
-    },
-    {
-      labelKey: 'siteAboutArtistSelection',
-      href: 'https://docs.google.com/document/d/1dOtCRVEsBZ0dW87lynU-ZulnvaxThhD6vU-28i9tBPY/edit?usp=sharing',
-      external: true,
-    },
-    {
-      labelKey: 'siteAboutAppraisal',
-      href: 'https://docs.google.com/document/d/1zyRHlG-PqJ2QqAHVqzUNHX5I0ztp4uzIP_YCkAuUrOk/edit?usp=sharing',
-      external: true,
-    },
-    {
-      labelKey: 'siteAboutExhibitionRules',
-      href: 'https://docs.google.com/document/d/1PCt1HOOuilplQg47c5GrK6nHbWozkzrJWJhLUVnOtOQ/edit?usp=sharing',
-      external: true,
-    },
+    // 규정 원문은 Google Docs 에서 저장소 regulations/ 로 옮겨 /regulations 에 싣는다 (2026-10-19)
+    { labelKey: 'siteAboutArticles', href: '/regulations/articles' },
+    { labelKey: 'siteAboutBylaws', href: '/regulations/membership-dues' },
+    { labelKey: 'siteAboutOperations', href: '/regulations/operation-judging' },
+    { labelKey: 'siteAboutArtistSelection', href: '/regulations/artist-selection' },
+    { labelKey: 'siteAboutAppraisal', href: '/regulations/appraisal' },
+    { labelKey: 'siteAboutExhibitionRules', href: '/regulations/exhibition' },
     { labelKey: 'siteAboutHistory', href: '/history' },
     { labelKey: 'siteAboutBrand', href: '/brand' },
   ],

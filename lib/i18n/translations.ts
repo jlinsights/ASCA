@@ -1,6 +1,7 @@
 import { archiveTranslations } from './translations/archive'
 import { authTranslations } from './translations/auth'
 import { flipbookTranslations } from './translations/flipbooks'
+import { regulationsTranslations } from './translations/regulations'
 import type { Language, TranslationData } from './types'
 import { navigationTranslations } from './translations/navigation'
 import { artworksTranslations } from './translations/artworks'
@@ -23,6 +24,7 @@ export const translations: TranslationData = {
     ...archiveTranslations.ko,
     ...authTranslations.ko,
     ...flipbookTranslations.ko,
+    ...regulationsTranslations.ko,
 
     // 공통 UI 요소
     loading: '로딩 중...',
@@ -147,6 +149,7 @@ export const translations: TranslationData = {
     ...archiveTranslations.en,
     ...authTranslations.en,
     ...flipbookTranslations.en,
+    ...regulationsTranslations.en,
 
     // 공통 UI 요소
     loading: 'Loading...',
@@ -280,6 +283,7 @@ export const translations: TranslationData = {
     ...archiveTranslations.ja,
     ...authTranslations.ja,
     ...flipbookTranslations.ja,
+    ...regulationsTranslations.ja,
 
     // 공통 UI 요소
     loading: '読み込み中...',
@@ -404,6 +408,7 @@ export const translations: TranslationData = {
     ...archiveTranslations.zh,
     ...authTranslations.zh,
     ...flipbookTranslations.zh,
+    ...regulationsTranslations.zh,
 
     // 공통 UI 요소
     loading: '加載中...',

@@ -22,7 +22,7 @@ const SIDEBAR_LINKS = [
   { label: '양식모음', href: '/forms' },
   { label: '유관단체', href: '/partners' },
   { label: '사업계획', href: '/business-plan' },
-  { label: '정관', href: '/articles-of-incorporation-and-bylaws' },
+  { label: '정관', href: '/regulations' },
   { label: '개인정보처리방침', href: '/privacy-policy' },
 ] as const
 

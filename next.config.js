@@ -255,6 +255,18 @@ const nextConfig = {
 
   // @clerk/nextjs는 번들에 포함해야 React 컨텍스트가 일치함 (serverExternalPackages 제외)
 
+  // 옛 단일 페이지 → 정관 및 규정 목록. 브라우저가 #앵커를 그대로 들고 가고,
+  // 목록의 각 줄이 옛 섹션 id 를 갖고 있어 해당 규정에 닿는다.
+  async redirects() {
+    return [
+      {
+        source: '/articles-of-incorporation-and-bylaws',
+        destination: '/regulations',
+        permanent: true,
+      },
+    ]
+  },
+
   // 보안 헤더 설정
   async headers() {
     return [

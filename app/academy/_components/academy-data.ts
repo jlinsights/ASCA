@@ -113,5 +113,5 @@ export const SIDEBAR_QUICK_LINKS = [
   { href: '/history', label: '연 혁' },
   { href: '/board-members', label: '임 원' },
   { href: '/partners', label: '협력기관' },
-  { href: '/articles-of-incorporation-and-bylaws', label: '정 관' },
+  { href: '/regulations', label: '정 관' },
 ] as const

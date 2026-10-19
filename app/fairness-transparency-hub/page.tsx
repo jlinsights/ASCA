@@ -191,7 +191,7 @@ export default function FairnessTransparencyHubPage() {
               </div>
 
               <Link
-                href='/articles-of-incorporation-and-bylaws'
+                href='/regulations'
                 className='flex items-center gap-2 rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity w-full justify-center'
               >
                 <FileText className='h-4 w-4' />
