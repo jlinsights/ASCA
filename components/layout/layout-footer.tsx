@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Facebook, Instagram, Linkedin, Youtube, type LucideIcon } from 'lucide-react'
+import { Facebook, Instagram, Link2, Linkedin, Youtube, type LucideIcon } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 import { SOCIAL_LINKS, type SocialNetwork } from '@/lib/social-links'
 import { footerLinks, footerSections } from './footer-data'
@@ -13,6 +13,7 @@ const SOCIAL_ICONS: Record<SocialNetwork, LucideIcon> = {
   facebook: Facebook,
   linkedin: Linkedin,
   youtube: Youtube,
+  littly: Link2,
 }
 
 interface LayoutFooterProps {

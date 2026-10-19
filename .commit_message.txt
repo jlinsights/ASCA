@@ -1,1 +1,1 @@
-🔗 feat: 푸터에 인스타그램·페이스북·링크드인·유튜브 공식 채널 아이콘을 넣고 Organization JSON-LD sameAs 에 등록
+🔗 feat: 푸터 공식 채널에 리틀리(Litt.ly) 링크 모음을 추가하고 JSON-LD sameAs 에 등록

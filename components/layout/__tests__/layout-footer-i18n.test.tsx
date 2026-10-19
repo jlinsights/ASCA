@@ -135,6 +135,7 @@ describe('LayoutFooter — 공식 소셜 채널', () => {
     ['Facebook', 'https://www.facebook.com/orientalcalligraphy/'],
     ['LinkedIn', 'https://www.linkedin.com/company/105905953/'],
     ['YouTube', 'https://www.youtube.com/@orientalcalligraphy'],
+    ['Litt.ly', 'https://litt.ly/oriental_calligraphy'],
   ] as const
 
   it.each(expected)('%s 아이콘이 공식 채널을 새 창으로 연다', async (name, href) => {
@@ -145,10 +146,10 @@ describe('LayoutFooter — 공식 소셜 채널', () => {
     expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'))
   })
 
-  it('목록에 이름이 붙고 링크는 정확히 네 개다', async () => {
+  it('목록에 이름이 붙고 링크는 정확히 다섯 개다', async () => {
     renderFooter('ko')
     const list = await screen.findByRole('list', { name: '공식 소셜 채널' })
-    expect(list.querySelectorAll('a')).toHaveLength(4)
+    expect(list.querySelectorAll('a')).toHaveLength(5)
   })
 
   it('LinkedIn 은 관리자 대시보드가 아닌 공개 페이지로 연결한다', async () => {
