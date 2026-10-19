@@ -75,10 +75,18 @@ const THIRD_PARTY = {
     connect: ['https://dapi.kakao.com', 'https://kapi.kakao.com'],
     img: ['https://t1.kakaocdn.net', 'https://k.kakaocdn.net'],
   },
-  // 채널톡 상담 위젯 — app/contact/*, app/fairness-transparency-hub
+  // 예약 플로팅 버튼 — components/third-party/site-widgets.tsx (전 페이지)
+  cal: {
+    script: ['https://app.cal.com'],
+    frame: ['https://app.cal.com', 'https://cal.com'],
+    connect: ['https://app.cal.com'],
+  },
+  // 채널톡 상담 위젯 — components/third-party/site-widgets.tsx (전 페이지)
   channelTalk: {
     script: ['https://cdn.channel.io'],
     connect: ['https://api.channel.io', 'wss://*.channel.io'],
+    // 알림음(mp3) — media-src 가 없으면 default-src 'self' 로 떨어져 막힌다
+    media: ['https://cdn.channel.io'],
     frame: ['https://*.channel.io'],
     img: ['https://*.channel.io'],
   },
@@ -129,6 +137,7 @@ const productionCsp = [
   `connect-src ${sources(`'self'`, clerkOrigin, clerkAccountPortalOrigin, 'https://*.clerk.accounts.dev', 'https://clerk-telemetry.com', supabaseOrigin, supabaseSocketOrigin, vendorOrigins('connect'))}`,
   // Clerk은 봇 차단에 Cloudflare Turnstile을 프레임으로 띄운다.
   `frame-src ${sources(`'self'`, 'https://challenges.cloudflare.com', vendorOrigins('frame'))}`,
+  `media-src ${sources(`'self'`, vendorOrigins('media'))}`,
   // Clerk은 blob: 워커를 쓴다. default-src 'self' 폴백으로는 막힌다.
   `worker-src ${sources(`'self'`, 'blob:')}`,
   `object-src 'none'`,

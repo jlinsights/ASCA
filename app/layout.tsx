@@ -47,10 +47,17 @@ import { KakaoScript } from '@/components/seo/kakao-script'
 import { VideoBackground } from '@/components/layout/video-background'
 import { Header } from '@/components/header/header'
 import { SkipLink } from '@/components/layout/skip-link'
+import { SiteWidgets } from '@/components/third-party/site-widgets'
 
 // root layout은 정적 콘텐츠 이모저모를 렌더링하므로 force-dynamic 불필요
 
-export const metadata = constructMetadata()
+// google-adsense-account 는 Google 이 <head> 에서만 읽는다 — metadata.other 로 <head> 에 넣는다.
+const ADSENSE_ACCOUNT = 'ca-pub-3536211002609340'
+
+export const metadata: Metadata = {
+  ...constructMetadata(),
+  other: { 'google-adsense-account': ADSENSE_ACCOUNT },
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -79,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </main>
           </div>
         </ClientProviders>
+        <SiteWidgets />
       </body>
     </html>
   )
