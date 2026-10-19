@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { defaultSEO } from './seo-constants'
+import { SOCIAL_LINKS } from './social-links'
 
 interface SEOProps {
   title?: string
@@ -94,9 +95,7 @@ export function generateOrganizationSchema() {
       postalCode: '02872',
       addressCountry: 'KR',
     },
-    sameAs: [
-      // Add social media links here if available
-    ],
+    sameAs: SOCIAL_LINKS.map(link => link.href),
   }
 }
 

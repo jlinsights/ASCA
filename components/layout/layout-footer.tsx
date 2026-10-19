@@ -2,9 +2,18 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { Facebook, Instagram, Linkedin, Youtube, type LucideIcon } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
+import { SOCIAL_LINKS, type SocialNetwork } from '@/lib/social-links'
 import { footerLinks, footerSections } from './footer-data'
 import { footerCopy } from './footer-copy'
+
+const SOCIAL_ICONS: Record<SocialNetwork, LucideIcon> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  youtube: Youtube,
+}
 
 interface LayoutFooterProps {
   variant?: 'default' | 'simple'
@@ -86,6 +95,30 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
                 <span className='mt-1 block text-xs text-rice-paper/70'>{copy.qrHelp}</span>
               </span>
             </a>
+            <div className='mt-8'>
+              <h2 id='footer-social' className='text-sm font-medium text-rice-paper'>
+                {copy.social}
+              </h2>
+              <ul aria-labelledby='footer-social' className='mt-3 flex flex-wrap gap-2'>
+                {SOCIAL_LINKS.map(link => {
+                  const Icon = SOCIAL_ICONS[link.id]
+                  return (
+                    <li key={link.id}>
+                      <a
+                        href={link.href}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label={`${link.name} (${copy.newTab})`}
+                        title={link.name}
+                        className='inline-flex h-11 w-11 items-center justify-center rounded-full border border-rice-paper/25 text-rice-paper/80 transition-colors hover:border-rice-paper/60 hover:text-rice-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent'
+                      >
+                        <Icon aria-hidden='true' className='h-5 w-5' strokeWidth={1.75} />
+                      </a>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
           </div>
           {variant === 'default' && (
             <nav

@@ -128,3 +128,32 @@ describe('footer-data — 모든 링크 라벨 키가 4개 언어에 있다', ()
     expect(missing).toStrictEqual([])
   })
 })
+
+describe('LayoutFooter — 공식 소셜 채널', () => {
+  const expected = [
+    ['Instagram', 'https://www.instagram.com/oriental_calligraphy/'],
+    ['Facebook', 'https://www.facebook.com/orientalcalligraphy/'],
+    ['LinkedIn', 'https://www.linkedin.com/company/105905953/'],
+    ['YouTube', 'https://www.youtube.com/@orientalcalligraphy'],
+  ] as const
+
+  it.each(expected)('%s 아이콘이 공식 채널을 새 창으로 연다', async (name, href) => {
+    renderFooter('ko')
+    const link = await screen.findByRole('link', { name: `${name} (새 창에서 열림)` })
+    expect(link).toHaveAttribute('href', href)
+    expect(link).toHaveAttribute('target', '_blank')
+    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'))
+  })
+
+  it('목록에 이름이 붙고 링크는 정확히 네 개다', async () => {
+    renderFooter('ko')
+    const list = await screen.findByRole('list', { name: '공식 소셜 채널' })
+    expect(list.querySelectorAll('a')).toHaveLength(4)
+  })
+
+  it('LinkedIn 은 관리자 대시보드가 아닌 공개 페이지로 연결한다', async () => {
+    renderFooter('ko')
+    const link = await screen.findByRole('link', { name: /LinkedIn/ })
+    expect(link.getAttribute('href')).not.toMatch(/admin/)
+  })
+})
