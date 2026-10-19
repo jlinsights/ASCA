@@ -15,8 +15,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { PageHero } from '@/components/layout/page-hero'
-import { ContestFlipbook } from '@/components/contests/contest-flipbook'
+import { ContestIntro } from '@/components/contests/contest-intro'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -115,6 +114,7 @@ export default function ContestsPage() {
     return (
       <div className='min-h-screen bg-transparent'>
         <main className='container mx-auto px-4 py-8'>
+          <ContestIntro />
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
@@ -127,12 +127,7 @@ export default function ContestsPage() {
   return (
     <div className='min-h-screen bg-transparent'>
       <main className='container mx-auto px-4 py-8'>
-        <PageHero
-          title='공모전'
-          subtitle='다양한 예술 공모전에 도전하고 여러분의 재능을 펼쳐보세요'
-        />
-
-        <ContestFlipbook />
+        <ContestIntro />
 
         {/* Statistics */}
         <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
