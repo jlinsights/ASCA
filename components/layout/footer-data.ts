@@ -3,6 +3,7 @@ export type FooterLink = {
   labelKey: string
   href: string
   external?: boolean
+  logo?: { src: string; width: number; height: number }
 }
 
 type FooterLinkSection =
@@ -85,19 +86,30 @@ export const footerLinks: Record<FooterLinkSection, FooterLink[]> = {
     { labelKey: 'siteLegalEmail', href: '/email-refuse' },
   ],
   sponsors: [
-    { labelKey: 'siteSponsorSamsung', href: 'https://familyoffices.vip/', external: true },
-    { labelKey: 'siteSponsorSac', href: 'https://www.sac.or.kr/site/main/home', external: true },
     {
       labelKey: 'siteSponsorHanja',
       href: 'https://www.hanja.ne.kr/index_original.asp',
       external: true,
+      logo: { src: '/sponsor/footer-kta.avif', width: 138, height: 101 },
+    },
+    {
+      labelKey: 'siteSponsorSac',
+      href: 'https://www.sac.or.kr/site/main/home',
+      external: true,
+      logo: { src: '/sponsor/footer-seoul-arts-center.avif', width: 1080, height: 339 },
     },
     {
       labelKey: 'siteSponsorSeoul',
       href: 'https://www.seoul.go.kr/main/index.jsp',
       external: true,
+      logo: { src: '/sponsor/footer-seoul.png', width: 174, height: 48 },
     },
-    { labelKey: 'siteSponsorMcst', href: 'https://www.mcst.go.kr/kor/main.jsp', external: true },
+    {
+      labelKey: 'siteSponsorMcst',
+      href: 'https://www.mcst.go.kr/kor/main.jsp',
+      external: true,
+      logo: { src: '/sponsor/footer-mcst.png', width: 1175, height: 737 },
+    },
   ],
 }
 
