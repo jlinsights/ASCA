@@ -1,10 +1,10 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 import type { HomeStats } from './home-data'
+import { HomePromotions } from './home-promotions'
 
 // 교류국 수는 연혁 원문(1997년 韓·中·日 書藝文化交流聯合會展)에 근거한다.
 const EXCHANGE_NATIONS = { count: 3, tc: '韓 · 中 · 日' } as const
@@ -23,21 +23,7 @@ export function HomeHero({ stats }: HomeHeroProps) {
   return (
     <section className='asca-hero' aria-labelledby='asca-hero-title'>
       <div className='asca-hero__frame'>
-        <figure className='asca-hero__feature'>
-          <div className='asca-hero__feature-img'>
-            <Image
-              src='/images/hero_bg_calligraphy.png'
-              alt={t('homeHeroImgAlt')}
-              fill
-              priority
-              sizes='(max-width: 960px) 100vw, 45vw'
-              className='object-cover'
-            />
-            <span className='asca-hero__seal' lang='zh-Hant' aria-hidden='true'>
-              印
-            </span>
-          </div>
-        </figure>
+        <HomePromotions />
 
         <div className='asca-hero__copy'>
           <p className='asca-eyebrow asca-hero__eyebrow'>{t('homeHeroEyebrow')}</p>

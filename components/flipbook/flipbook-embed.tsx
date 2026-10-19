@@ -20,7 +20,7 @@ export function FlipbookEmbed({ id, url, keyPrefix }: FlipbookEmbedProps) {
   const titleId = `${id}-title`
 
   return (
-    <section aria-labelledby={titleId} className='mb-12'>
+    <section id={id} aria-labelledby={titleId} className='mb-12 scroll-mt-24'>
       <div className='mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-3'>
         <div>
           <p className='mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-temple-gold'>
