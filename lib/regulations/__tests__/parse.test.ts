@@ -121,8 +121,11 @@ describe('parseRegulation — 실제 규정 9종', () => {
     expect(allBlocks(doc).filter(block => block.kind === 'note')).toHaveLength(0)
   })
 
-  it('빈 title_en 과 빈 effective_note 를 빈 문자열로 읽는다', () => {
-    expect(load('06-branches-chapters.md').doc.titleEn).toBe('')
+  it('빈 effective_note 는 빈 문자열, 다음 줄로 내린 머리말 값은 이어 붙여 읽는다', () => {
+    // 06 의 title_en 은 prettier 가 `title_en:\n  '…'` 두 줄로 내린다
+    expect(load('06-branches-chapters.md').doc.titleEn).toBe(
+      'Regulations on the Establishment and Operation of Branches and Chapters'
+    )
     expect(load('00-articles-of-incorporation.md').doc.effectiveNote).toBe('')
     expect(load('08-membership-qualifications.md').doc.effectiveNote).toBe('')
   })

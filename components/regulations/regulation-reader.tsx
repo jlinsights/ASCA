@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Check, Link2, List, Printer } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 import { REGULATIONS_BASE_PATH, regulationHref } from '@/lib/regulations/catalog'
-import type { RegulationDocument } from '@/lib/regulations/types'
+import type { RegulationDocument, RegulationTranslations } from '@/lib/regulations/types'
 import { Blocks } from './regulation-body'
 import { RegulationsContact } from './regulations-contact'
 
@@ -16,6 +16,8 @@ export interface RegulationNeighbor {
 
 interface RegulationReaderProps {
   doc: RegulationDocument
+  /** 참고용 번역본. 선택한 언어의 번역이 없으면 한국어 원문을 보여준다 */
+  translations?: RegulationTranslations
   nameKey: string
   hanja: string
   /** 목록 안 순서 (0부터) */
@@ -54,7 +56,8 @@ function useActiveArticle(ids: string[]): string | null {
 }
 
 export function RegulationReader({
-  doc,
+  doc: original,
+  translations = {},
   nameKey,
   hanja,
   position,
@@ -63,6 +66,9 @@ export function RegulationReader({
   next,
 }: RegulationReaderProps) {
   const { t, language } = useLanguage()
+  const translated = language === 'ko' ? undefined : translations[language]
+  const doc = translated ?? original
+  const textLang = translated ? language : 'ko'
   const [tocOpen, setTocOpen] = useState(false)
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const articleIds = doc.sections.flatMap(section => section.articles.map(article => article.id))
@@ -99,18 +105,24 @@ export function RegulationReader({
           </p>
           <span className='asca-regs-status'>{t('regsStatusActive')}</span>
         </div>
-        <h1 className='asca-regs-doc-head__title' lang='ko'>
+        <h1 className='asca-regs-doc-head__title' lang={textLang}>
           {doc.title}
         </h1>
-        {doc.titleEn && (
-          <p className='asca-regs-doc-head__en' lang='en'>
-            {doc.titleEn}
+        {translated ? (
+          <p className='asca-regs-doc-head__en' lang='ko'>
+            {original.title}
           </p>
+        ) : (
+          doc.titleEn && (
+            <p className='asca-regs-doc-head__en' lang='en'>
+              {doc.titleEn}
+            </p>
+          )
         )}
         <dl className='asca-regs-meta'>
           <div>
             <dt>{t('regsEffective')}</dt>
-            <dd lang='ko'>{doc.effectiveNote || t('regsNoEffective')}</dd>
+            <dd lang={textLang}>{doc.effectiveNote || t('regsNoEffective')}</dd>
           </div>
           <div>
             <dt>{t('regsStatArticles')}</dt>
@@ -122,7 +134,11 @@ export function RegulationReader({
           </div>
         </dl>
         <div className='asca-regs-doc-head__actions'>
-          {language !== 'ko' && <p className='asca-regs-lang-note'>{t('regsKoreanOnly')}</p>}
+          {language !== 'ko' && (
+            <p className='asca-regs-lang-note'>
+              {t(translated ? 'regsTranslationNote' : 'regsKoreanOnly')}
+            </p>
+          )}
           <button type='button' className='asca-btn asca-btn--ghost' onClick={() => window.print()}>
             <Printer aria-hidden='true' /> {t('regsPrint')}
           </button>
@@ -142,7 +158,7 @@ export function RegulationReader({
               <List aria-hidden='true' /> {tocOpen ? t('regsToc') : t('regsTocOpen')}
             </button>
             <p className='asca-regs-toc__label'>{t('regsToc')}</p>
-            <ol id='regs-toc-list' className='asca-regs-toc__list' lang='ko'>
+            <ol id='regs-toc-list' className='asca-regs-toc__list' lang={textLang}>
               {doc.sections.map(section => (
                 <li key={section.id}>
                   {section.title && (
@@ -172,7 +188,7 @@ export function RegulationReader({
           </nav>
         )}
 
-        <div className='asca-regs-text' lang='ko'>
+        <div className='asca-regs-text' lang={textLang}>
           {doc.sections.map(section => (
             <section
               key={section.id}

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { RegulationReader } from '@/components/regulations/regulation-reader'
 import { REGULATIONS, findRegulation, regulationHref } from '@/lib/regulations/catalog'
-import { loadRegulation } from '@/lib/regulations/load'
+import { loadRegulation, loadRegulationTranslations } from '@/lib/regulations/load'
 import '@/components/home/home.css'
 import '@/components/regulations/regulations.css'
 
@@ -49,6 +49,7 @@ export default async function RegulationPage({ params }: RegulationPageProps) {
     <>
       <RegulationReader
         doc={loadRegulation(entry)}
+        translations={loadRegulationTranslations(entry)}
         nameKey={entry.nameKey}
         hanja={entry.hanja}
         position={position}

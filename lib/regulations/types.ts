@@ -54,6 +54,11 @@ export interface RegulationDocument {
   tableCount: number
 }
 
+export type TranslatedLanguage = 'en' | 'ja' | 'zh'
+
+/** 한국어 원문 외의 참고용 번역본. 없는 언어는 원문을 보여준다 */
+export type RegulationTranslations = Partial<Record<TranslatedLanguage, RegulationDocument>>
+
 export interface RegulationLinkContext {
   /** 옛 단일 페이지의 섹션 앵커(#Articles-of-Incorporation) → 새 경로 */
   legacyAnchors: Readonly<Record<string, string>>

@@ -994,3 +994,11 @@
     background: none;
   }
 }
+
+/* 일본어·중국어 번역본: keep-all 은 한자·가나 사이 줄바꿈을 막아 원문 줄 끝에서만 꺾인다 */
+.asca-regs-text:is(:lang(ja), :lang(zh)),
+.asca-regs-toc__list:is(:lang(ja), :lang(zh)),
+.asca-regs-doc-head__title:is(:lang(ja), :lang(zh)) {
+  word-break: normal;
+  line-break: strict;
+}
