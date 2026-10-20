@@ -58,7 +58,7 @@ export function RegulationsIndex({
             </dd>
           </div>
         </dl>
-        {language !== 'ko' && <p className='asca-regs-lang-note'>{t('regsKoreanOnly')}</p>}
+        {language !== 'ko' && <p className='asca-regs-lang-note'>{t('regsTranslationNote')}</p>}
       </header>
 
       <section className='asca-regs-index' aria-labelledby='regs-index-title'>

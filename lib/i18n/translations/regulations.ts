@@ -1,6 +1,7 @@
 import type { TranslationData } from '../types'
 
-// /regulations (정관 및 규정) 화면 문구. 규정 본문은 regulations/*.md 의 한국어 원문 그대로이고,
+// /regulations (정관 및 규정) 화면 문구. 규정 본문은 regulations/*.md 의 한국어 원문과
+// regulations/i18n/{en,ja,zh} 의 참고용 번역본이고,
 // 여기에는 메뉴·목차·안내 같은 화면 틀과 규정 이름만 둔다.
 // zh 는 사이트 다른 화면처럼 번체(臺灣) 표기.
 export const regulationsTranslations: TranslationData = {
@@ -26,6 +27,7 @@ export const regulationsTranslations: TranslationData = {
     regsPrev: '이전 규정',
     regsNext: '다음 규정',
     regsKoreanOnly: '규정 원문은 한국어로만 제공됩니다.',
+    regsTranslationNote: '번역본은 참고용이며, 한국어 원문이 우선합니다.',
     regsTableLabel: '표 — 좁은 화면에서는 좌우로 밀어 보세요',
     regsCopyLink: '이 조문의 링크 복사',
     regsCopied: '링크를 복사했습니다',
@@ -65,6 +67,8 @@ export const regulationsTranslations: TranslationData = {
     regsPrev: 'Previous',
     regsNext: 'Next',
     regsKoreanOnly: 'The regulation text is published in Korean only.',
+    regsTranslationNote:
+      'This translation is for reference only. The Korean original prevails in case of any discrepancy.',
     regsTableLabel: 'Table — scroll sideways on small screens',
     regsCopyLink: 'Copy link to this article',
     regsCopied: 'Link copied',
@@ -104,6 +108,7 @@ export const regulationsTranslations: TranslationData = {
     regsPrev: '前の規程',
     regsNext: '次の規程',
     regsKoreanOnly: '規程本文は韓国語のみで提供しています。',
+    regsTranslationNote: 'この翻訳は参考用です。内容に相違がある場合は韓国語の原文が優先します。',
     regsTableLabel: '表 — 狭い画面では左右にスクロールしてください',
     regsCopyLink: 'この条文のリンクをコピー',
     regsCopied: 'リンクをコピーしました',
@@ -143,6 +148,7 @@ export const regulationsTranslations: TranslationData = {
     regsPrev: '上一項規章',
     regsNext: '下一項規章',
     regsKoreanOnly: '規章原文僅提供韓文版本。',
+    regsTranslationNote: '本譯文僅供參考，如有歧義，以韓文原文為準。',
     regsTableLabel: '表格 — 窄螢幕請左右滑動查看',
     regsCopyLink: '複製此條文連結',
     regsCopied: '已複製連結',

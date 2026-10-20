@@ -12,29 +12,54 @@ import type {
 /**
  * regulations/*.md 한 편을 RegulationDocument 로 바꾼다.
  * - `## ` = 장·부칙, `### 제N조 (제목)` = 조, 그 밖의 `###` = 소제목
+ * - 번역본(regulations/i18n/{en,ja,zh})은 `Article N-M (Title)`, `第N条のM（見出し）`,
+ *   `第N條之M（標題）` 로 조를 쓴다. 앵커(a6, a3-2)는 언어와 관계없이 같다
  * - `<!-- 검토 N -->` 주석은 내부 검토 메모라 출력에 절대 남기지 않는다
  */
 
 const FRONTMATTER = /^---\n([\s\S]*?)\n---\n?/
 const HTML_COMMENT = /<!--[\s\S]*?-->\n?/g
-const ARTICLE_HEADING = /^제\s*(\d+)\s*조(?:\s*의\s*(\d+))?\s*(?:\(([^)]*)\))?\s*(.*)$/
-const ADDENDUM_HEADING = /^부\s*칙/
+const TITLE_TAIL = String.raw`\s*(?:[(（]([^)）]*)[)）])?\s*(.*)$`
+const ARTICLE_HEADINGS: readonly { pattern: RegExp; label: (n: string, b?: string) => string }[] = [
+  {
+    pattern: new RegExp(String.raw`^제\s*(\d+)\s*조(?:\s*의\s*(\d+))?` + TITLE_TAIL),
+    label: (n, b) => `제${n}조${b ? `의${b}` : ''}`,
+  },
+  {
+    pattern: new RegExp(String.raw`^Article\s+(\d+)(?:-(\d+))?` + TITLE_TAIL),
+    label: (n, b) => `Article ${n}${b ? `-${b}` : ''}`,
+  },
+  {
+    pattern: new RegExp(String.raw`^第\s*(\d+)\s*条(?:\s*の\s*(\d+))?` + TITLE_TAIL),
+    label: (n, b) => `第${n}条${b ? `の${b}` : ''}`,
+  },
+  {
+    pattern: new RegExp(String.raw`^第\s*(\d+)\s*條(?:\s*之\s*(\d+))?` + TITLE_TAIL),
+    label: (n, b) => `第${n}條${b ? `之${b}` : ''}`,
+  },
+]
+const ADDENDUM_HEADING = /^(?:부\s*칙|附\s*則|Addend)/
 const ASSET_PREFIX = './assets/'
 
 function parseFrontmatter(source: string): { meta: Record<string, string>; body: string } {
   const match = FRONTMATTER.exec(source)
   if (!match) return { meta: {}, body: source }
-  const meta: Record<string, string> = {}
+  // prettier 가 긴 값을 들여쓴 다음 줄로 내린다 (`key:\n  'value'`) — 이어지는 줄을 앞 값에 붙인다
+  const raw: Record<string, string> = {}
+  let lastKey: string | null = null
   for (const line of match[1]!.split('\n')) {
+    if (/^\s/.test(line) && lastKey) {
+      raw[lastKey] = `${raw[lastKey]} ${line.trim()}`.trim()
+      continue
+    }
     const separator = line.indexOf(':')
     if (separator === -1) continue
-    const key = line.slice(0, separator).trim()
-    const value = line
-      .slice(separator + 1)
-      .trim()
-      .replace(/^'(.*)'$/, '$1')
-      .replace(/^"(.*)"$/, '$1')
-    meta[key] = value
+    lastKey = line.slice(0, separator).trim()
+    raw[lastKey] = line.slice(separator + 1).trim()
+  }
+  const meta: Record<string, string> = {}
+  for (const [key, value] of Object.entries(raw)) {
+    meta[key] = value.replace(/^'(.*)'$/, '$1').replace(/^"(.*)"$/, '$1')
   }
   return { meta, body: source.slice(match[0].length) }
 }
@@ -176,14 +201,17 @@ interface ArticleHeading {
 }
 
 function matchArticle(text: string): ArticleHeading | null {
-  const match = ARTICLE_HEADING.exec(text)
-  if (!match) return null
-  const [, number, branch, paren, rest] = match
-  return {
-    label: `제${number}조${branch ? `의${branch}` : ''}`,
-    title: (paren ?? rest ?? '').trim(),
-    anchor: `a${number}${branch ? `-${branch}` : ''}`,
+  for (const { pattern, label } of ARTICLE_HEADINGS) {
+    const match = pattern.exec(text)
+    if (!match) continue
+    const [, number, branch, paren, rest] = match
+    return {
+      label: label(number!, branch),
+      title: (paren ?? rest ?? '').trim(),
+      anchor: `a${number}${branch ? `-${branch}` : ''}`,
+    }
   }
+  return null
 }
 
 export function parseRegulation(source: string, ctx: RegulationLinkContext): RegulationDocument {
