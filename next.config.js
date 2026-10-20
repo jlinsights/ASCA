@@ -101,6 +101,9 @@ const THIRD_PARTY = {
   spotify: { frame: ['https://open.spotify.com'] },
   // 공모 요강 플립북 — components/contests/contest-flipbook.tsx
   fliphtml5: { frame: ['https://online.fliphtml5.com'] },
+  // 행사 및 전시회 일정 캘린더 — app/contact/_components/event-calendar.tsx
+  // lu.ma 는 luma.com 으로 301 되므로 둘 다 연다
+  luma: { frame: ['https://luma.com', 'https://lu.ma'] },
   // 웹폰트 로더 — 코드에서 webfont.js 로드
   googleFonts: {
     script: ['https://ajax.googleapis.com'],

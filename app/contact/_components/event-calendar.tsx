@@ -19,7 +19,7 @@ export function EventCalendar() {
       <CardContent className='p-0'>
         <div className='relative w-full overflow-hidden rounded-b-lg'>
           <iframe
-            src='https://lu.ma/embed/calendar/cal-ZlettsX2TEJryng/events?lt=dark'
+            src='https://luma.com/embed/calendar/cal-ZlettsX2TEJryng/events'
             className='w-full border-0'
             style={{ height: '600px' }}
             allowFullScreen
