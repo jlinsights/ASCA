@@ -1,7 +1,7 @@
 import type { TranslationData } from '../types'
 
 // 소개(/introductions)·연혁(/history) 페이지 문구. 'intro'·'history' 접두어로 다른 표와 키가 겹치지 않게 한다.
-// 명예이사장 인사말 본문은 길어서 app/introductions/_components/chairman-message.ts 에 따로 둔다.
+// 이사장 인사말 본문은 길어서 app/introductions/_components/chairman-message.ts 에 따로 둔다.
 // 중국어는 번체(사이트 표기 통일, 2026-10-11 결정).
 export const aboutTranslations: TranslationData = {
   ko: {
