@@ -119,13 +119,13 @@ export type Database = {
           bio_ja: string | null
           bio_zh: string | null
           birth_year: number | null
-          death_year: number | null
           branch_name: string | null
           calligraphy_styles: string[]
           certification_grade: string | null
           certified_at: string | null
           claimed_by_user_id: string | null
           created_at: string | null
+          death_year: number | null
           exhibitions: string[] | null
           id: string
           membership_type: string | null
@@ -156,13 +156,13 @@ export type Database = {
           bio_ja?: string | null
           bio_zh?: string | null
           birth_year?: number | null
-          death_year?: number | null
           branch_name?: string | null
           calligraphy_styles?: string[]
           certification_grade?: string | null
           certified_at?: string | null
           claimed_by_user_id?: string | null
           created_at?: string | null
+          death_year?: number | null
           exhibitions?: string[] | null
           id?: string
           membership_type?: string | null
@@ -193,13 +193,13 @@ export type Database = {
           bio_ja?: string | null
           bio_zh?: string | null
           birth_year?: number | null
-          death_year?: number | null
           branch_name?: string | null
           calligraphy_styles?: string[]
           certification_grade?: string | null
           certified_at?: string | null
           claimed_by_user_id?: string | null
           created_at?: string | null
+          death_year?: number | null
           exhibitions?: string[] | null
           id?: string
           membership_type?: string | null
