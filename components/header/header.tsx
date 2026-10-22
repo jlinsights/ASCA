@@ -52,7 +52,8 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
         { titleKey: 'siteNavArtistsIntro', href: '/artists' },
         { titleKey: 'arTitle', href: '/archive' },
         { titleKey: 'siteArtistContest', href: '/artists?type=공모작가' },
-        { titleKey: 'siteArtistYoung', href: '/artists?type=청년작가' },
+        // 청년작가 등록자가 없어 숨김 (2026-10-22). 등록이 시작되면 아래 줄을 되살린다
+        // { titleKey: 'siteArtistYoung', href: '/artists?type=청년작가' },
         { titleKey: 'siteArtistRecommended', href: '/artists?type=추천작가' },
         { titleKey: 'siteArtistInvited', href: '/artists?type=초대작가' },
       ],
