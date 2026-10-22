@@ -2,12 +2,12 @@ import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Users, Crown, Shield, Briefcase, Gavel, MapPin } from 'lucide-react'
+import { Users, Shield, Briefcase, Gavel, MapPin } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: '임원 조직도 | 동양서예협회',
   description:
-    '사단법인 동양서예협회의 임원 조직도를 소개합니다. 명예이사장, 고문, 이사장, 감사, 상임이사, 심사위원장, 지부장 등 현재 임원진 구성을 확인하실 수 있습니다.',
+    '사단법인 동양서예협회의 임원 조직도를 소개합니다. 고문, 이사장, 감사, 상임이사, 심사위원장, 지부장 등 현재 임원진 구성을 확인하실 수 있습니다.',
   openGraph: {
     title: '임원 조직도 | 동양서예협회',
     description: '사단법인 동양서예협회의 임원 조직도와 현재 임원진을 소개합니다.',
@@ -27,19 +27,8 @@ type BoardSection = {
   members: BoardMember[]
 }
 
+// 작고하신 분은 임원 조직도에 싣지 않는다 (명예이사장 성곡 임현기, 2026-08 별세)
 const boardSections: BoardSection[] = [
-  {
-    id: 'chairman-emeritus',
-    title: '명예이사장',
-    icon: Crown,
-    members: [
-      {
-        name: '임현기',
-        artName: '성곡',
-        position: '명예이사장',
-      },
-    ],
-  },
   {
     id: 'senior-advisor',
     title: '고문',
