@@ -73,8 +73,8 @@ export function ArtworksClient() {
         const searchLower = searchTerm.trim().toLowerCase()
         matchesSearch =
           artwork.title.toLowerCase().includes(searchLower) ||
-          artwork.artist.name.toLowerCase().includes(searchLower) ||
-          artwork.description.toLowerCase().includes(searchLower) ||
+          (artwork.artist?.name ?? '').toLowerCase().includes(searchLower) ||
+          (artwork.description ?? '').toLowerCase().includes(searchLower) ||
           (artwork.materials?.some((material: string) =>
             material.toLowerCase().includes(searchLower)
           ) ??
@@ -289,7 +289,7 @@ export function ArtworksClient() {
                             {artwork.title}
                           </h2>
                           <p className='mt-2 text-base leading-relaxed text-muted-foreground'>
-                            {artwork.artist.name}
+                            {artwork.artist?.name}
                           </p>
                         </div>
                         <p className='text-sm leading-relaxed text-muted-foreground'>

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import ArtistsPage from '../page'
+import { ArtistsPage } from '../artists-client'
 
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
 jest.mock('@/components/translated-content', () => ({ TranslatedContent: () => <span>작가</span> }))
@@ -25,6 +25,17 @@ afterAll(() => {
 })
 
 describe('Artists discovery states', () => {
+  // 회귀: 메뉴의 /artists?type=초대작가 링크가 주소를 읽지 않아 늘 전체 3,762명을 보여 줬다
+  it('주소로 들어온 회원 구분·국적 조건으로 첫 목록을 거른다', async () => {
+    fetchMock.mockResolvedValue(response([{ id: '1', name: '김작가' }]))
+    render(<ArtistsPage initialFilters={{ membershipType: '초대작가', nationality: '中國' }} />)
+    await screen.findAllByText('김작가')
+    const url = decodeURIComponent(fetchMock.mock.calls[0][0] as string)
+    expect(url).toContain('membershipType=초대작가')
+    expect(url).toContain('nationality=中國')
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it('첫 로딩 중 검색창을 유지하고 통신 오류를 빈 목록과 구분해 재시도한다', async () => {
     fetchMock
       .mockRejectedValueOnce(new Error('offline'))

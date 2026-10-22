@@ -61,7 +61,7 @@ function SearchContent() {
       case 'exhibition':
         return t('exhibition')
       case 'event':
-        return t('currentEvents')
+        return t('siteNewsEvents')
       case 'artist':
         return t('artists')
       case 'artwork':
@@ -192,7 +192,7 @@ function SearchContent() {
                 </Badge>
                 <Badge variant='outline' className='text-xs'>
                   <Calendar className='w-3 h-3 mr-1' />
-                  {t('currentEvents')}
+                  {t('siteNewsEvents')}
                 </Badge>
                 <Badge variant='outline' className='text-xs'>
                   <User className='w-3 h-3 mr-1' />

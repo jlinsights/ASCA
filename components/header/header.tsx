@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Menu, X, ChevronDown, Settings } from 'lucide-react'
+import { Menu, X, ChevronDown } from 'lucide-react'
 
 import { HeaderAuthSection } from './header-auth-section'
 import { HeaderMobileAuth } from './header-mobile-auth'
@@ -11,13 +11,10 @@ import { ThemeTransition } from '../theme-transition'
 import { LanguageSelector } from '../language-selector'
 import { Logo } from '../brand/logo'
 import { useLanguage } from '@/contexts/language-context'
-import { REGULATIONS, REGULATIONS_BASE_PATH, regulationHref } from '@/lib/regulations/catalog'
-
-// 메뉴 구조 정의
-
+import { headerMenu as menuStructure } from '../layout/site-menu'
 import { usePathname } from 'next/navigation'
 
-// @deprecated Use LayoutHeader from @/components/layout/layout-header instead
+// 메뉴 구조는 components/layout/site-menu.ts 에서 푸터와 함께 관리한다
 export function Header({ transparentOnTop = false }: { transparentOnTop?: boolean }) {
   const pathname = usePathname()
   const isHome = pathname === '/'
@@ -40,94 +37,6 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  // ... (menuStructure and handlers) ...
-
-  const menuStructure = [
-    {
-      titleKey: 'siteNavArtists',
-      key: 'artists',
-      href: '/artists',
-      subItems: [
-        { titleKey: 'siteNavArtistsIntro', href: '/artists' },
-        { titleKey: 'arTitle', href: '/archive' },
-        { titleKey: 'siteArtistContest', href: '/artists?type=공모작가' },
-        // 청년작가 등록자가 없어 숨김 (2026-10-22). 등록이 시작되면 아래 줄을 되살린다
-        // { titleKey: 'siteArtistYoung', href: '/artists?type=청년작가' },
-        { titleKey: 'siteArtistRecommended', href: '/artists?type=추천작가' },
-        { titleKey: 'siteArtistInvited', href: '/artists?type=초대작가' },
-      ],
-    },
-    {
-      titleKey: 'siteNavArtworks',
-      key: 'artworks',
-      href: '/artworks',
-      subItems: [
-        { titleKey: 'siteNavArtworksAll', href: '/artworks' },
-        { titleKey: 'siteCatHangeul', href: '/artworks?category=한글서예' },
-        { titleKey: 'siteCatHanja', href: '/artworks?category=한자서예' },
-        { titleKey: 'siteCatLiterati', href: '/artworks?category=문인화' },
-        { titleKey: 'siteCatInk', href: '/artworks?category=수묵화' },
-        { titleKey: 'siteCatFolk', href: '/artworks?category=민화' },
-        { titleKey: 'siteCatModern', href: '/artworks?category=현대서예' },
-        { titleKey: 'siteCatCalligraphy', href: '/artworks?category=캘리그라피' },
-        { titleKey: 'siteCatSeal', href: '/artworks?category=전각' },
-        { titleKey: 'siteCatWood', href: '/artworks?category=서각' },
-      ],
-    },
-    {
-      titleKey: 'siteNavExhibitions',
-      key: 'exhibitions',
-      href: '/exhibitions',
-      subItems: [
-        { titleKey: 'siteExCurrent', href: '/exhibitions/current' },
-        { titleKey: 'siteExUpcoming', href: '/exhibitions/upcoming' },
-        { titleKey: 'siteExPast', href: '/exhibitions/past' },
-        { titleKey: 'siteExOnline', href: '/exhibitions/online' },
-      ],
-    },
-    {
-      titleKey: 'siteNavContests',
-      key: 'contests',
-      href: '/contests',
-      subItems: [
-        { titleKey: 'siteContestOpen', href: '/contests?status=open' },
-        { titleKey: 'siteContestClosed', href: '/contests?status=closed' },
-        { titleKey: 'siteContestMine', href: '/profile/applications' },
-      ],
-    },
-    {
-      titleKey: 'siteNavGallery',
-      key: 'gallery',
-      href: '/gallery',
-      subItems: [
-        { titleKey: 'siteGalleryActivities', href: '/gallery' },
-        { titleKey: 'siteGalleryEvents', href: '/events' },
-      ],
-    },
-    {
-      titleKey: 'regsMenu',
-      key: 'regulations',
-      href: REGULATIONS_BASE_PATH,
-      subItems: [
-        { titleKey: 'regsAll', href: REGULATIONS_BASE_PATH },
-        ...REGULATIONS.map(entry => ({
-          titleKey: entry.nameKey,
-          href: regulationHref(entry.slug),
-        })),
-      ],
-    },
-    {
-      titleKey: 'siteNavAcademy',
-      key: 'academy',
-      href: '/academy',
-    },
-    {
-      titleKey: 'siteNavBlog',
-      key: 'blog',
-      href: '/blog',
-    },
-  ]
 
   const handleThemeToggle = (position: { x: number; y: number }) => {
     setClickPosition(position)
@@ -239,13 +148,13 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
       >
         <div className='container mx-auto px-4'>
           <div className='flex items-center justify-between h-14 md:h-16'>
-            <a href='https://orientalcalligraphy.org' className='flex items-center'>
+            <Link href='/' className='flex shrink-0 items-center'>
               <Logo width={150} height={50} className='h-10 md:h-12 lg:h-14 w-auto' />
-            </a>
+            </Link>
 
             {/* Desktop Navigation — 4개 언어 메뉴가 한 줄에 들어가는 xl(1280px) 이상에서만. 그 아래는 햄버거 메뉴 */}
             <nav
-              className='hidden xl:flex items-center space-x-4 2xl:space-x-8'
+              className='hidden xl:flex items-center space-x-1 2xl:space-x-6'
               role='navigation'
               aria-label={t('siteMainNav')}
             >
@@ -253,19 +162,17 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                 <div
                   key={menu.key}
                   className='relative group'
-                  onMouseEnter={
-                    menu.subItems?.length ? () => handleMouseEnter(menu.key) : undefined
-                  }
-                  onMouseLeave={menu.subItems?.length ? handleMouseLeave : undefined}
+                  onMouseEnter={menu.items?.length ? () => handleMouseEnter(menu.key) : undefined}
+                  onMouseLeave={menu.items?.length ? handleMouseLeave : undefined}
                 >
                   <Link
                     href={menu.href}
                     className="flex items-center gap-1 whitespace-nowrap text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
-                    aria-haspopup={menu.subItems?.length ? 'menu' : undefined}
-                    aria-expanded={menu.subItems?.length ? activeDropdown === menu.key : undefined}
+                    aria-haspopup={menu.items?.length ? 'menu' : undefined}
+                    aria-expanded={menu.items?.length ? activeDropdown === menu.key : undefined}
                   >
-                    {t(menu.titleKey)}
-                    {(menu.subItems?.length ?? 0) > 0 && (
+                    {t(menu.labelKey)}
+                    {(menu.items?.length ?? 0) > 0 && (
                       <ChevronDown
                         className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === menu.key ? 'rotate-180' : ''}`}
                         aria-hidden='true'
@@ -274,10 +181,10 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                   </Link>
 
                   {/* Dropdown Menu */}
-                  {(menu.subItems?.length ?? 0) > 0 && (
+                  {(menu.items?.length ?? 0) > 0 && (
                     <div
                       role='menu'
-                      aria-label={`${t(menu.titleKey)} ${t('siteSubmenu')}`}
+                      aria-label={`${t(menu.labelKey)} ${t('siteSubmenu')}`}
                       className={`absolute top-full left-0 w-48 glass-panel rounded-lg transition-all duration-200 z-50 ${
                         activeDropdown === menu.key
                           ? 'opacity-100 visible translate-y-0'
@@ -285,7 +192,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                       }`}
                     >
                       <div className='py-2'>
-                        {menu.subItems?.map((subItem, index) => {
+                        {menu.items?.map((subItem, index) => {
                           const isExternalLink = subItem.href.startsWith('http')
                           return isExternalLink ? (
                             <a
@@ -296,7 +203,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                               role='menuitem'
                               className='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                             >
-                              {t(subItem.titleKey)}
+                              {t(subItem.labelKey)}
                             </a>
                           ) : (
                             <Link
@@ -305,7 +212,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                               role='menuitem'
                               className='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                             >
-                              {t(subItem.titleKey)}
+                              {t(subItem.labelKey)}
                             </Link>
                           )
                         })}
@@ -375,13 +282,13 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                       className='flex-1 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      {t(menu.titleKey)}
+                      {t(menu.labelKey)}
                     </Link>
-                    {(menu.subItems?.length ?? 0) > 0 && (
+                    {(menu.items?.length ?? 0) > 0 && (
                       <button
                         onClick={() => toggleMobileDropdown(menu.key)}
                         className='p-2 hover:bg-foreground/5 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green'
-                        aria-label={`${t(menu.titleKey)} ${t('siteSubmenu')}`}
+                        aria-label={`${t(menu.labelKey)} ${t('siteSubmenu')}`}
                         aria-expanded={mobileDropdowns[menu.key]}
                         aria-controls={`mobile-submenu-${menu.key}`}
                       >
@@ -394,16 +301,18 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                       </button>
                     )}
                   </div>
-                  {(menu.subItems?.length ?? 0) > 0 && (
+                  {(menu.items?.length ?? 0) > 0 && (
                     <div
                       id={`mobile-submenu-${menu.key}`}
                       role='menu'
-                      aria-label={`${t(menu.titleKey)} ${t('siteSubmenu')}`}
+                      aria-label={`${t(menu.labelKey)} ${t('siteSubmenu')}`}
                       className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${
-                        mobileDropdowns[menu.key] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                        mobileDropdowns[menu.key]
+                          ? 'max-h-[40rem] opacity-100'
+                          : 'max-h-0 opacity-0'
                       }`}
                     >
-                      {menu.subItems?.map((subItem, index) => {
+                      {menu.items?.map((subItem, index) => {
                         const isExternalLink = subItem.href.startsWith('http')
                         return isExternalLink ? (
                           <a
@@ -415,7 +324,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                             className='block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                             onClick={() => setIsMenuOpen(false)}
                           >
-                            {t(subItem.titleKey)}
+                            {t(subItem.labelKey)}
                           </a>
                         ) : (
                           <Link
@@ -425,7 +334,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                             className='block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                             onClick={() => setIsMenuOpen(false)}
                           >
-                            {t(subItem.titleKey)}
+                            {t(subItem.labelKey)}
                           </Link>
                         )
                       })}

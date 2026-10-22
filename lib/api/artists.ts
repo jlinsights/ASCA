@@ -96,6 +96,8 @@ export async function getArtists(
     if (specialty) query = query.contains('specialties', [specialty])
     const title = filters?.title?.[0]
     if (title) query = query.ilike('title', spacingTolerantPattern(title))
+    const nationality = filters?.nationality?.[0]
+    if (nationality) query = query.eq('nationality', nationality)
 
     // 일괄 이관이라 created_at 이 대부분 같다 — 이름+id 로 정렬해야 페이지 경계가 흔들리지 않는다
     const {

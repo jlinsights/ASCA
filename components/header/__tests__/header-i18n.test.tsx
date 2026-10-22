@@ -31,20 +31,24 @@ describe('Header — 메뉴 번역', () => {
     const nav = screen.getByRole('navigation', { name: '주 메뉴' })
     expect(await within(nav).findByRole('link', { name: /^작가/ })).toBeInTheDocument()
     expect(within(nav).getByRole('link', { name: '검색' })).toBeInTheDocument()
+    expect(within(nav).getByRole('menuitem', { name: '임원' })).toHaveAttribute(
+      'href',
+      '/board-members'
+    )
   })
 
   it('en: 메뉴·하위 메뉴·검색이 영어로 바뀐다', async () => {
     renderWithLanguage('en', <Header transparentOnTop />)
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
-    for (const name of ['Artists', 'Artworks', 'Exhibitions', 'Competitions', 'Gallery']) {
+    for (const name of ['About', 'Artists', 'Artworks', 'Exhibitions', 'Competitions', 'News']) {
       expect(within(nav).getByRole('link', { name: new RegExp(`^${name}`) })).toBeInTheDocument()
     }
     expect(within(nav).getByRole('menuitem', { name: 'Current' })).toBeInTheDocument()
     expect(within(nav).getByRole('link', { name: 'Search' })).toBeInTheDocument()
-    // 링크 주소(쿼리값)는 언어와 무관하게 그대로다
-    expect(within(nav).getByRole('menuitem', { name: 'Ink Painting' })).toHaveAttribute(
+    // 링크 주소(쿼리값)는 언어와 무관하게 그대로다 — /artists 필터 파라미터 이름을 쓴다
+    expect(within(nav).getByRole('menuitem', { name: 'Invited Artists' })).toHaveAttribute(
       'href',
-      '/artworks?category=수묵화'
+      `/artists?membershipType=${encodeURIComponent('초대작가')}`
     )
   })
 
