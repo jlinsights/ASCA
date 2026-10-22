@@ -11,6 +11,7 @@ interface ArtistFiltersProps {
   artistTypeFilter: string
   specialtyFilter: string
   titleFilter: string
+  nationalityFilter: string
   resultText: string
   busy: boolean
   onSearchChange: (value: string) => void
@@ -18,6 +19,7 @@ interface ArtistFiltersProps {
   onArtistTypeChange: (value: string) => void
   onSpecialtyChange: (value: string) => void
   onTitleChange: (value: string) => void
+  onNationalityChange: (value: string) => void
   onReset: () => void
 }
 
@@ -44,6 +46,13 @@ export function ArtistFilters(props: ArtistFiltersProps) {
           value: props.membershipFilter,
           options: withAll('membership'),
           onChange: props.onMembershipChange,
+        },
+        {
+          id: 'nationality',
+          label: copy.nationality,
+          value: props.nationalityFilter,
+          options: withAll('nationality'),
+          onChange: props.onNationalityChange,
         },
         {
           id: 'artist-type',

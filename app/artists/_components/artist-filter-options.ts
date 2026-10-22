@@ -6,6 +6,7 @@ const options = {
     ['준회원', 'Associate member', '準会員', '準會員'],
     ['공모작가', 'Open-call artist', '公募作家', '公募作家'],
     ['추천작가', 'Recommended artist', '推薦作家', '推薦作家'],
+    ['회원작가', 'Member artist', '会員作家', '會員作家'],
     ['초대작가', 'Invited artist', '招待作家', '邀請作家'],
     ['원로작가', 'Senior artist', 'ベテラン作家', '資深作家'],
     ['명예회원', 'Honorary member', '名誉会員', '名譽會員'],
@@ -26,6 +27,12 @@ const options = {
     ['동양화', 'Oriental painting', '東洋画', '東洋畫'],
     ['전각', 'Seal engraving', '篆刻', '篆刻'],
     ['서각', 'Wood engraving', '書刻', '書刻'],
+  ],
+  // 값은 DB nationality 표기(한자) 그대로
+  nationality: [
+    ['韓國', 'Korea', '韓国', '韓國'],
+    ['中國', 'China', '中国', '中國'],
+    ['日本', 'Japan', '日本', '日本'],
   ],
   title: [
     ['회장', 'President', '会長', '會長'],

@@ -133,7 +133,7 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
                   </h2>
                   <ul className='grid grid-cols-2 gap-x-4 gap-y-2'>
                     {section.items.map(item => (
-                      <li key={item.labelKey} className='min-w-0'>
+                      <li key={item.href} className='min-w-0'>
                         <Link
                           href={item.href}
                           target={item.external ? '_blank' : undefined}
@@ -147,18 +147,6 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
                   </ul>
                 </section>
               ))}
-              <div className='flex flex-wrap gap-x-6 gap-y-2 border-t border-rice-paper/20 pt-6 sm:col-span-2'>
-                {[
-                  { labelKey: 'siteFtExhibitions', href: '/exhibitions' },
-                  { labelKey: 'siteFtArtworks', href: '/artworks' },
-                  { labelKey: 'siteNavContests', href: '/contests' },
-                  { labelKey: 'siteNavGallery', href: '/gallery' },
-                ].map(item => (
-                  <Link key={item.labelKey} href={item.href} className={linkStyle}>
-                    {t(item.labelKey)}
-                  </Link>
-                ))}
-              </div>
             </nav>
           )}
         </div>

@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
     const artistType = searchParams.get('artistType')
     const specialty = searchParams.get('specialty')
     const title = searchParams.get('title')
+    const nationality = searchParams.get('nationality')
 
     // filters 객체 구성
     const filters = {
@@ -23,6 +24,7 @@ export async function GET(request: NextRequest) {
       artistType: artistType ? [artistType] : undefined,
       specialties: specialty ? [specialty] : undefined,
       title: title ? [title] : undefined,
+      nationality: nationality ? [nationality] : undefined,
     }
 
     const result = await getArtists(

@@ -65,7 +65,7 @@ describe('LayoutFooter — 번역', () => {
   it('ko: 기존 한국어 문구가 그대로다', async () => {
     renderFooter('ko')
     expect(await screen.findByRole('link', { name: '이용약관' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '회원' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '협회 소개' })).toBeInTheDocument()
   })
 
   // 회귀: 번역 키 'subscribeNewsletter' 가 어느 표에도 없어 키 이름이 그대로 노출됐다.
@@ -81,7 +81,7 @@ describe('LayoutFooter — 번역', () => {
   it('ja: 섹션 제목·법적 고지·후원 기관이 일본어로 바뀐다', async () => {
     renderFooter('ja')
     expect(await screen.findByRole('link', { name: '利用規約' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '会員' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '協会紹介' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'ソウル芸術の殿堂' })).toBeInTheDocument()
   })
 
