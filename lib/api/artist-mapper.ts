@@ -18,6 +18,7 @@ export interface ArtistDbRow {
   bio_ja: string | null
   bio_zh: string | null
   birth_year: number | null
+  death_year: number | null
   nationality: string | null
   specialties: string[] | null
   awards: string[] | null
@@ -39,6 +40,8 @@ export interface PublicArtist {
   nameZh: string | null
   bio: string | null
   birthYear: number | null
+  /** 고인이면 사망 연도 (2026-10 추가) */
+  deathYear: number | null
   nationality: string | null
   specialties: string[]
   awards: string[]
@@ -57,6 +60,7 @@ export function toPublicArtist(row: ArtistDbRow): PublicArtist {
     nameZh: row.name_zh ?? null,
     bio: row.bio ?? null,
     birthYear: row.birth_year ?? null,
+    deathYear: row.death_year ?? null,
     nationality: row.nationality ?? null,
     specialties: row.specialties ?? [],
     awards: row.awards ?? [],

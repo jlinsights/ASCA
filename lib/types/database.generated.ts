@@ -119,6 +119,7 @@ export type Database = {
           bio_ja: string | null
           bio_zh: string | null
           birth_year: number | null
+          death_year: number | null
           branch_name: string | null
           calligraphy_styles: string[]
           certification_grade: string | null
@@ -155,6 +156,7 @@ export type Database = {
           bio_ja?: string | null
           bio_zh?: string | null
           birth_year?: number | null
+          death_year?: number | null
           branch_name?: string | null
           calligraphy_styles?: string[]
           certification_grade?: string | null
@@ -191,6 +193,7 @@ export type Database = {
           bio_ja?: string | null
           bio_zh?: string | null
           birth_year?: number | null
+          death_year?: number | null
           branch_name?: string | null
           calligraphy_styles?: string[]
           certification_grade?: string | null
