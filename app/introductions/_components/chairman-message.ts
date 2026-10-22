@@ -1,8 +1,10 @@
 import type { Language } from '@/lib/i18n/types'
 
-// 명예이사장 인사말(2025-02-05). 한국어가 원문, 영어는 기존 공식 번역.
+// 이사장 인사말. 본문은 명예이사장 인사말(2025-02-05)을 이어 쓰고, 서명만 현 이사장으로 바꿨다
+// (성곡 임현기 명예이사장 2026-08 별세 — 작고하신 분 이름으로 현재 인사말을 싣지 않는다).
+// 한국어가 원문, 영어는 기존 공식 번역.
 // 일본어·중국어(번체)는 2026-10-11 초안 — 원문에서 옮긴 번역임을 화면에 밝힌다(translationNote).
-// 서명의 한자 이름(惺谷 林炫圻)은 연혁 기록(app/history/_data/history-events.ts)의 표기를 따른다.
+// 서명의 한자 이름(林宰弘)은 작가 DB(artists.name_zh) 표기를 따른다.
 
 export interface ChairmanMessage {
   tabLabel: string
@@ -25,9 +27,7 @@ export const chairmanMessages: Record<Language, ChairmanMessage> = {
 
 여러분의 참여와 관심이 동양 서예 문화의 미래를 밝히는 소중한 빛이 됩니다.
 
-2025년 2월 5일
-
-사단법인 동양서예협회 명예이사장 성곡 임 현 기 拜`,
+사단법인 동양서예협회 이사장 임 재 홍 拜`,
   },
   en: {
     tabLabel: 'English',
@@ -43,9 +43,7 @@ Through regular exhibitions, academic seminars, workshops, and international exc
 
 Your participation and interest become a precious light illuminating the future of East Asian calligraphic culture.
 
-February 5, 2025
-
-Lim Hyun-gi (Seong-gok), Honorary Chairman of the Asian Society of Calligraphic Arts (ASCA)`,
+Lim Jae-hong, Chairman of the Asian Society of Calligraphic Arts (ASCA)`,
   },
   ja: {
     tabLabel: '日本語',
@@ -62,9 +60,7 @@ Lim Hyun-gi (Seong-gok), Honorary Chairman of the Asian Society of Calligraphic 
 
 皆様のご参加とご関心が、東洋書芸文化の未来を照らす尊い光となります。
 
-2025年2月5日
-
-社団法人東洋書芸協会 名誉理事長 惺谷 林炫圻 拝`,
+社団法人東洋書芸協会 理事長 林宰弘 拝`,
   },
   zh: {
     tabLabel: '中文',
@@ -81,8 +77,6 @@ Lim Hyun-gi (Seong-gok), Honorary Chairman of the Asian Society of Calligraphic 
 
 各位的參與和關注，將成為照亮東洋書藝文化未來的珍貴之光。
 
-2025年2月5日
-
-社團法人東洋書藝協會 名譽理事長 惺谷 林炫圻 拜`,
+社團法人東洋書藝協會 理事長 林宰弘 拜`,
   },
 }

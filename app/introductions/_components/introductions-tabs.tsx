@@ -14,12 +14,12 @@ const BROCHURE_KO =
 const BROCHURE_MULTI =
   'https://pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev/소개자료/동양서예협회%20소개_한국어%20영어%20중국어%20일본어_PDF.pdf'
 
-// 탭 제목은 그 탭의 언어로 쓴다(사이트 언어와 무관하게 '名誉理事長あいさつ' 탭은 일본어 제목)
+// 탭 제목은 그 탭의 언어로 쓴다(사이트 언어와 무관하게 '理事長あいさつ' 탭은 일본어 제목)
 const HEADINGS: Record<Language, string> = {
-  ko: '명예이사장 소개글',
-  en: 'Message from the Honorary Chairman',
-  ja: '名誉理事長あいさつ',
-  zh: '名譽理事長致辭',
+  ko: '이사장 인사말',
+  en: 'Message from the Chairman',
+  ja: '理事長あいさつ',
+  zh: '理事長致辭',
 }
 
 export function IntroductionsTabs() {
