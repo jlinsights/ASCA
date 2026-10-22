@@ -41,7 +41,8 @@ const menuStructure = [
     href: '/artists',
     submenu: [
       { key: 'openCallArtists', href: '/artists?type=open-call' },
-      { key: 'youngArtists', href: '/artists?type=young' },
+      // 청년작가 등록자가 없어 숨김 (2026-10-22). 등록이 시작되면 아래 줄을 되살린다
+      // { key: 'youngArtists', href: '/artists?type=young' },
       { key: 'recommendedArtists', href: '/artists?type=recommended' },
       { key: 'invitedArtists', href: '/artists?type=invited' },
     ],
