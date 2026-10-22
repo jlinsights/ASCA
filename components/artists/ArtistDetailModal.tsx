@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Calendar, Award, MapPin, Mail, Globe, Users } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
+import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
 import {
   type ExtendedArtist,
   getArtistContactInfo,
@@ -45,13 +46,15 @@ export default function ArtistDetailModal({
   // Type-safe helper functions
   const contactInfo = getArtistContactInfo(artist)
   const stats = getArtistStats(artist)
+  const displayName = artistDisplayName(artist.name, artist.deathYear)
+  const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
       <DialogContent className='max-w-6xl max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
           <DialogTitle className='text-2xl font-semibold'>
-            {artist.name} {language === 'ko' ? '작가 프로필' : 'Artist Profile'}
+            {displayName} {language === 'ko' ? '작가 프로필' : 'Artist Profile'}
           </DialogTitle>
         </DialogHeader>
 
@@ -80,11 +83,9 @@ export default function ArtistDetailModal({
               </div>
 
               <div className='flex-1 pb-2'>
-                <h2 className='text-2xl font-bold text-foreground mb-1'>{artist.name}</h2>
+                <h2 className='text-2xl font-bold text-foreground mb-1'>{displayName}</h2>
                 <p className='text-muted-foreground'>
-                  {artist.nameEn || artist.birthYear
-                    ? `${artist.nameEn || ''} ${artist.birthYear ? `(${artist.birthYear})` : ''}`.trim()
-                    : ''}
+                  {`${artist.nameEn || ''} ${lifeYears ? `(${lifeYears})` : ''}`.trim()}
                 </p>
                 <div className='flex items-center gap-4 mt-2 text-sm text-muted-foreground'>
                   <span className='flex items-center gap-1'>

@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArtistShareButton } from '@/components/kakao/kakao-share-button'
 import type { PublicArtist as Artist } from '@/lib/api/artist-mapper'
+import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 
 interface ArtistCardProps {
@@ -19,6 +20,8 @@ const DEFAULT_IMAGE = '/images/artists/kangdaehee.avif'
 
 export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const isPc = variant === 'pc'
+  const displayName = artistDisplayName(artist.name, artist.deathYear)
+  const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
 
   const nameClass = isPc
     ? 'font-bold text-xl text-foreground group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0'
@@ -66,11 +69,9 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           )}
 
           <div className='text-center'>
-            <h3 className='text-xl font-bold text-celadon mb-1'>{artist.name}</h3>
+            <h3 className='text-xl font-bold text-celadon mb-1'>{displayName}</h3>
             <p className='text-sm text-muted-foreground'>
-              {artist.nameEn || artist.birthYear
-                ? `${artist.nameEn || ''} ${artist.birthYear ? `(${artist.birthYear})` : ''}`.trim()
-                : ''}
+              {`${artist.nameEn || ''} ${lifeYears ? `(${lifeYears})` : ''}`.trim()}
             </p>
           </div>
 
@@ -86,11 +87,11 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
       <CardContent className={cardContentClass}>
         <div className={isPc ? 'space-y-2' : 'space-y-1'}>
           <div className={`flex items-baseline justify-between ${isPc ? 'gap-4' : 'gap-3'}`}>
-            <h3 className={nameClass}>{artist.name}</h3>
-            {artist.birthYear && (
+            <h3 className={nameClass}>{displayName}</h3>
+            {lifeYears && (
               <div className='flex items-center gap-2 text-muted-foreground flex-shrink-0'>
                 <Calendar className={birthYearIconClass} />
-                <span className={birthYearTextClass}>b. {artist.birthYear}</span>
+                <span className={birthYearTextClass}>{lifeYears}</span>
               </div>
             )}
           </div>

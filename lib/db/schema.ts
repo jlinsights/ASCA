@@ -58,6 +58,7 @@ export const artists = pgTable('artists', {
   bioCn: text('bio_cn'),
   bioJp: text('bio_jp'),
   birthYear: integer('birth_year'),
+  deathYear: integer('death_year'),
   nationality: text('nationality'),
   specialties: jsonb('specialties').$type<string[]>(), // JSON 형태로 저장
   awards: jsonb('awards').$type<string[]>(), // JSON 형태로 저장

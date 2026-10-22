@@ -14,6 +14,7 @@ import { useParams } from 'next/navigation'
 import type { ArtworkWithArtist } from '@/lib/api/artworks'
 import { useLanguage } from '@/contexts/language-context'
 import type { ArtistRow as Artist } from '@/lib/supabase'
+import { artistDisplayName } from '@/lib/api/artist-life'
 
 export default function ArtistPage() {
   const params = useParams()
@@ -66,8 +67,12 @@ export default function ArtistPage() {
     }
   }, [id])
 
+  // /api/artists/[id] 는 snake_case 행을 그대로 돌려준다 — 고인 표시는 death_year 로 읽는다
+  const deathYearOf = (artist: Artist): number | null =>
+    artist.deathYear ?? (artist as unknown as { death_year?: number | null }).death_year ?? null
+
   // 작가 이름 다국어 지원
-  const getArtistName = (artist: Artist) => {
+  const localizedName = (artist: Artist) => {
     switch (language) {
       case 'en':
         return artist.nameEn || artist.name
@@ -79,6 +84,8 @@ export default function ArtistPage() {
         return artist.name
     }
   }
+  const getArtistName = (artist: Artist) =>
+    artistDisplayName(localizedName(artist), deathYearOf(artist))
 
   // 작가 소개 다국어 지원
   const getArtistBio = (artist: Artist) => {
@@ -183,6 +190,12 @@ export default function ArtistPage() {
                   <div className='flex items-center text-sm text-muted-foreground'>
                     <Calendar className='w-4 h-4 mr-2' />
                     {artist.birthYear}년 출생
+                  </div>
+                )}
+                {deathYearOf(artist) && (
+                  <div className='flex items-center text-sm text-muted-foreground'>
+                    <Calendar className='w-4 h-4 mr-2' />
+                    {deathYearOf(artist)}년 별세
                   </div>
                 )}
                 {artist.nationality && (

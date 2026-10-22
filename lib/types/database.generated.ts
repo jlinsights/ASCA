@@ -125,6 +125,7 @@ export type Database = {
           certified_at: string | null
           claimed_by_user_id: string | null
           created_at: string | null
+          death_year: number | null
           exhibitions: string[] | null
           id: string
           membership_type: string | null
@@ -161,6 +162,7 @@ export type Database = {
           certified_at?: string | null
           claimed_by_user_id?: string | null
           created_at?: string | null
+          death_year?: number | null
           exhibitions?: string[] | null
           id?: string
           membership_type?: string | null
@@ -197,6 +199,7 @@ export type Database = {
           certified_at?: string | null
           claimed_by_user_id?: string | null
           created_at?: string | null
+          death_year?: number | null
           exhibitions?: string[] | null
           id?: string
           membership_type?: string | null
