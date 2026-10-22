@@ -4,13 +4,16 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
 import { submissionSchema, MAX_IMAGE_BYTES, MAX_IMAGES } from '@/lib/archive/submission'
+import type { Submission } from '@/lib/archive/submission'
 const fieldClass = 'mt-2 w-full rounded-md border border-input bg-background p-3'
 export function SubmissionForm({
   artists,
   access,
+  draft,
 }: {
   artists: { id: string; name: string }[]
   access: 'login' | 'unclaimed' | 'ready'
+  draft?: { id: string; updatedAt: string | null; values: Submission }
 }) {
   const { t } = useLanguage()
   const [step, setStep] = useState(0)
@@ -52,13 +55,20 @@ export function SubmissionForm({
         min={type === 'number' ? 1 : undefined}
         step={name === 'year' ? 1 : type === 'number' ? 'any' : undefined}
         className={fieldClass}
+        defaultValue={draft?.values[name as keyof Submission]}
       />
     </label>
   )
   const area = (name: string, label: string) => (
     <label className='text-sm block'>
       {t(label)}
-      <textarea name={name} maxLength={10000} rows={4} className={fieldClass} />
+      <textarea
+        name={name}
+        maxLength={10000}
+        rows={4}
+        className={fieldClass}
+        defaultValue={draft?.values[name as keyof Submission]}
+      />
     </label>
   )
   async function save(status: 'draft' | 'pending_review') {
@@ -71,7 +81,7 @@ export function SubmissionForm({
       setStep(1)
       return
     }
-    if (!files.length) {
+    if (!draft && !files.length) {
       setMessage('arImageRequired')
       setStep(0)
       return
@@ -89,15 +99,27 @@ export function SubmissionForm({
     files.forEach(file => body.append('images', file))
     setBusy(true)
     try {
-      const response = await fetch('/api/archive/submissions', { method: 'POST', body })
+      const { artistId, recordTitle, organizer, contestRef, ...values } = parsed.data
+      const response = await fetch(
+        draft ? `/api/archive/drafts/${draft.id}` : '/api/archive/submissions',
+        draft
+          ? {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ...values, expectedUpdatedAt: draft.updatedAt }),
+            }
+          : { method: 'POST', body }
+      )
       const data = await response.json()
       if (!response.ok) {
         setMessage(
-          data.code === 'OWNER_REQUIRED'
-            ? 'arClaimHint'
-            : data.code === 'AUTH_REQUIRED'
-              ? 'arLoginHint'
-              : 'arSaveFailed'
+          data.code === 'CONFLICT'
+            ? 'arDraftConflict'
+            : data.code === 'OWNER_REQUIRED'
+              ? 'arClaimHint'
+              : data.code === 'AUTH_REQUIRED'
+                ? 'arLoginHint'
+                : 'arSaveFailed'
         )
         return
       }
@@ -113,7 +135,9 @@ export function SubmissionForm({
   return (
     <div>
       <header className='max-w-3xl mb-8'>
-        <h1 className='font-serif text-4xl md:text-5xl mb-6'>{t('arSubmit')}</h1>
+        <h1 className='font-serif text-4xl md:text-5xl mb-6'>
+          {t(draft ? 'arEditDraft' : 'arSubmit')}
+        </h1>
         <p className='text-muted-foreground leading-relaxed'>{t('arSubmitIntro')}</p>
       </header>
       <ol className='flex flex-wrap gap-4 md:gap-8 border-y border-border py-4 mb-8 text-sm'>
@@ -141,8 +165,8 @@ export function SubmissionForm({
             {t(saved === 'draft' ? 'arSavedDraft' : 'arSavedReview')}
           </h2>
           <p className='text-muted-foreground mb-6'>{t('arSavedHint')}</p>
-          <Link href='/archive' className='underline'>
-            {t('arBack')}
+          <Link href='/archive/my' className='underline'>
+            {t('arMyWorks')}
           </Link>
         </section>
       ) : (
@@ -158,49 +182,59 @@ export function SubmissionForm({
           <fieldset disabled={busy}>
             <legend className='sr-only'>{t(steps[step]!)}</legend>
             <div hidden={step !== 0}>
-              <label className='block text-sm'>
-                {t('arPhotos')} *
-                <input
-                  type='file'
-                  multiple
-                  accept='image/jpeg,image/png,image/webp'
-                  className={fieldClass}
-                  onChange={event => {
-                    const selected = Array.from(event.target.files || [])
-                    if (
-                      selected.length > MAX_IMAGES ||
-                      selected.reduce((n, f) => n + f.size, 0) > MAX_IMAGE_BYTES
-                    ) {
-                      setMessage('arImageLimit')
-                      event.target.value = ''
-                      setFiles([])
-                    } else {
-                      setFiles(selected)
-                      setMessage('')
-                    }
-                  }}
-                />
-              </label>
-              <p className='text-sm text-muted-foreground mt-4'>{t('arImageHint')}</p>
-              <div className='grid sm:grid-cols-3 gap-6 mt-8'>
-                {previews.map((url, index) => (
-                  <figure key={url} className='border border-border p-4 bg-muted'>
-                    <img
-                      src={url}
-                      alt={`${t('arPhotoStep')} ${index + 1}`}
-                      className='h-64 w-full object-contain'
+              {draft ? (
+                <p className='text-muted-foreground leading-relaxed'>{t('arKeepImages')}</p>
+              ) : (
+                <>
+                  <label className='block text-sm'>
+                    {t('arPhotos')} *
+                    <input
+                      type='file'
+                      multiple
+                      accept='image/jpeg,image/png,image/webp'
+                      className={fieldClass}
+                      onChange={event => {
+                        const selected = Array.from(event.target.files || [])
+                        if (
+                          selected.length > MAX_IMAGES ||
+                          selected.reduce((n, f) => n + f.size, 0) > MAX_IMAGE_BYTES
+                        ) {
+                          setMessage('arImageLimit')
+                          event.target.value = ''
+                          setFiles([])
+                        } else {
+                          setFiles(selected)
+                          setMessage('')
+                        }
+                      }}
                     />
-                    <figcaption className='text-sm mt-4'>
-                      {index === 0 ? t('arPrimary') : t('arDetailPhoto')}
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
+                  </label>
+                  <p className='text-sm text-muted-foreground mt-4'>{t('arImageHint')}</p>
+                  <div className='grid sm:grid-cols-3 gap-6 mt-8'>
+                    {previews.map((url, index) => (
+                      <figure key={url} className='border border-border p-4 bg-muted'>
+                        <img
+                          src={url}
+                          alt={`${t('arPhotoStep')} ${index + 1}`}
+                          className='h-64 w-full object-contain'
+                        />
+                        <figcaption className='text-sm mt-4'>
+                          {index === 0 ? t('arPrimary') : t('arDetailPhoto')}
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
             <div hidden={step !== 1} className='space-y-6'>
               <label className='text-sm block'>
                 {t('arArtist')} *
-                <select name='artistId' className={fieldClass}>
+                <select
+                  name='artistId'
+                  className={fieldClass}
+                  defaultValue={draft?.values.artistId}
+                >
                   {artists.map(artist => (
                     <option key={artist.id} value={artist.id}>
                       {artist.name}
@@ -231,9 +265,20 @@ export function SubmissionForm({
                 <h2 className='font-serif text-2xl mb-4'>{t('arRecordStep')}</h2>
                 <p className='text-sm leading-loose text-muted-foreground'>{t('arRecordHint')}</p>
               </div>
-              {input('recordTitle', 'arRecordTitle')}
-              {input('organizer', 'arOrganizer')}
-              {input('contestRef', 'arContestRef')}
+              {draft ? (
+                <>
+                  <p className='text-muted-foreground'>{t('arKeepRecords')}</p>
+                  <input type='hidden' name='recordTitle' value='' />
+                  <input type='hidden' name='organizer' value='' />
+                  <input type='hidden' name='contestRef' value='' />
+                </>
+              ) : (
+                <>
+                  {input('recordTitle', 'arRecordTitle')}
+                  {input('organizer', 'arOrganizer')}
+                  {input('contestRef', 'arContestRef')}
+                </>
+              )}
               <p className='text-sm text-muted-foreground'>{t('arPrivacyHint')}</p>
             </div>
           </fieldset>

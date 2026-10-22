@@ -39,6 +39,9 @@ export function ArtistProfile({
       </Link>
       <div className='grid lg:grid-cols-[20rem_1fr] gap-12 mt-8'>
         <aside>
+          <Link href={`${base}/cv`} className='inline-block mb-6 text-sm underline'>
+            {t('axCvLink')}
+          </Link>
           <div className='w-32 h-32 bg-muted rounded-full overflow-hidden mb-8'>
             <ArchiveImage path={artist.profile_image_path} alt={name} />
           </div>

@@ -130,6 +130,24 @@ export const artistContacts = pgTable('artist_contacts', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
+// Workflow constraints and service-role RPCs are defined in Supabase migrations.
+export const archiveReviews = pgTable('archive_reviews', {
+  id: uuid('id').primaryKey(),
+  artworkId: uuid('artwork_id').notNull(),
+  action: text('action', { enum: ['publish', 'return', 'unpublish'] }).notNull(),
+  state: text('state', { enum: ['processing', 'failed', 'completed'] })
+    .notNull()
+    .default('processing'),
+  reviewerId: text('reviewer_id').notNull(),
+  reason: text('reason').notNull().default(''),
+  leaseToken: uuid('lease_token').notNull(),
+  leasedAt: timestamp('leased_at', { withTimezone: true }).defaultNow().notNull(),
+  images: jsonb('images').notNull().default([]),
+  cleanupPaths: text('cleanup_paths').array().notNull().default([]),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  completedAt: timestamp('completed_at', { withTimezone: true }),
+})
+
 export const artworkImages = pgTable('artwork_images', {
   id: uuid('id').defaultRandom().primaryKey(),
   artworkId: uuid('artwork_id').notNull(),

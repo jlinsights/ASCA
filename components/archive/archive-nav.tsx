@@ -13,7 +13,21 @@ export function ArchiveNav() {
       <Link href='/archive' className='font-serif text-xl'>
         {t('arTitle')}
       </Link>
-      <div className='flex gap-6 text-sm'>
+      <div className='flex flex-wrap gap-x-6 gap-y-4 text-sm'>
+        <Link
+          href='/archive/exhibitions'
+          aria-current={path.startsWith('/archive/exhibitions') ? 'page' : undefined}
+          className='underline-offset-8 hover:underline'
+        >
+          {t('axExhibitionWorks')}
+        </Link>
+        <Link
+          href='/archive/my'
+          aria-current={path.startsWith('/archive/my') ? 'page' : undefined}
+          className='underline-offset-8 hover:underline'
+        >
+          {t('arMyWorks')}
+        </Link>
         <Link
           href='/archive'
           aria-current={path === '/archive' ? 'page' : undefined}
