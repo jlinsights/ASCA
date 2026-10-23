@@ -1,12 +1,14 @@
 # ASCA — 동양서예협회
 
 동양서예협회의 작가·작품·전시·행사 정보를 제공하는 웹사이트와 관리자 CMS입니다.
-한국어를 기본으로 하며 다국어 콘텐츠 필드와 i18n 인프라를 갖추고 있습니다.
+한국어를 기본으로 영어·일본어·중국어(번체) 화면 번역과 다국어 콘텐츠 필드를
+갖추고 있습니다.
 
 ## 주요 구성
 
 - 작가·작품 탐색과 검색·필터, 전시·행사·공지 페이지
-- 사진 갤러리와 협회 연혁 콘텐츠
+- 저장소의 연혁·블로그 기록으로 구성한 홈과 사진 갤러리
+- 협회 연혁과 아카데미 교육 안내
 - Clerk 인증을 사용하는 관리자 CMS와 역할 기반 권한 관리
 - Supabase PostgreSQL 데이터 저장, Drizzle 쿼리와 마이그레이션
 - Airtable 연동, 감사 로그, CQRS 및 이벤트 처리 모듈
@@ -32,17 +34,22 @@
 ## 로컬 시작
 
 명령은 저장소 루트에서 실행합니다. Next.js가 요구하는 Node.js 버전을 사용하세요.
-현재 저장소의 Next.js 주 버전에 맞춰 Node.js 20.9 이상이 필요합니다.
+현재 Next.js의 요구 조건은 Node.js 20.9 이상입니다. 루트 `package.json`의
+Node.js 하한보다 높으므로, 설치 후에는 다음 명령으로 실제 조건을 확인하세요.
+
+```bash
+node -p "require('/Users/jaehong/Developer/Projects/ASCA/node_modules/next/package.json').engines.node"
+```
 
 ```bash
 git clone https://github.com/jlinsights/ASCA /Users/jaehong/Developer/Projects/ASCA
 cd /Users/jaehong/Developer/Projects/ASCA
 npm ci
-cp /Users/jaehong/Developer/Projects/ASCA/.env.example /Users/jaehong/Developer/Projects/ASCA/.env.local
+cp -n /Users/jaehong/Developer/Projects/ASCA/.env.example /Users/jaehong/Developer/Projects/ASCA/.env.local
 ```
 
-이미 저장소나 `.env.local`이 있다면 클론·복사 단계를 건너뛰세요. `.npmrc`에 peer
-dependency 설치 옵션이 설정되어 있습니다.
+이미 저장소가 있다면 클론 단계를 건너뛰세요. `cp -n`은 기존 `.env.local`을
+보존합니다. [.npmrc](.npmrc)에 peer dependency 설치 옵션이 설정되어 있습니다.
 
 `.env.local`의 예시 값을 실제 개발용 자격 증명으로 교체한 뒤 실행합니다.
 
@@ -84,6 +91,8 @@ Supabase 트랜잭션 풀러를 사용하는 Drizzle 연결은 `prepare: false`�
 | `npm test`                               | Jest 테스트                                        |
 | `npm run test:ci`                        | CI용 Jest 및 커버리지                              |
 | `npm run test:e2e`                       | Playwright E2E 테스트                              |
+| `npm run design:lint`                    | 디자인 명세 검사                                   |
+| `npm run design:wcag`                    | 디자인 토큰 대비 검사                              |
 | `npm run pre-commit`                     | 타입·린트·전체 포맷·CI 테스트 검사                 |
 | `npm run build`                          | 컴파일 전용 빌드                                   |
 | `NODE_ENV=production npm run build:full` | 페이지 데이터 수집과 프리렌더링을 포함한 배포 검증 |
@@ -94,14 +103,38 @@ Supabase 트랜잭션 풀러를 사용하는 Drizzle 연결은 `prepare: false`�
 빌드에는 유효한 DB·Supabase·Clerk 환경 설정이 필요하며, Production과 Preview
 각각에 설정해야 합니다.
 
+Playwright는 [playwright.config.ts](playwright.config.ts)에 따라 개발 서버를
+시작하고, 기본 URL은 `http://localhost:3000`입니다. 테스트 대상 URL은
+`PLAYWRIGHT_BASE_URL`로 지정할 수 있습니다. 다만 [proxy.ts](proxy.ts)는 서버에
+이 변수가 설정되어 있거나 `NODE_ENV=test`이면 Clerk 보호 대신 E2E 프록시를
+사용하므로, 이 설정은 테스트 환경에만 사용하세요. 관리자 권한은 실제 Clerk
+로그인과 역할로 별도 검증합니다.
+
+문서만 바꾸면 참조 경로·실행 명령·변경 파일 포맷과 `git diff --check`를
+검사합니다. 앱 테스트, 전체 빌드, 배포 상태와 실제 화면 확인은 수행한 범위를
+구분해 기록합니다.
+
 ## 데이터와 마이그레이션
 
 - 공개 페이지 조회에는 supabase-js, 서버 데이터 처리에는 Drizzle을 사용합니다.
 - 스키마와 쿼리는 [lib/db/schema.ts](lib/db/schema.ts),
   [lib/db/queries.ts](lib/db/queries.ts)를 참조하세요.
 - Airtable 스키마 차이는 감지·기록 대상이며 자동으로 DB에 적용하지 않습니다.
-- 홈·연혁 등 일부 콘텐츠는 저장소 데이터에서도 제공됩니다.
 - 공개 콘텐츠 테이블은 RLS로 읽기를 허용하고 쓰기는 service role로 제한합니다.
+
+홈 콘텐츠는 CMS 조회와 별도로 저장소 기록에서 계산합니다.
+
+| 콘텐츠            | 원본 및 처리 위치                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------------- |
+| 홈 통계·전시 기록 | [연혁 데이터](app/history/_data/history-events.ts) → [홈 집계 함수](components/home/home-data.ts) |
+| 홈 저널           | [블로그 데이터](lib/data/blog-posts.json) → [홈 집계 함수](components/home/home-data.ts)          |
+| 홈 구성           | [app/page.tsx](app/page.tsx) → [홈 컴포넌트](components/home/)                                    |
+
+공개 작가 조회의 snake_case 행은
+[artist-mapper.ts](lib/api/artist-mapper.ts)에서 화면용 camelCase 타입으로
+변환합니다. Drizzle 스키마와 공개 API의 컬럼 구성을 같다고 가정하지 마세요. 작가
+조회는 오류 시에도 빈 목록을 반환할 수 있으므로, 빈 화면이 나오면 서버 로그와 DB
+권한도 확인합니다.
 
 ```bash
 npm run db:studio
@@ -113,6 +146,17 @@ npm run db:generate
 사용합니다. 기존 Supabase 프로젝트용 마이그레이션을 현재 프로젝트에 일괄
 재실행하지 마세요. 운영 DB 덤프와 개인정보는 커밋하지 않습니다. 관련 제약은
 [AGENTS.md](AGENTS.md)의 운영 환경과 데이터 항목을 따릅니다.
+
+## 다국어 콘텐츠
+
+UI 언어 코드는 `ko`, `en`, `ja`, `zh`이며 중국어 로케일은 `zh-TW`입니다. 화면
+번역은 [LanguageProvider](contexts/language-context.tsx)와
+[lib/i18n/](lib/i18n/)에서 처리하고, 선택한 언어는 로컬 스토리지의
+`asca-language`에 저장합니다.
+
+화면별 번역표를 추가할 때는 [정적 통합표](lib/i18n/translations.ts)에도 연결하고
+모든 지원 언어의 키를 맞춥니다. 기본 언어의 SSR·첫 렌더와 언어 전환 후 화면을
+함께 확인하세요. DB 다국어 필드는 각 스키마와 API 매퍼를 따릅니다.
 
 ## 디자인 시스템
 
@@ -129,6 +173,8 @@ npm run db:generate
 ```text
 app/                      페이지 및 API 라우트
 components/               공통 UI와 기능별 컴포넌트
+components/home/          홈 섹션·스타일·데이터 집계
+contexts/                 언어 등 클라이언트 컨텍스트
 lib/api/                  공개 콘텐츠 조회
 lib/db/                   Drizzle 스키마·쿼리·연결
 lib/admin/                관리자 권한
@@ -140,6 +186,7 @@ supabase/migrations/      Supabase 마이그레이션
 scripts/                  데이터·개발 자동화
 public/                   정적 자산
 docs/                     설계 및 개발 문서
+e2e/                      Playwright 테스트
 ```
 
 갤러리 데이터 작업에는 `gallery:split`, `gallery:upload:dry`,
@@ -156,6 +203,10 @@ Vercel에서 확인하세요. 협회 도메인의 DNS는 별도로 관리되므�
 ## 기여 및 참고 문서
 
 작업 전 [AGENTS.md](AGENTS.md)를 읽고, 변경 범위에 맞는 검증을 실행하세요.
+Claude Code의 루트 진입 문서는 [CLAUDE.md](CLAUDE.md)이며
+[docs/CLAUDE.md](docs/CLAUDE.md)를 불러옵니다. 프로젝트 지침을 바꿀 때는
+`AGENTS.md`와 `docs/CLAUDE.md`의 공통 본문을 함께 갱신합니다.
+
 커밋은 명시적인 요청이 있을 때만 수행하며, 변경 설명은 `.commit_message.txt`에
 이모지를 포함한 한국어 한 줄로 기록합니다.
 
