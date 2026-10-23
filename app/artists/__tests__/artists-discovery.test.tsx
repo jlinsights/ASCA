@@ -7,7 +7,9 @@ jest.mock('@/components/translated-content', () => ({ TranslatedContent: () => <
 jest.mock('../_components/artist-card', () => ({
   ArtistCard: ({ artist }: { artist: { name: string } }) => <article>{artist.name}</article>,
 }))
-jest.mock('@/contexts/language-context', () => ({ useLanguage: () => ({ language: 'ko' }) }))
+jest.mock('@/contexts/language-context', () => ({
+  useLanguage: () => ({ language: 'ko', t: (key: string) => key }),
+}))
 
 const fetchMock = jest.fn()
 const originalFetch = global.fetch

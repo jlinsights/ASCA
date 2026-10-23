@@ -3,6 +3,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -282,27 +284,15 @@ export default async function TypePage({ params }: { params: Promise<{ type: str
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <div className='flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4'>
-            <Link href='/artworks' className='hover:text-foreground transition-colors'>
-              작품
-            </Link>
-            <span>/</span>
-            <span className='text-foreground'>유형별</span>
-            <span>/</span>
-            <span className='text-foreground'>{typeInfo.name}</span>
-          </div>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            {typeInfo.nameEn}
-          </p>
-          <h1 className='text-3xl md:text-5xl font-bold mb-2'>{typeInfo.name} 작품</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed mt-4'>
-            {typeInfo.description}
-          </p>
-          <p className='text-sm text-muted-foreground mt-4'>총 {artworks.length}개 작품</p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.artworks}
+        tier='band'
+        title={`${typeInfo.name} 작품`}
+        lede={typeInfo.description}
+        crumbs={[{ label: '작품', href: '/artworks' }, { label: typeInfo.name }]}
+      >
+        <HeroFacts facts={[{ label: '총 작품', value: `${artworks.length}개` }]} />
+      </PageHero>
 
       <section className='border-b border-border bg-card'>
         <div className='container mx-auto px-4 py-4'>
@@ -321,7 +311,7 @@ export default async function TypePage({ params }: { params: Promise<{ type: str
         </div>
       </section>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         {artworks.length === 0 ? (
           <div className='text-center py-16'>
             <Layers className='w-16 h-16 mx-auto text-muted-foreground mb-4' />

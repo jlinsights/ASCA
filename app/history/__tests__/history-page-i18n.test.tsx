@@ -22,7 +22,7 @@ afterEach(() => {
 describe('연혁 페이지 — 번역', () => {
   it('ko: 기존 한국어 그대로다', async () => {
     renderPage('ko')
-    expect(await screen.findByRole('heading', { level: 1, name: '연 혁' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: '연혁' })).toBeInTheDocument()
     expect(screen.getAllByText('2025 임시총회').length).toBeGreaterThan(0)
   })
 

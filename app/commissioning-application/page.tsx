@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import {
   FileText,
   FileDown,
@@ -73,20 +75,15 @@ const RECRUITER_QUALIFICATIONS = [
 export default function CommissioningApplicationPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Committee Commissioning Application
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>동양서예대전 위원 위촉 지원</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-            심사위원, 운영위원, 모집위원으로 활동하실 분을 모집합니다. 온라인 지원서를 작성하시거나
-            오프라인 양식을 다운로드하여 제출해 주세요.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.commissioning}
+        title='동양서예대전 위원 위촉 지원'
+        lede='심사위원, 운영위원, 모집위원으로 활동하실 분을 모집합니다. 온라인 지원서를 작성하시거나 오프라인 양식을 다운로드하여 제출해 주세요.'
+      >
+        <HeroFacts facts={[{ label: '다운로드 서식', value: '2종' }]} />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-16'>
           <Card>
             <CardHeader className='text-center'>

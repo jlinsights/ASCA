@@ -4,7 +4,8 @@ import { useEffect, useState, lazy, Suspense } from 'react'
 import { User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { TranslatedContent } from '@/components/translated-content'
+import { PageHero, HeroScrolls, type PageHeroStat } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import type { PublicArtist as Artist } from '@/lib/api/artist-mapper'
 import { ArtistFilters } from './_components/artist-filters'
 import { ArtistCard } from './_components/artist-card'
@@ -37,7 +38,7 @@ function buildArtistsUrl(query: ArtistQuery, page: number): string {
 }
 
 export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistInitialFilters }) {
-  const { language } = useLanguage()
+  const { language, t } = useLanguage()
   const copy = discoveryCopy[language]
   const [filteredArtists, setFilteredArtists] = useState<Artist[]>([])
   const [total, setTotal] = useState(0)
@@ -148,23 +149,36 @@ export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistIn
     : formatDiscoveryCount(copy.artistResults, total, language)
   const isUpdating = loading || searchQuery.trim() !== debouncedSearch
 
-  return (
-    <div
-      className='min-h-screen bg-background'
-      style={{ paddingTop: 'calc(var(--spacing-lg) * 2)' }}
-    >
-      <section className='py-12 md:py-20'>
-        <div className='gallery-container'>
-          <h1 className='font-serif text-3xl md:text-4xl mb-4 tracking-tight text-foreground'>
-            <TranslatedContent textKey='artists' />
-          </h1>
-          <p className='text-base leading-relaxed text-muted-foreground max-w-2xl'>
-            {copy.artistIntro}
-          </p>
-        </div>
-      </section>
+  // 히어로 — 불러온 작가 중 프로필 사진이 있는 사람만 건다. 숫자는 현재 조건에 맞는 작가 수
+  const heroImages = filteredArtists
+    .filter(artist => Boolean(artist.profileImage))
+    .slice(0, 5)
+    .map(artist => ({ src: artist.profileImage as string, alt: artist.name }))
+  // 불러오는 중엔 '—' 로 자리를 잡고, 실패하면 숫자 칸을 아예 내리지 않는다(목록 쪽이 오류를 알린다)
+  const heroLedger: PageHeroStat[] = error
+    ? []
+    : [
+        {
+          label: t('phStatArtists'),
+          value: loading ? '—' : total.toLocaleString(language),
+        },
+      ]
 
-      <div className='gallery-container'>
+  return (
+    <div className='min-h-screen bg-background'>
+      <PageHero
+        {...PAGE_HERO_MARKS.artists}
+        title={t('artists')}
+        lede={copy.artistIntro}
+        ledger={heroLedger}
+        media={
+          loading || heroImages.length > 0 ? (
+            <HeroScrolls images={heroImages} fit='cover' loading={loading} />
+          ) : undefined
+        }
+      />
+
+      <div className='gallery-container pt-10 md:pt-16'>
         <ArtistFilters
           searchQuery={searchQuery}
           membershipFilter={membershipFilter}

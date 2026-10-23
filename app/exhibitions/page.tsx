@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero, HeroScrolls, type PageHeroStat } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { useLanguage } from '@/contexts/language-context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -29,6 +31,7 @@ export default function ExhibitionsPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
   const [showFilters, setShowFilters] = useState(false)
 
   const fetchExhibitions = useCallback(async () => {
@@ -50,6 +53,7 @@ export default function ExhibitionsPage() {
       const response = await getExhibitions(filters, pagination)
       setExhibitions(response.data)
       setTotalPages(response.totalPages)
+      setTotalCount(response.total)
     } catch {
       setErrorKey('exPageLoadError')
     } finally {
@@ -71,9 +75,37 @@ export default function ExhibitionsPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // 히어로 — 대표 이미지가 있는 전시만 걸고, 숫자는 검색 결과 전체 건수를 쓴다.
+  // 불러오는 동안에는 자리만 잡아 두어 목록이 도착해도 화면이 밀리지 않게 한다.
+  const heroImages = exhibitions
+    .filter(exhibition => Boolean(exhibition.featured_image_url))
+    .slice(0, 3)
+    .map(exhibition => ({
+      src: exhibition.featured_image_url as string,
+      alt: exhibition.title,
+      href: `/exhibitions/${exhibition.id}`,
+    }))
+  const heroLedger: PageHeroStat[] = [
+    { label: t('exLedgerCount'), value: loading ? '—' : totalCount },
+  ]
+  const hero = (
+    <PageHero
+      {...PAGE_HERO_MARKS.exhibitions}
+      title={t('exhibition')}
+      lede={t('exPageLede')}
+      ledger={heroLedger}
+      media={
+        loading || heroImages.length > 0 ? (
+          <HeroScrolls images={heroImages} fit='cover' max={3} loading={loading} />
+        ) : undefined
+      }
+    />
+  )
+
   if (loading) {
     return (
       <main className='min-h-screen bg-transparent'>
+        {hero}
         <section className='container mx-auto px-4 py-16'>
           <div className='max-w-6xl mx-auto text-center'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto'></div>
@@ -88,6 +120,7 @@ export default function ExhibitionsPage() {
   if (errorKey) {
     return (
       <main className='min-h-screen bg-transparent'>
+        {hero}
         <section className='container mx-auto px-4 py-16'>
           <div className='max-w-6xl mx-auto text-center'>
             <div className='bg-seal/5 border border-seal/30 rounded-lg p-6'>
@@ -108,16 +141,9 @@ export default function ExhibitionsPage() {
 
   return (
     <main className='min-h-screen bg-transparent'>
-      <section className='container mx-auto px-4 py-16'>
+      {hero}
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-6xl mx-auto'>
-          {/* 헤더 */}
-          <div className='text-center mb-12'>
-            <h1 className='text-4xl font-bold mb-4 text-foreground tracking-tight'>
-              {t('exhibition')}
-            </h1>
-            <p className='text-lg text-muted-foreground font-medium'>{t('exPageLede')}</p>
-          </div>
-
           {/* 검색 및 필터 */}
           <Card className='mb-8 border-border/50 shadow-sm'>
             <CardContent className='p-6'>

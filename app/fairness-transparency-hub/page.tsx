@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import {
   Shield,
   Scale,
@@ -137,21 +139,26 @@ const NAV_ITEMS = [
 export default function FairnessTransparencyHubPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Fairness &amp; Transparency Hub
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>공정·투명성 허브</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
+      <PageHero
+        {...PAGE_HERO_MARKS.fairness}
+        title='공정·투명성 허브'
+        lede={
+          <>
             (사) 동양서예협회는 &ldquo;전시를 잘하는 단체&rdquo;를 넘어,{' '}
             <strong className='text-foreground'>운영을 신뢰받는 단체</strong>가 되기 위해
             공모전·전시 운영의 공정성·투명성 기준을 공개합니다.
-          </p>
-        </div>
-      </section>
+          </>
+        }
+      >
+        <HeroFacts
+          facts={[
+            { label: '운영원칙', value: `${CORE_PRINCIPLES.length}개` },
+            { label: '심사 단계', value: `${JUDGING_STEPS.length}단계` },
+          ]}
+        />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
           <aside className='lg:w-64 shrink-0'>
             <div className='sticky top-24 space-y-6'>

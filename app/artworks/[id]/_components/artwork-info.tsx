@@ -71,8 +71,6 @@ function ArtworkHeader({ artwork, isLiked, onToggleLike }: ArtworkInfoProps) {
             {!artwork.isAvailable && <Badge variant='secondary'>판매완료</Badge>}
           </div>
 
-          <h1 className='text-3xl md:text-4xl font-normal mb-2'>{artwork.title}</h1>
-
           <Link
             href={`/artists/${artwork.artistId || artwork.artist}`}
             className='text-lg text-muted-foreground hover:text-foreground transition-colors'

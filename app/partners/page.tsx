@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Building2, Landmark, BookOpen, Palette, Handshake, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '유관단체 | 동양서예협회',
@@ -128,22 +130,27 @@ const partnerCategories: PartnerCategory[] = [
 ]
 
 export default function PartnersPage() {
+  const partnerCount = partnerCategories.reduce(
+    (sum, category) => sum + category.partners.length,
+    0
+  )
+
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Partners
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>유 관 단 체</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-            사단법인 동양서예협회와 직접 혹은 간접적으로 관련이 있거나 파트너십 관계를 맺고 있는
-            협회 및 단체들을 소개합니다.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.partners}
+        title='유관단체'
+        lede='사단법인 동양서예협회와 직접 혹은 간접적으로 관련이 있거나 파트너십 관계를 맺고 있는 협회 및 단체들을 소개합니다.'
+      >
+        <HeroFacts
+          facts={[
+            { label: '분류', value: `${partnerCategories.length}개` },
+            { label: '등재 기관·단체', value: `${partnerCount}곳` },
+          ]}
+        />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-5xl mx-auto space-y-12'>
           {partnerCategories.map(category => {
             const Icon = category.icon

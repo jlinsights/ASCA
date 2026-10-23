@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { Landmark } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { Badge } from '@/components/ui/badge'
+import { PageHero, type PageHeroStat } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS, type PageHeroKey } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
 import { useLanguage } from '@/contexts/language-context'
@@ -13,46 +14,36 @@ import { getExhibitionRecords, type ExhibitionRecords } from '../_data/exhibitio
 
 type Variant = keyof ExhibitionRecords
 
-// 하위 페이지마다 다른 것: 히어로 색·배지 라벨(헤더 메뉴와 같은 키)·제목·빈 상태 문구
+// 하위 페이지마다 다른 것: 題簽 표식·제목·소개·빈 상태 문구
 const VARIANTS: Record<
   Variant,
   {
-    hero: string
-    badge: string
-    badgeKey: string
+    mark: PageHeroKey
     titleKey: string
     ledeKey: string
     emptyKey: string
   }
 > = {
   current: {
-    hero: 'bg-gradient-to-b from-muted/50 to-background',
-    badge: '',
-    badgeKey: 'siteExCurrent',
+    mark: 'exhibitionsCurrent',
     titleKey: 'exCurrentTitle',
     ledeKey: 'exCurrentLede',
     emptyKey: 'exCurrentEmpty',
   },
   upcoming: {
-    hero: 'bg-gradient-to-b from-info/5 to-background',
-    badge: 'bg-info text-white',
-    badgeKey: 'siteExUpcoming',
+    mark: 'exhibitionsUpcoming',
     titleKey: 'exUpcomingTitle',
     ledeKey: 'exUpcomingLede',
     emptyKey: 'exUpcomingEmpty',
   },
   past: {
-    hero: 'bg-transparent',
-    badge: 'bg-warning text-ink-black',
-    badgeKey: 'siteExPast',
+    mark: 'exhibitionsPast',
     titleKey: 'exPastTitle',
     ledeKey: 'exPastLede',
     emptyKey: 'exPastEmpty',
   },
   online: {
-    hero: 'bg-transparent',
-    badge: 'bg-highlight text-highlight-foreground',
-    badgeKey: 'siteExOnline',
+    mark: 'exhibitionsOnline',
     titleKey: 'exOnlineTitle',
     ledeKey: 'exOnlineLede',
     emptyKey: 'exOnlineEmpty',
@@ -64,19 +55,27 @@ export function ExhibitionRecordsPage({ variant }: { variant: Variant }) {
   const config = VARIANTS[variant]
   const records = getExhibitionRecords(historyEvents)[variant]
 
+  const years = records.map(record => record.year)
+  const ledger: PageHeroStat[] = [{ label: t('exLedgerCount'), value: records.length }]
+  if (years.length > 0) {
+    const first = Math.min(...years)
+    const last = Math.max(...years)
+    ledger.push({
+      label: t('exLedgerYears'),
+      value: first === last ? first : `${first}–${last}`,
+    })
+  }
+
   return (
     <main className='min-h-screen'>
-      <section className={`${config.hero} py-16`}>
-        <div className='container mx-auto px-4'>
-          <div className='max-w-3xl mx-auto text-center'>
-            <Badge className={`mb-4 ${config.badge}`}>{t(config.badgeKey)}</Badge>
-            <h1 className='text-4xl md:text-5xl font-normal mb-6'>{t(config.titleKey)}</h1>
-            <p className='text-lg text-muted-foreground'>{t(config.ledeKey)}</p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS[config.mark]}
+        title={t(config.titleKey)}
+        lede={t(config.ledeKey)}
+        ledger={ledger}
+      />
 
-      <section className='container mx-auto px-4 py-16'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto'>
           {records.length > 0 ? (
             <div className='relative pl-8 border-l-2 border-muted-foreground/20 space-y-4'>

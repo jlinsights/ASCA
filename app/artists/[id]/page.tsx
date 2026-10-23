@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { PageHero } from '@/components/layout/page-hero'
+import { HeroFacts, PageHero, type HeroFact } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Calendar, MapPin, User, ArrowLeft, ExternalLink, Award, Eye } from 'lucide-react'
+import { Calendar, MapPin, User, ExternalLink, Award, Eye } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -115,9 +116,27 @@ export default function ArtistPage() {
     }
   }
 
+  const heroName = artist ? getArtistName(artist) : '작가 프로필'
+  const heroFacts: HeroFact[] = [
+    // 불러오는 중엔 '—' 로 자리를 잡고, 불러온 뒤 비어 있는 항목은 내리지 않는다(null → 숨김)
+    { label: '출생', value: !artist ? '—' : artist.birthYear ? `${artist.birthYear}년` : null },
+    { label: '국적', value: !artist ? '—' : artist.nationality || null },
+  ]
+  const hero = (
+    <PageHero
+      {...PAGE_HERO_MARKS.artists}
+      tier='band'
+      title={heroName}
+      crumbs={[{ label: '작가 목록', href: '/artists' }, { label: heroName }]}
+    >
+      <HeroFacts facts={heroFacts} />
+    </PageHero>
+  )
+
   if (loading) {
     return (
       <main className='min-h-screen bg-transparent'>
+        {hero}
         <div className='container mx-auto px-4 py-16 text-center'>
           <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto'></div>
           <p className='mt-4 text-sm text-muted-foreground'>작가 정보를 불러오는 중...</p>
@@ -130,6 +149,7 @@ export default function ArtistPage() {
   if (error || !artist) {
     return (
       <main className='min-h-screen bg-transparent'>
+        {hero}
         <div className='container mx-auto px-4 py-16 text-center'>
           <p className='text-destructive'>{error || '작가를 찾을 수 없습니다.'}</p>
           <Link href='/artists'>
@@ -143,21 +163,10 @@ export default function ArtistPage() {
 
   return (
     <main className='min-h-screen bg-transparent'>
-      <PageHero title='작가 프로필' subtitle={artist?.name} />
-
-      {/* Back Button */}
-      <div className='container mx-auto px-4 pt-8'>
-        <Link
-          href='/artists'
-          className='inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors'
-        >
-          <ArrowLeft className='w-4 h-4 mr-2' />
-          작가 목록으로 돌아가기
-        </Link>
-      </div>
+      {hero}
 
       {/* Artist Profile */}
-      <section className='container mx-auto px-4 py-8'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Profile Image */}
           <div className='lg:col-span-1'>
@@ -180,10 +189,6 @@ export default function ArtistPage() {
           {/* Artist Info */}
           <div className='lg:col-span-2 space-y-6'>
             <div>
-              <h1 className='text-4xl md:text-5xl font-normal uppercase mb-4'>
-                {getArtistName(artist)}
-              </h1>
-
               {/* Basic Info */}
               <div className='flex flex-wrap gap-4 mb-6'>
                 {artist.birthYear && (

@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero, type HeroFact } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, AlertCircle, Loader2 } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
 import { getEventById, incrementEventViews, getRelatedEvents } from '@/lib/supabase/cms'
 import type { Event } from '@/lib/types/cms-legacy'
 import { EventDetailBody } from './_components/event-detail-body'
+import { formatEventDateTime } from './_components/event-detail-meta'
 
 export default function EventDetailPage() {
   const params = useParams()
@@ -52,10 +55,27 @@ export default function EventDetailPage() {
     }
   }, [eventId])
 
+  const heroTitle = event?.title ?? '행사 상세'
+  const heroFacts: HeroFact[] = [
+    { label: '일시', value: event ? formatEventDateTime(event.event_date) : '—' },
+    { label: '장소', value: !event ? '—' : event.venue || event.location || null },
+  ]
+  const hero = (
+    <PageHero
+      {...PAGE_HERO_MARKS.events}
+      tier='band'
+      title={heroTitle}
+      crumbs={[{ label: '행사 목록', href: '/events' }, { label: heroTitle }]}
+    >
+      <HeroFacts facts={heroFacts} />
+    </PageHero>
+  )
+
   if (loading) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        {hero}
+        <main className='container mx-auto px-4 py-10 md:py-16'>
           <div className='flex items-center justify-center py-12'>
             <div className='flex items-center gap-3'>
               <Loader2 className='h-6 w-6 animate-spin' />
@@ -71,7 +91,8 @@ export default function EventDetailPage() {
   if (error || !event) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        {hero}
+        <main className='container mx-auto px-4 py-10 md:py-16'>
           <div className='text-center py-12'>
             <AlertCircle className='h-16 w-16 text-destructive mx-auto mb-4' />
             <h3 className='text-lg font-semibold text-foreground mb-2'>오류가 발생했습니다</h3>
@@ -88,28 +109,8 @@ export default function EventDetailPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container mx-auto px-4 py-8'>
-        {/* 네비게이션 */}
-        <div className='flex items-center gap-4 mb-8'>
-          <Link href='/events'>
-            <Button variant='outline' size='sm'>
-              <ArrowLeft className='h-4 w-4 mr-2' />
-              목록으로
-            </Button>
-          </Link>
-          <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-            <Link href='/' className='hover:text-foreground'>
-              홈
-            </Link>
-            <span>/</span>
-            <Link href='/events' className='hover:text-foreground'>
-              행사
-            </Link>
-            <span>/</span>
-            <span className='text-foreground'>{event.title}</span>
-          </div>
-        </div>
-
+      {hero}
+      <main className='container mx-auto px-4 py-10 md:py-16'>
         <EventDetailBody event={event} relatedEvents={relatedEvents} />
       </main>
 

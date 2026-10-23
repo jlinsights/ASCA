@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent } from '@/components/ui/card'
-import { PageHero } from '@/components/layout/page-hero'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -88,16 +89,25 @@ export default function EventsPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container mx-auto px-4 py-8'>
-        <PageHero
-          title={language === 'ko' ? '행사 안내' : 'Events'}
-          subtitle={
-            language === 'ko'
-              ? '동양서예협회에서 주최하는 다양한 행사와 프로그램을 확인하세요.'
-              : 'Discover various events and programs hosted by the Oriental Calligraphy Association.'
-          }
+      <PageHero
+        {...PAGE_HERO_MARKS.events}
+        title={language === 'ko' ? '행사 안내' : 'Events'}
+        lede={
+          language === 'ko'
+            ? '동양서예협회에서 주최하는 다양한 행사와 프로그램을 확인하세요.'
+            : 'Discover various events and programs hosted by the Oriental Calligraphy Association.'
+        }
+      >
+        <HeroFacts
+          facts={[
+            {
+              label: language === 'ko' ? '불러온 행사' : 'Events loaded',
+              value: loading ? '—' : events.length,
+            },
+          ]}
         />
-
+      </PageHero>
+      <main className='container mx-auto px-4 py-10 md:py-16'>
         {/* 검색 및 필터 섹션 */}
         <Card className='mb-8 border-border/50 shadow-sm'>
           <CardContent className='p-6'>

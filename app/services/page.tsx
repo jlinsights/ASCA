@@ -1,5 +1,8 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { Button } from '@/components/ui/button'
 import {
   Mail,
   Database,
@@ -108,46 +111,39 @@ const partners = ['삼성금융네트웍스', '예술의전당', '대한검정�
 export default function ServicesPage() {
   return (
     <div className='min-h-screen bg-background'>
-      {/* Hero Section */}
-      <section className='relative overflow-hidden bg-gradient-to-b from-background to-muted/30'>
-        <div className='container mx-auto px-4 py-24 md:py-32'>
-          <div className='max-w-4xl mx-auto text-center'>
-            <p className='text-sm font-medium tracking-widest uppercase text-celadon-green mb-4'>
-              ASCA Digital Services
-            </p>
-            <h1 className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground mb-6 leading-tight'>
-              문화예술 단체의{' '}
-              <span className='bg-clip-text text-transparent bg-gradient-to-r from-celadon-green via-scholar-red to-temple-gold'>
-                디지털 전환
-              </span>
-              을 함께합니다
-            </h1>
-            <p className='text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed'>
-              엑셀과 수작업에서 벗어나세요. 마케팅 자동화, 데이터 파이프라인, AI 챗봇으로 협회
-              운영의 새로운 기준을 만듭니다.
-            </p>
-            <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-              <a
-                href='mailto:info@orientalcalligraphy.org?subject=서비스 문의'
-                className='inline-flex items-center justify-center h-14 px-8 text-lg font-medium rounded-lg bg-celadon-green text-rice-paper hover:bg-celadon-green/90 shadow-lg hover:shadow-xl transition-all duration-300'
-              >
+      <PageHero
+        {...PAGE_HERO_MARKS.services}
+        title='문화예술 단체의 디지털 전환을 함께합니다'
+        lede='엑셀과 수작업에서 벗어나세요. 마케팅 자동화, 데이터 파이프라인, AI 챗봇으로 협회 운영의 새로운 기준을 만듭니다.'
+        actions={
+          <>
+            <Button
+              asChild
+              size='lg'
+              className='bg-celadon-green text-rice-paper hover:bg-celadon-green/90'
+            >
+              <a href='mailto:info@orientalcalligraphy.org?subject=서비스 문의'>
                 <Zap className='mr-2 h-5 w-5' />
                 무료 상담 신청
               </a>
-              <Link
-                href='/blog/digital-transformation-guide'
-                className='inline-flex items-center justify-center h-14 px-8 text-lg font-medium rounded-lg border-2 border-scholar-red text-scholar-red hover:bg-scholar-red hover:text-rice-paper transition-all duration-300'
-              >
+            </Button>
+            <Button
+              asChild
+              variant='outline'
+              size='lg'
+              className='border-scholar-red text-scholar-red hover:bg-scholar-red hover:text-rice-paper'
+            >
+              <Link href='/blog/digital-transformation-guide'>
                 디지털 전환 가이드 읽기
                 <ArrowRight className='ml-2 h-5 w-5' />
               </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+            </Button>
+          </>
+        }
+      />
 
       {/* Services Section */}
-      <section className='py-20 md:py-28'>
+      <section className='py-10 md:py-16'>
         <div className='container mx-auto px-4'>
           <div className='text-center mb-16'>
             <h2 className='text-3xl md:text-4xl font-serif font-bold text-foreground mb-4'>

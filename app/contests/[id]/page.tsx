@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  ArrowLeft,
   Calendar,
   Clock,
   MapPin,
@@ -20,6 +19,8 @@ import {
   Link as LinkIcon,
 } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero, type HeroFact } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -122,10 +123,31 @@ export default function ContestDetailPage() {
     return `${(amount / 10000).toLocaleString()}만원`
   }
 
+  const heroTitle = contest?.title ?? '공모전 상세'
+  const heroFacts: HeroFact[] = [
+    {
+      label: '접수 기간',
+      value: contest ? `${formatDate(contest.startDate)} ~ ${formatDate(contest.endDate)}` : '—',
+    },
+    { label: '주최', value: !contest ? '—' : contest.organizer || null },
+  ]
+  const hero = (
+    <PageHero
+      {...PAGE_HERO_MARKS.contests}
+      tier='band'
+      title={heroTitle}
+      lede={contest?.subtitle || undefined}
+      crumbs={[{ label: '공모전 목록', href: '/contests' }, { label: heroTitle }]}
+    >
+      <HeroFacts facts={heroFacts} />
+    </PageHero>
+  )
+
   if (loading) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        {hero}
+        <main className='container mx-auto px-4 py-10 md:py-16'>
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
@@ -138,7 +160,8 @@ export default function ContestDetailPage() {
   if (error || !contest) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        {hero}
+        <main className='container mx-auto px-4 py-10 md:py-16'>
           <Alert variant='destructive'>
             <AlertCircle className='h-4 w-4' />
             <AlertDescription>{error}</AlertDescription>
@@ -159,28 +182,8 @@ export default function ContestDetailPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container mx-auto px-4 py-8'>
-        {/* Navigation */}
-        <div className='flex items-center gap-4 mb-8'>
-          <Link href='/contests'>
-            <Button variant='outline' size='sm'>
-              <ArrowLeft className='h-4 w-4 mr-2' />
-              목록으로
-            </Button>
-          </Link>
-          <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-            <Link href='/' className='hover:text-foreground'>
-              홈
-            </Link>
-            <span>/</span>
-            <Link href='/contests' className='hover:text-foreground'>
-              공모전
-            </Link>
-            <span>/</span>
-            <span className='text-foreground'>{contest.title}</span>
-          </div>
-        </div>
-
+      {hero}
+      <main className='container mx-auto px-4 py-10 md:py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Main Content */}
           <div className='lg:col-span-2 space-y-6'>
@@ -207,13 +210,6 @@ export default function ContestDetailPage() {
                     </Button>
                   </div>
                 </div>
-
-                <CardTitle className='text-3xl font-serif font-bold text-foreground'>
-                  {contest.title}
-                </CardTitle>
-                {contest.subtitle && (
-                  <p className='text-lg text-muted-foreground mt-2'>{contest.subtitle}</p>
-                )}
 
                 {contest.posterImageUrl && (
                   <div className='relative w-full h-96 mt-6 rounded-lg overflow-hidden'>

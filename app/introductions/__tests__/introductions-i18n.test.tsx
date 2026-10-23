@@ -20,7 +20,7 @@ afterEach(() => {
 describe('소개 페이지 — 번역', () => {
   it('ko: 기존 문구와 한국어 인사말이 그대로다', async () => {
     renderPage('ko')
-    expect(await screen.findByRole('heading', { level: 1, name: '소 개' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: '소개' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: '이사장 인사말' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /협회 소개 브로셔/ })).toBeInTheDocument()
   })

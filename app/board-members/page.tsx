@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Users, Shield, Briefcase, Gavel, MapPin } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -98,6 +100,11 @@ const boardSections: BoardSection[] = [
   },
 ]
 
+// 겸직자(배옥영·소정아)는 두 번 적히므로 사람 수는 이름으로 중복을 걷는다
+const BOARD_PERSON_COUNT = new Set(
+  boardSections.flatMap(section => section.members.map(member => member.name))
+).size
+
 function MemberCard({ member }: { member: BoardMember }) {
   return (
     <Card className='transition-shadow hover:shadow-md'>
@@ -118,20 +125,20 @@ function MemberCard({ member }: { member: BoardMember }) {
 export default function BoardMembersPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Board Members
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>임 원</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-            현재 사단법인 동양서예협회의 조직도와 임원진을 소개합니다. 궁금하신 부분이 있거나 저희
-            협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.boardMembers}
+        title='임원'
+        lede='현재 사단법인 동양서예협회의 조직도와 임원진을 소개합니다. 궁금하신 부분이 있거나 저희 협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.'
+      >
+        <HeroFacts
+          facts={[
+            { label: '직책군', value: `${boardSections.length}개` },
+            { label: '임원진', value: `${BOARD_PERSON_COUNT}명` },
+          ]}
+        />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-5xl mx-auto space-y-12'>
           {boardSections.map(section => {
             const Icon = section.icon

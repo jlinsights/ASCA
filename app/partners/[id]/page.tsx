@@ -5,14 +5,12 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import {
   ArrowLeft,
   ExternalLink,
   Building2,
-  Landmark,
-  BookOpen,
-  Palette,
-  Handshake,
   Phone,
   Mail,
   MapPin,
@@ -36,14 +34,6 @@ type PartnerDetail = {
   established?: string
   relationshipType: string
   relatedResources: Array<{ label: string; href: string }>
-}
-
-const categoryIcons: Record<string, typeof Building2> = {
-  organizations: Building2,
-  museums: Landmark,
-  publications: BookOpen,
-  galleries: Palette,
-  partners: Handshake,
 }
 
 const partnerDetails: Record<string, PartnerDetail> = {
@@ -234,35 +224,22 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
 
   if (!partner) return notFound()
 
-  const CategoryIcon = categoryIcons[partner.categoryId] ?? Building2
-
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4'>
-          <div className='flex items-center justify-center gap-2 text-sm text-muted-foreground mb-6'>
-            <Link href='/partners' className='hover:text-foreground transition-colors'>
-              유관단체
-            </Link>
-            <span>/</span>
-            <span className='text-foreground'>{partner.name}</span>
-          </div>
-          <div className='text-center'>
-            <div className='inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-scholar-red/10 mb-4'>
-              <CategoryIcon className='w-8 h-8 text-scholar-red' />
-            </div>
-            <h1 className='text-2xl md:text-4xl font-bold mb-3'>{partner.name}</h1>
-            <div className='flex items-center justify-center gap-3 flex-wrap'>
-              <Badge variant='secondary'>{partner.categoryName}</Badge>
-              <Badge variant='outline' className='border-scholar-red/30 text-scholar-red'>
-                {partner.relationshipType}
-              </Badge>
-            </div>
-          </div>
+      <PageHero
+        {...PAGE_HERO_MARKS.partners}
+        title={partner.name}
+        crumbs={[{ label: '유관단체', href: '/partners' }, { label: partner.name }]}
+      >
+        <div className='flex items-center gap-3 flex-wrap'>
+          <Badge variant='secondary'>{partner.categoryName}</Badge>
+          <Badge variant='outline' className='border-scholar-red/30 text-scholar-red'>
+            {partner.relationshipType}
+          </Badge>
         </div>
-      </section>
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto'>
           <div className='mb-6'>
             <Link href='/partners'>

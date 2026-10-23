@@ -3,13 +3,16 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, AlertCircle, Loader2, Edit, Trash2 } from 'lucide-react'
+import { AlertCircle, Loader2, Edit, Trash2 } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero, type HeroFact } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import { useUser } from '@clerk/nextjs'
 import { fetchExhibitionById, deleteExhibition } from '@/lib/api/exhibitions'
 import type { ExhibitionWithDetails } from '@/lib/types/exhibition-legacy'
 import { ExhibitionDetailBody } from './_components/exhibition-detail-body'
+import { formatExhibitionDate } from './_components/exhibition-detail-meta'
 
 export default function ExhibitionDetailPage() {
   const params = useParams()
@@ -116,10 +119,53 @@ export default function ExhibitionDetailPage() {
     router.push('/profile/exhibitions')
   }
 
+  const heroTitle = exhibition?.title ?? '전시 상세'
+  const heroFacts: HeroFact[] = [
+    {
+      label: '전시 기간',
+      value: exhibition
+        ? `${formatExhibitionDate(exhibition.startDate)} ~ ${formatExhibitionDate(exhibition.endDate)}`
+        : '—',
+    },
+    { label: '장소', value: !exhibition ? '—' : exhibition.venue || exhibition.location || null },
+  ]
+  const heroActions = isOwner ? (
+    <div className='flex gap-2'>
+      <Link href={`/exhibitions/${exhibitionId}/edit`}>
+        <Button variant='outline' size='sm'>
+          <Edit className='w-4 h-4 mr-2' />
+          수정
+        </Button>
+      </Link>
+      <Button
+        variant='outline'
+        size='sm'
+        onClick={handleDelete}
+        className='text-scholar-red hover:text-scholar-red hover:border-scholar-red'
+      >
+        <Trash2 className='w-4 h-4 mr-2' />
+        삭제
+      </Button>
+    </div>
+  ) : undefined
+  const hero = (
+    <PageHero
+      {...PAGE_HERO_MARKS.exhibitions}
+      tier='band'
+      title={heroTitle}
+      lede={exhibition?.subtitle || undefined}
+      crumbs={[{ label: '전시 목록', href: '/exhibitions' }, { label: heroTitle }]}
+      actions={heroActions}
+    >
+      <HeroFacts facts={heroFacts} />
+    </PageHero>
+  )
+
   if (loading) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        {hero}
+        <main className='container mx-auto px-4 py-10 md:py-16'>
           <div className='flex items-center justify-center py-12'>
             <div className='flex items-center gap-3'>
               <Loader2 className='h-6 w-6 animate-spin' />
@@ -135,7 +181,8 @@ export default function ExhibitionDetailPage() {
   if (error || !exhibition) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        {hero}
+        <main className='container mx-auto px-4 py-10 md:py-16'>
           <div className='text-center py-12'>
             <AlertCircle className='h-16 w-16 text-destructive mx-auto mb-4' />
             <h3 className='text-lg font-semibold text-foreground mb-2'>오류가 발생했습니다</h3>
@@ -152,51 +199,8 @@ export default function ExhibitionDetailPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container mx-auto px-4 py-8'>
-        {/* Navigation */}
-        <div className='flex items-center justify-between mb-8'>
-          <div className='flex items-center gap-4'>
-            <Link href='/exhibitions'>
-              <Button variant='outline' size='sm'>
-                <ArrowLeft className='h-4 w-4 mr-2' />
-                목록으로
-              </Button>
-            </Link>
-            <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-              <Link href='/' className='hover:text-foreground'>
-                홈
-              </Link>
-              <span>/</span>
-              <Link href='/exhibitions' className='hover:text-foreground'>
-                전시
-              </Link>
-              <span>/</span>
-              <span className='text-foreground'>{exhibition.title}</span>
-            </div>
-          </div>
-
-          {/* Owner Actions */}
-          {isOwner && (
-            <div className='flex gap-2'>
-              <Link href={`/exhibitions/${exhibitionId}/edit`}>
-                <Button variant='outline' size='sm'>
-                  <Edit className='w-4 h-4 mr-2' />
-                  수정
-                </Button>
-              </Link>
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={handleDelete}
-                className='text-scholar-red hover:text-scholar-red hover:border-scholar-red'
-              >
-                <Trash2 className='w-4 h-4 mr-2' />
-                삭제
-              </Button>
-            </div>
-          )}
-        </div>
-
+      {hero}
+      <main className='container mx-auto px-4 py-10 md:py-16'>
         <ExhibitionDetailBody exhibition={exhibition} />
       </main>
 

@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Brush, Layers, MapPin, Palette, BookOpen, ChevronRight } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -91,20 +93,23 @@ const taxonomySections = [
 export default function TaxonomyPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Taxonomy
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>분 류 체 계</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-            동양서예협회의 작품과 작가를 다양한 분류 기준으로 탐색하세요. 서체, 유형, 국가, 카테고리
-            등 체계적인 분류를 통해 동양 서예의 넓은 세계를 발견할 수 있습니다.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.taxonomy}
+        title='분류체계'
+        lede='동양서예협회의 작품과 작가를 다양한 분류 기준으로 탐색하세요. 서체, 유형, 국가, 카테고리 등 체계적인 분류를 통해 동양 서예의 넓은 세계를 발견할 수 있습니다.'
+      >
+        <HeroFacts
+          facts={[
+            { label: '분류 기준', value: `${taxonomySections.length}개` },
+            {
+              label: '분류 항목',
+              value: `${taxonomySections.reduce((sum, section) => sum + section.items.length, 0)}개`,
+            },
+          ]}
+        />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-5xl mx-auto space-y-10'>
           {taxonomySections.map(section => {
             const Icon = section.icon
