@@ -36,7 +36,7 @@ _Related: `.agents/product-marketing-context.md`,
 | 권두언 (Foreword) | 4언어 병기 — 한국어 L3 + 中文 L3 + 日本語 L3 + English L3                                      | `brand-guidelines.md §1`       |
 | 협회 소개         | 한국어 L3 (단독)                                                                               | `brand-guidelines.md §1.1`     |
 | 작품 페이지 캡션  | 작가명·작품명·재질·크기·연도 + 작가 짧은 한 줄 (한국어 + 영어 병기 권장)                       | 사무국 제공                    |
-| 후원·협력         | 협력 단체 로고·이름 (예: 삼성금융네트웍스, 예술의전당, 대한검정회, 서울특별시, 문화체육관광부) | `product-marketing-context.md` |
+| 후원·협력         | 협력 단체 로고·이름 (예: 예술의전당, 대한검정회, 서울특별시, 문화체육관광부) | `product-marketing-context.md` |
 | 판권              | 협회 정보 + 사무국 연락처 + 발행일                                                             | 사무국 제공                    |
 
 ### 1.3 시각 방향

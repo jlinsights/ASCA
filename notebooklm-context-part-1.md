@@ -90874,15 +90874,6 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
         <div className='border-t border-[#fcfcfc]/10 dark:border-[#fcfcfc]/10 pt-6 mt-6'>
           <div className='flex flex-wrap justify-center items-center gap-6 md:gap-8 opacity-60 mb-6'>
             <Link
-              href='https://familyoffices.vip/'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors'
-            >
-              삼성금융네트웍스
-            </Link>
-
-            <Link
               href='https://www.sac.or.kr/site/main/home'
               target='_blank'
               rel='noopener noreferrer'
