@@ -46,9 +46,9 @@ export default function ArtworkDetailPage() {
 
   const heroTitle = artwork?.title ?? '작품 상세'
   const heroFacts: HeroFact[] = [
-    { label: '제작 연도', value: artwork ? `${artwork.year}년` : '—' },
-    { label: '재료', value: artwork?.medium || '—' },
-    { label: '규격', value: artwork?.dimensions || '—' },
+    { label: '제작 연도', value: !artwork ? '—' : artwork.year ? `${artwork.year}년` : null },
+    { label: '재료', value: !artwork ? '—' : artwork.medium || null },
+    { label: '규격', value: !artwork ? '—' : artwork.dimensions || null },
   ]
   const hero = (
     <PageHero

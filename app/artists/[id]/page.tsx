@@ -118,8 +118,9 @@ export default function ArtistPage() {
 
   const heroName = artist ? getArtistName(artist) : '작가 프로필'
   const heroFacts: HeroFact[] = [
-    { label: '출생', value: artist?.birthYear ? `${artist.birthYear}년` : '—' },
-    { label: '국적', value: artist?.nationality || '—' },
+    // 불러오는 중엔 '—' 로 자리를 잡고, 불러온 뒤 비어 있는 항목은 내리지 않는다(null → 숨김)
+    { label: '출생', value: !artist ? '—' : artist.birthYear ? `${artist.birthYear}년` : null },
+    { label: '국적', value: !artist ? '—' : artist.nationality || null },
   ]
   const hero = (
     <PageHero

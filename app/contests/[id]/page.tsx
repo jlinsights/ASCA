@@ -129,7 +129,7 @@ export default function ContestDetailPage() {
       label: '접수 기간',
       value: contest ? `${formatDate(contest.startDate)} ~ ${formatDate(contest.endDate)}` : '—',
     },
-    { label: '주최', value: contest?.organizer || '—' },
+    { label: '주최', value: !contest ? '—' : contest.organizer || null },
   ]
   const hero = (
     <PageHero

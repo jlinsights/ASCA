@@ -58,7 +58,7 @@ export default function EventDetailPage() {
   const heroTitle = event?.title ?? '행사 상세'
   const heroFacts: HeroFact[] = [
     { label: '일시', value: event ? formatEventDateTime(event.event_date) : '—' },
-    { label: '장소', value: event?.venue || event?.location || '—' },
+    { label: '장소', value: !event ? '—' : event.venue || event.location || null },
   ]
   const hero = (
     <PageHero

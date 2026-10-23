@@ -11,7 +11,8 @@ export const ASCA_SEAL = '書協'
  * 빈 페이지를 먼저 알리지 않게. 불러오는 중의 '—' 는 그대로 둔다(높이 고정).
  */
 function isShown(item: { value: ReactNode }): boolean {
-  return item.value !== 0 && item.value !== '0'
+  const { value } = item
+  return value !== 0 && value !== '0' && value !== null && value !== undefined && value !== ''
 }
 
 export interface PageHeroCrumb {

@@ -182,7 +182,9 @@ export default function NoticeDetailPage() {
     },
     {
       label: '분류',
-      value: notice ? (categoryLabels[notice.category as keyof typeof categoryLabels] ?? '—') : '—',
+      value: notice
+        ? (categoryLabels[notice.category as keyof typeof categoryLabels] ?? null)
+        : '—',
     },
   ]
   const hero = (

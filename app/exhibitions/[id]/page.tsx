@@ -127,7 +127,7 @@ export default function ExhibitionDetailPage() {
         ? `${formatExhibitionDate(exhibition.startDate)} ~ ${formatExhibitionDate(exhibition.endDate)}`
         : '—',
     },
-    { label: '장소', value: exhibition?.venue || exhibition?.location || '—' },
+    { label: '장소', value: !exhibition ? '—' : exhibition.venue || exhibition.location || null },
   ]
   const heroActions = isOwner ? (
     <div className='flex gap-2'>
