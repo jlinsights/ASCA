@@ -1,1 +1,1 @@
-🖼️ fix: 작품 목록이 12점만 보이던 기본값을 걷어내고 images.main.url 을 화면 이미지로 연결
+🖼️ feat: 작품 원본 이미지를 Supabase Storage(artwork-images)로 올리는 스크립트 추가
