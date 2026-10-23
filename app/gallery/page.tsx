@@ -7,6 +7,7 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import galleryMeta from '@/lib/data/gallery-data.json'
 import type { GalleryData } from '@/lib/types/gallery/gallery-legacy'
 import GalleryPageClient from '@/components/gallery/GalleryPageClient'
+import { resolveGalleryData } from '@/lib/gallery-media'
 
 function GallerySkeleton() {
   return (
@@ -23,7 +24,7 @@ function GallerySkeleton() {
 }
 
 // 서버에서 메타데이터만 읽음 (items 배열 클라이언트로 전달 없음)
-const meta = galleryMeta as unknown as GalleryData
+const meta = resolveGalleryData(galleryMeta as unknown as GalleryData)
 const availableYears = meta.metadata.availableYears ?? []
 const categories = meta.categories ?? []
 const totalImages = meta.metadata.totalImages

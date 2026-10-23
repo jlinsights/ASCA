@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import type { Artwork } from '@/lib/types/artwork-legacy'
 import { ARTWORK_CATEGORY_LABELS, ARTWORK_STATUS_LABELS } from '@/lib/types/artwork-legacy'
+import { artworkImageUrl } from '@/lib/api/artwork-image'
 
 interface ArtworkCardProps {
   artwork: Artwork
@@ -47,8 +48,8 @@ export function ArtworkCard({
         {/* 작품 이미지 */}
         <div className='relative aspect-[4/3] overflow-hidden bg-stone-gray/10'>
           <Image
-            src={mainImage.url}
-            alt={mainImage.alt || artwork.title}
+            src={artworkImageUrl(artwork.images) || '/placeholder.svg'}
+            alt={mainImage?.alt || artwork.title}
             fill
             className={`object-cover transition-all duration-500 group-hover:scale-105 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'

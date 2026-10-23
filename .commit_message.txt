@@ -1,1 +1,1 @@
-🔒 fix: public_events 뷰를 SECURITY INVOKER 로 바꾸고 비공개 Luma 링크는 생성 열 권한으로 가림
+🖼️ fix: public 이미지 대조와 Supabase 갤러리·작품 연결 경로 정리
