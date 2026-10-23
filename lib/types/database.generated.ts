@@ -428,6 +428,7 @@ export type Database = {
           is_published: boolean | null
           location: string | null
           luma_url: string | null
+          luma_url_public: string | null
           luma_visibility: string
           max_participants: number | null
           organizer: string | null
@@ -459,6 +460,7 @@ export type Database = {
           is_published?: boolean | null
           location?: string | null
           luma_url?: string | null
+          luma_url_public?: never
           luma_visibility?: string
           max_participants?: number | null
           organizer?: string | null
@@ -490,6 +492,7 @@ export type Database = {
           is_published?: boolean | null
           location?: string | null
           luma_url?: string | null
+          luma_url_public?: never
           luma_visibility?: string
           max_participants?: number | null
           organizer?: string | null

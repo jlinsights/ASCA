@@ -1,1 +1,1 @@
-🖼️ feat: 작품 원본 이미지를 Supabase Storage(artwork-images)로 올리는 스크립트 추가
+🔒 fix: public_events 뷰를 SECURITY INVOKER 로 바꾸고 비공개 Luma 링크는 생성 열 권한으로 가림
