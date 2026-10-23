@@ -121,10 +121,6 @@ const partnerCategories: PartnerCategory[] = [
         name: '한국문화예술위원회 | 예술가의집',
         url: 'https://www.arko.or.kr/arthouse/',
       },
-      {
-        name: '삼성금융네트웍스 | 패밀리오피스',
-        url: 'https://samsunglife.vip',
-      },
     ],
   },
 ]

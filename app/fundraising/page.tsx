@@ -3,7 +3,7 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { FundraisingSidebar } from './_components/fundraising-sidebar'
 import { PaymentCards } from './_components/payment-cards'
 import { ConsultationSection } from './_components/consultation-section'
-import { PartnershipSection } from './_components/partnership-section'
+import { CmsFormSection } from './_components/cms-form-section'
 import { FundraisingFaq } from './_components/fundraising-faq'
 import { PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
@@ -39,7 +39,7 @@ export default function FundraisingPage() {
           <main className='flex-1 min-w-0 space-y-16'>
             <PaymentCards />
             <ConsultationSection />
-            <PartnershipSection />
+            <CmsFormSection />
             <FundraisingFaq />
           </main>
         </div>

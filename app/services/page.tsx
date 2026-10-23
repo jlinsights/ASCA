@@ -106,7 +106,7 @@ const painPoints = [
   },
 ]
 
-const partners = ['삼성금융네트웍스', '예술의전당', '대한검정회', '서울특별시', '문화체육관광부']
+const partners = ['예술의전당', '대한검정회', '서울특별시', '문화체육관광부']
 
 export default function ServicesPage() {
   return (
