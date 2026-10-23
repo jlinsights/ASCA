@@ -11,7 +11,7 @@
  *   node scripts/upload-artwork-images.mjs --apply    # 업로드 + artworks.images 갱신 (백업 먼저)
  *   --dir <폴더>   원본 폴더를 바꾼다 (기본 public/images/artworks/originals)
  *
- * 키: ASCA_SUPABASE_SERVICE_ROLE_KEY (업로드에 필요). 미리 보기는 공개 키(ASCA_SUPABASE_ANON_KEY)로도 된다.
+ * 키: ASCA_SUPABASE_SERVICE_ROLE_KEY (미리 보기·업로드 모두).
  * .env.local 은 읽지 않는다 — 그 파일은 옛 프로젝트를 가리킨다.
  * 키는 화면·로그에 찍지 않는다. 터미널에서 직접 export 해서 쓰고, 대화창(!)에는 붙여 넣지 말 것.
  */
@@ -37,14 +37,10 @@ const sourceDir =
     : path.join(root, 'public/images/artworks/originals')
 const apply = process.argv.includes('--apply')
 
-const serviceKey = process.env.ASCA_SUPABASE_SERVICE_ROLE_KEY
-const key = serviceKey || process.env.ASCA_SUPABASE_ANON_KEY
-if (!key || (apply && !serviceKey)) {
-  console.error(
-    apply
-      ? '❌ --apply 에는 ASCA_SUPABASE_SERVICE_ROLE_KEY 가 필요합니다.'
-      : '❌ ASCA_SUPABASE_SERVICE_ROLE_KEY 또는 ASCA_SUPABASE_ANON_KEY 가 필요합니다.'
-  )
+// 미리 보기와 업로드가 같은 행을 보도록 둘 다 서비스 키로 읽는다 (공개 키는 RLS 로 일부만 보인다)
+const key = process.env.ASCA_SUPABASE_SERVICE_ROLE_KEY
+if (!key) {
+  console.error('❌ ASCA_SUPABASE_SERVICE_ROLE_KEY 가 필요합니다.')
   process.exit(1)
 }
 const supabase = createClient(SUPABASE_URL, key, { auth: { persistSession: false } })
@@ -75,8 +71,11 @@ function matchFiles(files, artworks) {
   const byDrive = new Map()
   const byTitle = new Map()
   for (const artwork of artworks) {
-    const drive = driveId(artwork.images?.main?.url)
-    if (drive) byDrive.set(drive, artwork)
+    // 이미 올린 작품은 url 이 Storage 주소이고 Drive 주소는 original_url 에 남아 있다 — 다시 실행해도 찾도록 둘 다 본다
+    for (const url of [artwork.images?.main?.url, artwork.images?.main?.original_url]) {
+      const drive = driveId(url)
+      if (drive) byDrive.set(drive, artwork)
+    }
     const title = normalize(artwork.title ?? '')
     byTitle.set(title, [...(byTitle.get(title) ?? []), artwork])
   }
@@ -120,13 +119,11 @@ async function uploadOne({ file, artwork }) {
     .webp({ quality: QUALITY })
     .toBuffer({ resolveWithObject: true })
   const objectPath = `${artwork.id}/main.webp`
-  const { error } = await supabase.storage
-    .from(BUCKET)
-    .upload(objectPath, buffer, {
-      contentType: 'image/webp',
-      upsert: true,
-      cacheControl: '31536000',
-    })
+  const { error } = await supabase.storage.from(BUCKET).upload(objectPath, buffer, {
+    contentType: 'image/webp',
+    upsert: true,
+    cacheControl: '31536000',
+  })
   if (error) throw new Error(`${file}: 업로드 실패 — ${error.message}`)
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(objectPath)
   // 같은 경로에 다시 올리면 CDN 캐시가 옛 이미지를 줄 수 있어 버전 쿼리를 붙인다
