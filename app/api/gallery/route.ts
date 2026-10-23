@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { error as logError } from '@/lib/logging/structured-logger'
 import { GalleryItem } from '@/lib/types/gallery/gallery-legacy'
+import { resolveGalleryItems } from '@/lib/gallery-media'
 
 const PAGE_SIZE = 24
 
@@ -34,7 +35,7 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(48, Math.max(12, Number(searchParams.get('limit') ?? PAGE_SIZE)))
 
   try {
-    let items = await loadGalleryItems(year)
+    let items = resolveGalleryItems(await loadGalleryItems(year))
 
     // 카테고리 필터
     if (category !== 'all') {

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Artwork } from '@/lib/types/artwork-legacy'
+import { artworkImageUrl } from '@/lib/api/artwork-image'
 
 interface SelectedArtwork extends Artwork {
   displayOrder: number
@@ -172,7 +173,7 @@ export function ArtworkSelector({
                 <div className='relative w-16 h-16 rounded overflow-hidden flex-shrink-0'>
                   {artwork.images?.main ? (
                     <Image
-                      src={artwork.images.main.url || '/api/placeholder/100/100'}
+                      src={artworkImageUrl(artwork.images) || '/placeholder.svg'}
                       alt={artwork.title}
                       fill
                       className='object-cover'
@@ -281,7 +282,7 @@ export function ArtworkSelector({
                     <div className='relative aspect-[3/4] rounded overflow-hidden mb-2'>
                       {artwork.images?.main ? (
                         <Image
-                          src={artwork.images.main.url || '/api/placeholder/200/300'}
+                          src={artworkImageUrl(artwork.images) || '/placeholder.svg'}
                           alt={artwork.title}
                           fill
                           className='object-cover'

@@ -19,6 +19,7 @@ import { getSupabaseClient } from '@/lib/supabase'
 import { useUser } from '@clerk/nextjs'
 import { Contest, canApplyToContest } from '@/lib/types/contest-new-legacy'
 import type { Artwork } from '@/lib/types/artwork-legacy'
+import { artworkImageUrl } from '@/lib/api/artwork-image'
 
 export default function ContestApplyPage() {
   const params = useParams()
@@ -307,6 +308,7 @@ export default function ContestApplyPage() {
                 <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
                   {artworks.map(artwork => {
                     const isSelected = selectedArtworkIds.includes(artwork.id)
+                    const imageUrl = artworkImageUrl(artwork.images)
                     return (
                       <div
                         key={artwork.id}
@@ -318,9 +320,9 @@ export default function ContestApplyPage() {
                         }`}
                       >
                         <div className='relative aspect-square bg-muted rounded-t-lg overflow-hidden'>
-                          {artwork.images?.main?.url && (
+                          {imageUrl && (
                             <Image
-                              src={artwork.images.main.url}
+                              src={imageUrl}
                               alt={artwork.title}
                               fill
                               className='object-cover'

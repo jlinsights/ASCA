@@ -1,12 +1,26 @@
-// artworks.images 는 {"main": {"url": "..."}} 모양이다. 작품 목록 화면은 image_url 을 읽는다.
-// Google Drive 링크는 비공개 파일이라 로그인 화면으로 넘어가 이미지로 뜨지 않는다 (2026-10-23 확인, 28건).
-// Supabase Storage 로 옮기기 전까지는 이미지 없음으로 보고 화면의 기본 이미지를 쓴다.
+// 새 Storage 경로와 기존 images.main.url을 화면용 URL로 통일한다.
+// 비공개 Google Drive 링크는 로그인 페이지이므로 이미지로 사용하지 않는다.
 const UNSERVABLE_HOSTS = ['drive.google.com', 'docs.google.com']
 
 export function artworkImageUrl(images: unknown): string | null {
   if (!images || typeof images !== 'object') return null
   const main = (images as { main?: unknown }).main
+  if (main && typeof main === 'object') {
+    const stored = main as { path?: unknown; bucket?: unknown }
+    const base = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (
+      base &&
+      typeof stored.path === 'string' &&
+      (stored.bucket === undefined || stored.bucket === 'artwork-images') &&
+      stored.path.split('/').every(part => part && part !== '.' && part !== '..')
+    ) {
+      return `${base.replace(/\/$/, '')}/storage/v1/object/public/artwork-images/${stored.path.split('/').map(encodeURIComponent).join('/')}`
+    }
+  }
   const url = main && typeof main === 'object' ? (main as { url?: unknown }).url : undefined
+  if (typeof url === 'string' && (url.startsWith('/images/') || url === '/placeholder.svg')) {
+    return url.split('/').includes('..') ? null : url
+  }
   if (typeof url !== 'string' || !/^https?:\/\//.test(url)) return null
   try {
     const host = new URL(url).hostname
