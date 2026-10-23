@@ -23,7 +23,12 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 - 명시적 요청 없이 커밋·푸시·병합하지 않는다.
 - 변경 시 `.commit_message.txt`를 먼저 읽고, 이모지를 포함한 한국어 한 줄로
   덮어쓴다. revert 작업이면 비운다.
-- `AGENTS.md`와 `docs/CLAUDE.md`의 공통 본문은 함께 갱신한다.
+- `AGENTS.md`와 `docs/CLAUDE.md`의 공통 본문은 함께 갱신한다. 루트 `CLAUDE.md`는
+  `docs/CLAUDE.md`를 불러오는 진입 문서로 유지한다.
+- 형제 작업 폴더의 변경·병합 여부는 현재 `git worktree list`와 해당 폴더의 Git
+  상태·이력을 대조한다. 과거 세션 요약만으로 작업을 재실행하지 않는다.
+- 웹 브라우징은 `/Users/jaehong/.agents/skills/gstack/browse/SKILL.md`를 따른다.
+  `mcp__claude-in-chrome__*` 도구는 사용하지 않는다.
 - 일반 설치·사용 안내는 `README.md`, 실행 명령은 `package.json`, 환경 변수는
   `.env.example`과 `lib/config/env.ts`를 기준으로 한다.
 - 코드 검사, 빌드, 배포, 인증된 브라우저 확인은 서로 다른 검증이다. 실제로
@@ -58,8 +63,10 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   `supabase/migrations/20261010233903_asca2026_public_cms_tables.sql`을
   참조한다. 그 이전 마이그레이션에는 옛 프로젝트의 auth.users FK, 관리자 정책,
   검색 설정이 있으므로 현재 DB에 일괄 재실행하지 않는다.
-- 홈·연혁 콘텐츠는 저장소 데이터도 사용한다:
-  `app/history/_data/history-events.ts`, `lib/data/blog-posts.json`.
+- 홈은 `app/page.tsx`에서 연혁·블로그 데이터를 읽고
+  `components/home/home-data.ts`로 집계해 `components/home/`에 전달한다. 원본은
+  `app/history/_data/history-events.ts`, `lib/data/blog-posts.json`이다. 홈
+  통계나 전시 기록을 수정할 때 CMS 데이터로 간주하지 않는다.
 - 공개 CMS의 RLS는 읽기 공개, 쓰기 service_role 제한을 유지한다.
 - `execute_sql` 같은 임의 SQL RPC를 만들지 않는다. 구조 변경은 마이그레이션으로
   한다.
@@ -74,13 +81,17 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 
 ### 조회 함정
 
-- PostgREST 는 한 번에 **최대 1,000행**만 준다. 목록은 `range()` +
-  `count: 'exact'` 로 페이지를 나눈다(`/api/artists?q&page&limit&title…`).
+- 목록은 `range()` + `count: 'exact'`로 페이지를 나눈다
+  (`/api/artists?q&page&limit&title…`). PostgREST 응답 한도와 앱의 페이지 크기
+  제한은 별개이며, 작가 목록 제한은 `lib/api/artists.ts`의
+  `MAX_ARTISTS_PAGE_SIZE`와 `pageRange()`를 따른다.
 - `or()` 필터에 사용자 입력을 그대로 넣지 말 것 — `sanitizeSearchTerm` 을
   거친다.
 - `artists.membership_type` 은 쉼표로 이은 복수 역할이고, 직함은 음절 사이에
   공백이 들어간 값('고 문')이 있다 — 그래서 `=` 대신 `lib/api/artists.ts` 의
   `spacingTolerantPattern` 으로 `ilike` 한다.
+- `getArtists()`는 조회 오류를 기록한 뒤 빈 목록을 반환하기도 한다. 빈 화면을
+  데이터 부재로 단정하지 말고 API 응답, 서버 로그, 대상 DB의 권한을 확인한다.
 
 ## Primary Commands
 
@@ -123,6 +134,9 @@ npm run lint             # ESLint checking
 npm run lint:fix         # Auto-fix linting issues
 npm run test             # Run Jest tests
 npm run test:coverage    # Generate test coverage report
+npm run test:e2e         # Playwright; see Testing Strategy for auth limitations
+npm run design:lint      # DESIGN.md specification lint
+npm run design:wcag      # Design token contrast checks
 ```
 
 ## Core Architecture
@@ -165,13 +179,18 @@ security:
 - **Clerk** handles all authentication (Supabase Auth is fully removed)
 - Server Actions for admin/membership are being replaced by secure API routes
 
-### Multi-language Pattern
+### 다국어와 공개 API 타입
 
-All content tables use consistent multilingual structure:
-
-- `title`, `titleKo`, `titleEn`, `titleCn`, `titleJp`
-- `description`, `descriptionKo`, `descriptionEn`, `descriptionCn`,
-  `descriptionJp`
+- UI 언어 코드는 `ko`, `en`, `ja`, `zh`다. DB 컬럼 이름과 구분한다.
+- Drizzle의 다국어 필드는 `lib/db/schema.ts`를 따른다(`titleCn`, `titleJp` 등).
+  공개 Supabase 작가 행은 `name_zh`, `name_ja`를 사용하며
+  `lib/api/artist-mapper.ts`가 `nameZh`, `nameJa` 등 화면 타입으로 변환한다.
+  PostgREST 원시 행에 Drizzle의 camelCase 타입을 그대로 붙이지 않는다.
+- 화면 번역은 `contexts/language-context.tsx`와 `lib/i18n/`을 따른다. 새
+  번역표는 `lib/i18n/translations.ts`의 정적 통합표에도 연결한다. 기본 언어의
+  SSR·첫 렌더에서 번역 키가 노출되지 않는지 확인한다.
+- 번역한 필터 라벨로 DB 필터 값을 바꾸지 않는다. 탐색 UI의 공통 레이블은
+  `components/gallery/discovery-copy.ts`를 참조한다.
 
 ## Admin System
 
@@ -229,23 +248,11 @@ Hierarchical and resource-based permissions defined in
 
 ### Database Operations
 
-Always use typed queries from `lib/db/queries.ts`:
+Drizzle을 사용하는 서버 작업은 `lib/db/queries.ts`의 타입 지정 쿼리를
+재사용한다. 공개 supabase-js 조회는 `lib/api/`의 조회 함수와 행 매퍼를 따른다.
 
 ```typescript
 import { getArtistById, createArtwork } from '@/lib/db/queries'
-```
-
-### Multi-language Content
-
-Use the established pattern for all content:
-
-```typescript
-{
-  title: string,      // Korean (default)
-  titleEn?: string,   // English
-  titleCn?: string,   // Chinese
-  titleJp?: string    // Japanese
-}
 ```
 
 ### Component Structure
@@ -360,6 +367,10 @@ and refactor using this standardized process:
 - Component tests with React Testing Library
 - 관리자 기능은 실제 Clerk 로그인과 역할별 권한으로 검증한다.
   `/admin/dev-login`은 현재 존재하는 테스트 경로로 가정하지 않는다.
+- `playwright.config.ts`는 개발 서버를 시작하며 `PLAYWRIGHT_BASE_URL`로 대상
+  URL을 정한다. `proxy.ts`는 `NODE_ENV=test` 또는 `PLAYWRIGHT_BASE_URL`이 설정된
+  서버에서 Clerk 보호 대신 E2E 프록시를 사용한다. 이 조건의 테스트는 실제 관리자
+  인증 검증을 대신하지 못하며 운영 서버에 해당 설정을 넣지 않는다.
 - 문서만 변경하면 링크·npm 명령·포맷·`git diff --check`를 검증한다. 앱 테스트를
   실행하지 않았다면 그 범위를 명시한다.
 - Use `npm run pre-commit` before any commits

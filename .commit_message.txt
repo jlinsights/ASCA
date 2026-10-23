@@ -1,1 +1,1 @@
-📝 docs: ASCA 디자인·카피 가이드의 Ink System 및 탐색 UI 기준 정비
+📝 docs: ASCA 에이전트 지침의 데이터·다국어·검증 기준과 Claude 진입 문서 정비
