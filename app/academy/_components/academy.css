@@ -1,0 +1,1144 @@
+/* =====================================================================
+   강좌 — Ink System 장부(帳簿) 레이아웃. /membership 과 같은 문법을 쓴다.
+   카드 대신 먹선(hairline)과 굵은 명조 제목으로 위계를 만들고, 색은 토큰만 쓴다.
+   - 주간 시간표: 요일 다섯 열이 subgrid 로 오전·오후 행을 맞추고, 좁은 화면에선 요일별로 쌓인다
+   - 분야 색: 시간표 칸의 왼쪽 먹선 한 줄로만 쓴다(장식 아닌 분류)
+   ===================================================================== */
+
+.asca-ac {
+  --ac-bg: var(--paper);
+  --ac-surface: var(--paper-2);
+  --ac-fg: var(--navy-900);
+  --ac-muted: var(--stone-700);
+  --ac-rule: var(--border);
+  --ac-rule-strong: var(--navy-900);
+  --ac-accent: var(--gold-800);
+  --ac-seal: var(--seal-red);
+  --ac-ring: var(--gold-600);
+
+  --ac-cat-hanmun: var(--navy-900);
+  --ac-cat-hangul: var(--gold-700);
+  --ac-cat-munin: var(--seal-red);
+  --ac-cat-calli: var(--stone-500);
+  --ac-cat-minhwa: var(--gold-500);
+  --ac-cat-jeongak: var(--navy-500);
+
+  --ac-gutter: clamp(16px, 4vw, 48px);
+  --ac-max: 1200px;
+  --ac-font-display:
+    var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
+  --ac-font-sans: 'Pretendard', var(--font-noto-sans-kr), system-ui, sans-serif;
+  --ac-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  background: var(--ac-bg);
+  color: var(--ac-fg);
+  font-family: var(--ac-font-sans);
+}
+
+.dark .asca-ac {
+  --ac-bg: var(--navy-950);
+  --ac-surface: var(--navy-900);
+  --ac-fg: var(--paper);
+  --ac-muted: var(--navy-300);
+  --ac-rule-strong: var(--gold-500);
+  --ac-accent: var(--gold-400);
+  --ac-ring: var(--gold-400);
+  --ac-cat-hanmun: var(--paper);
+  --ac-cat-hangul: var(--gold-400);
+  --ac-cat-calli: var(--navy-300);
+  --ac-cat-minhwa: var(--gold-600);
+  --ac-cat-jeongak: var(--stone-500);
+}
+
+.asca-ac :focus-visible {
+  outline: 2px solid var(--ac-ring);
+  outline-offset: 3px;
+}
+
+.asca-ac__body {
+  max-width: var(--ac-max);
+  margin: 0 auto;
+  padding: clamp(28px, 4vw, 48px) var(--ac-gutter) clamp(64px, 8vw, 120px);
+  display: grid;
+  /* 가로 스크롤 띠(작품·바로가기)의 min-content 가 열을 넓히지 않게 */
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(64px, 9vw, 128px);
+}
+
+.asca-ac__anchor {
+  scroll-margin-top: 96px;
+}
+
+/* ---------- 바로가기 ---------- */
+.asca-ac__toc {
+  display: flex;
+  gap: 4px 24px;
+  overflow-x: auto;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ac-rule);
+  margin-bottom: calc(-1 * clamp(32px, 5vw, 72px));
+  scrollbar-width: none;
+}
+.asca-ac__toc a {
+  flex: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ac-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 160ms var(--ac-ease);
+}
+.asca-ac__toc a::before {
+  content: '↓ ';
+  color: var(--ac-accent);
+}
+.asca-ac__toc a:hover {
+  color: var(--ac-fg);
+}
+
+/* ---------- 섹션 머리 ---------- */
+.asca-ac__head {
+  display: grid;
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 2px solid var(--ac-rule-strong);
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+@media (min-width: 900px) {
+  .asca-ac__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: end;
+    gap: 32px;
+  }
+}
+.asca-ac__eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ac-accent);
+}
+.asca-ac__title {
+  margin: 0;
+  font-family: var(--ac-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.asca-ac__lede {
+  margin: 0;
+  color: var(--ac-muted);
+  font-size: 0.975rem;
+  line-height: 1.7;
+  max-width: 58ch;
+}
+.asca-ac__subhead {
+  margin: 0 0 16px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ac-muted);
+}
+.asca-ac__index {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ac-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 공용 목록 ---------- */
+.asca-ac__dash-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 7px;
+}
+.asca-ac__dash-list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ac-muted);
+}
+.asca-ac__dash-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.8em;
+  width: 7px;
+  border-top: 1px solid var(--ac-rule-strong);
+}
+.asca-ac__dash-list--small {
+  margin-top: 16px;
+}
+.asca-ac__dash-list--small li {
+  font-size: 0.8125rem;
+}
+
+.asca-ac__numbered {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ac-num;
+  border-top: 1px solid var(--ac-rule);
+}
+.asca-ac__numbered li {
+  counter-increment: ac-num;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  padding: 14px 0;
+  border-bottom: 1px solid var(--ac-rule);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.asca-ac__numbered li::before {
+  content: counter(ac-num, decimal-leading-zero);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ac-accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.2em;
+}
+
+/* ---------- 근거 조문 ---------- */
+.asca-ac__cite {
+  margin: 18px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 4px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--ac-muted);
+}
+.asca-ac__cite-label {
+  font-weight: 600;
+  color: var(--ac-accent);
+  margin-right: 6px;
+}
+.asca-ac__cite-link,
+.asca-ac__source a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--ac-rule);
+  text-underline-offset: 3px;
+  transition:
+    color 160ms var(--ac-ease),
+    text-decoration-color 160ms var(--ac-ease);
+}
+.asca-ac__cite-link:hover,
+.asca-ac__source a:hover {
+  color: var(--ac-fg);
+  text-decoration-color: var(--ac-seal);
+}
+
+/* ---------- 협회가 잇는 교육 ---------- */
+.asca-ac__intro {
+  display: grid;
+  gap: 36px;
+}
+@media (min-width: 900px) {
+  .asca-ac__intro {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 32px;
+  }
+}
+.asca-ac__prose p {
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  max-width: 44ch;
+}
+.asca-ac__prose strong {
+  font-weight: 600;
+  box-shadow: inset 0 -0.45em 0 color-mix(in oklab, var(--ac-accent) 18%, transparent);
+}
+.asca-ac__institutions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ac-rule);
+}
+.asca-ac__institution {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  grid-template-areas:
+    'idx name icon'
+    'idx role icon'
+    'idx body icon';
+  column-gap: 12px;
+  row-gap: 2px;
+  padding: 22px 4px;
+  border-bottom: 1px solid var(--ac-rule);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 180ms var(--ac-ease);
+}
+.asca-ac__institution .asca-ac__index {
+  grid-area: idx;
+  padding-top: 0.45em;
+}
+.asca-ac__institution-name {
+  grid-area: name;
+  font-family: var(--ac-font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.asca-ac__institution-role {
+  grid-area: role;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ac-accent);
+}
+.asca-ac__institution-body {
+  grid-area: body;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--ac-muted);
+}
+.asca-ac__institution-icon {
+  grid-area: icon;
+  align-self: center;
+  width: 18px;
+  height: 18px;
+  color: var(--ac-muted);
+  transition:
+    transform 220ms var(--ac-ease),
+    color 180ms var(--ac-ease);
+}
+.asca-ac__institution:hover {
+  background: var(--ac-surface);
+}
+.asca-ac__institution:hover .asca-ac__institution-icon {
+  color: var(--ac-seal);
+  transform: translateY(3px);
+}
+
+/* ---------- 과목 색인 ---------- */
+.asca-ac__subjects {
+  list-style: none;
+  margin: 0 0 clamp(48px, 6vw, 80px);
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ac-rule);
+}
+@media (min-width: 640px) {
+  .asca-ac__subjects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(24px, 4vw, 48px);
+  }
+}
+@media (min-width: 1100px) {
+  .asca-ac__subjects {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.asca-ac__subject {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-areas:
+    'mark title'
+    'mark body';
+  column-gap: 14px;
+  row-gap: 4px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--ac-rule);
+}
+.asca-ac__subject-mark {
+  grid-area: mark;
+  font-family: var(--ac-font-display);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--ac-accent);
+}
+.asca-ac__subject:nth-child(4n + 1) .asca-ac__subject-mark {
+  color: var(--ac-seal);
+}
+.asca-ac__subject-title {
+  grid-area: title;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.asca-ac__subject-body {
+  grid-area: body;
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ac-muted);
+}
+
+/* ---------- 커리큘럼 세 갈래 ---------- */
+.asca-ac__tracks {
+  display: grid;
+  gap: 40px;
+}
+@media (min-width: 900px) {
+  .asca-ac__tracks {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: clamp(24px, 3vw, 40px);
+  }
+  .asca-ac__track {
+    grid-row: span 3;
+    display: grid;
+    grid-template-rows: subgrid;
+  }
+}
+.asca-ac__track-head {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ac-rule-strong);
+}
+.asca-ac__track-title {
+  margin: 0;
+  font-family: var(--ac-font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.asca-ac__track-en {
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--ac-muted);
+}
+.asca-ac__level {
+  position: relative;
+  padding: 18px 0 20px 22px;
+  border-left: 1px dashed var(--ac-rule);
+  margin-left: 5px;
+}
+.asca-ac__level-stage {
+  margin: 0;
+  position: relative;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ac-accent);
+}
+.asca-ac__level-node {
+  position: absolute;
+  left: -28px;
+  top: 0.15em;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--ac-rule-strong);
+  background: var(--ac-bg);
+}
+.asca-ac__level-node[data-step='1'] {
+  background: var(--ac-rule-strong);
+}
+.asca-ac__level-label {
+  margin: 4px 0 10px;
+  font-family: var(--ac-font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+/* ---------- 문원: 특징 / 장부 ---------- */
+.asca-ac__split {
+  display: grid;
+  gap: 36px;
+}
+@media (min-width: 900px) {
+  .asca-ac__split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 32px;
+    align-items: start;
+  }
+}
+.asca-ac__facts {
+  margin: 0;
+  border-top: 1px solid var(--ac-rule-strong);
+}
+.asca-ac__fact {
+  display: grid;
+  gap: 4px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ac-rule);
+}
+@media (min-width: 600px) {
+  .asca-ac__fact {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+.asca-ac__fact dt {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ac-muted);
+  padding-top: 0.2em;
+}
+.asca-ac__fact dd {
+  margin: 0;
+  display: grid;
+  gap: 2px;
+}
+.asca-ac__fact-value,
+.asca-ac__fact-link {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+.asca-ac__fact-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  width: fit-content;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--ac-rule);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 160ms var(--ac-ease);
+}
+.asca-ac__fact-link svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  align-self: center;
+  color: var(--ac-muted);
+}
+.asca-ac__fact-link:hover {
+  text-decoration-color: var(--ac-seal);
+}
+.asca-ac__fact-note {
+  font-size: 0.8125rem;
+  color: var(--ac-muted);
+}
+
+.asca-ac__figure {
+  /* 인포그래픽이 흰 글씨라 두 테마 모두 먹색 판 위에 올린다 */
+  margin: clamp(40px, 5vw, 64px) 0 0;
+  padding: clamp(16px, 3vw, 32px);
+  background: var(--navy-950);
+}
+.asca-ac__figure img {
+  display: block;
+  width: 100%;
+  max-width: 880px;
+  height: auto;
+  margin: 0 auto;
+}
+.asca-ac__figure figcaption {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--navy-300);
+}
+
+/* ---------- 지도 교수 ---------- */
+.asca-ac__teacher {
+  margin-top: clamp(48px, 6vw, 80px);
+  padding-top: 24px;
+  border-top: 1px solid var(--ac-rule-strong);
+}
+.asca-ac__teacher-head {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 28px);
+  margin-bottom: 32px;
+}
+.asca-ac__teacher-portrait {
+  flex: none;
+  width: clamp(80px, 12vw, 112px);
+  height: clamp(80px, 12vw, 112px);
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(0.15);
+  border: 1px solid var(--ac-rule);
+}
+.asca-ac__teacher-name {
+  margin: 0;
+  font-family: var(--ac-font-display);
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.asca-ac__teacher-role {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ac-muted);
+}
+.asca-ac__teacher-grid {
+  display: grid;
+  gap: 32px;
+}
+@media (min-width: 900px) {
+  .asca-ac__teacher-grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 3vw, 48px);
+  }
+}
+.asca-ac__tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.asca-ac__tags li {
+  padding: 5px 10px;
+  border: 1px solid var(--ac-rule);
+  font-size: 0.8125rem;
+  color: var(--ac-muted);
+}
+
+.asca-ac__works {
+  list-style: none;
+  margin: clamp(36px, 5vw, 56px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(150px, 1fr);
+  gap: clamp(10px, 1.5vw, 18px);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 6px;
+}
+.asca-ac__works > li {
+  scroll-snap-align: start;
+}
+.asca-ac__work {
+  margin: 0;
+}
+.asca-ac__work img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--ac-surface);
+  border: 1px solid var(--ac-rule);
+  transition: transform 500ms var(--ac-ease);
+}
+.asca-ac__work:hover img {
+  transform: translateY(-4px);
+}
+.asca-ac__work figcaption,
+.asca-ac__video figcaption {
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  color: var(--ac-muted);
+}
+
+.asca-ac__videos {
+  display: grid;
+  gap: 24px;
+  margin-top: clamp(32px, 4vw, 48px);
+}
+@media (min-width: 768px) {
+  .asca-ac__videos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.asca-ac__video {
+  margin: 0;
+}
+.asca-ac__video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--navy-950);
+}
+.asca-ac__video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- 예술의전당: 학기 띠 ---------- */
+.asca-ac__term {
+  margin: 0 0 clamp(28px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--ac-rule);
+  border-bottom: 1px solid var(--ac-rule);
+}
+@media (min-width: 900px) {
+  .asca-ac__term {
+    grid-template-columns: 1.2fr 1.3fr 1fr 1.3fr;
+  }
+}
+.asca-ac__term > div {
+  padding: 16px 16px 16px 0;
+}
+.asca-ac__term > div + div {
+  padding-left: 16px;
+  border-left: 1px solid var(--ac-rule);
+}
+@media (max-width: 899px) {
+  .asca-ac__term > div:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .asca-ac__term > div:nth-child(n + 3) {
+    border-top: 1px solid var(--ac-rule);
+  }
+}
+.asca-ac__term dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ac-muted);
+}
+.asca-ac__term dd {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.asca-ac__term-strong {
+  font-family: var(--ac-font-display);
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+}
+
+/* ---------- 협회 수강생 혜택 ---------- */
+.asca-ac__benefit {
+  display: grid;
+  gap: 16px;
+  margin-bottom: clamp(48px, 6vw, 72px);
+  padding: clamp(20px, 3vw, 32px);
+  background: var(--ac-surface);
+  border-left: 3px solid var(--ac-seal);
+}
+@media (min-width: 900px) {
+  .asca-ac__benefit {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    column-gap: 40px;
+    align-items: start;
+  }
+  .asca-ac__benefit .asca-ac__eyebrow {
+    grid-column: 1;
+  }
+  .asca-ac__benefit-title {
+    grid-column: 1;
+  }
+  .asca-ac__benefit-list {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+.asca-ac__benefit .asca-ac__eyebrow {
+  margin: 0;
+  color: var(--ac-seal);
+}
+.asca-ac__benefit-title {
+  margin: 0;
+  font-family: var(--ac-font-display);
+  font-size: clamp(1.3rem, 1rem + 1vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.35;
+}
+.asca-ac__benefit-list {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.asca-ac__benefit-list > div {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.asca-ac__benefit-list dt {
+  font-weight: 600;
+}
+.asca-ac__benefit-list dd {
+  margin: 0;
+  color: var(--ac-muted);
+}
+
+/* ---------- 시간표: 분야 버튼 ---------- */
+.asca-ac__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.asca-ac__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 12px 6px 10px;
+  border: 1px solid var(--ac-rule);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ac-fg);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ac-ease),
+    border-color 160ms var(--ac-ease),
+    color 160ms var(--ac-ease);
+}
+.asca-ac__filter::before {
+  content: '';
+  width: 3px;
+  height: 14px;
+  background: var(--ac-cat, var(--ac-rule-strong));
+}
+.asca-ac__filter[data-cat='전체']::before {
+  display: none;
+}
+.asca-ac__filter-count {
+  font-size: 0.75rem;
+  color: var(--ac-muted);
+  font-variant-numeric: tabular-nums;
+}
+.asca-ac__filter:hover {
+  border-color: var(--ac-rule-strong);
+}
+.asca-ac__filter[aria-pressed='true'] {
+  background: var(--ac-rule-strong);
+  border-color: var(--ac-rule-strong);
+  color: var(--ac-bg);
+}
+.asca-ac__filter[aria-pressed='true'] .asca-ac__filter-count {
+  color: inherit;
+  opacity: 0.75;
+}
+.asca-ac__filter:active {
+  transform: translateY(1px);
+}
+
+[data-cat='한문서예'] {
+  --ac-cat: var(--ac-cat-hanmun);
+}
+[data-cat='한글서예'] {
+  --ac-cat: var(--ac-cat-hangul);
+}
+[data-cat='문인화·수묵화'] {
+  --ac-cat: var(--ac-cat-munin);
+}
+[data-cat='캘리그라피'] {
+  --ac-cat: var(--ac-cat-calli);
+}
+[data-cat='민화'] {
+  --ac-cat: var(--ac-cat-minhwa);
+}
+[data-cat='전각'] {
+  --ac-cat: var(--ac-cat-jeongak);
+}
+
+/* ---------- 시간표 격자 ---------- */
+.asca-ac__tt {
+  /* 좁은 화면: flex 로 쌓는다 — 요일 열의 인라인 grid-column 이 여기선 무시된다 */
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.asca-ac__tt-corner,
+.asca-ac__tt-slot {
+  display: none;
+}
+.asca-ac__tt-day {
+  min-width: 0;
+}
+.asca-ac__tt-day-name {
+  margin: 0 0 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ac-rule-strong);
+  font-family: var(--ac-font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.asca-ac__tt-day-suffix {
+  margin-left: 2px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ac-muted);
+}
+.asca-ac__tt-cell {
+  min-width: 0;
+  padding: 12px 0 4px;
+}
+.asca-ac__tt-cell + .asca-ac__tt-cell {
+  border-top: 1px dashed var(--ac-rule);
+}
+.asca-ac__tt-cell-label {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ac-accent);
+}
+.asca-ac__tt-cell-label span {
+  margin-left: 4px;
+  font-weight: 500;
+  color: var(--ac-muted);
+  font-variant-numeric: tabular-nums;
+}
+.asca-ac__tt-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+@media (min-width: 600px) and (max-width: 1023px) {
+  .asca-ac__tt-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.asca-ac__class {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px 9px 12px;
+  border-left: 3px solid var(--ac-cat, var(--ac-rule-strong));
+  background: var(--ac-surface);
+  transition:
+    opacity 220ms var(--ac-ease),
+    filter 220ms var(--ac-ease);
+}
+.asca-ac__class[data-dim='true'] {
+  opacity: 0.22;
+  filter: grayscale(1);
+}
+.asca-ac__class-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+.asca-ac__class-meta {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  font-size: 0.75rem;
+  color: var(--ac-muted);
+}
+.asca-ac__class-time {
+  font-weight: 600;
+  color: var(--ac-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 넓은 화면: 시간대 열 + 요일 다섯 열, 요일 열은 subgrid 로 오전·오후 행 높이를 맞춘다 */
+@media (min-width: 1024px) {
+  .asca-ac__tt {
+    display: grid;
+    grid-template-columns: 76px repeat(5, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: 12px;
+    row-gap: 0;
+  }
+  .asca-ac__tt-corner {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+    border-bottom: 1px solid var(--ac-rule-strong);
+  }
+  .asca-ac__tt-slot {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+    grid-column: 1;
+    padding-top: 14px;
+    border-top: 1px dashed var(--ac-rule);
+  }
+  .asca-ac__tt-slot:nth-of-type(2) {
+    border-top: 0;
+  }
+  .asca-ac__tt-slot-label {
+    font-family: var(--ac-font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .asca-ac__tt-slot-time {
+    font-size: 0.6875rem;
+    color: var(--ac-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .asca-ac__tt-day {
+    grid-row: 1 / span 3;
+    display: grid;
+    grid-template-rows: subgrid;
+  }
+  .asca-ac__tt-day-name {
+    margin: 0;
+  }
+  .asca-ac__tt-cell {
+    padding: 14px 0 16px;
+  }
+  .asca-ac__tt-cell-label {
+    display: none;
+  }
+  .asca-ac__class {
+    padding: 7px 8px 8px 10px;
+  }
+  .asca-ac__class-title {
+    font-size: 0.8125rem;
+  }
+}
+
+.asca-ac__source {
+  margin: 16px 0 0;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--ac-muted);
+}
+
+/* ---------- 수강료 / 수강 안내 ---------- */
+.asca-ac__sac-info {
+  display: grid;
+  gap: 40px;
+  margin-top: clamp(48px, 6vw, 72px);
+}
+@media (min-width: 900px) {
+  .asca-ac__sac-info {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 4vw, 56px);
+  }
+}
+.asca-ac__fees {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 1px solid var(--ac-rule-strong);
+}
+.asca-ac__fees th,
+.asca-ac__fees td {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--ac-rule);
+  vertical-align: baseline;
+}
+.asca-ac__fees th {
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  padding-right: 16px;
+}
+.asca-ac__fees td {
+  text-align: right;
+  white-space: nowrap;
+  font-family: var(--ac-font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 바로 가는 창구 ---------- */
+.asca-ac__channels {
+  list-style: none;
+  margin: clamp(36px, 5vw, 56px) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--ac-rule);
+}
+@media (min-width: 900px) {
+  .asca-ac__channels--pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+  }
+}
+.asca-ac__channel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'title icon'
+    'detail icon';
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 2px;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--ac-rule);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 180ms var(--ac-ease);
+}
+.asca-ac__channel-title {
+  grid-area: title;
+  font-family: var(--ac-font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.asca-ac__channel-detail {
+  grid-area: detail;
+  font-size: 0.875rem;
+  color: var(--ac-muted);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.asca-ac__channel-icon {
+  grid-area: icon;
+  width: 20px;
+  height: 20px;
+  color: var(--ac-muted);
+  transition:
+    transform 220ms var(--ac-ease),
+    color 180ms var(--ac-ease);
+}
+.asca-ac__channel:hover {
+  background: var(--ac-surface);
+}
+.asca-ac__channel:hover .asca-ac__channel-icon {
+  color: var(--ac-seal);
+  transform: translateX(3px);
+}
+
+/* ---------- 협력 기관 모집 ---------- */
+.asca-ac__join {
+  display: grid;
+  gap: 28px;
+  padding-top: 18px;
+  border-top: 2px solid var(--ac-rule-strong);
+}
+.asca-ac__join .asca-ac__channels {
+  margin-top: 0;
+}
+.asca-ac__join-head {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+@media (min-width: 900px) {
+  .asca-ac__join {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 32px;
+  }
+  .asca-ac__join .asca-ac__channels {
+    align-self: end;
+  }
+}
+.asca-ac__join .asca-ac__eyebrow {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asca-ac__toc a,
+  .asca-ac__institution,
+  .asca-ac__institution-icon,
+  .asca-ac__work img,
+  .asca-ac__filter,
+  .asca-ac__class,
+  .asca-ac__channel,
+  .asca-ac__channel-icon,
+  .asca-ac__cite-link,
+  .asca-ac__source a,
+  .asca-ac__fact-link {
+    transition: none;
+  }
+}
+
+@media print {
+  .asca-ac__filters,
+  .asca-ac__videos,
+  .asca-ac__channel-icon,
+  .asca-ac__institution-icon {
+    display: none;
+  }
+  .asca-ac__class[data-dim='true'] {
+    opacity: 1;
+    filter: none;
+  }
+}

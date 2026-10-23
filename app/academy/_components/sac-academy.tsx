@@ -1,403 +1,162 @@
-'use client'
-
-import { useState } from 'react'
-import useSWR from 'swr'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
+import { ArrowUpRight } from 'lucide-react'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
-import Image from 'next/image'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Calendar, Clock, User, Info, BookOpen, ArrowRight, ImageIcon } from 'lucide-react'
-import {
-  MOCK_COURSES,
-  MOCK_INSTRUCTORS,
-  type AcademyCourse,
-  type AcademyInstructor,
-} from './sac-academy-data'
+  ACADEMY_LINKS,
+  ASCA_BENEFIT,
+  SAC_CLASSES,
+  SAC_DISCOUNTS,
+  SAC_FEES,
+  SAC_INSTRUCTOR_COUNT,
+  SAC_LINKS,
+  SAC_TERM,
+} from './academy-data'
+import { AcademySectionHead } from './academy-section-head'
+import { SacTimetable } from './sac-timetable'
 
-const fetcher = (url: string) => fetch(url).then(res => res.json())
-
+/**
+ * 예술의전당 서화아카데미 — 학기 띠, 협회 수강생 혜택, 주간 시간표, 수강료·안내.
+ * 학기 상태(모집 중·진행 중)는 빌드 시점에 굳으므로 계산하지 않고 학기 기간만 적는다.
+ */
 export function SacAcademy() {
-  const [activeTab, setActiveTab] = useState('courses')
-
-  const { data: courses } = useSWR<AcademyCourse[]>('/api/academy/courses', fetcher)
-  const { data: instructors } = useSWR<AcademyInstructor[]>('/api/academy/instructors', fetcher)
-
-  const allCourses = Array.isArray(courses) && courses.length > 0 ? courses : MOCK_COURSES
-  const safeInstructors =
-    Array.isArray(instructors) && instructors.length > 0 ? instructors : MOCK_INSTRUCTORS
-
-  const isNewCourse = (createdAt: string) => {
-    const diffMs = Math.abs(Date.now() - new Date(createdAt).getTime())
-    return Math.ceil(diffMs / (1000 * 60 * 60 * 24)) <= 7
-  }
-
   return (
-    <div id='sac-academy' className='scroll-mt-24 space-y-8'>
-      <div className='text-center'>
-        <Badge
-          variant='outline'
-          className='mb-3 bg-scholar-red/5 text-scholar-red border-scholar-red/20'
-        >
-          예술의전당 서화아카데미
-        </Badge>
-        <h2 className='text-2xl md:text-3xl font-bold mb-4'>한국 서예의 맥을 잇다</h2>
-        <p className='text-muted-foreground max-w-2xl mx-auto'>
-          국내 최고의 강사진과 함께하는 깊이 있는 서예 교육. 전통의 향기와 현대적 감각이 어우러진
-          배움의 장에 여러분을 초대합니다.
-        </p>
-      </div>
+    <section id='sac' className='asca-ac__section asca-ac__anchor' aria-labelledby='ac-sac'>
+      <AcademySectionHead
+        id='ac-sac'
+        eyebrow='출품료 할인 협력 · 예술의전당 서예박물관'
+        title='예술의전당 서화아카데미'
+        lede={`한글·한문·문인화·캘리그라피·민화·전각까지, 강사 ${SAC_INSTRUCTOR_COUNT}명이 여는 정규강좌 ${SAC_CLASSES.length}개. 협회의 대표 전시공간에서 배웁니다.`}
+      />
 
-      {/* SAC Poster + Benefit */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-        <a
-          href='https://www.sac.or.kr/site/main/board/academy_stats/314871'
-          target='_blank'
-          rel='noopener noreferrer'
-          className='block overflow-hidden rounded-lg border hover:shadow-md transition-shadow'
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src='/images/programs/sac-academy-poster.webp'
-            alt='예술의전당 서화아카데미 포스터'
-            className='w-full object-contain'
-            loading='lazy'
-          />
-        </a>
-        <div className='space-y-4 text-sm text-muted-foreground'>
-          <h3 className='text-lg font-bold text-foreground'>전통과 신뢰로 이어온 특별한 혜택</h3>
-          <p>
-            동양서예협회의 대표 전시공간인 예술의전당에서 서화아카데미 정규강좌 수강생 중
-            동양서예협회에서 주최하는 공모전, 초대작가전 및 특별 기획전에 출품 예정이신 분들께{' '}
-            <strong className='text-scholar-red'>
-              수강료의 최대 10%에 해당하는 금액을 출품료에서 할인
-            </strong>
-            하여 드립니다.
-          </p>
-          <ul className='space-y-2'>
-            <li>
-              <strong className='text-foreground'>대상:</strong> 예술의전당 서화아카데미 수강생
-            </li>
-            <li>
-              <strong className='text-foreground'>혜택:</strong> 수강료의 5% 상당 출품료 할인
-              (정회원 등록 시 추가 5% 할인)
-            </li>
-            <li>
-              <strong className='text-foreground'>신청:</strong> 동양서협 사무국에 수강증 제시
-            </li>
-          </ul>
-          <div className='flex items-center gap-3 pt-2'>
-            <a
-              href='https://cal.com/orientalcalligraphy/academy'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center rounded-md bg-scholar-red px-4 py-2 text-sm font-medium text-white hover:bg-scholar-red/90 transition-colors'
-            >
-              상담 예약
-            </a>
-            <a
-              href='https://www.sac.or.kr/site/main/board/academy_stats/314871'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors'
-            >
-              교육과정 상세 보기
-            </a>
-          </div>
+      <dl className='asca-ac__term'>
+        <div>
+          <dt>학기</dt>
+          <dd className='asca-ac__term-strong'>{SAC_TERM.name}</dd>
         </div>
-      </div>
-
-      {/* Courses & Instructors Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className='w-full'>
-        <div className='flex justify-center mb-8'>
-          <TabsList className='grid grid-cols-2 w-full max-w-[400px]'>
-            <TabsTrigger value='courses'>강좌소개</TabsTrigger>
-            <TabsTrigger value='instructors'>강사소개</TabsTrigger>
-          </TabsList>
+        <div>
+          <dt>수강 기간</dt>
+          <dd>{SAC_TERM.period}</dd>
         </div>
+        <div>
+          <dt>수업</dt>
+          <dd>{SAC_TERM.length}</dd>
+        </div>
+        <div>
+          <dt>휴강</dt>
+          <dd>{SAC_TERM.recess}</dd>
+        </div>
+      </dl>
 
-        <TabsContent value='courses' className='space-y-8'>
-          {/* Notice */}
-          <div className='bg-muted/30 border rounded-lg p-5 md:p-6'>
-            <div className='flex items-start gap-3'>
-              <Info className='w-5 h-5 text-celadon-green mt-0.5 shrink-0' />
-              <div className='space-y-3'>
-                <div>
-                  <h3 className='text-sm font-semibold mb-1'>수강신청 안내</h3>
-                  <p className='text-sm text-muted-foreground'>
-                    모든 강좌는 예술의전당 홈페이지를 통해 신청 및 결제가 진행됩니다.
-                  </p>
-                </div>
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-muted-foreground'>
-                  <div className='bg-background/50 p-3 rounded-md'>
-                    <strong className='block text-foreground mb-0.5 text-sm'>환불 규정</strong>
-                    개강일 전일까지 전액 환불 가능, 이후 평생교육법 기준 적용
-                  </div>
-                  <div className='bg-background/50 p-3 rounded-md'>
-                    <strong className='block text-foreground mb-0.5 text-sm'>문의 사항</strong>
-                    전화: 02-580-1657~9 (서예박물관)
-                  </div>
-                </div>
-              </div>
+      <aside className='asca-ac__benefit' aria-labelledby='ac-benefit'>
+        <p className='asca-ac__eyebrow'>협회 수강생 혜택</p>
+        <h3 id='ac-benefit' className='asca-ac__benefit-title'>
+          {ASCA_BENEFIT.headline}
+        </h3>
+        <dl className='asca-ac__benefit-list'>
+          {ASCA_BENEFIT.items.map(item => (
+            <div key={item.label}>
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
             </div>
-          </div>
+          ))}
+        </dl>
+      </aside>
 
-          {/* Course Cards */}
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            {allCourses.map(course => (
-              <div
-                key={course.id}
-                className='group flex flex-col bg-card border rounded-xl overflow-hidden hover:shadow-lg transition-all'
-              >
-                <div className='p-5 md:p-6 flex-1 flex flex-col'>
-                  <div className='flex justify-between items-start mb-3'>
-                    <div className='space-y-1.5'>
-                      <div className='flex items-center gap-2'>
-                        <span className='text-xs font-medium text-celadon-green'>
-                          {course.period}
-                        </span>
-                        {isNewCourse(course.createdAt) && (
-                          <Badge className='bg-seal hover:bg-seal/90 text-white text-[10px] px-1.5 py-0.5 h-auto'>
-                            NEW
-                          </Badge>
-                        )}
-                      </div>
-                      <h3 className='text-xl font-bold group-hover:text-celadon-green transition-colors'>
-                        {course.title}
-                      </h3>
-                    </div>
-                    <Badge variant={course.status === '접수중' ? 'default' : 'secondary'}>
-                      {course.status || '상태미정'}
-                    </Badge>
-                  </div>
+      <h3 className='asca-ac__subhead'>주간 수업시간표</h3>
+      <SacTimetable />
+      <p className='asca-ac__source'>
+        출처: 예술의전당 「[서화] 2026 &lt;가을정규&gt; 수강생 모집」 — 시간은 기본 시간대와 다를
+        때만 따로 적었습니다.{' '}
+        <a href={SAC_LINKS.post} target='_blank' rel='noopener noreferrer'>
+          원문 보기
+          <span className='sr-only'> (새 창)</span>
+        </a>
+      </p>
 
-                  <div className='space-y-3 mb-6 flex-1'>
-                    <p className='text-sm text-muted-foreground line-clamp-2'>
-                      {course.description}
-                    </p>
-                    <div className='grid grid-cols-2 gap-2 text-xs'>
-                      <div className='flex items-center text-muted-foreground'>
-                        <User className='w-3.5 h-3.5 mr-1.5' />
-                        {course.instructor}
-                      </div>
-                      <div className='flex items-center text-muted-foreground'>
-                        <Clock className='w-3.5 h-3.5 mr-1.5' />
-                        {course.schedule}
-                      </div>
-                      <div className='flex items-center text-muted-foreground'>
-                        <BookOpen className='w-3.5 h-3.5 mr-1.5' />
-                        {course.level}
-                      </div>
-                      <div className='flex items-center text-muted-foreground'>
-                        <Calendar className='w-3.5 h-3.5 mr-1.5' />
-                        4주 과정
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='flex items-center justify-between pt-4 border-t mt-auto'>
-                    <div className='font-semibold text-sm'>{course.fee}</div>
-                    <div className='flex gap-2'>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant='outline' size='sm'>
-                            상세보기
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className='max-w-2xl max-h-[90vh] overflow-y-auto'>
-                          <DialogHeader>
-                            <DialogTitle className='text-2xl mb-1'>{course.title}</DialogTitle>
-                            <DialogDescription>
-                              {course.instructor} &bull; {course.schedule}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className='space-y-5 py-4'>
-                            <div>
-                              <h4 className='font-semibold mb-2 text-sm'>강좌 소개</h4>
-                              <p className='text-sm text-muted-foreground leading-relaxed'>
-                                {course.description}
-                              </p>
-                            </div>
-                            {course.curriculum?.length > 0 && (
-                              <div>
-                                <h4 className='font-semibold mb-2 text-sm'>커리큘럼</h4>
-                                <ScrollArea className='h-[180px] rounded-md border p-4'>
-                                  <ul className='space-y-2'>
-                                    {course.curriculum.map((item, i) => (
-                                      <li key={i} className='text-sm text-muted-foreground flex'>
-                                        <span className='mr-3 text-celadon-green font-medium'>
-                                          {i + 1}주차
-                                        </span>
-                                        {item}
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </ScrollArea>
-                              </div>
-                            )}
-                            <div className='bg-muted p-4 rounded-lg text-sm space-y-2'>
-                              <div className='flex justify-between'>
-                                <span className='text-muted-foreground'>수강기간</span>
-                                <span className='font-medium'>{course.period}</span>
-                              </div>
-                              <div className='flex justify-between'>
-                                <span className='text-muted-foreground'>강의시간</span>
-                                <span className='font-medium'>{course.schedule}</span>
-                              </div>
-                              <div className='flex justify-between'>
-                                <span className='text-muted-foreground'>수강료</span>
-                                <span className='font-medium'>{course.fee}</span>
-                              </div>
-                            </div>
-                          </div>
-                          {course.externalLink && (
-                            <div className='flex justify-end'>
-                              <Button
-                                className='bg-celadon-green hover:bg-celadon-green/90'
-                                onClick={() => window.open(course.externalLink, '_blank')}
-                              >
-                                수강 신청하기
-                                <ArrowRight className='w-4 h-4 ml-2' />
-                              </Button>
-                            </div>
-                          )}
-                        </DialogContent>
-                      </Dialog>
-                      {course.externalLink && (
-                        <Button
-                          size='sm'
-                          className='bg-celadon-green hover:bg-celadon-green/90'
-                          onClick={() => window.open(course.externalLink, '_blank')}
-                        >
-                          수강 신청
-                          <ArrowRight className='w-3.5 h-3.5 ml-1' />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div className='asca-ac__sac-info'>
+        <div>
+          <h3 className='asca-ac__subhead'>수강료 (15주)</h3>
+          <table className='asca-ac__fees'>
+            <caption className='sr-only'>{SAC_TERM.name} 강좌 유형별 수강료</caption>
+            <tbody>
+              {SAC_FEES.map(fee => (
+                <tr key={fee.label}>
+                  <th scope='row'>{fee.label}</th>
+                  <td>{fee.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <ul className='asca-ac__dash-list asca-ac__dash-list--small'>
+            {SAC_DISCOUNTS.map(item => (
+              <li key={item}>{item}</li>
             ))}
-          </div>
-        </TabsContent>
+          </ul>
+        </div>
 
-        <TabsContent value='instructors'>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-            {safeInstructors.map(instructor => (
-              <div
-                key={instructor.id}
-                className='group bg-card border rounded-xl overflow-hidden hover:shadow-lg transition-all'
-              >
-                <div className='aspect-[3/4] relative overflow-hidden bg-muted'>
-                  {instructor.imageUrl ? (
-                    <Image
-                      src={instructor.imageUrl}
-                      alt={instructor.name}
-                      fill
-                      className='object-cover group-hover:scale-105 transition-transform duration-500'
-                    />
-                  ) : (
-                    <div className='w-full h-full flex items-center justify-center text-muted-foreground text-sm'>
-                      이미지 준비중
-                    </div>
-                  )}
-                  <div className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5 pt-20 text-white'>
-                    <span className='text-xs font-medium text-celadon-green/90 mb-0.5 block'>
-                      {instructor.category || '전문강사'}
-                    </span>
-                    <h3 className='text-xl font-bold'>{instructor.name}</h3>
-                  </div>
-                </div>
+        <div>
+          <h3 className='asca-ac__subhead'>수강 안내</h3>
+          <dl className='asca-ac__facts'>
+            <div className='asca-ac__fact'>
+              <dt>장소</dt>
+              <dd>
+                <span className='asca-ac__fact-value'>{SAC_TERM.place}</span>
+              </dd>
+            </div>
+            <div className='asca-ac__fact'>
+              <dt>수업 방식</dt>
+              <dd>
+                <span className='asca-ac__fact-value'>{SAC_TERM.format}</span>
+              </dd>
+            </div>
+            <div className='asca-ac__fact'>
+              <dt>신청</dt>
+              <dd>
+                <span className='asca-ac__fact-value'>예술의전당 홈페이지 선착순 접수</span>
+                <span className='asca-ac__fact-note'>
+                  아카데미 → 수강신청 → 서화아카데미 (신용카드 결제)
+                </span>
+              </dd>
+            </div>
+            <div className='asca-ac__fact'>
+              <dt>문의</dt>
+              <dd>
+                <a href={`tel:${SAC_TERM.tel}`} className='asca-ac__fact-link'>
+                  {SAC_TERM.contact}
+                </a>
+                <span className='asca-ac__fact-note'>
+                  예술의전당 서예박물관 · {SAC_TERM.contactHours}
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
 
-                <div className='p-5 space-y-3'>
-                  {instructor.career?.length > 0 ? (
-                    <ul className='space-y-1.5 text-xs text-muted-foreground'>
-                      {instructor.career.slice(0, 3).map((item, i) => (
-                        <li key={i} className='line-clamp-1'>
-                          &bull; {item}
-                        </li>
-                      ))}
-                      {instructor.career.length > 3 && (
-                        <li className='text-xs text-celadon-green pt-0.5'>외 다수 경력 보유</li>
-                      )}
-                    </ul>
-                  ) : (
-                    <p className='text-xs text-muted-foreground'>약력 정보가 없습니다.</p>
-                  )}
-
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant='outline' size='sm' className='w-full'>
-                        프로필 상세보기
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className='max-w-2xl'>
-                      <DialogHeader>
-                        <DialogTitle className='text-2xl'>{instructor.name}</DialogTitle>
-                        <DialogDescription className='text-celadon-green font-medium'>
-                          {instructor.category}
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className='grid md:grid-cols-2 gap-6 py-4'>
-                        <div className='aspect-[3/4] relative rounded-lg overflow-hidden bg-muted'>
-                          {instructor.imageUrl && (
-                            <Image
-                              src={instructor.imageUrl}
-                              alt={instructor.name}
-                              fill
-                              className='object-cover'
-                            />
-                          )}
-                        </div>
-                        <div className='space-y-5'>
-                          <div>
-                            <h4 className='font-semibold mb-2 flex items-center text-sm'>
-                              <User className='w-4 h-4 mr-2' /> 주요 약력
-                            </h4>
-                            <ul className='space-y-1.5 text-xs text-muted-foreground'>
-                              {instructor.career?.map((item, i) => (
-                                <li key={i}>&bull; {item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                          {instructor.artworkUrl && (
-                            <div>
-                              <h4 className='font-semibold mb-2 flex items-center text-sm'>
-                                <ImageIcon className='w-4 h-4 mr-2' /> 대표 작품
-                              </h4>
-                              <div className='aspect-square relative rounded-lg overflow-hidden border bg-muted'>
-                                <Image
-                                  src={instructor.artworkUrl}
-                                  alt={instructor.artworkDesc || 'Artwork'}
-                                  fill
-                                  className='object-cover'
-                                />
-                              </div>
-                              {instructor.artworkDesc && (
-                                <p className='text-xs text-muted-foreground mt-1.5'>
-                                  {instructor.artworkDesc}
-                                </p>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              </div>
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
+      <ul className='asca-ac__channels asca-ac__channels--pair'>
+        <li>
+          <a
+            href={SAC_LINKS.recruiting}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='asca-ac__channel'
+          >
+            <span className='asca-ac__channel-title'>다음 학기 모집 소식</span>
+            <span className='asca-ac__channel-detail'>예술의전당 아카데미 모집현황에서 확인</span>
+            <ArrowUpRight className='asca-ac__channel-icon' aria-hidden='true' />
+          </a>
+        </li>
+        <li>
+          <a
+            href={ACADEMY_LINKS.booking}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='asca-ac__channel'
+          >
+            <span className='asca-ac__channel-title'>출품료 할인 상담</span>
+            <span className='asca-ac__channel-detail'>동양서예협회 사무국 상담 예약</span>
+            <ArrowUpRight className='asca-ac__channel-icon' aria-hidden='true' />
+          </a>
+        </li>
+      </ul>
+    </section>
   )
 }

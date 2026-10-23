@@ -69,6 +69,8 @@ const THIRD_PARTY = {
     script: ['https://f.vimeocdn.com'],
     connect: ['https://*.vimeocdn.com'],
   },
+  // 강의 영상 임베드(쿠키 없는 도메인) — app/academy/_components/instructor-anam.tsx
+  youtube: { frame: ['https://www.youtube-nocookie.com'] },
   // 카카오 SDK(공유·지도) — components/seo/kakao-script.tsx, lib/kakao.ts
   kakao: {
     script: ['https://t1.kakaocdn.net', 'https://dapi.kakao.com'],

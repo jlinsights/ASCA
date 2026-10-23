@@ -1,68 +1,87 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
+import { CalendarDays, MessageCircle } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { AcademySidebar } from './_components/academy-sidebar'
+import { ACADEMY_LINKS, INSTITUTIONS, SAC_CLASSES, SUBJECTS } from './_components/academy-data'
 import { AcademyIntro } from './_components/academy-intro'
-import { CURRICULUM_CARDS, SUBJECTS } from './_components/academy-data'
+import { AcademySubjects } from './_components/academy-subjects'
 import { MunwonAcademy } from './_components/munwon-academy'
-import { InstructorAnam } from './_components/instructor-anam'
 import { SacAcademy } from './_components/sac-academy'
 import { PartnershipCta } from './_components/partnership-cta'
+import './_components/academy.css'
 
 export const metadata: Metadata = {
-  title: '동양서화 아카데미 | 전통서예, 현대서예, 문인화, 수묵화, 캘리그라피 전문 교육기관',
+  title: '강좌 | 동양서예협회',
   description:
-    '대한민국 정통 동양의 전통서예부터 현대서예, 문인화, 수묵화, 캘리그라피, 전각까지 전문적인 교육을 제공하는 동양서화 아카데미.',
+    '동양서예협회가 연결하는 서예 강좌 안내. 문원한문서예학원 토요 정규 과정과 예술의전당 서화아카데미 2026 가을정규 시간표, 수강료, 협회 수강생 출품료 할인을 확인하세요.',
   openGraph: {
-    title: '동양서화 아카데미 | 전문 교육기관 - ASCA',
+    title: '강좌 | 동양서예협회',
     description:
-      '전통과 현대를 아우르는 동양 예술의 모든 것을 배울 수 있는 최고의 교육 기관입니다.',
-    images: [
-      'https://imagedelivery.net/iELritu8tmGaSR8tZ-NWcg/561446ce-48df-41cf-c8d8-ac7427ed2600/Contain',
-    ],
+      '한문·한글서예, 문인화, 캘리그라피, 민화, 전각. 협회가 승인한 교육기관의 강좌와 시간표를 한곳에서 안내합니다.',
   },
 }
 
+const TOC = [
+  { href: '#munwon', label: '문원한문서예학원' },
+  { href: '#sac', label: '예술의전당 서화아카데미' },
+  { href: '#partnership', label: '협력 기관 모집' },
+] as const
+
 export default function AcademyPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
+    <div className='asca-ac min-h-screen'>
       <PageHero
         {...PAGE_HERO_MARKS.academy}
         title='강좌'
-        lede='전통의 깊이와 현대의 감각을 잇는 체계적인 서예 교육'
+        lede='전통의 깊이와 현대의 감각을 잇는 서예 교육. 협회가 승인한 교육기관의 과정과 시간표를 안내합니다.'
+        actions={
+          <>
+            <Link
+              href={ACADEMY_LINKS.booking}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='inline-flex items-center gap-2 rounded-lg bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity'
+            >
+              <CalendarDays className='h-4 w-4' aria-hidden='true' />
+              수강 상담 예약
+            </Link>
+            <Link
+              href={ACADEMY_LINKS.chat}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='inline-flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors'
+            >
+              <MessageCircle className='h-4 w-4' aria-hidden='true' />
+              실시간 상담
+            </Link>
+          </>
+        }
       >
         <HeroFacts
           facts={[
-            { label: '강좌 과목', value: `${SUBJECTS.length}개` },
-            { label: '커리큘럼', value: `${CURRICULUM_CARDS.length}개` },
+            { label: '연계 교육기관', value: `${INSTITUTIONS.length}곳` },
+            { label: '지도 과목', value: `${SUBJECTS.length}개` },
+            { label: '서화아카데미 강좌', value: `${SAC_CLASSES.length}개` },
           ]}
         />
       </PageHero>
 
-      {/* Main Content with Sidebar */}
-      <section className='container mx-auto px-4 py-10 md:py-16'>
-        <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
-          <AcademySidebar />
-
-          <main className='flex-1 min-w-0 space-y-16'>
-            {/* 동양서화 아카데미 소개 + 커리큘럼 */}
-            <AcademyIntro />
-
-            {/* 문원한문서예학원 */}
-            <MunwonAcademy />
-
-            {/* 아남 배옥영 교수 프로필 */}
-            <InstructorAnam />
-
-            {/* 예술의전당 서화아카데미 */}
-            <SacAcademy />
-
-            {/* 교육 협력 기관 모집 */}
-            <PartnershipCta />
-          </main>
-        </div>
-      </section>
+      <div className='asca-ac__body'>
+        <nav className='asca-ac__toc' aria-label='강좌 바로가기'>
+          {TOC.map(item => (
+            <a key={item.href} href={item.href}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+        <AcademyIntro />
+        <AcademySubjects />
+        <MunwonAcademy />
+        <SacAcademy />
+        <PartnershipCta />
+      </div>
 
       <LayoutFooter />
     </div>

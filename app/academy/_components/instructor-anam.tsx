@@ -1,130 +1,93 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { ANAM } from './academy-data'
 
-const CAREER = [
-  '동양철학박사',
-  '원광대 서예문화학과 동양학대학원 강사 및 초빙교수 역임',
-  '조선대학교 철학과 강사 역임',
-  '송제인문학연구소 수석연구원',
-  '세종한글큰뜻모임 이사',
-  '아남서예심리치료연구소 소장',
-  '전주시 평생교육원 인문학 강사',
-  '대한검정회 한자한문교사 중앙연수원 전임교수',
-  '개인전 및 초대전 6회',
-  '프랑스 앙지엥데뱅 미술관 / 캐나다 온타리오 미술관 초대전',
-]
-
-const ARTWORKS = [
-  {
-    src: '/images/artworks/nakjiron-baeogyeong.avif',
-    alt: '낙지론 - 아남 배옥영',
-  },
-  {
-    src: '/images/artworks/cheoktang-baeogyeong.avif',
-    alt: '척탕 - 아남 배옥영',
-  },
-  {
-    src: '/images/artworks/cheonjibubudo-baeogyeong.jpg',
-    alt: '천지부부도덕가 - 아남 배옥영',
-  },
-  {
-    src: '/images/artworks/hoenggan-baeogyeong.jpg',
-    alt: '횡간 - 아남 배옥영',
-  },
-  {
-    src: '/images/artworks/toepilyeosan-baeogyeong.jpg',
-    alt: '퇴필여산 - 아남 배옥영',
-  },
-]
-
-const VIDEOS = [
-  {
-    id: 'Ii1Ui2UL8m4',
-    title: '콜로키움 25회 서예 4부 1강 배옥영',
-  },
-  {
-    id: 'YZIbtwOHU8k',
-    title: 'STB콜로키움 19회 문자와 커뮤니케이션1 배옥영 교수',
-  },
-]
-
+/** 지도 교수 — 초상과 직함을 세우고, 약력·전시·활동을 세 칸 장부로. 아래에 작품 띠와 강의 영상 */
 export function InstructorAnam() {
   return (
-    <div className='space-y-6'>
-      {/* Profile Header */}
-      <Card>
-        <CardContent className='p-6'>
-          <div className='flex flex-col sm:flex-row items-start gap-4'>
-            <div className='shrink-0'>
+    <article className='asca-ac__teacher' aria-labelledby='ac-teacher'>
+      <header className='asca-ac__teacher-head'>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={ANAM.portrait}
+          alt=''
+          width={112}
+          height={112}
+          className='asca-ac__teacher-portrait'
+          loading='lazy'
+          decoding='async'
+        />
+        <div>
+          <p className='asca-ac__eyebrow'>지도 교수</p>
+          <h3 id='ac-teacher' className='asca-ac__teacher-name'>
+            {ANAM.name}
+          </h3>
+          <p className='asca-ac__teacher-role'>
+            {ANAM.title}
+            <span aria-hidden='true'> · </span>
+            {ANAM.role}
+          </p>
+        </div>
+      </header>
+
+      <div className='asca-ac__teacher-grid'>
+        <div>
+          <h4 className='asca-ac__subhead'>약력</h4>
+          <ul className='asca-ac__dash-list'>
+            {ANAM.career.map(item => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 className='asca-ac__subhead'>전시</h4>
+          <ul className='asca-ac__dash-list'>
+            {ANAM.exhibitions.map(item => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 className='asca-ac__subhead'>활동</h4>
+          <ul className='asca-ac__tags'>
+            {ANAM.activities.map(item => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <ul className='asca-ac__works' aria-label={`${ANAM.name} 작품`}>
+        {ANAM.artworks.map(work => (
+          <li key={work.src}>
+            <figure className='asca-ac__work'>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src='/images/artists/baeogyeong.png'
-                alt='아남 배옥영'
-                className='w-24 h-24 rounded-lg object-cover border'
+                src={work.src}
+                alt={`${work.title} — ${ANAM.name}`}
+                loading='lazy'
+                decoding='async'
+              />
+              <figcaption>{work.title}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+
+      <div className='asca-ac__videos'>
+        {ANAM.videos.map(video => (
+          <figure key={video.id} className='asca-ac__video'>
+            <div className='asca-ac__video-frame'>
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${video.id}?rel=0`}
+                title={`${video.title} — ${ANAM.name}`}
+                allow='encrypted-media; picture-in-picture'
+                allowFullScreen
                 loading='lazy'
               />
             </div>
-            <div>
-              <div className='flex items-center gap-2 mb-2'>
-                <h3 className='text-xl font-bold'>아남 배 옥 영</h3>
-                <Badge variant='outline' className='text-xs'>
-                  심사위원장
-                </Badge>
-              </div>
-              <p className='text-sm text-muted-foreground mb-3'>
-                동양서예대전 심사위원장 / 대한검정회 전임교수
-              </p>
-              <ul className='space-y-1'>
-                {CAREER.map((item, i) => (
-                  <li
-                    key={i}
-                    className="text-xs text-muted-foreground pl-3 relative before:content-['•'] before:absolute before:left-0 before:text-scholar-red"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Artworks */}
-      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3'>
-        {ARTWORKS.map(artwork => (
-          <Card key={artwork.alt} className='overflow-hidden'>
-            <CardContent className='p-0'>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={artwork.src}
-                alt={artwork.alt}
-                className='w-full aspect-[3/4] object-cover hover:scale-105 transition-transform duration-500'
-                loading='lazy'
-              />
-            </CardContent>
-          </Card>
+            <figcaption>{video.title}</figcaption>
+          </figure>
         ))}
       </div>
-
-      {/* Videos */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        {VIDEOS.map(video => (
-          <Card key={video.id} className='overflow-hidden'>
-            <CardContent className='p-0'>
-              <div className='relative w-full' style={{ paddingTop: '56.25%' }}>
-                <iframe
-                  src={`https://www.youtube.com/embed/${video.id}?rel=0`}
-                  className='absolute inset-0 w-full h-full'
-                  allow='autoplay; encrypted-media'
-                  allowFullScreen
-                  title={video.title}
-                  loading='lazy'
-                />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    </article>
   )
 }
