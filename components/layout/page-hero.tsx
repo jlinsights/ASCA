@@ -6,6 +6,14 @@ import './page-hero.css'
 /** 모든 페이지 題簽 아래 찍히는 협회 낙관 — 東洋書藝協會 */
 export const ASCA_SEAL = '書協'
 
+/**
+ * 다 불러온 뒤의 0 은 숨긴다 — '전시 0'·'불러온 행사 0' 이 제목 바로 아래에서
+ * 빈 페이지를 먼저 알리지 않게. 불러오는 중의 '—' 는 그대로 둔다(높이 고정).
+ */
+function isShown(item: { value: ReactNode }): boolean {
+  return item.value !== 0 && item.value !== '0'
+}
+
 export interface PageHeroCrumb {
   label: string
   href?: string
@@ -54,6 +62,7 @@ export function PageHero({
   id = 'page-hero-title',
 }: PageHeroProps) {
   const body = lede ?? subtitle
+  const shownLedger = (ledger ?? []).filter(isShown)
   const sealText = seal ?? ASCA_SEAL
   const hasMedia = tier === 'feature' && Boolean(media)
   const className = ['asca-ph', `asca-ph--${tier}`, hasMedia ? 'asca-ph--has-media' : '']
@@ -104,10 +113,10 @@ export function PageHero({
         {hasMedia && <div className='asca-ph__media'>{media}</div>}
       </div>
 
-      {ledger && ledger.length > 0 && (
+      {shownLedger.length > 0 && (
         <div className='asca-ph__ledger'>
           <dl>
-            {ledger.map((stat, index) => (
+            {shownLedger.map((stat, index) => (
               <div className='asca-ph__stat' key={index}>
                 <dt>{stat.label}</dt>
                 <dd>
@@ -195,10 +204,11 @@ export interface HeroFact {
 
 /** band 페이지의 사실 한 줄 — 시행일·서식 수·임원 수처럼 페이지가 이미 가진 정보만 */
 export function HeroFacts({ facts }: { facts: HeroFact[] }) {
-  if (facts.length === 0) return null
+  const shown = facts.filter(isShown)
+  if (shown.length === 0) return null
   return (
     <dl className='asca-ph__facts'>
-      {facts.map(fact => (
+      {shown.map(fact => (
         <div key={fact.label}>
           <dt>{fact.label}</dt>
           <dd>{fact.value}</dd>

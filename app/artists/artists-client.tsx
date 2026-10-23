@@ -154,12 +154,15 @@ export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistIn
     .filter(artist => Boolean(artist.profileImage))
     .slice(0, 5)
     .map(artist => ({ src: artist.profileImage as string, alt: artist.name }))
-  const heroLedger: PageHeroStat[] = [
-    {
-      label: t('phStatArtists'),
-      value: loading || error ? '—' : total.toLocaleString(language),
-    },
-  ]
+  // 불러오는 중엔 '—' 로 자리를 잡고, 실패하면 숫자 칸을 아예 내리지 않는다(목록 쪽이 오류를 알린다)
+  const heroLedger: PageHeroStat[] = error
+    ? []
+    : [
+        {
+          label: t('phStatArtists'),
+          value: loading ? '—' : total.toLocaleString(language),
+        },
+      ]
 
   return (
     <div className='min-h-screen bg-background'>
