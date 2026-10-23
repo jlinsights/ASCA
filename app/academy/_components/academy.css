@@ -81,6 +81,9 @@
 }
 .asca-ac__toc a {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--ac-muted);
