@@ -4,6 +4,8 @@ import { ContactCards } from './_components/contact-cards'
 import { ContactForm } from './_components/contact-form'
 import { EventCalendar } from './_components/event-calendar'
 import { ContactFaq } from './_components/contact-faq'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '문의 | Contact - 동양서예협회 | 東洋書藝協會',
@@ -22,20 +24,14 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      {/* Hero */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <h1 className='text-3xl md:text-5xl font-bold tracking-tight mb-4'>문 의</h1>
-          <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>
-            동양서예협회에 방문해 주셔서 감사 드립니다.
-            <br />
-            궁금하신 부분이 있거나 저희 협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.contact}
+        title='문의'
+        lede='동양서예협회에 방문해 주셔서 감사 드립니다. 궁금하신 부분이 있거나 저희 협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.'
+      />
 
       {/* Contact Info + Form */}
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12'>
           {/* Left: Contact channels */}
           <div className='space-y-6'>

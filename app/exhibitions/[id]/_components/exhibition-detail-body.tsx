@@ -117,15 +117,7 @@ export function ExhibitionDetailBody({ exhibition }: ExhibitionDetailBodyProps) 
               </div>
             </div>
 
-            <CardTitle className='text-2xl font-serif font-bold text-foreground mb-2'>
-              {exhibition.title}
-            </CardTitle>
-
-            {exhibition.subtitle && (
-              <p className='text-lg text-muted-foreground mb-4'>{exhibition.subtitle}</p>
-            )}
-
-            <div className='flex items-center gap-6 text-sm text-muted-foreground'>
+            <div className='flex items-center gap-6 text-sm text-muted-foreground mt-4'>
               <div className='flex items-center gap-2'>
                 <Calendar className='h-4 w-4' />
                 <span>{exhibitionPeriod}</span>

@@ -6,6 +6,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar, User, ArrowLeft, ArrowRight, Tag, BookOpen } from 'lucide-react'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 interface BlogPost {
   id: string
@@ -217,30 +219,20 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ s
 
   return (
     <main className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-transparent'>
-        <div className='container mx-auto px-4 text-center'>
-          <Badge className='mb-4 bg-scholar-red text-white hover:bg-scholar-red/90'>
-            <Tag className='h-3 w-3 mr-1' />
-            {category.nameEn}
-          </Badge>
-          <h1 className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground mb-4'>
-            {category.name}
-          </h1>
-          <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>{category.description}</p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.blog}
+        title={category.name}
+        lede={category.description}
+        crumbs={[{ label: '블로그', href: '/blog' }, { label: category.name }]}
+      >
+        <Badge className='mb-4 bg-scholar-red text-white hover:bg-scholar-red/90'>
+          <Tag className='h-3 w-3 mr-1' />
+          {category.nameEn}
+        </Badge>
+        <HeroFacts facts={[{ label: '게시물', value: posts.length }]} />
+      </PageHero>
 
-      <div className='container mx-auto px-4 pt-8'>
-        <Link
-          href='/blog'
-          className='inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors'
-        >
-          <ArrowLeft className='w-4 h-4 mr-2' />
-          블로그 목록으로 돌아가기
-        </Link>
-      </div>
-
-      <section className='container mx-auto px-4 py-8'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='flex flex-wrap gap-2 mb-8'>
           {categories.map(cat => (
             <Link key={cat.slug} href={`/blog/category/${cat.slug}`}>

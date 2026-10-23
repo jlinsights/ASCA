@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero, type PageHeroStat } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -127,25 +129,26 @@ const statusConfig = {
   completed: { label: '완료', className: 'bg-success/10 text-foreground' },
 }
 
+const contestYearNumbers = contestYears.map(contest => contest.year)
+const awardsLedger: PageHeroStat[] = [
+  { label: '수상 연도', value: contestYears.length, unit: '개년' },
+  {
+    label: '기간',
+    value: `${Math.min(...contestYearNumbers)}–${Math.max(...contestYearNumbers)}`,
+  },
+]
+
 export default function AwardsPage() {
   return (
     <main className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-transparent'>
-        <div className='container mx-auto px-4 text-center'>
-          <Badge className='mb-4 bg-scholar-red text-white hover:bg-scholar-red/90'>Awards</Badge>
-          <h1 className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground mb-4'>
-            수 상
-          </h1>
-          <p className='text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto'>
-            Awards &amp; Achievements
-          </p>
-          <p className='mt-4 text-muted-foreground max-w-3xl mx-auto'>
-            매년 개최되는 대한민국 동양서예대전의 역대 수상 내역을 연도별로 확인하실 수 있습니다.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.awards}
+        title='수상'
+        lede='매년 개최되는 대한민국 동양서예대전의 역대 수상 내역을 연도별로 확인하실 수 있습니다.'
+        ledger={awardsLedger}
+      />
 
-      <section className='container mx-auto px-4 py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto mb-12'>
           <h2 className='text-2xl font-semibold text-foreground mb-6 flex items-center gap-2'>
             <Award className='h-6 w-6 text-scholar-red' />

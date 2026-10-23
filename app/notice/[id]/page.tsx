@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero, type HeroFact } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import {
-  ArrowLeft,
   Calendar,
   Eye,
   MessageCircle,
@@ -173,10 +174,33 @@ export default function NoticeDetailPage() {
     }
   }
 
+  const heroTitle = notice?.title ?? '공지 상세'
+  const heroFacts: HeroFact[] = [
+    {
+      label: '게시일',
+      value: notice ? new Date(notice.created_at).toLocaleDateString('ko-KR') : '—',
+    },
+    {
+      label: '분류',
+      value: notice ? (categoryLabels[notice.category as keyof typeof categoryLabels] ?? '—') : '—',
+    },
+  ]
+  const hero = (
+    <PageHero
+      {...PAGE_HERO_MARKS.notice}
+      tier='band'
+      title={heroTitle}
+      crumbs={[{ label: '공지사항', href: '/notice' }, { label: heroTitle }]}
+    >
+      <HeroFacts facts={heroFacts} />
+    </PageHero>
+  )
+
   if (loading) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        {hero}
+        <main className='container mx-auto px-4 py-10 md:py-16'>
           <div className='flex items-center justify-center py-12'>
             <div className='flex items-center gap-3'>
               <Loader2 className='h-6 w-6 animate-spin' />
@@ -192,7 +216,8 @@ export default function NoticeDetailPage() {
   if (error || !notice) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        {hero}
+        <main className='container mx-auto px-4 py-10 md:py-16'>
           <div className='text-center py-12'>
             <AlertCircle className='h-16 w-16 text-destructive mx-auto mb-4' />
             <h3 className='text-lg font-semibold text-foreground mb-2'>오류가 발생했습니다</h3>
@@ -209,28 +234,8 @@ export default function NoticeDetailPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container mx-auto px-4 py-8'>
-        {/* 네비게이션 */}
-        <div className='flex items-center gap-4 mb-8'>
-          <Link href='/notice'>
-            <Button variant='outline' size='sm'>
-              <ArrowLeft className='h-4 w-4 mr-2' />
-              목록으로
-            </Button>
-          </Link>
-          <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-            <Link href='/' className='hover:text-foreground'>
-              홈
-            </Link>
-            <span>/</span>
-            <Link href='/notice' className='hover:text-foreground'>
-              공지사항
-            </Link>
-            <span>/</span>
-            <span className='text-foreground'>{notice.title}</span>
-          </div>
-        </div>
-
+      {hero}
+      <main className='container mx-auto px-4 py-10 md:py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-4 gap-8'>
           {/* 메인 콘텐츠 */}
           <div className='lg:col-span-3'>
@@ -263,10 +268,6 @@ export default function NoticeDetailPage() {
                     </Button>
                   </div>
                 </div>
-
-                <CardTitle className='text-2xl font-bold text-foreground mb-4'>
-                  {notice.title}
-                </CardTitle>
 
                 <div className='flex items-center gap-6 text-sm text-muted-foreground'>
                   <div className='flex items-center gap-2'>

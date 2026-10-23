@@ -4,6 +4,8 @@ import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero, HeroScrolls, type PageHeroStat } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Search } from 'lucide-react'
@@ -138,6 +140,43 @@ export function ArtworksClient() {
         return copy.public
     }
   }
+  // 히어로 — 이미지가 실제로 있는 작품만 걸고(추천작 먼저), 숫자는 불러온 목록에서 센다
+  const heroImages = useMemo(
+    () =>
+      [...artworks]
+        .filter(artwork => Boolean(artwork.image_url))
+        .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
+        .slice(0, 5)
+        .map(artwork => ({
+          src: artwork.image_url as string,
+          alt: artwork.artist?.name ? `${artwork.title} — ${artwork.artist.name}` : artwork.title,
+          href: `/artworks/${artwork.id}`,
+        })),
+    [artworks]
+  )
+  const heroLedger = useMemo(() => {
+    // 불러오는 동안에도 같은 높이를 차지해 숫자가 들어올 때 화면이 밀리지 않게 한다
+    if (loading) {
+      return [t('phStatWorks'), t('phStatArtists'), t('phStatYears')].map(label => ({
+        label,
+        value: '—',
+      }))
+    }
+    if (artworks.length === 0) return undefined
+    const artistCount = new Set(artworks.map(a => a.artist?.id).filter(Boolean)).size
+    const years = artworks.map(a => a.year).filter((y): y is number => typeof y === 'number')
+    const stats: PageHeroStat[] = [
+      { label: t('phStatWorks'), value: artworks.length },
+      ...(artistCount > 0 ? [{ label: t('phStatArtists'), value: artistCount }] : []),
+    ]
+    if (years.length > 0) {
+      const min = Math.min(...years)
+      const max = Math.max(...years)
+      stats.push({ label: t('phStatYears'), value: min === max ? min : `${min}–${max}` })
+    }
+    return stats
+  }, [artworks, loading, t])
+
   const hasConditions =
     Boolean(searchTerm.trim()) ||
     selectedCategory !== 'all' ||
@@ -145,20 +184,20 @@ export function ArtworksClient() {
     showAvailableOnly
 
   return (
-    <div
-      className='min-h-screen bg-background'
-      style={{ paddingTop: 'calc(var(--spacing-lg) * 2)' }}
-    >
-      <div className='gallery-container py-12 md:py-20'>
-        <div className='mb-8'>
-          <h1 className='font-serif text-3xl md:text-4xl tracking-tight mb-4'>
-            {t('artCollection')}
-          </h1>
-          <p className='max-w-2xl text-base leading-relaxed text-muted-foreground'>
-            {t('artworksDescription')}
-          </p>
-        </div>
+    <div className='min-h-screen bg-background'>
+      <PageHero
+        {...PAGE_HERO_MARKS.artworks}
+        title={t('artCollection')}
+        lede={t('artworksDescription')}
+        ledger={heroLedger}
+        media={
+          loading || heroImages.length > 0 ? (
+            <HeroScrolls images={heroImages} fit='contain' loading={loading} />
+          ) : undefined
+        }
+      />
 
+      <div className='gallery-container py-12 md:py-16'>
         <DiscoveryToolbar
           search={searchTerm}
           searchLabel={copy.artworkSearch}

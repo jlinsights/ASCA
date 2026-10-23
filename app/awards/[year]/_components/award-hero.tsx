@@ -1,4 +1,7 @@
+import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 interface AwardHeroProps {
   year: number
@@ -8,14 +11,13 @@ interface AwardHeroProps {
 
 export function AwardHero({ year, edition, title }: AwardHeroProps) {
   return (
-    <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-transparent'>
-      <div className='container mx-auto px-4 text-center'>
-        <Badge className='mb-4 bg-scholar-red text-white hover:bg-scholar-red/90'>{edition}</Badge>
-        <h1 className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground mb-4'>
-          {year}년 수상 내역
-        </h1>
-        <p className='text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto'>{title}</p>
-      </div>
-    </section>
+    <PageHero
+      {...PAGE_HERO_MARKS.awards}
+      title={`${year}년 수상 내역`}
+      lede={title}
+      crumbs={[{ label: '수상', href: '/awards' }, { label: `${year}` }]}
+    >
+      <Badge className='bg-scholar-red text-white hover:bg-scholar-red/90'>{edition}</Badge>
+    </PageHero>
   )
 }

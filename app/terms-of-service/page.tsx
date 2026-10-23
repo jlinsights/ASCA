@@ -3,30 +3,23 @@
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Badge } from '@/components/ui/badge'
-import { ScrollText, Scale, Shield, User, FileText, AlertCircle } from 'lucide-react'
+import { Scale, Shield, User, FileText, AlertCircle } from 'lucide-react'
+import { PageHero, HeroFacts } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export default function TermsOfServicePage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <div className='flex items-center justify-center gap-3 mb-6'>
-            <ScrollText className='h-8 w-8 md:h-10 md:w-10 text-scholar-red' />
-            <h1 className='text-3xl md:text-5xl font-bold tracking-tight'>이용약관</h1>
-          </div>
-          <p className='text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl mx-auto'>
-            사단법인 동양서예협회 웹사이트 이용약관
-          </p>
-          <Badge variant='outline' className='text-sm'>
-            시행일: 2019년 1월 1일
-          </Badge>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.terms}
+        title='이용약관'
+        lede='사단법인 동양서예협회 웹사이트 이용약관'
+      >
+        <HeroFacts facts={[{ label: '시행일', value: '2019년 1월 1일' }]} />
+      </PageHero>
 
       {/* Terms Content */}
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 목적 */}
           <Card className='border-l-4 border-l-scholar-red'>

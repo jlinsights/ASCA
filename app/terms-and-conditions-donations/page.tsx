@@ -3,7 +3,10 @@ import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { ScrollText, ChevronRight, Scale, MessageSquare } from 'lucide-react'
+import { PageHero, HeroFacts } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '기부금품 관리 및 이용약관 | 동양서예협회',
@@ -150,28 +153,23 @@ const TERMS_ARTICLES = [
 export default function TermsAndConditionsDonationsPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Terms &amp; Conditions
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>기부금품 관리 및 이용약관</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-            궁금하신 부분이 있거나 저희 협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.
-          </p>
-          <div className='mt-6'>
-            <Link
-              href='/contact'
-              className='inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-scholar-red text-white hover:bg-scholar-red/90 transition-colors'
-            >
+      <PageHero
+        {...PAGE_HERO_MARKS.donationTerms}
+        title='기부금품 관리 및 이용약관'
+        lede='궁금하신 부분이 있거나 저희 협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.'
+        actions={
+          <Button asChild>
+            <Link href='/contact'>
               <MessageSquare className='h-4 w-4' />
               문의처
             </Link>
-          </div>
-        </div>
-      </section>
+          </Button>
+        }
+      >
+        <HeroFacts facts={[{ label: '개정', value: '2026. 1. 1' }]} />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
           <aside className='lg:w-64 shrink-0'>
             <div className='sticky top-24 space-y-6'>

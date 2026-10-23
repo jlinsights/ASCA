@@ -19,6 +19,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '회원 안내 | 동양서예협회',
@@ -151,17 +153,12 @@ const SCORING_TABLE = [
 export default function MembershipPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Membership Guide
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>회원 안내</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-            동양서예협회 정회원으로 가입하시면 전시 활동, 교육 혜택, 디지털 서비스, 네트워크 등
-            다양한 특전을 누리실 수 있습니다.
-          </p>
-          <div className='flex justify-center gap-3 mt-6'>
+      <PageHero
+        {...PAGE_HERO_MARKS.membership}
+        title='회원 안내'
+        lede='동양서예협회 정회원으로 가입하시면 전시 활동, 교육 혜택, 디지털 서비스, 네트워크 등 다양한 특전을 누리실 수 있습니다.'
+        actions={
+          <>
             <Link
               href='https://orientalcalligraphy.channel.io'
               target='_blank'
@@ -178,11 +175,13 @@ export default function MembershipPage() {
               <CalendarDays className='h-4 w-4' />
               상담 예약
             </Link>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      >
+        <HeroFacts facts={[{ label: '회원 등급', value: `${MEMBER_TIERS.length}종` }]} />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12 space-y-16'>
+      <section className='container mx-auto px-4 py-10 md:py-16 space-y-16'>
         <div>
           <h2 className='text-2xl font-bold mb-2 text-center'>회원 등급 및 연회비</h2>
           <p className='text-sm text-muted-foreground text-center mb-8'>

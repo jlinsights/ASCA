@@ -27,6 +27,8 @@ import {
   Clock,
 } from 'lucide-react'
 import { getNotices } from '@/lib/supabase/cms'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { searchNotices, AdvancedSearchFilters } from '@/lib/supabase/search'
 import SimpleSearch from '@/components/search/SimpleSearch'
 import type { Notice, SearchFilters, PaginationParams } from '@/lib/types/cms-legacy'
@@ -123,10 +125,28 @@ export default function NoticePage() {
 
   const pinnedNotices = notices.filter(notice => notice.is_pinned)
   const regularNotices = notices.filter(notice => !notice.is_pinned)
+  const latestPublishedAt = notices.reduce<string | null>(
+    (latest, notice) => (!latest || notice.published_at > latest ? notice.published_at : latest),
+    null
+  )
+  const hero = (
+    <PageHero {...PAGE_HERO_MARKS.notice} title={t('notice')} lede='사단법인 동양서예협회 공지사항'>
+      <HeroFacts
+        facts={[
+          { label: '불러온 공지', value: loading ? '—' : notices.length },
+          {
+            label: '최근 게시',
+            value: loading || !latestPublishedAt ? '—' : formatDate(latestPublishedAt),
+          },
+        ]}
+      />
+    </PageHero>
+  )
 
   if (loading) {
     return (
       <main className='min-h-screen bg-transparent'>
+        {hero}
         <section className='container mx-auto px-4 py-16'>
           <div className='max-w-4xl mx-auto text-center'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto'></div>
@@ -141,6 +161,7 @@ export default function NoticePage() {
   if (error) {
     return (
       <main className='min-h-screen bg-transparent'>
+        {hero}
         <section className='container mx-auto px-4 py-16'>
           <div className='max-w-4xl mx-auto text-center'>
             <div className='bg-seal/5 border border-seal/30 rounded-lg p-6'>
@@ -158,18 +179,9 @@ export default function NoticePage() {
 
   return (
     <main className='min-h-screen bg-transparent'>
-      <section className='container mx-auto px-4 py-16'>
+      {hero}
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto'>
-          {/* 헤더 */}
-          <div className='text-center mb-12'>
-            <h1 className='text-4xl font-bold mb-4 text-foreground tracking-tight'>
-              {t('notice')}
-            </h1>
-            <p className='text-lg text-muted-foreground font-medium'>
-              사단법인 동양서예협회 공지사항
-            </p>
-          </div>
-
           {/* 검색 및 필터 */}
           <Card className='mb-8 border-border/50 shadow-sm'>
             <CardContent className='p-6'>

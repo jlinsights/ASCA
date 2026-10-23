@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { ArrowLeft } from 'lucide-react'
 import { getContestResultsByYearGrouped } from '@/lib/db/queries/contest-results'
 import type { ContestResult } from '@/lib/db/schema'
 
@@ -95,17 +93,7 @@ export default async function AwardYearPage({ params }: { params: Promise<{ year
     <main className='min-h-screen bg-transparent'>
       <AwardHero year={displayData.year} edition={displayData.edition} title={displayData.title} />
 
-      <div className='container mx-auto px-4 pt-8'>
-        <Link
-          href='/awards'
-          className='inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors'
-        >
-          <ArrowLeft className='w-4 h-4 mr-2' />
-          수상 목록으로 돌아가기
-        </Link>
-      </div>
-
-      <section className='container mx-auto px-4 py-8'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <ContestSummary
           date={displayData.date}
           venue={displayData.venue}

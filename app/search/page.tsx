@@ -12,6 +12,8 @@ import { useLanguage } from '@/contexts/language-context'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 function SearchContent() {
   const searchParams = useSearchParams()
@@ -107,20 +109,19 @@ function SearchContent() {
 
   return (
     <div className='min-h-screen bg-background'>
-      <div className='container mx-auto px-4 py-8'>
+      <PageHero
+        {...PAGE_HERO_MARKS.search}
+        title={t('search')}
+        lede='공지사항, 전시회, 행사, 작가, 작품을 한 번에 검색하세요'
+      >
+        <SimpleSearch
+          onSearch={handleSearch}
+          placeholder={t('searchPlaceholder')}
+          className='max-w-2xl'
+        />
+      </PageHero>
+      <div className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto'>
-          <div className='text-center mb-8'>
-            <h1 className='text-3xl font-bold text-foreground mb-4'>{t('search')}</h1>
-            <p className='text-muted-foreground mb-6'>
-              공지사항, 전시회, 행사, 작가, 작품을 한 번에 검색하세요
-            </p>
-            <SimpleSearch
-              onSearch={handleSearch}
-              placeholder={t('searchPlaceholder')}
-              className='max-w-2xl mx-auto'
-            />
-          </div>
-
           {query && (
             <div className='mb-6' aria-live='polite' aria-atomic='true'>
               <p className='text-muted-foreground'>

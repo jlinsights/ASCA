@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { TranslatedContent } from '@/components/translated-content'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -264,33 +266,23 @@ export default function CategoryPage() {
 
   return (
     <main className='min-h-screen bg-transparent'>
-      {/* Hero Section */}
-      <section className='relative overflow-hidden bg-transparent'>
-        <div className='container mx-auto px-4 py-12 md:py-16 lg:py-20'>
-          <div className='text-center space-y-4 md:space-y-6'>
-            <div className='flex items-center justify-center gap-2 text-sm text-muted-foreground'>
-              <Link href='/artworks' className='hover:text-foreground transition-colors'>
-                작품
-              </Link>
-              <span>/</span>
-              <span className='text-foreground'>{currentCategory.title}</span>
-            </div>
-
-            <h1 className='text-3xl sm:text-4xl md:text-5xl font-normal tracking-tight leading-tight'>
-              {currentCategory.title}
-            </h1>
-            <p className='text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-              {currentCategory.description}
-            </p>
-
-            <div className='flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-sm text-muted-foreground'>
-              <span>총 {categoryArtworks.length}개 작품</span>
-              <span className='hidden sm:inline'>•</span>
-              <span>{categoryArtworks.filter(art => art.isAvailable).length}개 구매가능</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.artworks}
+        tier='band'
+        title={currentCategory.title}
+        lede={currentCategory.description}
+        crumbs={[{ label: '작품', href: '/artworks' }, { label: currentCategory.title }]}
+      >
+        <HeroFacts
+          facts={[
+            { label: '총 작품', value: `${categoryArtworks.length}개` },
+            {
+              label: '구매가능',
+              value: `${categoryArtworks.filter(art => art.isAvailable).length}개`,
+            },
+          ]}
+        />
+      </PageHero>
 
       {/* Filters */}
       <section className='border-b border-border bg-card'>

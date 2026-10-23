@@ -6,17 +6,19 @@ import type { TranslationData } from '../types'
 export const aboutTranslations: TranslationData = {
   ko: {
     introEyebrow: 'Introduction',
-    introTitle: '소 개',
+    introTitle: '소개',
     introLede: '사단법인 동양서예협회의 비전과 활동을 소개합니다',
     introMotto: '“正法의 계승 발전과 創新의 조화로운 구현”',
     introDownloadTitle: '소개 자료 다운로드',
     introBrochureKo: '협회 소개 브로셔 (한국어)',
     introBrochureMulti: '소개 브로셔 (한·영·중·일)',
     historyEyebrow: 'History',
-    historyTitle: '연 혁',
+    historyTitle: '연혁',
     historyLede:
       '1997년 韓·中·日 書藝文化交流聯合會展을 시작으로, 동양서예의 전통을 계승하고 발전시켜 온 협회의 발자취를 소개합니다.',
     historyClosing: '1997년부터 이어온 동양서예의 전통과 역사',
+    historyLedgerSince: '시작 연도',
+    historyLedgerEvents: '연혁 기록',
     historyTypeExhibition: '전시',
     historyTypeEvent: '행사',
     historyTypeMilestone: '이정표',
@@ -36,6 +38,8 @@ export const aboutTranslations: TranslationData = {
     historyLede:
       'Since the 1997 Korea–China–Japan Calligraphy Culture Exchange Exhibition (韓·中·日 書藝文化交流聯合會展), the record of how the Society has carried East Asian calligraphy forward.',
     historyClosing: 'The tradition and history of East Asian calligraphy since 1997',
+    historyLedgerSince: 'Since',
+    historyLedgerEvents: 'Records',
     historyTypeExhibition: 'Exhibition',
     historyTypeEvent: 'Event',
     historyTypeMilestone: 'Milestone',
@@ -54,6 +58,8 @@ export const aboutTranslations: TranslationData = {
     historyLede:
       '1997年の韓・中・日 書藝文化交流聯合會展に始まり、東洋書芸の伝統を受け継ぎ発展させてきた協会の歩みをご紹介します。',
     historyClosing: '1997年から続く東洋書芸の伝統と歴史',
+    historyLedgerSince: '開始年',
+    historyLedgerEvents: '沿革記録',
     historyTypeExhibition: '展示',
     historyTypeEvent: '行事',
     historyTypeMilestone: '節目',
@@ -71,6 +77,8 @@ export const aboutTranslations: TranslationData = {
     historyTitle: '沿革',
     historyLede: '自1997年韓·中·日書藝文化交流聯合會展起，介紹本會傳承並發展東洋書藝傳統的歷程。',
     historyClosing: '自1997年延續至今的東洋書藝傳統與歷史',
+    historyLedgerSince: '起始年',
+    historyLedgerEvents: '沿革紀錄',
     historyTypeExhibition: '展覽',
     historyTypeEvent: '活動',
     historyTypeMilestone: '里程碑',

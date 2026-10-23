@@ -113,8 +113,8 @@ export default function ContestsPage() {
   if (loading) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
-          <ContestIntro />
+        <ContestIntro total={null} open={null} />
+        <main className='container mx-auto px-4 pb-16'>
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
@@ -126,9 +126,8 @@ export default function ContestsPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container mx-auto px-4 py-8'>
-        <ContestIntro />
-
+      <ContestIntro total={contests.length} open={openContests.length} />
+      <main className='container mx-auto px-4 pb-16'>
         {/* Statistics */}
         <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
           <Card>

@@ -4,6 +4,8 @@ import { FileDown, Download, FileText, ExternalLink, MousePointerClick } from 'l
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '문서·서식 | 동양서예협회',
@@ -251,17 +253,12 @@ function getTypeIcon(type: FormItem['downloads'][number]['type']) {
 export default function FormsPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Documents &amp; Forms
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-4'>문서·서식</h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
-            동양서예협회의 공식 서식 자료를 다운로드할 수 있습니다. 회원가입 신청서, 작품출품 양식,
-            심사위원 지원서 등 필요한 모든 양식을 한곳에서 편리하게 이용하세요.
-          </p>
-          <div className='flex justify-center gap-3 mt-6'>
+      <PageHero
+        {...PAGE_HERO_MARKS.forms}
+        title='문서·서식'
+        lede='동양서예협회의 공식 서식 자료를 다운로드할 수 있습니다. 회원가입 신청서, 작품출품 양식, 심사위원 지원서 등 필요한 모든 양식을 한곳에서 편리하게 이용하세요.'
+        actions={
+          <>
             <Link
               href='https://orientalcalligraphy.channel.io'
               target='_blank'
@@ -277,11 +274,13 @@ export default function FormsPage() {
             >
               상담 예약
             </Link>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      >
+        <HeroFacts facts={[{ label: '서식', value: `${FORM_ITEMS.length}종` }]} />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='grid gap-8'>
           {FORM_ITEMS.map(form => (
             <Card key={form.id} id={form.id}>

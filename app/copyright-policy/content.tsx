@@ -5,6 +5,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import {
   Copyright,
   Shield,
@@ -25,39 +27,14 @@ import {
 export default function CopyrightPolicyContent() {
   return (
     <div className='min-h-screen bg-transparent'>
-      {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-info/5 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <div className='flex items-center justify-center gap-3 mb-6'>
-            <Copyright className='h-8 w-8 md:h-10 md:w-10 text-info dark:text-navy-300' />
-            <h1 className='text-3xl md:text-5xl font-bold tracking-tight'>저작권 정책</h1>
-          </div>
-          <p className='text-lg md:text-xl text-muted-foreground mb-6 max-w-3xl mx-auto'>
-            동양서예협회는 창작자의 저작권을 존중하고 보호합니다
-          </p>
-          <div className='flex flex-wrap gap-3 justify-center'>
-            <Badge variant='outline' className='text-sm border-info/30'>
-              <Palette className='h-3 w-3 mr-1' />
-              작품 보호
-            </Badge>
-            <Badge variant='outline' className='text-sm border-info/30'>
-              <Scale className='h-3 w-3 mr-1' />
-              저작권법
-            </Badge>
-            <Badge variant='outline' className='text-sm border-info/30'>
-              <Shield className='h-3 w-3 mr-1' />
-              권리 보장
-            </Badge>
-            <Badge variant='outline' className='text-sm border-info/30'>
-              <Eye className='h-3 w-3 mr-1' />
-              공정이용
-            </Badge>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.copyright}
+        title='저작권 정책'
+        lede='동양서예협회는 창작자의 저작권을 존중하고 보호합니다'
+      />
 
       {/* Main Content */}
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 기본 원칙 */}
           <Card className='border-l-4 border-l-info'>

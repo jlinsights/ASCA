@@ -3,30 +3,23 @@
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Badge } from '@/components/ui/badge'
 import { Shield, Lock, Eye, User, FileText, AlertTriangle, Database, Settings } from 'lucide-react'
+import { PageHero, HeroFacts } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export default function PrivacyPolicyPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      {/* Hero Section */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <div className='flex items-center justify-center gap-3 mb-6'>
-            <Shield className='h-8 w-8 md:h-10 md:w-10 text-info dark:text-navy-300' />
-            <h1 className='text-3xl md:text-5xl font-bold tracking-tight'>개인정보처리방침</h1>
-          </div>
-          <p className='text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl mx-auto'>
-            사단법인 동양서예협회 개인정보처리방침
-          </p>
-          <Badge variant='outline' className='text-sm'>
-            시행일: 2024년 1월 1일
-          </Badge>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.privacy}
+        title='개인정보처리방침'
+        lede='사단법인 동양서예협회 개인정보처리방침'
+      >
+        <HeroFacts facts={[{ label: '시행일', value: '2024년 1월 1일' }]} />
+      </PageHero>
 
       {/* Privacy Policy Content */}
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 목적 */}
           <Card className='border-l-4 border-l-info'>

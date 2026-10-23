@@ -9,6 +9,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCreateMember, useMembershipTiers } from '@/lib/api/rails-hooks'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export default function MemberApplicationPage() {
   const router = useRouter()
@@ -46,128 +48,148 @@ export default function MemberApplicationPage() {
     }))
   }
 
+  const tierCount = tiersData?.membership_tiers?.length
+  const hero = (
+    <PageHero {...PAGE_HERO_MARKS.membersApply} title='회원 신청'>
+      <HeroFacts
+        facts={[
+          {
+            label: '회원 등급',
+            value: tiersLoading ? '—' : `${tierCount ?? 0}종`,
+          },
+        ]}
+      />
+    </PageHero>
+  )
+
   if (tiersLoading) {
-    return <div className='container mx-auto p-8'>Loading...</div>
+    return (
+      <>
+        {hero}
+        <div className='container mx-auto px-4 py-10 md:py-16'>Loading...</div>
+      </>
+    )
   }
 
   return (
-    <div className='container mx-auto p-8 max-w-2xl'>
-      <h1 className='text-3xl font-bold mb-6'>회원 신청</h1>
+    <>
+      {hero}
+      <div className='container mx-auto px-4 py-10 md:py-16 max-w-2xl'>
+        <form onSubmit={handleSubmit} className='space-y-6 bg-white p-6 rounded-lg shadow'>
+          <div>
+            <label className='block text-sm font-medium mb-2'>한국어 이름 *</label>
+            <input
+              type='text'
+              name='full_name_ko'
+              value={formData.full_name_ko}
+              onChange={handleChange}
+              required
+              className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
+              placeholder='홍길동'
+            />
+          </div>
 
-      <form onSubmit={handleSubmit} className='space-y-6 bg-white p-6 rounded-lg shadow'>
-        <div>
-          <label className='block text-sm font-medium mb-2'>한국어 이름 *</label>
-          <input
-            type='text'
-            name='full_name_ko'
-            value={formData.full_name_ko}
-            onChange={handleChange}
-            required
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
-            placeholder='홍길동'
-          />
-        </div>
+          <div>
+            <label className='block text-sm font-medium mb-2'>영문 이름</label>
+            <input
+              type='text'
+              name='full_name_en'
+              value={formData.full_name_en}
+              onChange={handleChange}
+              className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
+              placeholder='Hong Gil-dong'
+            />
+          </div>
 
-        <div>
-          <label className='block text-sm font-medium mb-2'>영문 이름</label>
-          <input
-            type='text'
-            name='full_name_en'
-            value={formData.full_name_en}
-            onChange={handleChange}
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
-            placeholder='Hong Gil-dong'
-          />
-        </div>
+          <div>
+            <label className='block text-sm font-medium mb-2'>전화번호 *</label>
+            <input
+              type='tel'
+              name='phone_number'
+              value={formData.phone_number}
+              onChange={handleChange}
+              required
+              className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
+              placeholder='010-1234-5678'
+            />
+          </div>
 
-        <div>
-          <label className='block text-sm font-medium mb-2'>전화번호 *</label>
-          <input
-            type='tel'
-            name='phone_number'
-            value={formData.phone_number}
-            onChange={handleChange}
-            required
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
-            placeholder='010-1234-5678'
-          />
-        </div>
+          <div>
+            <label className='block text-sm font-medium mb-2'>이메일 *</label>
+            <input
+              type='email'
+              name='email'
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
+              placeholder='hong@example.com'
+            />
+          </div>
 
-        <div>
-          <label className='block text-sm font-medium mb-2'>이메일 *</label>
-          <input
-            type='email'
-            name='email'
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
-            placeholder='hong@example.com'
-          />
-        </div>
+          <div>
+            <label className='block text-sm font-medium mb-2'>국적</label>
+            <input
+              type='text'
+              name='nationality'
+              value={formData.nationality}
+              onChange={handleChange}
+              className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
+            />
+          </div>
 
-        <div>
-          <label className='block text-sm font-medium mb-2'>국적</label>
-          <input
-            type='text'
-            name='nationality'
-            value={formData.nationality}
-            onChange={handleChange}
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
-          />
-        </div>
+          <div>
+            <label className='block text-sm font-medium mb-2'>서예 경력 (년)</label>
+            <input
+              type='number'
+              name='calligraphy_experience'
+              value={formData.calligraphy_experience}
+              onChange={handleChange}
+              className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
+              placeholder='5'
+              min='0'
+            />
+          </div>
 
-        <div>
-          <label className='block text-sm font-medium mb-2'>서예 경력 (년)</label>
-          <input
-            type='number'
-            name='calligraphy_experience'
-            value={formData.calligraphy_experience}
-            onChange={handleChange}
-            className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-info'
-            placeholder='5'
-            min='0'
-          />
-        </div>
+          <div className='flex gap-4'>
+            <button
+              type='submit'
+              disabled={createMember.isPending}
+              className='flex-1 bg-info text-white py-3 rounded-lg font-medium hover:bg-info/90 disabled:opacity-50'
+            >
+              {createMember.isPending ? '제출 중...' : '신청하기'}
+            </button>
 
-        <div className='flex gap-4'>
-          <button
-            type='submit'
-            disabled={createMember.isPending}
-            className='flex-1 bg-info text-white py-3 rounded-lg font-medium hover:bg-info/90 disabled:opacity-50'
-          >
-            {createMember.isPending ? '제출 중...' : '신청하기'}
-          </button>
+            <button
+              type='button'
+              onClick={() => router.back()}
+              className='px-6 py-3 border rounded-lg font-medium hover:bg-muted'
+            >
+              취소
+            </button>
+          </div>
+        </form>
 
-          <button
-            type='button'
-            onClick={() => router.back()}
-            className='px-6 py-3 border rounded-lg font-medium hover:bg-muted'
-          >
-            취소
-          </button>
-        </div>
-      </form>
-
-      {/* Membership Tiers Info */}
-      <div className='mt-8'>
-        <h2 className='text-xl font-semibold mb-4'>회원 등급 안내</h2>
-        <div className='space-y-3'>
-          {tiersData?.membership_tiers?.map((tier: any) => (
-            <div key={tier.id} className='p-4 bg-muted rounded-lg'>
-              <div className='flex justify-between items-center'>
-                <div>
-                  <span className='font-medium'>{tier.name_ko}</span>
-                  <span className='text-sm text-muted-foreground ml-2'>Level {tier.level}</span>
+        {/* Membership Tiers Info */}
+        <div className='mt-8'>
+          <h2 className='text-xl font-semibold mb-4'>회원 등급 안내</h2>
+          <div className='space-y-3'>
+            {tiersData?.membership_tiers?.map((tier: any) => (
+              <div key={tier.id} className='p-4 bg-muted rounded-lg'>
+                <div className='flex justify-between items-center'>
+                  <div>
+                    <span className='font-medium'>{tier.name_ko}</span>
+                    <span className='text-sm text-muted-foreground ml-2'>Level {tier.level}</span>
+                  </div>
+                  <span className='text-info dark:text-navy-300 font-semibold'>
+                    {tier.annual_fee?.toLocaleString()}원/년
+                  </span>
                 </div>
-                <span className='text-info dark:text-navy-300 font-semibold'>
-                  {tier.annual_fee?.toLocaleString()}원/년
-                </span>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

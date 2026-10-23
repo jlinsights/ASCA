@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Brush } from 'lucide-react'
 import { genreData, genreArtworks, validGenres } from './_data/genres'
@@ -41,32 +43,16 @@ export default async function GenrePage({ params }: { params: Promise<{ genre: s
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <div className='flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4'>
-            <Link href='/artworks' className='hover:text-foreground transition-colors'>
-              작품
-            </Link>
-            <span>/</span>
-            <span className='text-foreground'>서체별</span>
-            <span>/</span>
-            <span className='text-foreground'>{genreInfo.name}</span>
-          </div>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            {genreInfo.nameEn}
-          </p>
-          <h1 className='text-3xl md:text-5xl font-bold mb-2'>
-            {genreInfo.name}
-            <span className='text-xl md:text-3xl text-muted-foreground ml-3'>
-              {genreInfo.chinese}
-            </span>
-          </h1>
-          <p className='text-muted-foreground max-w-2xl mx-auto leading-relaxed mt-4'>
-            {genreInfo.description}
-          </p>
-          <p className='text-sm text-muted-foreground mt-4'>총 {artworks.length}개 작품</p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.artworks}
+        tier='band'
+        tc={genreInfo.chinese}
+        title={genreInfo.name}
+        lede={genreInfo.description}
+        crumbs={[{ label: '작품', href: '/artworks' }, { label: genreInfo.name }]}
+      >
+        <HeroFacts facts={[{ label: '총 작품', value: `${artworks.length}개` }]} />
+      </PageHero>
 
       <section className='border-b border-border bg-card'>
         <div className='container mx-auto px-4 py-4'>
@@ -85,7 +71,7 @@ export default async function GenrePage({ params }: { params: Promise<{ genre: s
         </div>
       </section>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         {artworks.length === 0 ? (
           <div className='text-center py-16'>
             <Brush className='w-16 h-16 mx-auto text-muted-foreground mb-4' />

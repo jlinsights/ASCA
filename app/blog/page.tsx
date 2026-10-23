@@ -28,6 +28,8 @@ import {
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/language-context'
 import { BlogPost, getCombinedPosts } from '@/lib/services/blog-service'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export default function BlogPage() {
   const { language } = useLanguage()
@@ -92,24 +94,27 @@ export default function BlogPage() {
 
   return (
     <main className='min-h-screen bg-transparent'>
-      {/* Hero Section */}
-      <section className='bg-transparent py-16 border-b border-white/10'>
-        <div className='container mx-auto px-4'>
-          <div className='max-w-3xl mx-auto text-center'>
-            <h1 className='text-4xl md:text-5xl font-bold mb-6 tracking-tight text-foreground'>
-              {language === 'ko' ? '동양서예 블로그' : 'Oriental Calligraphy Blog'}
-            </h1>
-            <p className='text-lg text-muted-foreground'>
-              {language === 'ko'
-                ? '동양서예협회의 다양한 소식과 이야기를 만나보세요'
-                : 'Discover various news and stories from ASCA'}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.blog}
+        title={language === 'ko' ? '동양서예 블로그' : 'Oriental Calligraphy Blog'}
+        lede={
+          language === 'ko'
+            ? '동양서예협회의 다양한 소식과 이야기를 만나보세요'
+            : 'Discover various news and stories from ASCA'
+        }
+      >
+        <HeroFacts
+          facts={[
+            {
+              label: language === 'ko' ? '게시물' : 'Posts',
+              value: loading ? '—' : posts.length,
+            },
+          ]}
+        />
+      </PageHero>
 
       {/* External Channels Grid */}
-      <section className='container mx-auto px-4 py-8'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 max-w-4xl mx-auto'>
           {/* Kakao Channel Card - Static Link */}
           <a

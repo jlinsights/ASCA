@@ -4,6 +4,8 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Mail, Headphones, CalendarClock } from 'lucide-react'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '추천ㆍ초대작가 신청 | 동양서예협회',
@@ -62,17 +64,15 @@ const LEVEL_CRITERIA = [
 export default function RecommendedInvitedCalligrapherPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <p className='text-sm font-medium tracking-widest text-scholar-red uppercase mb-3'>
-            Application for Recommended &amp; Invited Calligrapher
-          </p>
-          <h1 className='text-3xl md:text-4xl font-bold mb-2'>추천ㆍ초대작가 신청</h1>
-          <p className='text-lg text-muted-foreground'>社團法人 東洋書藝協會</p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.recommendedApplication}
+        title='추천ㆍ초대작가 신청'
+        lede='社團法人 東洋書藝協會'
+      >
+        <HeroFacts facts={[{ label: '자격 등급', value: `${LEVEL_CRITERIA.length}단계` }]} />
+      </PageHero>
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-16'>
           <Card>
             <CardHeader className='text-center'>

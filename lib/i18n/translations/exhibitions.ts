@@ -5,6 +5,8 @@ import type { TranslationData } from '../types'
 export const exhibitionsTranslations: TranslationData = {
   ko: {
     exPageLede: '동양서예협회의 다양한 전시회를 만나보세요',
+    exLedgerCount: '전시',
+    exLedgerYears: '기록 연도',
     exPageLoading: '전시회 정보를 불러오는 중...',
     exPageLoadError: '전시회 정보를 불러오는데 실패했습니다.',
     exPageRetry: '다시 시도',
@@ -47,6 +49,8 @@ export const exhibitionsTranslations: TranslationData = {
   },
   en: {
     exPageLede: 'Explore the exhibitions of the Asian Society of Calligraphic Arts',
+    exLedgerCount: 'Exhibitions',
+    exLedgerYears: 'Years',
     exPageLoading: 'Loading exhibitions…',
     exPageLoadError: 'Could not load exhibitions.',
     exPageRetry: 'Retry',
@@ -90,6 +94,8 @@ export const exhibitionsTranslations: TranslationData = {
   },
   ja: {
     exPageLede: '東洋書芸協会のさまざまな展覧会をご覧ください',
+    exLedgerCount: '展覧会',
+    exLedgerYears: '記録年',
     exPageLoading: '展覧会情報を読み込み中…',
     exPageLoadError: '展覧会情報を読み込めませんでした。',
     exPageRetry: '再試行',
@@ -132,6 +138,8 @@ export const exhibitionsTranslations: TranslationData = {
   },
   zh: {
     exPageLede: '探索東洋書藝協會的各項展覽',
+    exLedgerCount: '展覽',
+    exLedgerYears: '紀錄年份',
     exPageLoading: '正在載入展覽資訊…',
     exPageLoadError: '無法載入展覽資訊。',
     exPageRetry: '重試',

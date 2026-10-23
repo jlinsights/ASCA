@@ -1,13 +1,15 @@
 import { Suspense } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-import { Camera, Palette } from 'lucide-react'
+import { Camera } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero, HeroScrolls, type PageHeroStat } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import galleryMeta from '@/lib/data/gallery-data.json'
+import galleryMedia from '@/lib/data/gallery-media.json'
 import type { GalleryData } from '@/lib/types/gallery/gallery-legacy'
 import GalleryPageClient from '@/components/gallery/GalleryPageClient'
-import { resolveGalleryData } from '@/lib/gallery-media'
+import { galleryMediaKey, resolveGalleryData, resolveGalleryItems } from '@/lib/gallery-media'
 
 function GallerySkeleton() {
   return (
@@ -29,61 +31,58 @@ const availableYears = meta.metadata.availableYears ?? []
 const categories = meta.categories ?? []
 const totalImages = meta.metadata.totalImages
 
+// 히어로 사진 — 업로드가 확인된 실제 사진만 건다(미연결 항목은 제외)
+const mediaMap = galleryMedia as Record<string, unknown>
+const heroImages = resolveGalleryItems(
+  (galleryMeta as unknown as GalleryData).items.filter(item => {
+    const key = galleryMediaKey(item.src)
+    return key !== null && key in mediaMap
+  })
+).map(item => ({ src: item.src, alt: item.title }))
+
+const heroLedger: PageHeroStat[] = [
+  { label: '활동사진', value: totalImages },
+  { label: '카테고리', value: categories.length },
+  ...(availableYears.length > 0
+    ? [
+        {
+          label: '활동 연도',
+          value: `${Math.min(...availableYears)}–${Math.max(...availableYears)}`,
+          unit: '년',
+        },
+      ]
+    : []),
+]
+
 export default function GalleryPage() {
   return (
     <div className='min-h-screen bg-background'>
-      {/* ── Hero ── */}
-      <section className='border-b border-border bg-background'>
-        <div className='max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20 text-center space-y-6'>
-          <div className='flex justify-center'>
-            <Image
-              src='/logo/Logo & Tagline_white BG.png'
-              alt='동양서예협회 로고'
-              width={360}
-              height={144}
-              className='h-20 md:h-28 w-auto object-contain'
-              priority
-            />
-          </div>
-
-          <h1 className='text-3xl md:text-5xl font-bold text-foreground tracking-tight'>
-            동양서예 갤러리
-          </h1>
-          <p className='text-muted-foreground text-lg'>正法의 계승, 創新의 조화</p>
-
-          {/* 통계 */}
-          <div className='flex items-center justify-center gap-6 text-sm text-muted-foreground'>
-            <span className='flex items-center gap-1.5'>
-              <Camera className='w-4 h-4' />
-              <strong className='text-foreground'>{totalImages}</strong> 활동사진
-            </span>
-            <div className='w-px h-4 bg-border' />
-            <span className='flex items-center gap-1.5'>
-              <Palette className='w-4 h-4' />
-              <strong className='text-foreground'>{categories.length}</strong> 카테고리
-            </span>
-            <div className='w-px h-4 bg-border' />
-            <span className='flex items-center gap-1.5'>
-              <strong className='text-foreground'>{availableYears.join(', ')}</strong>년
-            </span>
-          </div>
-
-          <div className='flex gap-3 justify-center'>
-            <Button asChild size='sm'>
-              <Link href='#gallery'>
-                <Camera className='w-4 h-4 mr-1.5' />
-                갤러리 보기
-              </Link>
-            </Button>
-            <Button asChild variant='outline' size='sm'>
-              <Link href='/events'>행사 안내</Link>
-            </Button>
-          </div>
+      <PageHero
+        {...PAGE_HERO_MARKS.gallery}
+        title='동양서예 갤러리'
+        lede='正法의 계승, 創新의 조화'
+        ledger={heroLedger}
+        media={
+          heroImages.length > 0 ? (
+            <HeroScrolls images={heroImages} fit='cover' max={3} />
+          ) : undefined
+        }
+      >
+        <div className='flex gap-3'>
+          <Button asChild size='sm'>
+            <Link href='#gallery'>
+              <Camera className='w-4 h-4 mr-1.5' />
+              갤러리 보기
+            </Link>
+          </Button>
+          <Button asChild variant='outline' size='sm'>
+            <Link href='/events'>행사 안내</Link>
+          </Button>
         </div>
-      </section>
+      </PageHero>
 
       {/* ── Gallery ── */}
-      <section id='gallery' className='py-12 md:py-16'>
+      <section id='gallery' className='py-10 md:py-16'>
         <div className='max-w-7xl mx-auto px-6 md:px-12'>
           {/*
             useSearchParams()를 쓰는 Client Component는 반드시 Suspense 안에 있어야 합니다.

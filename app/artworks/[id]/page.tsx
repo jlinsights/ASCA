@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useParams, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { PageHero } from '@/components/layout/page-hero'
+import { HeroFacts, PageHero, type HeroFact } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import type { Artwork } from './_components/artwork-types'
 import { sampleArtworks } from './_components/artworks-sample-data'
@@ -44,9 +44,27 @@ export default function ArtworkDetailPage() {
     loadArtwork()
   }, [params.id])
 
+  const heroTitle = artwork?.title ?? '작품 상세'
+  const heroFacts: HeroFact[] = [
+    { label: '제작 연도', value: artwork ? `${artwork.year}년` : '—' },
+    { label: '재료', value: artwork?.medium || '—' },
+    { label: '규격', value: artwork?.dimensions || '—' },
+  ]
+  const hero = (
+    <PageHero
+      {...PAGE_HERO_MARKS.artworks}
+      tier='band'
+      title={heroTitle}
+      crumbs={[{ label: '작품 목록', href: '/artworks' }, { label: heroTitle }]}
+    >
+      <HeroFacts facts={heroFacts} />
+    </PageHero>
+  )
+
   if (loading) {
     return (
       <main className='min-h-screen'>
+        {hero}
         <div className='container mx-auto px-4 py-16 text-center'>
           <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto'></div>
           <p className='mt-4 text-sm text-muted-foreground'>작품 정보를 불러오는 중...</p>
@@ -59,6 +77,7 @@ export default function ArtworkDetailPage() {
   if (error || !artwork) {
     return (
       <main className='min-h-screen'>
+        {hero}
         <div className='container mx-auto px-4 py-16 text-center'>
           <p className='text-destructive'>{error || '작품을 찾을 수 없습니다.'}</p>
           <Link href='/artworks'>
@@ -80,19 +99,9 @@ export default function ArtworkDetailPage() {
 
   return (
     <main className='min-h-screen'>
-      <PageHero title='작품 상세' subtitle={artwork.title} />
+      {hero}
 
-      <div className='container mx-auto px-4 pt-8'>
-        <Link
-          href='/artworks'
-          className='inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors'
-        >
-          <ArrowLeft className='w-4 h-4 mr-2' />
-          작품 목록으로 돌아가기
-        </Link>
-      </div>
-
-      <section className='container mx-auto px-4 py-8'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
           <ArtworkGallery
             artwork={artwork}

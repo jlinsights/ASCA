@@ -1,7 +1,10 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { AcademySidebar } from './_components/academy-sidebar'
 import { AcademyIntro } from './_components/academy-intro'
+import { CURRICULUM_CARDS, SUBJECTS } from './_components/academy-data'
 import { MunwonAcademy } from './_components/munwon-academy'
 import { InstructorAnam } from './_components/instructor-anam'
 import { SacAcademy } from './_components/sac-academy'
@@ -24,18 +27,21 @@ export const metadata: Metadata = {
 export default function AcademyPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      {/* Hero */}
-      <section className='py-12 md:py-20 bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 text-center'>
-          <h1 className='text-3xl md:text-5xl font-bold tracking-tight mb-4'>강 좌</h1>
-          <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>
-            전통의 깊이와 현대의 감각을 잇는 체계적인 서예 교육
-          </p>
-        </div>
-      </section>
+      <PageHero
+        {...PAGE_HERO_MARKS.academy}
+        title='강좌'
+        lede='전통의 깊이와 현대의 감각을 잇는 체계적인 서예 교육'
+      >
+        <HeroFacts
+          facts={[
+            { label: '강좌 과목', value: `${SUBJECTS.length}개` },
+            { label: '커리큘럼', value: `${CURRICULUM_CARDS.length}개` },
+          ]}
+        />
+      </PageHero>
 
       {/* Main Content with Sidebar */}
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container mx-auto px-4 py-10 md:py-16'>
         <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
           <AcademySidebar />
 

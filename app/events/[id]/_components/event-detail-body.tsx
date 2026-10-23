@@ -158,8 +158,6 @@ export function EventDetailBody({ event, relatedEvents }: EventDetailBodyProps) 
               </div>
             </div>
 
-            <CardTitle className='text-2xl font-bold text-foreground mb-4'>{event.title}</CardTitle>
-
             <div className='flex items-center gap-6 text-sm text-muted-foreground'>
               <div className='flex items-center gap-2'>
                 <Calendar className='h-4 w-4' />
