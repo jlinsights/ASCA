@@ -29,9 +29,7 @@ export function ConsultationSection() {
     <section id='consultation' className='scroll-mt-24'>
       <h2 className='text-2xl font-bold mb-3'>문의·상담</h2>
       <p className='text-sm text-muted-foreground mb-6 leading-relaxed'>
-        삼성금융네트웍스 제휴·후원 금융상품 가입 시 평생회원 승급, 연회비 면제, 전시 및 행사
-        프로그램 우대·할인 혜택을 드리고 있습니다. 상담이 필요하신 회원 작가분께서는 아래로 문의해
-        주세요.
+        회비·후원·출품 관련 상담이 필요하신 회원 작가분께서는 아래로 문의해 주세요.
       </p>
 
       <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
