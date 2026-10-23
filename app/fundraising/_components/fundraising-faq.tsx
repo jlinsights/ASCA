@@ -1,12 +1,4 @@
-'use client'
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { FAQ_ITEMS } from './fundraising-data'
+import { SiteFaqList } from '@/components/faq/site-faq-list'
 
 export function FundraisingFaq() {
   return (
@@ -37,22 +29,7 @@ export function FundraisingFaq() {
       </div>
 
       <div className='max-w-4xl mx-auto'>
-        <Accordion type='single' collapsible className='space-y-3'>
-          {FAQ_ITEMS.map((item, i) => (
-            <AccordionItem
-              key={i}
-              value={`faq-${i}`}
-              className='rounded-lg border bg-card px-4 md:px-6'
-            >
-              <AccordionTrigger className='text-left text-sm md:text-base font-medium py-4 hover:no-underline'>
-                {item.q}
-              </AccordionTrigger>
-              <AccordionContent className='text-sm text-muted-foreground pb-4 whitespace-pre-line leading-relaxed'>
-                {item.a}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <SiteFaqList />
       </div>
     </section>
   )
