@@ -1,4 +1,5 @@
 import Script from 'next/script'
+import { MobileConsultButton } from './mobile-consult-button'
 
 // 전 페이지 공통 위젯 — 루트 레이아웃 <body> 끝에서 렌더링한다.
 // 오리진은 next.config.js CSP 의 THIRD_PARTY(cal, channelTalk)에 등록돼 있어야 한다.
@@ -13,11 +14,15 @@ import Script from 'next/script'
  *   config.theme·ui.theme 을 주면 그 값이 고정돼 사이트 테마를 따르지 않는다.
  *   한계: 한 페이지에서 예약 창을 이미 연 뒤 테마를 바꾸면 그 창은 새로고침 전까지 처음 테마를 유지한다
  *   (Cal 이 iframe 을 재사용하고, 열린 뒤의 ui.theme 변경은 반영되지 않음 — 2026-10-19 확인).
+ * - 좁은 화면(768px 미만)에선 Cal 버튼을 만들지 않는다. 147×64 알약이 본문을 가려서,
+ *   대신 MobileConsultButton(52px 원형 아이콘)이 같은 예약 창을 연다.
  */
 const CAL_EMBED = `
 (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
 Cal("init", "meeting", {origin:"https://cal.com"});
-Cal.ns.meeting("floatingButton", {"calLink":"orientalcalligraphy","config":{"layout":"month_view"},"buttonPosition":"bottom-right","buttonText":"상담 예약","buttonColor":"#8a661c","buttonTextColor":"#ffffff"});
+if (window.matchMedia("(min-width: 768px)").matches) {
+  Cal.ns.meeting("floatingButton", {"calLink":"orientalcalligraphy","config":{"layout":"month_view"},"buttonPosition":"bottom-right","buttonText":"상담 예약","buttonColor":"#8a661c","buttonTextColor":"#ffffff"});
+}
 Cal.ns.meeting("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
 `
 
@@ -35,6 +40,7 @@ export function SiteWidgets() {
       <Script id='cal-floating-embed' strategy='lazyOnload'>
         {CAL_EMBED}
       </Script>
+      <MobileConsultButton />
       <Script id='channel-talk' strategy='lazyOnload'>
         {CHANNEL_TALK}
       </Script>

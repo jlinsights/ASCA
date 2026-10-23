@@ -165,24 +165,31 @@ export default function PartnersPage() {
                 <Card>
                   <CardContent className='p-0'>
                     <div className='divide-y'>
-                      {category.partners.map((partner, idx) => (
-                        <div
-                          key={`${category.id}-${idx}`}
-                          className='flex items-center justify-between px-4 py-3 hover:bg-muted/30 transition-colors'
-                        >
-                          <span className='text-sm'>{partner.name}</span>
-                          {partner.url && (
-                            <Link
-                              href={partner.url}
-                              target='_blank'
-                              rel='noopener noreferrer'
-                              className='text-muted-foreground hover:text-scholar-red transition-colors'
-                            >
-                              <ExternalLink className='w-4 h-4' />
-                            </Link>
-                          )}
-                        </div>
-                      ))}
+                      {category.partners.map((partner, idx) =>
+                        partner.url ? (
+                          <Link
+                            key={`${category.id}-${idx}`}
+                            href={partner.url}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='group flex min-h-12 items-center justify-between gap-3 px-4 py-3 hover:bg-muted/30 transition-colors'
+                          >
+                            <span className='text-sm'>{partner.name}</span>
+                            <ExternalLink
+                              aria-hidden='true'
+                              className='w-4 h-4 shrink-0 text-muted-foreground group-hover:text-scholar-red transition-colors'
+                            />
+                            <span className='sr-only'>(새 창)</span>
+                          </Link>
+                        ) : (
+                          <div
+                            key={`${category.id}-${idx}`}
+                            className='flex min-h-12 items-center px-4 py-3'
+                          >
+                            <span className='text-sm'>{partner.name}</span>
+                          </div>
+                        )
+                      )}
                     </div>
                   </CardContent>
                 </Card>

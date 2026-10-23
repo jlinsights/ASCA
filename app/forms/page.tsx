@@ -326,25 +326,25 @@ export default function FormsPage() {
           <div className='flex flex-wrap justify-center gap-3'>
             <Link
               href='/history'
-              className='text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
+              className='inline-flex min-h-11 items-center px-1 text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
             >
               연혁
             </Link>
             <Link
               href='/regulations'
-              className='text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
+              className='inline-flex min-h-11 items-center px-1 text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
             >
               정관
             </Link>
             <Link
               href='/business-plan'
-              className='text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
+              className='inline-flex min-h-11 items-center px-1 text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
             >
               사업계획
             </Link>
             <Link
               href='/contact'
-              className='text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
+              className='inline-flex min-h-11 items-center px-1 text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4'
             >
               문의
             </Link>

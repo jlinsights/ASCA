@@ -69,7 +69,7 @@ export function YearSection({ exhibition }: YearSectionProps) {
             {exhibitionLink && (
               <Link
                 href={exhibitionLink}
-                className='inline-flex items-center gap-1.5 text-sm font-medium text-scholar-red hover:underline mt-1'
+                className='inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-scholar-red hover:underline'
               >
                 전시 상세보기
                 <ExternalLink className='h-3.5 w-3.5' />

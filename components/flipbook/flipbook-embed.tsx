@@ -35,7 +35,7 @@ export function FlipbookEmbed({ id, url, keyPrefix }: FlipbookEmbedProps) {
           href={url}
           target='_blank'
           rel='noopener noreferrer'
-          className='inline-flex items-center gap-1.5 text-sm font-medium text-foreground underline decoration-temple-gold underline-offset-4 hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-temple-gold focus-visible:ring-offset-2 rounded-sm'
+          className='inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-foreground underline decoration-temple-gold underline-offset-4 hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-temple-gold focus-visible:ring-offset-2 rounded-sm'
         >
           {t('flipbookOpen')}
           <ExternalLink aria-hidden='true' className='h-4 w-4' />

@@ -62,7 +62,7 @@ export function ContactForm() {
               placeholder='성함'
               required
               maxLength={256}
-              className='w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-scholar-red/30 focus:border-scholar-red transition-colors'
+              className='w-full rounded-md border border-border bg-background px-4 py-2.5 text-base md:text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-scholar-red/30 focus:border-scholar-red transition-colors'
             />
           </div>
           <div>
@@ -72,7 +72,7 @@ export function ContactForm() {
               placeholder='이메일 주소'
               required
               maxLength={256}
-              className='w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-scholar-red/30 focus:border-scholar-red transition-colors'
+              className='w-full rounded-md border border-border bg-background px-4 py-2.5 text-base md:text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-scholar-red/30 focus:border-scholar-red transition-colors'
             />
           </div>
           <div>
@@ -82,7 +82,7 @@ export function ContactForm() {
               placeholder='휴대 전화번호'
               required
               maxLength={256}
-              className='w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-scholar-red/30 focus:border-scholar-red transition-colors'
+              className='w-full rounded-md border border-border bg-background px-4 py-2.5 text-base md:text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-scholar-red/30 focus:border-scholar-red transition-colors'
             />
           </div>
           <div>
@@ -91,7 +91,7 @@ export function ContactForm() {
               placeholder='남겨주실 말씀을 적어 주세요.'
               maxLength={5000}
               rows={5}
-              className='w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-scholar-red/30 focus:border-scholar-red transition-colors resize-y min-h-[120px]'
+              className='w-full rounded-md border border-border bg-background px-4 py-2.5 text-base md:text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-scholar-red/30 focus:border-scholar-red transition-colors resize-y min-h-[120px]'
             />
           </div>
 

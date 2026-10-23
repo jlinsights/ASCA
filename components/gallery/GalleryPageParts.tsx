@@ -86,7 +86,7 @@ export function FilterBar({
           value={localSearch}
           onChange={e => handleSearch(e.target.value)}
           placeholder='제목, 설명, 태그로 검색...'
-          className='w-full pl-10 pr-4 py-2.5 bg-background border border-border rounded-lg text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition'
+          className='w-full pl-10 pr-4 py-2.5 bg-background border border-border rounded-lg text-base md:text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition'
         />
         {localSearch && (
           <button
