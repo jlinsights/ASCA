@@ -1,0 +1,509 @@
+/* =====================================================================
+   회비·후원(/fundraising)과 문의(/contact) — apply.css 장부 문법의 확장.
+   - 여러 갈래 중 하나를 "권장"으로 무겁게: 납부 방법 첫 칸, 실시간 상담, 사무소 주소
+   - 용건별 안내는 줄 하나가 링크 하나. 카드 대신 먹선, 오른쪽 끝에 갈 곳 이름
+   ===================================================================== */
+
+.asca-apply__stack {
+  display: grid;
+  gap: 32px;
+  align-content: start;
+}
+
+/* ---------- 납부 방법 ---------- */
+.asca-apply__ways {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 900px) {
+  .asca-apply__ways {
+    grid-template-columns: 1.25fr 1fr 1fr;
+  }
+}
+.asca-apply__way {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--ap-rule);
+}
+@media (min-width: 900px) {
+  .asca-apply__way {
+    padding: 28px clamp(20px, 2.4vw, 32px);
+    border-bottom: 0;
+    border-left: 1px solid var(--ap-rule);
+  }
+  .asca-apply__way:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+.asca-apply__way.is-primary {
+  position: relative;
+}
+.asca-apply__way.is-primary::before {
+  content: '';
+  position: absolute;
+  inset: -1px auto auto 0;
+  width: 56px;
+  height: 3px;
+  background: var(--ap-seal);
+}
+.asca-apply__way-tag {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ap-accent);
+}
+.asca-apply__way.is-primary .asca-apply__way-tag {
+  color: var(--ap-seal);
+}
+.asca-apply__way-title {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.7rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+.asca-apply__way-body {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--ap-muted);
+}
+.asca-apply__way-actions {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+.asca-apply__way-link,
+.asca-apply__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ap-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--ap-seal);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  transition: text-decoration-color 160ms var(--ap-ease);
+}
+.asca-apply__way-link:hover {
+  text-decoration-color: var(--ap-fg);
+}
+.asca-apply__way-link.is-quiet {
+  font-weight: 500;
+  color: var(--ap-muted);
+  text-decoration-color: var(--ap-rule);
+}
+.asca-apply__copy {
+  padding: 0 14px;
+  border: 1px solid var(--ap-rule);
+  border-radius: 6px;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 160ms var(--ap-ease);
+}
+.asca-apply__copy:hover {
+  background: var(--ap-surface);
+}
+.asca-apply__copy:active {
+  transform: translateY(1px);
+}
+.asca-apply__account {
+  margin: 0;
+  display: grid;
+  gap: 2px;
+  font-size: 0.85rem;
+  color: var(--ap-muted);
+}
+.asca-apply__account strong {
+  font-family: var(--ap-font-display);
+  font-size: clamp(1.4rem, 1.15rem + 0.9vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ap-fg);
+}
+
+/* ---------- 회비가 쓰이는 곳 ---------- */
+.asca-apply__programs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 640px) {
+  .asca-apply__programs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(24px, 3vw, 48px);
+  }
+}
+.asca-apply__program {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--ap-rule);
+}
+.asca-apply__program-mark {
+  font-family: var(--ap-font-display);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--ap-seal);
+  text-align: center;
+}
+.asca-apply__program-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+/* ---------- 예산·결산 타임라인 ---------- */
+.asca-apply__timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  counter-reset: tl;
+}
+@media (min-width: 900px) {
+  .asca-apply__timeline {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: clamp(20px, 2.4vw, 32px);
+  }
+}
+.asca-apply__timeline-step {
+  counter-increment: tl;
+  position: relative;
+  padding: 22px 0 22px 28px;
+  border-left: 1px solid var(--ap-rule);
+}
+.asca-apply__timeline-step::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 28px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ap-bg);
+  border: 2px solid var(--ap-accent);
+}
+@media (min-width: 900px) {
+  .asca-apply__timeline-step {
+    padding: 28px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--ap-rule);
+  }
+  .asca-apply__timeline-step::before {
+    left: 0;
+    top: -5px;
+  }
+}
+.asca-apply__timeline-when {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ap-accent);
+}
+.asca-apply__timeline-title {
+  margin: 6px 0 0;
+  font-family: var(--ap-font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.asca-apply__timeline-body {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--ap-muted);
+}
+
+/* ---------- 용건별 안내 ---------- */
+.asca-apply__routes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 900px) {
+  .asca-apply__routes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(32px, 4vw, 56px);
+  }
+}
+.asca-apply__route {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'title cta'
+    'body cta';
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 2px;
+  min-height: 76px;
+  padding: 16px 4px;
+  border-bottom: 1px solid var(--ap-rule);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 180ms var(--ap-ease);
+}
+.asca-apply__route:hover {
+  background: var(--ap-surface);
+}
+.asca-apply__route-title {
+  grid-area: title;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.asca-apply__route-body {
+  grid-area: body;
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--ap-muted);
+}
+.asca-apply__route-cta {
+  grid-area: cta;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ap-accent);
+  white-space: nowrap;
+}
+.asca-apply__route-cta svg {
+  transition: transform 180ms var(--ap-ease);
+}
+.asca-apply__route:hover .asca-apply__route-cta svg {
+  transform: translateX(3px);
+}
+@media (max-width: 479.98px) {
+  /* 좁은 화면에선 갈 곳 이름을 숨기고 화살표만 — 제목이 두 줄로 꺾이지 않게 */
+  .asca-apply__route-cta {
+    font-size: 0;
+  }
+}
+
+/* ---------- 연락 창구 ---------- */
+.asca-apply__channels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 640px) {
+  .asca-apply__channels {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(24px, 3vw, 40px);
+  }
+}
+@media (min-width: 1024px) {
+  .asca-apply__channels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.asca-apply__channel {
+  display: grid;
+  gap: 4px;
+  height: 100%;
+  padding: 20px 4px 22px;
+  border-bottom: 1px solid var(--ap-rule);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 180ms var(--ap-ease);
+}
+a.asca-apply__channel:hover {
+  background: var(--ap-surface);
+}
+.asca-apply__channel.is-primary {
+  box-shadow: inset 3px 0 0 var(--ap-seal);
+  padding-left: 16px;
+}
+.asca-apply__channel-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ap-muted);
+}
+.asca-apply__channel-badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--paper);
+  background: var(--ap-seal);
+}
+.asca-apply__channel-value {
+  font-family: var(--ap-font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.asca-apply__channel-best {
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--ap-muted);
+}
+
+/* ---------- 이의제기 필수 항목 ---------- */
+.asca-apply__fields {
+  margin: 0;
+  display: grid;
+  border-top: 1px solid var(--ap-rule);
+}
+.asca-apply__field {
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ap-rule);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.asca-apply__field dt {
+  font-weight: 600;
+}
+.asca-apply__field dd {
+  margin: 0;
+  color: var(--ap-muted);
+}
+
+/* ---------- 주소 ---------- */
+.asca-apply__addresses {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 900px) {
+  .asca-apply__addresses {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+.asca-apply__address {
+  font-style: normal;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--ap-rule);
+}
+@media (min-width: 900px) {
+  .asca-apply__address {
+    padding: 30px clamp(24px, 3vw, 40px);
+    border-bottom: 0;
+  }
+  .asca-apply__address:first-child {
+    padding-left: 0;
+    border-right: 1px solid var(--ap-rule);
+  }
+}
+.asca-apply__address-label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-family: var(--ap-font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.asca-apply__address-role {
+  font-family: var(--ap-font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 2px 10px;
+  border: 1px solid var(--ap-seal);
+  border-radius: 999px;
+  color: var(--ap-seal);
+}
+.asca-apply__address-postal {
+  margin: 14px 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ap-accent);
+}
+.asca-apply__address-line {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.asca-apply__address-sub {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ap-muted);
+}
+.asca-apply__address-map {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  color: var(--ap-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--ap-rule);
+  text-underline-offset: 4px;
+}
+.asca-apply__address-map:hover {
+  color: var(--ap-fg);
+}
+
+/* ---------- 행사 캘린더 ---------- */
+.asca-apply__calendar {
+  border-top: 1px solid var(--ap-rule-strong);
+  padding-top: 16px;
+}
+.asca-apply__calendar-frame {
+  display: block;
+  width: 100%;
+  height: 640px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--ap-surface);
+}
+@media (max-width: 639.98px) {
+  .asca-apply__calendar-frame {
+    height: 560px;
+  }
+}
+
+/* ---------- 출품원서 보낼 곳 ---------- */
+.asca-apply__sendto {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-left: 3px solid var(--ap-seal);
+  background: var(--ap-surface);
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+.asca-apply__sendto strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asca-apply__route-cta svg {
+    transition: none;
+  }
+}

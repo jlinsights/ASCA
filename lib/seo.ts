@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { defaultSEO } from './seo-constants'
 import { SOCIAL_LINKS } from './social-links'
+import { HEADQUARTERS } from './content/contact-info'
 
 interface SEOProps {
   title?: string
@@ -89,10 +90,10 @@ export function generateOrganizationSchema() {
     },
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '보문로 105, 보림빌딩',
-      addressLocality: '성북구',
-      addressRegion: '서울시',
-      postalCode: '02872',
+      streetAddress: HEADQUARTERS.street,
+      addressLocality: HEADQUARTERS.locality,
+      addressRegion: HEADQUARTERS.region,
+      postalCode: HEADQUARTERS.postalCode,
       addressCountry: 'KR',
     },
     sameAs: SOCIAL_LINKS.map(link => link.href),

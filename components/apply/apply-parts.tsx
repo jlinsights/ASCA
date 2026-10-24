@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { ArrowDown, CalendarClock, Headphones, Phone } from 'lucide-react'
+import { BOOKING_URL, CHAT_URL, OFFICE_HOURS, PHONE } from '@/lib/content/contact-info'
 
 /** 규정 조문 링크 — /regulations/<slug>#a<조> */
 export interface RegSource {
@@ -105,22 +106,22 @@ const CONTACTS = [
   {
     icon: Phone,
     title: '전화 상담',
-    body: '0502-5550-8700',
-    href: 'tel:+8250255508700',
+    body: PHONE.display,
+    href: PHONE.href,
     external: false,
   },
   {
     icon: Headphones,
     title: '실시간 온라인 상담',
     body: '1년 365일 언제든 문의 가능',
-    href: 'https://orientalcalligraphy.channel.io',
+    href: CHAT_URL,
     external: true,
   },
   {
     icon: CalendarClock,
     title: '상담 예약',
-    body: '월–금 오전 10시 – 오후 5시',
-    href: 'https://cal.com/orientalcalligraphy',
+    body: OFFICE_HOURS,
+    href: BOOKING_URL,
     external: true,
   },
 ] as const
