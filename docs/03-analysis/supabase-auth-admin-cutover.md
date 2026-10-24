@@ -1,13 +1,13 @@
 # Supabase Auth 관리자 준비와 배포 순서
 
-이 문서는 운영 실행 절차다. 아래 운영 작업을 이미 수행했다는 뜻이 아니다. 초기
-관리자 검증을 완료하기 전 PR을 병합하거나 운영으로 승격하지 않는다. `main`
-병합은 Vercel 운영 배포를 시작하므로 이 순서가 병합 선행 조건이다.
+이 문서는 운영 실행 절차다. 실행 여부는 아래 체크리스트와 전환 준비 기록을
+따른다. 초기 관리자 검증을 완료하기 전 PR을 병합하거나 운영으로 승격하지 않는다.
+`main` 병합은 Vercel 운영 배포를 시작하므로 이 순서가 병합 선행 조건이다.
 
 ## 마이그레이션 적용 → 배포
 
 1. ASCA-2026(`caxjyimsuvjnbmjoxfad`)의 직전 백업과 복구 기준을 확인한다.
-2. 검토한 `supabase/migrations/20261024110000_supabase_auth_foundation.sql`의
+2. 검토한 `supabase/migrations/20261024142344_supabase_auth_foundation.sql`의
    내용만 Supabase 마이그레이션 도구(`apply_migration`)로 해당 프로젝트에
    적용하고 적용 이력을 확인한다. 과거 파일 재실행, `db:push`, `--include-all`은
    사용하지 않는다. 현재 운영 Clerk 계정·설정은 보존한다.
@@ -36,8 +36,8 @@ select has_function_privilege('authenticated', 'public.get_my_artist_ids()', 'ex
 -- 기대값: authenticated=true, anon=false, service_role=false.
 ```
 
-DB 소유자/운영자 권한은 이 클라이언트 역할 검사와 별개다. 운영 적용·관리자
-부여는 이 문서 작성 작업에서 실행하지 않았다.
+DB 소유자/운영자 권한은 이 클라이언트 역할 검사와 별개다. 2026-10-24 운영 DB
+적용과 위 권한 검사는 완료했다. 관리자 역할 부여는 아직 수행하지 않았다.
 
 ## 초기 관리자 계정 만들기
 
@@ -89,9 +89,10 @@ returning p.id, p.role;
 
 ## 병합 전 운영 체크리스트
 
-- [ ] 직전 백업·복구 기준 확인
-- [ ] ASCA-2026에 검토된 Auth 마이그레이션만 적용하고 이력 확인
-- [ ] 테이블·RPC 존재 및 역할별 실행 권한 확인
+- [x] 직전 완료 백업 확인, PITR 비활성·복원 리허설 미수행 기록
+- [x] ASCA-2026에 검토된 Auth 마이그레이션만 적용하고 이력 확인
+      (`20261024142344`)
+- [x] 테이블·RPC 존재 및 역할별 실행 권한 확인
 - [ ] Preview 환경변수·SMTP·발신 주소·확인 링크·TOTP 정책 확인
 - [ ] Preview 배포 후 관리자 이메일 가입·확인과 UUID 확인
 - [ ] `public.account_profiles.role = 'admin'` 부여 및 운영 기록

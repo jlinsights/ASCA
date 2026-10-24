@@ -136,7 +136,7 @@ async function run() {
     await database.unsafe(
       await readFile(
         new URL(
-          '../supabase/migrations/20261024110000_supabase_auth_foundation.sql',
+          '../supabase/migrations/20261024142344_supabase_auth_foundation.sql',
           import.meta.url
         ),
         'utf8'

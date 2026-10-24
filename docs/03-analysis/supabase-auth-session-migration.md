@@ -3,6 +3,9 @@
 2026-10-24. `feat/supabase-auth`의 로컬 구현 기록이다. 운영 배포·운영 DB 변경·
 기존 계정 이전·실제 인증메일 발송을 수행한 기록이 아니다.
 
+후속 운영 DB 적용 상태는 [전환 준비 기록](supabase-auth-cutover-readiness.md)을
+확인한다.
+
 ## 구현한 흐름
 
 - Clerk 위젯·provider·런타임 SDK 호출을 Supabase SSR 기반
@@ -73,7 +76,7 @@ gstack `/browse`로 로컬 프로덕션 빌드의 로그인·가입·복구 화�
 1. 최신 main `f1099fba`의 PR #117·#118을 통합했다. 다른 작업 트리의 변경과
    복구용 stash를 보존했다. 후속 변경이 생기면 다시 비교한다.
 2. 실제 프로젝트 `caxjyimsuvjnbmjoxfad`의 백업/복원 가능 상태를 확인한다. 검토한
-   `20261024110000_supabase_auth_foundation.sql`만 적용한다. 과거 마이그레이션
+   `20261024142344_supabase_auth_foundation.sql`만 적용한다. 과거 마이그레이션
    재실행, 전체 Drizzle 스키마 push, 초기화는 하지 않는다.
 3. Preview/운영의 Supabase URL·공개 키·서버 키·DATABASE_URL이 같은 프로젝트를
    가리키는지 확인한다.

@@ -67,7 +67,7 @@ Clerk 유료 업그레이드 없이 Supabase Auth로 전환한다. 이 단계는
   계정 삭제 시 작가 보존.
 - `npm run db:generate`는 임시 출력 디렉터리에 생성해 검토했다. 레거시 테이블
   전체를 생성하는 결과는 운영에 적용하거나 커밋하지 않았다. 검토 대상 SQL은
-  `supabase/migrations/20261024110000_supabase_auth_foundation.sql` 하나다.
+  `supabase/migrations/20261024142344_supabase_auth_foundation.sql` 하나다.
 
 DB 테스트는 JWT helper와 최소 `auth.users` 구조를 제공하는 로컬 PostgreSQL
 16이다. 운영 Supabase는 PostgreSQL 17이며, 운영 마이그레이션은 아직 실행하지
