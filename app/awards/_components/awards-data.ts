@@ -14,6 +14,16 @@ export interface ContestEdition {
   online: boolean
 }
 
+/**
+ * 다음 대전 — 연혁에는 아직 없다. 출처: 옛 사이트 공지
+ * https://orientalcalligraphy.org/event/23-oriental-calligraphy-exhibition-2027 (2026-10-24 확인)
+ */
+export const NEXT_CONTEST = {
+  edition: 23,
+  date: '2027년 4월 20일(화) ~ 4월 30일(금)',
+  venue: '예술의전당 서울서예박물관',
+} as const
+
 const EDITION_TITLE = /^第(\d+)回 大韓民國 東洋書藝大展$/
 
 export const CONTEST_EDITIONS: readonly ContestEdition[] = historyEvents

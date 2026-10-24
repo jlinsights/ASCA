@@ -70,7 +70,6 @@ const boardSections: BoardSection[] = [
     title: '감사',
     icon: Shield,
     members: [
-      { name: '배옥영', artName: '아남', position: '감사' },
       { name: '이권재', artName: '문원', position: '감사' },
       { name: '박성호', artName: '옥채', position: '감사' },
     ],
@@ -100,7 +99,7 @@ const boardSections: BoardSection[] = [
   },
 ]
 
-// 겸직자(배옥영·소정아)는 두 번 적히므로 사람 수는 이름으로 중복을 걷는다
+// 겸직자(소정아)는 두 번 적히므로 사람 수는 이름으로 중복을 걷는다
 const BOARD_PERSON_COUNT = new Set(
   boardSections.flatMap(section => section.members.map(member => member.name))
 ).size

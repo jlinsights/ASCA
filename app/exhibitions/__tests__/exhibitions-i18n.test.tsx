@@ -108,19 +108,13 @@ describe('전시 페이지 — 번역', () => {
     }
   })
 
-  it('목록 페이지(en): 빈 상태 문구가 번역된다', async () => {
+  // 회귀: 목록 페이지가 비어 있는 exhibitions 테이블을 읽어 "전시가 없습니다"만 보였다.
+  it('목록 페이지: 연혁의 전 회차를 보여 주고 DB 를 읽지 않는다', async () => {
     const { container } = renderIn('en', <ExhibitionsPage />)
-    expect(await screen.findByText('No exhibitions found')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('Search exhibitions…')).toBeInTheDocument()
+    expect(await screen.findByText('第22回 大韓民國 東洋書藝大展')).toBeInTheDocument()
+    expect(screen.queryByText('No exhibitions found')).not.toBeInTheDocument()
+    expect(mockGetExhibitions).not.toHaveBeenCalled()
     expect(hangulLeft(container)).toStrictEqual([])
-  })
-
-  // 회귀: 오류 문구를 한국어 문자열로 state 에 넣어 언어를 바꿔도 한국어로 남았다.
-  it('목록 페이지(ja): 불러오기 실패 문구가 번역된다', async () => {
-    mockGetExhibitions.mockRejectedValue(new Error('down'))
-    renderIn('ja', <ExhibitionsPage />)
-    expect(await screen.findByText('展覧会情報を読み込めませんでした。')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '再試行' })).toBeInTheDocument()
   })
 
   it('전시 카드(en): 상태·큐레이터·날짜·인원이 번역된다', async () => {

@@ -89,9 +89,12 @@ export default function NoticePage() {
         if (selectedCategory !== 'all') searchFilters.category = selectedCategory
         searchFilters.status = 'published'
 
-        const response = await searchNotices(searchQuery.trim(), searchFilters)
+        const response = await searchNotices(searchQuery.trim(), searchFilters, {
+          page: currentPage,
+          limit: 10,
+        })
         setNotices(response.data)
-        setTotalPages(Math.ceil(response.data.length / 10))
+        setTotalPages(Math.ceil(response.total / 10))
       } else {
         // 일반 목록 조회
         const filters: SearchFilters = {}
@@ -219,12 +222,11 @@ export default function NoticePage() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value='all'>전체</SelectItem>
-                          <SelectItem value='exhibition'>전시회</SelectItem>
-                          <SelectItem value='education'>교육</SelectItem>
-                          <SelectItem value='competition'>공모전</SelectItem>
-                          <SelectItem value='general'>일반</SelectItem>
-                          <SelectItem value='meeting'>총회</SelectItem>
-                          <SelectItem value='exchange'>교류전</SelectItem>
+                          {Object.entries(categoryLabels).map(([value, label]) => (
+                            <SelectItem key={value} value={value}>
+                              {label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -374,16 +376,17 @@ export default function NoticePage() {
           {/* 페이지네이션 */}
           {totalPages > 1 && (
             <div className='mt-12 flex justify-center'>
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-1.5 sm:gap-2'>
                 <Button
                   variant='outline'
                   size='sm'
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
                   className='border-border/50'
+                  aria-label={t('previous')}
                 >
                   <ChevronLeft className='h-4 w-4' />
-                  {t('previous')}
+                  <span className='hidden sm:inline'>{t('previous')}</span>
                 </Button>
 
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -408,8 +411,9 @@ export default function NoticePage() {
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                   className='border-border/50'
+                  aria-label={t('next')}
                 >
-                  {t('next')}
+                  <span className='hidden sm:inline'>{t('next')}</span>
                   <ChevronRight className='h-4 w-4' />
                 </Button>
               </div>

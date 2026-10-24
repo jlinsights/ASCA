@@ -1,4 +1,5 @@
 import { ensureSupabase } from '../supabase'
+import { historyEvents } from '@/app/history/_data/history-events'
 import type {
   Notice,
   Exhibition,
@@ -76,7 +77,15 @@ export interface SearchResults {
   facets: any
 }
 
-// Notice 검색
+// 검색어를 PostgREST or() 필터에 안전하게 넣는다 — 구분자·와일드카드 문자는 지운다
+export function toIlikeTerm(query: string): string {
+  return query
+    .replace(/[%_,()*\\:."']/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+// Notice 검색 — 제목·본문 부분 일치 (ASCA-2026 에는 search_* RPC 가 없다)
 export async function searchNotices(
   query: string,
   filters: SearchFilters = {},
@@ -84,17 +93,21 @@ export async function searchNotices(
 ): Promise<{ data: Notice[]; total: number }> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  const { data, error } = await supabase.rpc('search_notices', {
-    search_query: query,
-    category_filter: filters.category,
-    date_from: filters.dateFrom,
-    date_to: filters.dateTo,
-    page_num: pagination.page,
-    page_size: pagination.limit,
-  })
+  const term = toIlikeTerm(query)
+  if (!term) return { data: [], total: 0 }
+  let request = supabase
+    .from('notices')
+    .select('*', { count: 'exact' })
+    .eq('is_published', true)
+    .or(`title.ilike.%${term}%,content.ilike.%${term}%`)
+  if (filters.category) request = request.eq('category', filters.category)
+  const from = (pagination.page - 1) * pagination.limit
+  const { data, error, count } = await request
+    .order('published_at', { ascending: false })
+    .range(from, from + pagination.limit - 1)
 
   if (error) throw error
-  return data
+  return { data: (data ?? []) as Notice[], total: count ?? 0 }
 }
 
 // Exhibition 검색
@@ -180,29 +193,80 @@ export async function searchArtworks(
   return data
 }
 
-// 전체 콘텐츠 통합 검색
+// 전체 콘텐츠 통합 검색 — 공지·행사는 DB, 전시는 협회 연혁 기록에서 찾는다
 export async function searchAllContent(
   query: string,
   params: GlobalSearchParams = { query }
 ): Promise<SearchResultItem[]> {
   const supabase = ensureSupabase()
   if (!supabase) throw new Error('Supabase client not available')
-  const { data, error } = await supabase.rpc('search_all_content', {
-    search_query: query,
-    content_types: params.contentTypes || [
-      'notices',
-      'exhibitions',
-      'events',
-      'artists',
-      'artworks',
-    ],
-    date_from: params.dateRange?.from,
-    date_to: params.dateRange?.to,
-    result_limit: params.limit || 20,
-  })
+  const term = toIlikeTerm(query)
+  if (!term) return []
+  const types = params.contentTypes ?? ['notices', 'exhibitions', 'events']
+  const limit = params.limit ?? 20
+  const like = `%${term}%`
+  // 행사는 요약(description)이 필수이고 본문(content)은 비어 있을 수 있다
+  const noticePattern = `title.ilike.${like},content.ilike.${like}`
+  const eventPattern = `title.ilike.${like},description.ilike.${like},content.ilike.${like}`
 
-  if (error) throw error
-  return data || []
+  const [notices, events] = await Promise.all([
+    types.includes('notices')
+      ? supabase
+          .from('notices')
+          .select('id,title,excerpt,content,published_at')
+          .eq('is_published', true)
+          .or(noticePattern)
+          .order('published_at', { ascending: false })
+          .limit(limit)
+      : null,
+    types.includes('events')
+      ? supabase
+          .from('public_events')
+          .select('id,title,description,event_date')
+          .eq('is_published', true)
+          .or(eventPattern)
+          .order('event_date', { ascending: false })
+          .limit(limit)
+      : null,
+  ])
+  if (notices?.error) throw notices.error
+  if (events?.error) throw events.error
+
+  const needle = term.toLowerCase()
+  const exhibitions = types.includes('exhibitions')
+    ? historyEvents.filter(
+        e =>
+          e.type === 'exhibition' &&
+          [e.title, e.subtitle, e.venue].some(v => v?.toLowerCase().includes(needle))
+      )
+    : []
+
+  return [
+    ...(notices?.data ?? []).map(n => ({
+      id: n.id,
+      title: n.title,
+      description: n.excerpt ?? n.content.slice(0, 160),
+      content_type: 'notice' as const,
+      url: `/notice/${n.id}`,
+      published_at: n.published_at ?? undefined,
+    })),
+    ...(events?.data ?? []).map(e => ({
+      id: e.id,
+      title: e.title,
+      description: e.description,
+      content_type: 'event' as const,
+      url: `/events/${e.id}`,
+      published_at: e.event_date,
+    })),
+    ...exhibitions.map(e => ({
+      id: e.id,
+      title: e.title,
+      description: [e.subtitle, e.date, e.venue].filter(Boolean).join(' · '),
+      content_type: 'exhibition' as const,
+      url: '/exhibitions',
+      published_at: `${e.year}-${String(e.month).padStart(2, '0')}-01`,
+    })),
+  ].slice(0, limit * 2)
 }
 
 // 간단한 텍스트 검색 (기존 방식과 호환)

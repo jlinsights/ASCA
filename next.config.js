@@ -281,6 +281,8 @@ const nextConfig = {
         destination: '/awards#editions',
         permanent: false,
       },
+      // /services(B2B 자동화 판매 페이지)는 협회 사업이 아니어서 내렸다(2026-10-24 사용자 결정)
+      { source: '/services', destination: '/contact', permanent: true },
       // 블로그 카테고리 페이지는 지어낸 게시물(수상자 인터뷰·총회 보고 등)뿐이라 내렸다
       { source: '/blog/category/:slug*', destination: '/blog', permanent: false },
       // 분류별 작품 페이지는 실제 회원 작품 이미지에 지어낸 작가명·가격을 붙인 샘플이라 내렸다
@@ -289,6 +291,8 @@ const nextConfig = {
         destination: '/artworks',
         permanent: false,
       },
+      // 분류 체계 페이지는 위 분류별 페이지로 가는 카드에 지어낸 작품 수를 단 목록이었다
+      { source: '/taxonomy', destination: '/artworks', permanent: false },
       // 옛 Webflow 회차별 전시 주소(/exhibition/21-oriental-calligraphy-exhibition-2024 등)
       {
         source: '/exhibition/:slug*',

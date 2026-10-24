@@ -446,13 +446,6 @@ export default function DigitalTransformationGuidePage() {
                   <Zap className='mr-2 h-5 w-5' />
                   무료 진단 신청
                 </a>
-                <Link
-                  href='/services'
-                  className='inline-flex items-center justify-center h-12 px-8 text-base font-medium rounded-lg border-2 border-rice-paper/50 text-rice-paper hover:bg-rice-paper/10 transition-all duration-300'
-                >
-                  서비스 자세히 보기
-                  <ArrowRight className='ml-2 h-4 w-4' />
-                </Link>
               </div>
             </div>
 
@@ -460,15 +453,6 @@ export default function DigitalTransformationGuidePage() {
             <div className='mt-16 pt-12 border-t border-border/50'>
               <h3 className='text-lg font-bold text-foreground mb-6'>관련 글</h3>
               <div className='grid md:grid-cols-2 gap-4'>
-                <Link
-                  href='/services'
-                  className='rounded-xl border border-border/50 bg-card p-6 hover:shadow-md transition-all group'
-                >
-                  <p className='text-sm text-celadon-green font-medium mb-2'>서비스 안내</p>
-                  <p className='font-bold text-foreground group-hover:text-celadon-green transition-colors'>
-                    ASCA 디지털 서비스 →
-                  </p>
-                </Link>
                 <Link
                   href='/blog'
                   className='rounded-xl border border-border/50 bg-card p-6 hover:shadow-md transition-all group'

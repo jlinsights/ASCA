@@ -37,7 +37,7 @@ describe('연혁 페이지 — 번역', () => {
   it('en: 행사 종류·날짜·장소가 영어로 바뀐다', async () => {
     renderPage('en')
     expect(await screen.findByText('2025 Extraordinary General Meeting')).toBeInTheDocument()
-    expect(screen.getByText('Nov 27, 2025 (Sat) 1–7 PM')).toBeInTheDocument()
+    expect(screen.getByText('Nov 27, 2025 (Thu) 1–7 PM')).toBeInTheDocument()
     expect(screen.getAllByText('Exhibition').length).toBeGreaterThan(0)
   })
 })
