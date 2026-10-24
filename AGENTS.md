@@ -13,10 +13,10 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   detected and logged (see "Sync System")
 - **Multi-language Support**: Korean (default), English, Japanese, Chinese
   (Traditional, `zh-TW`) — see "UI 번역 (i18n)"
-- **Admin Dashboard**: Complete CMS for managing artists, artworks, exhibitions
+- **Admin**: `/admin/artists` 작가 회비 관리만 동작한다 (see "Admin System")
 - **Advanced Gallery**: Filtering, categorization, and viewing features
 
-## 운영 환경과 데이터 (2026-10-12 기준)
+## 운영 환경과 데이터 (2026-10-24 기준)
 
 ### 배포 — Vercel `asca-main`
 
@@ -35,6 +35,16 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   루트· `www` 의 DNS(Cloudflare)는 아직 **Webflow** 를 가리킨다. 이 저장소를
   배포해도 그 도메인은 바뀌지 않는다(하위 도메인 anam·heelang·catalog2025·jury
   는 각각 다른 Vercel 프로젝트).
+- 운영도 Clerk **개발용 인스턴스**(`pk_test_…`)로 돈다.
+- `proxy.ts` 의 CSRF 검사(`lib/security/origin-check.ts`)는 POST·PUT·PATCH·
+  DELETE 의 Origin 을 허용 목록과 대조한다. 허용 목록은 `NEXT_PUBLIC_APP_URL`·
+  `VERCEL_URL`·`VERCEL_PROJECT_PRODUCTION_URL`·`VERCEL_BRANCH_URL`·
+  `CSRF_ALLOWED_ORIGINS` 다. ⚠️ `VERCEL_URL` 은 **배포마다 바뀌는 고유 주소**라
+  별칭(`asca-main.vercel.app`)을 담지 못한다. 2026-10-24 까지 운영의 같은 사이트
+  POST 가 전부 403 이었고, 증상은 **"로그아웃이 안 됨"**(Clerk `signOut` 이 먼저
+  Next 서버 액션 `POST /` 를 보낸다)과 회비 저장 실패였다(#120). 미들웨어를
+  바꾸면 **배포된 별칭에서 실제로 POST 를 보내** 확인한다. 커스텀 도메인을
+  붙이면 www·apex 중 하나는 `CSRF_ALLOWED_ORIGINS` 에 넣어야 할 수 있다.
 
 ### Supabase — `ASCA-2026` (`caxjyimsuvjnbmjoxfad`)
 
@@ -72,6 +82,32 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 - `artists.membership_type` 은 쉼표로 이은 복수 역할이고, 직함은 음절 사이에
   공백이 들어간 값('고 문')이 있다 — 그래서 `=` 대신 `lib/api/artists.ts` 의
   `spacingTolerantPattern` 으로 `ilike` 한다.
+
+### 작가 공개 범위 — `visibility` + RLS
+
+- `artists.visibility` 는 `public`·`members`·`hidden` 이고, 공개 조회는 RLS 정책
+  `artists_public_read` 가 `public` 만 통과시킨다. 작품(`artworks`)도 작가가
+  공개일 때만 보인다.
+- 트리거 `trg_artists_grade_visibility`(함수
+  `artists_enforce_grade_visibility`)가 등급에 따라 자동으로 숨긴다 —
+  `membership_type` 에 **준회원·공모작가**가 있거나 `dues_status` 가 **'자격
+  정지'** 면 `hidden`, 그 조건에서 벗어나면 `public` 으로 되돌린다. `visibility`
+  를 손으로 바꿔도 트리거가 다시 맞춘다.
+- `membership_type` 기본값이 **'준회원'** 이라 등급 없이 넣은 새 작가는 숨겨진
+  채로 시작한다. 테스트 픽스처는 공개 등급('초대작가' 등)을 명시한다.
+- `dues_status`(`정상`·`권한 제한`·`자격 정지`)는 **등급과 별개**다. 정회원이
+  회비를 안 내도 등급은 그대로 두고 회비 상태만 바꾼다.
+- 🔴 `artists` 는 **열 단위 grant** 다. 새 열을 공개 select 에 넣으면 anon·
+  authenticated 에 grant 해야 하고, 빠지면 **작가 목록 전체가 빈 배열**이 된다.
+  `dues_status`·`claimed_by_user_id` 는 일부러 grant 하지 않았다.
+- 🔴 공개 API 는 **anon 클라이언트 + `PUBLIC_ARTIST_COLUMNS`** 로 읽는다.
+  service role 은 RLS 를 건너뛰어 숨긴 작가가 새어 나간다 — 상세 API
+  `/api/artists/[id]` 가 그랬다(#117). 공개 범위를 검증할 때는 목록뿐 아니라
+  **상세 API 까지** 숨긴 작가 id 로 404 를 확인한다.
+- 계정–작가 연결 칸 `claimed_by_user_id` 는 있지만 **채워진 행이 없고** 연결하는
+  화면도 없다. 그래서 `/profile/edit` 은 지금 누구에게나 조회·저장이 실패한다
+  (Clerk 사용자 id 를 작가 uuid 로 조회하고, 브라우저 anon 클라이언트로 직접
+  update 한다). Supabase Auth 전환 후 서버 API 로 다시 만든다.
 
 ## Primary Commands
 
@@ -142,7 +178,10 @@ security:
 
 ### Authentication
 
-- **Clerk** handles all authentication (Supabase Auth is fully removed)
+- 지금 main 은 **Clerk** 이다(Supabase Auth 는 제거된 상태).
+- ⚠️ **Supabase Auth 로 전환하는 작업이 `feat/supabase-auth` 에서 진행 중이다.**
+  인증·헤더·`/profile`·관리자 보호 라우트를 그 브랜치가 고치고 있으니, 이 영역을
+  바꾸기 전에 그 브랜치와 겹치는지 확인한다.
 - Server Actions for admin/membership are being replaced by secure API routes
 
 ### Multi-language Pattern
@@ -179,21 +218,28 @@ All content tables use consistent multilingual structure:
 
 ## Admin System
 
-### Special Admin Account
+### 관리자 판정
 
-- Email: `info@orientalcalligraphy.org`
-- Auto-login without password
-- Full CMS access at `/admin`
+- 관리자 계정은 `info@orientalcalligraphy.org` 다. 비밀번호 로그인이다(자동
+  로그인·`/admin/dev-login` 은 없다).
+- 관리자 여부는 `lib/archive/writer.ts` 의 `archiveIdentity()` 가 정한다 — Clerk
+  의 **검증된 대표 이메일**이 Vercel 환경변수 `ADMIN_EMAILS`(또는
+  `SUPER_ADMIN_EMAILS`)에 있으면 관리자다(`lib/auth/admin-roles.ts`). 관리자 API
+  는 이걸로 401·403 을 가르고 그다음에만 service role 을 쓴다.
+- ⚠️ `lib/auth/middleware.ts` 의 관리자 확인은 DB 에 **없는 `user_profiles`**
+  테이블을 봐서 항상 실패한다. 새 관리자 기능은 `archiveIdentity()` 를 쓴다.
 
-### Key Admin Features
+### 동작하는 관리 화면
 
-- Artist/artwork management
-- Exhibition scheduling
-- News/event publishing
-- Database migration monitoring
-- Real-time sync controls
-- **Audit Log Viewer**: High-risk activity monitoring and compliance reporting
-- **System Health**: Performance metrics and agent status tracking
+- `/admin` → `/admin/artists` 로 보낸다.
+- **`/admin/artists` — 작가 회비 관리**: 이름 검색·등급·회비 상태 필터, 행마다
+  `dues_status` 변경(`PATCH /api/admin/artists/[id]`, Origin 검사·분당 60회·
+  `auditTrail.trackDataChange` 기록). 회비 상태를 바꾸면 트리거가 공개 여부를
+  맞추고, 응답에 바뀐 `visibility` 가 온다.
+- 메뉴(`components/admin/admin-nav-items.ts`)에는 **페이지가 있는 화면만**
+  싣는다. 테스트가 href 마다 `app/admin/**/page.tsx` 가 있는지 확인한다.
+- ⚠️ `/admin/contests` 는 위 `user_profiles` 때문에 항상 튕기고,
+  `/admin/membership` 은 예시 데이터라 메뉴에서 뺐다.
 
 ### Permission System (RBAC)
 
@@ -353,7 +399,10 @@ and refactor using this standardized process:
 
 - **Database Schema**: `lib/db/schema.ts` (primary PostgreSQL schema)
 - **Database Config**: `drizzle.config.ts` (points to PostgreSQL)
-- **Admin Auth**: Clerk Authentication integration
+- **Admin Auth**: `archiveIdentity()` in `lib/archive/writer.ts` (Clerk +
+  `ADMIN_EMAILS`)
+- **CSRF Guard**: `proxy.ts` → `lib/security/origin-check.ts`
+- **Terms of Service**: `app/terms-of-service/_data/terms-articles.ts`
 - **Permission Mapping**: `lib/admin/permissions.ts`
 - **Audit System**: `lib/audit/audit-trail.ts`
 - **CQRS Buses**: `lib/cqrs/` (command-bus, query-bus)
@@ -367,7 +416,12 @@ and refactor using this standardized process:
 
 - Database tests: `npx tsx lib/db/test.ts`
 - Component tests with React Testing Library
-- Admin functionality testing via `/admin/dev-login`
+- 실제 Postgres 검증은 CI `archive-db` 가 돌린다 —
+  `scripts/test-archive-upgrade.mjs`·`test-archive.mjs`·`test-archive-ui.mjs`.
+  RLS·열 grant·등급 트리거 같은 DB 규칙은 jest mock 으로는 못 잡으니 여기에
+  검사를 더한다.
+- 전체 jest 는 기계 부하가 높으면 간헐적으로 실패한다. 실패가 나면 `uptime` 을
+  보고 다시 돌려 본다.
 - Use `npm run pre-commit` before any commits
 
 ## Common Workflows
@@ -388,3 +442,15 @@ and refactor using this standardized process:
 
 The project emphasizes type safety, multilingual support, and robust data
 synchronization between multiple systems.
+
+<!-- prettier-ignore-start -->
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+<!-- prettier-ignore-end -->
