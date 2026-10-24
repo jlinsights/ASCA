@@ -291,6 +291,8 @@ const nextConfig = {
         destination: '/artworks',
         permanent: false,
       },
+      // 분류 체계 페이지는 위 분류별 페이지로 가는 카드에 지어낸 작품 수를 단 목록이었다
+      { source: '/taxonomy', destination: '/artworks', permanent: false },
       // 옛 Webflow 회차별 전시 주소(/exhibition/21-oriental-calligraphy-exhibition-2024 등)
       {
         source: '/exhibition/:slug*',
