@@ -1,1 +1,1 @@
-🔒 fix: 작가 상세 공개 API 가 service role 로 RLS 를 우회해 비공개(준회원·공모작가) 작가와 내부 컬럼을 노출하던 문제 수정 — anon 클라이언트·공개 컬럼으로 조회
+🔒 feat: 준회원·공모작가 자동 비공개 트리거 추가 — 등록·변경 시 visibility hidden 강제, 승급하면 public 복원
