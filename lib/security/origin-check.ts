@@ -10,6 +10,10 @@
 export interface OriginCheckEnv {
   appUrl: string | undefined
   vercelUrl: string | undefined
+  /** VERCEL_PROJECT_PRODUCTION_URL — 운영 대표 주소(별칭). VERCEL_URL 은 배포마다 바뀌어 이걸 못 담는다 */
+  productionUrl?: string | undefined
+  /** VERCEL_BRANCH_URL — 브랜치 미리보기 고정 주소 */
+  branchUrl?: string | undefined
   allowedOrigins: string | undefined
   nodeEnv: string | undefined
   /**
@@ -51,7 +55,8 @@ export function parseHostname(rawUrl: string | undefined | null): string | null 
 /**
  * 화이트리스트 호스트 목록 구성.
  *
- * 우선순위: APP_URL → VERCEL_URL → CSRF_ALLOWED_ORIGINS csv.
+ * 우선순위: APP_URL → VERCEL_URL → VERCEL_PROJECT_PRODUCTION_URL → VERCEL_BRANCH_URL
+ * → CSRF_ALLOWED_ORIGINS csv.
  * 비어있으면 dev/test 는 localhost 자동, production 은 throw.
  */
 export function buildAllowedHosts(env: OriginCheckEnv): string[] {
@@ -60,8 +65,10 @@ export function buildAllowedHosts(env: OriginCheckEnv): string[] {
   const appHost = parseHostname(env.appUrl)
   if (appHost) hosts.push(appHost)
 
-  if (env.vercelUrl) {
-    const vercelHost = parseHostname(`https://${env.vercelUrl}`)
+  // Vercel 시스템 변수는 scheme 없이 호스트만 준다
+  for (const vercelValue of [env.vercelUrl, env.productionUrl, env.branchUrl]) {
+    if (!vercelValue) continue
+    const vercelHost = parseHostname(`https://${vercelValue}`)
     if (vercelHost) hosts.push(vercelHost)
   }
 
@@ -169,6 +176,8 @@ function readEnvFromProcess(): OriginCheckEnv {
   return {
     appUrl: process.env.NEXT_PUBLIC_APP_URL,
     vercelUrl: process.env.VERCEL_URL,
+    productionUrl: process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    branchUrl: process.env.VERCEL_BRANCH_URL,
     allowedOrigins: process.env.CSRF_ALLOWED_ORIGINS,
     nodeEnv: process.env.NODE_ENV,
     enforceHttps,
