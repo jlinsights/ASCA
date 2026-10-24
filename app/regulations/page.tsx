@@ -11,13 +11,13 @@ import '@/components/home/home.css'
 import '@/components/regulations/regulations.css'
 
 export const metadata: Metadata = {
-  title: '정관 및 규정 | Articles of Incorporation & Bylaws',
+  title: '정관 및 규정 | 동양서예협회',
   description:
-    '사단법인 동양서예협회의 정관과 회원·회비, 운영·심사, 전시, 추천·초대작가 선임, 작품 감정, 지부·지회, 이의제기 규정을 원문 그대로 조문 단위로 안내합니다.',
+    '사단법인 동양서예협회의 정관과 회원·회비, 운영·심사, 전시, 추천·초대작가 선임, 작품 감정, 지부·지회, 이의제기 규정과 회원·임원 자격 및 요건을 원문 그대로 조문 단위로 안내합니다.',
   alternates: { canonical: REGULATIONS_BASE_PATH },
   openGraph: {
     title: '정관 및 규정 | 동양서예협회',
-    description: '동양서예협회의 정관과 세부 운영 규정 9종을 조문 단위로 안내합니다.',
+    description: '동양서예협회의 정관과 세부 규정 8종을 조문 단위로 안내합니다.',
   },
 }
 

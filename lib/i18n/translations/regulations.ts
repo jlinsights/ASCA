@@ -51,7 +51,7 @@ export const regulationsTranslations: TranslationData = {
     regsEyebrow: 'Articles & Bylaws',
     regsHeroTitle: 'Articles of Incorporation & Bylaws',
     regsHeroLede:
-      'The rules the Oriental Calligraphy Association holds itself to. The articles and every operating regulation, in their original text, arranged so you can find and read each article.',
+      'The rules the Asian Society of Calligraphic Arts holds itself to. The articles and every operating regulation, in their original text, arranged so you can find and read each article.',
     regsStatRegulations: 'Regulations',
     regsStatArticles: 'Articles',
     regsStatLatest: 'Latest in force',

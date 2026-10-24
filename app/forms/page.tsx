@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { BOOKING_URL, CHAT_URL, OFFICE, formatAddress } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
   title: '문서·서식 | 동양서예협회',
@@ -132,7 +133,7 @@ const FORM_ITEMS: FormItem[] = [
     id: 'cms-application',
     title: 'CMS 출금 이체 신청서',
     description:
-      '후원금을 CMS 정기납 방식으로 납부 신청하실 때 필요한 기본 신청서입니다. 온라인 후원 모금을 통해 서류작성 없이 신청 가능합니다.',
+      '연회비와 임원 발전기금(최대 20개월 분할)을 CMS 자동이체로 납부하실 때 쓰는 신청서입니다. 온라인 결제로 납부하시면 서류 없이 진행할 수 있습니다.',
     downloads: [
       {
         label: '한글 문서로 다운로드',
@@ -272,7 +273,7 @@ export default function FormsPage() {
         actions={
           <>
             <Link
-              href='https://orientalcalligraphy.channel.io'
+              href={CHAT_URL}
               target='_blank'
               className='inline-flex items-center gap-2 rounded-lg bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity'
             >
@@ -280,7 +281,7 @@ export default function FormsPage() {
               상담 문의
             </Link>
             <Link
-              href='https://whattime.co.kr/orientalcalligraphy'
+              href={BOOKING_URL}
               target='_blank'
               className='inline-flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors'
             >
@@ -293,6 +294,12 @@ export default function FormsPage() {
       </PageHero>
 
       <section className='container mx-auto px-4 py-10 md:py-16'>
+        <p className='mb-8 border-l-2 border-scholar-red/60 bg-muted/40 px-4 py-3 text-sm leading-relaxed'>
+          <strong className='block'>작성한 서식을 보내실 곳 — {OFFICE.label}</strong>
+          {formatAddress(OFFICE)}
+          <br />
+          출품원서 접수와 모든 행정업무는 사무소에서 처리합니다.
+        </p>
         <div className='grid gap-8'>
           {FORM_ITEMS.map(form => (
             <Card key={form.id} id={form.id}>

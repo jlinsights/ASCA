@@ -94,7 +94,7 @@ const partnerDetails: Record<string, PartnerDetail> = {
     categoryId: 'museums',
     categoryName: '미술관 및 박물관',
     description:
-      '대한민국을 대표하는 종합예술기관으로, 서예박물관을 운영하며 매년 다수의 서예 기획전과 초대전을 개최합니다. 동양서예협회는 이곳에서 연례 동양서예대전을 개최합니다.',
+      '대한민국을 대표하는 종합예술기관으로, 서예박물관을 운영하며 매년 다수의 서예 기획전과 초대전을 개최합니다. 동양서예협회는 서울서예박물관에서 대한민국 동양서예대전과 특별기획전을 여러 차례 열었습니다(연혁 참조).',
     website: 'https://www.sac.or.kr',
     address: '서울특별시 서초구 남부순환로 2406',
     phone: '02-580-1300',

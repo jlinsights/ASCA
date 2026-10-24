@@ -1,3 +1,5 @@
+import { BOOKING_URL, CHAT_URL, PHONE } from '@/lib/content/contact-info'
+
 /**
  * 회원 안내 페이지의 사실 데이터.
  * 기준은 /regulations 가 공개하는 regulations/*.md 원문이다(정관·회원 및 회비 규정·추천·초대작가 선임 규정·
@@ -387,16 +389,16 @@ export const JOIN_CHANNELS: readonly JoinChannel[] = [
     href: PAYMENT_LINKS.pay,
     external: true,
   },
-  { title: '전화 상담', detail: '0502-5550-8700', href: 'tel:+8250255508700', external: false },
+  { title: '전화 상담', detail: PHONE.display, href: PHONE.href, external: false },
   {
     title: '실시간 온라인 상담',
     detail: '1년 365일 언제든 문의 가능',
-    href: 'https://orientalcalligraphy.channel.io',
+    href: CHAT_URL,
     external: true,
   },
 ]
 
 export const CONSULT_LINKS = {
-  chat: 'https://orientalcalligraphy.channel.io',
-  booking: 'https://cal.com/orientalcalligraphy',
+  chat: CHAT_URL,
+  booking: BOOKING_URL,
 } as const

@@ -17,11 +17,11 @@ import { MembershipBranch } from '@/components/community/membership-branch'
  */
 
 export const metadata: Metadata = {
-  title: '동도들의 자리 | 사단법인 동양서예협회',
+  title: '동도들의 자리 | 동양서예협회',
   description:
     '한 획을 함께 긋는 동도(同道)들의 자리. 동양서예협회는 옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어지는 서예 문화를 엽니다.',
   openGraph: {
-    title: '동도들의 자리 | 사단법인 동양서예협회',
+    title: '동도들의 자리 | 동양서예협회',
     description: '法古創新 · 人書俱老 — 한 획을 함께 긋는 사람들의 모임에 동참하세요.',
     images: ['/og/community.png'],
   },

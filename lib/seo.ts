@@ -17,9 +17,11 @@ export function constructMetadata({
   title = defaultSEO.title,
   description = defaultSEO.description,
   image = defaultSEO.image,
-  url = defaultSEO.url,
+  url,
   type = 'website',
 }: SEOProps = {}): Metadata {
+  // url 을 준 경우에만 canonical·og:url 을 단다. 루트 레이아웃이 기본값(홈 주소)을 달면 모든 하위 페이지가
+  // 그것을 물려받아 "나는 홈의 사본"이라고 검색엔진에 알리게 된다(2026-10-24 수정).
   const fullTitle = title === defaultSEO.title ? title : `${title} | ASCA`
 
   return {
@@ -28,7 +30,7 @@ export function constructMetadata({
     openGraph: {
       title: fullTitle,
       description,
-      url,
+      ...(url ? { url } : {}),
       images: [
         {
           url: image,
@@ -48,9 +50,7 @@ export function constructMetadata({
       images: [image],
     },
     metadataBase: new URL(defaultSEO.url),
-    alternates: {
-      canonical: url,
-    },
+    ...(url ? { alternates: { canonical: url } } : {}),
     robots: {
       index: true,
       follow: true,

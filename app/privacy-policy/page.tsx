@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import { Shield, Lock, Eye, User, FileText, AlertTriangle, Database, Settings } from 'lucide-react'
 import { PageHero, HeroFacts } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { PHONE } from '@/lib/content/contact-info'
 
 export default function PrivacyPolicyPage() {
   return (
@@ -328,7 +329,7 @@ export default function PrivacyPolicyPage() {
                         <strong>직책:</strong> 이사장
                       </p>
                       <p>
-                        <strong>전화번호:</strong> 02-928-1117
+                        <strong>전화번호:</strong> ☎︎ <a href={PHONE.href}>{PHONE.display}</a>
                       </p>
                       <p>
                         <strong>이메일:</strong> ceo@orientalcalligraphy.org
@@ -343,7 +344,7 @@ export default function PrivacyPolicyPage() {
                         <strong>담당부서:</strong> 사무국장
                       </p>
                       <p>
-                        <strong>전화번호:</strong> 02-928-1117
+                        <strong>전화번호:</strong> ☎︎ <a href={PHONE.href}>{PHONE.display}</a>
                       </p>
                       <p>
                         <strong>이메일:</strong> info@orientalcalligraphy.org
@@ -432,7 +433,9 @@ export default function PrivacyPolicyPage() {
               </p>
               <div className='space-y-2 text-sm text-muted-foreground'>
                 <p>📧 info@orientalcalligraphy.org</p>
-                <p>📞 0502-5550-8700</p>
+                <p>
+                  ☎︎ <a href={PHONE.href}>{PHONE.display}</a>
+                </p>
                 <p>📍 〒02873 서울시 성북구 보문로 57-1, 6층 (보문동7가, 중앙빌딩)</p>
               </div>
             </CardContent>

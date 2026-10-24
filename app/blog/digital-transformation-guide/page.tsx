@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: '문화예술 단체의 디지털 전환 가이드 | ASCA 블로그',
+  title: '문화예술 단체의 디지털 전환 가이드 | 동양서예협회',
   description:
     '서예협회, 갤러리, 문화센터의 회원관리, 전시홍보, 문의응대를 자동화하는 실전 가이드. 엑셀과 수작업에서 벗어나는 3단계 전략.',
   keywords: [

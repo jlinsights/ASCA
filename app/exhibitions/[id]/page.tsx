@@ -58,7 +58,13 @@ export default function ExhibitionDetailPage() {
             curator: '(사)동양서예협회 운영위원회',
             featuredImageUrl: '/images/exhibitions/poster-main.png',
             galleryImages: [],
-            status: 'upcoming',
+            // 날짜로 판정 — 고정 'upcoming' 이면 전시가 끝난 뒤에도 "예정"으로 보였다
+            status:
+              new Date() > new Date('2026-04-28T23:59:59+09:00')
+                ? 'past'
+                : new Date() >= new Date('2026-04-15T00:00:00+09:00')
+                  ? 'current'
+                  : 'upcoming',
             isFeatured: true,
             isPublished: true,
             views: 0,

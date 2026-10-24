@@ -95,7 +95,7 @@ export default function EventsPage() {
         lede={
           language === 'ko'
             ? '동양서예협회에서 주최하는 다양한 행사와 프로그램을 확인하세요.'
-            : 'Discover various events and programs hosted by the Oriental Calligraphy Association.'
+            : 'Discover various events and programs hosted by the Asian Society of Calligraphic Arts.'
         }
       >
         <HeroFacts

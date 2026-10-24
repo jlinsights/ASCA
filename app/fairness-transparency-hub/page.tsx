@@ -16,6 +16,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { CHAT_URL, EMAIL, PHONE } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
   title: '공정·투명성 허브 | 동양서예협회',
@@ -114,11 +115,12 @@ const OBJECTION_TYPES = [
   { title: '검증 관련', desc: '현장휘호·원작확인 요청 및 결과 관련 사실 확인 요청' },
 ]
 
+// 이의제기 처리 규정 제7조 그대로 — 예전 목록은 '주관적 평가(점수) 불만'을 빠뜨리고 규정에 없는 항목을 넣었다
 const DISMISSAL_REASONS = [
-  '접수 기간 경과',
-  '필수 정보(성명/연락처/접수번호 등) 누락',
-  '인신공격·비방·허위 사실 유포 목적',
-  '심사위원 개인 신상 공개 요구 등 운영 원칙 위반',
+  '정해진 접수 기간을 넘긴 경우',
+  '필수 정보(성명·연락처·접수번호 등)가 빠져 검토할 수 없는 경우',
+  '심사위원 개인의 주관적 평가(점수)에 대한 단순 불만인 경우',
+  '근거 없는 비방, 인신공격 또는 업무 방해 목적이 뚜렷한 경우',
 ]
 
 const COI_ITEMS = [
@@ -185,10 +187,10 @@ export default function FairnessTransparencyHubPage() {
                   className='flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground'
                 >
                   <Phone className='h-4 w-4' />
-                  0502-5550-8700
+                  {PHONE.display}
                 </Link>
                 <Link
-                  href='https://orientalcalligraphy.channel.io'
+                  href={CHAT_URL}
                   target='_blank'
                   className='flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground'
                 >
@@ -345,7 +347,11 @@ export default function FairnessTransparencyHubPage() {
                           <strong>원칙</strong>: 사실관계 중심 검토 + 접수 확인 회신 + 기한 내 답변
                         </li>
                         <li>
-                          <strong>채널</strong>: 전화/실시간 상담(공식 채널)로 접수
+                          <strong>채널</strong>: 서면(이메일 {EMAIL}) 접수가 원칙입니다. 전화로
+                          접수한 경우에도 필수 항목을 서면으로 제출해야 합니다.{' '}
+                          <Link href='/contact#objection' className='underline underline-offset-4'>
+                            이의제기 절차 보기
+                          </Link>
                         </li>
                       </ul>
                     </CardContent>

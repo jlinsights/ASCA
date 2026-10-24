@@ -33,6 +33,7 @@ import { searchNotices, AdvancedSearchFilters } from '@/lib/supabase/search'
 import SimpleSearch from '@/components/search/SimpleSearch'
 import type { Notice, SearchFilters, PaginationParams } from '@/lib/types/cms-legacy'
 import Link from 'next/link'
+import { PHONE } from '@/lib/content/contact-info'
 
 const categoryColors = {
   general: 'bg-info/10 text-foreground',
@@ -423,8 +424,8 @@ export default function NoticePage() {
                 <p className='text-muted-foreground mb-2'>{t('noticeInquiryText')}</p>
                 {/* 연락처는 하단 푸터(layout-footer)의 협회 공식 정보와 같아야 한다 */}
                 <p className='text-muted-foreground font-medium'>
-                  <a href='tel:0502-5550-8700' className='hover:text-foreground'>
-                    ☎︎ 0502-5550-8700
+                  <a href={PHONE.href} className='hover:text-foreground'>
+                    ☎︎ {PHONE.display}
                   </a>
                   {' | '}
                   <a href='mailto:info@orientalcalligraphy.org' className='hover:text-foreground'>

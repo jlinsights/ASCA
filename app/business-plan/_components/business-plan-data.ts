@@ -24,7 +24,7 @@ export const EXHIBITION_YEARS: ExhibitionYear[] = [
     venue: '예술의전당 서울서예박물관',
     period: '2024년 8월 31일 ~ 9월 8일',
     posterSrc: '/webflow/orientalcalligraphy/images/Artboard-1.png',
-    exhibitionLink: '/exhibition/21-oriental-calligraphy-exhibition-2024',
+    exhibitionLink: '/exhibitions/past',
   },
   {
     year: 2023,
@@ -32,7 +32,7 @@ export const EXHIBITION_YEARS: ExhibitionYear[] = [
     venue: '예술의전당 서울서예박물관',
     period: '2023년 5월 31일 ~ 6월 10일',
     posterSrc: '/webflow/orientalcalligraphy/images/예술의전당-포스터_1020x1302px_1.avif',
-    exhibitionLink: '/exhibition/20-oriental-calligraphy-exhibition-2023',
+    exhibitionLink: '/exhibitions/past',
   },
   {
     year: 2022,
@@ -40,7 +40,7 @@ export const EXHIBITION_YEARS: ExhibitionYear[] = [
     venue: '인사동 한국미술관 3층 전관',
     period: '2022년 7월 20일 ~ 7월 26일',
     posterSrc: '/webflow/orientalcalligraphy/images/19회동양서예포스터.png',
-    exhibitionLink: '/exhibition/19-oriental-calligraphy-exhibition-2022',
+    exhibitionLink: '/exhibitions/past',
   },
   {
     year: 2021,

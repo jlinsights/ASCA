@@ -7,7 +7,7 @@ const options = {
     ['공모작가', 'Open-call artist', '公募作家', '公募作家'],
     ['추천작가', 'Recommended artist', '推薦作家', '推薦作家'],
     ['회원작가', 'Member artist', '会員作家', '會員作家'],
-    ['초대작가', 'Invited artist', '招待作家', '邀請作家'],
+    ['초대작가', 'Invited artist', '招待作家', '特邀作家'],
     ['원로작가', 'Senior artist', 'ベテラン作家', '資深作家'],
     ['명예회원', 'Honorary member', '名誉会員', '名譽會員'],
   ],

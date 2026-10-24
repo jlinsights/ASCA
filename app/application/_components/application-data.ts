@@ -58,7 +58,7 @@ export const SIZES = [
 
 export const DIVISION_SOURCES = [reg('operation-judging', '5', '운영 및 심사 규정 제5조')]
 
-/** 회원 자격 및 회비 규정 제6조 — [구분, 1점, 2~9번째] */
+/** 회원 및 회비 규정 제6조 — [구분, 1점, 2~9번째] */
 export const ENTRY_FEES: readonly LedgerRow[] = [
   { cells: ['청년작가', '5만원', '4만원'] },
   { cells: ['일반작가', '6만원', '5만원'] },
@@ -66,7 +66,7 @@ export const ENTRY_FEES: readonly LedgerRow[] = [
   { cells: ['초대작가', '20만원', '19만원'] },
 ]
 
-/** 회원 자격 및 회비 규정 제8조 — [규격, 표준가(비회원), 회원가(정회원)]. 규격 이름만 쓴다(cm 는 제5조와 표기가 달라 생략) */
+/** 회원 및 회비 규정 제8조 — [규격, 표준가(비회원), 회원가(정회원)]. 규격 이름만 쓴다(cm 는 제5조와 표기가 달라 생략) */
 export const FRAMING_FEES: readonly LedgerRow[] = [
   { cells: ['반절지', '작품당 8만원', '작품당 6만원'] },
   { cells: ['전지', '작품당 10만원', '작품당 8만원'] },
@@ -74,7 +74,7 @@ export const FRAMING_FEES: readonly LedgerRow[] = [
 ]
 
 export const FEE_SOURCES = [
-  reg('membership-dues', '6', '회원 자격 및 회비 규정 제6조'),
+  reg('membership-dues', '6', '회원 및 회비 규정 제6조'),
   reg('membership-dues', '8', '제8조'),
 ]
 

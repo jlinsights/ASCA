@@ -1,147 +1,54 @@
-'use client'
-
-import { useState } from 'react'
+import type { Metadata } from 'next'
+import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { TaiwanTripFlipbook } from '@/components/programs/taiwan-trip-flipbook'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { FileText, Award } from 'lucide-react'
-import type {
-  CulturalExchangeProgramInfo,
-  CulturalProgramType,
-  CulturalProgramStatus,
-} from '@/lib/types/membership'
 
-// Extracted Components & Data
-import { ProgramCard } from './_components/program-card'
-import { ProgramDetailModal } from './_components/program-detail-modal'
-import { mockPrograms, programTypeConfig, statusConfig } from './_components/program-data'
+/**
+ * 문화교류 — 실제로 다녀온 교류 기록(대만 방문 자료집)만 싣는다.
+ * 예전 목록은 규정에 없는 회원 등급('고급 실습생'·'인증 서예가')과 참가비, 2025년에 끝난 "모집 중" 마감일,
+ * 확인되지 않은 협력 단체를 붙인 샘플 프로그램이었고, "지금 신청하기" 버튼은 아무 일도 하지 않았다.
+ */
+
+const DESCRIPTION =
+  '동양서예협회의 국제 문화교류 기록입니다. 한·중·일 연합전과 해외 교류전시는 협회 정관 제4조의 사업으로, 지난 교류 자료와 역대 교류전 기록을 안내합니다.'
+
+export const metadata: Metadata = {
+  title: '문화교류 | 동양서예협회',
+  description: DESCRIPTION,
+  openGraph: { title: '문화교류 | 동양서예협회', description: DESCRIPTION },
+}
+
+const linkStyle = 'underline underline-offset-4'
 
 export default function CulturalExchangePage() {
-  const [programs] = useState<CulturalExchangeProgramInfo[]>(mockPrograms)
-  const [selectedProgram, setSelectedProgram] = useState<CulturalExchangeProgramInfo | null>(null)
-  const [filterType, setFilterType] = useState<CulturalProgramType | 'all'>('all')
-  const [filterStatus, setFilterStatus] = useState<CulturalProgramStatus | 'all'>('all')
-
-  const filteredPrograms = programs.filter(program => {
-    if (filterType !== 'all' && program.programType !== filterType) return false
-    if (filterStatus !== 'all' && program.status !== filterStatus) return false
-    return true
-  })
-
   return (
     <div className='min-h-screen bg-transparent'>
       <PageHero
         {...PAGE_HERO_MARKS.culturalExchange}
-        title='문화교류 프로그램'
-        lede='세계 각국의 서예 전통을 배우고, 국제적인 예술가 네트워크를 구축하세요'
+        title='문화교류'
+        lede='한·중·일 연합전과 국내외 교류전시는 협회가 정관으로 정한 사업입니다. 지난 교류의 기록을 모았습니다.'
       />
 
-      <div className='container mx-auto px-4 py-10 md:py-16'>
+      <div className='container mx-auto space-y-10 px-4 py-10 md:py-16'>
         <TaiwanTripFlipbook />
-
-        <Tabs defaultValue='programs' className='space-y-6'>
-          <TabsList>
-            <TabsTrigger value='programs'>프로그램 목록</TabsTrigger>
-            <TabsTrigger value='my-applications'>내 신청 현황</TabsTrigger>
-            <TabsTrigger value='certificates'>수료증</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value='programs' className='space-y-6'>
-            <Card>
-              <CardHeader>
-                <CardTitle>프로그램 필터</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className='flex flex-wrap gap-4'>
-                  <div>
-                    <label className='text-sm font-medium mb-2 block'>프로그램 유형</label>
-                    <select
-                      className='px-3 py-2 border border-border rounded-md bg-background'
-                      value={filterType}
-                      onChange={e => setFilterType(e.target.value as any)}
-                    >
-                      <option value='all'>전체</option>
-                      {Object.entries(programTypeConfig).map(([type, config]) => (
-                        <option key={type} value={type}>
-                          {config.icon} {config.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className='text-sm font-medium mb-2 block'>모집 상태</label>
-                    <select
-                      className='px-3 py-2 border border-border rounded-md bg-background'
-                      value={filterStatus}
-                      onChange={e => setFilterStatus(e.target.value as any)}
-                    >
-                      <option value='all'>전체</option>
-                      {Object.entries(statusConfig).map(([status, config]) => (
-                        <option key={status} value={status}>
-                          {config.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-              {filteredPrograms.map(program => (
-                <ProgramCard key={program.id} program={program} onSelect={setSelectedProgram} />
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value='my-applications'>
-            <Card>
-              <CardHeader>
-                <CardTitle>신청 현황</CardTitle>
-                <p className='text-muted-foreground'>
-                  내가 신청한 문화교류 프로그램의 진행 상황을 확인하세요.
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className='text-center py-12'>
-                  <FileText className='w-12 h-12 text-muted-foreground mx-auto mb-4' />
-                  <h3 className='text-lg font-semibold mb-2'>아직 신청한 프로그램이 없습니다</h3>
-                  <p className='text-muted-foreground mb-4'>
-                    관심 있는 문화교류 프로그램에 신청해 보세요.
-                  </p>
-                  <Button onClick={() => setFilterType('all')}>프로그램 둘러보기</Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value='certificates'>
-            <Card>
-              <CardHeader>
-                <CardTitle>수료증</CardTitle>
-                <p className='text-muted-foreground'>
-                  완료한 문화교류 프로그램의 수료증을 다운로드하실 수 있습니다.
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className='text-center py-12'>
-                  <Award className='w-12 h-12 text-muted-foreground mx-auto mb-4' />
-                  <h3 className='text-lg font-semibold mb-2'>보유한 수료증이 없습니다</h3>
-                  <p className='text-muted-foreground'>
-                    문화교류 프로그램을 완료하면 수료증이 발급됩니다.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        <p className='max-w-2xl text-sm leading-relaxed text-muted-foreground'>
+          역대 한·중·일 교류전 기록은{' '}
+          <Link href='/history' className={linkStyle}>
+            연혁
+          </Link>
+          과{' '}
+          <Link href='/exhibitions/past' className={linkStyle}>
+            지난 전시
+          </Link>
+          에서, 교류 단체는{' '}
+          <Link href='/partners' className={linkStyle}>
+            유관단체
+          </Link>
+          에서 볼 수 있습니다.
+        </p>
       </div>
-
-      <ProgramDetailModal program={selectedProgram} onClose={() => setSelectedProgram(null)} />
 
       <LayoutFooter />
     </div>

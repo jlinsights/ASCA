@@ -42,7 +42,7 @@ describe('LayoutFooter — 번역', () => {
     )
     expect(screen.getByRole('link', { name: /전화 0502/ })).toHaveAttribute(
       'href',
-      'tel:050255508700'
+      'tel:+8250255508700'
     )
     expect(screen.getByRole('link', { name: 'info@orientalcalligraphy.org' })).toHaveAttribute(
       'href',
