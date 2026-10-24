@@ -14,17 +14,22 @@ import { MobileConsultButton } from './mobile-consult-button'
  *   config.theme·ui.theme 을 주면 그 값이 고정돼 사이트 테마를 따르지 않는다.
  *   한계: 한 페이지에서 예약 창을 이미 연 뒤 테마를 바꾸면 그 창은 새로고침 전까지 처음 테마를 유지한다
  *   (Cal 이 iframe 을 재사용하고, 열린 뒤의 ui.theme 변경은 반영되지 않음 — 2026-10-19 확인).
- * - 좁은 화면(768px 미만)에선 Cal 버튼을 만들지 않는다. 147×64 알약이 본문을 가려서,
- *   대신 MobileConsultButton(52px 원형 아이콘)이 같은 예약 창을 연다.
+ * - 좁은 화면(768px 미만)에선 CAL_HIDE_ON_MOBILE 이 Cal 버튼을 숨긴다. 147×64 알약이 본문을 가려서,
+ *   대신 MobileConsultButton(52px 원형 아이콘, md:hidden)이 같은 예약 창을 연다. 버튼은 항상 만들고
+ *   보이기만 같은 768px 미디어 쿼리로 가른다 — 로드 시점 matchMedia 로 가르면 창 크기를 바꿀 때 어긋난다.
  */
 const CAL_EMBED = `
 (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
 Cal("init", "meeting", {origin:"https://cal.com"});
-if (window.matchMedia("(min-width: 768px)").matches) {
-  Cal.ns.meeting("floatingButton", {"calLink":"orientalcalligraphy","config":{"layout":"month_view"},"buttonPosition":"bottom-right","buttonText":"상담 예약","buttonColor":"#8a661c","buttonTextColor":"#ffffff"});
-}
+Cal.ns.meeting("floatingButton", {"calLink":"orientalcalligraphy","config":{"layout":"month_view"},"buttonPosition":"bottom-right","buttonText":"상담 예약","buttonColor":"#8a661c","buttonTextColor":"#ffffff"});
 Cal.ns.meeting("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
 `
+
+// 위젯 옆에 인라인으로 둔다 — globals.css 에 넣었을 땐 빌드 결과 CSS 에서 규칙이 빠졌다
+// (2026-10-24, 번들 해시 불변 → 빌드 캐시 재사용으로 추정, 미확정). 위젯과 함께 있어야 할 규칙이기도 하다.
+// 호스트 엘리먼트를 숨기면 섀도 DOM 안의 고정 버튼도 함께 숨는다.
+const CAL_HIDE_ON_MOBILE =
+  '@media (max-width: 767.98px) { cal-floating-button { display: none !important; } }'
 
 /** 채널톡 상담 위젯 — 공식 설치 코드 그대로 (pluginKey 는 공개 키) */
 const CHANNEL_TALK = `
@@ -40,6 +45,7 @@ export function SiteWidgets() {
       <Script id='cal-floating-embed' strategy='lazyOnload'>
         {CAL_EMBED}
       </Script>
+      <style>{CAL_HIDE_ON_MOBILE}</style>
       <MobileConsultButton />
       <Script id='channel-talk' strategy='lazyOnload'>
         {CHANNEL_TALK}
