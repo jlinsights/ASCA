@@ -12,6 +12,10 @@ references:
   globals: app/globals.css
   brand-page: app/brand/page.tsx
   brand-data: app/brand/_components/brand-data.ts
+  copy: copy.md
+  layout: app/layout.tsx
+  home-styles: components/home/home.css
+  home-copy: lib/i18n/translations/home.ts
 
 # ─────────────────────────────────────────────
 # COLORS — 브랜드 팔레트 + shadcn 시맨틱 슬롯 (구현 = app/globals.css :root)
@@ -83,7 +87,7 @@ colors:
 
 # ─────────────────────────────────────────────
 # TYPOGRAPHY — Google DESIGN.md spec canonical tokens
-# 확장 정보(family 9종, scale 13단계, weight/tracking/leading)는 본문 prose 참조
+# 확장 정보(family, scale, weight/tracking/leading)는 본문 prose 참조
 # ─────────────────────────────────────────────
 typography:
   display-lg:
@@ -210,14 +214,25 @@ ASCA는 서예라는 **무형의 정신성**을 디지털 인터페이스로 옮
 세 축 중 하나라도 포기하는 결정은 하지 않는다. **충돌이 있다면 접근성이
 우선**이다.
 
+### 1.1 문서와 구현의 역할
+
+- 디자인 계약과 공통 토큰은 이 문서, 카피 작성 기준은 루트 `copy.md`를 따른다.
+- 구현은 `tailwind.config.ts`, `app/globals.css`, 대상 컴포넌트의 CSS와
+  대조한다. 외부 시안만으로 저장소 토큰이나 현재 노출 문구를 덮어쓰지 않는다.
+- 홈의 `.asca-home` 테마는 `components/home/home.css`에 정의된 한정 범위다. 공통
+  컴포넌트에 그 지역 변수·버튼 변형을 그대로 가져오지 않는다(§8.9).
+- 문서에 명시한 원칙과 화면 적용 여부는 구분한다. 검증 결과는 실행한 명령과
+  확인한 화면 범위를 함께 기록한다(§11).
+
 ## 2. Colors
 
 ### 2.0 ASCA Ink System 채택 (2026-10-10)
 
-정본은 Claude Design 프로젝트 **"ASCA Design System"**(ASCA Ink System — Navy &
-Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 강조, 따뜻한
-宣紙(`#fbf8ef`)를 밝은 면으로 쓰고, 朱印 홍색(`#a8201a`)은 낙관·오류에만 쓴다.
-박물관 도록 같은 절제가 원칙이다.
+설계 출처는 Claude Design 프로젝트 **"ASCA Design System"**(ASCA Ink System —
+Navy & Gold)이며, 저장소의 토큰 계약은 이 문서와 구현을 대조해 관리한다. 깊은
+남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 강조, 따뜻한 宣紙(`#fbf8ef`)를
+밝은 면으로 쓰고, 朱印 홍색(`#a8201a`)은 낙관·오류에만 쓴다. 박물관 도록 같은
+절제가 원칙이다.
 
 **토큰 이름은 유지하고 값만 바꿨다.** 기존 클래스(`bg-scholar-red`,
 `text-celadon-green` …)가 수백 곳에 있어, 이름을 바꾸는 대신 값을 Ink System
@@ -352,10 +367,31 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
    금지**
 5. **코드**: `{typography.family.mono}` — JetBrains Mono
 
+위 스택의 폰트 이름은 로딩 보장이 아니다. 현재 로딩 경로는 다음과 같다.
+
+| 폰트             | 로딩 방식                                           | 변수·적용                         |
+| ---------------- | --------------------------------------------------- | --------------------------------- |
+| Pretendard       | `app/layout.tsx`의 버전 고정 CDN CSS                | `font-sans`의 첫 폰트             |
+| Playfair Display | `next/font/local`, `public/fonts/playfair-display/` | `--font-display`                  |
+| Noto Sans KR     | `app/globals.css`의 로컬 `@font-face`               | `--font-noto-sans-kr`             |
+| Noto Serif KR    | `app/globals.css`의 로컬 `@font-face`               | `--font-noto-serif-kr`            |
+| Noto Serif TC    | `app/layout.tsx`의 Google Fonts CSS                 | `--font-noto-serif-tc`, `font-tc` |
+
+폰트 경로나 CDN을 바꾸면 `next.config.js`의 CSP도 대조한다. `--font-playfair`,
+`--font-inter`, `--font-noto-sans`, `--font-noto-serif`를 새 코드의 폰트 변수로
+사용하지 않는다. 다른 폴백 서체의 실제 선택 여부는 브라우저에서 확인한다.
+
 ### 3.2 언어별 자동 전환
 
-`lang` 속성에 따라 CSS가 자동으로 최적 폰트를 선택한다. 다국어 페이지에서는
-`html[lang="ko|en|zh|ja"]`에 의존하고, 인라인 `font-family`를 덮어쓰지 않는다.
+UI 언어 코드는 `ko`, `en`, `ja`, `zh`이며 중국어 로케일은 `zh-TW`다.
+`contexts/language-context.tsx`가 클라이언트의 `html.lang`을 갱신하며, 최초 서버
+렌더는 `app/layout.tsx`의 한국어를 따른다. 언어 속성만으로 모든 폴백 폰트가 자동
+로딩되지는 않는다.
+
+협회명·슬로건 등 번체 한자에는 `lang='zh-Hant'` 또는 `lang='zh-TW'`를 단다.
+`app/globals.css`의 해당 선택자와 `.cjk-tc-strict`는 Noto Serif TC를 적용한다.
+`.cjk-tc-strict`는 언어 속성을 나누기 어려운 혼합 문장의 보완 수단이다. 일본어
+본문의 자형을 번체 규칙으로 일괄 덮어쓰지 않는다.
 
 ### 3.3 스케일
 
@@ -379,17 +415,18 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 
 #### 3.5.1 Font Families (확장 — front matter 외부)
 
-| 토큰          | 정의                                                                                                                | 적용                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `sans`        | `"Pretendard", var(--font-noto-sans-kr), "Noto Sans CJK SC/TC/JP", system-ui, sans-serif`                           | UI 본문                    |
-| `serif`       | `var(--font-display)` (Playfair Display), `var(--font-noto-serif-kr), "Source Han Serif SC/TC", "Noto Serif CJK *"` | 헤드라인·인용              |
-| `calligraphy` | `"Source Han Serif SC/TC/KR/JP", "Noto Serif CJK *", "KaiTi", "STKaiti", serif`                                     | 작품 정보, 한자            |
-| `brush`       | `"Ma Shan Zheng", "Long Cang", "Source Han Serif SC", "Noto Serif CJK SC", cursive`                                 | 데코레이티브 (히어로 한정) |
-| `mono`        | `"JetBrains Mono", "SF Mono", "Monaco", "Consolas", monospace`                                                      | 코드, 좌표                 |
-| `korean`      | `var(--font-noto-serif-kr), "Source Han Serif KR", "Nanum Myeongjo", "Batang", serif`                               | 한국어 강조                |
-| `chinese`     | `"Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "Microsoft YaHei", serif`                                    | 중국어 강조                |
-| `japanese`    | `"Noto Serif CJK JP", "Source Han Serif JP", "Yu Mincho", "Hiragino Mincho Pro", serif`                             | 일본어 강조                |
-| `english`     | `"Playfair Display", "Crimson Text", "Georgia", serif`                                                              | 영어 강조                  |
+| 토큰          | 정의                                                                                                                | 적용                                            |
+| ------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `sans`        | `"Pretendard", var(--font-noto-sans-kr), "Noto Sans CJK SC/TC/JP", system-ui, sans-serif`                           | UI 본문                                         |
+| `serif`       | `var(--font-display)` (Playfair Display), `var(--font-noto-serif-kr), "Source Han Serif SC/TC", "Noto Serif CJK *"` | 헤드라인·인용                                   |
+| `calligraphy` | `"Source Han Serif SC/TC/KR/JP", "Noto Serif CJK *", "KaiTi", "STKaiti", serif`                                     | 작품 정보, 한자                                 |
+| `brush`       | `"Ma Shan Zheng", "Long Cang", "Source Han Serif SC", "Noto Serif CJK SC", cursive`                                 | 데코레이티브 (히어로 한정)                      |
+| `mono`        | `"JetBrains Mono", "SF Mono", "Monaco", "Consolas", monospace`                                                      | 코드, 좌표                                      |
+| `korean`      | `var(--font-noto-serif-kr), "Source Han Serif KR", "Nanum Myeongjo", "Batang", serif`                               | 한국어 강조                                     |
+| `chinese`     | `"Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "Microsoft YaHei", serif`                                    | 레거시 간체 스택, 브랜드 한자에는 사용하지 않음 |
+| `japanese`    | `"Noto Serif CJK JP", "Source Han Serif JP", "Yu Mincho", "Hiragino Mincho Pro", serif`                             | 일본어 강조                                     |
+| `english`     | `var(--font-display), "Cormorant Garamond", "Georgia", serif`                                                       | 영어 강조                                       |
+| `tc`          | `var(--font-noto-serif-tc), "Source Han Serif TC", "Noto Serif TC", serif`                                          | 번체 한자·브랜드 표기                           |
 
 #### 3.5.2 Scale Mapping (Tailwind 13단계 ↔ canonical)
 
@@ -421,8 +458,10 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 ### 3.6 Color Pair Policy (WCAG)
 
 > **Hard-fail pairs (verified by `npm run design:wcag`)** —
-> `scripts/design-lint.ts`가 정의한 페어는 모두 WCAG 2.1 AA 통과 필수.
-> **P2**·**L2**는 남색 `primary`, **P3**는 밝은 금색 `secondary` 슬롯이다.
+> `scripts/design-lint.ts`가 정의한 라이트 모드 YAML 색상 쌍은 모두 WCAG 2.1 AA
+> 통과 필수. 이 검사는 실제 화면·다크 모드·홈 지역 변수의 대비를 검사하지
+> 않는다. **P2**·**L2**는 남색 `primary`, **P3**는 밝은 금색 `secondary`
+> 슬롯이다.
 
 | 페어 | foreground / background                  | 최소 비율 | 크기       |
 | ---- | ---------------------------------------- | --------- | ---------- |
@@ -433,10 +472,13 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 | P5   | `highlight-foreground` / `highlight`     | 4.5:1     | 본문       |
 | P6   | `destructive-foreground` / `destructive` | 4.5:1     | 본문       |
 | P7   | `muted-foreground` / `muted`             | 4.5:1     | 본문       |
-| P8   | `card-foreground` / `card`               | 4.5:1     | 본문       |
-| P9   | `popover-foreground` / `popover`         | 4.5:1     | 본문       |
+| P8   | `foreground` / `card`                    | 4.5:1     | 본문       |
+| P9   | `foreground` / `card` (popover 대용)     | 4.5:1     | 본문       |
 | L1   | `foreground` / `background`              | 3.0:1     | large text |
 | L2   | `primary-foreground` / `primary`         | 3.0:1     | large text |
+
+위 P8·P9는 현재 검사 스크립트의 대용 조합이다. `card-foreground`,
+`popover-foreground`, `popover`의 실제 CSS 값은 화면에서 별도로 확인한다.
 
 **Decorative-only (excluded from contrast lint)**:
 
@@ -633,6 +675,29 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 - 배경·테두리·텍스트는 `card`, `border`, `foreground`, `muted-foreground`를
   사용한다.
 
+### 8.9 홈 — 한정 범위의 에디토리얼 레이아웃
+
+`app/page.tsx`는 `components/home/`의 히어로·전시·저널·입회 섹션을 조합하고
+`components/home/home.css`를 읽는다. 공통 `gallery-*` 규칙과 구분한다.
+
+| 항목           | 현재 홈 구현                                                   | 적용 범위                            |
+| -------------- | -------------------------------------------------------------- | ------------------------------------ |
+| 섹션 폭        | 최대 1280px, 기본 좌우 40px                                    | `.asca-section`, `.asca-join__inner` |
+| 반응형 전환    | 960px·640px 이하에서 재배치                                    | 홈 CSS의 미디어 쿼리                 |
+| 버튼           | `asca-btn--primary`, `--link`, `--ghost`, `--gold`, `--on-ink` | 홈 링크·CTA                          |
+| 버튼 치수      | 최소 높이 44px, 기본 반경 2px                                  | `.asca-btn`                          |
+| 작은 강조 글자 | 라이트 `--gold-800`, 다크 `--gold-400`                         | 지역 변수 `--accent-text`            |
+| 모션           | `--dur-fast: 150ms`, `--dur-normal: 260ms`                     | 홈 지역 변수                         |
+
+이 값은 기존 홈 구현의 한정 규칙이며 공통 간격·반경·모션 토큰을 대체하지 않는다.
+새 페이지로 확장할 때는 공통 토큰과의 관계를 먼저 정의한다. 홈의 `--bg`, `--fg`,
+`--accent-text`는 `.asca-home` 바깥에 정의된 전역 토큰으로 가정하지 않는다.
+
+한국어 제목과 번체 제첨은 읽기 순서를 유지하고 각 섹션을 제목으로 연결한다. 홈의
+전시·저널은 테두리와 날짜 열로 구분한 목록이다. 실제 링크를 유지하며, 클릭
+이벤트만 있는 행으로 바꾸지 않는다. 새 창 링크는 카피의 언어별 안내를 제공한다.
+`prefers-reduced-motion` 대응과 `:focus-visible`도 함께 확인한다.
+
 ## 9. Do's and Don'ts
 
 ### ✅ Do
@@ -668,7 +733,7 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
 
 1. **조회 순서**: 이 문서 → `tailwind.config.ts` → `app/globals.css` → 기존
    컴포넌트
-2. **토큰 참조 문법**: `{colors.primary}`, `{typography.scale.lg}` — 본문에서
+2. **토큰 참조 문법**: `{colors.primary}`, `{typography.body-lg}` — 본문에서
    규칙을 인용할 때 사용. **`{colors.primary}`는 YAML·Tailwind `primary` 슬롯
    (라이트 남색, 다크 금색, §2.1)** 이다. `celadon-green`은 레거시 이름이며 현재
    값은 gold-700이다. 이름으로 색상을 추정하지 않는다.
@@ -698,7 +763,19 @@ Gold)이다. 깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 
   `NODE_ENV=production npm run build:full`도 확인한다. 검사 통과가 모든 화면의
   접근성을 증명하지는 않으므로 실제 화면을 별도로 검증한다.
 
+| 검사                  | 확인 범위                                          | 별도 확인할 항목                                        |
+| --------------------- | -------------------------------------------------- | ------------------------------------------------------- |
+| `npm run design:lint` | DESIGN.md의 구조·명세                              | 실제 CSS 적용·화면 품질                                 |
+| `npm run design:diff` | YAML 색상과 Tailwind 리터럴·지원하는 RGB 채널 변수 | 직접 `var(...)`로 참조하는 시맨틱 색상·다크 모드·홈 CSS |
+| `npm run design:wcag` | §3.6의 YAML 색상 쌍 대비                           | 렌더된 화면의 대비·키보드 조작·텍스트 확대              |
+
+카피 문서 변경은 참조 경로와 번역 키·실제 링크도 대조한다. 문서만 바꿨다면
+브라우저 확인·빌드·배포를 수행한 것으로 보고하지 않는다.
+
 ### Changelog
+
+- **2.0.0-alpha 문서 보완** — 현재 폰트 로딩·번체 자형·홈 지역 스타일과 카피
+  원본의 관계를 명시하고 디자인 검사의 실제 확인 범위를 정리. 토큰 값은 유지.
 
 - **2.0.0-alpha 문서 정비** — Ink System의 레거시 금색 사용 제한, 컨테이너·반경·
   모션·그림자 정의를 현재 구현과 대조하고 탐색 UI 및 검증 지침을 보완.

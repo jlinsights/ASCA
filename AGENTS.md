@@ -12,6 +12,7 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 - **Airtable Sync**: Data sync from Airtable; schema differences are only
   detected and logged (see "Sync System")
 - **Multi-language Support**: Korean (default), English, Japanese, Chinese
+  (Traditional, `zh-TW`)
 - **Admin Dashboard**: Complete CMS for managing artists, artworks, exhibitions
 - **Advanced Gallery**: Filtering, categorization, and viewing features
 
@@ -31,6 +32,8 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   `mcp__claude-in-chrome__*` 도구는 사용하지 않는다.
 - 일반 설치·사용 안내는 `README.md`, 실행 명령은 `package.json`, 환경 변수는
   `.env.example`과 `lib/config/env.ts`를 기준으로 한다.
+- 카피 기준은 루트의 소문자 `copy.md`, 시각 토큰은 `docs/02-design/DESIGN.md`를
+  따른다. 문서의 예시와 현재 UI의 노출 문구는 해당 소스 파일로 대조한다.
 - 코드 검사, 빌드, 배포, 인증된 브라우저 확인은 서로 다른 검증이다. 실제로
   통과한 범위만 완료로 보고한다.
 
@@ -137,6 +140,7 @@ npm run test:coverage    # Generate test coverage report
 npm run test:e2e         # Playwright; see Testing Strategy for auth limitations
 npm run design:lint      # DESIGN.md specification lint
 npm run design:wcag      # Design token contrast checks
+npm run design:diff      # Compare documented color tokens with implementation
 ```
 
 ## Core Architecture
@@ -181,7 +185,8 @@ security:
 
 ### 다국어와 공개 API 타입
 
-- UI 언어 코드는 `ko`, `en`, `ja`, `zh`다. DB 컬럼 이름과 구분한다.
+- UI 언어 코드는 `ko`, `en`, `ja`, `zh`다. 중국어는 번체(`zh-TW`)를 사용하며 DB
+  컬럼 이름과 구분한다.
 - Drizzle의 다국어 필드는 `lib/db/schema.ts`를 따른다(`titleCn`, `titleJp` 등).
   공개 Supabase 작가 행은 `name_zh`, `name_ja`를 사용하며
   `lib/api/artist-mapper.ts`가 `nameZh`, `nameJa` 등 화면 타입으로 변환한다.
@@ -189,6 +194,11 @@ security:
 - 화면 번역은 `contexts/language-context.tsx`와 `lib/i18n/`을 따른다. 새
   번역표는 `lib/i18n/translations.ts`의 정적 통합표에도 연결한다. 기본 언어의
   SSR·첫 렌더에서 번역 키가 노출되지 않는지 확인한다.
+- 영어 회차 단위·중국어 슬로건 풀이처럼 컴포넌트가 숨기는 번역 예외는 보존한다.
+  빈 문자열이 `t()`에서 키 이름으로 돌아올 수 있으므로 숨김은 조건으로 처리한다.
+- 협회명·슬로건 등 번체 한자는 `lang='zh-Hant'` 또는 `lang='zh-TW'`를 쓴다. 혼합
+  문장의 보완은 `.cjk-tc-strict`로 하며, 일본어 본문의 자형에 일괄 적용하지
+  않는다.
 - 번역한 필터 라벨로 DB 필터 값을 바꾸지 않는다. 탐색 UI의 공통 레이블은
   `components/gallery/discovery-copy.ts`를 참조한다.
 
@@ -271,6 +281,21 @@ import { getArtistById, createArtwork } from '@/lib/db/queries'
 - 토큰이 없으면 임의 값을 만들지 말고 DESIGN.md를 먼저 수정한다
 - Feature 단위 design 문서(`docs/02-design/features/*.design.md`)는 DESIGN.md
   토큰을 참조
+- 홈의 `components/home/home.css`는 `.asca-home` 범위의 지역 테마다.
+  `asca-btn--*`와 지역 CSS 변수를 공통 Button variant·전역 토큰으로 취급하지
+  않는다. 홈 전용 레이아웃 기준은 DESIGN.md §8.9를 따른다.
+- 폰트 스택과 실제 로딩을 구분한다. `app/layout.tsx`·`app/globals.css`와
+  DESIGN.md §3.1을 확인하고, 경로·CDN 변경 시 `next.config.js`의 CSP도 대조한다.
+
+### 카피 작성과 콘텐츠 원본
+
+- 홈 문구는 `lib/i18n/translations/home.ts`, 탐색 문구는
+  `components/gallery/discovery-copy.ts`를 기준으로 컴포넌트의 키·실제 링크와
+  대조한다. `copy.md`의 예시만으로 UI를 덮어쓰지 않는다.
+- `法古創新 · 人書俱老`의 브랜드 선언과 기존 소개·SEO·푸터 슬로건은 사용 위치를
+  확인해 구분한다. 통계의 의미·회신 기한·모집 상태를 근거 없이 바꾸지 않는다.
+- `copy.md` Part B~D의 내부 서비스 기획은 공개 제공 서비스나 검증된 성과가
+  아니다. 구현된 서버 모듈만으로 자동화·AI 상품을 제공한다고 쓰지 않는다.
 
 ### Large File Refactoring Process
 
@@ -312,7 +337,9 @@ and refactor using this standardized process:
 ### Brand Consistency
 
 - Use brand color variables from Tailwind config
-- Follow component variants: celadon, sage, terra, traditional
+- 공통 버튼은 `components/ui/button.tsx`의 `default`·`secondary`·`outline`·
+  `ghost`·`link` 등 목적에 맞는 variant를 사용한다. `celadon`·`sage`·`terra`·
+  `traditional` 등 기존 이름을 새 디자인의 색상 기준으로 삼지 않는다.
 - ⚠️ 2026-10-10 부터 색은 **ASCA Ink System(Navy & Gold)** 이다.
   `celadon-green`·`scholar-red` 같은 이름은 기존 클래스를 살리려 남긴 것이고
   **값은 금색·남색**이다(DESIGN.md §2.0 대조표). 새 코드는 시맨틱
@@ -371,8 +398,12 @@ and refactor using this standardized process:
   URL을 정한다. `proxy.ts`는 `NODE_ENV=test` 또는 `PLAYWRIGHT_BASE_URL`이 설정된
   서버에서 Clerk 보호 대신 E2E 프록시를 사용한다. 이 조건의 테스트는 실제 관리자
   인증 검증을 대신하지 못하며 운영 서버에 해당 설정을 넣지 않는다.
-- 문서만 변경하면 링크·npm 명령·포맷·`git diff --check`를 검증한다. 앱 테스트를
-  실행하지 않았다면 그 범위를 명시한다.
+- 문서만 변경하면 링크·npm 명령·포맷·`git diff --check`를 검증한다. 카피는 번역
+  키·실제 링크도 대조한다. 앱 테스트를 실행하지 않았다면 그 범위를 명시한다.
+- 디자인 문서·토큰 변경은 `design:lint`·`design:diff`·`design:wcag`를 확인한다.
+  `design:diff`는 직접 CSS 변수를 참조하는 색상·다크 모드·홈 CSS 전체를 검사하지
+  않으며, `design:wcag`는 YAML 색상 쌍 검사다. 실제 화면의 대비·키보드·확대
+  검증은 별도로 한다.
 - Use `npm run pre-commit` before any commits
 
 ## Common Workflows
