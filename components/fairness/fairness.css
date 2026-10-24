@@ -1,0 +1,734 @@
+/* =====================================================================
+   공정·투명성 허브 (/fairness-transparency-hub) — 규정 열람기와 같은 Ink System 편집형
+   토큰은 .asca-regs(regulations.css)에서, 버튼·eyebrow 는 home.css 에서 가져온다.
+   카드 안의 카드 대신 괘선·번호·여백으로 위계를 만든다.
+   ===================================================================== */
+
+.asca-fair {
+  --fair-header-offset: 96px;
+  /* 朱印 — tailwind seal 과 같은 값. 각하 사유처럼 '멈춤' 의미에만 쓴다 */
+  --fair-seal: #a8201a;
+  padding-bottom: clamp(48px, 7vw, 104px);
+}
+
+/* ---------- 한눈에 보는 약속 ---------- */
+.asca-fair-glance {
+  max-width: var(--regs-max);
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 72px) var(--regs-gutter) 0;
+}
+.asca-fair-glance .asca-eyebrow {
+  margin: 0;
+}
+.asca-fair-glance__stats {
+  margin-top: 20px;
+}
+.asca-fair-glance__stats small {
+  margin-left: 6px;
+  font-family: var(--font-h-sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--fg-muted);
+}
+
+.asca-fair-note {
+  margin: 16px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--fg-muted);
+  word-break: keep-all;
+}
+
+/* ---------- 목차 + 본문 ---------- */
+.asca-fair-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  max-width: var(--regs-max);
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 72px) var(--regs-gutter) 0;
+}
+.asca-fair-aside {
+  position: sticky;
+  top: var(--fair-header-offset);
+  align-self: start;
+  display: grid;
+  /* 좁은 화면의 가로 칩 줄이 트랙을 늘리지 않게 — 넘치는 칩은 안에서 스크롤한다 */
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  gap: 32px;
+}
+
+.asca-fair-toc__label {
+  margin: 0 0 14px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.asca-fair-toc ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid var(--border);
+}
+.asca-fair-toc a {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 0 10px 16px;
+  font-size: 15px;
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast);
+}
+.asca-fair-toc a:hover {
+  color: var(--fg);
+}
+.asca-fair-toc a::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  background: var(--gold-600);
+  transform: scaleY(0);
+  transition: transform var(--dur-normal) var(--ease-out);
+}
+.asca-fair-toc a[aria-current='location'] {
+  color: var(--fg);
+  font-weight: 600;
+}
+.asca-fair-toc a[aria-current='location']::before {
+  transform: scaleY(1);
+}
+.asca-fair-toc__num {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-text);
+}
+
+.asca-fair-aside__cta {
+  display: grid;
+  gap: 2px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.asca-fair-aside__cta a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  font-size: 14px;
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast);
+}
+.asca-fair-aside__cta a:hover {
+  color: var(--fg);
+}
+.asca-fair-aside__cta svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--accent-text);
+}
+.asca-fair-aside__cta .asca-fair-aside__regs {
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 0 16px;
+  min-height: 44px;
+  background: var(--navy-900);
+  color: var(--paper);
+  font-weight: 500;
+}
+.asca-fair-aside__cta .asca-fair-aside__regs:hover {
+  color: var(--gold-300);
+}
+.asca-fair-aside__cta .asca-fair-aside__regs svg {
+  color: inherit;
+}
+.dark .asca-fair-aside__cta .asca-fair-aside__regs {
+  background: var(--gold-500);
+  color: var(--navy-950);
+}
+
+.asca-fair-body {
+  min-width: 0;
+  display: grid;
+  gap: clamp(64px, 8vw, 112px);
+}
+
+/* ---------- 절 머리 ---------- */
+.asca-fair-sec {
+  display: grid;
+  gap: clamp(28px, 3.5vw, 44px);
+  scroll-margin-top: var(--fair-header-offset);
+}
+.asca-fair-sec-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-strong);
+}
+.asca-fair-sec-head__num {
+  grid-row: span 2;
+  font-family: var(--font-h-display);
+  font-size: clamp(32px, 3.4vw, 44px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-text);
+}
+.asca-fair-sec-head h2 {
+  margin: 0;
+  font-family: var(--font-h-kr-serif);
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
+.asca-fair-sec-head p {
+  margin: 12px 0 0;
+  max-width: var(--regs-measure);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--fg-muted);
+  word-break: keep-all;
+}
+
+.asca-fair-sub {
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+}
+
+.asca-fair-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+.asca-fair-split--even {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* ---------- 번호 괘선 목록 (원칙 · 이해상충 항목) ---------- */
+.asca-fair-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+.asca-fair-rows > li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+.asca-fair-rows__num {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  line-height: 1.75rem;
+  color: var(--accent-text);
+}
+.asca-fair-rows strong {
+  display: block;
+  font-family: var(--font-h-kr-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--fg);
+}
+.asca-fair-rows__text {
+  display: block;
+  margin-top: 2px;
+  color: var(--fg-muted);
+}
+
+/* ---------- 체크 목록 · 보조 면 ---------- */
+.asca-fair-panel {
+  padding: clamp(20px, 2.5vw, 32px);
+  background: var(--surface-2);
+}
+.asca-fair-checks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+.asca-fair-checks li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+.asca-fair-checks svg {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: var(--gold-700);
+}
+.dark .asca-fair-checks svg {
+  color: var(--gold-400);
+}
+
+/* ---------- 심사 단계: 흐름 줄 + 단계 설명 ---------- */
+.asca-fair-rail {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.asca-fair-rail li {
+  position: relative;
+}
+/* 점과 점을 잇는 선 — 마지막 단계에는 없다 */
+.asca-fair-rail li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 17px;
+  left: calc(50% + 22px);
+  right: calc(-50% + 22px);
+  height: 1px;
+  background: var(--border-strong);
+}
+.asca-fair-rail a {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 0 4px 6px;
+  color: inherit;
+  text-decoration: none;
+}
+.asca-fair-rail__dot {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color var(--dur-fast),
+    color var(--dur-fast);
+}
+.asca-fair-rail a:hover .asca-fair-rail__dot,
+.asca-fair-rail a:focus-visible .asca-fair-rail__dot {
+  background: var(--navy-900);
+  color: var(--paper);
+}
+.dark .asca-fair-rail a:hover .asca-fair-rail__dot,
+.dark .asca-fair-rail a:focus-visible .asca-fair-rail__dot {
+  background: var(--gold-500);
+  color: var(--navy-950);
+}
+.asca-fair-rail__name {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.asca-fair-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+.asca-fair-step {
+  padding: 24px 24px 28px 0;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: var(--fair-header-offset);
+}
+.asca-fair-step:nth-child(even) {
+  padding-left: 24px;
+  border-left: 1px solid var(--border);
+}
+/* 이의제기(7단계)는 한 줄을 다 쓰고 금빛 괘로 다음 절을 예고한다 */
+.asca-fair-step:last-child {
+  grid-column: 1 / -1;
+  padding-left: 24px;
+  border-left: 0;
+  box-shadow: inset 3px 0 0 var(--gold-600);
+}
+.asca-fair-step:target {
+  background: var(--surface-2);
+}
+.asca-fair-step__kicker {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+}
+.asca-fair-step h3 {
+  margin: 8px 0 12px;
+  font-family: var(--font-h-kr-serif);
+  font-size: 20px;
+  font-weight: 600;
+}
+.asca-fair-step ul {
+  margin: 0;
+  padding-left: 1.1em;
+  display: grid;
+  gap: 6px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--fg-muted);
+  word-break: keep-all;
+}
+.asca-fair-step .asca-btn--link {
+  margin-top: 16px;
+}
+
+/* ---------- 이의제기 ---------- */
+.asca-fair-file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 40px;
+  padding: clamp(24px, 3vw, 36px);
+  border: 1px solid var(--border-strong);
+}
+.asca-fair-file > div:first-child {
+  flex: 1 1 22rem;
+}
+.asca-fair-file p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+.asca-fair-file .asca-fair-sub {
+  margin-bottom: 8px;
+}
+.asca-fair-file__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+/* 주 버튼 옆의 보조 창구는 테두리로 버튼임을 드러낸다 (home.css 의 ghost 는 테두리 없는 글자 버튼) */
+.asca-fair-file__actions .asca-btn--ghost {
+  padding: 13px 20px;
+  border-color: var(--border-strong);
+}
+.asca-fair-file__actions .asca-btn--ghost:hover {
+  background: var(--surface-2);
+}
+/* 어두운 바탕에서 남색 주 버튼은 묻힌다 — 규정 문의 띠와 같이 금색으로 */
+.dark .asca-fair-file__actions .asca-btn--primary {
+  background: var(--gold-500);
+  border-color: var(--gold-500);
+  color: var(--navy-950);
+}
+.dark .asca-fair-file__actions .asca-btn--primary:hover {
+  background: var(--gold-400);
+}
+.asca-fair-mono {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* 기한: 결과 공지 → 접수 → 1차 회신 → 최종 회신 */
+.asca-fair-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 2px solid var(--border-strong);
+}
+.asca-fair-timeline li {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 20px 16px 0 0;
+}
+.asca-fair-timeline li::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--gold-600);
+  box-shadow: 0 0 0 4px var(--bg);
+}
+.asca-fair-timeline strong {
+  font-family: var(--font-h-kr-serif);
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  word-break: keep-all;
+}
+.asca-fair-timeline span {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  word-break: keep-all;
+}
+
+.asca-fair-types {
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+.asca-fair-types > div {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.asca-fair-types dt {
+  font-weight: 600;
+  font-size: 15px;
+}
+.asca-fair-types dd {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  word-break: keep-all;
+}
+
+.asca-fair-dismiss {
+  padding: clamp(20px, 2.5vw, 28px);
+  border-left: 3px solid var(--fair-seal);
+  background: color-mix(in srgb, var(--fair-seal) 5%, var(--bg));
+}
+.asca-fair-dismiss > p {
+  margin: -8px 0 12px;
+  font-size: 14px;
+  color: var(--fg-muted);
+}
+.asca-fair-dismiss ul {
+  margin: 0;
+  padding-left: 1.1em;
+  display: grid;
+  gap: 6px;
+  font-size: 15px;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+
+.asca-fair-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin: 0;
+}
+
+/* ---------- 이해상충 ---------- */
+.asca-fair-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border);
+}
+.asca-fair-pillars > div {
+  padding: 20px 20px 22px 0;
+}
+.asca-fair-pillars > div + div {
+  padding-left: 20px;
+  border-left: 1px solid var(--border);
+}
+.asca-fair-pillars dt {
+  font-family: var(--font-h-kr-serif);
+  font-size: 18px;
+  font-weight: 600;
+}
+.asca-fair-pillars dd {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  word-break: keep-all;
+}
+
+.asca-fair-pledge {
+  margin: 0;
+  padding: clamp(28px, 4vw, 48px);
+  background: var(--navy-900);
+  color: var(--paper);
+}
+.asca-fair-pledge figcaption {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--gold-400);
+}
+.asca-fair-pledge blockquote {
+  margin: 14px 0 0;
+  max-width: 44rem;
+  font-family: var(--font-h-kr-serif);
+  font-size: clamp(17px, 1.7vw, 21px);
+  line-height: 1.8;
+  word-break: keep-all;
+}
+.dark .asca-fair-pledge {
+  background: var(--navy-800);
+  border: 1px solid var(--border);
+}
+
+/* ---------- 좁은 화면 ---------- */
+@media (max-width: 1023px) {
+  .asca-fair-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  /* 목차는 머리글 아래 붙는 가로 칩 줄이 되고, 연락처 묶음은 이의제기 절에 같은 것이 있어 숨긴다 */
+  .asca-fair-aside {
+    top: 64px;
+    z-index: 20;
+    margin: 0 calc(var(--regs-gutter) * -1);
+    padding: 0 var(--regs-gutter);
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .asca-fair-aside__cta,
+  .asca-fair-toc__label {
+    display: none;
+  }
+  .asca-fair-toc ol {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    border-left: 0;
+    scrollbar-width: none;
+  }
+  .asca-fair-toc a {
+    white-space: nowrap;
+    padding: 10px 12px;
+    min-height: 48px;
+    align-items: center;
+  }
+  .asca-fair-toc a::before {
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 0;
+    width: auto;
+    height: 3px;
+    transform: scaleX(0);
+  }
+  .asca-fair-toc a[aria-current='location']::before {
+    transform: scaleX(1);
+  }
+  .asca-fair-sec,
+  .asca-fair-step {
+    scroll-margin-top: 128px;
+  }
+}
+
+@media (max-width: 767px) {
+  /* 좁은 화면에서는 소개 문단이 번호 아래 빈칸까지 넓게 쓴다 */
+  .asca-fair-sec-head__num {
+    grid-row: auto;
+  }
+  .asca-fair-sec-head p {
+    grid-column: 1 / -1;
+  }
+  .asca-fair-split,
+  .asca-fair-split--even,
+  .asca-fair-steps,
+  .asca-fair-pillars {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .asca-fair-step,
+  .asca-fair-step:nth-child(even) {
+    padding: 22px 0;
+    border-left: 0;
+  }
+  .asca-fair-step:last-child {
+    padding-left: 16px;
+  }
+  .asca-fair-pillars > div,
+  .asca-fair-pillars > div + div {
+    padding: 16px 0;
+    border-left: 0;
+  }
+  .asca-fair-pillars > div + div {
+    border-top: 1px solid var(--border);
+  }
+  /* 흐름 줄은 세로로 — 일곱 칸이 320px 에 들어가지 않는다 */
+  .asca-fair-rail {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .asca-fair-rail li:not(:last-child)::after {
+    top: 36px;
+    bottom: 0;
+    left: 17px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+  .asca-fair-rail a {
+    grid-template-columns: 36px minmax(0, 1fr);
+    justify-items: start;
+    align-items: center;
+    gap: 14px;
+    padding: 0 0 12px;
+  }
+  .asca-fair-rail__name {
+    text-align: left;
+    font-size: 15px;
+  }
+  .asca-fair-timeline {
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 0;
+    border-left: 2px solid var(--border-strong);
+    margin-left: 5px;
+  }
+  .asca-fair-timeline li {
+    padding: 0 0 20px 20px;
+  }
+  .asca-fair-timeline li::before {
+    top: 4px;
+    left: -7px;
+  }
+  .asca-fair-file__actions {
+    width: 100%;
+  }
+  .asca-fair-file__actions .asca-btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+@media print {
+  .asca-fair-aside,
+  .asca-fair-file__actions,
+  .asca-fair-rail {
+    display: none !important;
+  }
+  .asca-fair-layout {
+    display: block;
+  }
+}
