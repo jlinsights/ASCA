@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { EnhancedAdminAPI } from '@/lib/api/enhanced-admin-api'
+import { getArtist } from '@/lib/api/artists'
 import { requireAdminAuth } from '@/lib/auth/middleware'
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+// 공개 조회는 anon 클라이언트 + 공개 컬럼으로만 한다. RLS(visibility='public')가 비공개 작가
+// (준회원·공모작가 등)를 걸러 404 가 된다. 예전에는 service role 로 select('*') 해서 RLS 를 우회했다.
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
 
@@ -10,7 +13,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: '작가 ID가 필요합니다.' }, { status: 400 })
     }
 
-    const artist = await EnhancedAdminAPI.getArtistById(id)
+    const artist = await getArtist(id)
 
     if (!artist) {
       return NextResponse.json({ error: '작가를 찾을 수 없습니다.' }, { status: 404 })
