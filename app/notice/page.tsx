@@ -89,9 +89,12 @@ export default function NoticePage() {
         if (selectedCategory !== 'all') searchFilters.category = selectedCategory
         searchFilters.status = 'published'
 
-        const response = await searchNotices(searchQuery.trim(), searchFilters)
+        const response = await searchNotices(searchQuery.trim(), searchFilters, {
+          page: currentPage,
+          limit: 10,
+        })
         setNotices(response.data)
-        setTotalPages(Math.ceil(response.data.length / 10))
+        setTotalPages(Math.ceil(response.total / 10))
       } else {
         // 일반 목록 조회
         const filters: SearchFilters = {}

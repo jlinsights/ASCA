@@ -204,7 +204,10 @@ export async function searchAllContent(
   if (!term) return []
   const types = params.contentTypes ?? ['notices', 'exhibitions', 'events']
   const limit = params.limit ?? 20
-  const pattern = `title.ilike.%${term}%,content.ilike.%${term}%`
+  const like = `%${term}%`
+  // 행사는 요약(description)이 필수이고 본문(content)은 비어 있을 수 있다
+  const noticePattern = `title.ilike.${like},content.ilike.${like}`
+  const eventPattern = `title.ilike.${like},description.ilike.${like},content.ilike.${like}`
 
   const [notices, events] = await Promise.all([
     types.includes('notices')
@@ -212,7 +215,7 @@ export async function searchAllContent(
           .from('notices')
           .select('id,title,excerpt,content,published_at')
           .eq('is_published', true)
-          .or(pattern)
+          .or(noticePattern)
           .order('published_at', { ascending: false })
           .limit(limit)
       : null,
@@ -221,7 +224,7 @@ export async function searchAllContent(
           .from('public_events')
           .select('id,title,description,event_date')
           .eq('is_published', true)
-          .or(pattern)
+          .or(eventPattern)
           .order('event_date', { ascending: false })
           .limit(limit)
       : null,

@@ -56,7 +56,13 @@ describe('searchAllContent', () => {
     const results = await searchAllContent('大韓民國')
     expect(rpc).not.toHaveBeenCalled()
     expect(calls.map(c => c.table).sort()).toStrictEqual(['notices', 'public_events'])
-    expect(calls.every(c => c.or === 'title.ilike.%大韓民國%,content.ilike.%大韓民國%')).toBe(true)
+    expect(calls.find(c => c.table === 'notices')?.or).toBe(
+      'title.ilike.%大韓民國%,content.ilike.%大韓民國%'
+    )
+    // 행사는 본문이 비어 있을 수 있어 요약(description)도 찾는다
+    expect(calls.find(c => c.table === 'public_events')?.or).toBe(
+      'title.ilike.%大韓民國%,description.ilike.%大韓民國%,content.ilike.%大韓民國%'
+    )
     expect(results.find(r => r.content_type === 'notice')?.url).toBe('/notice/n1')
     expect(results.find(r => r.content_type === 'event')?.url).toBe('/events/e1')
     const exhibitions = results.filter(r => r.content_type === 'exhibition')
