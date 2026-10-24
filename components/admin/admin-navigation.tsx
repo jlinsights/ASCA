@@ -2,24 +2,11 @@
 
 import React, { useMemo } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import {
-  ArrowLeft,
-  FileText,
-  Star,
-  Calendar,
-  Users,
-  Palette,
-  Folder,
-  RefreshCw,
-  Settings,
-  ArrowLeftRight,
-  Bell,
-} from 'lucide-react'
-
-import { useLanguage } from '@/contexts/language-context'
-
 import { usePathname } from 'next/navigation'
+import { ArrowLeft } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useLanguage } from '@/contexts/language-context'
+import { ADMIN_NAV_ITEMS } from './admin-nav-items'
 
 interface AdminNavigationProps {
   // Optional: Allow overriding for specific cases
@@ -30,123 +17,45 @@ export const AdminNavigation = React.memo(
   ({ currentPage: propCurrentPage }: AdminNavigationProps = {}) => {
     const { language } = useLanguage()
     const pathname = usePathname()
+    const lang = language === 'ko' ? 'ko' : 'en'
 
-    const navItems = useMemo(
-      () => [
-        {
-          key: 'notices',
-          href: '/admin/notices',
-          icon: Bell,
-          label: language === 'ko' ? '공지사항' : 'Notices',
-        },
-        {
-          key: 'exhibitions',
-          href: '/admin/exhibitions',
-          icon: Star,
-          label: language === 'ko' ? '전시회' : 'Exhibitions',
-        },
-        {
-          key: 'events',
-          href: '/admin/events',
-          icon: Calendar,
-          label: language === 'ko' ? '행사' : 'Events',
-        },
-        {
-          key: 'files',
-          href: '/admin/files',
-          icon: Folder,
-          label: language === 'ko' ? '파일' : 'Files',
-        },
-        {
-          key: 'artists',
-          href: '/admin/artists',
-          icon: Users,
-          label: language === 'ko' ? '작가' : 'Artists',
-        },
-        {
-          key: 'artworks',
-          href: '/admin/artworks',
-          icon: Palette,
-          label: language === 'ko' ? '작품' : 'Artworks',
-        },
-        {
-          key: 'migration',
-          href: '/admin/migration',
-          icon: RefreshCw,
-          label: language === 'ko' ? '마이그레이션' : 'Migration',
-        },
-        {
-          key: 'sync',
-          href: '/admin/sync',
-          icon: ArrowLeftRight,
-          label: language === 'ko' ? '실시간 동기화' : 'Real-time Sync',
-        },
-      ],
-      [language]
-    )
-
-    // Determine current page from prop or pathname
-    const currentPage = useMemo(() => {
-      if (propCurrentPage) return propCurrentPage
-
-      // Find matching nav item based on pathname prefix
-      const matchingItem = navItems.find(item => pathname?.startsWith(item.href as string))
-      return matchingItem ? matchingItem.key : 'dashboard'
-    }, [propCurrentPage, pathname, navItems])
-
-    const currentItem = useMemo(
-      () => navItems.find(item => item.key === currentPage),
-      [navItems, currentPage]
+    const currentPage = useMemo(
+      () => propCurrentPage ?? ADMIN_NAV_ITEMS.find(item => pathname?.startsWith(item.href))?.key,
+      [propCurrentPage, pathname]
     )
 
     return (
-      <div className='border-b border-border bg-muted/30'>
+      <nav aria-label='관리자 메뉴' className='border-b border-border bg-muted/30'>
         <div className='container mx-auto px-4'>
           <div className='flex items-center gap-2 py-3 overflow-x-auto'>
-            <Link href='/admin'>
+            <Link href='/'>
               <Button variant='ghost' size='sm' className='gap-2 flex-shrink-0'>
                 <ArrowLeft className='h-4 w-4' />
-                <Settings className='h-4 w-4' />
-                {language === 'ko' ? 'Admin Dashboard' : 'Admin Dashboard'}
+                {lang === 'ko' ? '사이트로' : 'Back to site'}
               </Button>
             </Link>
 
-            <div className='w-px h-6 bg-border flex-shrink-0'></div>
+            <div className='w-px h-6 bg-border flex-shrink-0' />
 
-            {navItems.map(item => {
+            {ADMIN_NAV_ITEMS.map(item => {
               const Icon = item.icon
               const isCurrent = item.key === currentPage
-
               return (
-                <Link key={item.key} href={item.href as string} prefetch={true}>
+                <Link key={item.key} href={item.href} aria-current={isCurrent ? 'page' : undefined}>
                   <Button
                     variant={isCurrent ? 'secondary' : 'ghost'}
                     size='sm'
                     className={`gap-2 flex-shrink-0 ${isCurrent ? 'bg-primary/10 text-primary border-primary/20' : ''}`}
                   >
                     <Icon className='h-4 w-4' />
-                    {item.label}
+                    {item.label[lang]}
                   </Button>
                 </Link>
               )
             })}
-
-            {currentItem && (
-              <>
-                <div className='w-px h-6 bg-border flex-shrink-0'></div>
-                <div className='flex items-center gap-2 text-sm text-muted-foreground flex-shrink-0'>
-                  <currentItem.icon className='h-4 w-4' />
-                  <span>
-                    {language === 'ko'
-                      ? `${currentItem.label} 관리`
-                      : `${currentItem.label} Management`}
-                  </span>
-                </div>
-              </>
-            )}
           </div>
         </div>
-      </div>
+      </nav>
     )
   }
 )
