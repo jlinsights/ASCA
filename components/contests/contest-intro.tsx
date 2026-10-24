@@ -17,7 +17,7 @@ export function ContestIntro({ total, open }: ContestIntroProps) {
       <PageHero
         {...PAGE_HERO_MARKS.contests}
         title='공모전'
-        lede='다양한 예술 공모전에 도전하고 여러분의 재능을 펼쳐보세요'
+        lede='협회가 주최하는 대한민국 동양서예대전의 공모 안내와 출품·수상 정보를 한곳에 모았습니다.'
         actions={
           <>
             <Link

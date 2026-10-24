@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     '사단법인 동양서예협회 이사장 임재홍의 인사말씀입니다. 2026년 병오년 새해를 맞아 협회의 비전과 주요 계획을 안내합니다.',
   openGraph: {
-    title: '인사말씀 | Greetings - ASCA',
+    title: '인사말씀 | 동양서예협회',
     description:
       '사단법인 동양서예협회 이사장 임재홍의 인사말씀. 전통과 혁신의 조화로운 구현을 향한 협회의 비전을 소개합니다.',
     images: [

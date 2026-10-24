@@ -19,9 +19,10 @@ import {
   Landmark,
 } from 'lucide-react'
 import Link from 'next/link'
+import { EMAIL, OFFICE_HOURS, PHONE } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
-  title: '서비스 | 사단법인 동양서예협회',
+  title: '서비스 | 동양서예협회',
   description:
     '문화예술 단체를 위한 마케팅 자동화, 데이터 파이프라인, AI 챗봇. 엑셀에서 벗어나 디지털 전환을 시작하세요.',
   openGraph: {
@@ -295,14 +296,14 @@ export default function ServicesPage() {
                 무료 상담 신청
               </a>
               <a
-                href='tel:0502-5550-8700'
+                href={PHONE.href}
                 className='inline-flex items-center justify-center h-14 px-10 text-lg font-medium rounded-lg border-2 border-foreground/20 text-foreground hover:bg-foreground/5 transition-all duration-300'
               >
-                0502-5550-8700
+                {PHONE.display}
               </a>
             </div>
             <p className='text-sm text-muted-foreground mt-6'>
-              평일 09:00 - 18:00 | info@orientalcalligraphy.org
+              {OFFICE_HOURS} | {EMAIL}
             </p>
           </div>
         </div>

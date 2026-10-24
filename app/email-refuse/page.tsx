@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { PageHero, HeroFacts } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { PHONE } from '@/lib/content/contact-info'
 
 export default function EmailRefusePage() {
   return (
@@ -237,7 +238,9 @@ export default function EmailRefusePage() {
               </p>
               <div className='space-y-2 text-sm text-muted-foreground'>
                 <p>📧 info@orientalcalligraphy.org</p>
-                <p>📞 0502-5550-8700</p>
+                <p>
+                  ☎︎ <a href={PHONE.href}>{PHONE.display}</a>
+                </p>
                 <p>📍 〒02873 서울시 성북구 보문로 57-1, 6층 (보문동7가, 중앙빌딩)</p>
               </div>
               <div className='flex gap-4 justify-center mt-6'>

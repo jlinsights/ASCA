@@ -10,7 +10,8 @@ const IS_E2E_TEST = process.env.NODE_ENV === 'test' || Boolean(process.env.PLAYW
 const isProtectedRoute = createRouteMatcher([
   '/profile(.*)',
   '/admin(.*)',
-  '/members/apply(.*)',
+  // /members 는 Rails API 를 부르는 미완성 관리 화면(회원 목록·상태 필터)이라 공개하지 않는다
+  '/members(.*)',
   '/exhibitions/create(.*)',
   '/contests/(.*)/apply',
   // /commissioning-application(위원 위촉 지원)은 공개 — 자격·수당 안내와 공개 Tally 양식뿐이라

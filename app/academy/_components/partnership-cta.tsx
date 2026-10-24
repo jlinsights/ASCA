@@ -1,5 +1,6 @@
 import { ArrowUpRight, Phone } from 'lucide-react'
 import { ACADEMY_LINKS } from './academy-data'
+import { PHONE } from '@/lib/content/contact-info'
 
 /** 교육 협력 기관 모집 — 왼쪽에 모집 취지, 오른쪽에 바로 닿는 창구를 먹선 행으로 */
 export function PartnershipCta() {
@@ -46,7 +47,7 @@ export function PartnershipCta() {
           </a>
         </li>
         <li>
-          <a href={`tel:${ACADEMY_LINKS.phone.replace(/-/g, '')}`} className='asca-ac__channel'>
+          <a href={PHONE.href} className='asca-ac__channel'>
             <span className='asca-ac__channel-title'>사무국 전화</span>
             <span className='asca-ac__channel-detail'>{ACADEMY_LINKS.phone}</span>
             <Phone className='asca-ac__channel-icon' aria-hidden='true' />

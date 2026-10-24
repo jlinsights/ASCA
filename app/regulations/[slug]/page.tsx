@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: RegulationPageProps): Promise
     doc.effectiveNote ? ` ${doc.effectiveNote}` : ''
   } — ${doc.articleCount > 0 ? `${doc.articleCount}개 조문 ` : ''}원문`
   return {
-    title: `${doc.title} | 정관 및 규정`,
+    title: `${doc.title} | 동양서예협회`,
     description,
     alternates: { canonical: regulationHref(slug) },
     openGraph: { title: `${doc.title} | 동양서예협회`, description },

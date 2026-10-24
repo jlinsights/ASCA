@@ -7,6 +7,7 @@ import { useLanguage } from '@/contexts/language-context'
 import { SOCIAL_LINKS, type SocialNetwork } from '@/lib/social-links'
 import { footerLinks, footerSections } from './footer-data'
 import { footerCopy } from './footer-copy'
+import { PHONE } from '@/lib/content/contact-info'
 
 const SOCIAL_ICONS: Record<SocialNetwork, LucideIcon> = {
   instagram: Instagram,
@@ -64,8 +65,8 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
                 {copy.officeBuilding}
               </p>
               <div>
-                <a href='tel:050255508700' className={linkStyle}>
-                  {copy.phone} 0502-5550-8700
+                <a href={PHONE.href} className={linkStyle}>
+                  {copy.phone} {PHONE.display}
                 </a>
                 <p>FAX 0504-256-6600</p>
                 <a href='mailto:info@orientalcalligraphy.org' className={`${linkStyle} break-all`}>

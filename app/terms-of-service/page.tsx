@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import { Scale, Shield, User, FileText, AlertCircle } from 'lucide-react'
 import { PageHero, HeroFacts } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { PHONE } from '@/lib/content/contact-info'
 
 export default function TermsOfServicePage() {
   return (
@@ -279,7 +280,9 @@ export default function TermsOfServicePage() {
               </p>
               <div className='space-y-2 text-sm text-muted-foreground'>
                 <p>📧 info@orientalcalligraphy.org</p>
-                <p>📞 0502-5550-8700</p>
+                <p>
+                  ☎︎ <a href={PHONE.href}>{PHONE.display}</a>
+                </p>
                 <p>📍 〒02873 서울시 성북구 보문로 57-1, 6층 (보문동7가, 중앙빌딩)</p>
               </div>
             </CardContent>

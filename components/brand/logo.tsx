@@ -58,7 +58,7 @@ export function Logo({ width = 120, height = 40, className = '', variant = 'tagl
     return (
       <Image
         src={getLogoPath(false)}
-        alt='동양서예협회 | Oriental Calligraphy Association'
+        alt='동양서예협회 | The Asian Society of Calligraphic Arts'
         width={width}
         height={height}
         className={`transition-all duration-300 ${className}`}
@@ -74,7 +74,7 @@ export function Logo({ width = 120, height = 40, className = '', variant = 'tagl
   return (
     <Image
       src={logoSrc}
-      alt='동양서예협회 | Oriental Calligraphy Association'
+      alt='동양서예협회 | The Asian Society of Calligraphic Arts'
       width={width}
       height={height}
       className={`transition-all duration-300 ${className}`}

@@ -163,7 +163,7 @@ export const navigationTranslations: TranslationData = {
     articles: '章程',
     operationJudging: '運營·審查',
     judgingSystem: '審查管理系統',
-    artistSelection: '推薦·邀請作家選任',
+    artistSelection: '推薦·特邀作家選任',
     qualifications: '資格及要件',
     history: '沿革',
     organizationChart: '組織圖',

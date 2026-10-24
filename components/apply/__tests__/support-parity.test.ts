@@ -241,7 +241,15 @@ describe('옛 본부 주소·개인 번호가 남지 않았다', () => {
   // public/webflow 는 옛 사이트 보관본, lib/data 는 사진 파일명(JTL02872)이라 뺀다
   const SCAN = ['app', 'components', 'lib', 'copy.md']
   const SKIP = new Set(['node_modules', '__tests__', 'data'])
-  const FORBIDDEN = [/보문로\s?105/, /보림빌딩/, /Borim/, /普門路105/, /02872/, /1089808555/]
+  const FORBIDDEN = [
+    /보문로\s?105/,
+    /보림빌딩/,
+    /Borim/,
+    /普門路105/,
+    /02872/,
+    /1089808555/,
+    /02-928-1117/,
+  ]
 
   function files(target: string): string[] {
     const full = path.join(REPO, target)

@@ -7,6 +7,7 @@ import { BusinessPlanSidebar } from './_components/business-plan-sidebar'
 import { Plan2025 } from './_components/plan-2025'
 import { YearSection } from './_components/year-section'
 import { EXHIBITION_YEARS } from './_components/business-plan-data'
+import { BOOKING_URL, CHAT_URL } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
   title: '사업계획 | 동양서예협회',
@@ -38,20 +39,12 @@ export default function BusinessPlanPage() {
         actions={
           <>
             <Button asChild className='bg-scholar-red text-white hover:bg-scholar-red/90'>
-              <a
-                href='https://orientalcalligraphy.channel.io'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
+              <a href={CHAT_URL} target='_blank' rel='noopener noreferrer'>
                 상담 문의
               </a>
             </Button>
             <Button asChild variant='outline'>
-              <a
-                href='https://whattime.co.kr/orientalcalligraphy'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
+              <a href={BOOKING_URL} target='_blank' rel='noopener noreferrer'>
                 상담 예약
               </a>
             </Button>

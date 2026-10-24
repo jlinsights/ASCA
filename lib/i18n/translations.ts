@@ -167,7 +167,7 @@ export const translations: TranslationData = {
     reset: 'Reset',
 
     // 홈 페이지
-    artGalleryExhibition: 'Oriental Calligraphy Association',
+    artGalleryExhibition: 'The Asian Society of Calligraphic Arts',
     journeyThroughArts: 'TRADITION AND MODERNITY, INCLUSION AND COMMUNICATION',
     // brand-rollout L1·L2 SSOT (brand-guidelines §1·§8)
     homeHeroL1: 'Rooted in Tradition, Renewed Through Calligraphy.',
@@ -247,7 +247,7 @@ export const translations: TranslationData = {
     whereArtsBecome: 'WHERE ARTS BECOME REALITY',
     ourSpace: 'Our Space',
     ourSpaceText:
-      'Located in Seongbuk-gu, Seoul, the Oriental Calligraphy Association provides the optimal environment for experiencing and learning calligraphy culture.',
+      'Located in Seongbuk-gu, Seoul, the Asian Society of Calligraphic Arts provides the optimal environment for experiencing and learning calligraphy culture.',
 
     // 작품 페이지
     artCollection: 'Art Collection',

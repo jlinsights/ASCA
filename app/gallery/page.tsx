@@ -101,11 +101,11 @@ export default function GalleryPage() {
 
 // ── 메타데이터 ──────────────────────────────────────────
 export const metadata = {
-  title: '동양서예 갤러리 | 사단법인 동양서예협회',
+  title: '갤러리 | 동양서예협회',
   description: `동양서예협회의 종합 활동 갤러리. ${totalImages}장의 전시회, 심사위원회, 휘호대회, 시상식 등 협회 활동 사진을 감상하세요.`,
   keywords: ['동양서예', '서예갤러리', '전시회', '휘호대회', '심사위원회', '시상식'],
   openGraph: {
-    title: '동양서예 갤러리 | 사단법인 동양서예협회',
+    title: '갤러리 | 동양서예협회',
     description: `${totalImages}개의 서예 작품 및 협회 활동 종합 갤러리`,
     type: 'website',
   },

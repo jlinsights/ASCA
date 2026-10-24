@@ -275,6 +275,26 @@ const nextConfig = {
         destination: '/commissioning-application',
         permanent: true,
       },
+      // 연도별 수상 페이지는 지어낸 수상자 명단이라 내렸다. 실제 명단이 공개되면 되살린다 — 그래서 임시(307)
+      {
+        source: '/awards/:year(\\d{4})',
+        destination: '/awards#editions',
+        permanent: false,
+      },
+      // 블로그 카테고리 페이지는 지어낸 게시물(수상자 인터뷰·총회 보고 등)뿐이라 내렸다
+      { source: '/blog/category/:slug*', destination: '/blog', permanent: false },
+      // 분류별 작품 페이지는 실제 회원 작품 이미지에 지어낸 작가명·가격을 붙인 샘플이라 내렸다
+      {
+        source: '/artworks/:kind(category|type|genre)/:slug*',
+        destination: '/artworks',
+        permanent: false,
+      },
+      // 옛 Webflow 회차별 전시 주소(/exhibition/21-oriental-calligraphy-exhibition-2024 등)
+      {
+        source: '/exhibition/:slug*',
+        destination: '/exhibitions/past',
+        permanent: true,
+      },
     ]
   },
 

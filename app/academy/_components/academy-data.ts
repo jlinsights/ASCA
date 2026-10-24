@@ -1,3 +1,5 @@
+import { CHAT_URL, PHONE } from '@/lib/content/contact-info'
+
 /**
  * 강좌 페이지의 사실 데이터.
  * - 협회 소개·과목·커리큘럼·문원한문서예학원·아남 배옥영: 협회가 직접 게시해 온 강좌 안내(구 웹사이트 강좌 페이지)
@@ -401,6 +403,6 @@ export const SAC_INSTRUCTOR_COUNT = new Set(SAC_CLASSES.map(item => item.instruc
 
 export const ACADEMY_LINKS = {
   booking: 'https://cal.com/orientalcalligraphy/academy',
-  chat: 'https://orientalcalligraphy.channel.io',
-  phone: '0502-5550-8700',
+  chat: CHAT_URL,
+  phone: PHONE.display,
 } as const
