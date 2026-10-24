@@ -142,6 +142,77 @@ describe('checkOrigin — 10 시나리오 (design §5.1)', () => {
   })
 })
 
+// 2026-10-24 운영 사고: VERCEL_URL 은 배포마다 바뀌는 고유 주소(asca-main-<hash>-….vercel.app)라
+// 사용자가 실제로 여는 asca-main.vercel.app 을 담지 못한다. APP_URL·CSRF_ALLOWED_ORIGINS 도 비어 있어
+// 같은 사이트의 POST 가 전부 403 → 로그아웃(Clerk 서버 액션)·회비 저장이 막혔다.
+describe('Vercel 대표 주소 (VERCEL_PROJECT_PRODUCTION_URL · VERCEL_BRANCH_URL)', () => {
+  const ENV_VERCEL_ONLY: OriginCheckEnv = {
+    appUrl: undefined,
+    vercelUrl: 'asca-main-ey1mte59r-jlinsights-projects.vercel.app',
+    productionUrl: 'asca-main.vercel.app',
+    branchUrl: undefined,
+    allowedOrigins: undefined,
+    nodeEnv: 'production',
+  }
+
+  test('운영 대표 주소에서 온 요청 → ok', () => {
+    const result = checkOrigin(
+      makeRequest({ origin: 'https://asca-main.vercel.app' }),
+      ENV_VERCEL_ONLY
+    )
+    expect(result.ok).toBe(true)
+  })
+
+  test('브랜치 미리보기 주소에서 온 요청 → ok', () => {
+    const env: OriginCheckEnv = {
+      ...ENV_VERCEL_ONLY,
+      branchUrl: 'asca-main-git-fix-x-jlinsights-projects.vercel.app',
+    }
+    const req = makeRequest({
+      origin: 'https://asca-main-git-fix-x-jlinsights-projects.vercel.app',
+    })
+    expect(checkOrigin(req, env).ok).toBe(true)
+  })
+
+  test('다른 vercel.app 사이트는 여전히 막는다', () => {
+    const result = checkOrigin(makeRequest({ origin: 'https://evil.vercel.app' }), ENV_VERCEL_ONLY)
+    expect(result.ok).toBe(false)
+    expect(result.reason).toBe('host_mismatch')
+  })
+
+  test('process.env 에서 VERCEL_PROJECT_PRODUCTION_URL·VERCEL_BRANCH_URL 을 읽는다', () => {
+    const keys = [
+      'NEXT_PUBLIC_APP_URL',
+      'VERCEL_URL',
+      'VERCEL_PROJECT_PRODUCTION_URL',
+      'VERCEL_BRANCH_URL',
+      'CSRF_ALLOWED_ORIGINS',
+      'CSRF_ENFORCE_HTTPS',
+    ] as const
+    const saved = Object.fromEntries(keys.map(k => [k, process.env[k]]))
+    try {
+      delete process.env.NEXT_PUBLIC_APP_URL
+      delete process.env.CSRF_ALLOWED_ORIGINS
+      delete process.env.CSRF_ENFORCE_HTTPS
+      process.env.VERCEL_URL = 'asca-main-ey1mte59r-jlinsights-projects.vercel.app'
+      process.env.VERCEL_PROJECT_PRODUCTION_URL = 'asca-main.vercel.app'
+      process.env.VERCEL_BRANCH_URL = 'asca-main-git-main-jlinsights-projects.vercel.app'
+
+      expect(checkOrigin(makeRequest({ origin: 'https://asca-main.vercel.app' })).ok).toBe(true)
+      expect(
+        checkOrigin(
+          makeRequest({ origin: 'https://asca-main-git-main-jlinsights-projects.vercel.app' })
+        ).ok
+      ).toBe(true)
+    } finally {
+      for (const k of keys) {
+        if (saved[k] === undefined) delete process.env[k]
+        else process.env[k] = saved[k]
+      }
+    }
+  })
+})
+
 describe('buildAllowedHosts — 3 추가 케이스', () => {
   test('dedupe: 동일 hostname 중복 제거', () => {
     const env: OriginCheckEnv = {
