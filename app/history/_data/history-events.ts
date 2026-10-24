@@ -15,6 +15,8 @@ export interface HistoryEvent {
   online?: boolean
 }
 
+// 2005~2018년 대전은 기간이 모두 '7월 20일 ~ 7월 26일' 로 적혀 있던 자리표시값이라 지우고 연도만 둔다.
+// 도록으로 실제 기간을 확인하면 date 를 채운다 (2026-10-24 사용자 결정)
 export const historyEvents: HistoryEvent[] = [
   {
     // 2026 특별기획전 — 예전 /exhibitions/upcoming 에 있던 항목. 사용자 확인(2026-10-11)으로 실제 전시
@@ -187,7 +189,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第15回 大韓民國 東洋書藝大展',
     subtitle: '第15回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2018년 7월 20일 ~ 2018년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -197,7 +198,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第14回 大韓民國 東洋書藝大展',
     subtitle: '第14回 韓·中·日 東洋書藝招待作家展',
     venue: '인사동 한국미술관 3층 전관',
-    date: '2017년 7월 20일 ~ 2017년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -225,7 +225,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第13回 大韓民國 東洋書藝大展',
     subtitle: '第13回 韓·中·日 東洋書藝招待作家展',
     venue: '인사동 한국미술관 3층 전관',
-    date: '2016년 7월 20일 ~ 2016년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -235,7 +234,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第12回 大韓民國 東洋書藝大展',
     subtitle: '第12回 韓·中·日 東洋書藝招待作家展',
     venue: '인사동 한국미술관 3층 전관',
-    date: '2015년 7월 20일 ~ 2015년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -245,7 +243,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第11回 大韓民國 東洋書藝大展',
     subtitle: '第11回 韓·中·日 東洋書藝招待作家展',
     venue: '인사동 한국미술관 3층 전관',
-    date: '2014년 7월 20일 ~ 2014년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -255,7 +252,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第10回 大韓民國 東洋書藝大展',
     subtitle: '第10回 韓·中·日 東洋書藝招待作家展',
     venue: '인사동 한국미술관 3층 전관',
-    date: '2013년 7월 20일 ~ 2013년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -275,7 +271,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第9回 大韓民國 東洋書藝大展',
     subtitle: '第9回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2012년 7월 20일 ~ 2012년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -294,7 +289,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第8回 大韓民國 東洋書藝大展',
     subtitle: '第8回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2011년 7월 20일 ~ 2011년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -313,7 +307,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第7回 大韓民國 東洋書藝大展',
     subtitle: '第7回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2010년 7월 20일 ~ 2010년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -323,7 +316,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第6回 大韓民國 東洋書藝大展',
     subtitle: '第6回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2009년 7월 20일 ~ 2009년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -333,7 +325,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第5回 大韓民國 東洋書藝大展',
     subtitle: '第5回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2008년 7월 20일 ~ 2008년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -343,7 +334,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第4回 大韓民國 東洋書藝大展',
     subtitle: '第4回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2007년 7월 20일 ~ 2007년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -353,7 +343,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第3回 大韓民國 東洋書藝大展',
     subtitle: '第3回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2006년 7월 20일 ~ 2006년 7월 26일',
     type: 'exhibition',
   },
   {
@@ -363,7 +352,6 @@ export const historyEvents: HistoryEvent[] = [
     title: '第2回 大韓民國 東洋書藝大展',
     subtitle: '第2回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2005년 7월 20일 ~ 2005년 7월 26일',
     type: 'exhibition',
   },
   {

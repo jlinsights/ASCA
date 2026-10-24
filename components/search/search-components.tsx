@@ -171,9 +171,9 @@ export function AdvancedSearch({
     { value: '서각', label: '서각' },
   ]
 
+  // 규정 작가 등급 — /artists 의 작가 등급 필터와 같다
   const artistTypes = [
-    { value: '공모작가', label: '공모작가' },
-    { value: '청년작가', label: '청년작가' },
+    { value: '회원작가', label: '일반작가' },
     { value: '추천작가', label: '추천작가' },
     { value: '초대작가', label: '초대작가' },
   ]

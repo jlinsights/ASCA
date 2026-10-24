@@ -2,18 +2,12 @@ import type { Language } from '@/lib/i18n/types'
 
 // Values stay in the database language; only the visible labels are translated.
 const options = {
+  // 규정(회원 및 회비 규정)의 작가 등급만 보여 준다 — 준회원·공모작가·원로작가·명예회원은 등급이 아니다.
+  // 청년작가는 등록자가 없어 싣지 않는다(사이트 메뉴와 같음). 임원은 '직함' 필터로 찾는다.
   membership: [
-    ['준회원', 'Associate member', '準会員', '準會員'],
-    ['공모작가', 'Open-call artist', '公募作家', '公募作家'],
-    ['추천작가', 'Recommended artist', '推薦作家', '推薦作家'],
-    ['회원작가', 'Member artist', '会員作家', '會員作家'],
-    ['초대작가', 'Invited artist', '招待作家', '特邀作家'],
-    ['원로작가', 'Senior artist', 'ベテラン作家', '資深作家'],
-    ['명예회원', 'Honorary member', '名誉会員', '名譽會員'],
-  ],
-  artistType: [
     ['일반작가', 'General artist', '一般作家', '一般作家'],
-    ['공모작가', 'Open-call artist', '公募作家', '公募作家'],
+    ['추천작가', 'Recommended artist', '推薦作家', '推薦作家'],
+    ['초대작가', 'Invited artist', '招待作家', '特邀作家'],
   ],
   specialty: [
     ['전통서예', 'Traditional calligraphy', '伝統書道', '傳統書藝'],
@@ -52,7 +46,30 @@ const options = {
   ],
 } as const
 
+// DB 에 다른 이름으로 저장된 등급 — 일반작가는 membership_type '회원작가' 로 들어 있다
+// (옛 사이트도 일반작가 목록을 /members/member-calligrapher 에 두었다)
+const STORED_AS: Partial<Record<keyof typeof options, Record<string, string>>> = {
+  membership: { 일반작가: '회원작가' },
+}
+
+/**
+ * 저장된 membership_type('초대작가, 운영위원' 처럼 쉼표로 이어짐)에서 규정 작가 등급을 뽑는다.
+ * 준회원·공모작가·원로작가 등 규정 등급이 아닌 값이면 null.
+ */
+export function regulationGrade(membershipType?: string | null): string | null {
+  if (!membershipType) return null
+  const parts = membershipType.split(',').map(part => part.replace(/\s/g, ''))
+  if (parts.includes('초대작가')) return '초대작가'
+  if (parts.includes('추천작가')) return '추천작가'
+  if (parts.includes('회원작가') || parts.includes('일반작가')) return '일반작가'
+  if (parts.includes('청년작가')) return '청년작가'
+  return null
+}
+
 export function getArtistFilterOptions(group: keyof typeof options, language: Language) {
   const index = ({ ko: 0, en: 1, ja: 2, zh: 3 } as const)[language]
-  return options[group].map(option => ({ value: option[0], label: option[index] }))
+  return options[group].map(option => ({
+    value: STORED_AS[group]?.[option[0]] ?? option[0],
+    label: option[index],
+  }))
 }

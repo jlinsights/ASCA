@@ -57,6 +57,19 @@ describe('localizeHistoryEvent — 실제 연혁 데이터 전체', () => {
   })
 })
 
+// 회귀: 2005~2018년 대전 기간이 모두 같은 '7월 20일 ~ 7월 26일' 자리표시값이었다. 도록 확인 전까지 연도만 둔다
+describe('확인되지 않은 대전 기간', () => {
+  it('2005~2018년 회차에 자리표시 기간이 없다', () => {
+    const placeholders = historyEvents.filter(
+      event =>
+        event.year >= 2005 &&
+        event.year <= 2018 &&
+        /7월 20일 ~ \d{4}년 7월 26일/.test(event.date ?? '')
+    )
+    expect(placeholders.map(event => event.id)).toStrictEqual([])
+  })
+})
+
 describe('연혁 날짜의 요일', () => {
   // 2025-11-27(토)·2024-08-31(일)·2023-05-31(금) 처럼 날짜와 요일이 어긋난 채 실려 있었다(2026-10-24 정정)
   const WEEKDAYS = '일월화수목금토'

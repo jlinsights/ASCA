@@ -30,12 +30,12 @@ const about: MenuLink[] = [
   { labelKey: 'siteAboutBrand', href: '/brand' },
 ]
 
+// 규정 등급만 싣는다 — 공모작가는 등급이 아니다(2026-10-24). 일반작가는 DB 에 '회원작가' 로 들어 있다.
 // 청년작가는 등록자가 없어 싣지 않는다 (2026-10-22). 등록이 시작되면 membershipType=청년작가 로 되살린다
 const artistGrades: MenuLink[] = [
   { labelKey: 'siteArtistInvited', href: artistsBy({ membershipType: '초대작가' }) },
   { labelKey: 'siteArtistRecommended', href: artistsBy({ membershipType: '추천작가' }) },
   { labelKey: 'siteArtistMember', href: artistsBy({ membershipType: '회원작가' }) },
-  { labelKey: 'siteArtistContest', href: artistsBy({ membershipType: '공모작가' }) },
 ]
 
 const exhibitions: MenuLink[] = [

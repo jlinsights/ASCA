@@ -10,6 +10,7 @@ import { ArtistShareButton } from '@/components/kakao/kakao-share-button'
 import type { PublicArtist as Artist } from '@/lib/api/artist-mapper'
 import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
+import { regulationGrade } from './artist-filter-options'
 
 interface ArtistCardProps {
   artist: Artist
@@ -20,6 +21,7 @@ const DEFAULT_IMAGE = '/images/artists/kangdaehee.avif'
 
 export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const isPc = variant === 'pc'
+  const grade = regulationGrade(artist.membershipType)
   const displayName = artistDisplayName(artist.name, artist.deathYear)
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
 
@@ -99,14 +101,12 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
 
         {isPc ? (
           <div className='flex flex-col gap-2 pt-2 border-t border-border/30 dark:border-border/20'>
-            <div className='flex items-center justify-between text-sm'>
-              <span className='text-muted-foreground'>회원 구분</span>
-              <span className='font-medium text-foreground'>{artist.membershipType}</span>
-            </div>
-            <div className='flex items-center justify-between text-sm'>
-              <span className='text-muted-foreground'>작가 유형</span>
-              <span className='font-medium text-foreground'>{artist.artistType}</span>
-            </div>
+            {grade && (
+              <div className='flex items-center justify-between text-sm'>
+                <span className='text-muted-foreground'>작가 등급</span>
+                <span className='font-medium text-foreground'>{grade}</span>
+              </div>
+            )}
             {artist.title && (
               <div className='flex items-center justify-between text-sm'>
                 <span className='text-muted-foreground'>직위</span>
@@ -116,11 +116,11 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           </div>
         ) : (
           <div className='text-xs text-muted-foreground space-y-1 pt-2 border-t border-border/30 dark:border-border/20'>
-            <div className='flex items-center justify-between'>
-              <span className='text-foreground font-medium'>{artist.membershipType}</span>
-              <span>•</span>
-              <span className='text-foreground font-medium'>{artist.artistType}</span>
-            </div>
+            {grade && (
+              <div className='text-center'>
+                <span className='text-foreground font-medium'>{grade}</span>
+              </div>
+            )}
             {artist.title && (
               <div className='text-center'>
                 <span className='text-foreground font-medium'>{artist.title}</span>
