@@ -39,11 +39,11 @@ const partnerData = [
     nameEn: 'Arts Council Korea',
     category: 'government' as const,
     description:
-      '문화예술 진흥을 위한 사업과 활동을 지원하는 기관으로, 전시 및 문화교류 프로그램에 대한 지원을 받고 있습니다.',
+      '문화예술 진흥 사업을 펼치는 기관으로, 예술가의집에서 열린 동양서예협회의 총회·이사회·위촉식을 후원했습니다.',
     website: 'https://www.arko.or.kr/',
     address: '서울특별시 종로구 대학로 116 예술가의집',
     phone: '02-760-4500',
-    relationshipType: '지원기관',
+    relationshipType: '후원기관',
     sortOrder: 3,
     isActive: true,
   },

@@ -1,13 +1,6 @@
 import { ArtistsPage, type ArtistInitialFilters } from './artists-client'
 
-const FILTER_KEYS = [
-  'q',
-  'membershipType',
-  'artistType',
-  'specialty',
-  'title',
-  'nationality',
-] as const
+const FILTER_KEYS = ['q', 'membershipType', 'specialty', 'title', 'nationality'] as const
 
 type SearchParams = Record<string, string | string[] | undefined>
 

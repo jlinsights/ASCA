@@ -8,7 +8,6 @@ import { getArtistFilterOptions } from './artist-filter-options'
 interface ArtistFiltersProps {
   searchQuery: string
   membershipFilter: string
-  artistTypeFilter: string
   specialtyFilter: string
   titleFilter: string
   nationalityFilter: string
@@ -16,7 +15,6 @@ interface ArtistFiltersProps {
   busy: boolean
   onSearchChange: (value: string) => void
   onMembershipChange: (value: string) => void
-  onArtistTypeChange: (value: string) => void
   onSpecialtyChange: (value: string) => void
   onTitleChange: (value: string) => void
   onNationalityChange: (value: string) => void
@@ -53,13 +51,6 @@ export function ArtistFilters(props: ArtistFiltersProps) {
           value: props.nationalityFilter,
           options: withAll('nationality'),
           onChange: props.onNationalityChange,
-        },
-        {
-          id: 'artist-type',
-          label: copy.artistType,
-          value: props.artistTypeFilter,
-          options: withAll('artistType'),
-          onChange: props.onArtistTypeChange,
         },
         {
           id: 'specialty',

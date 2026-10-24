@@ -20,7 +20,6 @@ const PAGE_SIZE = 24
 interface ArtistQuery {
   q: string
   membershipType: string
-  artistType: string
   specialty: string
   title: string
   nationality: string
@@ -51,7 +50,6 @@ export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistIn
   const [debouncedSearch, setDebouncedSearch] = useState(initialFilters.q ?? '')
   const [searchQuery, setSearchQuery] = useState(initialFilters.q ?? '')
   const [membershipFilter, setMembershipFilter] = useState(initialFilters.membershipType ?? 'all')
-  const [artistTypeFilter, setArtistTypeFilter] = useState(initialFilters.artistType ?? 'all')
   const [specialtyFilter, setSpecialtyFilter] = useState(initialFilters.specialty ?? 'all')
   const [titleFilter, setTitleFilter] = useState(initialFilters.title ?? 'all')
   const [nationalityFilter, setNationalityFilter] = useState(initialFilters.nationality ?? 'all')
@@ -67,7 +65,6 @@ export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistIn
   const query: ArtistQuery = {
     q: debouncedSearch,
     membershipType: membershipFilter,
-    artistType: artistTypeFilter,
     specialty: specialtyFilter,
     title: titleFilter,
     nationality: nationalityFilter,
@@ -133,7 +130,6 @@ export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistIn
     setSearchQuery('')
     setDebouncedSearch('')
     setMembershipFilter('all')
-    setArtistTypeFilter('all')
     setSpecialtyFilter('all')
     setTitleFilter('all')
     setNationalityFilter('all')
@@ -141,7 +137,7 @@ export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistIn
 
   const hasConditions =
     Boolean(searchQuery.trim()) ||
-    [membershipFilter, artistTypeFilter, specialtyFilter, titleFilter, nationalityFilter].some(
+    [membershipFilter, specialtyFilter, titleFilter, nationalityFilter].some(
       value => value !== 'all'
     )
   const resultText = error
@@ -182,7 +178,6 @@ export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistIn
         <ArtistFilters
           searchQuery={searchQuery}
           membershipFilter={membershipFilter}
-          artistTypeFilter={artistTypeFilter}
           specialtyFilter={specialtyFilter}
           titleFilter={titleFilter}
           nationalityFilter={nationalityFilter}
@@ -190,7 +185,6 @@ export function ArtistsPage({ initialFilters = {} }: { initialFilters?: ArtistIn
           busy={isUpdating}
           onSearchChange={setSearchQuery}
           onMembershipChange={setMembershipFilter}
-          onArtistTypeChange={setArtistTypeFilter}
           onSpecialtyChange={setSpecialtyFilter}
           onTitleChange={setTitleFilter}
           onNationalityChange={setNationalityFilter}
