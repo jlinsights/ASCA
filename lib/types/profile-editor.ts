@@ -1,6 +1,5 @@
 /** The self-service editor supports real artist columns only. */
 export interface ArtistProfileUpdates {
-  name?: string
   nameEn?: string | null
   bio?: string | null
   bioEn?: string | null
@@ -10,7 +9,7 @@ export interface ArtistProfileUpdates {
 
 export interface ArtistProfileEditorData {
   id: string
-  name: string
+  readonly name: string
   nameEn: string | null
   bio: string | null
   bioEn: string | null

@@ -53,7 +53,6 @@ it('loads the artist UUID and saves only supported fields, including clearing bi
   fireEvent.submit(screen.getByRole('button', { name: 'authNativeSave' }).closest('form')!)
   await waitFor(() =>
     expect(updateArtistProfile).toHaveBeenCalledWith(id, {
-      name: '작가',
       nameEn: 'Updated',
       bio: '소개',
       bioEn: 'Biography',
@@ -64,6 +63,7 @@ it('loads the artist UUID and saves only supported fields, including clearing bi
   expect(await screen.findByRole('status')).toHaveTextContent('profileEditorSaved')
   expect(screen.queryByRole('switch')).not.toBeInTheDocument()
   expect(screen.getByText('profileEditorHidden')).toBeInTheDocument()
+  expect(screen.getByLabelText('profileEditorName')).toHaveAttribute('readonly')
 })
 
 it('shows save failures and never reports success', async () => {
@@ -151,7 +151,8 @@ it('ignores an old save response after the linked account and artist change', as
   await waitFor(() =>
     expect(updateArtistProfile).toHaveBeenLastCalledWith(
       next.id,
-      expect.objectContaining({ name: '다른 작가' })
+      expect.objectContaining({ nameEn: 'Artist' })
     )
   )
+  expect(jest.mocked(updateArtistProfile).mock.calls.at(-1)?.[1]).not.toHaveProperty('name')
 })

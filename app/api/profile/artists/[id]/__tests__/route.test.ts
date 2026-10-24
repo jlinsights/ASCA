@@ -130,6 +130,7 @@ it('reads the owned hidden artist with a safe response projection and private ca
 })
 
 it.each([
+  'name',
   'membership_type',
   'membershipType',
   'visibility',

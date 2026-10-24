@@ -7,7 +7,6 @@ export const ARTIST_PROFILE_COLUMNS =
 
 export const artistProfileUpdateSchema = z
   .object({
-    name: z.string().trim().min(1).max(200).optional(),
     nameEn: z.string().trim().max(200).nullable().optional(),
     bio: z.string().max(10000).nullable().optional(),
     bioEn: z.string().max(10000).nullable().optional(),
@@ -19,7 +18,6 @@ export const artistProfileUpdateSchema = z
 
 export function artistProfilePatch(input: z.infer<typeof artistProfileUpdateSchema>) {
   const patch: Database['public']['Tables']['artists']['Update'] = {}
-  if (input.name !== undefined) patch.name = input.name
   if (input.nameEn !== undefined) patch.name_en = input.nameEn
   if (input.bio !== undefined) patch.bio = input.bio
   if (input.bioEn !== undefined) patch.bio_en = input.bioEn

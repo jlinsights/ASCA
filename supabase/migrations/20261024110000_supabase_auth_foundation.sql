@@ -89,7 +89,7 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '' AS $$
     AND (SELECT auth.jwt()->>'email') IS NOT NULL
     AND (SELECT auth.jwt()->>'is_anonymous') IS DISTINCT FROM 'true';
 $$;
-REVOKE ALL ON FUNCTION public.get_my_artist_ids() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.get_my_artist_ids() FROM PUBLIC, anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_artist_ids() TO authenticated;
 
 COMMIT;
