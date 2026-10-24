@@ -6,13 +6,12 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ContestForm } from '@/components/admin/contest-form'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { fetchContestById } from '@/lib/api/contests'
-import { getSupabaseClient } from '@/lib/supabase'
 import type { Contest } from '@/lib/types/contest-new-legacy'
 
 export default function AdminContestEditPage() {
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
   const params = useParams()
   const router = useRouter()
   const contestId = params.id as string
@@ -26,24 +25,12 @@ export default function AdminContestEditPage() {
 
     const loadContest = async () => {
       try {
-        if (!isSignedIn || !clerkUser) {
+        if (!isSignedIn || !account) {
           router.push('/sign-in')
           return
         }
 
-        const supabase = getSupabaseClient()
-        if (!supabase) {
-          router.push('/sign-in')
-          return
-        }
-
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('role')
-          .eq('clerk_user_id', clerkUser.id)
-          .single()
-
-        if (!profile || !['admin', 'moderator'].includes(profile.role)) {
+        if (account.role !== 'admin' || account.assuranceLevel !== 'aal2') {
           router.push('/')
           return
         }
@@ -63,7 +50,7 @@ export default function AdminContestEditPage() {
     }
 
     loadContest()
-  }, [contestId, router, isLoaded, isSignedIn, clerkUser])
+  }, [contestId, router, isLoaded, isSignedIn, account])
 
   if (loading) {
     return (

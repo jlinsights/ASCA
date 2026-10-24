@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { ImageUploader } from '@/components/ui/image-uploader'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Save, Eye } from 'lucide-react'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { createArtwork } from '@/lib/api/artworks'
 import type { ArtworkCategory, ArtworkStatus } from '@/lib/types/artwork-legacy'
 import { error as logError } from '@/lib/logging'
@@ -20,7 +20,7 @@ import { ArtworkPreviewDialog } from './_components/ArtworkPreviewDialog'
 
 export function ArtworkUploadClient() {
   const router = useRouter()
-  const { user: clerkUser } = useUser()
+  const { user: account } = useAccount()
   const [loading, setLoading] = useState(false)
   const [uploadedImages, setUploadedImages] = useState<File[]>([])
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -101,7 +101,7 @@ export function ArtworkUploadClient() {
         })),
       }
 
-      const { data, error } = await createArtwork(artworkData, images, clerkUser?.id ?? '')
+      const { data, error } = await createArtwork(artworkData, images, account?.artistIds[0] ?? '')
 
       if (error) {
         alert('작품 등록에 실패했습니다.')

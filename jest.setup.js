@@ -80,6 +80,13 @@ jest.mock('@clerk/nextjs/server', () => ({
   clerkClient: { users: { getUser: jest.fn() } },
 }))
 
+// Server identity is mocked at its application boundary. Dedicated account and
+// cookie tests exercise the native SDK-facing layer without external services.
+jest.mock('@/lib/auth/server', () => ({
+  auth: jest.fn().mockResolvedValue({ userId: null, account: null }),
+  getAccount: jest.fn().mockResolvedValue(null),
+}))
+
 // Mock performance API (only in browser environment)
 if (typeof window !== 'undefined') {
   Object.defineProperty(window, 'performance', {

@@ -9,11 +9,15 @@ jest.mock('../header-mobile-auth', () => ({ HeaderMobileAuth: () => null }))
 jest.mock('../../theme-toggle', () => ({ ThemeToggle: () => null }))
 jest.mock('../../theme-transition', () => ({ ThemeTransition: () => null }))
 jest.mock('../../brand/logo', () => ({ Logo: () => null }))
-jest.mock('@clerk/nextjs', () => ({
-  useUser: () => ({ isLoaded: true, isSignedIn: false, user: null }),
-  useClerk: () => ({ signOut: jest.fn() }),
-  SignInButton: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  SignUpButton: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+jest.mock('@/components/auth/session-provider', () => ({
+  useAccount: () => ({
+    isLoaded: true,
+    isSignedIn: false,
+    user: null,
+    error: false,
+    signOut: jest.fn(),
+    refresh: jest.fn(),
+  }),
 }))
 
 function renderWithLanguage(lang: string, ui: React.ReactElement) {
@@ -54,8 +58,11 @@ describe('Header — 메뉴 번역', () => {
 
   it('ja: 로그인·회원가입 버튼이 일본어로 바뀐다', async () => {
     renderWithLanguage('ja', <HeaderAuthSection />)
-    expect(await screen.findByRole('button', { name: 'ログイン' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '会員登録' })).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: 'ログイン' })).toHaveAttribute(
+      'href',
+      '/sign-in'
+    )
+    expect(screen.getByRole('link', { name: '会員登録' })).toHaveAttribute('href', '/sign-up')
   })
 
   // 회귀: 실제로 쓰이는 header.tsx 의 모바일 메뉴에는 언어 선택기가 없었다.

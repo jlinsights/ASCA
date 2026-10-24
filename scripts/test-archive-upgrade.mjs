@@ -24,7 +24,15 @@ try {
   await db.connect()
   // Storage system migrations are owned by Supabase; only the referenced catalog shape is needed here.
   await db.query(
-    `create schema storage; create table storage.buckets(id text primary key,name text,public boolean); create table storage.objects(id uuid primary key,bucket_id text); alter table storage.objects enable row level security; grant usage on schema public,storage to anon,authenticated,service_role; alter default privileges in schema public grant all on tables to anon,authenticated,service_role`
+    `create schema storage; create table storage.buckets(id text primary key,name text,public boolean); create table storage.objects(id uuid primary key,bucket_id text); alter table storage.objects enable row level security; grant usage on schema public,storage to anon,authenticated,service_role; alter default privileges in schema public grant all on tables to anon,authenticated,service_role;
+     create schema auth;
+     create table auth.users(id uuid primary key, raw_user_meta_data jsonb default '{}');
+     create function auth.uid() returns uuid language sql stable as $$
+       select (nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid
+     $$;
+     create function auth.jwt() returns jsonb language sql stable as $$
+       select coalesce(nullif(current_setting('request.jwt.claims',true),'')::jsonb,'{}'::jsonb)
+     $$;`
   )
   const dir = new URL('../supabase/migrations/', import.meta.url)
   const files = readdirSync(dir)
@@ -59,6 +67,13 @@ try {
     (await db.query('select status from artworks where id=$1', [artwork])).rows[0].status,
     'in-exhibition'
   )
+  const privileges = (
+    await db.query(`select
+    has_function_privilege('authenticated','public.get_my_artist_ids()','execute') as authenticated,
+    has_function_privilege('anon','public.get_my_artist_ids()','execute') as anon,
+    has_function_privilege('service_role','public.get_my_artist_ids()','execute') as service_role`)
+  ).rows[0]
+  assert.deepEqual(privileges, { authenticated: true, anon: false, service_role: false })
   console.log(
     'Archive upgrade: existing artists, legacy state and private contact migration preserved.'
   )

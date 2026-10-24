@@ -21,6 +21,7 @@ const db = new pg.Client({ connectionString: local.DB_URL })
 await db.connect()
 const admin = createClient(local.API_URL, local.SERVICE_ROLE_KEY)
 const anon = createClient(local.API_URL, local.ANON_KEY)
+const authUserIds = []
 const ids = Array.from({ length: 12 }, () => randomUUID())
 const [
   publicArtist,
@@ -340,6 +341,73 @@ try {
     await rejects('select dues_status from artists', '42501')
     await db.query('reset role')
   }
+  // Native Auth RPC is callable only with an authenticated JWT, never anonymously
+  // or through the service-role default function grants. Its result contains own IDs only.
+  const rpcPrivileges = (
+    await rows(`select
+    has_function_privilege('authenticated','public.get_my_artist_ids()','execute') as authenticated,
+    has_function_privilege('anon','public.get_my_artist_ids()','execute') as anon,
+    has_function_privilege('service_role','public.get_my_artist_ids()','execute') as service_role`)
+  )[0]
+  assert.deepEqual(rpcPrivileges, { authenticated: true, anon: false, service_role: false })
+  checks++
+  assert.equal((await anon.rpc('get_my_artist_ids')).error?.code, '42501')
+  checks++
+  const [rpcPublicArtist, rpcHiddenArtist, rpcOtherArtist] = Array.from({ length: 3 }, () =>
+    randomUUID()
+  )
+  ids.push(rpcPublicArtist, rpcHiddenArtist, rpcOtherArtist)
+  await db.query(
+    `insert into artists(id,name,visibility,membership_type) values
+    ($1,'RPC public fixture','public','초대작가'),
+    ($2,'RPC hidden fixture','hidden','초대작가'),
+    ($3,'RPC other fixture','members','초대작가')`,
+    [rpcPublicArtist, rpcHiddenArtist, rpcOtherArtist]
+  )
+  const password = `Archive-fixture-${randomUUID()}!`
+  let ownerEmail
+  for (let index = 0; index < 2; index++) {
+    const email = `archive-auth-${randomUUID()}@example.test`
+    const created = await admin.auth.admin.createUser({ email, password, email_confirm: true })
+    assert.equal(created.error, null)
+    authUserIds.push(created.data.user.id)
+    if (index === 0) ownerEmail = email
+  }
+  await db.query('update artists set claimed_by_user_id=$1 where id=any($2::uuid[])', [
+    authUserIds[0],
+    [rpcPublicArtist, rpcHiddenArtist],
+  ])
+  await db.query('update artists set claimed_by_user_id=$1 where id=$2', [
+    authUserIds[1],
+    rpcOtherArtist,
+  ])
+  const owner = createClient(local.API_URL, local.ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  })
+  await ok(await owner.auth.signInWithPassword({ email: ownerEmail, password }))
+  const owned = await ok(await owner.rpc('get_my_artist_ids'))
+  assert.deepEqual(
+    owned.map(row => row.artist_id).sort(),
+    [rpcPublicArtist, rpcHiddenArtist].sort()
+  )
+  assert(owned.every(row => JSON.stringify(Object.keys(row)) === '["artist_id"]'))
+  checks++
+  assert.equal((await owner.from('artists').select('claimed_by_user_id')).error?.code, '42501')
+  checks++
+  const other = createClient(local.API_URL, local.ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  })
+  // Use the second fixture identity to prove the first identity/ownership is not exposed.
+  const listed = await admin.auth.admin.getUserById(authUserIds[1])
+  assert.equal(listed.error, null)
+  await ok(await other.auth.signInWithPassword({ email: listed.data.user.email, password }))
+  const otherOwned = await ok(await other.rpc('get_my_artist_ids'))
+  assert.deepEqual(
+    otherOwned.map(row => row.artist_id),
+    [rpcOtherArtist]
+  )
+  assert.equal((await other.from('artists').select('claimed_by_user_id')).error?.code, '42501')
+  checks += 2
   console.log(
     `Archive integration: ${checks} checks passed (SQL roles, REST, Storage, constraints).`
   )
@@ -348,5 +416,9 @@ try {
   await db.query('delete from events where id=any($1::uuid[])', [ids])
   await db.query('delete from exhibitions where id=$1', [exhibition])
   await db.query('delete from artists where id=any($1::uuid[])', [ids])
+  for (const id of authUserIds) {
+    const { error } = await admin.auth.admin.deleteUser(id)
+    assert.equal(error, null, 'Native Auth fixture cleanup failed')
+  }
   await db.end()
 }
