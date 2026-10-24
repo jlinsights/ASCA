@@ -1,0 +1,609 @@
+/* =====================================================================
+   신청 페이지(출품원서·위원 위촉) — Ink System 장부(帳簿) 레이아웃.
+   /academy·/membership 과 같은 문법: 카드 대신 먹선과 명조 제목으로 위계를 만들고 색은 토큰만 쓴다.
+   - 금액·인원 표는 숫자 열을 오른쪽 정렬·고정폭 숫자로 맞춰 세로로 비교되게 한다
+   - 신청 방법은 온라인(주) 한 칸 + 내려받기(부) 줄로 무게를 나눈다
+   ===================================================================== */
+
+.asca-apply {
+  --ap-bg: var(--paper);
+  --ap-surface: var(--paper-2);
+  --ap-fg: var(--navy-900);
+  --ap-muted: var(--stone-700);
+  --ap-rule: var(--border);
+  --ap-rule-strong: var(--navy-900);
+  --ap-accent: var(--gold-800);
+  --ap-seal: var(--seal-red);
+  --ap-ring: var(--gold-600);
+
+  --ap-gutter: clamp(16px, 4vw, 48px);
+  --ap-max: 1200px;
+  --ap-font-display:
+    var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
+  --ap-font-sans: 'Pretendard', var(--font-noto-sans-kr), system-ui, sans-serif;
+  --ap-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  background: var(--ap-bg);
+  color: var(--ap-fg);
+  font-family: var(--ap-font-sans);
+}
+
+.dark .asca-apply {
+  --ap-bg: var(--navy-950);
+  --ap-surface: var(--navy-900);
+  --ap-fg: var(--paper);
+  --ap-muted: var(--navy-300);
+  --ap-rule-strong: var(--gold-500);
+  --ap-accent: var(--gold-400);
+  --ap-ring: var(--gold-400);
+}
+
+.asca-apply :focus-visible {
+  outline: 2px solid var(--ap-ring);
+  outline-offset: 3px;
+}
+
+.asca-apply__body {
+  max-width: var(--ap-max);
+  margin: 0 auto;
+  padding: clamp(28px, 4vw, 48px) var(--ap-gutter) clamp(64px, 8vw, 120px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(64px, 9vw, 128px);
+}
+
+.asca-apply__anchor {
+  scroll-margin-top: 96px;
+}
+
+/* ---------- 바로가기 ---------- */
+.asca-apply__toc {
+  display: flex;
+  gap: 4px 24px;
+  overflow-x: auto;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ap-rule);
+  margin-bottom: calc(-1 * clamp(32px, 5vw, 72px));
+  scrollbar-width: none;
+}
+.asca-apply__toc a {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ap-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 160ms var(--ap-ease);
+}
+.asca-apply__toc a::before {
+  content: '↓ ';
+  color: var(--ap-accent);
+}
+.asca-apply__toc a:hover {
+  color: var(--ap-fg);
+}
+
+/* ---------- 섹션 머리 ---------- */
+.asca-apply__head {
+  display: grid;
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 2px solid var(--ap-rule-strong);
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+@media (min-width: 900px) {
+  .asca-apply__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: end;
+    gap: 32px;
+  }
+}
+.asca-apply__eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ap-accent);
+}
+.asca-apply__title {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.asca-apply__lede {
+  margin: 0;
+  color: var(--ap-muted);
+  font-size: 0.975rem;
+  line-height: 1.7;
+  max-width: 58ch;
+}
+.asca-apply__subhead {
+  margin: 0 0 14px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ap-muted);
+}
+
+/* 두 덩어리를 나란히 — 좁은 화면에선 쌓인다 */
+.asca-apply__split {
+  display: grid;
+  gap: clamp(40px, 5vw, 56px);
+}
+@media (min-width: 900px) {
+  .asca-apply__split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(32px, 4vw, 56px);
+  }
+}
+
+.asca-apply__note {
+  margin: 14px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--ap-muted);
+  max-width: 64ch;
+}
+
+/* ---------- 근거 조문 ---------- */
+.asca-apply__cite {
+  margin: 18px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 4px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--ap-muted);
+}
+.asca-apply__cite-label {
+  font-weight: 600;
+  color: var(--ap-accent);
+  margin-right: 6px;
+}
+.asca-apply__cite a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--ap-rule);
+  text-underline-offset: 3px;
+  transition:
+    color 160ms var(--ap-ease),
+    text-decoration-color 160ms var(--ap-ease);
+}
+.asca-apply__cite a:hover {
+  color: var(--ap-fg);
+  text-decoration-color: var(--ap-seal);
+}
+
+/* ---------- 목록 ---------- */
+.asca-apply__dash-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.asca-apply__dash-list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 0.925rem;
+  line-height: 1.65;
+}
+.asca-apply__dash-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.82em;
+  width: 7px;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+
+.asca-apply__numbered {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ap-num;
+  border-top: 1px solid var(--ap-rule);
+}
+.asca-apply__numbered > li {
+  counter-increment: ap-num;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ap-rule);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+.asca-apply__numbered > li::before {
+  content: counter(ap-num, decimal-leading-zero);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ap-accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.25em;
+}
+.asca-apply__numbered strong {
+  display: block;
+  font-weight: 600;
+}
+.asca-apply__numbered span {
+  color: var(--ap-muted);
+  font-size: 0.875rem;
+}
+
+/* ---------- 장부 표 ---------- */
+.asca-apply__table-wrap {
+  overflow-x: auto;
+}
+.asca-apply__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.925rem;
+}
+.asca-apply__table caption {
+  caption-side: top;
+  text-align: left;
+  margin-bottom: 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ap-muted);
+}
+.asca-apply__table th,
+.asca-apply__table td {
+  padding: 12px 12px 12px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--ap-rule);
+}
+.asca-apply__table thead th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ap-muted);
+  border-bottom: 1px solid var(--ap-rule-strong);
+  white-space: nowrap;
+}
+.asca-apply__table tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.asca-apply__table .is-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.asca-apply__table .is-sub {
+  color: var(--ap-muted);
+  font-size: 0.85rem;
+}
+.asca-apply__table tr.is-lead th,
+.asca-apply__table tr.is-lead td.is-num {
+  color: var(--ap-seal);
+}
+.dark .asca-apply__table tr.is-lead th,
+.dark .asca-apply__table tr.is-lead td.is-num {
+  color: var(--ap-accent);
+}
+
+/* ---------- 부문·규격 ---------- */
+.asca-apply__divisions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ap-rule);
+}
+@media (min-width: 640px) {
+  .asca-apply__divisions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(24px, 4vw, 48px);
+  }
+}
+.asca-apply__division {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  column-gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--ap-rule);
+}
+.asca-apply__division-mark {
+  grid-row: span 2;
+  font-family: var(--ap-font-display);
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--ap-accent);
+}
+.asca-apply__division:first-child .asca-apply__division-mark {
+  color: var(--ap-seal);
+}
+.asca-apply__division-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.asca-apply__division-body {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ap-muted);
+}
+
+.asca-apply__sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 32px;
+  margin: 0;
+  padding: 20px 0 0;
+}
+.asca-apply__size dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ap-muted);
+}
+.asca-apply__size dd {
+  margin: 2px 0 0;
+  font-family: var(--ap-font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 심사 배점 ---------- */
+.asca-apply__criteria {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 900px) {
+  .asca-apply__criteria {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.asca-apply__criterion {
+  padding: 18px 16px 18px 0;
+  border-bottom: 1px solid var(--ap-rule);
+}
+.asca-apply__criterion-name {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.asca-apply__criterion-han {
+  margin-left: 6px;
+  font-size: 0.9rem;
+  color: var(--ap-accent);
+}
+.asca-apply__criterion-score {
+  margin: 4px 0 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.asca-apply__criterion-body {
+  margin: 6px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--ap-muted);
+}
+
+/* ---------- 위원 구분 ---------- */
+.asca-apply__roles {
+  display: grid;
+  gap: 40px;
+}
+@media (min-width: 900px) {
+  /* 머리·'자격'·목록·근거 네 줄을 세 열이 공유해, 설명 길이가 달라도 자격 목록이 같은 높이에서 시작한다 */
+  .asca-apply__roles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+    column-gap: clamp(24px, 3vw, 40px);
+  }
+  .asca-apply__roles > article {
+    grid-row: span 4;
+    display: grid;
+    grid-template-rows: subgrid;
+    align-content: start;
+  }
+}
+.asca-apply__role-head {
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--ap-rule-strong);
+}
+.asca-apply__role-mark {
+  font-family: var(--ap-font-display);
+  font-size: 0.95rem;
+  color: var(--ap-accent);
+}
+.asca-apply__role-title {
+  margin: 2px 0 6px;
+  font-family: var(--ap-font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.asca-apply__role-duty {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ap-muted);
+}
+
+/* ---------- 신청 방법 ---------- */
+.asca-apply__form {
+  border-top: 2px solid var(--ap-rule-strong);
+  padding-top: 20px;
+}
+.asca-apply__form-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 24px;
+  margin-bottom: 12px;
+}
+.asca-apply__form-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.asca-apply__form-title small {
+  margin-left: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ap-seal);
+}
+.asca-apply__form-hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--ap-muted);
+}
+.asca-apply__form-frame {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+}
+.asca-apply__form-alt {
+  margin: 12px 0 0;
+  font-size: 0.8125rem;
+  color: var(--ap-muted);
+}
+.asca-apply__form-alt a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  color: var(--ap-fg);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--ap-rule);
+  text-underline-offset: 3px;
+}
+
+.asca-apply__downloads {
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ap-rule);
+}
+@media (min-width: 640px) {
+  .asca-apply__downloads {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(24px, 4vw, 48px);
+  }
+}
+.asca-apply__download {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'type icon'
+    'title icon'
+    'note icon';
+  column-gap: 12px;
+  padding: 18px 4px;
+  min-height: 44px;
+  border-bottom: 1px solid var(--ap-rule);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 180ms var(--ap-ease);
+}
+.asca-apply__download-type {
+  grid-area: type;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ap-accent);
+}
+.asca-apply__download-title {
+  grid-area: title;
+  font-weight: 600;
+}
+.asca-apply__download-note {
+  grid-area: note;
+  font-size: 0.8125rem;
+  color: var(--ap-muted);
+}
+.asca-apply__download-icon {
+  grid-area: icon;
+  align-self: center;
+  width: 18px;
+  height: 18px;
+  color: var(--ap-muted);
+  transition:
+    transform 220ms var(--ap-ease),
+    color 180ms var(--ap-ease);
+}
+.asca-apply__download:hover {
+  background: var(--ap-surface);
+}
+.asca-apply__download:hover .asca-apply__download-icon {
+  color: var(--ap-seal);
+  transform: translateY(3px);
+}
+
+/* ---------- 문의 ---------- */
+.asca-apply__contacts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ap-rule);
+}
+@media (min-width: 900px) {
+  .asca-apply__contacts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(24px, 3vw, 40px);
+  }
+}
+.asca-apply__contact {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  column-gap: 12px;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--ap-rule);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 180ms var(--ap-ease);
+}
+.asca-apply__contact:hover {
+  background: var(--ap-surface);
+}
+.asca-apply__contact-icon {
+  grid-row: span 2;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  color: var(--ap-accent);
+}
+.asca-apply__contact-title {
+  font-weight: 600;
+}
+.asca-apply__contact-body {
+  font-size: 0.85rem;
+  color: var(--ap-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asca-apply * {
+    transition: none !important;
+  }
+}
+
+@media print {
+  .asca-apply__toc,
+  .asca-apply__form-frame {
+    display: none;
+  }
+}

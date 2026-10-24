@@ -269,6 +269,12 @@ const nextConfig = {
         destination: '/regulations',
         permanent: true,
       },
+      // 옛 Webflow 위원 위촉 지원 주소 — 도메인을 옮겨도 공유된 링크가 살아 있게
+      {
+        source: '/commissioning-application-for-the-board-of-jurors-and-organizing-committee',
+        destination: '/commissioning-application',
+        permanent: true,
+      },
     ]
   },
 

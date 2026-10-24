@@ -27,6 +27,12 @@ describe('사이트 FAQ', () => {
     expect(new Set(questions).size).toBe(questions.length)
   })
 
+  it('id 가 겹치지 않고, 출품원서 페이지가 고르는 id 가 모두 있다', () => {
+    const ids = SITE_FAQ.flatMap(item => (item.id ? [item.id] : []))
+    expect(new Set(ids).size).toBe(ids.length)
+    expect(ids).toEqual(expect.arrayContaining(['entry-fees', 'awards', 'artist-selection']))
+  })
+
   it.each(regSources)('「%s」의 근거 %s(%s)가 실제 조문을 가리킨다', (_q, _label, href) => {
     const match = /^\/regulations\/([a-z-]+)#(a[\d-]+)$/.exec(href)
     expect(match).not.toBeNull()

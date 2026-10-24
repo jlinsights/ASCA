@@ -38,6 +38,12 @@ const FORM_ITEMS: FormItem[] = [
       '대한민국 동양서예대전 참여를 희망하실 때 작성 제출하셔야 하는 출품원서 양식입니다.',
     downloads: [
       {
+        label: '온라인 출품원서 입력',
+        href: '/application',
+        type: 'online',
+        note: '입력하신 후 전송하시면 완료',
+      },
+      {
         label: 'PDF 문서로 다운로드',
         href: 'https://pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev/%EC%84%9C%EC%8B%9D/%E1%84%8E%E1%85%AE%E1%86%AF%E1%84%91%E1%85%AE%E1%86%B7%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%89%E1%85%A5%20%E1%84%8B%E1%85%A3%E1%86%BC%E1%84%89%E1%85%B5%E1%86%A8.pdf',
         type: 'pdf',
@@ -153,6 +159,12 @@ const FORM_ITEMS: FormItem[] = [
     title: '위원 위촉 지원서',
     description: '심사위원 및 운영위원 지원하실 때 작성 제출해야 하는 신청 양식입니다.',
     downloads: [
+      {
+        label: '온라인 지원서 입력',
+        href: '/commissioning-application',
+        type: 'online',
+        note: '입력하신 후 전송하시면 완료',
+      },
       {
         label: '한글 문서로 다운로드',
         href: 'https://pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev/%EC%84%9C%EC%8B%9D/%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A3%E1%86%BC%E1%84%89%E1%85%A5%E1%84%8B%E1%85%A8%E1%84%92%E1%85%A7%E1%86%B8%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%B1%E1%84%8B%E1%85%AF%E1%86%AB%20%E1%84%8B%E1%85%B1%E1%84%8E%E1%85%A9%E1%86%A8%20%E1%84%8C%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%89%E1%85%A5.hwpx',
@@ -297,8 +309,10 @@ export default function FormsPage() {
                     <Link
                       key={dl.href}
                       href={dl.href}
-                      target='_blank'
-                      rel='noopener noreferrer'
+                      // 사이트 안 신청 페이지(/application 등)는 같은 탭, 파일·외부 양식만 새 탭
+                      {...(dl.href.startsWith('/')
+                        ? {}
+                        : { target: '_blank', rel: 'noopener noreferrer' })}
                       className='group flex items-start gap-3 rounded-lg border p-4 hover:bg-muted/50 transition-colors'
                     >
                       <div className='mt-0.5 shrink-0 text-muted-foreground group-hover:text-scholar-red transition-colors'>

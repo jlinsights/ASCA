@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { PenLine, Users } from 'lucide-react'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { ContestFlipbook } from './contest-flipbook'
@@ -16,6 +18,24 @@ export function ContestIntro({ total, open }: ContestIntroProps) {
         {...PAGE_HERO_MARKS.contests}
         title='공모전'
         lede='다양한 예술 공모전에 도전하고 여러분의 재능을 펼쳐보세요'
+        actions={
+          <>
+            <Link
+              href='/application'
+              className='inline-flex min-h-11 items-center gap-2 rounded-lg bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90'
+            >
+              <PenLine className='h-4 w-4' aria-hidden='true' />
+              출품원서 작성
+            </Link>
+            <Link
+              href='/commissioning-application'
+              className='inline-flex min-h-11 items-center gap-2 rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-muted'
+            >
+              <Users className='h-4 w-4' aria-hidden='true' />
+              위원 위촉 지원
+            </Link>
+          </>
+        }
       >
         <HeroFacts
           facts={[

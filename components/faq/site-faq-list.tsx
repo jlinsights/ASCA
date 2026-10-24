@@ -9,11 +9,17 @@ import {
 } from '@/components/ui/accordion'
 import { SITE_FAQ } from '@/lib/content/site-faq'
 
+interface SiteFaqListProps {
+  /** 주면 이 id 의 항목만, 준 순서대로 보여 준다. 없으면 전체(/contact·/fundraising) */
+  ids?: readonly string[]
+}
+
 /** 자주 묻는 질문 아코디언 — /contact 와 /fundraising 이 같은 목록을 쓴다. 답 끝에 근거 조문 링크 */
-export function SiteFaqList() {
+export function SiteFaqList({ ids }: SiteFaqListProps = {}) {
+  const items = ids ? ids.flatMap(id => SITE_FAQ.filter(item => item.id === id)) : SITE_FAQ
   return (
     <Accordion type='single' collapsible className='space-y-3'>
-      {SITE_FAQ.map((item, i) => (
+      {items.map((item, i) => (
         <AccordionItem
           key={item.q}
           value={`faq-${i}`}
