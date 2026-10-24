@@ -2,7 +2,7 @@ export const footerCopy = {
   ko: {
     name: '사단법인 동양서예협회',
     headquarters: '본부',
-    office: '사무국 주소',
+    office: '사무소',
     address: '서울시 성북구 보문로 57-1',
     building: '6층 (보문동7가, 중앙빌딩)',
     officeAddress: '경기 고양시 덕양구 호국로 860',

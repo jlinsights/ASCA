@@ -32,6 +32,8 @@ import {
   SIZES,
 } from './_components/application-data'
 import '@/components/apply/apply.css'
+import '@/components/apply/support.css'
+import { OFFICE, formatAddress } from '@/lib/content/contact-info'
 
 const DESCRIPTION =
   '대한민국 동양서예대전 출품원서를 온라인으로 작성하거나 Word·PDF 양식으로 제출하세요. 공모 부문과 작품 규격, 출품비, 심사 방식, 시상 내역을 규정 원문과 함께 안내합니다.'
@@ -112,6 +114,12 @@ export default function ApplicationPage() {
             />
           </div>
           <DownloadList items={ENTRY_DOWNLOADS} />
+          <p className='asca-apply__sendto'>
+            <strong>출품원서 접수처 — {OFFICE.label}</strong>
+            {formatAddress(OFFICE)}
+            <br />
+            출품원서 접수와 모든 행정업무는 사무소에서 처리합니다.
+          </p>
         </section>
 
         <section id='guide' aria-label='공모요강' className='asca-apply__anchor'>

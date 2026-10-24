@@ -45,6 +45,7 @@ export const SITE_FAQ: readonly FaqItem[] = [
     ],
   },
   {
+    id: 'dues-usage',
     q: '연회비의 사용처는 어떻게 되나요?',
     a: `연회비는 정관이 정한 협회 사업과 운영에 쓰입니다.
 
@@ -59,6 +60,7 @@ export const SITE_FAQ: readonly FaqItem[] = [
     ],
   },
   {
+    id: 'dues',
     q: '연회비가 별도로 있나요?',
     a: `회원 등급별 연회비와 등록비:
 - 청년작가(1월 1일 기준 만 40세 이하): 연회비 3만원 + 가입 등록비 1만원
@@ -75,6 +77,7 @@ export const SITE_FAQ: readonly FaqItem[] = [
     ],
   },
   {
+    id: 'lifetime',
     q: "'평생회원'이 연회비 납부 면제되던데 어떤 요건을 충족해야 하나요?",
     a: `평생회원은 평생회비를 일시(또는 분할) 납부해 연회비 납부 의무를 영구히 면제받은 회원입니다.
 
@@ -87,6 +90,7 @@ export const SITE_FAQ: readonly FaqItem[] = [
     ],
   },
   {
+    id: 'benefits',
     q: '동양서예협회 정회원 가입 시 어떤 혜택이 있나요?',
     a: `[정회원 공통]
 - 전시 참가 시 도록 1권 무료
@@ -196,6 +200,7 @@ URL 형식: https://orientalcalligraphy.org/calligrapher/name
     ],
   },
   {
+    id: 'donation-receipt',
     q: '기부금 납입 영수증을 발급받을 수 있나요?',
     a: `현재 협회는 세제적격단체가 아니므로 기부금영수증 발급이 불가합니다. 증빙이 필요한 경우 기부내역확인서(세제 혜택 없음, 단순 증빙용)를 발급해 드릴 수 있습니다.
 
