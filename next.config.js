@@ -1,4 +1,5 @@
 const path = require('path')
+const { webflowRedirects } = require('./lib/seo/webflow-redirects')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -119,6 +120,8 @@ const THIRD_PARTY = {
   },
   // Cloudflare Images — 정적 이미지 호스팅
   cloudflareImages: { img: ['https://imagedelivery.net'] },
+  // 옛 Webflow CDN — 블로그 글 본문·썸네일(lib/data/blog-posts.json). Webflow 해지 전에 옮겨야 한다
+  webflowCdn: { img: ['https://cdn.prod.website-files.com'] },
 }
 
 /** THIRD_PARTY에서 특정 디렉티브에 해당하는 오리진을 모아 중복 제거한다. */
@@ -299,6 +302,8 @@ const nextConfig = {
         destination: '/exhibitions/past',
         permanent: true,
       },
+      // 옛 Webflow 사이트 주소 — 도메인 이전용 대응표
+      ...webflowRedirects,
     ]
   },
 

@@ -1,19 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { sanitizeHTML } from '@/lib/security/sanitize'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import {
   Search,
   Calendar,
@@ -26,6 +18,7 @@ import {
   BookOpen,
 } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
 import { BlogPost, getCombinedPosts } from '@/lib/services/blog-service'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
@@ -36,7 +29,6 @@ export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null)
   const ITEMS_PER_PAGE = 9
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -234,35 +226,17 @@ export default function BlogPage() {
                         )}
 
                         {post.source === 'local' ? (
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button
-                                variant='ghost'
-                                size='sm'
-                                className='ml-auto hover:bg-primary/10 hover:text-primary'
-                                onClick={() => setSelectedPost(post)}
-                              >
-                                읽기 <ArrowRight className='w-4 h-4 ml-1' />
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className='max-w-3xl max-h-[90vh] overflow-y-auto'>
-                              <DialogHeader>
-                                <DialogTitle className='text-2xl mb-2'>{post.title}</DialogTitle>
-                                <div className='text-sm text-muted-foreground flex gap-4'>
-                                  <span>{formatDate(post.publishedAt)}</span>
-                                  <span>{post.author}</span>
-                                </div>
-                              </DialogHeader>
-                              <div className='mt-4 prose dark:prose-invert max-w-none'>
-                                <div
-                                  className='whitespace-normal leading-relaxed [&>p]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-bold [&>h3]:mt-6 [&>h3]:mb-3 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4 [&_figure]:!w-full [&_figure]:!max-w-full [&_figure]:!my-8 [&_figure]:!mx-auto [&_img]:!w-full [&_img]:!max-w-full [&_img]:!h-auto [&_img]:!mx-auto [&_img]:rounded-lg [&_img]:shadow-sm [&_figcaption]:text-center [&_figcaption]:text-sm [&_figcaption]:text-muted-foreground [&_figcaption]:mt-2'
-                                  dangerouslySetInnerHTML={{
-                                    __html: sanitizeHTML(post.content || post.summary || ''),
-                                  }}
-                                />
-                              </div>
-                            </DialogContent>
-                          </Dialog>
+                          // 글마다 주소(/blog/<slug>)가 있어야 검색엔진이 찾고, 옛 /post/<slug> 가 이어진다
+                          <Button
+                            asChild
+                            variant='ghost'
+                            size='sm'
+                            className='ml-auto hover:bg-primary/10 hover:text-primary'
+                          >
+                            <Link href={`/blog/${post.id}`}>
+                              읽기 <ArrowRight className='w-4 h-4 ml-1' />
+                            </Link>
+                          </Button>
                         ) : (
                           <Button
                             asChild
