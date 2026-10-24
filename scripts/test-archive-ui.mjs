@@ -26,8 +26,21 @@ async function ok(query) {
 try {
   await ok(
     admin.from('artists').insert([
-      { id: artist, name: tag, visibility: 'public', calligraphy_styles: ['해서'] },
-      { id: hidden, name: `${tag}-hidden`, visibility: 'hidden', calligraphy_styles: [] },
+      // membership_type 기본값 '준회원' 은 트리거가 hidden 으로 바꾸므로 공개 등급을 명시한다
+      {
+        id: artist,
+        name: tag,
+        visibility: 'public',
+        membership_type: '초대작가',
+        calligraphy_styles: ['해서'],
+      },
+      {
+        id: hidden,
+        name: `${tag}-hidden`,
+        visibility: 'hidden',
+        membership_type: '초대작가',
+        calligraphy_styles: [],
+      },
     ])
   )
   const base = {

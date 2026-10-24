@@ -54,8 +54,9 @@ async function ok(result) {
   return result.data
 }
 try {
+  // membership_type 기본값이 '준회원' 이고 트리거가 준회원을 hidden 으로 바꾸므로 공개 등급을 명시한다
   await db.query(
-    `insert into artists(id,name,visibility) values ($1,'archive public','public'),($2,'archive hidden','hidden'),($3,'archive member','members')`,
+    `insert into artists(id,name,visibility,membership_type) values ($1,'archive public','public','초대작가'),($2,'archive hidden','hidden','초대작가'),($3,'archive member','members','초대작가')`,
     [publicArtist, hiddenArtist, memberArtist]
   )
   await db.query(
@@ -316,6 +317,28 @@ try {
     checks += 9
   } finally {
     await db.query("delete from artists where airtable_id='archive-integration-record'")
+  }
+  // 등급·회비 상태로 공개 여부를 강제하는 트리거 (20261024092153 · 20261024093959)
+  const gradeArtist = randomUUID()
+  ids.push(gradeArtist)
+  const visibilityOf = async () =>
+    (await rows('select visibility from artists where id=$1', [gradeArtist]))[0].visibility
+  await db.query(`insert into artists(id,name) values ($1,'grade default')`, [gradeArtist])
+  assert.equal(await visibilityOf(), 'hidden', '기본 등급 준회원은 비공개')
+  await db.query(`update artists set visibility='public' where id=$1`, [gradeArtist])
+  assert.equal(await visibilityOf(), 'hidden', '준회원은 손으로 공개할 수 없다')
+  await db.query(`update artists set membership_type='회원작가' where id=$1`, [gradeArtist])
+  assert.equal(await visibilityOf(), 'public', '승급하면 공개 복원')
+  await db.query(`update artists set dues_status='자격 정지' where id=$1`, [gradeArtist])
+  assert.equal(await visibilityOf(), 'hidden', '회비 자격 정지는 비공개')
+  await db.query(`update artists set dues_status='정상' where id=$1`, [gradeArtist])
+  assert.equal(await visibilityOf(), 'public', '완납하면 공개 복원')
+  await rejects(`update artists set dues_status='미납' where id='${gradeArtist}'`, '23514')
+  checks += 5
+  for (const role of ['anon', 'authenticated']) {
+    await db.query(`set role ${role}`)
+    await rejects('select dues_status from artists', '42501')
+    await db.query('reset role')
   }
   console.log(
     `Archive integration: ${checks} checks passed (SQL roles, REST, Storage, constraints).`
