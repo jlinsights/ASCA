@@ -1,6 +1,6 @@
 # Supabase Auth 전환 준비와 실제 로컬 검증
 
-2026-10-24. `feat/supabase-auth`를 main `c67c1c15`(PR #117·#118·#119·#120
+2026-10-24. `feat/supabase-auth`를 main `85b6688d`(PR #121 문서·#122 LICENSE
 포함)에 통합했다. 운영 인증 제공자, 운영 DB, Vercel 환경변수, 실제 사용자 계정은
 변경하지 않았다.
 
@@ -108,3 +108,6 @@ HTTP 검사에서 새 세션 쿠키 기록 및 계정 조회가 성공했다.
 
 본인 작가 프로필 저장 보완과 계정 연결 계약은
 [프로필 저장 기록](artist-profile-self-service.md)에 정리했다.
+
+관리자 계정·DB 역할·TOTP 준비와 병합 선행 조건은
+[관리자 전환 절차](supabase-auth-admin-cutover.md)를 따른다.

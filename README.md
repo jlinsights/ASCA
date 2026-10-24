@@ -41,7 +41,7 @@
 | 프레임워크  | Next.js 16 (App Router), React, TypeScript 5                                    |
 | 스타일      | Tailwind CSS 3, Radix UI + shadcn/ui, Framer Motion                             |
 | 데이터      | Supabase PostgreSQL (`ASCA-2026`), supabase-js(공개 조회) + Drizzle ORM(서버)   |
-| 인증        | Supabase Auth + DB 역할·MFA (운영 전환 전)                                        |
+| 인증        | Supabase Auth + DB 역할·MFA (운영 전환 전)                                      |
 | 테스트      | Jest + React Testing Library, Playwright(E2E), 실제 Postgres 검사(`archive-db`) |
 | 배포        | Vercel (`asca-main`), GitHub Actions                                            |
 | 외부 서비스 | ChannelIO(채팅), Cal.com(상담 예약)                                             |
@@ -132,7 +132,8 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ## 🔐 관리자
 
 - 관리자 계정: `info@orientalcalligraphy.org` (비밀번호 로그인)
-- 관리자 여부: `public.account_profiles.role = 'admin'`과 검증된 MFA `aal2`를 모두 요구한다
+- 관리자 여부: `public.account_profiles.role = 'admin'`과 검증된 MFA `aal2`를
+  모두 요구한다
 - 가입·이메일 확인 → 서버에서 역할 부여 → `/auth/mfa` TOTP 등록·검증 순서다.
   [관리자 전환 절차](docs/03-analysis/supabase-auth-admin-cutover.md)를 따른다.
 - `/admin` → **`/admin/artists` 작가 회비 관리** — 이름·등급·회비 상태로 찾고,
@@ -179,7 +180,8 @@ CI(`.github/workflows/`)는 `ci.yml`(품질·테스트·빌드), `e2e-tests.yml`
 - **Auth 마이그레이션 적용 → Preview 검증·초기 관리자 준비 → 운영 배포** 순서를
   지킨다. `get_my_artist_ids()`가 없는 DB에 새 코드를 배포하지 않는다.
   [전환 준비 기록](docs/03-analysis/supabase-auth-cutover-readiness.md)과
-  [본인 프로필 저장 계약](docs/03-analysis/artist-profile-self-service.md)을 확인한다.
+  [본인 프로필 저장 계약](docs/03-analysis/artist-profile-self-service.md)을
+  확인한다.
 
 ## 🖼️ 갤러리 사진 추가
 

@@ -17,7 +17,6 @@ import type { ArtistProfileEditorData, ArtistProfileUpdates } from '@/lib/types/
 
 type Form = Required<ArtistProfileUpdates>
 const empty: Form = {
-  name: '',
   nameEn: '',
   bio: '',
   bioEn: '',
@@ -25,7 +24,6 @@ const empty: Form = {
   specialization: [],
 }
 const toForm = (profile: ArtistProfileEditorData): Form => ({
-  name: profile.name,
   nameEn: profile.nameEn ?? '',
   bio: profile.bio ?? '',
   bioEn: profile.bioEn ?? '',
@@ -170,11 +168,13 @@ export function ProfileEditClient() {
                 <Label htmlFor='artist-name'>{t('profileEditorName')}</Label>
                 <Input
                   id='artist-name'
-                  value={form.name}
-                  onChange={e => setForm({ ...form, name: e.target.value })}
-                  maxLength={200}
-                  required
+                  value={profile.name}
+                  readOnly
+                  aria-describedby='artist-name-policy'
                 />
+                <p id='artist-name-policy' className='text-sm text-muted-foreground'>
+                  {t('profileEditorNamePolicy')}
+                </p>
               </div>
               <div className='space-y-2'>
                 <Label htmlFor='artist-name-en'>{t('profileEditorNameEn')}</Label>

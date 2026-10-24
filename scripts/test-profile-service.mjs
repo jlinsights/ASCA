@@ -128,6 +128,7 @@ try {
     async () => {
       for (const key of [
         'membership_type',
+        'name',
         'visibility',
         'dues_status',
         'claimed_by_user_id',
@@ -152,12 +153,13 @@ try {
       const saved = await admin
         .from('artists')
         .select(
-          'name_en,bio,bio_en,birth_year,specialties,membership_type,visibility,dues_status,claimed_by_user_id'
+          'name,name_en,bio,bio_en,birth_year,specialties,membership_type,visibility,dues_status,claimed_by_user_id'
         )
         .eq('id', artistId)
         .single()
       assert.equal(saved.error, null)
       assert.deepEqual(saved.data, {
+        name: 'Local profile fixture',
         name_en: 'Updated',
         bio: '소개 수정',
         bio_en: 'Updated biography',

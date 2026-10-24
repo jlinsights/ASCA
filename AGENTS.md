@@ -104,11 +104,11 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   service role 은 RLS 를 건너뛰어 숨긴 작가가 새어 나간다 — 상세 API
   `/api/artists/[id]` 가 그랬다(#117). 공개 범위를 검증할 때는 목록뿐 아니라
   **상세 API 까지** 숨긴 작가 id 로 404 를 확인한다.
-- 운영 확인 당시 `claimed_by_user_id`가 채워진 작가는 없고 연결 화면도 없다.
-  이 브랜치의 `/profile/edit`은 본인 연결이 있는 경우 서버 API로 조회·저장한다.
-  연결 값은 `auth.users.id` UUID 문자열(text)이며 작가 UUID와 구분한다.
-  연결 화면은 후속 작업이다. 공식 이름·등급·회비·공개 상태·소유권을 본인이
-  변경하지 못한다. 계약은 `docs/03-analysis/artist-profile-self-service.md`를 본다.
+- 운영 확인 당시 `claimed_by_user_id`가 채워진 작가는 없고 연결 화면도 없다. 이
+  브랜치의 `/profile/edit`은 본인 연결이 있는 경우 서버 API로 조회·저장한다.
+  연결 값은 `auth.users.id` UUID 문자열(text)이며 작가 UUID와 구분한다. 연결
+  화면은 후속 작업이다. 공식 이름·등급·회비·공개 상태·소유권을 본인이 변경하지
+  못한다. 계약은 `docs/03-analysis/artist-profile-self-service.md`를 본다.
 
 ## Primary Commands
 
@@ -240,8 +240,8 @@ All content tables use consistent multilingual structure:
   Supabase 계정을 만들고 `public.account_profiles.role`을 `admin`으로 부여한 뒤
   `/auth/mfa`에서 TOTP를 등록·검증한다. 이메일만으로 자동 승격하지 않는다.
 - `archiveIdentity()`는 `getAccount()`의 검증된 DB 역할과 MFA를 사용한다.
-  `role === 'admin' && assuranceLevel === 'aal2'`인 경우에만 관리자다.
-  반환 계약 `{ userId, admin }`은 유지하며 userId는 `auth.users.id` UUID다.
+  `role === 'admin' && assuranceLevel === 'aal2'`인 경우에만 관리자다. 반환 계약
+  `{ userId, admin }`은 유지하며 userId는 `auth.users.id` UUID다.
 - `ADMIN_EMAILS`·`SUPER_ADMIN_EMAILS`와 Clerk `user_profiles`는 native 관리자
   판정에 사용하지 않는다. 기존 Clerk 설정은 롤백 검증까지 보존한다.
 - 관리자 초기 준비와 마이그레이션 적용 → Preview 검증 → 운영 배포 절차는
@@ -257,9 +257,9 @@ All content tables use consistent multilingual structure:
   맞추고, 응답에 바뀐 `visibility` 가 온다.
 - 메뉴(`components/admin/admin-nav-items.ts`)에는 **페이지가 있는 화면만**
   싣는다. 테스트가 href 마다 `app/admin/**/page.tsx` 가 있는지 확인한다.
-- `/admin/contests`의 인증 경계는 공통 Supabase 계정 계층으로 교체했다.
-  레거시 회원·공모전 제품 기능을 완성한 것으로 보지 않으며,
-  `/admin/membership`의 예시 화면과 함께 기존 메뉴 제외 상태를 유지한다.
+- `/admin/contests`의 인증 경계는 공통 Supabase 계정 계층으로 교체했다. 레거시
+  회원·공모전 제품 기능을 완성한 것으로 보지 않으며, `/admin/membership`의 예시
+  화면과 함께 기존 메뉴 제외 상태를 유지한다.
 
 ### Permission System (RBAC)
 
@@ -438,8 +438,9 @@ and refactor using this standardized process:
 - Component tests with React Testing Library
 - Auth RLS는 빈 로컬 `asca_auth_test_*` DB에 `AUTH_TEST_DATABASE_URL`을 지정하고
   `npm run test:auth-db`로 검사한다. 실제 로컬 Auth·프로필 API 검증은
-  `AUTH_LOCAL_STATUS_FILE`과 `npm run test:auth-service`·`test:profile-service`를
-  사용한다. 허용 주소와 준비 절차는 전환·프로필 검증 기록을 따른다.
+  `AUTH_LOCAL_STATUS_FILE`과
+  `npm run test:auth-service`·`test:profile-service`를 사용한다. 허용 주소와
+  준비 절차는 전환·프로필 검증 기록을 따른다.
 - 실제 Postgres 검증은 CI `archive-db` 가 돌린다 —
   `scripts/test-archive-upgrade.mjs`·`test-archive.mjs`·`test-archive-ui.mjs`.
   RLS·열 grant·등급 트리거 같은 DB 규칙은 jest mock 으로는 못 잡으니 여기에

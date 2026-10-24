@@ -3,6 +3,36 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      account_profiles: {
+        Row: {
+          created_at: string
+          disabled_at: string | null
+          display_name: string
+          id: string
+          locale: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          disabled_at?: string | null
+          display_name?: string
+          id: string
+          locale?: string
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          disabled_at?: string | null
+          display_name?: string
+          id?: string
+          locale?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       artist_contacts: {
         Row: {
           artist_id: string
@@ -408,6 +438,32 @@ export type Database = {
             columns: ['artist_id']
             isOneToOne: false
             referencedRelation: 'artists'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      auth_identity_links: {
+        Row: {
+          account_id: string
+          clerk_user_id: string
+          linked_at: string
+        }
+        Insert: {
+          account_id: string
+          clerk_user_id: string
+          linked_at?: string
+        }
+        Update: {
+          account_id?: string
+          clerk_user_id?: string
+          linked_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'auth_identity_links_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: true
+            referencedRelation: 'account_profiles'
             referencedColumns: ['id']
           },
         ]
@@ -1080,6 +1136,12 @@ export type Database = {
       }
     }
     Functions: {
+      get_my_artist_ids: {
+        Args: never
+        Returns: {
+          artist_id: string
+        }[]
+      }
       increment_event_views: {
         Args: { event_uuid: string }
         Returns: undefined
