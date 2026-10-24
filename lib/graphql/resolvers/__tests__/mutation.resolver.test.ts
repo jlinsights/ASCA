@@ -23,6 +23,22 @@ import {
  */
 
 describe('Mutation Resolvers', () => {
+  it.each([
+    'createArtist',
+    'createArtwork',
+    'updateArtist',
+    'updateArtwork',
+    'deleteArtwork',
+  ] as const)('blocks legacy direct %s even for an authenticated artist owner', async operation => {
+    const context = createAuthContext({ id: 'user-1', role: 'artist' })
+    context.artistIds = ['artist-1']
+    await expectAuthzError(() =>
+      mutationResolvers[operation]({}, { id: 'artist-1', input: { artistId: 'artist-1' } }, context)
+    )
+    expect(context.db.insert).not.toHaveBeenCalled()
+    expect(context.db.update).not.toHaveBeenCalled()
+    expect(context.db.delete).not.toHaveBeenCalled()
+  })
   // ===================================
   // Member Mutations
   // ===================================
@@ -384,7 +400,7 @@ describe('Mutation Resolvers', () => {
 
       const artist = createMockArtist(input)
 
-      const context = createAuthContext()
+      const context = createAdminContext()
 
       context.db.insert = jest.fn(() => ({
         values: jest.fn().mockReturnThis(),
@@ -405,11 +421,11 @@ describe('Mutation Resolvers', () => {
   })
 
   describe('updateArtist', () => {
-    it('should update artist when user owns the record', async () => {
+    it('should update artist after administrator verification', async () => {
       const artist = createMockArtist({ id: 'artist-1', userId: 'user-1' })
       const input = { name: 'Updated Name' }
 
-      const context = createAuthContext({ id: 'user-1' })
+      const context = createAdminContext({ id: 'user-1' })
       ;(context.loaders.artistLoader.load as jest.Mock).mockResolvedValue(artist)
       ;(context.loaders.artistLoader.clear as jest.Mock) = jest.fn()
 
@@ -469,7 +485,7 @@ describe('Mutation Resolvers', () => {
 
       const artwork = createMockArtwork(input)
 
-      const context = createAuthContext()
+      const context = createAdminContext()
       ;(context.loaders.artworksByArtistLoader.clear as jest.Mock) = jest.fn()
 
       context.db.insert = jest.fn(() => ({
@@ -497,7 +513,7 @@ describe('Mutation Resolvers', () => {
       const artist = createMockArtist({ id: 'artist-1', userId: 'user-1' })
       const input = { title: 'Updated Title' }
 
-      const context = createAuthContext({ id: 'user-1' })
+      const context = createAdminContext({ id: 'user-1' })
       ;(context.loaders.artworkLoader.load as jest.Mock).mockResolvedValue(artwork)
       ;(context.loaders.artistLoader.load as jest.Mock).mockResolvedValue(artist)
       ;(context.loaders.artworkLoader.clear as jest.Mock) = jest.fn()
@@ -553,7 +569,7 @@ describe('Mutation Resolvers', () => {
       const artwork = createMockArtwork({ id: 'artwork-1', artistId: 'artist-1' })
       const artist = createMockArtist({ id: 'artist-1', userId: 'user-1' })
 
-      const context = createAuthContext({ id: 'user-1' })
+      const context = createAdminContext({ id: 'user-1' })
       ;(context.loaders.artworkLoader.load as jest.Mock).mockResolvedValue(artwork)
       ;(context.loaders.artistLoader.load as jest.Mock).mockResolvedValue(artist)
       ;(context.loaders.artworkLoader.clear as jest.Mock) = jest.fn()

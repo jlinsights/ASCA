@@ -3,10 +3,9 @@ import {
   publicExhibitionArtworkCondition,
 } from '@/lib/db/archive-access'
 import { publicArtistCondition, publicArtworkCondition } from '@/lib/db/archive-access'
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth/server'
 import { db } from '@/lib/db'
 import { createIdLoader, DataLoader } from '@/lib/optimization/dataloader'
-import { error as logError } from '@/lib/logging'
 import { and, eq, inArray } from 'drizzle-orm'
 import * as schema from '@/lib/db/schema'
 import type { User } from '@/lib/db/schema'
@@ -21,13 +20,16 @@ import type { User } from '@/lib/db/schema'
  * - Request metadata
  */
 
+type GraphQLUser = Pick<User, 'id' | 'email' | 'name' | 'role' | 'createdAt' | 'updatedAt'>
+
 export interface GraphQLContext {
   // Database
   db: typeof db
 
   // User authentication
-  user: User | null
+  user: GraphQLUser | null
   userId: string | null
+  artistIds?: string[]
 
   // DataLoaders for N+1 query prevention
   loaders: {
@@ -75,8 +77,8 @@ export interface GraphQLContext {
  * with new DataLoader instances (per-request caching)
  */
 export async function createGraphQLContext(req: Request): Promise<GraphQLContext> {
-  // Authenticate via Clerk session cookie (server-side)
-  const { user, userId } = await authenticateUser()
+  // Verify native Auth identity and protected account role
+  const { user, userId, artistIds } = await authenticateUser()
 
   // Extract request metadata
   const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || null
@@ -89,6 +91,7 @@ export async function createGraphQLContext(req: Request): Promise<GraphQLContext
     db,
     user,
     userId,
+    artistIds,
     loaders,
     request: {
       ip,
@@ -97,29 +100,27 @@ export async function createGraphQLContext(req: Request): Promise<GraphQLContext
   }
 }
 
-/**
- * Authenticate user via Clerk session cookie (server-side).
- *
- * Returns both `user` (Drizzle row, may be null if not yet synced) and
- * `userId` (Clerk session id, always set when authenticated). Resolvers
- * that only need identity should rely on `userId`; resolvers that need
- * Drizzle relations should null-check `user`.
- *
- * External Bearer tokens (mobile/3rd-party) are out of scope for this
- * cycle — see plan asca-api-security-hardening §2.2 (M2 backlog).
- */
-async function authenticateUser(): Promise<{ user: User | null; userId: string | null }> {
-  try {
-    const { userId } = await auth()
-    if (!userId) return { user: null, userId: null }
-
-    const user = await db.query.users.findFirst({
-      where: eq(schema.users.id, userId),
-    })
-    return { user: user ?? null, userId }
-  } catch (error) {
-    logError('GraphQL authentication error', error instanceof Error ? error : undefined)
-    return { user: null, userId: null }
+/** Account identity/role comes from native Auth and its protected profile, not legacy users. */
+async function authenticateUser() {
+  const { account } = await auth()
+  if (!account) return { user: null, userId: null, artistIds: [] }
+  const role: User['role'] =
+    account.role === 'admin' && account.assuranceLevel === 'aal2'
+      ? 'admin'
+      : account.artistIds.length
+        ? 'artist'
+        : 'member'
+  return {
+    user: {
+      id: account.id,
+      email: account.email,
+      name: account.displayName,
+      role,
+      createdAt: new Date(account.createdAt),
+      updatedAt: new Date(account.updatedAt),
+    },
+    userId: account.id,
+    artistIds: account.artistIds,
   }
 }
 
@@ -279,7 +280,7 @@ function createDataLoaders() {
  */
 export function requireAuth(
   context: GraphQLContext
-): asserts context is GraphQLContext & { user: User; userId: string } {
+): asserts context is GraphQLContext & { user: GraphQLUser; userId: string } {
   if (!context.user || !context.userId) {
     throw new Error('Authentication required')
   }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -24,7 +24,7 @@ import { error as logError } from '@/lib/logging'
 
 export function CareerEntryFormClient() {
   const router = useRouter()
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState<CareerEntryFormData>({
     type: 'exhibition',
@@ -46,16 +46,16 @@ export function CareerEntryFormClient() {
     e.preventDefault()
 
     if (!isLoaded) return
-    if (!isSignedIn || !clerkUser) {
+    if (!isSignedIn || !account?.artistIds[0]) {
       alert('로그인이 필요합니다.')
-      router.push('/sign-in')
+      router.push(account ? '/profile' : '/sign-in')
       return
     }
 
     setLoading(true)
 
     try {
-      const { data, error } = await createCareerEntry(clerkUser.id, formData)
+      const { data, error } = await createCareerEntry(account.artistIds[0]!, formData)
 
       if (error) {
         alert('이력 등록에 실패했습니다.')

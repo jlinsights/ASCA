@@ -1,480 +1,260 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
+import { useLanguage } from '@/contexts/language-context'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Switch } from '@/components/ui/switch'
-import { ArrowLeft, Save, Eye, Upload, Globe, Instagram, Facebook, Twitter } from 'lucide-react'
-import {
-  fetchArtistProfile,
-  updateArtistProfile,
-  toggleProfileVisibility,
-  uploadProfileImage,
-} from '@/lib/api/profiles'
-import type { ArtistProfile, ArtistProfileFormData } from '@/lib/types/profile-legacy'
-import Image from 'next/image'
-import { error as logError } from '@/lib/logging'
+import { fetchArtistProfile, updateArtistProfile } from '@/lib/api/profiles'
+import type { ArtistProfileEditorData, ArtistProfileUpdates } from '@/lib/types/profile-editor'
+
+type Form = Required<ArtistProfileUpdates>
+const empty: Form = {
+  name: '',
+  nameEn: '',
+  bio: '',
+  bioEn: '',
+  birthYear: null,
+  specialization: [],
+}
+const toForm = (profile: ArtistProfileEditorData): Form => ({
+  name: profile.name,
+  nameEn: profile.nameEn ?? '',
+  bio: profile.bio ?? '',
+  bioEn: profile.bioEn ?? '',
+  birthYear: profile.birthYear,
+  specialization: profile.specialization,
+})
 
 export function ProfileEditClient() {
   const router = useRouter()
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
-  const [profile, setProfile] = useState<ArtistProfile | null>(null)
+  const { isLoaded, isSignedIn, user: account } = useAccount()
+  const { t } = useLanguage()
+  const artistId = account?.artistIds[0]
+  const identity = `${account?.id ?? ''}:${artistId ?? ''}`
+  const currentIdentity = useRef(identity)
+  currentIdentity.current = identity
+  const generation = useRef(0)
+  const [profile, setProfile] = useState<ArtistProfileEditorData | null>(null)
+  const [form, setForm] = useState<Form>(empty)
+  const [specialtiesText, setSpecialtiesText] = useState('')
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
+  const [attempt, setAttempt] = useState(0)
   const [saving, setSaving] = useState(false)
-  const [userId, setUserId] = useState<string | null>(null)
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null)
-  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null)
-
-  const [formData, setFormData] = useState<ArtistProfileFormData>({
-    name: '',
-    nameEn: '',
-    bio: '',
-    bioEn: '',
-    email: '',
-    phone: '',
-    location: '',
-    specialization: [],
-    yearsActive: undefined,
-    birthYear: undefined,
-    socialLinks: {
-      website: '',
-      instagram: '',
-      facebook: '',
-      twitter: '',
-    },
-    isPublic: true,
-  })
+  const [message, setMessage] = useState('')
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
+    const requests = generation
+    const version = ++requests.current
+    setSaving(false)
+    setMessage('')
+    setFailed(false)
     if (!isLoaded) return
-    if (!isSignedIn || !clerkUser) {
-      router.push('/sign-in')
+    if (!isSignedIn) {
+      router.replace('/sign-in?next=/profile/edit')
       return
     }
-
-    const loadProfile = async () => {
-      setUserId(clerkUser.id)
-      const { data, error } = await fetchArtistProfile(clerkUser.id)
-
-      if (data) {
-        setProfile(data)
-        setFormData({
-          name: data.name || '',
-          nameEn: data.nameEn || '',
-          bio: data.bio || '',
-          bioEn: data.bioEn || '',
-          email: data.email || '',
-          phone: data.phone || '',
-          location: data.location || '',
-          specialization: data.specialization || [],
-          yearsActive: data.yearsActive,
-          birthYear: data.birthYear,
-          socialLinks: data.socialLinks || {},
-          isPublic: data.isPublic,
-        })
-        if (data.profileImage) {
-          setProfileImagePreview(data.profileImage)
-        }
-      }
-
+    if (!artistId) {
+      setProfile(null)
       setLoading(false)
+      return
     }
-
-    loadProfile()
-  }, [isLoaded, isSignedIn, clerkUser, router])
-
-  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setProfileImageFile(file)
-      setProfileImagePreview(URL.createObjectURL(file))
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!userId) return
-
-    setSaving(true)
-
-    try {
-      // Upload profile image if changed
-      if (profileImageFile) {
-        await uploadProfileImage(userId, profileImageFile)
-      }
-
-      // Update profile
-      const { data, error } = await updateArtistProfile(userId, formData)
-
-      if (error) {
-        alert('프로필 저장에 실패했습니다.')
-        logError('Profile update failed', error instanceof Error ? error : undefined)
+    let active = true
+    setProfile(null)
+    setLoading(true)
+    setLoadError(false)
+    void fetchArtistProfile(artistId).then(({ data, error }) => {
+      if (!active || version !== generation.current || currentIdentity.current !== identity) return
+      if (error || !data) {
+        setProfile(null)
+        setLoadError(true)
       } else {
-        alert('프로필이 성공적으로 저장되었습니다!')
         setProfile(data)
+        setForm(toForm(data))
+        setSpecialtiesText(data.specialization.join(', '))
       }
-    } catch (error) {
-      alert('프로필 저장 중 오류가 발생했습니다.')
-      logError('Profile save error', error instanceof Error ? error : undefined)
-    } finally {
-      setSaving(false)
+      setLoading(false)
+    })
+    return () => {
+      active = false
+      requests.current++
     }
-  }
+  }, [isLoaded, isSignedIn, artistId, identity, attempt, router])
 
-  const handleToggleVisibility = async () => {
-    if (!userId) return
-
-    const { data, error } = await toggleProfileVisibility(userId)
-
-    if (error) {
-      alert('공개 설정 변경에 실패했습니다.')
-    } else if (data) {
+  async function save(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!artistId || !profile || profile.id !== artistId || saving) return
+    const version = generation.current
+    const isCurrent = () => version === generation.current && currentIdentity.current === identity
+    setSaving(true)
+    setMessage('')
+    setFailed(false)
+    try {
+      const { data, error } = await updateArtistProfile(artistId, {
+        ...form,
+        specialization: specialtiesText
+          .split(',')
+          .map(value => value.trim())
+          .filter(Boolean),
+      })
+      if (!isCurrent()) return
+      if (error || !data) throw new Error('PROFILE_UNAVAILABLE')
       setProfile(data)
-      setFormData({ ...formData, isPublic: data.isPublic })
+      setForm(toForm(data))
+      setSpecialtiesText(data.specialization.join(', '))
+      setMessage('profileEditorSaved')
+    } catch {
+      if (!isCurrent()) return
+      setFailed(true)
+      setMessage('authNativeUnavailable')
+    } finally {
+      if (isCurrent()) setSaving(false)
     }
   }
 
-  const handleSpecializationChange = (value: string) => {
-    const specs = value
-      .split(',')
-      .map(s => s.trim())
-      .filter(Boolean)
-    setFormData({ ...formData, specialization: specs })
-  }
-
-  if (loading) {
+  if (!isLoaded || loading || (artistId && profile && profile.id !== artistId))
     return (
-      <div className='min-h-screen bg-transparent flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-celadon-green mb-4' />
-          <p className='text-muted-foreground'>프로필을 불러오는 중...</p>
-        </div>
-      </div>
+      <p role='status' className='p-8'>
+        {t('authNativeBusy')}
+      </p>
     )
-  }
+  if (!artistId)
+    return (
+      <main className='mx-auto max-w-xl space-y-4 px-6 py-12'>
+        <p>{t('authNativeUnlinked')}</p>
+        <Link className='underline' href='/profile'>
+          {t('authNativeAccount')}
+        </Link>
+      </main>
+    )
+  if (loadError || !profile)
+    return (
+      <main className='mx-auto max-w-xl space-y-4 px-6 py-12'>
+        <p role='alert'>{t('profileEditorLoadError')}</p>
+        <Button onClick={() => setAttempt(value => value + 1)}>{t('authNativeRetry')}</Button>
+      </main>
+    )
 
   return (
-    <div className='min-h-screen bg-transparent flex flex-col'>
-      <main className='flex-1 container mx-auto px-4 py-8'>
-        <div className='max-w-4xl mx-auto'>
-          {/* Header */}
-          <div className='mb-8'>
-            <Button variant='ghost' onClick={() => router.back()} className='mb-4'>
-              <ArrowLeft className='w-4 h-4 mr-2' />
-              뒤로 가기
-            </Button>
-
-            <div className='flex items-center justify-between'>
-              <div>
-                <h1 className='text-4xl font-serif font-bold text-foreground mb-2'>프로필 편집</h1>
-                <p className='text-muted-foreground'>작가 프로필 정보를 관리하세요</p>
+    <div className='min-h-screen flex flex-col'>
+      <main className='mx-auto w-full max-w-3xl flex-1 space-y-8 px-6 py-12'>
+        <header className='space-y-3'>
+          <Link href='/profile' className='underline'>
+            {t('authNativeAccount')}
+          </Link>
+          <h1 className='font-serif text-3xl text-foreground'>{t('profileEditorTitle')}</h1>
+          <p className='text-muted-foreground'>{t('profileEditorIntro')}</p>
+        </header>
+        {profile.profileImage && (
+          <Image
+            src={profile.profileImage}
+            alt={profile.name}
+            width={128}
+            height={128}
+            className='rounded-full object-cover'
+          />
+        )}
+        <form onSubmit={save} className='space-y-6' aria-busy={saving}>
+          <fieldset disabled={saving} className='space-y-6'>
+            <div className='grid gap-4 sm:grid-cols-2'>
+              <div className='space-y-2'>
+                <Label htmlFor='artist-name'>{t('profileEditorName')}</Label>
+                <Input
+                  id='artist-name'
+                  value={form.name}
+                  onChange={e => setForm({ ...form, name: e.target.value })}
+                  maxLength={200}
+                  required
+                />
               </div>
-              <Button variant='outline' onClick={() => router.push(`/artists/${userId}/portfolio`)}>
-                <Eye className='w-4 h-4 mr-2' />
-                포트폴리오 보기
-              </Button>
+              <div className='space-y-2'>
+                <Label htmlFor='artist-name-en'>{t('profileEditorNameEn')}</Label>
+                <Input
+                  id='artist-name-en'
+                  value={form.nameEn ?? ''}
+                  onChange={e => setForm({ ...form, nameEn: e.target.value })}
+                  maxLength={200}
+                />
+              </div>
             </div>
-          </div>
-
-          <form onSubmit={handleSubmit} className='space-y-8'>
-            {/* Profile Image */}
-            <Card>
-              <CardHeader>
-                <CardTitle className='font-serif'>프로필 이미지</CardTitle>
-                <CardDescription>작가의 프로필 사진을 설정하세요</CardDescription>
-              </CardHeader>
-              <CardContent className='flex flex-col md:flex-row gap-6 items-center'>
-                <div className='relative w-32 h-32 rounded-full overflow-hidden border-4 border-celadon-green'>
-                  {profileImagePreview ? (
-                    <Image src={profileImagePreview} alt='Profile' fill className='object-cover' />
-                  ) : (
-                    <div className='w-full h-full bg-celadon-green/20 flex items-center justify-center'>
-                      <span className='text-4xl font-serif text-celadon-green'>
-                        {formData.name.charAt(0) || '?'}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className='flex-1'>
-                  <input
-                    type='file'
-                    id='profileImage'
-                    accept='image/*'
-                    onChange={handleProfileImageChange}
-                    className='hidden'
-                  />
-                  <Label htmlFor='profileImage'>
-                    <Button type='button' variant='outline' asChild>
-                      <span>
-                        <Upload className='w-4 h-4 mr-2' />
-                        이미지 업로드
-                      </span>
-                    </Button>
-                  </Label>
-                  <p className='text-sm text-muted-foreground mt-2'>
-                    JPG, PNG 또는 WEBP 파일 (최대 5MB)
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Basic Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className='font-serif'>기본 정보</CardTitle>
-              </CardHeader>
-              <CardContent className='space-y-4'>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                  <div className='space-y-2'>
-                    <Label htmlFor='name'>이름 (한글) *</Label>
-                    <Input
-                      id='name'
-                      value={formData.name}
-                      onChange={e => setFormData({ ...formData, name: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className='space-y-2'>
-                    <Label htmlFor='nameEn'>이름 (영문)</Label>
-                    <Input
-                      id='nameEn'
-                      value={formData.nameEn}
-                      onChange={e => setFormData({ ...formData, nameEn: e.target.value })}
-                    />
-                  </div>
-                </div>
-
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                  <div className='space-y-2'>
-                    <Label htmlFor='bio'>소개 (한글) *</Label>
-                    <Textarea
-                      id='bio'
-                      value={formData.bio}
-                      onChange={e => setFormData({ ...formData, bio: e.target.value })}
-                      rows={4}
-                      required
-                    />
-                  </div>
-                  <div className='space-y-2'>
-                    <Label htmlFor='bioEn'>소개 (영문)</Label>
-                    <Textarea
-                      id='bioEn'
-                      value={formData.bioEn}
-                      onChange={e => setFormData({ ...formData, bioEn: e.target.value })}
-                      rows={4}
-                    />
-                  </div>
-                </div>
-
-                <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-                  <div className='space-y-2'>
-                    <Label htmlFor='birthYear'>출생연도</Label>
-                    <Input
-                      id='birthYear'
-                      type='number'
-                      value={formData.birthYear || ''}
-                      onChange={e =>
-                        setFormData({
-                          ...formData,
-                          birthYear: e.target.value ? parseInt(e.target.value) : undefined,
-                        })
-                      }
-                    />
-                  </div>
-                  <div className='space-y-2'>
-                    <Label htmlFor='yearsActive'>활동 연수</Label>
-                    <Input
-                      id='yearsActive'
-                      type='number'
-                      value={formData.yearsActive || ''}
-                      onChange={e =>
-                        setFormData({
-                          ...formData,
-                          yearsActive: e.target.value ? parseInt(e.target.value) : undefined,
-                        })
-                      }
-                    />
-                  </div>
-                  <div className='space-y-2'>
-                    <Label htmlFor='location'>지역</Label>
-                    <Input
-                      id='location'
-                      value={formData.location}
-                      onChange={e => setFormData({ ...formData, location: e.target.value })}
-                      placeholder='예: 서울'
-                    />
-                  </div>
-                </div>
-
-                <div className='space-y-2'>
-                  <Label htmlFor='specialization'>전문 분야</Label>
-                  <Input
-                    id='specialization'
-                    value={formData.specialization.join(', ')}
-                    onChange={e => handleSpecializationChange(e.target.value)}
-                    placeholder='쉼표로 구분하여 입력 (예: 서예, 전통회화)'
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Contact Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className='font-serif'>연락처</CardTitle>
-              </CardHeader>
-              <CardContent className='space-y-4'>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                  <div className='space-y-2'>
-                    <Label htmlFor='email'>이메일</Label>
-                    <Input
-                      id='email'
-                      type='email'
-                      value={formData.email}
-                      onChange={e => setFormData({ ...formData, email: e.target.value })}
-                    />
-                  </div>
-                  <div className='space-y-2'>
-                    <Label htmlFor='phone'>전화번호</Label>
-                    <Input
-                      id='phone'
-                      type='tel'
-                      value={formData.phone}
-                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Social Links */}
-            <Card>
-              <CardHeader>
-                <CardTitle className='font-serif'>소셜 미디어</CardTitle>
-                <CardDescription>SNS 및 웹사이트 링크를 추가하세요</CardDescription>
-              </CardHeader>
-              <CardContent className='space-y-4'>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                  <div className='space-y-2'>
-                    <Label htmlFor='website' className='flex items-center gap-2'>
-                      <Globe className='w-4 h-4' />
-                      웹사이트
-                    </Label>
-                    <Input
-                      id='website'
-                      type='url'
-                      value={formData.socialLinks?.website || ''}
-                      onChange={e =>
-                        setFormData({
-                          ...formData,
-                          socialLinks: { ...formData.socialLinks, website: e.target.value },
-                        })
-                      }
-                      placeholder='https://'
-                    />
-                  </div>
-                  <div className='space-y-2'>
-                    <Label htmlFor='instagram' className='flex items-center gap-2'>
-                      <Instagram className='w-4 h-4' />
-                      Instagram
-                    </Label>
-                    <Input
-                      id='instagram'
-                      value={formData.socialLinks?.instagram || ''}
-                      onChange={e =>
-                        setFormData({
-                          ...formData,
-                          socialLinks: { ...formData.socialLinks, instagram: e.target.value },
-                        })
-                      }
-                      placeholder='https://instagram.com/username'
-                    />
-                  </div>
-                  <div className='space-y-2'>
-                    <Label htmlFor='facebook' className='flex items-center gap-2'>
-                      <Facebook className='w-4 h-4' />
-                      Facebook
-                    </Label>
-                    <Input
-                      id='facebook'
-                      value={formData.socialLinks?.facebook || ''}
-                      onChange={e =>
-                        setFormData({
-                          ...formData,
-                          socialLinks: { ...formData.socialLinks, facebook: e.target.value },
-                        })
-                      }
-                      placeholder='https://facebook.com/username'
-                    />
-                  </div>
-                  <div className='space-y-2'>
-                    <Label htmlFor='twitter' className='flex items-center gap-2'>
-                      <Twitter className='w-4 h-4' />
-                      Twitter
-                    </Label>
-                    <Input
-                      id='twitter'
-                      value={formData.socialLinks?.twitter || ''}
-                      onChange={e =>
-                        setFormData({
-                          ...formData,
-                          socialLinks: { ...formData.socialLinks, twitter: e.target.value },
-                        })
-                      }
-                      placeholder='https://twitter.com/username'
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Visibility Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle className='font-serif'>공개 설정</CardTitle>
-                <CardDescription>프로필과 포트폴리오의 공개 여부를 설정하세요</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className='flex items-center justify-between'>
-                  <div>
-                    <Label>프로필 공개</Label>
-                    <p className='text-sm text-muted-foreground'>
-                      공개 시 누구나 포트폴리오를 볼 수 있습니다
-                    </p>
-                  </div>
-                  <Switch
-                    checked={formData.isPublic}
-                    onCheckedChange={checked => setFormData({ ...formData, isPublic: checked })}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Actions */}
-            <div className='flex gap-4 justify-end'>
-              <Button type='button' variant='outline' onClick={() => router.back()}>
-                취소
-              </Button>
-              <Button
-                type='submit'
-                className='bg-celadon-green hover:bg-celadon-green/90 text-ink-black'
-                disabled={saving}
-              >
-                <Save className='w-4 h-4 mr-2' />
-                {saving ? '저장 중...' : '프로필 저장'}
-              </Button>
+            <div className='space-y-2'>
+              <Label htmlFor='artist-bio'>{t('profileEditorBio')}</Label>
+              <Textarea
+                id='artist-bio'
+                value={form.bio ?? ''}
+                onChange={e => setForm({ ...form, bio: e.target.value })}
+                maxLength={10000}
+                rows={6}
+              />
             </div>
-          </form>
-        </div>
+            <div className='space-y-2'>
+              <Label htmlFor='artist-bio-en'>{t('profileEditorBioEn')}</Label>
+              <Textarea
+                id='artist-bio-en'
+                value={form.bioEn ?? ''}
+                onChange={e => setForm({ ...form, bioEn: e.target.value })}
+                maxLength={10000}
+                rows={6}
+              />
+            </div>
+            <div className='space-y-2'>
+              <Label htmlFor='artist-birth-year'>{t('profileEditorBirth')}</Label>
+              <Input
+                id='artist-birth-year'
+                type='number'
+                min={1000}
+                max={new Date().getUTCFullYear()}
+                value={form.birthYear ?? ''}
+                onChange={e =>
+                  setForm({ ...form, birthYear: e.target.value ? Number(e.target.value) : null })
+                }
+              />
+            </div>
+            <div className='space-y-2'>
+              <Label htmlFor='artist-specialties'>{t('profileEditorSpecialties')}</Label>
+              <Input
+                id='artist-specialties'
+                value={specialtiesText}
+                aria-describedby='artist-specialties-help'
+                onChange={e => setSpecialtiesText(e.target.value)}
+              />
+              <p id='artist-specialties-help' className='text-sm text-muted-foreground'>
+                {t('profileEditorSpecialtiesHelp')}
+              </p>
+            </div>
+          </fieldset>
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('profileEditorVisibility')}</CardTitle>
+              <CardDescription>{t('profileEditorVisibilityHelp')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>
+                {t(
+                  profile.visibility === 'public'
+                    ? 'profileEditorPublic'
+                    : profile.visibility === 'members'
+                      ? 'profileEditorMembers'
+                      : 'profileEditorHidden'
+                )}
+              </p>
+            </CardContent>
+          </Card>
+          {message && <p role={failed ? 'alert' : 'status'}>{t(message)}</p>}
+          <Button type='submit' disabled={saving}>
+            {t(saving ? 'authNativeBusy' : 'authNativeSave')}
+          </Button>
+        </form>
       </main>
-
       <LayoutFooter />
     </div>
   )

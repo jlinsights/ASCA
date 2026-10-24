@@ -2,7 +2,7 @@
  * Server-Sent Events (SSE) API Endpoint
  *
  * Provides real-time event streaming via SSE. Authentication is enforced
- * via Clerk session cookie (server-side). Anonymous connections are rejected
+ * via Supabase account session cookie (server-side). Anonymous connections are rejected
  * with 401.
  *
  * GET /api/realtime/sse
@@ -24,7 +24,7 @@
  * @module app/api/realtime/sse
  */
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { getSSEManager, createSSEResponse } from '@/lib/realtime/sse-manager'
 import { error as logError } from '@/lib/logging'
@@ -32,11 +32,11 @@ import { error as logError } from '@/lib/logging'
 /**
  * GET /api/realtime/sse
  *
- * Create SSE connection (Clerk session required)
+ * Create SSE connection (Verified native account required)
  */
 export async function GET(request: NextRequest) {
   try {
-    // Enforce Clerk session (cookie-based)
+    // Verify Supabase account session (cookie-based)
     const { userId } = await auth()
     if (!userId) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })

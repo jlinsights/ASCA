@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import Link from 'next/link'
 import { Calendar, FileText, Award, Eye, Trash2 } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
@@ -29,7 +29,7 @@ import {
 
 export default function MyApplicationsPage() {
   const router = useRouter()
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
   const [applications, setApplications] = useState<ContestApplicationWithDetails[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -43,14 +43,14 @@ export default function MyApplicationsPage() {
     const loadApplications = async () => {
       try {
         setLoading(true)
-        if (!isSignedIn || !clerkUser) {
-          router.push('/sign-in?redirect=/profile/applications')
+        if (!isSignedIn || !account?.artistIds[0]) {
+          router.push('/sign-in?next=/profile/applications')
           return
         }
 
-        setUserId(clerkUser.id)
+        setUserId(account.artistIds[0]!)
 
-        const { data, error: fetchError } = await fetchMyApplications(clerkUser.id)
+        const { data, error: fetchError } = await fetchMyApplications(account.artistIds[0]!)
         if (fetchError) {
           throw new Error('신청 내역을 불러오는데 실패했습니다.')
         }
@@ -64,7 +64,7 @@ export default function MyApplicationsPage() {
     }
 
     loadApplications()
-  }, [isLoaded, isSignedIn, clerkUser, router])
+  }, [isLoaded, isSignedIn, account, router])
 
   const handleWithdraw = async () => {
     if (!deleteId) return

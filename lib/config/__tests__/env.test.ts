@@ -21,6 +21,15 @@ describe('Environment Configuration', () => {
   })
 
   describe('Environment Validation', () => {
+    test('native Auth does not require Clerk credentials', () => {
+      process.env = {
+        NODE_ENV: 'test',
+        DATABASE_URL: 'postgresql://localhost:5432/test',
+        NEXT_PUBLIC_SUPABASE_URL: 'https://test.supabase.co',
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: 'test-anon-key',
+      }
+      expect(() => require('../env')).not.toThrow()
+    })
     test('should validate required environment variables', () => {
       // Arrange
       process.env = {

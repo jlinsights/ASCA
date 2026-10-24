@@ -14,6 +14,8 @@ export interface TermsArticle {
 
 export const TERMS_ENACTED = '2019년 1월 1일'
 export const TERMS_EFFECTIVE = '2026년 11월 1일'
+// Machine-readable edition identifier for the terms shown during signup.
+export const TERMS_VERSION = '2026-11-01'
 
 export const termsArticles: readonly TermsArticle[] = [
   {

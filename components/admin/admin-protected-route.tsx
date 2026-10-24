@@ -1,6 +1,6 @@
 'use client'
 
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { useRouter } from 'next/navigation'
 
 interface AdminProtectedRouteProps {
@@ -9,7 +9,7 @@ interface AdminProtectedRouteProps {
 }
 
 export default function AdminProtectedRoute({ children }: AdminProtectedRouteProps) {
-  const { isLoaded, isSignedIn } = useUser()
+  const { isLoaded, isSignedIn, user } = useAccount()
   const router = useRouter()
 
   if (!isLoaded) {
@@ -23,7 +23,7 @@ export default function AdminProtectedRoute({ children }: AdminProtectedRoutePro
     )
   }
 
-  if (!isSignedIn) {
+  if (!isSignedIn || user?.role !== 'admin' || user.assuranceLevel !== 'aal2') {
     return (
       <div className='flex items-center justify-center min-h-screen'>
         <div className='text-center space-y-4'>
