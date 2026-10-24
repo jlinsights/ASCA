@@ -44,6 +44,10 @@ DB 소유자/운영자 권한은 이 클라이언트 역할 검사와 별개다.
 - 마이그레이션과 Preview 준비 후 실제 운영자가 Preview의 `/sign-up`에서
   `info@orientalcalligraphy.org`로 가입한다. 비밀번호는 운영자가 직접 설정하며
   채팅·PR·저장소에 기록하지 않는다.
+- SMTP·검증된 발신자를 먼저 준비하고 고정 브랜치 별칭
+  `https://asca-main-git-feat-supabase-auth-jlinsights-projects.vercel.app/sign-up`을
+  사용한다. 이 별칭의 `/auth/callback**`은 허용 목록에 추가했다. 새 고유 배포
+  주소는 별도 callback 허용이 필요하다.
 - 해당 메일함에서 확인 링크를 열고 이메일 확인을 완료한다. Supabase Dashboard의
   Authentication → Users에서 이메일과 확인 상태를 확인하고 **해당 사용자의
   `auth.users.id` UUID**를 복사한다. Clerk 사용자 ID를 사용하지 않는다.
@@ -93,7 +97,9 @@ returning p.id, p.role;
 - [x] ASCA-2026에 검토된 Auth 마이그레이션만 적용하고 이력 확인
       (`20261024142344`)
 - [x] 테이블·RPC 존재 및 역할별 실행 권한 확인
-- [ ] Preview 환경변수·SMTP·발신 주소·확인 링크·TOTP 정책 확인
+- [x] Site URL·실제 운영/Preview callback 항목·서버 비밀번호 12자·이메일 확인
+      필수·TOTP 등록/검증·refresh token rotation 설정 확인 (2026-10-25)
+- [ ] Preview 보호 변수의 DB 연결·SMTP·검증된 발신자·실제 확인 링크 검증
 - [ ] Preview 배포 후 관리자 이메일 가입·확인과 UUID 확인
 - [ ] `public.account_profiles.role = 'admin'` 부여 및 운영 기록
 - [ ] `/auth/mfa`에서 TOTP 등록·검증, `admin` + `aal2` 확인
