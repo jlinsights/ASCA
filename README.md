@@ -204,6 +204,14 @@ CI(`.github/workflows/`)는 `ci.yml`(품질·테스트·빌드), `e2e-tests.yml`
 - 💬 사이트 내 ChannelIO 채팅
 - 📧 info@orientalcalligraphy.org
 
+## 📄 라이선스
+
+소스 코드는 [MIT 라이선스](LICENSE)로 배포한다 — Copyright (c) 2025-2026
+사단법인 동양서예협회.
+
+작가의 작품 이미지, 행사 사진, 협회 로고, 정관·규정·연혁 등 콘텐츠는 이
+라이선스에 포함되지 않으며 각 저작권자에게 권리가 있다.
+
 ## 🚀 최근 업데이트
 
 **2026.10**

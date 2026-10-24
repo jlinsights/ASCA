@@ -1,1 +1,1 @@
-📝 docs: README·AGENTS.md·docs/CLAUDE.md 를 2026-10-24 운영 상태로 갱신 — 작가 공개 범위·회비·관리자 판정·CSRF 허용 목록·인증 전환 진행 상황 반영
+📄 chore: MIT LICENSE 추가 — 저작권자 사단법인 동양서예협회, 작품·사진·로고 등 콘텐츠는 라이선스 범위 밖임을 README 에 명시
