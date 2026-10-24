@@ -13,7 +13,8 @@ const isProtectedRoute = createRouteMatcher([
   '/members/apply(.*)',
   '/exhibitions/create(.*)',
   '/contests/(.*)/apply',
-  '/commissioning-application(.*)',
+  // /commissioning-application(위원 위촉 지원)은 공개 — 자격·수당 안내와 공개 Tally 양식뿐이라
+  // 로그인 벽이 지원자만 돌려보낸다(옛 사이트도 공개). 2026-10-24 메뉴에 올리면서 뺐다.
 ])
 
 function enforceOrigin(request: NextRequest) {

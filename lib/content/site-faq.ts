@@ -10,6 +10,8 @@ export interface FaqSource {
 }
 
 export interface FaqItem {
+  /** 다른 페이지가 일부만 골라 보여 줄 때 쓰는 고정 키(질문 문구·순서가 바뀌어도 유지) */
+  id?: string
   q: string
   a: string
   sources?: readonly FaqSource[]
@@ -24,6 +26,7 @@ const page = (href: string, label: string): FaqSource => ({ label, href })
 
 export const SITE_FAQ: readonly FaqItem[] = [
   {
+    id: 'artist-selection',
     q: '추천작가와 초대작가 선정 기준이 궁금합니다.',
     a: `대한민국 동양서예대전 입상작 배점:
 - 입선 1점 / 특선 3점 / 삼체상 5점 / 오체상 7점
@@ -110,6 +113,7 @@ export const SITE_FAQ: readonly FaqItem[] = [
     ],
   },
   {
+    id: 'entry-fees',
     q: '대한민국 동양서예대전 출품 가능한 작품 수량과 출품료는 어떻게 되나요?',
     a: `출품비(표구비 별도):
 - 청년작가: 1점 5만원 (2~9번째 작품 4만원)
@@ -132,6 +136,7 @@ export const SITE_FAQ: readonly FaqItem[] = [
     ],
   },
   {
+    id: 'awards',
     q: '대한민국 동양서예대전 시상내역과 상금은 어떻게 되나요?',
     a: `[본상]
 - 대상: 1명, 상장 및 상금 200만원
@@ -170,6 +175,7 @@ URL 형식: https://orientalcalligraphy.org/calligrapher/name
     a: '아니요, 필요 없습니다. 현재 소셜 로그인 기능을 준비 중이며, 모든 콘텐츠는 공개되어 있습니다. 로그인 기능이 복원되면 온라인 회원 가입이 가능하도록 조치할 예정입니다.',
   },
   {
+    id: 'committee',
     q: '심사위원·운영위원 자격과 수당은 어떻게 되나요?',
     a: `운영위원·심사위원 자격:
 ① 본회 초대작가 (자문위원, 고문 포함)

@@ -64,6 +64,13 @@ const membership: MenuLink[] = [
   { labelKey: 'siteNavContact', href: '/contact' },
 ]
 
+// 동양서예대전 신청서 — 지원하는 사람과 시점 순서(출품자 → 수상 작가 → 위원)
+const contestApplications: MenuLink[] = [
+  { labelKey: 'siteNavEntryForm', href: '/application' },
+  { labelKey: 'siteNavApplication', href: '/application-for-recommended-invited-calligrapher' },
+  { labelKey: 'siteNavCommissioning', href: '/commissioning-application' },
+]
+
 export const headerMenu: MenuGroup[] = [
   { key: 'about', labelKey: 'siteNavAbout', href: '/introductions', items: about },
   {
@@ -86,10 +93,7 @@ export const headerMenu: MenuGroup[] = [
     href: '/contests',
     items: [
       { labelKey: 'siteNavContestsGuide', href: '/contests' },
-      {
-        labelKey: 'siteNavApplication',
-        href: '/application-for-recommended-invited-calligrapher',
-      },
+      ...contestApplications,
       { labelKey: 'siteNavForms', href: '/forms' },
       { labelKey: 'siteContestMine', href: '/profile/applications' },
     ],
@@ -132,10 +136,7 @@ export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
     titleKey: 'siteFtSecJoin',
     items: [
       ...membership.slice(0, 3),
-      {
-        labelKey: 'siteNavApplication',
-        href: '/application-for-recommended-invited-calligrapher',
-      },
+      ...contestApplications,
       { labelKey: 'siteNavForms', href: '/forms' },
       ...news,
       {
