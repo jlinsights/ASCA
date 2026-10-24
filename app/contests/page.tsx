@@ -1,378 +1,110 @@
-'use client'
-
-import { useState, useEffect } from 'react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
-import {
-  Calendar,
-  Award,
-  MapPin,
-  Search,
-  Filter,
-  Clock,
-  Trophy,
-  Star,
-  ChevronRight,
-} from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { ContestIntro } from '@/components/contests/contest-intro'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { fetchContests } from '@/lib/api/contests'
-import {
-  Contest,
-  ContestStatus,
-  ContestCategory,
-  CONTEST_STATUS_LABELS,
-  CONTEST_CATEGORY_LABELS,
-  getContestDeadlineInfo,
-  getContestStatusColor,
-} from '@/lib/types/contest-new-legacy'
+  ApplySectionHead,
+  ApplyToc,
+  ContactList,
+  LedgerTable,
+} from '@/components/apply/apply-parts'
+import { CONTEST_EDITIONS, NEXT_CONTEST } from '@/app/awards/_components/awards-data'
+import '@/components/apply/apply.css'
+
+/**
+ * 공모전 — 협회가 여는 공모전은 대한민국 동양서예대전 하나다. 회차 기록은 /awards 와 같은 연혁 데이터를 쓴다.
+ * 예전엔 존재하지 않는 contests 테이블을 읽어 "전체 공모전 0 · 접수중 0"만 보였다.
+ */
+
+const DESCRIPTION =
+  '사단법인 동양서예협회가 주최하는 대한민국 동양서예대전의 다음 회차 일정, 공모 요강, 역대 대전 기록을 안내합니다.'
+
+export const metadata: Metadata = {
+  title: '공모전 | 동양서예협회',
+  description: DESCRIPTION,
+  openGraph: { title: '공모전 | 동양서예협회', description: DESCRIPTION },
+}
+
+const TOC = [
+  { href: '#next', label: '다음 대전' },
+  { href: '#editions', label: '역대 대전' },
+  { href: '#contact', label: '문의' },
+] as const
 
 export default function ContestsPage() {
-  const [contests, setContests] = useState<Contest[]>([])
-  const [filteredContests, setFilteredContests] = useState<Contest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [selectedStatus, setSelectedStatus] = useState<string>('all')
-
-  // Load contests
-  useEffect(() => {
-    const loadContests = async () => {
-      setLoading(true)
-      const { data, error } = await fetchContests({
-        status: ['announced', 'open', 'closed', 'judging', 'completed'],
-      })
-
-      if (data) {
-        setContests(data)
-        setFilteredContests(data)
-      }
-
-      setLoading(false)
-    }
-
-    loadContests()
-  }, [])
-
-  // Apply filters
-  useEffect(() => {
-    let filtered = [...contests]
-
-    // Search filter
-    if (searchQuery) {
-      filtered = filtered.filter(
-        contest =>
-          contest.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          contest.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          contest.organizer.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    }
-
-    // Category filter
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(contest => contest.category === selectedCategory)
-    }
-
-    // Status filter
-    if (selectedStatus !== 'all') {
-      filtered = filtered.filter(contest => contest.status === selectedStatus)
-    }
-
-    setFilteredContests(filtered)
-  }, [contests, searchQuery, selectedCategory, selectedStatus])
-
-  const featuredContests = contests.filter(c => c.isFeatured)
-  const openContests = contests.filter(c => c.status === 'open')
-  const upcomingContests = contests.filter(c => c.status === 'announced')
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  }
-
-  const formatPrize = (amount?: number) => {
-    if (!amount) return '-'
-    return `${(amount / 10000).toLocaleString()}만원`
-  }
-
-  if (loading) {
-    return (
-      <div className='min-h-screen bg-transparent'>
-        <ContestIntro total={null} open={null} />
-        <main className='container mx-auto px-4 pb-16'>
-          <div className='flex items-center justify-center py-12'>
-            <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
-          </div>
-        </main>
-        <LayoutFooter />
-      </div>
-    )
-  }
-
+  const latest = CONTEST_EDITIONS[0]
   return (
-    <div className='min-h-screen bg-transparent'>
-      <ContestIntro total={contests.length} open={openContests.length} />
-      <main className='container mx-auto px-4 pb-16'>
-        {/* Statistics */}
-        <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
-          <Card>
-            <CardContent className='p-6 text-center'>
-              <Trophy className='w-8 h-8 mx-auto mb-2 text-celadon-green' />
-              <div className='text-2xl font-bold text-foreground'>{contests.length}</div>
-              <div className='text-sm text-muted-foreground'>전체 공모전</div>
-            </CardContent>
-          </Card>
+    <div className='asca-apply min-h-screen'>
+      <ContestIntro
+        facts={[
+          { label: '역대 대전', value: `${CONTEST_EDITIONS.length}회` },
+          { label: '다음 대전', value: `제${NEXT_CONTEST.edition}회 · 2027년 4월` },
+        ]}
+      />
 
-          <Card>
-            <CardContent className='p-6 text-center'>
-              <Clock className='w-8 h-8 mx-auto mb-2 text-success dark:text-foreground' />
-              <div className='text-2xl font-bold text-foreground'>{openContests.length}</div>
-              <div className='text-sm text-muted-foreground'>접수중</div>
-            </CardContent>
-          </Card>
+      <div className='asca-apply__body'>
+        <ApplyToc items={TOC} />
 
-          <Card>
-            <CardContent className='p-6 text-center'>
-              <Calendar className='w-8 h-8 mx-auto mb-2 text-info dark:text-navy-300' />
-              <div className='text-2xl font-bold text-foreground'>{upcomingContests.length}</div>
-              <div className='text-sm text-muted-foreground'>예정</div>
-            </CardContent>
-          </Card>
+        <section id='next' aria-labelledby='next-title' className='asca-apply__anchor'>
+          <ApplySectionHead
+            id='next-title'
+            eyebrow='다음 대전'
+            title={`제${NEXT_CONTEST.edition}회 대한민국 동양서예대전`}
+            lede='출품 요강과 접수 일정은 확정되는 대로 공지사항에 안내합니다.'
+          />
+          <LedgerTable
+            caption={`제${NEXT_CONTEST.edition}회 대전 일정`}
+            columns={[{ label: '구분' }, { label: '내용' }]}
+            rows={[
+              { cells: ['전시 기간', NEXT_CONTEST.date], lead: true },
+              { cells: ['장소', NEXT_CONTEST.venue] },
+              { cells: ['함께 열리는 전시', '한·중·일 동양서예 초대작가전'] },
+            ]}
+          />
+          <p className='asca-apply__note'>
+            출품 방법은 <Link href='/application'>출품원서</Link>, 시상 내역과 상금은{' '}
+            <Link href='/awards'>수상</Link>, 새 소식은 <Link href='/notice'>공지사항</Link>에서
+            확인하세요.
+          </p>
+        </section>
 
-          <Card>
-            <CardContent className='p-6 text-center'>
-              <Star className='w-8 h-8 mx-auto mb-2 text-temple-gold' />
-              <div className='text-2xl font-bold text-foreground'>{featuredContests.length}</div>
-              <div className='text-sm text-muted-foreground'>주요 공모전</div>
-            </CardContent>
-          </Card>
-        </div>
+        <section id='editions' aria-labelledby='editions-title' className='asca-apply__anchor'>
+          <ApplySectionHead
+            id='editions-title'
+            eyebrow='역대 대전'
+            title={`제1회부터 제${latest?.edition ?? ''}회까지`}
+            lede='개최 기간과 장소는 협회 연혁의 기록입니다.'
+          />
+          <LedgerTable
+            caption='역대 대한민국 동양서예대전'
+            columns={[
+              { label: '회차' },
+              { label: '연도', numeric: true },
+              { label: '기간' },
+              { label: '장소' },
+            ]}
+            rows={CONTEST_EDITIONS.map((edition, index) => ({
+              cells: [
+                `제${edition.edition}회`,
+                String(edition.year),
+                edition.date ?? '—',
+                edition.online ? `${edition.venue ?? ''} (온라인)`.trim() : (edition.venue ?? '—'),
+              ],
+              lead: index === 0,
+            }))}
+          />
+        </section>
 
-        {/* Featured Contests */}
-        {featuredContests.length > 0 && (
-          <div className='mb-12'>
-            <h2 className='text-2xl font-serif font-bold text-foreground mb-6 flex items-center gap-2'>
-              <Star className='w-6 h-6 text-temple-gold' />
-              주요 공모전
-            </h2>
-            <div className='grid md:grid-cols-2 gap-6'>
-              {featuredContests.slice(0, 2).map(contest => {
-                const deadline = getContestDeadlineInfo(contest.endDate)
-                return (
-                  <Card
-                    key={contest.id}
-                    className='border-celadon-green/30 hover:shadow-lg transition-shadow'
-                  >
-                    <CardHeader>
-                      <div className='flex items-start justify-between mb-2'>
-                        <Badge className={getContestStatusColor(contest.status)}>
-                          {CONTEST_STATUS_LABELS[contest.status]?.ko}
-                        </Badge>
-                        {deadline.isSoon && !deadline.isExpired && (
-                          <Badge variant='destructive' className='flex items-center gap-1'>
-                            <Clock className='w-3 h-3' />
-                            {deadline.daysRemaining}일 남음
-                          </Badge>
-                        )}
-                      </div>
-                      <CardTitle className='text-xl font-serif'>
-                        <Link
-                          href={`/contests/${contest.id}`}
-                          className='hover:text-celadon-green transition-colors'
-                        >
-                          {contest.title}
-                        </Link>
-                      </CardTitle>
-                      {contest.subtitle && (
-                        <p className='text-sm text-muted-foreground'>{contest.subtitle}</p>
-                      )}
-                    </CardHeader>
-                    <CardContent>
-                      <p className='text-muted-foreground mb-4 line-clamp-2'>
-                        {contest.description}
-                      </p>
-
-                      <div className='space-y-2 text-sm'>
-                        <div className='flex items-center gap-2 text-muted-foreground'>
-                          <Calendar className='w-4 h-4' />
-                          <span>
-                            {formatDate(contest.startDate)} ~ {formatDate(contest.endDate)}
-                          </span>
-                        </div>
-                        <div className='flex items-center gap-2 text-muted-foreground'>
-                          <MapPin className='w-4 h-4' />
-                          <span>{contest.organizer}</span>
-                        </div>
-                        {contest.totalPrizeAmount && (
-                          <div className='flex items-center gap-2 text-muted-foreground'>
-                            <Award className='w-4 h-4' />
-                            <span>총 상금 {formatPrize(contest.totalPrizeAmount)}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <Link href={`/contests/${contest.id}`}>
-                        <Button className='w-full mt-4 bg-celadon-green hover:bg-celadon-green/90'>
-                          상세보기
-                          <ChevronRight className='w-4 h-4 ml-2' />
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Filters */}
-        <Card className='mb-6'>
-          <CardContent className='p-4'>
-            <div className='flex flex-col md:flex-row gap-4'>
-              <div className='flex-1 relative'>
-                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground' />
-                <Input
-                  placeholder='공모전 검색...'
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  className='pl-10'
-                />
-              </div>
-
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className='md:w-48'>
-                  <SelectValue placeholder='카테고리' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='all'>전체 카테고리</SelectItem>
-                  {Object.entries(CONTEST_CATEGORY_LABELS).map(([key, label]) => (
-                    <SelectItem key={key} value={key}>
-                      {label.ko}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                <SelectTrigger className='md:w-48'>
-                  <SelectValue placeholder='상태' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='all'>전체 상태</SelectItem>
-                  <SelectItem value='announced'>발표됨</SelectItem>
-                  <SelectItem value='open'>접수중</SelectItem>
-                  <SelectItem value='closed'>마감</SelectItem>
-                  <SelectItem value='judging'>심사중</SelectItem>
-                  <SelectItem value='completed'>완료</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Contest List */}
-        {filteredContests.length === 0 ? (
-          <Card>
-            <CardContent className='p-12 text-center'>
-              <Filter className='w-16 h-16 mx-auto mb-4 text-muted-foreground/50' />
-              <h3 className='text-lg font-semibold text-foreground mb-2'>
-                공모전을 찾을 수 없습니다
-              </h3>
-              <p className='text-muted-foreground'>다른 검색어나 필터를 시도해보세요</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
-            {filteredContests.map(contest => {
-              const deadline = getContestDeadlineInfo(contest.endDate)
-              return (
-                <Card key={contest.id} className='hover:shadow-md transition-shadow'>
-                  {contest.posterImageUrl && (
-                    <div className='relative h-48 bg-celadon-green/10'>
-                      <Image
-                        src={contest.posterImageUrl}
-                        alt={contest.title}
-                        fill
-                        className='object-cover'
-                      />
-                    </div>
-                  )}
-                  <CardHeader>
-                    <div className='flex items-start justify-between mb-2'>
-                      <Badge className={getContestStatusColor(contest.status)}>
-                        {CONTEST_STATUS_LABELS[contest.status]?.ko}
-                      </Badge>
-                      {contest.isFeatured && (
-                        <Star className='w-4 h-4 text-temple-gold fill-current' />
-                      )}
-                    </div>
-                    <CardTitle className='text-lg font-serif line-clamp-2'>
-                      <Link
-                        href={`/contests/${contest.id}`}
-                        className='hover:text-celadon-green transition-colors'
-                      >
-                        {contest.title}
-                      </Link>
-                    </CardTitle>
-                    <Badge variant='outline' className='w-fit'>
-                      {CONTEST_CATEGORY_LABELS[contest.category]?.ko}
-                    </Badge>
-                  </CardHeader>
-                  <CardContent>
-                    <p className='text-sm text-muted-foreground mb-4 line-clamp-2'>
-                      {contest.description}
-                    </p>
-
-                    <div className='space-y-2 text-xs text-muted-foreground mb-4'>
-                      <div className='flex items-center gap-2'>
-                        <Calendar className='w-3 h-3' />
-                        <span>~ {formatDate(contest.endDate)}</span>
-                      </div>
-                      <div className='flex items-center gap-2'>
-                        <MapPin className='w-3 h-3' />
-                        <span>{contest.organizer}</span>
-                      </div>
-                      {contest.entryFee > 0 && (
-                        <div className='flex items-center gap-2'>
-                          <span>참가비: {formatPrize(contest.entryFee)}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {deadline.isSoon && !deadline.isExpired && (
-                      <Badge variant='destructive' className='w-full justify-center mb-3'>
-                        <Clock className='w-3 h-3 mr-1' />
-                        마감 {deadline.daysRemaining}일 전
-                      </Badge>
-                    )}
-
-                    <Link href={`/contests/${contest.id}`}>
-                      <Button variant='outline' className='w-full'>
-                        자세히 보기
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-        )}
-      </main>
+        <section id='contact' aria-labelledby='contact-title' className='asca-apply__anchor'>
+          <ApplySectionHead
+            id='contact-title'
+            eyebrow='문의·상담'
+            title='출품이 궁금하면'
+            lede='출품 자격과 부문, 접수 방법은 사무국으로 문의해 주세요.'
+          />
+          <ContactList />
+        </section>
+      </div>
 
       <LayoutFooter />
     </div>

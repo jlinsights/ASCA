@@ -24,6 +24,12 @@ const VARIANTS: Record<
     emptyKey: string
   }
 > = {
+  all: {
+    mark: 'exhibitions',
+    titleKey: 'exhibition',
+    ledeKey: 'exPageLede',
+    emptyKey: 'exPageEmptyTitle',
+  },
   current: {
     mark: 'exhibitionsCurrent',
     titleKey: 'exCurrentTitle',

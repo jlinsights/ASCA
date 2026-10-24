@@ -36,6 +36,12 @@ describe('getExhibitionRecords — 연혁 기록에서 전시 페이지 목록�
     expect(r.past).toStrictEqual([])
   })
 
+  it('전체 목록: 현재·예정·지난 전시를 빠짐없이 최신순으로', () => {
+    const { all, past, current, upcoming } = getExhibitionRecords(historyEvents, OCT_2026)
+    expect(all.length).toBe(past.length + current.length + upcoming.length)
+    expect(all[0]?.id).toBe('2026-4')
+  })
+
   it('온라인 전시: 인터넷 전시로 열린 회차(2020)', () => {
     const { online } = getExhibitionRecords(historyEvents, OCT_2026)
     expect(online.map(e => e.year)).toStrictEqual([2020])

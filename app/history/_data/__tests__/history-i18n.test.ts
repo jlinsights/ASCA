@@ -5,12 +5,12 @@ const HANGUL = /[가-힣]/
 
 describe('localizeHistoryDate', () => {
   it('ko 는 원문 그대로다', () => {
-    const raw = '2025년 11월 27일(토) 오후 1시 ~ 7시'
+    const raw = '2025년 11월 27일(목) 오후 1시 ~ 7시'
     expect(localizeHistoryDate(raw, 'ko')).toBe(raw)
   })
 
   it.each([
-    ['2025년 11월 27일(토) 오후 1시 ~ 7시', 'Nov 27, 2025 (Sat) 1–7 PM'],
+    ['2025년 11월 27일(목) 오후 1시 ~ 7시', 'Nov 27, 2025 (Thu) 1–7 PM'],
     ['2025년 6월 18일(수) ~ 6월 24일(화)', 'Jun 18, 2025 (Wed) – Jun 24 (Tue)'],
     ['2025년 4월 19일(토) | 2025년 4월 26일(토)', 'Apr 19, 2025 (Sat) | Apr 26, 2025 (Sat)'],
     ['1997년 9월', 'Sep 1997'],
@@ -23,9 +23,9 @@ describe('localizeHistoryDate', () => {
   })
 
   it.each([
-    ['2025년 11월 27일(토) 오후 1시 ~ 7시', 'ja', '2025年11月27日(土) 午後1時〜7時'],
+    ['2025년 11월 27일(목) 오후 1시 ~ 7시', 'ja', '2025年11月27日(木) 午後1時〜7時'],
     ['2025년 6월 18일(수) ~ 6월 24일(화)', 'ja', '2025年6月18日(水)〜6月24日(火)'],
-    ['2025년 11월 27일(토) 오후 1시 ~ 7시', 'zh', '2025年11月27日(六) 下午1時至7時'],
+    ['2025년 11월 27일(목) 오후 1시 ~ 7시', 'zh', '2025年11月27日(四) 下午1時至7時'],
     ['1997년 9월', 'zh', '1997年9月'],
   ] as const)('%s → %s', (raw, lang, expected) => {
     expect(localizeHistoryDate(raw, lang)).toBe(expected)
@@ -55,4 +55,23 @@ describe('localizeHistoryEvent — 실제 연혁 데이터 전체', () => {
     expect(grand).toBeDefined()
     expect(localizeHistoryEvent(grand!, 'en').title).toBe('第22回 大韓民國 東洋書藝大展')
   })
+})
+
+describe('연혁 날짜의 요일', () => {
+  // 2025-11-27(토)·2024-08-31(일)·2023-05-31(금) 처럼 날짜와 요일이 어긋난 채 실려 있었다(2026-10-24 정정)
+  const WEEKDAYS = '일월화수목금토'
+  const DATE = /(?:(\d{4})년\s*)?(\d{1,2})월\s*(\d{1,2})일\(([월화수목금토일])\)/g
+
+  it.each(historyEvents.filter(event => event.date?.includes('일(')).map(e => [e.id, e.date]))(
+    '%s: %s 의 요일이 달력과 같다',
+    (_id, date) => {
+      let year: number | undefined
+      for (const match of (date as string).matchAll(DATE)) {
+        if (match[1]) year = Number(match[1])
+        expect(year).toBeDefined()
+        const day = new Date(Date.UTC(year as number, Number(match[2]) - 1, Number(match[3])))
+        expect(WEEKDAYS[day.getUTCDay()]).toBe(match[4])
+      }
+    }
+  )
 })

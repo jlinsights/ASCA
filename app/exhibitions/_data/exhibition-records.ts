@@ -5,6 +5,8 @@ import type { HistoryEvent } from '@/app/history/_data/history-events'
 // 연혁에는 연·월만 있어 달 단위로 가른다: 이번 달 = 현재, 이후 = 예정, 이전 = 지난 전시.
 
 export interface ExhibitionRecords {
+  /** /exhibitions 목록 — 전 회차, 최신순 */
+  all: HistoryEvent[]
   current: HistoryEvent[]
   upcoming: HistoryEvent[]
   past: HistoryEvent[]
@@ -23,6 +25,7 @@ export function getExhibitionRecords(
     .toSorted((a, b) => monthKey(b.year, b.month) - monthKey(a.year, a.month))
 
   return {
+    all: exhibitions,
     current: exhibitions.filter(e => monthKey(e.year, e.month) === thisMonth),
     upcoming: exhibitions.filter(e => monthKey(e.year, e.month) > thisMonth).toReversed(),
     past: exhibitions.filter(e => monthKey(e.year, e.month) < thisMonth),

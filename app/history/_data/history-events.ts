@@ -33,7 +33,7 @@ export const historyEvents: HistoryEvent[] = [
     month: 11,
     title: '2025 임시총회',
     venue: '예술가의집 | Artist House (Arts Council Korea)',
-    date: '2025년 11월 27일(토) 오후 1시 ~ 7시',
+    date: '2025년 11월 27일(목) 오후 1시 ~ 7시',
     type: 'event',
   },
   {
@@ -99,7 +99,7 @@ export const historyEvents: HistoryEvent[] = [
     title: '第21回 大韓民國 東洋書藝大展',
     subtitle: '第21回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2024년 8월 31일(일) ~ 2024년 9월 8일(일)',
+    date: '2024년 8월 31일(토) ~ 2024년 9월 8일(일)',
     type: 'exhibition',
   },
   {
@@ -135,7 +135,7 @@ export const historyEvents: HistoryEvent[] = [
     title: '第20回 大韓民國 東洋書藝大展',
     subtitle: '第20回 韓·中·日 東洋書藝招待作家展',
     venue: '예술의전당 서울서예박물관',
-    date: '2023년 5월 31일(금) ~ 2023년 6월 10일(토)',
+    date: '2023년 5월 31일(수) ~ 2023년 6월 10일(토)',
     type: 'exhibition',
   },
   {
