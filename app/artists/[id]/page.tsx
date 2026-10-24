@@ -12,16 +12,44 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { useParams } from 'next/navigation'
-import type { ArtworkWithArtist } from '@/lib/api/artworks'
 import { useLanguage } from '@/contexts/language-context'
-import type { ArtistRow as Artist } from '@/lib/supabase'
+import { toPublicArtist, type ArtistDbRow, type PublicArtist } from '@/lib/api/artist-mapper'
 import { artistDisplayName } from '@/lib/api/artist-life'
+
+// /api/artists/[id] 는 DB 행을 snake_case 그대로 준다. 예전에는 camelCase 타입(ArtistRow)을 붙여 읽어서
+// profileImage·birthYear·nameEn 이 늘 비었다 — 사진이 있는 작가도 빈 아이콘이었다 (2026-10-25)
+interface Artist extends PublicArtist {
+  bioEn: string | null
+  bioJa: string | null
+  bioZh: string | null
+  exhibitions: string[]
+}
+
+function toArtist(row: ArtistDbRow): Artist {
+  return {
+    ...toPublicArtist(row),
+    bioEn: row.bio_en ?? null,
+    bioJa: row.bio_ja ?? null,
+    bioZh: row.bio_zh ?? null,
+    exhibitions: row.exhibitions ?? [],
+  }
+}
+
+/** /api/artworks?artist_id= 한 줄 — image_url 은 API 가 Storage 경로를 풀어 준 주소(없으면 null) */
+interface ArtistArtwork {
+  id: string
+  title: string
+  title_en: string | null
+  medium: string | null
+  year_created: number | null
+  image_url: string | null
+}
 
 export default function ArtistPage() {
   const params = useParams()
   const id = params.id as string
   const [artist, setArtist] = useState<Artist | null>(null)
-  const [artworks, setArtworks] = useState<ArtworkWithArtist[]>([])
+  const [artworks, setArtworks] = useState<ArtistArtwork[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const { language } = useLanguage()
@@ -41,19 +69,16 @@ export default function ArtistPage() {
           }
           throw new Error('Failed to fetch artist')
         }
-        const artistData = await response.json()
-        setArtist(artistData)
+        setArtist(toArtist((await response.json()) as ArtistDbRow))
 
-        // 작가의 작품 목록 로드 (임시 비활성화)
-        /*
-        
-        const { artworks: artistArtworks } = await getArtworks({
-          artistId: id
-        })
-        
-        setArtworks(artistArtworks)
-        */
-        setArtworks([]) // 임시로 빈 배열 설정
+        // 작품은 작가 정보와 따로 실패할 수 있다 — 작품을 못 불러와도 작가 소개는 보여 준다
+        const artworksResponse = await fetch(`/api/artworks?artist_id=${encodeURIComponent(id)}`)
+        if (artworksResponse.ok) {
+          const { artworks: rows } = (await artworksResponse.json()) as {
+            artworks?: ArtistArtwork[]
+          }
+          setArtworks(rows ?? [])
+        }
       } catch (err) {
         setError(
           `작가 정보를 불러오는데 실패했습니다. 오류: ${err instanceof Error ? err.message : String(err)}`
@@ -68,9 +93,7 @@ export default function ArtistPage() {
     }
   }, [id])
 
-  // /api/artists/[id] 는 snake_case 행을 그대로 돌려준다 — 고인 표시는 death_year 로 읽는다
-  const deathYearOf = (artist: Artist): number | null =>
-    artist.deathYear ?? (artist as unknown as { death_year?: number | null }).death_year ?? null
+  const deathYearOf = (artist: Artist): number | null => artist.deathYear
 
   // 작가 이름 다국어 지원
   const localizedName = (artist: Artist) => {
@@ -78,9 +101,9 @@ export default function ArtistPage() {
       case 'en':
         return artist.nameEn || artist.name
       case 'ja':
-        return artist.nameJp || artist.name
+        return artist.nameJa || artist.name
       case 'zh':
-        return artist.nameCn || artist.name
+        return artist.nameZh || artist.name
       default:
         return artist.name
     }
@@ -94,27 +117,17 @@ export default function ArtistPage() {
       case 'en':
         return artist.bioEn || artist.bio
       case 'ja':
-        return artist.bioJp || artist.bio
+        return artist.bioJa || artist.bio
       case 'zh':
-        return artist.bioCn || artist.bio
+        return artist.bioZh || artist.bio
       default:
         return artist.bio
     }
   }
 
   // 작품 제목 다국어 지원
-  const getArtworkTitle = (artwork: ArtworkWithArtist) => {
-    switch (language) {
-      case 'en':
-        return artwork.titleEn || artwork.title
-      case 'ja':
-        return artwork.title || artwork.title
-      case 'zh':
-        return artwork.title || artwork.title
-      default:
-        return artwork.title
-    }
-  }
+  const getArtworkTitle = (artwork: ArtistArtwork) =>
+    language === 'en' ? artwork.title_en || artwork.title : artwork.title
 
   const heroName = artist ? getArtistName(artist) : '작가 프로필'
   const heroFacts: HeroFact[] = [
@@ -297,47 +310,26 @@ export default function ArtistPage() {
         ) : (
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
             {artworks.map(artwork => (
-              <Link key={artwork.id} href={`/artworks/${artwork.id}`}>
-                <div className='group cursor-pointer'>
-                  <div className='relative aspect-square mb-4 overflow-hidden rounded-lg'>
+              <Link key={artwork.id} href={`/artworks/${artwork.id}`} className='group'>
+                <div className='relative aspect-[3/4] mb-4 overflow-hidden rounded-lg bg-muted'>
+                  {/* 이미지가 없으면 비워 둔다 — 예전에는 다른 작가 사진(kangdaehee.avif)으로 채웠다 */}
+                  {artwork.image_url && (
                     <Image
-                      src={artwork.thumbnail || '/images/artists/kangdaehee.avif'}
+                      src={artwork.image_url}
                       alt={getArtworkTitle(artwork)}
                       fill
-                      className='object-cover transition-transform group-hover:scale-105'
+                      sizes='(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'
+                      className='object-contain p-3 transition-transform group-hover:scale-105'
                     />
-                    {artwork.featured && (
-                      <div className='absolute top-2 right-2'>
-                        <Badge className='bg-highlight text-highlight-foreground hover:bg-highlight'>
-                          추천
-                        </Badge>
-                      </div>
-                    )}
-                  </div>
-                  <div className='space-y-2'>
-                    <h3 className='font-medium line-clamp-2'>{getArtworkTitle(artwork)}</h3>
-                    <p className='text-sm text-muted-foreground'>{artwork.year}년</p>
-                    <div className='flex items-center justify-between'>
-                      <Badge variant='outline' className='text-xs'>
-                        {artwork.category}
-                      </Badge>
-                      <span
-                        className={`text-xs px-2 py-1 rounded ${
-                          artwork.availability === 'available'
-                            ? 'bg-success/10 text-foreground'
-                            : artwork.availability === 'sold'
-                              ? 'bg-seal/10 text-foreground'
-                              : 'bg-warning/10 text-foreground'
-                        }`}
-                      >
-                        {artwork.availability === 'available'
-                          ? '판매 가능'
-                          : artwork.availability === 'sold'
-                            ? '판매 완료'
-                            : '예약됨'}
-                      </span>
-                    </div>
-                  </div>
+                  )}
+                </div>
+                <div className='space-y-1'>
+                  <h3 className='font-medium line-clamp-2'>{getArtworkTitle(artwork)}</h3>
+                  <p className='text-sm text-muted-foreground'>
+                    {[artwork.medium, artwork.year_created ? `${artwork.year_created}년` : null]
+                      .filter(Boolean)
+                      .join(' · ')}
+                  </p>
                 </div>
               </Link>
             ))}
