@@ -99,7 +99,8 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           </div>
         </div>
 
-        {isPc ? (
+        {/* 등급도 직위도 없는 작가(준회원·공모작가 등)는 빈 구분선을 그리지 않는다 */}
+        {!grade && !artist.title ? null : isPc ? (
           <div className='flex flex-col gap-2 pt-2 border-t border-border/30 dark:border-border/20'>
             {grade && (
               <div className='flex items-center justify-between text-sm'>
