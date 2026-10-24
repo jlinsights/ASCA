@@ -137,6 +137,8 @@ export type Database = {
           nationality: string | null
           profile_image: string | null
           profile_image_path: string | null
+          slug: string | null
+          slug_aliases: string[]
           specialties: string[] | null
           teacher_artist_id: string | null
           teacher_name: string | null
@@ -175,6 +177,8 @@ export type Database = {
           nationality?: string | null
           profile_image?: string | null
           profile_image_path?: string | null
+          slug?: string | null
+          slug_aliases?: string[]
           specialties?: string[] | null
           teacher_artist_id?: string | null
           teacher_name?: string | null
@@ -213,6 +217,8 @@ export type Database = {
           nationality?: string | null
           profile_image?: string | null
           profile_image_path?: string | null
+          slug?: string | null
+          slug_aliases?: string[]
           specialties?: string[] | null
           teacher_artist_id?: string | null
           teacher_name?: string | null

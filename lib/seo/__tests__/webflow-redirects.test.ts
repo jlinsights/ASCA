@@ -91,11 +91,12 @@ const WEBFLOW_PATHS = [
   '/en/post/checklist-for-successful-exhibition',
 ]
 
-/** app/**\/page.tsx → Next 경로 패턴 (/artists/:id, /sign-in/:rest* …) */
+/** app/**\/page.tsx·route.ts → Next 경로 패턴 (/artists/:id, /sign-in/:rest* …) */
 function collectRoutes(dir: string, prefix = ''): string[] {
   const routes: string[] = []
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.isFile() && entry.name === 'page.tsx') routes.push(prefix || '/')
+    if (entry.isFile() && (entry.name === 'page.tsx' || entry.name === 'route.ts'))
+      routes.push(prefix || '/')
     if (!entry.isDirectory() || entry.name.startsWith('_') || entry.name === 'api') continue
     const name = entry.name
     // path-to-regexp 매개변수 이름은 \w 만 허용 — [[...sign-in]] 같은 이름을 바꾼다

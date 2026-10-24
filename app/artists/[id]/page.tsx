@@ -60,8 +60,8 @@ export default function ArtistPage() {
         setLoading(true)
         setError(null)
 
-        // 작가 정보 로드
-        const response = await fetch(`/api/artists/${id}`)
+        // 작가 정보 로드 — 주소 조각은 uuid 또는 slug(옛 주소 포함)
+        const response = await fetch(`/api/artists/${encodeURIComponent(id)}`)
         if (!response.ok) {
           if (response.status === 404) {
             notFound()
@@ -69,10 +69,14 @@ export default function ArtistPage() {
           }
           throw new Error('Failed to fetch artist')
         }
-        setArtist(toArtist((await response.json()) as ArtistDbRow))
+        const row = (await response.json()) as ArtistDbRow
+        setArtist(toArtist(row))
 
-        // 작품은 작가 정보와 따로 실패할 수 있다 — 작품을 못 불러와도 작가 소개는 보여 준다
-        const artworksResponse = await fetch(`/api/artworks?artist_id=${encodeURIComponent(id)}`)
+        // 작품은 작가 정보와 따로 실패할 수 있다 — 작품을 못 불러와도 작가 소개는 보여 준다.
+        // 주소가 slug 일 수 있으니 응답의 id 로 찾는다
+        const artworksResponse = await fetch(
+          `/api/artworks?artist_id=${encodeURIComponent(row.id)}`
+        )
         if (artworksResponse.ok) {
           const { artworks: rows } = (await artworksResponse.json()) as {
             artworks?: ArtistArtwork[]
