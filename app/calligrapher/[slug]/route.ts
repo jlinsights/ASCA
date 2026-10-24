@@ -16,7 +16,10 @@ export async function GET(
     const artist = await getArtist(slug)
     const target = artist?.slug ?? artist?.id
     if (!target) return fallback
-    return NextResponse.redirect(new URL(`/artists/${encodeURIComponent(target)}`, request.url), 308)
+    return NextResponse.redirect(
+      new URL(`/artists/${encodeURIComponent(target)}`, request.url),
+      308
+    )
   } catch (error) {
     log.error('calligrapher redirect lookup failed', error)
     return fallback

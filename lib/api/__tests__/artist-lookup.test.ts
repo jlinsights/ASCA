@@ -7,7 +7,8 @@ const calls: Array<{ method: string; args: unknown[] }> = []
 let responses: Result[] = []
 
 function builder() {
-  const next = (): Promise<Result> => Promise.resolve(responses.shift() ?? { data: null, error: null })
+  const next = (): Promise<Result> =>
+    Promise.resolve(responses.shift() ?? { data: null, error: null })
   const chain = {
     select: (...args: unknown[]) => (calls.push({ method: 'select', args }), chain),
     eq: (...args: unknown[]) => (calls.push({ method: 'eq', args }), chain),
