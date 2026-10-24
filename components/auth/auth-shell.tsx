@@ -1,14 +1,9 @@
 'use client'
 
-import { useRef, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
-import type { Language } from '@/lib/i18n/types'
-import { useNameFieldOrder, type NameOrder } from './use-name-field-order'
-
-// 한·중·일은 성이 먼저 온다.
-const FAMILY_NAME_FIRST: ReadonlySet<Language> = new Set<Language>(['ko', 'ja', 'zh'])
 
 export type AuthVariant = 'sign-in' | 'sign-up'
 
@@ -60,18 +55,17 @@ const COPY = {
 interface AuthShellProps {
   variant: AuthVariant
   children: ReactNode
+  titleKey?: string
+  ledeKey?: string
 }
 
-export function AuthShell({ variant, children }: AuthShellProps) {
+export function AuthShell({ variant, children, titleKey, ledeKey }: AuthShellProps) {
   const { t, language } = useLanguage()
   const copy = COPY[variant]
   const art = ART[variant]
   const captionId = `asca-auth-caption-${variant}`
   // 중국어는 글귀 자체가 원문이라 풀이를 되풀이하지 않는다.
   const showGloss = language !== 'zh'
-  const nameOrder: NameOrder = FAMILY_NAME_FIRST.has(language) ? 'family-first' : 'given-first'
-  const widgetRef = useRef<HTMLDivElement>(null)
-  useNameFieldOrder(widgetRef, nameOrder)
 
   return (
     <div className='asca-auth' data-variant={variant}>
@@ -79,13 +73,11 @@ export function AuthShell({ variant, children }: AuthShellProps) {
         <div className='asca-auth__form-inner'>
           <p className='asca-auth__eyebrow'>{t(copy.eyebrow)}</p>
           <h1 id='asca-auth-title' className='asca-auth__title'>
-            {t(copy.title)}
+            {t(titleKey || copy.title)}
           </h1>
-          <p className='asca-auth__lede'>{t(copy.lede)}</p>
+          <p className='asca-auth__lede'>{t(ledeKey || copy.lede)}</p>
 
-          <div ref={widgetRef} className='asca-auth__widget'>
-            {children}
-          </div>
+          <div className='asca-auth__widget'>{children}</div>
 
           <p className='asca-auth__switch'>
             {t(copy.switchText)}{' '}

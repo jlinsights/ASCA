@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useUser, useClerk, SignInButton, SignUpButton } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { Button } from '../ui/button'
 import { useLanguage } from '@/contexts/language-context'
 import { LogOut } from 'lucide-react'
@@ -11,9 +11,16 @@ interface HeaderMobileAuthProps {
 }
 
 export function HeaderMobileAuth({ onCloseMenu }: HeaderMobileAuthProps) {
-  const { isLoaded, isSignedIn, user } = useUser()
-  const { signOut } = useClerk()
+  const { isLoaded, isSignedIn, user, signOut, error, refresh } = useAccount()
   const { t } = useLanguage()
+
+  if (error)
+    return (
+      <div role='alert' className='text-sm text-destructive'>
+        {t('authNativeSessionError')}{' '}
+        <button onClick={() => void refresh()}>{t('authNativeRetry')}</button>
+      </div>
+    )
 
   if (!isLoaded) {
     return (
@@ -25,17 +32,15 @@ export function HeaderMobileAuth({ onCloseMenu }: HeaderMobileAuthProps) {
 
   return (
     <div className='border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 pt-4 mt-4'>
-      {isSignedIn ? (
+      {isSignedIn && user ? (
         <div className='space-y-3'>
           <div className='p-3 bg-muted/50 rounded-lg'>
             <p className='text-sm font-medium text-foreground mb-1'>
-              {user.fullName || t('siteSignedIn')}
+              {user.displayName || t('siteSignedIn')}
             </p>
-            <p className='text-xs text-muted-foreground truncate'>
-              {user.emailAddresses[0]?.emailAddress}
-            </p>
+            <p className='text-xs text-muted-foreground truncate'>{user.email}</p>
           </div>
-          <Link href='/profile/edit'>
+          <Link href='/profile'>
             <Button variant='outline' className='w-full justify-start' onClick={onCloseMenu}>
               {t('siteProfile')}
             </Button>
@@ -49,7 +54,7 @@ export function HeaderMobileAuth({ onCloseMenu }: HeaderMobileAuthProps) {
             variant='outline'
             className='w-full justify-start text-scholar-red hover:bg-scholar-red/10'
             onClick={() => {
-              signOut({ redirectUrl: '/' })
+              void signOut().catch(() => {})
               onCloseMenu()
             }}
           >
@@ -59,19 +64,16 @@ export function HeaderMobileAuth({ onCloseMenu }: HeaderMobileAuthProps) {
         </div>
       ) : (
         <div className='space-y-3'>
-          <SignInButton mode='redirect'>
-            <Button variant='outline' className='w-full justify-start' onClick={onCloseMenu}>
+          <Button asChild variant='outline' className='w-full justify-start'>
+            <Link href='/sign-in' onClick={onCloseMenu}>
               {t('siteSignIn')}
-            </Button>
-          </SignInButton>
-          <SignUpButton mode='redirect'>
-            <Button
-              className='w-full justify-start bg-celadon-green hover:bg-celadon-green/90'
-              onClick={onCloseMenu}
-            >
+            </Link>
+          </Button>
+          <Button asChild className='w-full justify-start'>
+            <Link href='/sign-up' onClick={onCloseMenu}>
               {t('siteSignUp')}
-            </Button>
-          </SignUpButton>
+            </Link>
+          </Button>
         </div>
       )}
     </div>

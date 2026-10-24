@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -74,7 +74,7 @@ interface ContestFormProps {
 
 export function ContestForm({ contest, onSuccess, onCancel }: ContestFormProps) {
   const router = useRouter()
-  const { user: clerkUser } = useUser()
+  const { user: account } = useAccount()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -133,7 +133,7 @@ export function ContestForm({ contest, onSuccess, onCancel }: ContestFormProps) 
           throw new Error(typeof updateError === 'string' ? updateError : '저장에 실패했습니다')
       } else {
         // Create new contest
-        const { error: createError } = await createContest(data, clerkUser?.id ?? '')
+        const { error: createError } = await createContest(data, account?.id ?? '')
         if (createError)
           throw new Error(typeof createError === 'string' ? createError : '생성에 실패했습니다')
       }

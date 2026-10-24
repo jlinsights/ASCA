@@ -24,8 +24,7 @@ import {
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
-import { useUser } from '@clerk/nextjs'
-import { getSupabaseClient } from '@/lib/supabase'
+import { useAccount } from '@/components/auth/session-provider'
 import { fetchContestById, fetchContestApplications, reviewApplication } from '@/lib/api/contests'
 import {
   Contest,
@@ -36,7 +35,7 @@ import {
 } from '@/lib/types/contest-new-legacy'
 
 export default function AdminContestApplicationsPage() {
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
   const params = useParams()
   const router = useRouter()
   const contestId = params.id as string
@@ -58,24 +57,12 @@ export default function AdminContestApplicationsPage() {
 
     const loadData = async () => {
       try {
-        if (!isSignedIn || !clerkUser) {
+        if (!isSignedIn || !account) {
           router.push('/sign-in')
           return
         }
 
-        const supabase = getSupabaseClient()
-        if (!supabase) {
-          router.push('/sign-in')
-          return
-        }
-
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('role')
-          .eq('clerk_user_id', clerkUser.id)
-          .single()
-
-        if (!profile || !['admin', 'moderator'].includes(profile.role)) {
+        if (account.role !== 'admin' || account.assuranceLevel !== 'aal2') {
           router.push('/')
           return
         }
@@ -96,7 +83,7 @@ export default function AdminContestApplicationsPage() {
     }
 
     loadData()
-  }, [contestId, router, isLoaded, isSignedIn, clerkUser])
+  }, [contestId, router, isLoaded, isSignedIn, account])
 
   useEffect(() => {
     let filtered = applications
@@ -125,7 +112,7 @@ export default function AdminContestApplicationsPage() {
           status: newStatus,
           judgeNotes: judgeNotes || undefined,
         },
-        clerkUser?.id ?? ''
+        account?.id ?? ''
       )
 
       if (error) {

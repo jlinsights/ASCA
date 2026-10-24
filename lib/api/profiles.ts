@@ -1,40 +1,50 @@
-import { PUBLIC_ARTIST_COLUMNS } from './public-artist-columns'
 // Artist Profile API functions
 
 import { getSupabaseClient } from '@/lib/supabase'
-import type {
-  ArtistProfile,
-  ArtistProfileFormData,
-  PortfolioConfigFormData,
-  PublicPortfolio,
-  ArtistStats,
-} from '@/lib/types/profile-legacy'
+import type { ArtistProfile, PublicPortfolio, ArtistStats } from '@/lib/types/profile-legacy'
 
-/**
- * Fetch artist profile by ID
- */
-export async function fetchArtistProfile(
-  id: string
-): Promise<{ data: ArtistProfile | null; error: any }> {
-  const supabase = getSupabaseClient()
+import type { ArtistProfileEditorData, ArtistProfileUpdates } from '@/lib/types/profile-editor'
 
-  if (!supabase) {
-    return { data: null, error: { message: 'Supabase not configured' } }
+async function profileRequest(
+  id: string,
+  updates?: ArtistProfileUpdates
+): Promise<{
+  data: ArtistProfileEditorData | null
+  error: { message: string; code?: string; status?: number } | null
+}> {
+  try {
+    const response = await fetch(`/api/profile/artists/${encodeURIComponent(id)}`, {
+      method: updates ? 'PATCH' : 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      ...(updates
+        ? { headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) }
+        : {}),
+    })
+    const result = await response.json().catch(() => null)
+    if (!response.ok || !result?.data)
+      return {
+        data: null,
+        error: {
+          message: result?.error || 'Profile request failed',
+          code: result?.code,
+          status: response.status,
+        },
+      }
+    return { data: result.data, error: null }
+  } catch {
+    return { data: null, error: { message: 'Profile request failed', code: 'PROFILE_UNAVAILABLE' } }
   }
+}
 
-  const { data, error } = await supabase
-    .from('artists')
-    .select(PUBLIC_ARTIST_COLUMNS)
-    .eq('id', id)
-    .single()
+/** Private editor read: ownership is checked by the server, including hidden artists. */
+export function fetchArtistProfile(id: string) {
+  return profileRequest(id)
+}
 
-  if (error) {
-    return { data: null, error }
-  }
-
-  // Preserve the legacy editor response contract; its UI model predates the physical schema.
-  // The explicit projection above never retrieves contacts or Clerk ownership metadata.
-  return { data: data as unknown as ArtistProfile, error: null }
+/** Self-service writes always use the authenticated server whitelist. */
+export function updateArtistProfile(id: string, updates: ArtistProfileUpdates) {
+  return profileRequest(id, updates)
 }
 
 /**
@@ -134,58 +144,6 @@ export async function fetchPublicPortfolio(
 }
 
 /**
- * Update artist profile
- */
-export async function updateArtistProfile(
-  id: string,
-  updates: Partial<ArtistProfileFormData>
-): Promise<{ data: ArtistProfile | null; error: any }> {
-  const supabase = getSupabaseClient()
-
-  if (!supabase) {
-    return { data: null, error: { message: 'Supabase not configured' } }
-  }
-
-  const { data, error } = await supabase
-    .from('artists')
-    .update({
-      ...updates,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', id)
-    .select()
-    .single()
-
-  return { data, error }
-}
-
-/**
- * Update portfolio configuration
- */
-export async function updatePortfolioConfig(
-  id: string,
-  config: PortfolioConfigFormData
-): Promise<{ data: ArtistProfile | null; error: any }> {
-  const supabase = getSupabaseClient()
-
-  if (!supabase) {
-    return { data: null, error: { message: 'Supabase not configured' } }
-  }
-
-  const { data, error } = await supabase
-    .from('artists')
-    .update({
-      portfolio_config: config,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', id)
-    .select()
-    .single()
-
-  return { data, error }
-}
-
-/**
  * Get artist statistics
  */
 export async function getArtistStats(
@@ -220,76 +178,4 @@ export async function getArtistStats(
   }
 
   return { data: stats, error: null }
-}
-
-/**
- * Toggle profile public visibility
- */
-export async function toggleProfileVisibility(
-  id: string
-): Promise<{ data: ArtistProfile | null; error: any }> {
-  const supabase = getSupabaseClient()
-
-  if (!supabase) {
-    return { data: null, error: { message: 'Supabase not configured' } }
-  }
-
-  // Fetch current status
-  const { data: current, error: fetchError } = await supabase
-    .from('artists')
-    .select('is_public')
-    .eq('id', id)
-    .single()
-
-  if (fetchError) {
-    return { data: null, error: fetchError }
-  }
-
-  // Toggle visibility
-  const { data, error } = await supabase
-    .from('artists')
-    .update({
-      is_public: !current.is_public,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', id)
-    .select()
-    .single()
-
-  return { data, error }
-}
-
-/**
- * Upload profile image
- */
-export async function uploadProfileImage(
-  artistId: string,
-  file: File
-): Promise<{ data: { url: string } | null; error: any }> {
-  const supabase = getSupabaseClient()
-
-  if (!supabase) {
-    return { data: null, error: { message: 'Supabase not configured' } }
-  }
-
-  const fileExt = file.name.split('.').pop()
-  const fileName = `${artistId}-${Date.now()}.${fileExt}`
-  const filePath = `profiles/${fileName}`
-
-  // Upload file to storage
-  const { error: uploadError } = await supabase.storage.from('artist-images').upload(filePath, file)
-
-  if (uploadError) {
-    return { data: null, error: uploadError }
-  }
-
-  // Get public URL
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from('artist-images').getPublicUrl(filePath)
-
-  // Update profile with new image URL
-  await supabase.from('artists').update({ profile_image: publicUrl }).eq('id', artistId)
-
-  return { data: { url: publicUrl }, error: null }
 }

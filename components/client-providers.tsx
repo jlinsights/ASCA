@@ -4,7 +4,8 @@ import { ReactNode, useState } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { LanguageProvider } from '@/contexts/language-context'
-import { LocalizedClerkProvider } from '@/components/auth/localized-clerk-provider'
+import { SessionProvider } from '@/components/auth/session-provider'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 interface ClientProvidersProps {
   children: ReactNode
@@ -23,10 +24,9 @@ export function ClientProviders({ children }: ClientProvidersProps) {
       })
   )
 
-  // Clerk 위젯 언어가 사이트 언어를 따라가도록 LanguageProvider 가 ClerkProvider 를 감싼다.
   return (
     <LanguageProvider>
-      <LocalizedClerkProvider>
+      <SessionProvider>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider
             attribute='class'
@@ -34,10 +34,10 @@ export function ClientProviders({ children }: ClientProvidersProps) {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <AuthProvider>{children}</AuthProvider>
           </ThemeProvider>
         </QueryClientProvider>
-      </LocalizedClerkProvider>
+      </SessionProvider>
     </LanguageProvider>
   )
 }

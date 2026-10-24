@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -42,7 +42,7 @@ import { CAREER_ENTRY_TYPE_LABELS } from '@/lib/types/career-legacy'
 
 export function CareerManagementClient() {
   const router = useRouter()
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
   const [entries, setEntries] = useState<CareerEntry[]>([])
   const [filteredEntries, setFilteredEntries] = useState<CareerEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -58,16 +58,16 @@ export function CareerManagementClient() {
 
   useEffect(() => {
     if (!isLoaded) return
-    if (!isSignedIn || !clerkUser) {
-      router.push('/sign-in')
+    if (!isSignedIn || !account?.artistIds[0]) {
+      router.push(account ? '/profile' : '/sign-in')
       return
     }
 
     const loadData = async () => {
-      setUserId(clerkUser.id)
+      setUserId(account.artistIds[0]!)
 
       // Fetch career entries
-      const { data: careerData, error } = await fetchCareerEntries(clerkUser.id)
+      const { data: careerData, error } = await fetchCareerEntries(account.artistIds[0]!)
 
       if (careerData) {
         setEntries(careerData)
@@ -75,7 +75,7 @@ export function CareerManagementClient() {
       }
 
       // Fetch summary
-      const { data: summaryData } = await getCareerSummary(clerkUser.id)
+      const { data: summaryData } = await getCareerSummary(account.artistIds[0]!)
       if (summaryData) {
         setSummary(summaryData)
       }
@@ -84,7 +84,7 @@ export function CareerManagementClient() {
     }
 
     loadData()
-  }, [isLoaded, isSignedIn, clerkUser, router])
+  }, [isLoaded, isSignedIn, account, router])
 
   // Apply filters
   useEffect(() => {

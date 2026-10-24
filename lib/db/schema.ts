@@ -14,6 +14,9 @@ import {
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
+export { accountProfiles, authIdentityLinks } from './auth-schema'
+export type { AccountProfile } from './auth-schema'
+
 // 사용자 테이블
 export const users = pgTable('users', {
   id: text('id').primaryKey(),

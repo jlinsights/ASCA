@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth/server'
 import { createClient } from '@/lib/supabase/server'
 import { getAuthUser } from '@/lib/auth/middleware'
 import { logger } from '@/lib/utils/logger'
@@ -40,9 +40,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // 본인 또는 admin만 조회 가능 (PUT 권한 분기와 동일 패턴)
-    if (member.clerk_user_id !== userId) {
+    if (member.user_id !== userId) {
       const adminUser = await getAuthUser()
-      if (!adminUser || adminUser.role !== 'admin') {
+      if (!adminUser || adminUser.role !== 'admin' || adminUser.assuranceLevel !== 'aal2') {
         return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
       }
     }
@@ -68,11 +68,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const supabase = await createClient()
     const { id } = await params
     const body: UpdateMemberRequest = await request.json()
+    // Paid membership and approval state are never self-service account fields.
+    if (body.membership_level_id !== undefined || body.membership_status !== undefined) {
+      const adminUser = await getAuthUser()
+      if (adminUser?.role !== 'admin' || adminUser.assuranceLevel !== 'aal2') {
+        return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
+      }
+    }
 
     // 회원 존재 확인 및 권한 검증
     const { data: existingMember } = await supabase
       .from('members')
-      .select('clerk_user_id, membership_level_id')
+      .select('user_id, membership_level_id')
       .eq('id', id)
       .single()
 
@@ -81,9 +88,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // 본인 또는 관리자만 수정 가능
-    if (existingMember.clerk_user_id !== userId) {
+    if (existingMember.user_id !== userId) {
       const adminUser = await getAuthUser()
-      if (!adminUser || adminUser.role !== 'admin') {
+      if (!adminUser || adminUser.role !== 'admin' || adminUser.assuranceLevel !== 'aal2') {
         return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
       }
     }
@@ -165,7 +172,7 @@ export async function DELETE(
     // 회원 존재 확인
     const { data: existingMember } = await supabase
       .from('members')
-      .select('clerk_user_id')
+      .select('user_id')
       .eq('id', id)
       .single()
 
@@ -174,9 +181,9 @@ export async function DELETE(
     }
 
     // 본인 또는 관리자만 삭제 가능
-    if (existingMember.clerk_user_id !== userId) {
+    if (existingMember.user_id !== userId) {
       const adminUser = await getAuthUser()
-      if (!adminUser || adminUser.role !== 'admin') {
+      if (!adminUser || adminUser.role !== 'admin' || adminUser.assuranceLevel !== 'aal2') {
         return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
       }
     }

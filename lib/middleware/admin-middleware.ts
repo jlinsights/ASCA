@@ -16,7 +16,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthUser } from '@/lib/auth/middleware'
 import { error as logError } from '@/lib/logging'
-import { getRoleManager } from '../admin/role-manager'
 import { Permission, Role, getPermissionsForRole } from '../admin/permissions'
 
 /**
@@ -46,27 +45,11 @@ export interface AdminMiddlewareOptions {
 
 export async function getAuthContext(_request: NextRequest): Promise<AuthContext | null> {
   const authUser = await getAuthUser()
-  if (!authUser?.clerkId) {
-    return null
-  }
-
-  const userId = authUser.clerkId
-  const roleManager = getRoleManager()
-  const rolesFromRm = roleManager.getUserRoles(userId)
-  const isDbAdmin = authUser.role === 'admin'
-
-  const roles =
-    isDbAdmin && !rolesFromRm.includes(Role.ADMIN) && !rolesFromRm.includes(Role.SUPER_ADMIN)
-      ? [...rolesFromRm, Role.ADMIN]
-      : rolesFromRm
-
-  let permissions = roleManager.getUserPermissions(userId)
-  if (isDbAdmin) {
-    const adminPerms = getPermissionsForRole(Role.ADMIN)
-    permissions = [...new Set([...permissions, ...adminPerms])]
-  }
-
-  const isAdmin = isDbAdmin || roleManager.isAdmin(userId)
+  if (!authUser?.id) return null
+  const userId = authUser.id
+  const isAdmin = authUser.role === 'admin' && authUser.assuranceLevel === 'aal2'
+  const roles = isAdmin ? [Role.ADMIN] : [Role.MEMBER]
+  const permissions = getPermissionsForRole(isAdmin ? Role.ADMIN : Role.MEMBER)
 
   return {
     userId,
@@ -91,11 +74,6 @@ export async function adminMiddleware(
   request: NextRequest,
   options: AdminMiddlewareOptions = {}
 ): Promise<NextResponse | null> {
-  // Skip auth if configured
-  if (options.skipAuth) {
-    return null
-  }
-
   // Get auth context
   const auth = await getAuthContext(request)
 
@@ -112,8 +90,7 @@ export async function adminMiddleware(
 
   // Check super admin requirement
   if (options.requireSuperAdmin) {
-    const roleManager = getRoleManager()
-    if (!roleManager.isSuperAdmin(auth.userId)) {
+    if (!auth.roles.includes(Role.SUPER_ADMIN)) {
       return NextResponse.json(
         {
           error: 'Forbidden',
@@ -168,8 +145,7 @@ export async function adminMiddleware(
 
   // Check permission requirement
   if (options.requiredPermission) {
-    const roleManager = getRoleManager()
-    if (!roleManager.can(auth.userId, options.requiredPermission)) {
+    if (!auth.permissions.includes(options.requiredPermission)) {
       return NextResponse.json(
         {
           error: 'Forbidden',
@@ -182,8 +158,7 @@ export async function adminMiddleware(
 
   // Check multiple permissions (all required)
   if (options.requiredPermissions && options.requiredPermissions.length > 0) {
-    const roleManager = getRoleManager()
-    if (!roleManager.canAll(auth.userId, options.requiredPermissions)) {
+    if (!options.requiredPermissions.every(permission => auth.permissions.includes(permission))) {
       return NextResponse.json(
         {
           error: 'Forbidden',
@@ -254,8 +229,7 @@ export async function requirePermissionAuth(
 ): Promise<AuthContext> {
   const auth = await requireAuth(request)
 
-  const roleManager = getRoleManager()
-  if (!roleManager.can(auth.userId, permission)) {
+  if (!auth.permissions.includes(permission)) {
     throw new Error(`Forbidden: Required permission: ${permission}`)
   }
 
