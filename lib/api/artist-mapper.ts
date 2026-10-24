@@ -30,6 +30,8 @@ export interface ArtistDbRow {
   created_at: string | null
   updated_at: string | null
   airtable_id: string | null
+  /** 주소용 로마자 이름 (/artists/<slug>). 없으면 null (2026-10-25 추가) */
+  slug?: string | null
 }
 
 export interface PublicArtist {
@@ -49,6 +51,8 @@ export interface PublicArtist {
   membershipType: string | null
   artistType: string | null
   title: string | null
+  /** 주소용 로마자 이름. 없으면 id 주소를 쓴다 */
+  slug: string | null
 }
 
 export function toPublicArtist(row: ArtistDbRow): PublicArtist {
@@ -68,5 +72,6 @@ export function toPublicArtist(row: ArtistDbRow): PublicArtist {
     membershipType: row.membership_type ?? null,
     artistType: row.artist_type ?? null,
     title: row.title ?? null,
+    slug: row.slug ?? null,
   }
 }

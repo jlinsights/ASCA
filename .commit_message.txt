@@ -1,1 +1,1 @@
-🐛 fix: 작가 상세에 프로필 사진·작품 목록이 안 보이던 문제 — snake_case 응답 매핑, /api/artworks 작가 필터(공개 작품만), 작품 불러오기 재활성화
+✨ feat: 작가 주소에 slug 지원 — /artists/<slug>·옛 주소(slug_aliases) 조회, 옛 Webflow /calligrapher/<slug> 를 작가 페이지로 1:1 연결(못 찾으면 목록)

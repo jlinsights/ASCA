@@ -23,6 +23,7 @@ const row: ArtistDbRow = {
   created_at: '2026-10-10T00:00:00Z',
   updated_at: '2026-10-10T00:00:00Z',
   airtable_id: null,
+  slug: 'test-artist',
 }
 
 describe('toPublicArtist', () => {
@@ -44,6 +45,7 @@ describe('toPublicArtist', () => {
       membershipType: '정회원',
       artistType: '초대작가',
       title: '이사',
+      slug: 'test-artist',
     })
   })
 
@@ -63,5 +65,10 @@ describe('toPublicArtist', () => {
     expect(sparse.specialties).toEqual([])
     expect(sparse.awards).toEqual([])
     expect(sparse.membershipType).toBeNull()
+  })
+
+  it('slug 를 고르지 않은 행이면 slug 는 null', () => {
+    const { slug: _omit, ...withoutSlug } = row
+    expect(toPublicArtist(withoutSlug).slug).toBeNull()
   })
 })

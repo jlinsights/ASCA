@@ -124,26 +124,54 @@ export async function getArtists(
   }
 }
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
+
+export type ArtistKey =
+  | { kind: 'id'; value: string }
+  | { kind: 'slug'; value: string }
+  | { kind: 'invalid' }
+
 /**
- * 특정 작가 조회
+ * 주소 조각이 uuid 인지 slug 인지 가른다. uuid 컬럼에 slug 를 그대로 넣으면 22P02 로 500 이 난다.
+ * slug 는 DB 제약(artists_slug_format)과 같은 모양만 받는다 — 그 밖은 어떤 작가와도 맞지 않는다.
  */
-export async function getArtist(id: string): Promise<ArtistDbRow | null> {
+export function parseArtistKey(raw: string): ArtistKey {
+  if (UUID_PATTERN.test(raw)) return { kind: 'id', value: raw.toLowerCase() }
+  const slug = raw.toLowerCase()
+  if (SLUG_PATTERN.test(slug)) return { kind: 'slug', value: slug }
+  return { kind: 'invalid' }
+}
+
+/**
+ * 특정 작가 조회 — uuid, 대표 slug, 옛 주소(slug_aliases) 어느 것으로도 찾는다.
+ * 비공개 작가는 RLS 가 가려 null 이 된다.
+ */
+export async function getArtist(idOrSlug: string): Promise<ArtistDbRow | null> {
+  const key = parseArtistKey(idOrSlug)
+  if (key.kind === 'invalid') return null
   try {
     const supabase = ensureSupabase()
     if (!supabase) throw new Error('Supabase client not available')
-    const { data: artistData, error: artistError } = await supabase
+    const byColumn = (column: 'id' | 'slug') =>
+      supabase.from('artists').select(PUBLIC_ARTIST_COLUMNS).eq(column, key.value).maybeSingle()
+    const first = await byColumn(key.kind)
+    if (first.error) {
+      log.error('getArtist error', first.error)
+      throw new AppError('작가 정보를 불러오는 데 실패했습니다.', 500, first.error.code)
+    }
+    if (first.data || key.kind === 'id') return (first.data as ArtistDbRow | null) ?? null
+
+    const alias = await supabase
       .from('artists')
       .select(PUBLIC_ARTIST_COLUMNS)
-      .eq('id', id)
-      .single()
-    if (artistError) {
-      if (artistError.code === 'PGRST116') {
-        return null
-      }
-      log.error('getArtist error', artistError)
-      throw new AppError('작가 정보를 불러오는 데 실패했습니다.', 500, artistError.code)
+      .contains('slug_aliases', [key.value])
+      .limit(1)
+    if (alias.error) {
+      log.error('getArtist alias error', alias.error)
+      throw new AppError('작가 정보를 불러오는 데 실패했습니다.', 500, alias.error.code)
     }
-    return artistData
+    return ((alias.data ?? [])[0] as ArtistDbRow | undefined) ?? null
   } catch (error) {
     log.error('getArtist unexpected error', error)
     throw error
