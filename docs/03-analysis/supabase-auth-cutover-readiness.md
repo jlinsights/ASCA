@@ -1,8 +1,8 @@
 # Supabase Auth 전환 준비와 실제 로컬 검증
 
 2026-10-24. `feat/supabase-auth`를 main `85b6688d`(PR #121 문서·#122 LICENSE
-포함)에 통합했다. 운영 인증 제공자, 운영 DB, Vercel 환경변수, 실제 사용자 계정은
-변경하지 않았다.
+포함)에 통합했다. 운영 인증 제공자·Vercel 환경변수·실제 사용자 계정은 변경하지
+않았다. 운영 DB의 Auth 기반 스키마는 아래 적용 기록과 같이 준비했다.
 
 ## 통합한 경계
 
@@ -20,8 +20,9 @@
   트리거를 유지한다. `dues_status`에 `anon`·`authenticated` SELECT를 부여하지
   않는다. 공개 조회에 service role을 추가하지 않았다.
 - Auth 마이그레이션은
-  `supabase/migrations/20261024110000_supabase_auth_foundation.sql`로 이름을
-  변경했다. 이미 운영에 적용된 `20261024093959`보다 뒤다. SQL 내용은 보존했고
+  `supabase/migrations/20261024142344_supabase_auth_foundation.sql`로 이름을
+  맞췄다. 검토 당시 `20261024110000`이던 파일을 실제 운영 적용 도구가 기록한
+  버전에 맞춘 것으로 SQL 내용은 같다. 이미 적용된 `20261024093959`보다 뒤이며
   테스트·문서 참조도 갱신했다. `--include-all`로 옛 마이그레이션을 재실행하지
   않는다.
 
@@ -68,12 +69,24 @@ HTTP 검사에서 새 세션 쿠키 기록 및 계정 조회가 성공했다.
 기존 파일의 줄 수 경고만 남는다. AGENTS/CLAUDE 지침 본문 일치와 변경 파일 포맷도
 확인했다. 독립 후속 리뷰에서는 추가 P1/P2 지적이 없었다.
 
-## 운영에서 읽기만 확인한 내용
+## 운영 DB 적용 및 확인 기록
 
-- ASCA-2026은 `ACTIVE_HEALTHY`이며 Auth 기반 테이블은 운영에 미적용이다.
+- ASCA-2026은 `ACTIVE_HEALTHY`다. 2026-10-24 `apply_migration`으로 검토된 Auth
+  SQL만 적용했고 이력은 `20261024142344 / supabase_auth_foundation`이다.
+  `account_profiles`·`auth_identity_links`·`get_my_artist_ids()`가 존재한다.
+- RPC 실행 권한은 `authenticated=true`, `anon=false`, `service_role=false`다.
+  `dues_status`·`claimed_by_user_id`는 여전히 anon·authenticated가 읽을 수 없다.
+  작가 공개 범위 트리거와 새 계정/수정시각 트리거 3개도 확인했다. 실제 계정·
+  프로필과 연결 작가는 모두 0건이다. 실제 사용자 생성·작가 연결은 수행하지
+  않았다.
+- 보안 advisor의 `auth_identity_links` RLS 무정책과 본인 ID RPC의 authenticated
+  SECURITY DEFINER 알림은 의도한 서버 전용 매핑/본인 ID 조회 경계다. 기존 조회수
+  증가 RPC의 공개 SECURITY DEFINER 경고는 이번 전환에서 변경하지 않았다.
 - 최근 일일 물리 백업이 `COMPLETED`다. 최신 기록은
   `2026-10-23T18:43:41.887Z`이며 PITR은 비활성이다. 실제 복원 리허설을 수행한
-  증거는 없으며 전환 시점의 복구 기준을 따로 정한다.
+  증거는 없다. 이번 변경은 기존 데이터·정책을 바꾸지 않는 추가 스키마로
+  한정했고, 장애 시 기존 Clerk 운영 코드를 유지한 채 원인을 수정한다. 실제
+  복원은 별도 운영 결정이며 이 백업 이후 데이터가 포함된다고 간주하지 않는다.
 - Vercel `asca-main`의 팀 접근 승인이 반영되어 환경변수 메타데이터를 조회했다.
   Preview·운영 모두 `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
   `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL`이 등록되어 있다. Clerk 설정과
@@ -99,8 +112,9 @@ HTTP 검사에서 새 세션 쿠키 기록 및 계정 조회가 성공했다.
    채팅이나 Git에 기록하지 않는다.
 2. 같은 ASCA-2026을 가리키는 환경변수, Site URL, 쿼리를 포함한 callback
    allowlist, 이메일 확인, 비밀번호·메일 요청 제한을 검증한다.
-3. 전환 직전 백업 상태와 복구 절차를 재확인하고 검토된 새 Auth 마이그레이션만
-   적용한다. 전체 `db:push`나 과거 마이그레이션 재실행을 하지 않는다.
+3. Auth 마이그레이션과 RPC 권한 검사는 완료했다. 운영 코드 전환 직전 백업과 복구
+   절차를 다시 확인한다. 전체 `db:push`나 과거 마이그레이션 재실행을 하지
+   않는다.
 4. 검증된 Clerk 신원을 신규 UUID에 연결한다. 비밀번호·세션 자동 승계나
    이메일만으로 계정 병합을 하지 않는다. 관리자·작가 소유권은 개별 확인한다.
 5. Preview에서 이메일 배달·가입·복구·MFA·회비 관리·작품 제출과 타인 수정 차단을

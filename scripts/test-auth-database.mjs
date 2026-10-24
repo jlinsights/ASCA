@@ -76,7 +76,7 @@ try {
   await sql`INSERT INTO auth.users (id, email, raw_user_meta_data)
     VALUES (${priorId}, 'prior@example.test', ${sql.json({ role: 'admin', locale: 'unsupported' })})`
   const migration = await readFile(
-    new URL('../supabase/migrations/20261024110000_supabase_auth_foundation.sql', import.meta.url),
+    new URL('../supabase/migrations/20261024142344_supabase_auth_foundation.sql', import.meta.url),
     'utf8'
   )
   await sql.unsafe(migration)
