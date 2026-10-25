@@ -619,6 +619,96 @@ export type Database = {
           },
         ]
       }
+      contest_entries: {
+        Row: {
+          airtable_record_id: string
+          artist_id: string | null
+          contest_name: string
+          contest_year: number
+          created_at: string
+          division: string | null
+          entrant_email: string | null
+          entrant_name: string | null
+          entrant_name_hanja: string | null
+          fee_status: string
+          fee_status_raw: string | null
+          id: string
+          match_method: string | null
+          matched_at: string | null
+          matched_by: string | null
+          result_raw: string | null
+          result_status: string
+          script_style: string | null
+          source_key: string
+          submitted_at: string | null
+          synced_at: string
+          title: string | null
+        }
+        Insert: {
+          airtable_record_id: string
+          artist_id?: string | null
+          contest_name: string
+          contest_year: number
+          created_at?: string
+          division?: string | null
+          entrant_email?: string | null
+          entrant_name?: string | null
+          entrant_name_hanja?: string | null
+          fee_status?: string
+          fee_status_raw?: string | null
+          id?: string
+          match_method?: string | null
+          matched_at?: string | null
+          matched_by?: string | null
+          result_raw?: string | null
+          result_status?: string
+          script_style?: string | null
+          source_key: string
+          submitted_at?: string | null
+          synced_at?: string
+          title?: string | null
+        }
+        Update: {
+          airtable_record_id?: string
+          artist_id?: string | null
+          contest_name?: string
+          contest_year?: number
+          created_at?: string
+          division?: string | null
+          entrant_email?: string | null
+          entrant_name?: string | null
+          entrant_name_hanja?: string | null
+          fee_status?: string
+          fee_status_raw?: string | null
+          id?: string
+          match_method?: string | null
+          matched_at?: string | null
+          matched_by?: string | null
+          result_raw?: string | null
+          result_status?: string
+          script_style?: string | null
+          source_key?: string
+          submitted_at?: string | null
+          synced_at?: string
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'contest_entries_artist_id_fkey'
+            columns: ['artist_id']
+            isOneToOne: false
+            referencedRelation: 'artists'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'contest_entries_matched_by_fkey'
+            columns: ['matched_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       events: {
         Row: {
           contact_email: string | null
