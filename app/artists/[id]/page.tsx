@@ -5,6 +5,7 @@ import { getArtist } from '@/lib/api/artists'
 import { getSupabaseClient } from '@/lib/supabase'
 import { log } from '@/lib/utils/logger'
 import { artNameLabel, type ArtistDbRow } from '@/lib/api/artist-mapper'
+import { artistNativeName } from '@/lib/api/artist-name'
 import { ArtistProfile } from './_components/artist-profile'
 import {
   orderWorks,
@@ -42,13 +43,19 @@ async function loadWorks(artistId: string): Promise<ArtistWork[]> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const artist = await loadArtist(decodeURIComponent((await params).id))
   if (!artist) return { title: '작가를 찾을 수 없습니다 | 동양서예협회' }
+  const name = artistNativeName({
+    name: artist.name,
+    nationality: artist.nationality,
+    nameJa: artist.name_ja,
+    nameZh: artist.name_zh,
+  })
   const description =
     artist.bio?.replace(/\s+/g, ' ').trim().slice(0, 150) ||
-    `${artist.name} — 동양서예협회 ${artist.membership_type ?? '작가'}`
+    `${name} — 동양서예협회 ${artist.membership_type ?? '작가'}`
   // 아호로 찾는 사람이 많다 — '井巖 김형석'·'글꽃 이영희' 처럼 호를 이름 앞에
   const artName = artNameLabel(artist.art_name_ko, artist.art_name_hanja)
   return {
-    title: `${artName ? `${artName} ` : ''}${artist.name} | 동양서예협회`,
+    title: `${artName ? `${artName} ` : ''}${name} | 동양서예협회`,
     description,
     alternates: artist.slug ? { canonical: `/artists/${artist.slug}` } : undefined,
     openGraph: artist.profile_image ? { images: [artist.profile_image] } : undefined,

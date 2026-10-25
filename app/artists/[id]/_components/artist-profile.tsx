@@ -7,6 +7,7 @@ import { HeroScrolls } from '@/components/layout/page-hero'
 import { useLanguage } from '@/contexts/language-context'
 import { artNameLabel, type ArtistDbRow } from '@/lib/api/artist-mapper'
 import { artistDisplayName } from '@/lib/api/artist-life'
+import { artistNativeName } from '@/lib/api/artist-name'
 import { parseArtistCareer } from './artist-career'
 import { ArtistHero, type ArtistHeroFact } from './artist-hero'
 import { workYearSpan, type ArtistWork } from './artist-works'
@@ -60,7 +61,12 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
   const { language } = useLanguage() as { language: Language }
 
   const baseName = localized(language, {
-    ko: artist.name,
+    ko: artistNativeName({
+      name: artist.name,
+      nationality: artist.nationality,
+      nameJa: artist.name_ja,
+      nameZh: artist.name_zh,
+    }),
     en: artist.name_en,
     ja: artist.name_ja,
     zh: artist.name_zh,
