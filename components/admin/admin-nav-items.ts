@@ -1,4 +1,4 @@
-import { Users, type LucideIcon } from 'lucide-react'
+import { Link2, Users, type LucideIcon } from 'lucide-react'
 
 export interface AdminNavItem {
   key: string
@@ -17,6 +17,12 @@ export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
     href: '/admin/artists',
     icon: Users,
     label: { ko: '작가 회비 관리', en: 'Artist dues' },
+  },
+  {
+    key: 'artist-claims',
+    href: '/admin/artist-claims',
+    icon: Link2,
+    label: { ko: '작가 페이지 연결', en: 'Artist page links' },
   },
 ]
 
