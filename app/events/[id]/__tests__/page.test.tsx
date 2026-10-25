@@ -123,3 +123,20 @@ describe('행사 상세 페이지', () => {
     expect(metadata.description).toContain('가상 작가의 서예 개인전입니다')
   })
 })
+
+describe('관련 행사 순서', () => {
+  it('가까운 행사를 고른 뒤 최신순으로 보여 준다', async () => {
+    getPublishedEvent.mockResolvedValue(makeEvent())
+    listPublishedEvents.mockResolvedValue([
+      makeEvent({ id: 'old', title: '가상 옛 전시', event_date: '2025-07-13T00:00:00+09:00' }),
+      makeEvent({ id: 'new', title: '가상 새 전시', event_date: '2025-12-24T00:00:00+09:00' }),
+    ])
+    await render$()
+    const titles = screen
+      .getAllByRole('link')
+      .map(link => link.textContent ?? '')
+      .filter(text => text.includes('가상') && text.includes('전시') && !text.includes('개인전'))
+    expect(titles[0]).toContain('가상 새 전시')
+    expect(titles[1]).toContain('가상 옛 전시')
+  })
+})

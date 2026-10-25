@@ -89,6 +89,7 @@
   font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
   font-weight: 600;
   line-height: 1.2;
+  font-variant-numeric: lining-nums;
   letter-spacing: -0.01em;
 }
 .asca-events__feature-title a {
@@ -381,6 +382,8 @@
   font-size: clamp(1.15rem, 1rem + 0.6vw, 1.4rem);
   line-height: 1.8;
   text-wrap: pretty;
+  /* 명조의 옛 숫자꼴은 '4박 5일'의 5 를 내려 앉힌다 */
+  font-variant-numeric: lining-nums;
 }
 .asca-events__lead p {
   margin: 0;

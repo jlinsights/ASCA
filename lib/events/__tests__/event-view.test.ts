@@ -120,7 +120,7 @@ describe('eventFacts', () => {
       fields: { 구분: '전시회', 주관: '가상 주최', 후원: '사단법인 동양서예협회' },
     })
     expect(facts).toEqual([
-      { label: '구분', value: '전시회' },
+      { label: '구분', value: '전시' },
       { label: '기간', value: '2025년 10월 3일(금) – 10월 10일(금)' },
       { label: '장소', value: '가상 전시실 · 가상시 가상로 1' },
       { label: '주최', value: '가상 주최' },

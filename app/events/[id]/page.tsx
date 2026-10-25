@@ -45,6 +45,7 @@ async function loadRelated(event: Event, today: string): Promise<EventRow[]> {
           Math.abs(new Date(b.event_date).getTime() - origin)
       )
       .slice(0, RELATED_LIMIT)
+      .sort((a, b) => b.event_date.localeCompare(a.event_date)) // 고른 뒤엔 최신순으로 보여 준다
       .map(other => toEventRow(other, today))
   } catch (err) {
     log.error('related events load failed', err)

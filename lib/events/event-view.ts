@@ -119,7 +119,8 @@ export function eventFacts(event: Event, parsed: ParsedEventContent): EventFact[
   const place = [event.location, event.venue].filter(Boolean).join(' · ')
   const organizer = event.organizer?.trim() || fields.주최
   const facts: (EventFact | null)[] = [
-    { label: '구분', value: fields.구분 || EVENT_TYPE_LABELS[event.event_type] || '행사' },
+    // 구분은 유형 하나로 — 본문의 '구분: 행사' 와 머리의 '기행·행사' 가 엇갈렸다
+    { label: '구분', value: EVENT_TYPE_LABELS[event.event_type] ?? '행사' },
     { label: '기간', value: eventPeriod(event) },
     place ? { label: '장소', value: place } : null,
     organizer ? { label: '주최', value: organizer } : null,
