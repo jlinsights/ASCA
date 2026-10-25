@@ -148,6 +148,68 @@ export type Database = {
           },
         ]
       }
+      artist_profile_revisions: {
+        Row: {
+          account_id: string | null
+          artist_id: string
+          changes: Json
+          created_at: string
+          id: string
+          revert_of: string | null
+          reverted_at: string | null
+          reverted_by: string | null
+        }
+        Insert: {
+          account_id?: string | null
+          artist_id: string
+          changes: Json
+          created_at?: string
+          id?: string
+          revert_of?: string | null
+          reverted_at?: string | null
+          reverted_by?: string | null
+        }
+        Update: {
+          account_id?: string | null
+          artist_id?: string
+          changes?: Json
+          created_at?: string
+          id?: string
+          revert_of?: string | null
+          reverted_at?: string | null
+          reverted_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'artist_profile_revisions_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_profile_revisions_artist_id_fkey'
+            columns: ['artist_id']
+            isOneToOne: false
+            referencedRelation: 'artists'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_profile_revisions_revert_of_fkey'
+            columns: ['revert_of']
+            isOneToOne: false
+            referencedRelation: 'artist_profile_revisions'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_profile_revisions_reverted_by_fkey'
+            columns: ['reverted_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       artist_records: {
         Row: {
           artist_id: string
@@ -1225,6 +1287,10 @@ export type Database = {
       }
     }
     Functions: {
+      apply_artist_profile_edit: {
+        Args: { p_account: string; p_artist: string; p_patch: Json }
+        Returns: string
+      }
       approve_artist_claim: {
         Args: {
           p_admin: string
@@ -1258,9 +1324,17 @@ export type Database = {
         Args: { p_admin: string; p_note?: string; p_request: string }
         Returns: undefined
       }
+      revert_artist_profile_revision: {
+        Args: { p_admin: string; p_revision: string }
+        Returns: string
+      }
       revoke_artist_claim: {
         Args: { p_admin: string; p_note?: string; p_request: string }
         Returns: undefined
+      }
+      set_artist_profile_fields: {
+        Args: { p_artist: string; p_values: Json }
+        Returns: Json
       }
     }
     Enums: {

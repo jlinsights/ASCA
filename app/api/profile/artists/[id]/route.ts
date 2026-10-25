@@ -73,19 +73,30 @@ export async function PATCH(request: NextRequest, { params }: Context) {
       keyGenerator: () => `artist-profile:${account.id}`,
     }).check(request)
     if (limited) return limited
-    // Recheck the owner in the write itself so a revoked mapping cannot use a stale account lookup.
-    const { data, error } = await archiveWriter()
+    const patch = artistProfilePatch(body.data)
+    const db = archiveWriter()
+    // The DB function rechecks ownership, writes, and records a before/after revision in one
+    // transaction, so a revoked mapping cannot use a stale account lookup.
+    const { data: revisionId, error: editError } = await db.rpc('apply_artist_profile_edit', {
+      p_artist: id,
+      p_account: account.id,
+      p_patch: patch,
+    })
+    if (editError?.code === 'P0002')
+      return json({ error: 'Linked artist not found', code: 'NOT_FOUND' }, 404)
+    if (editError) throw editError
+    const { data, error } = await db
       .from('artists')
-      .update({ ...artistProfilePatch(body.data), updated_at: new Date().toISOString() })
+      .select(ARTIST_PROFILE_COLUMNS)
       .eq('id', id)
       .eq('claimed_by_user_id', account.id)
-      .select(ARTIST_PROFILE_COLUMNS)
       .maybeSingle()
     if (error) throw error
     if (!data) return json({ error: 'Linked artist not found', code: 'NOT_FOUND' }, 404)
     // Record the actor and changed columns without copying biographies or birth dates into logs.
     await auditTrail.trackDataChange(account.id, 'update', 'artist_profile', id, undefined, {
-      fields: Object.keys(artistProfilePatch(body.data)),
+      fields: Object.keys(patch),
+      revisionId,
     })
     return json({ data: artistProfileResponse(data) })
   } catch (error) {
