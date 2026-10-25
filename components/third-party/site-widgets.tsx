@@ -1,4 +1,7 @@
+'use client'
+
 import Script from 'next/script'
+import { usePathname } from 'next/navigation'
 import { MobileConsultButton } from './mobile-consult-button'
 
 // 전 페이지 공통 위젯 — 루트 레이아웃 <body> 끝에서 렌더링한다.
@@ -40,6 +43,15 @@ ChannelIO('boot', {
 `
 
 export function SiteWidgets() {
+  const pathname = usePathname()
+  // Authentication forms must remain unobstructed, including after client navigation.
+  if (
+    /^\/(?:sign-in|sign-up|forgot-password|reset-password|auth|profile|admin)(?:\/|$)/.test(
+      pathname
+    )
+  ) {
+    return <style>{'cal-floating-button, cal-modal-box { display: none !important; }'}</style>
+  }
   return (
     <>
       <Script id='cal-floating-embed' strategy='lazyOnload'>

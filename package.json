@@ -8,6 +8,9 @@
     "npm": ">=8.0.0"
   },
   "scripts": {
+    "test:auth-db": "node scripts/test-auth-database.mjs",
+    "test:auth-service": "node --conditions=react-server --import tsx scripts/test-auth-service.mjs",
+    "test:profile-service": "node scripts/test-profile-service.mjs",
     "dev": "next dev --webpack",
     "dev:turbo": "next dev --turbo",
     "dev:debug": "NODE_OPTIONS='--inspect' next dev --webpack",

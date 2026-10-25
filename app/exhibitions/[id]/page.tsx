@@ -8,7 +8,7 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroFacts, PageHero, type HeroFact } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { fetchExhibitionById, deleteExhibition } from '@/lib/api/exhibitions'
 import type { ExhibitionWithDetails } from '@/lib/types/exhibition-legacy'
 import { ExhibitionDetailBody } from './_components/exhibition-detail-body'
@@ -18,7 +18,7 @@ export default function ExhibitionDetailPage() {
   const params = useParams()
   const router = useRouter()
   const exhibitionId = params.id as string
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
 
   const [exhibition, setExhibition] = useState<ExhibitionWithDetails | null>(null)
   const [loading, setLoading] = useState(true)
@@ -28,12 +28,12 @@ export default function ExhibitionDetailPage() {
 
   useEffect(() => {
     if (!isLoaded) return
-    if (isSignedIn && clerkUser) {
-      setCurrentUserId(clerkUser.id)
+    if (isSignedIn && account) {
+      setCurrentUserId(account.id)
     } else {
       setCurrentUserId(null)
     }
-  }, [isLoaded, isSignedIn, clerkUser])
+  }, [isLoaded, isSignedIn, account])
 
   // Load exhibition data
   useEffect(() => {

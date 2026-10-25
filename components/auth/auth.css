@@ -27,6 +27,9 @@
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-a-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 @media (min-width: 768px) {
@@ -47,6 +50,7 @@
 /* ── 폼 단 ─────────────────────────────────────────────────────────── */
 
 .asca-auth__form {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -66,7 +70,7 @@
   gap: 0.75rem;
   margin: 0 0 1.25rem;
   color: var(--accent-text);
-  font-size: 0.75rem;
+  font-size: 1.0625rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -94,7 +98,7 @@
   margin: 1rem 0 0;
   max-width: 34ch;
   color: var(--fg-muted);
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
   line-height: 1.65;
   word-break: keep-all;
 }
@@ -108,7 +112,7 @@
 .asca-auth__switch {
   margin: 1.75rem 0 0;
   color: var(--fg-muted);
-  font-size: 0.875rem;
+  font-size: 1.0625rem;
 }
 
 .asca-auth__link {
@@ -131,7 +135,7 @@
   justify-content: center;
   gap: 0.25rem 1.25rem;
   color: var(--fg-muted);
-  font-size: 0.75rem;
+  font-size: 1.0625rem;
 }
 
 .asca-auth__legal a {
@@ -146,6 +150,89 @@
   outline: 2px solid var(--ring);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+.asca-auth input,
+.asca-auth button,
+.asca-auth summary {
+  min-height: 3rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.asca-auth input:not([type='checkbox']) {
+  min-width: 0;
+  height: auto;
+  padding-block: 0.65rem;
+}
+
+.asca-auth button {
+  height: auto;
+  padding-block: 0.65rem;
+  white-space: normal;
+}
+
+.asca-auth label {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.asca-auth a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  max-width: 100%;
+  padding-block: 0.5rem;
+}
+
+.asca-auth__password {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.asca-auth__password input {
+  flex: 1;
+}
+
+.asca-auth__password button {
+  flex-shrink: 0;
+  min-width: 3rem;
+}
+
+.asca-auth__returning {
+  padding: 1rem;
+  border: 2px solid var(--gold-600);
+  border-radius: 0.25rem;
+}
+
+.asca-auth__returning p + p {
+  margin-top: 0.75rem;
+}
+
+.asca-auth__returning--emphasis {
+  background: color-mix(in srgb, var(--gold-400) 20%, var(--bg));
+}
+
+.asca-auth__mail-help summary {
+  cursor: pointer;
+  padding-block: 0.5rem;
+  font-weight: 600;
+}
+
+.asca-auth__mail-help > :not(summary) {
+  margin-top: 1rem;
+}
+
+.asca-member-help {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 1.0625rem;
+  line-height: 1.6;
 }
 
 /* ── 작품 패널 ─────────────────────────────────────────────────────── */

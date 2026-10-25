@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Plus, Calendar, MapPin, Eye, Edit, Trash2, Filter } from 'lucide-react'
@@ -22,7 +22,7 @@ import { EXHIBITION_STATUS_LABELS } from '@/lib/types/exhibition-legacy'
 
 export function ExhibitionManagementClient() {
   const router = useRouter()
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
   const [loading, setLoading] = useState(true)
   const [exhibitions, setExhibitions] = useState<Exhibition[]>([])
   const [filteredExhibitions, setFilteredExhibitions] = useState<Exhibition[]>([])
@@ -32,15 +32,15 @@ export function ExhibitionManagementClient() {
   // Load exhibitions
   useEffect(() => {
     if (!isLoaded) return
-    if (!isSignedIn || !clerkUser) {
-      router.push('/sign-in')
+    if (!isSignedIn || !account?.artistIds[0]) {
+      router.push(account ? '/profile' : '/sign-in')
       return
     }
 
     const loadExhibitions = async () => {
-      setUserId(clerkUser.id)
+      setUserId(account.artistIds[0]!)
 
-      const { data, error } = await fetchArtistExhibitions(clerkUser.id, {
+      const { data, error } = await fetchArtistExhibitions(account.artistIds[0]!, {
         status: statusFilter === 'all' ? undefined : statusFilter,
       })
 
@@ -53,7 +53,7 @@ export function ExhibitionManagementClient() {
     }
 
     loadExhibitions()
-  }, [isLoaded, isSignedIn, clerkUser, router, statusFilter])
+  }, [isLoaded, isSignedIn, account, router, statusFilter])
 
   // Statistics
   const stats = {

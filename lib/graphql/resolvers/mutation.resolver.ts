@@ -188,7 +188,7 @@ export const mutationResolvers = {
   // ===================================
 
   createArtist: async (_: any, { input }: { input: any }, context: GraphQLContext) => {
-    requireAuth(context)
+    requireAdmin(context)
 
     const [artist] = await context.db
       .insert(schema.artists)
@@ -206,11 +206,11 @@ export const mutationResolvers = {
     { id, input }: { id: string; input: any },
     context: GraphQLContext
   ) => {
-    requireAuth(context)
+    requireAdmin(context)
 
     // Check if user owns this artist record or is admin
     const artist = await context.loaders.artistLoader.load(id)
-    if (artist.userId && artist.userId !== context.userId && context.user!.role !== 'admin') {
+    if (!context.artistIds?.includes(artist.id) && context.user!.role !== 'admin') {
       throw new Error('Not authorized to update this artist')
     }
 
@@ -234,7 +234,7 @@ export const mutationResolvers = {
   // ===================================
 
   createArtwork: async (_: any, { input }: { input: any }, context: GraphQLContext) => {
-    requireAuth(context)
+    requireAdmin(context)
 
     const [artwork] = await context.db
       .insert(schema.artworks)
@@ -259,13 +259,13 @@ export const mutationResolvers = {
     { id, input }: { id: string; input: any },
     context: GraphQLContext
   ) => {
-    requireAuth(context)
+    requireAdmin(context)
 
     // Check authorization
     const artwork = await context.loaders.artworkLoader.load(id)
     const artist = await context.loaders.artistLoader.load(artwork.artistId)
 
-    if (artist.userId && artist.userId !== context.userId && context.user!.role !== 'admin') {
+    if (!context.artistIds?.includes(artist.id) && context.user!.role !== 'admin') {
       throw new Error('Not authorized to update this artwork')
     }
 
@@ -286,13 +286,13 @@ export const mutationResolvers = {
   },
 
   deleteArtwork: async (_: any, { id }: { id: string }, context: GraphQLContext) => {
-    requireAuth(context)
+    requireAdmin(context)
 
     // Check authorization
     const artwork = await context.loaders.artworkLoader.load(id)
     const artist = await context.loaders.artistLoader.load(artwork.artistId)
 
-    if (artist.userId && artist.userId !== context.userId && context.user!.role !== 'admin') {
+    if (!context.artistIds?.includes(artist.id) && context.user!.role !== 'admin') {
       throw new Error('Not authorized to delete this artwork')
     }
 

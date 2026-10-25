@@ -1,10 +1,6 @@
-import { Suspense } from 'react'
-import { ArtworkUploadClient } from './artwork-upload-client'
+import { redirect } from 'next/navigation'
 
 export default function ArtworkUploadPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ArtworkUploadClient />
-    </Suspense>
-  )
+  // Use the real private Storage + owner-validated submission flow.
+  redirect('/archive/submit')
 }

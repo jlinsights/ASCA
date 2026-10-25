@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ImageUploader } from '@/components/ui/image-uploader'
 import { ArtworkSelector } from '@/components/exhibition/artwork-selector'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { fetchArtworksByArtist } from '@/lib/api/artworks'
 import { createExhibition } from '@/lib/api/exhibitions'
 import type { Artwork } from '@/lib/types/artwork-legacy'
@@ -24,7 +24,7 @@ interface SelectedArtwork extends Artwork {
 
 export function ExhibitionCreateClient() {
   const router = useRouter()
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
   const [loading, setLoading] = useState(false)
   const [artworks, setArtworks] = useState<Artwork[]>([])
   const [selectedArtworks, setSelectedArtworks] = useState<SelectedArtwork[]>([])
@@ -48,19 +48,19 @@ export function ExhibitionCreateClient() {
   useEffect(() => {
     const loadArtworks = async () => {
       if (!isLoaded) return
-      if (!isSignedIn || !clerkUser) {
-        router.push('/sign-in')
+      if (!isSignedIn || !account?.artistIds[0]) {
+        router.push(account ? '/profile' : '/sign-in')
         return
       }
 
-      const { data } = await fetchArtworksByArtist(clerkUser.id)
+      const { data } = await fetchArtworksByArtist(account.artistIds[0]!)
       if (data) {
         setArtworks(data)
       }
     }
 
     loadArtworks()
-  }, [router, isLoaded, isSignedIn, clerkUser])
+  }, [router, isLoaded, isSignedIn, account])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target

@@ -1,5 +1,7 @@
+import { profileEditorTranslations } from './translations/profile-editor'
 import { archiveTranslations } from './translations/archive'
 import { authTranslations } from './translations/auth'
+import { nativeAuthTranslations } from './translations/native-auth'
 import { flipbookTranslations } from './translations/flipbooks'
 import { regulationsTranslations } from './translations/regulations'
 import type { Language, TranslationData } from './types'
@@ -23,6 +25,8 @@ export const translations: TranslationData = {
     ...brandTranslations.ko,
     ...archiveTranslations.ko,
     ...authTranslations.ko,
+    ...nativeAuthTranslations.ko,
+    ...profileEditorTranslations.ko,
     ...flipbookTranslations.ko,
     ...regulationsTranslations.ko,
 
@@ -148,6 +152,8 @@ export const translations: TranslationData = {
     ...brandTranslations.en,
     ...archiveTranslations.en,
     ...authTranslations.en,
+    ...nativeAuthTranslations.en,
+    ...profileEditorTranslations.en,
     ...flipbookTranslations.en,
     ...regulationsTranslations.en,
 
@@ -282,6 +288,8 @@ export const translations: TranslationData = {
     ...brandTranslations.ja,
     ...archiveTranslations.ja,
     ...authTranslations.ja,
+    ...nativeAuthTranslations.ja,
+    ...profileEditorTranslations.ja,
     ...flipbookTranslations.ja,
     ...regulationsTranslations.ja,
 
@@ -407,6 +415,8 @@ export const translations: TranslationData = {
     ...brandTranslations.zh,
     ...archiveTranslations.zh,
     ...authTranslations.zh,
+    ...nativeAuthTranslations.zh,
+    ...profileEditorTranslations.zh,
     ...flipbookTranslations.zh,
     ...regulationsTranslations.zh,
 

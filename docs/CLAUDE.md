@@ -104,10 +104,11 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   service role 은 RLS 를 건너뛰어 숨긴 작가가 새어 나간다 — 상세 API
   `/api/artists/[id]` 가 그랬다(#117). 공개 범위를 검증할 때는 목록뿐 아니라
   **상세 API 까지** 숨긴 작가 id 로 404 를 확인한다.
-- 계정–작가 연결 칸 `claimed_by_user_id` 는 있지만 **채워진 행이 없고** 연결하는
-  화면도 없다. 그래서 `/profile/edit` 은 지금 누구에게나 조회·저장이 실패한다
-  (Clerk 사용자 id 를 작가 uuid 로 조회하고, 브라우저 anon 클라이언트로 직접
-  update 한다). Supabase Auth 전환 후 서버 API 로 다시 만든다.
+- 운영 확인 당시 `claimed_by_user_id`가 채워진 작가는 없고 연결 화면도 없다. 이
+  브랜치의 `/profile/edit`은 본인 연결이 있는 경우 서버 API로 조회·저장한다.
+  연결 값은 `auth.users.id` UUID 문자열(text)이며 작가 UUID와 구분한다. 연결
+  화면은 후속 작업이다. 공식 이름·등급·회비·공개 상태·소유권을 본인이 변경하지
+  못한다. 계약은 `docs/03-analysis/artist-profile-self-service.md`를 본다.
 
 ## Primary Commands
 
@@ -178,10 +179,25 @@ security:
 
 ### Authentication
 
-- 지금 main 은 **Clerk** 이다(Supabase Auth 는 제거된 상태).
-- ⚠️ **Supabase Auth 로 전환하는 작업이 `feat/supabase-auth` 에서 진행 중이다.**
-  인증·헤더·`/profile`·관리자 보호 라우트를 그 브랜치가 고치고 있으니, 이 영역을
-  바꾸기 전에 그 브랜치와 겹치는지 확인한다.
+- 이 브랜치의 런타임은 **Supabase Auth**다. 운영 제공자 전환·배포는 아직
+  수행하지 않았다.
+- 계획: `docs/01-plan/features/supabase-auth-migration.plan.md`.
+  로그인·가입·복구·MFA· cookie 갱신과 API의 공통 계정 계층을 연결했다. 검증
+  범위는 `docs/03-analysis/supabase-auth-session-migration.md`, 실제
+  서비스·브라우저 검증과 운영 준비는
+  `docs/03-analysis/supabase-auth-cutover-readiness.md`를 확인한다.
+- Supabase 계정은 `account_profiles`, 이전 계정 매핑은 서버 전용
+  `auth_identity_links`를 쓴다. Clerk webhook의 `user_profiles`와 섞지 않는다.
+  가입만으로 작가 소유권·협회 정회원 자격을 부여하지 않는다.
+- 계정 UUID와 작가 UUID는 다르다. `get_my_artist_ids()`로 본인에게 연결된 기존
+  작가 ID를 조회한다.
+- `claimed_by_user_id`는 `auth.users.id`의 UUID 문자열(text)이다. 작가 UUID와
+  혼동하지 않는다. 본인 프로필 저장은 `/api/profile/artists/[id]`의 소유권
+  검사와 허용 열만 사용한다. 공개 상태·등급·회비·소유권은 본인이 수정하지
+  못한다. 계약은 `docs/03-analysis/artist-profile-self-service.md`를 확인한다.
+- 신규 권한 검증은 검증된 세션 + DB 역할을 사용한다. `user_metadata`나 이메일
+  일치로 관리자 권한을 부여하지 않는다.
+- `requireSupabaseAdmin`은 DB `admin` 역할과 검증된 MFA `aal2`를 모두 요구한다.
 - Server Actions for admin/membership are being replaced by secure API routes
 
 ### Multi-language Pattern
@@ -220,14 +236,17 @@ All content tables use consistent multilingual structure:
 
 ### 관리자 판정
 
-- 관리자 계정은 `info@orientalcalligraphy.org` 다. 비밀번호 로그인이다(자동
-  로그인·`/admin/dev-login` 은 없다).
-- 관리자 여부는 `lib/archive/writer.ts` 의 `archiveIdentity()` 가 정한다 — Clerk
-  의 **검증된 대표 이메일**이 Vercel 환경변수 `ADMIN_EMAILS`(또는
-  `SUPER_ADMIN_EMAILS`)에 있으면 관리자다(`lib/auth/admin-roles.ts`). 관리자 API
-  는 이걸로 401·403 을 가르고 그다음에만 service role 을 쓴다.
-- ⚠️ `lib/auth/middleware.ts` 의 관리자 확인은 DB 에 **없는 `user_profiles`**
-  테이블을 봐서 항상 실패한다. 새 관리자 기능은 `archiveIdentity()` 를 쓴다.
+- 운영 관리자 준비 대상은 `info@orientalcalligraphy.org`다. 검증된 이메일로
+  Supabase 계정을 만들고 `public.account_profiles.role`을 `admin`으로 부여한 뒤
+  `/auth/mfa`에서 TOTP를 등록·검증한다. 이메일만으로 자동 승격하지 않는다.
+- `archiveIdentity()`는 `getAccount()`의 검증된 DB 역할과 MFA를 사용한다.
+  `role === 'admin' && assuranceLevel === 'aal2'`인 경우에만 관리자다. 반환 계약
+  `{ userId, admin }`은 유지하며 userId는 `auth.users.id` UUID다.
+- `ADMIN_EMAILS`·`SUPER_ADMIN_EMAILS`와 Clerk `user_profiles`는 native 관리자
+  판정에 사용하지 않는다. 기존 Clerk 설정은 롤백 검증까지 보존한다.
+- 관리자 초기 준비와 마이그레이션 적용 → Preview 검증 → 운영 배포 절차는
+  `docs/03-analysis/supabase-auth-admin-cutover.md`와 PR 체크리스트를 따른다.
+  초기 관리자 로그인·MFA·회비 API 검증을 마치기 전 운영 전환하지 않는다.
 
 ### 동작하는 관리 화면
 
@@ -238,8 +257,9 @@ All content tables use consistent multilingual structure:
   맞추고, 응답에 바뀐 `visibility` 가 온다.
 - 메뉴(`components/admin/admin-nav-items.ts`)에는 **페이지가 있는 화면만**
   싣는다. 테스트가 href 마다 `app/admin/**/page.tsx` 가 있는지 확인한다.
-- ⚠️ `/admin/contests` 는 위 `user_profiles` 때문에 항상 튕기고,
-  `/admin/membership` 은 예시 데이터라 메뉴에서 뺐다.
+- `/admin/contests`의 인증 경계는 공통 Supabase 계정 계층으로 교체했다. 레거시
+  회원·공모전 제품 기능을 완성한 것으로 보지 않으며, `/admin/membership`의 예시
+  화면과 함께 기존 메뉴 제외 상태를 유지한다.
 
 ### Permission System (RBAC)
 
@@ -399,8 +419,8 @@ and refactor using this standardized process:
 
 - **Database Schema**: `lib/db/schema.ts` (primary PostgreSQL schema)
 - **Database Config**: `drizzle.config.ts` (points to PostgreSQL)
-- **Admin Auth**: `archiveIdentity()` in `lib/archive/writer.ts` (Clerk +
-  `ADMIN_EMAILS`)
+- **Admin Auth**: `archiveIdentity()` in `lib/archive/writer.ts` →
+  `lib/auth/server.ts` (DB `admin` 역할 + 검증된 MFA `aal2`)
 - **CSRF Guard**: `proxy.ts` → `lib/security/origin-check.ts`
 - **Terms of Service**: `app/terms-of-service/_data/terms-articles.ts`
 - **Permission Mapping**: `lib/admin/permissions.ts`
@@ -416,6 +436,11 @@ and refactor using this standardized process:
 
 - Database tests: `npx tsx lib/db/test.ts`
 - Component tests with React Testing Library
+- Auth RLS는 빈 로컬 `asca_auth_test_*` DB에 `AUTH_TEST_DATABASE_URL`을 지정하고
+  `npm run test:auth-db`로 검사한다. 실제 로컬 Auth·프로필 API 검증은
+  `AUTH_LOCAL_STATUS_FILE`과
+  `npm run test:auth-service`·`test:profile-service`를 사용한다. 허용 주소와
+  준비 절차는 전환·프로필 검증 기록을 따른다.
 - 실제 Postgres 검증은 CI `archive-db` 가 돌린다 —
   `scripts/test-archive-upgrade.mjs`·`test-archive.mjs`·`test-archive-ui.mjs`.
   RLS·열 grant·등급 트리거 같은 DB 규칙은 jest mock 으로는 못 잡으니 여기에
@@ -442,3 +467,15 @@ and refactor using this standardized process:
 
 The project emphasizes type safety, multilingual support, and robust data
 synchronization between multiple systems.
+
+<!-- prettier-ignore-start -->
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+<!-- prettier-ignore-end -->

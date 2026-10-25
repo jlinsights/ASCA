@@ -16,7 +16,7 @@ import { Separator } from '@/components/ui/separator'
 import { Checkbox } from '@/components/ui/checkbox'
 import { fetchContestById, submitContestApplication } from '@/lib/api/contests'
 import { getSupabaseClient } from '@/lib/supabase'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import { Contest, canApplyToContest } from '@/lib/types/contest-new-legacy'
 import type { Artwork } from '@/lib/types/artwork-legacy'
 import { artworkImageUrl } from '@/lib/api/artwork-image'
@@ -25,7 +25,7 @@ export default function ContestApplyPage() {
   const params = useParams()
   const router = useRouter()
   const contestId = params.id as string
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
 
   const [contest, setContest] = useState<Contest | null>(null)
   const [loading, setLoading] = useState(true)
@@ -51,8 +51,10 @@ export default function ContestApplyPage() {
     if (!isLoaded) return
 
     const init = async () => {
-      if (!isSignedIn || !clerkUser) {
-        router.push('/sign-in?redirect=' + encodeURIComponent(window.location.pathname))
+      if (!isSignedIn || !account?.artistIds[0]) {
+        router.push(
+          account ? '/profile' : '/sign-in?next=' + encodeURIComponent(window.location.pathname)
+        )
         return
       }
 
@@ -64,29 +66,19 @@ export default function ContestApplyPage() {
           throw new Error('인증 시스템을 사용할 수 없습니다.')
         }
 
-        const clerkId = clerkUser.id
-        setUserId(clerkId)
+        const artistId = account.artistIds[0]!
+        setUserId(artistId)
 
-        const clerkEmail = clerkUser.primaryEmailAddress?.emailAddress ?? undefined
+        const accountEmail = account.email ?? undefined
 
-        // Get user profile for auto-fill
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('name, email, phone')
-          .eq('id', clerkId)
-          .single()
-
-        if (profile) {
-          setArtistName(profile.name || '')
-          setArtistEmail(profile.email || clerkEmail || '')
-          setArtistPhone(profile.phone || '')
-        }
+        setArtistName(account.displayName)
+        setArtistEmail(account.email)
 
         // Get user's artworks
         const { data: userArtworks } = await supabase
           .from('artworks')
           .select('*')
-          .eq('artist_id', clerkId)
+          .eq('artist_id', artistId)
           .order('created_at', { ascending: false })
 
         if (userArtworks) {
@@ -111,7 +103,7 @@ export default function ContestApplyPage() {
           .from('contest_applications')
           .select('id')
           .eq('contest_id', contestId)
-          .eq('artist_id', clerkId)
+          .eq('artist_id', artistId)
           .single()
 
         if (existingApp) {
@@ -127,7 +119,7 @@ export default function ContestApplyPage() {
     if (contestId) {
       void init()
     }
-  }, [contestId, router, isLoaded, isSignedIn, clerkUser])
+  }, [contestId, router, isLoaded, isSignedIn, account])
 
   const toggleArtworkSelection = (artworkId: string) => {
     if (selectedArtworkIds.includes(artworkId)) {
@@ -183,7 +175,7 @@ export default function ContestApplyPage() {
           notes,
           paymentStatus: contest.entryFee === 0 ? 'waived' : 'pending',
         },
-        clerkUser?.id ?? ''
+        account?.id ?? ''
       )
 
       if (submitError || !data) {

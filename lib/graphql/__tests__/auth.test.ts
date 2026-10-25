@@ -378,8 +378,8 @@ describe('Authentication and Authorization', () => {
         )
       })
 
-      it('should allow authenticated users to create artists', async () => {
-        const context = createAuthContext({ id: 'user-1' })
+      it('should allow verified administrators to create artists', async () => {
+        const context = createAdminContext({ id: 'user-1' })
         const artist = { id: 'artist-1', userId: 'user-1', name: 'Test Artist' }
 
         context.db.insert = jest.fn(() => ({
@@ -399,8 +399,8 @@ describe('Authentication and Authorization', () => {
     })
 
     describe('updateArtist mutation', () => {
-      it('should allow artist to update their own profile', async () => {
-        const context = createAuthContext({ id: 'user-1', role: 'artist' })
+      it('should allow verified administrator to update their own profile', async () => {
+        const context = createAdminContext({ id: 'user-1' })
         const artist = { id: 'artist-1', userId: 'user-1', name: 'Original Name' }
         ;(context.loaders.artistLoader.load as jest.Mock).mockResolvedValue(artist)
 
@@ -459,8 +459,8 @@ describe('Authentication and Authorization', () => {
         )
       })
 
-      it('should allow artist to delete their own artwork', async () => {
-        const context = createAuthContext({ id: 'user-1' })
+      it('should allow verified administrator to delete their own artwork', async () => {
+        const context = createAdminContext({ id: 'user-1' })
         const artist = { id: 'artist-1', userId: 'user-1' }
         const artwork = { id: 'artwork-1', artistId: 'artist-1' }
 

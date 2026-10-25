@@ -284,8 +284,18 @@ describe('GraphQL API Integration Tests', () => {
           returning: jest.fn().mockResolvedValue([mockMember]),
         })
 
-        const { auth } = require('@clerk/nextjs/server')
-        auth.mockResolvedValueOnce({ userId: 'user-1' })
+        const { auth } = require('@/lib/auth/server')
+        auth.mockResolvedValueOnce({
+          userId: 'user-1',
+          account: {
+            id: 'user-1',
+            role: 'member',
+            assuranceLevel: 'aal1',
+            artistIds: [],
+            email: 'test@example.com',
+            displayName: 'Test User',
+          },
+        })
 
         const request = createMockRequest(
           {
@@ -325,8 +335,18 @@ describe('GraphQL API Integration Tests', () => {
         db.query.users.findFirst.mockResolvedValue(mockUser)
 
         // Clerk session mock: authenticated as non-admin user
-        const { auth } = require('@clerk/nextjs/server')
-        auth.mockResolvedValueOnce({ userId: 'user-1' })
+        const { auth } = require('@/lib/auth/server')
+        auth.mockResolvedValueOnce({
+          userId: 'user-1',
+          account: {
+            id: 'user-1',
+            role: 'member',
+            assuranceLevel: 'aal1',
+            artistIds: [],
+            email: 'test@example.com',
+            displayName: 'Test User',
+          },
+        })
 
         const request = createMockRequest(
           {
@@ -369,8 +389,18 @@ describe('GraphQL API Integration Tests', () => {
           returning: jest.fn().mockResolvedValue([approvedMember]),
         })
 
-        const { auth } = require('@clerk/nextjs/server')
-        auth.mockResolvedValueOnce({ userId: 'admin-1' })
+        const { auth } = require('@/lib/auth/server')
+        auth.mockResolvedValueOnce({
+          userId: 'admin-1',
+          account: {
+            id: 'admin-1',
+            role: 'admin',
+            assuranceLevel: 'aal2',
+            artistIds: [],
+            email: 'admin@example.com',
+            displayName: 'Admin',
+          },
+        })
 
         const request = createMockRequest(
           {
@@ -530,8 +560,18 @@ describe('GraphQL API Integration Tests', () => {
 
         // Clerk session mock: authenticated user (Bearer header is legacy — actual
         // auth is via Clerk session. Mock auth() to return userId.)
-        const { auth } = require('@clerk/nextjs/server')
-        auth.mockResolvedValueOnce({ userId: 'user-1' })
+        const { auth } = require('@/lib/auth/server')
+        auth.mockResolvedValueOnce({
+          userId: 'user-1',
+          account: {
+            id: 'user-1',
+            role: 'member',
+            assuranceLevel: 'aal1',
+            artistIds: [],
+            email: 'test@example.com',
+            displayName: 'Test User',
+          },
+        })
 
         const request = createMockRequest(
           {

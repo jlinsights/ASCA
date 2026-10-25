@@ -27,7 +27,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { fetchContestById, incrementContestViews } from '@/lib/api/contests'
-import { useUser } from '@clerk/nextjs'
+import { useAccount } from '@/components/auth/session-provider'
 import {
   Contest,
   CONTEST_STATUS_LABELS,
@@ -42,7 +42,7 @@ export default function ContestDetailPage() {
   const params = useParams()
   const router = useRouter()
   const contestId = params.id as string
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded, isSignedIn, user: account } = useAccount()
 
   const [contest, setContest] = useState<Contest | null>(null)
   const [loading, setLoading] = useState(true)
@@ -51,8 +51,8 @@ export default function ContestDetailPage() {
 
   useEffect(() => {
     if (!isLoaded) return
-    setIsAuthenticated(!!(isSignedIn && clerkUser))
-  }, [isLoaded, isSignedIn, clerkUser])
+    setIsAuthenticated(!!(isSignedIn && account))
+  }, [isLoaded, isSignedIn, account])
 
   useEffect(() => {
     const loadContest = async () => {
