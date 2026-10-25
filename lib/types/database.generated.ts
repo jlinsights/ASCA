@@ -33,6 +33,89 @@ export type Database = {
         }
         Relationships: []
       }
+      artist_claim_requests: {
+        Row: {
+          account_id: string
+          artist_id: string | null
+          claimed_art_name: string | null
+          claimed_name: string
+          claimed_name_hanja: string | null
+          created_at: string
+          decision_note: string | null
+          id: string
+          note: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          revoked_at: string | null
+          revoked_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          account_id: string
+          artist_id?: string | null
+          claimed_art_name?: string | null
+          claimed_name: string
+          claimed_name_hanja?: string | null
+          created_at?: string
+          decision_note?: string | null
+          id?: string
+          note?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          revoked_at?: string | null
+          revoked_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          artist_id?: string | null
+          claimed_art_name?: string | null
+          claimed_name?: string
+          claimed_name_hanja?: string | null
+          created_at?: string
+          decision_note?: string | null
+          id?: string
+          note?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          revoked_at?: string | null
+          revoked_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'artist_claim_requests_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_claim_requests_artist_id_fkey'
+            columns: ['artist_id']
+            isOneToOne: false
+            referencedRelation: 'artists'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_claim_requests_reviewed_by_fkey'
+            columns: ['reviewed_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_claim_requests_revoked_by_fkey'
+            columns: ['revoked_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       artist_contacts: {
         Row: {
           artist_id: string
@@ -1142,6 +1225,16 @@ export type Database = {
       }
     }
     Functions: {
+      approve_artist_claim: {
+        Args: {
+          p_admin: string
+          p_artist?: string
+          p_note?: string
+          p_request: string
+        }
+        Returns: string
+      }
+      assert_claim_reviewer: { Args: { p_admin: string }; Returns: undefined }
       get_my_artist_ids: {
         Args: never
         Returns: {
@@ -1161,6 +1254,14 @@ export type Database = {
         Returns: undefined
       }
       is_archive_path: { Args: { value: string }; Returns: boolean }
+      reject_artist_claim: {
+        Args: { p_admin: string; p_note?: string; p_request: string }
+        Returns: undefined
+      }
+      revoke_artist_claim: {
+        Args: { p_admin: string; p_note?: string; p_request: string }
+        Returns: undefined
+      }
     }
     Enums: {
       artwork_category:
