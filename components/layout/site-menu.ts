@@ -52,6 +52,7 @@ const regulations: MenuLink[] = REGULATIONS.map(entry => ({
 
 const news: MenuLink[] = [
   { labelKey: 'siteNewsNotices', href: '/notice' },
+  { labelKey: 'siteNavCommunityBoard', href: '/community/board' },
   { labelKey: 'siteNewsEvents', href: '/events' },
   { labelKey: 'siteNavGallery', href: '/gallery' },
   { labelKey: 'siteNavBlog', href: '/blog' },

@@ -1,1 +1,1 @@
-✨ feat: 회원 게시판(/community/board) — 누구나 읽고 로그인 회원이 글을 쓰며, 사무국(관리자·MFA)이 글을 숨기거나 되살린다. follow.art 커뮤니티 보드 구조를 Ink System 으로
+🧭 feat: 헤더·푸터 소식 메뉴에 회원 게시판(/community/board) 링크 추가
