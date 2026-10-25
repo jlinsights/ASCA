@@ -1,0 +1,68 @@
+import type { TranslationData } from '../types'
+
+// 내 작가 공간의 "내 출품" 섹션. 공모전·부문 이름은 데이터에서 오므로 여기엔 장르 말을 넣지 않는다.
+export const contestEntriesTranslations: TranslationData = {
+  ko: {
+    entriesTitle: '내 출품',
+    entriesLoading: '출품 내역을 불러오는 중…',
+    entriesError: '출품 내역을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.',
+    entriesEmpty: '이 계정으로 확인된 출품이 아직 없습니다.',
+    entriesEmptyHint:
+      '다른 이메일로 출품하셨다면 사무국에 알려 주세요. 본인 확인 후 이 계정에 이어 드립니다.',
+    entriesUntitled: '작품명 미기재',
+    entriesFeeConfirmed: '출품비 확인',
+    entriesFeePending: '출품비 확인 중',
+    entriesFeeWithdrawn: '출품 취소',
+    entriesResultAwarded: '수상',
+    entriesResultPending: '심사 중',
+    entriesResultNotSelected: '미선정',
+    entriesResultWithdrawn: '출품 취소',
+  },
+  en: {
+    entriesTitle: 'My entries',
+    entriesLoading: 'Loading your entries…',
+    entriesError: 'We could not load your entries. Please try again shortly.',
+    entriesEmpty: 'No entries have been confirmed for this account yet.',
+    entriesEmptyHint:
+      'If you entered with a different email, let the office know. Once they confirm it is you, they will link it to this account.',
+    entriesUntitled: 'Untitled',
+    entriesFeeConfirmed: 'Fee received',
+    entriesFeePending: 'Fee being checked',
+    entriesFeeWithdrawn: 'Withdrawn',
+    entriesResultAwarded: 'Awarded',
+    entriesResultPending: 'Under review',
+    entriesResultNotSelected: 'Not selected',
+    entriesResultWithdrawn: 'Withdrawn',
+  },
+  ja: {
+    entriesTitle: 'わたしの出品',
+    entriesLoading: '出品履歴を読み込んでいます…',
+    entriesError: '出品履歴を読み込めませんでした。しばらくしてからもう一度お試しください。',
+    entriesEmpty: 'このアカウントで確認された出品はまだありません。',
+    entriesEmptyHint:
+      '別のメールアドレスで出品された場合は事務局にお知らせください。本人確認の後、このアカウントにおつなぎします。',
+    entriesUntitled: '作品名未記入',
+    entriesFeeConfirmed: '出品料確認済み',
+    entriesFeePending: '出品料確認中',
+    entriesFeeWithdrawn: '出品取り消し',
+    entriesResultAwarded: '受賞',
+    entriesResultPending: '審査中',
+    entriesResultNotSelected: '選外',
+    entriesResultWithdrawn: '出品取り消し',
+  },
+  zh: {
+    entriesTitle: '我的參展作品',
+    entriesLoading: '正在載入參展紀錄…',
+    entriesError: '無法載入參展紀錄，請稍後再試。',
+    entriesEmpty: '此帳號尚無已確認的參展紀錄。',
+    entriesEmptyHint: '若您以其他電子郵件參展，請告知辦公室。確認本人後，我們會將其連結至此帳號。',
+    entriesUntitled: '未填寫作品名',
+    entriesFeeConfirmed: '參展費已確認',
+    entriesFeePending: '參展費確認中',
+    entriesFeeWithdrawn: '已撤回',
+    entriesResultAwarded: '獲獎',
+    entriesResultPending: '評審中',
+    entriesResultNotSelected: '未入選',
+    entriesResultWithdrawn: '已撤回',
+  },
+}

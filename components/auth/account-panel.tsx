@@ -5,6 +5,7 @@ import { useState, type FormEvent } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { MemberHelp } from './member-help'
 import { ArtistClaimSection } from './artist-claim-section'
+import { MyContestEntries } from './my-contest-entries'
 import { useAccount } from './session-provider'
 import { useLanguage } from '@/contexts/language-context'
 import { createAuthBrowserClient } from '@/lib/auth/supabase/browser'
@@ -82,6 +83,7 @@ export function AccountPanel() {
           <Link href='/archive/submit'>{t('authNativeArchive')}</Link>
         </Button>
       )}
+      <MyContestEntries />
       {user.role === 'admin' && (
         <Button asChild variant='outline'>
           <Link href={user.assuranceLevel === 'aal2' ? '/admin' : '/auth/mfa?next=/admin'}>
