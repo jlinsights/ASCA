@@ -4,6 +4,7 @@ import { CommunityHero } from '@/components/community/hero'
 import { DaoArchitecture } from '@/components/community/dao-architecture'
 import { ImseoCard } from '@/components/community/imseo-card'
 import { CafeEntry } from '@/components/community/cafe-entry'
+import { BoardEntry } from '@/components/community/board-entry'
 import { MembershipBranch } from '@/components/community/membership-branch'
 
 /**
@@ -34,6 +35,7 @@ export default function CommunityPage() {
         <CommunityHero />
         <DaoArchitecture />
         <ImseoCard />
+        <BoardEntry />
         <CafeEntry />
         <MembershipBranch />
       </main>

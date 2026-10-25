@@ -619,6 +619,151 @@ export type Database = {
           },
         ]
       }
+      community_comments: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          deleted_at: string | null
+          hidden_at: string | null
+          hidden_by: string | null
+          id: string
+          thread_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          deleted_at?: string | null
+          hidden_at?: string | null
+          hidden_by?: string | null
+          id?: string
+          thread_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          deleted_at?: string | null
+          hidden_at?: string | null
+          hidden_by?: string | null
+          id?: string
+          thread_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'community_comments_author_id_fkey'
+            columns: ['author_id']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'community_comments_hidden_by_fkey'
+            columns: ['hidden_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'community_comments_thread_id_fkey'
+            columns: ['thread_id']
+            isOneToOne: false
+            referencedRelation: 'community_threads'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      community_reactions: {
+        Row: {
+          account_id: string
+          created_at: string
+          thread_id: string
+        }
+        Insert: {
+          account_id: string
+          created_at?: string
+          thread_id: string
+        }
+        Update: {
+          account_id?: string
+          created_at?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'community_reactions_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'community_reactions_thread_id_fkey'
+            columns: ['thread_id']
+            isOneToOne: false
+            referencedRelation: 'community_threads'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      community_threads: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          deleted_at: string | null
+          hidden_at: string | null
+          hidden_by: string | null
+          hidden_reason: string | null
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          deleted_at?: string | null
+          hidden_at?: string | null
+          hidden_by?: string | null
+          hidden_reason?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          deleted_at?: string | null
+          hidden_at?: string | null
+          hidden_by?: string | null
+          hidden_reason?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'community_threads_author_id_fkey'
+            columns: ['author_id']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'community_threads_hidden_by_fkey'
+            columns: ['hidden_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       contest_entries: {
         Row: {
           airtable_record_id: string
