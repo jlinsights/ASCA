@@ -72,21 +72,8 @@ const contestApplications: MenuLink[] = [
 ]
 
 export const headerMenu: MenuGroup[] = [
+  // 순서: 협회 소개 · 공모전 · 전시회 · 작가 · 작품 · 소식 · 정관 및 규정 · 회원·후원 (2026-10-25)
   { key: 'about', labelKey: 'siteNavAbout', href: '/introductions', items: about },
-  {
-    key: 'artists',
-    labelKey: 'siteNavArtists',
-    href: '/artists',
-    items: [
-      { labelKey: 'siteNavArtistsIntro', href: '/artists' },
-      { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
-      { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
-      ...artistGrades,
-    ],
-  },
-  { key: 'exhibitions', labelKey: 'siteNavExhibitions', href: '/exhibitions', items: exhibitions },
-  // 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
-  { key: 'artworks', labelKey: 'siteNavArtworks', href: '/artworks' },
   {
     key: 'contests',
     labelKey: 'siteNavContests',
@@ -98,6 +85,20 @@ export const headerMenu: MenuGroup[] = [
       { labelKey: 'siteContestMine', href: '/profile/applications' },
     ],
   },
+  { key: 'exhibitions', labelKey: 'siteNavExhibitions', href: '/exhibitions', items: exhibitions },
+  {
+    key: 'artists',
+    labelKey: 'siteNavArtists',
+    href: '/artists',
+    items: [
+      { labelKey: 'siteNavArtistsIntro', href: '/artists' },
+      { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
+      { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
+      ...artistGrades,
+    ],
+  },
+  // 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
+  { key: 'artworks', labelKey: 'siteNavArtworks', href: '/artworks' },
   // 공지사항·행사는 옛 CMS 데이터가 없어 비어 있다 — 메뉴 머리는 사진이 있는 갤러리로 보낸다
   { key: 'news', labelKey: 'siteFtNews', href: '/gallery', items: news },
   {
