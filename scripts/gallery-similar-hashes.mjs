@@ -12,6 +12,7 @@
 
 import { mkdir, readFile, writeFile, access } from 'node:fs/promises'
 import path from 'node:path'
+import prettier from 'prettier'
 import sharp from 'sharp'
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')
@@ -110,10 +111,10 @@ async function main() {
       .sort()
       .map(key => [key, hashes[key]])
   )
-  await writeFile(
-    OUT,
-    `${JSON.stringify({ version: 1, hashBits: HASH_SIZE * HASH_SIZE, items: sorted }, null, 2)}\n`
-  )
+  // 저장소 Prettier 설정으로 맞춘다 — 그대로 쓰면 CI 의 format:check 가 막는다
+  const json = JSON.stringify({ version: 1, hashBits: HASH_SIZE * HASH_SIZE, items: sorted })
+  const options = (await prettier.resolveConfig(OUT)) ?? {}
+  await writeFile(OUT, await prettier.format(json, { ...options, filepath: OUT }))
   console.log(`해시 ${Object.keys(sorted).length}/${keys.length}건 → ${path.relative(ROOT, OUT)}`)
   if (failures.length > 0) {
     console.error(`실패 ${failures.length}건 (이 사진들은 묶이지 않고 그대로 보입니다)`)
