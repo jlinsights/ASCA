@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { GalleryCategory, GalleryItem } from '@/lib/types/gallery/gallery-legacy'
+import { cardRatio, catIcon, catName, photoCaption, photoDescription } from './gallery-photo'
 
 export const PAGE_SIZE = 24
 
@@ -13,26 +14,8 @@ export interface GalleryPaginationData {
   totalCount: number
   totalPages: number
   hasMore: boolean
-}
-
-const CATEGORY_META: Record<string, { icon: string; name: string }> = {
-  committee: { icon: '👥', name: '심사위원회' },
-  contest: { icon: '🏆', name: '휘호대회' },
-  exhibition: { icon: '🖼️', name: '전시회' },
-  group: { icon: '👨‍👩‍👧‍👦', name: '단체사진' },
-  award: { icon: '🏅', name: '시상기념' },
-  ceremony: { icon: '🎉', name: '개막식 및 시상식' },
-  event: { icon: '📸', name: '행사 이모저모' },
-  people: { icon: '👤', name: '인물/참석자' },
-  sac: { icon: '🏛️', name: '전시장 풍경' },
-}
-
-function catIcon(c: string) {
-  return CATEGORY_META[c]?.icon ?? '📷'
-}
-
-function catName(c: string) {
-  return CATEGORY_META[c]?.name ?? c
+  /** 비슷한 사진을 접기 전 사진 수 */
+  photoCount?: number
 }
 
 export function FilterBar({
@@ -42,6 +25,8 @@ export function FilterBar({
   category,
   search,
   totalCount,
+  photoCount,
+  showAllSimilar,
   onChange,
 }: {
   availableYears: number[]
@@ -50,8 +35,12 @@ export function FilterBar({
   category: string
   search: string
   totalCount: number
+  /** 접기 전 사진 수 — 대표 사진 수와 다르면 비슷한 사진이 묶여 있다 */
+  photoCount: number
+  showAllSimilar: boolean
   onChange: (updates: Record<string, string>) => void
 }) {
+  const folded = photoCount - totalCount
   const [localSearch, setLocalSearch] = useState(search)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -149,33 +138,52 @@ export function FilterBar({
         ))}
       </div>
 
-      <p className='text-center text-sm text-muted-foreground' role='status' aria-live='polite'>
-        {totalCount > 0 ? (
-          <>
-            <strong className='text-foreground'>{totalCount}</strong>개의 사진
-          </>
-        ) : (
-          '검색 결과가 없습니다'
+      <div className='flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-muted-foreground'>
+        <p role='status' aria-live='polite'>
+          {totalCount === 0 ? (
+            '검색 결과가 없습니다'
+          ) : showAllSimilar || folded === 0 ? (
+            <>
+              <strong className='text-foreground'>{totalCount}</strong>장의 사진
+            </>
+          ) : (
+            <>
+              <strong className='text-foreground'>{totalCount}</strong>장 · 연속 촬영한 비슷한 사진{' '}
+              {folded}장은 묶어 두었습니다
+            </>
+          )}
+        </p>
+        {(folded > 0 || showAllSimilar) && (
+          <button
+            type='button'
+            aria-pressed={showAllSimilar}
+            onClick={() => onChange({ similar: showAllSimilar ? '' : 'all' })}
+            className='min-h-11 px-1 font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground'
+          >
+            {showAllSimilar ? '비슷한 사진 묶기' : '비슷한 사진도 모두 보기'}
+          </button>
         )}
-      </p>
+      </div>
     </div>
   )
 }
 
-const ASPECT_RATIOS = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[5/4]']
-
 export function GalleryCard({
   item,
   index,
+  showCategory,
   onClick,
 }: {
   item: GalleryItem
   index: number
+  /** 분류로 거르지 않은 목록에서만 분류 표시 — 거른 목록에선 모든 카드가 같은 말을 반복한다 */
+  showCategory: boolean
   onClick: (item: GalleryItem) => void
 }) {
   const [loaded, setLoaded] = useState(false)
   const [errored, setErrored] = useState(false)
-  const ratio = ASPECT_RATIOS[index % ASPECT_RATIOS.length]
+  const similarCount = item.similar?.length ?? 0
+  const caption = photoCaption(item)
 
   return (
     <motion.div
@@ -187,7 +195,7 @@ export function GalleryCard({
       onClick={() => onClick(item)}
       role='button'
       tabIndex={0}
-      aria-label={`${item.title} 보기`}
+      aria-label={`${caption} 사진 크게 보기${similarCount > 1 ? ` (비슷한 사진 ${similarCount}장)` : ''}`}
       onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
@@ -195,7 +203,10 @@ export function GalleryCard({
         }
       }}
     >
-      <div className={`relative ${ratio} bg-muted rounded-xl overflow-hidden`}>
+      <div
+        className='relative bg-muted rounded-xl overflow-hidden'
+        style={{ aspectRatio: cardRatio(item) }}
+      >
         {!loaded && !errored && (
           <div className='absolute inset-0 animate-pulse bg-gradient-to-r from-muted via-muted-foreground/10 to-muted' />
         )}
@@ -206,23 +217,42 @@ export function GalleryCard({
         )}
         <Image
           src={item.thumbnail || item.src}
-          alt={`${item.title} - ${item.description}`}
+          alt={`${photoDescription(item)} — ${caption}`}
           fill
           className={`object-cover transition-all duration-500 group-hover:scale-105 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-          sizes='(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw'
-          quality={80}
+          // Storage 썸네일은 이미 가로 480px WebP(평균 19KB)다. 다시 최적화하면 같은 화질을 w=3840 로 재인코딩할 뿐
+          unoptimized
           loading={index < 8 ? 'eager' : 'lazy'}
           onLoad={() => setLoaded(true)}
           onError={() => setErrored(true)}
         />
         <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
-        <div className='absolute top-2 left-2'>
-          <span className='text-xs px-2 py-0.5 bg-background/90 backdrop-blur-sm rounded-full font-medium text-foreground'>
-            {catIcon(item.category)} {catName(item.category)}
-          </span>
-        </div>
+        {showCategory && (
+          <div className='absolute top-2 left-2'>
+            <span className='text-xs px-2 py-0.5 bg-background/90 backdrop-blur-sm rounded-full font-medium text-foreground'>
+              {catIcon(item.category)} {catName(item.category)}
+            </span>
+          </div>
+        )}
+        {similarCount > 1 && (
+          <div className='absolute top-2 right-2'>
+            <span className='inline-flex items-center gap-1 text-xs px-2 py-0.5 bg-black/60 backdrop-blur-sm rounded-full font-medium text-white'>
+              <svg
+                aria-hidden='true'
+                className='w-3.5 h-3.5'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+              >
+                <rect x='7' y='7' width='13' height='13' rx='2' strokeWidth={2} />
+                <path d='M4 16V6a2 2 0 0 1 2-2h10' strokeWidth={2} strokeLinecap='round' />
+              </svg>
+              {similarCount}
+            </span>
+          </div>
+        )}
         <div className='absolute bottom-0 left-0 right-0 p-3 translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'>
-          <p className='text-white text-sm font-semibold line-clamp-2'>{item.title}</p>
+          <p className='text-white text-sm font-semibold line-clamp-2'>{photoDescription(item)}</p>
           {item.eventDate && <p className='text-white/70 text-xs mt-0.5'>{item.eventDate}</p>}
         </div>
       </div>
@@ -242,6 +272,21 @@ export function Lightbox({
   onNavigate: (dir: 'prev' | 'next') => void
 }) {
   const idx = items.findIndex(i => i.id === item.id)
+  const frames = item.similar ?? []
+  const [frameIndex, setFrameIndex] = useState(0)
+  const frame = frames[frameIndex]
+  const shown = frame ? { src: frame.src, width: frame.width, height: frame.height } : null
+
+  useEffect(() => {
+    setFrameIndex(
+      Math.max(
+        0,
+        frames.findIndex(f => f.id === item.id)
+      )
+    )
+    // 대표 사진이 바뀔 때만 처음 장으로
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item.id])
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -261,7 +306,7 @@ export function Lightbox({
     <motion.div
       role='dialog'
       aria-modal='true'
-      aria-label={item.title}
+      aria-label={`${photoCaption(item)} 사진`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -278,10 +323,12 @@ export function Lightbox({
       >
         <div className='flex items-center justify-between p-4 border-b border-border'>
           <div>
-            <h2 className='text-base font-semibold text-foreground line-clamp-1'>{item.title}</h2>
+            <h2 className='text-base font-semibold text-foreground line-clamp-1'>
+              {photoDescription(item)}
+            </h2>
             <p className='text-xs text-muted-foreground mt-0.5'>
-              {catIcon(item.category)} {catName(item.category)}
-              {item.eventDate && ` · ${item.eventDate}`}
+              {catIcon(item.category)} {photoCaption(item)}
+              {frames.length > 1 && ` · 비슷한 사진 ${frameIndex + 1} / ${frames.length}`}
             </p>
           </div>
           <div className='flex items-center gap-2'>
@@ -324,14 +371,15 @@ export function Lightbox({
             </svg>
           </button>
           <Image
-            src={item.src}
-            alt={item.title}
-            width={1600}
-            height={1200}
-            className='max-w-full max-h-[70vh] object-contain'
-            quality={90}
+            key={shown?.src ?? item.src}
+            src={shown?.src ?? item.src}
+            alt={`${photoDescription(item)} — ${photoCaption(item)}`}
+            width={shown?.width ?? item.dimensions?.width ?? 1600}
+            height={shown?.height ?? item.dimensions?.height ?? 1200}
+            className='max-w-full max-h-[70vh] w-auto h-auto object-contain'
+            // Storage 의 web.webp 는 이미 가로 1600px — 다시 최적화하지 않는다
+            unoptimized
             priority
-            sizes='100vw'
           />
           <button
             onClick={() => onNavigate('next')}
@@ -344,16 +392,28 @@ export function Lightbox({
           </button>
         </div>
 
-        {item.tags.length > 0 && (
-          <div className='flex flex-wrap gap-1.5 p-4 border-t border-border'>
-            {item.tags.slice(0, 8).map((tag, i) => (
-              <span
-                key={i}
-                className='text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-md'
-              >
-                #{tag}
-              </span>
-            ))}
+        {frames.length > 1 && (
+          <div className='border-t border-border p-3'>
+            <p className='sr-only'>비슷한 사진 {frames.length}장</p>
+            <ol className='flex gap-2 overflow-x-auto'>
+              {frames.map((f, i) => (
+                <li key={f.id} className='flex-none'>
+                  <button
+                    type='button'
+                    onClick={() => setFrameIndex(i)}
+                    aria-label={`비슷한 사진 ${i + 1}번 보기`}
+                    aria-current={i === frameIndex ? 'true' : undefined}
+                    className={`relative block h-16 w-20 overflow-hidden rounded-md border-2 transition ${
+                      i === frameIndex
+                        ? 'border-primary'
+                        : 'border-transparent opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <Image src={f.thumbnail} alt='' fill unoptimized className='object-cover' />
+                  </button>
+                </li>
+              ))}
+            </ol>
           </div>
         )}
       </motion.div>

@@ -46,6 +46,7 @@ export function resolveGalleryItems(
     return [
       {
         ...item,
+        mediaKey: key,
         src: publicUrl(image.bucket, image.path),
         thumbnail: publicUrl(image.bucket, image.thumbnailPath),
         originalSize: image.originalSize,

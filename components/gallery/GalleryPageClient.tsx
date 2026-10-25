@@ -28,6 +28,7 @@ function useGalleryParams() {
   const category = searchParams.get('category') ?? 'all'
   const search = searchParams.get('search') ?? ''
   const page = Number(searchParams.get('page') ?? '1')
+  const similar = searchParams.get('similar') === 'all' ? 'all' : ''
 
   const setParams = useCallback(
     (updates: Record<string, string>) => {
@@ -36,7 +37,12 @@ function useGalleryParams() {
         if (v === '' || v === 'all' || v === '1') params.delete(k)
         else params.set(k, v)
       }
-      if ('year' in updates || 'category' in updates || 'search' in updates) {
+      if (
+        'year' in updates ||
+        'category' in updates ||
+        'search' in updates ||
+        'similar' in updates
+      ) {
         params.delete('page')
       }
       router.push(`${pathname}?${params.toString()}`, { scroll: false })
@@ -44,10 +50,16 @@ function useGalleryParams() {
     [router, pathname, searchParams]
   )
 
-  return { year, category, search, page, setParams }
+  return { year, category, search, page, similar, setParams }
 }
 
-function useGalleryData(year: string, category: string, search: string, page: number) {
+function useGalleryData(
+  year: string,
+  category: string,
+  search: string,
+  page: number,
+  similar: string
+) {
   const [data, setData] = useState<ApiResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -65,6 +77,7 @@ function useGalleryData(year: string, category: string, search: string, page: nu
       ...(year !== 'all' ? { year } : {}),
       ...(category !== 'all' ? { category } : {}),
       ...(search.trim() ? { search } : {}),
+      ...(similar ? { similar } : {}),
       page: String(page),
       limit: String(PAGE_SIZE),
     })
@@ -83,7 +96,7 @@ function useGalleryData(year: string, category: string, search: string, page: nu
       })
 
     return () => ctrl.abort()
-  }, [year, category, search, page])
+  }, [year, category, search, page, similar])
 
   return { data, loading, error }
 }
@@ -94,8 +107,8 @@ interface GalleryPageClientProps {
 }
 
 export default function GalleryPageClient({ availableYears, categories }: GalleryPageClientProps) {
-  const { year, category, search, page, setParams } = useGalleryParams()
-  const { data, loading, error } = useGalleryData(year, category, search, page)
+  const { year, category, search, page, similar, setParams } = useGalleryParams()
+  const { data, loading, error } = useGalleryData(year, category, search, page, similar)
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null)
   const [, startTransition] = useTransition()
 
@@ -126,6 +139,7 @@ export default function GalleryPageClient({ availableYears, categories }: Galler
   )
 
   const totalCount = data?.pagination.totalCount ?? 0
+  const photoCount = data?.pagination.photoCount ?? totalCount
 
   return (
     <>
@@ -136,6 +150,8 @@ export default function GalleryPageClient({ availableYears, categories }: Galler
         category={category}
         search={search}
         totalCount={totalCount}
+        photoCount={photoCount}
+        showAllSimilar={similar === 'all'}
         onChange={handleParamsChange}
       />
 
@@ -161,7 +177,12 @@ export default function GalleryPageClient({ availableYears, categories }: Galler
             <div className='columns-2 md:columns-3 lg:columns-4 gap-3'>
               {data.items.map((item, i) => (
                 <div key={item.id} className='mb-3 break-inside-avoid'>
-                  <GalleryCard item={item} index={i} onClick={setSelectedImage} />
+                  <GalleryCard
+                    item={item}
+                    index={i}
+                    showCategory={category === 'all'}
+                    onClick={setSelectedImage}
+                  />
                 </div>
               ))}
             </div>
