@@ -98,6 +98,22 @@ async function renderPage(id = ARTIST) {
 }
 
 describe('작가 상세', () => {
+  it.each([
+    ['日本', '書家一', '書家二', '書家一'],
+    ['中國', '書家一', '書家二', '書家二'],
+  ])('%s: 한국어 화면과 문서 제목에 원어 한자 이름', async (nationality, ja, zh, expected) => {
+    getArtist.mockResolvedValue({
+      ...artistRow,
+      name: '가상 외국 작가',
+      nationality,
+      name_ja: ja,
+      name_zh: zh,
+    })
+    await renderPage()
+    expect(screen.getByRole('heading', { level: 1, name: expected })).toBeVisible()
+    expect(document.querySelector('.ah__hanja')?.textContent).not.toBe(expected)
+    expect((await generateMetadata(params(ARTIST))).title).toBe(`${expected} | 동양서예협회`)
+  })
   // 회귀: snake_case 응답을 artist.profileImage 로 읽어 모든 작가가 빈 아이콘이었다
   it('profile_image 의 사진을 보여 준다', async () => {
     await renderPage()

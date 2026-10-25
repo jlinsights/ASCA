@@ -70,7 +70,7 @@ export function ArtistHero({ name, baseName, hanja, lede, facts, ledger, media }
             )}
             {prefix ? baseName : name}
           </h1>
-          {hanja && (
+          {hanja && hanja !== baseName && (
             <p className='ah__hanja' lang='zh-Hant'>
               {hanja}
             </p>

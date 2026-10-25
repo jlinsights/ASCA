@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ArtistShareButton } from '@/components/kakao/kakao-share-button'
 import { artNameLabel, type PublicArtist as Artist } from '@/lib/api/artist-mapper'
 import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
+import { artistNativeHanName, artistNativeName } from '@/lib/api/artist-name'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 import { regulationGrade } from './artist-filter-options'
 
@@ -20,7 +21,11 @@ interface ArtistCardProps {
 const HAN = /[㐀-鿿豈-﫿]/
 
 /** 사진이 없을 때 사진 칸에 쓸 이름 — 한자 이름이 있으면 한자, 없으면 한글 */
-export function photoPlaceholderName(artist: Pick<Artist, 'name' | 'nameZh'>): string {
+export function photoPlaceholderName(
+  artist: Pick<Artist, 'name' | 'nameZh'> & Partial<Pick<Artist, 'nationality' | 'nameJa'>>
+): string {
+  const nativeName = artistNativeHanName(artist)
+  if (nativeName) return nativeName
   const zh = artist.nameZh?.trim()
   return zh && HAN.test(zh) ? zh : artist.name
 }
@@ -29,7 +34,8 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const isPc = variant === 'pc'
   const placeholderName = photoPlaceholderName(artist)
   const grade = regulationGrade(artist.membershipType)
-  const displayName = artistDisplayName(artist.name, artist.deathYear)
+  const nativeName = artistNativeName(artist)
+  const displayName = artistDisplayName(nativeName, artist.deathYear)
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
   const artName = artNameLabel(artist.artNameKo, artist.artNameHanja)
 
@@ -58,7 +64,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
         {artist.profileImage ? (
           <Image
             src={artist.profileImage}
-            alt={artist.name}
+            alt={nativeName}
             fill
             sizes={isPc ? '(max-width: 1279px) 33vw, 25vw' : '50vw'}
             className='object-cover transition-transform duration-300 group-hover:scale-[1.02]'
@@ -68,7 +74,13 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           <div
             aria-hidden='true'
             className='absolute inset-0 flex items-center justify-center'
-            lang={placeholderName === artist.name ? 'ko' : 'zh-Hant'}
+            lang={
+              placeholderName === artist.nameJa?.trim()
+                ? 'ja'
+                : placeholderName === artist.nameZh?.trim()
+                  ? 'zh'
+                  : undefined
+            }
           >
             <span
               className={`font-serif font-semibold tracking-[0.18em] text-navy-900/70 dark:text-paper/70 [writing-mode:vertical-rl] text-5xl`}
@@ -195,7 +207,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
               </Button>
             </Link>
             <ArtistShareButton
-              title={`${artist.name} 작가`}
+              title={`${displayName} 작가`}
               description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
               imageUrl={artist.profileImage ?? undefined}
               webUrl={`/artists/${artist.id}`}

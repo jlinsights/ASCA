@@ -2,7 +2,9 @@ import { render, screen } from '@testing-library/react'
 import type { PublicArtist } from '@/lib/api/artist-mapper'
 import { ArtistCard, photoPlaceholderName } from '../artist-card'
 
-jest.mock('@/components/kakao/kakao-share-button', () => ({ ArtistShareButton: () => null }))
+jest.mock('@/components/kakao/kakao-share-button', () => ({
+  ArtistShareButton: ({ title }: { title: string }) => <button aria-label={title}>공유</button>,
+}))
 
 const artist = (overrides: Partial<PublicArtist>): PublicArtist => ({
   id: '1',
@@ -103,8 +105,49 @@ describe('photoPlaceholderName', () => {
 
   it('사진 없는 카드는 그 작가의 이름을 사진 칸에 쓴다', () => {
     const { container } = render(<ArtistCard artist={artist({ nameZh: '金作家' })} variant='pc' />)
-    expect(container.querySelector('[aria-hidden="true"][lang="zh-Hant"]')).toHaveTextContent(
-      '金作家'
+    expect(container.querySelector('[aria-hidden="true"][lang="zh"]')).toHaveTextContent('金作家')
+  })
+})
+
+describe('ArtistCard 국적별 이름', () => {
+  it('기본 이름이 이미 원어일 때도 사진 대체 이름이 다른 번역으로 바뀌지 않는다', () => {
+    const source = artist({
+      name: '書家一',
+      nationality: '日本',
+      nameJa: '書家一',
+      nameZh: '書家二',
+    })
+    expect(photoPlaceholderName(source)).toBe('書家一')
+    const { container } = render(<ArtistCard artist={source} variant='pc' />)
+    expect(screen.getByRole('heading', { name: '書家一' })).toBeVisible()
+    expect(container.querySelector('[aria-hidden="true"][lang="ja"]')).toHaveTextContent('書家一')
+  })
+  it.each(['pc', 'mobile'] as const)('%s: 일본 작가 이름·이미지 설명·공유 제목', variant => {
+    render(
+      <ArtistCard
+        artist={artist({
+          name: '가상 일본 작가',
+          nationality: '日本',
+          nameJa: '書家一',
+          nameZh: '書家二',
+          profileImage: 'https://example.test/artist.jpg',
+        })}
+        variant={variant}
+      />
     )
+    expect(screen.getByRole('heading', { name: '書家一' })).toBeVisible()
+    expect(screen.getByRole('img', { name: '書家一' })).toBeVisible()
+    expect(screen.getByRole('button', { name: '書家一 작가' })).toBeVisible()
+    expect(screen.queryByText('가상 일본 작가')).not.toBeInTheDocument()
+  })
+  it.each(['pc', 'mobile'] as const)('%s: 중국 작가 이름·사진 대체 표기·故 표기', variant => {
+    const { container } = render(
+      <ArtistCard
+        artist={artist({ nationality: '中國', nameZh: '書家二', deathYear: 2020 })}
+        variant={variant}
+      />
+    )
+    expect(screen.getByRole('heading', { name: '故 書家二' })).toBeVisible()
+    expect(container.querySelector('[aria-hidden="true"][lang="zh"]')).toHaveTextContent('書家二')
   })
 })
