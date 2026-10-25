@@ -46,7 +46,7 @@ export function PhilosophySection() {
         aria-labelledby='philosophy-heading'
         className='py-24 md:py-32 lg:py-40 bg-background'
       >
-        <div className='container mx-auto px-4'>
+        <div className='container'>
           <m.div
             variants={containerVariants}
             initial='hidden'

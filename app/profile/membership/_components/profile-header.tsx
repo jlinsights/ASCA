@@ -287,7 +287,7 @@ export function ProfileHeader({
     <>
       {/* 프로필 헤더 */}
       <section className='border-b border-border bg-gradient-to-b from-muted/30 to-background'>
-        <div className='container mx-auto px-4 py-8'>
+        <div className='container py-8'>
           <div className='flex flex-col md:flex-row items-start gap-6'>
             {/* 프로필 이미지 */}
             <div className='relative'>

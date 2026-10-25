@@ -171,7 +171,7 @@ export default function ExhibitionDetailPage() {
     return (
       <div className='min-h-screen bg-transparent'>
         {hero}
-        <main className='container mx-auto px-4 py-10 md:py-16'>
+        <main className='container py-10 md:py-16'>
           <div className='flex items-center justify-center py-12'>
             <div className='flex items-center gap-3'>
               <Loader2 className='h-6 w-6 animate-spin' />
@@ -188,7 +188,7 @@ export default function ExhibitionDetailPage() {
     return (
       <div className='min-h-screen bg-transparent'>
         {hero}
-        <main className='container mx-auto px-4 py-10 md:py-16'>
+        <main className='container py-10 md:py-16'>
           <div className='text-center py-12'>
             <AlertCircle className='h-16 w-16 text-destructive mx-auto mb-4' />
             <h3 className='text-lg font-semibold text-foreground mb-2'>오류가 발생했습니다</h3>
@@ -206,7 +206,7 @@ export default function ExhibitionDetailPage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {hero}
-      <main className='container mx-auto px-4 py-10 md:py-16'>
+      <main className='container py-10 md:py-16'>
         <ExhibitionDetailBody exhibition={exhibition} />
       </main>
 

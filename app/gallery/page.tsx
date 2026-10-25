@@ -83,7 +83,7 @@ export default function GalleryPage() {
 
       {/* ── Gallery ── */}
       <section id='gallery' className='py-10 md:py-16'>
-        <div className='max-w-7xl mx-auto px-6 md:px-12'>
+        <div className='container'>
           {/*
             useSearchParams()를 쓰는 Client Component는 반드시 Suspense 안에 있어야 합니다.
             ssr:false dynamic은 Server Component에서 사용 불가 (Next.js 16).

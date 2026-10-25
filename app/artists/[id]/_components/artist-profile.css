@@ -6,8 +6,8 @@
    ===================================================================== */
 
 .ap {
-  --ap-gutter: clamp(16px, 4vw, 48px);
-  --ap-max: 1400px;
+  --ap-gutter: var(--shell-gutter);
+  --ap-max: var(--shell-frame);
   --ap-bg: var(--paper);
   --ap-fg: var(--navy-900);
   --ap-muted: var(--stone-700); /* paper 위 8.9:1 */

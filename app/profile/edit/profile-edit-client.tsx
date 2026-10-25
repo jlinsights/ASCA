@@ -144,116 +144,118 @@ export function ProfileEditClient() {
 
   return (
     <div className='min-h-screen flex flex-col'>
-      <main className='mx-auto w-full max-w-3xl flex-1 space-y-8 px-6 py-12'>
-        <header className='space-y-3'>
-          <Link href='/profile' className='underline'>
-            {t('authNativeAccount')}
-          </Link>
-          <h1 className='font-serif text-3xl text-foreground'>{t('profileEditorTitle')}</h1>
-          <p className='text-muted-foreground'>{t('profileEditorIntro')}</p>
-        </header>
-        {profile.profileImage && (
-          <Image
-            src={profile.profileImage}
-            alt={profile.name}
-            width={128}
-            height={128}
-            className='rounded-full object-cover'
-          />
-        )}
-        <form onSubmit={save} className='space-y-6' aria-busy={saving}>
-          <fieldset disabled={saving} className='space-y-6'>
-            <div className='grid gap-4 sm:grid-cols-2'>
+      <main className='container flex-1 py-12'>
+        <div className='mx-auto w-full max-w-3xl space-y-8'>
+          <header className='space-y-3'>
+            <Link href='/profile' className='underline'>
+              {t('authNativeAccount')}
+            </Link>
+            <h1 className='font-serif text-3xl text-foreground'>{t('profileEditorTitle')}</h1>
+            <p className='text-muted-foreground'>{t('profileEditorIntro')}</p>
+          </header>
+          {profile.profileImage && (
+            <Image
+              src={profile.profileImage}
+              alt={profile.name}
+              width={128}
+              height={128}
+              className='rounded-full object-cover'
+            />
+          )}
+          <form onSubmit={save} className='space-y-6' aria-busy={saving}>
+            <fieldset disabled={saving} className='space-y-6'>
+              <div className='grid gap-4 sm:grid-cols-2'>
+                <div className='space-y-2'>
+                  <Label htmlFor='artist-name'>{t('profileEditorName')}</Label>
+                  <Input
+                    id='artist-name'
+                    value={profile.name}
+                    readOnly
+                    aria-describedby='artist-name-policy'
+                  />
+                  <p id='artist-name-policy' className='text-sm text-muted-foreground'>
+                    {t('profileEditorNamePolicy')}
+                  </p>
+                </div>
+                <div className='space-y-2'>
+                  <Label htmlFor='artist-name-en'>{t('profileEditorNameEn')}</Label>
+                  <Input
+                    id='artist-name-en'
+                    value={form.nameEn ?? ''}
+                    onChange={e => setForm({ ...form, nameEn: e.target.value })}
+                    maxLength={200}
+                  />
+                </div>
+              </div>
               <div className='space-y-2'>
-                <Label htmlFor='artist-name'>{t('profileEditorName')}</Label>
-                <Input
-                  id='artist-name'
-                  value={profile.name}
-                  readOnly
-                  aria-describedby='artist-name-policy'
+                <Label htmlFor='artist-bio'>{t('profileEditorBio')}</Label>
+                <Textarea
+                  id='artist-bio'
+                  value={form.bio ?? ''}
+                  onChange={e => setForm({ ...form, bio: e.target.value })}
+                  maxLength={10000}
+                  rows={6}
                 />
-                <p id='artist-name-policy' className='text-sm text-muted-foreground'>
-                  {t('profileEditorNamePolicy')}
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor='artist-bio-en'>{t('profileEditorBioEn')}</Label>
+                <Textarea
+                  id='artist-bio-en'
+                  value={form.bioEn ?? ''}
+                  onChange={e => setForm({ ...form, bioEn: e.target.value })}
+                  maxLength={10000}
+                  rows={6}
+                />
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor='artist-birth-year'>{t('profileEditorBirth')}</Label>
+                <Input
+                  id='artist-birth-year'
+                  type='number'
+                  min={1000}
+                  max={new Date().getUTCFullYear()}
+                  value={form.birthYear ?? ''}
+                  onChange={e =>
+                    setForm({ ...form, birthYear: e.target.value ? Number(e.target.value) : null })
+                  }
+                />
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor='artist-specialties'>{t('profileEditorSpecialties')}</Label>
+                <Input
+                  id='artist-specialties'
+                  value={specialtiesText}
+                  aria-describedby='artist-specialties-help'
+                  onChange={e => setSpecialtiesText(e.target.value)}
+                />
+                <p id='artist-specialties-help' className='text-sm text-muted-foreground'>
+                  {t('profileEditorSpecialtiesHelp')}
                 </p>
               </div>
-              <div className='space-y-2'>
-                <Label htmlFor='artist-name-en'>{t('profileEditorNameEn')}</Label>
-                <Input
-                  id='artist-name-en'
-                  value={form.nameEn ?? ''}
-                  onChange={e => setForm({ ...form, nameEn: e.target.value })}
-                  maxLength={200}
-                />
-              </div>
-            </div>
-            <div className='space-y-2'>
-              <Label htmlFor='artist-bio'>{t('profileEditorBio')}</Label>
-              <Textarea
-                id='artist-bio'
-                value={form.bio ?? ''}
-                onChange={e => setForm({ ...form, bio: e.target.value })}
-                maxLength={10000}
-                rows={6}
-              />
-            </div>
-            <div className='space-y-2'>
-              <Label htmlFor='artist-bio-en'>{t('profileEditorBioEn')}</Label>
-              <Textarea
-                id='artist-bio-en'
-                value={form.bioEn ?? ''}
-                onChange={e => setForm({ ...form, bioEn: e.target.value })}
-                maxLength={10000}
-                rows={6}
-              />
-            </div>
-            <div className='space-y-2'>
-              <Label htmlFor='artist-birth-year'>{t('profileEditorBirth')}</Label>
-              <Input
-                id='artist-birth-year'
-                type='number'
-                min={1000}
-                max={new Date().getUTCFullYear()}
-                value={form.birthYear ?? ''}
-                onChange={e =>
-                  setForm({ ...form, birthYear: e.target.value ? Number(e.target.value) : null })
-                }
-              />
-            </div>
-            <div className='space-y-2'>
-              <Label htmlFor='artist-specialties'>{t('profileEditorSpecialties')}</Label>
-              <Input
-                id='artist-specialties'
-                value={specialtiesText}
-                aria-describedby='artist-specialties-help'
-                onChange={e => setSpecialtiesText(e.target.value)}
-              />
-              <p id='artist-specialties-help' className='text-sm text-muted-foreground'>
-                {t('profileEditorSpecialtiesHelp')}
-              </p>
-            </div>
-          </fieldset>
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('profileEditorVisibility')}</CardTitle>
-              <CardDescription>{t('profileEditorVisibilityHelp')}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>
-                {t(
-                  profile.visibility === 'public'
-                    ? 'profileEditorPublic'
-                    : profile.visibility === 'members'
-                      ? 'profileEditorMembers'
-                      : 'profileEditorHidden'
-                )}
-              </p>
-            </CardContent>
-          </Card>
-          {message && <p role={failed ? 'alert' : 'status'}>{t(message)}</p>}
-          <Button type='submit' disabled={saving}>
-            {t(saving ? 'authNativeBusy' : 'authNativeSave')}
-          </Button>
-        </form>
+            </fieldset>
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('profileEditorVisibility')}</CardTitle>
+                <CardDescription>{t('profileEditorVisibilityHelp')}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  {t(
+                    profile.visibility === 'public'
+                      ? 'profileEditorPublic'
+                      : profile.visibility === 'members'
+                        ? 'profileEditorMembers'
+                        : 'profileEditorHidden'
+                  )}
+                </p>
+              </CardContent>
+            </Card>
+            {message && <p role={failed ? 'alert' : 'status'}>{t(message)}</p>}
+            <Button type='submit' disabled={saving}>
+              {t(saving ? 'authNativeBusy' : 'authNativeSave')}
+            </Button>
+          </form>
+        </div>
       </main>
       <LayoutFooter />
     </div>

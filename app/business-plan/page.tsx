@@ -59,7 +59,7 @@ export default function BusinessPlanPage() {
         />
       </PageHero>
 
-      <section className='container mx-auto px-4 py-10 md:py-16'>
+      <section className='container py-10 md:py-16'>
         <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
           <BusinessPlanSidebar />
           <main className='flex-1 min-w-0 space-y-16'>

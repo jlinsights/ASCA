@@ -18,7 +18,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     <AdminProtectedRoute>
       <div className='min-h-screen bg-transparent'>
         <AdminNavigation />
-        <main className='container mx-auto px-4 py-8'>{children}</main>
+        <main className='container py-8'>{children}</main>
         <LayoutFooter />
       </div>
     </AdminProtectedRoute>

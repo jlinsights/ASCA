@@ -46,7 +46,7 @@ export default function DigitalTransformationGuidePage() {
     <div className='min-h-screen bg-background'>
       {/* Article Header */}
       <header className='bg-gradient-to-b from-background to-muted/20 py-16 md:py-24'>
-        <div className='container mx-auto px-4'>
+        <div className='container'>
           <div className='max-w-3xl mx-auto'>
             <div className='flex items-center gap-3 mb-6'>
               <span className='inline-flex items-center px-3 py-1 rounded-full bg-celadon-green/10 text-celadon-green text-sm font-medium'>
@@ -88,7 +88,7 @@ export default function DigitalTransformationGuidePage() {
 
       {/* Article Body */}
       <article className='py-12'>
-        <div className='container mx-auto px-4'>
+        <div className='container'>
           <div className='max-w-3xl mx-auto'>
             {/* Table of Contents */}
             <nav className='rounded-xl border border-border/50 bg-card p-6 mb-12'>

@@ -29,7 +29,7 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
   const label = (key: string) => (key in copy ? copy[key as keyof typeof copy] : t(key))
   return (
     <footer className='bg-ink-black text-rice-paper'>
-      <div className='container mx-auto px-6 py-12 md:px-8 md:py-16 lg:py-20'>
+      <div className='container py-12 md:py-16 lg:py-20'>
         <div
           className={variant === 'default' ? 'grid gap-12 lg:grid-cols-3 lg:gap-16' : 'max-w-xl'}
         >

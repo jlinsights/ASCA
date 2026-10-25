@@ -16,8 +16,8 @@
   --mb-seal: var(--seal-red);
   --mb-ring: var(--gold-600);
 
-  --mb-gutter: clamp(16px, 4vw, 48px);
-  --mb-max: 1200px;
+  --mb-gutter: var(--shell-gutter);
+  --mb-max: var(--shell-frame);
   --mb-font-display:
     var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
   --mb-font-sans: 'Pretendard', var(--font-noto-sans-kr), system-ui, sans-serif;

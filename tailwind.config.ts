@@ -17,14 +17,9 @@ const config = {
     '*.{js,ts,jsx,tsx,mdx}',
   ],
   prefix: '',
+  // .container 는 app/globals.css 가 --shell-* 토큰으로 정의한다(페이지 틀 하나)
+  corePlugins: { container: false },
   theme: {
-    container: {
-      center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
-    },
     extend: {
       colors: {
         border: withAlpha('border'),

@@ -23,8 +23,8 @@
   --ac-cat-minhwa: var(--gold-500);
   --ac-cat-jeongak: var(--navy-500);
 
-  --ac-gutter: clamp(16px, 4vw, 48px);
-  --ac-max: 1200px;
+  --ac-gutter: var(--shell-gutter);
+  --ac-max: var(--shell-frame);
   --ac-font-display:
     var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
   --ac-font-sans: 'Pretendard', var(--font-noto-sans-kr), system-ui, sans-serif;

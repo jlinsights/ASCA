@@ -198,7 +198,7 @@ export default function ContestApplyPage() {
   if (loading) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        <main className='container py-8'>
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
@@ -211,7 +211,7 @@ export default function ContestApplyPage() {
   if (success) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        <main className='container py-8'>
           <Card className='max-w-2xl mx-auto'>
             <CardContent className='p-12 text-center'>
               <CheckCircle className='w-16 h-16 mx-auto mb-4 text-celadon-green' />
@@ -237,7 +237,7 @@ export default function ContestApplyPage() {
   if (error && !contest) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container mx-auto px-4 py-8'>
+        <main className='container py-8'>
           <Alert variant='destructive' className='max-w-2xl mx-auto'>
             <AlertCircle className='h-4 w-4' />
             <AlertDescription>{error}</AlertDescription>
@@ -255,7 +255,7 @@ export default function ContestApplyPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container mx-auto px-4 py-8 max-w-4xl'>
+      <main className='container py-8 [--shell-max:56rem]'>
         {/* Navigation */}
         <div className='flex items-center gap-4 mb-8'>
           <Link href={`/contests/${contestId}`}>
