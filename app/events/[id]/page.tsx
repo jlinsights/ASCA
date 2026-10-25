@@ -10,8 +10,11 @@ import { Button } from '@/components/ui/button'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { getEventById, incrementEventViews, getRelatedEvents } from '@/lib/supabase/cms'
 import type { Event } from '@/lib/types/cms-legacy'
+import { log } from '@/lib/utils/logger'
 import { EventDetailBody } from './_components/event-detail-body'
 import { formatEventDateTime } from './_components/event-detail-meta'
+
+const NOT_FOUND = '주소가 바뀌었거나 공개되지 않은 행사입니다.'
 
 export default function EventDetailPage() {
   const params = useParams()
@@ -22,31 +25,35 @@ export default function EventDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // 행사 데이터 로드
+  // 행사 데이터 로드 — 실패로 다루는 것은 행사 본문을 못 읽었을 때뿐이다.
+  // 조회수·관련 행사는 곁가지라 실패해도 본문은 보여 준다(2026-10-25: 관련 행사 쿼리 400 이 페이지 전체를 오류로 만들었다)
   useEffect(() => {
     const loadEvent = async () => {
+      setLoading(true)
+      setError(null)
+
+      let eventData: Event | null
       try {
-        setLoading(true)
-        setError(null)
-
-        // 행사 상세 정보 가져오기
-        const eventData = await getEventById(eventId)
-        if (!eventData) {
-          throw new Error('행사를 찾을 수 없습니다.')
-        }
-
-        setEvent(eventData)
-
-        // 조회수 증가
-        await incrementEventViews(eventId)
-
-        // 관련 행사 가져오기
-        const relatedData = await getRelatedEvents(eventId, eventData.event_type)
-        setRelatedEvents(relatedData)
+        eventData = await getEventById(eventId)
       } catch (err) {
+        log.error('event load failed', err)
         setError('행사를 불러오는데 실패했습니다.')
-      } finally {
         setLoading(false)
+        return
+      }
+      if (!eventData) {
+        setError(NOT_FOUND)
+        setLoading(false)
+        return
+      }
+      setEvent(eventData)
+      setLoading(false)
+
+      incrementEventViews(eventId).catch(err => log.error('event views increment failed', err))
+      try {
+        setRelatedEvents(await getRelatedEvents(eventId, eventData.event_type))
+      } catch (err) {
+        log.error('related events load failed', err)
       }
     }
 
@@ -95,7 +102,9 @@ export default function EventDetailPage() {
         <main className='container mx-auto px-4 py-10 md:py-16'>
           <div className='text-center py-12'>
             <AlertCircle className='h-16 w-16 text-destructive mx-auto mb-4' />
-            <h3 className='text-lg font-semibold text-foreground mb-2'>오류가 발생했습니다</h3>
+            <h3 className='text-lg font-semibold text-foreground mb-2'>
+              {error === NOT_FOUND ? '행사를 찾을 수 없습니다' : '오류가 발생했습니다'}
+            </h3>
             <p className='text-muted-foreground mb-4'>{error}</p>
             <Link href='/events'>
               <Button variant='outline'>목록으로 돌아가기</Button>
