@@ -291,9 +291,7 @@ export async function getEventById(id: string): Promise<Event | null> {
     throw error
   }
 
-  // Increment view count
-  await supabase.rpc('increment_event_views', { event_uuid: id })
-
+  // 조회수는 호출하는 쪽(상세 페이지)이 incrementEventViews 로 한 번만 올린다 — 여기서도 올리면 두 번 센다
   return data
 }
 
@@ -390,7 +388,7 @@ export async function getFeaturedContent() {
       .select('*')
       .eq('is_published', true)
       .eq('is_featured', true)
-      .order('start_date', { ascending: false })
+      .order('event_date', { ascending: false })
       .limit(3),
   ])
 
@@ -477,7 +475,8 @@ export async function getRelatedEvents(
     .eq('is_published', true)
     .eq('event_type', eventType)
     .neq('id', eventId)
-    .order('start_date', { ascending: false })
+    // public_events 에는 start_date 가 없다(event_date·end_date) — 없는 열로 정렬하면 PostgREST 가 400 을 낸다
+    .order('event_date', { ascending: false })
     .limit(limit)
 
   if (error) throw error
