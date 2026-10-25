@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 import path from 'path'
 import { LEGACY_ANCHORS, findRegulation } from '@/lib/regulations/catalog'
 import { parseRegulation } from '@/lib/regulations/parse'
-import { SITE_FAQ } from '../site-faq'
+import { FAQ_GROUPS, SITE_FAQ, faqGroups } from '../site-faq'
 
 const ROOT = path.join(__dirname, '..', '..', '..', 'regulations')
 
@@ -31,6 +31,19 @@ describe('사이트 FAQ', () => {
     const ids = SITE_FAQ.flatMap(item => (item.id ? [item.id] : []))
     expect(new Set(ids).size).toBe(ids.length)
     expect(ids).toEqual(expect.arrayContaining(['entry-fees', 'awards', 'artist-selection']))
+  })
+
+  it('모든 질문에 id 가 있다 — /faq#id 로 바로 갈 수 있게', () => {
+    expect(SITE_FAQ.filter(item => !item.id).map(item => item.q)).toStrictEqual([])
+  })
+
+  it('/faq 의 주제 묶음은 모든 질문을 정확히 한 번씩 담는다', () => {
+    const grouped = FAQ_GROUPS.flatMap(group => group.ids)
+    expect(new Set(grouped).size).toBe(grouped.length)
+    expect([...grouped].sort()).toStrictEqual(SITE_FAQ.map(item => item.id).sort())
+    for (const group of faqGroups()) {
+      expect(group.items.length).toBe(FAQ_GROUPS.find(g => g.key === group.key)?.ids.length)
+    }
   })
 
   it.each(regSources)('「%s」의 근거 %s(%s)가 실제 조문을 가리킨다', (_q, _label, href) => {

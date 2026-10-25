@@ -44,6 +44,12 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(footerMenu.flatMap(s => s.items).map(link => link.href)).toContain('/community/board')
   })
 
+  it('회원·후원 메뉴와 푸터에서 자주 묻는 질문으로 갈 수 있다', () => {
+    const membership = headerMenu.find(group => group.key === 'membership')?.items ?? []
+    expect(membership.map(link => link.href)).toContain('/faq')
+    expect(footerMenu.flatMap(s => s.items).map(link => link.href)).toContain('/faq')
+  })
+
   it.each(links.filter(link => !('external' in link && link.external)).map(link => link.href))(
     '%s 는 실제 페이지로 간다',
     href => expect(pageExists(href)).toBe(true)

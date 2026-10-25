@@ -157,6 +157,7 @@ export const SITE_FAQ: readonly FaqItem[] = [
     sources: [reg('operation-judging', '7', '운영 및 심사 규정 제7조')],
   },
   {
+    id: 'classes',
     q: '서예 강좌를 운영하고 있나요?',
     a: `협회 상임이사진이 공식 승인한 교육기관에 한해 서예 강좌를 연결해 드립니다.
 
@@ -167,6 +168,7 @@ export const SITE_FAQ: readonly FaqItem[] = [
     sources: [page('/academy', '강좌 안내')],
   },
   {
+    id: 'english-name',
     q: '영문이름을 요청하는 사유가 무엇인가요?',
     a: `정회원 모든 분께 작품과 경력을 소개하는 개인 웹페이지를 만들어 드리기 위해서입니다.
 
@@ -175,6 +177,7 @@ URL 형식: https://orientalcalligraphy.org/calligrapher/name
 원하시는 이름이나 아호를 영문으로 알려 주시면, 연회비 납부와 정회원 여부를 확인한 뒤 웹페이지를 만들어 드립니다.`,
   },
   {
+    id: 'login',
     q: '로그인을 위해 기존 회원도 다시 회원 가입해야 하나요?',
     a: '아니요, 필요 없습니다. 현재 소셜 로그인 기능을 준비 중이며, 모든 콘텐츠는 공개되어 있습니다. 로그인 기능이 복원되면 온라인 회원 가입이 가능하도록 조치할 예정입니다.',
   },
@@ -207,6 +210,7 @@ URL 형식: https://orientalcalligraphy.org/calligrapher/name
 향후 문화예술진흥법에 따른 전문예술법인으로 전환한 뒤 공익법인으로 승격하기 위한 절차를 마련 중입니다.`,
   },
   {
+    id: 'artist-website',
     q: '작가들을 위한 홈페이지 제작과 유지보수를 지원해 주나요?',
     a: `네, 작가 개인 홈페이지 제작과 유지보수 서비스를 제공합니다.
 
@@ -228,3 +232,37 @@ URL 형식: https://orientalcalligraphy.org/calligrapher/name
     ],
   },
 ]
+
+export interface FaqGroup {
+  key: string
+  /** lib/i18n/translations/faq.ts 의 번역 키 */
+  titleKey: string
+  ids: readonly string[]
+}
+
+/** /faq 의 주제 묶음과 순서. 질문을 더하면 여기 한 곳에도 넣는다(테스트가 빠짐을 잡는다) */
+export const FAQ_GROUPS: readonly FaqGroup[] = [
+  {
+    key: 'membership',
+    titleKey: 'faqGroupMembership',
+    ids: ['benefits', 'dues', 'dues-usage', 'lifetime'],
+  },
+  {
+    key: 'contests',
+    titleKey: 'faqGroupContests',
+    ids: ['entry-fees', 'awards', 'artist-selection', 'committee'],
+  },
+  {
+    key: 'artists',
+    titleKey: 'faqGroupArtists',
+    ids: ['classes', 'artist-website', 'english-name'],
+  },
+  { key: 'account', titleKey: 'faqGroupAccount', ids: ['login', 'donation-receipt'] },
+]
+
+export function faqGroups(): (FaqGroup & { items: FaqItem[] })[] {
+  return FAQ_GROUPS.map(group => ({
+    ...group,
+    items: group.ids.flatMap(id => SITE_FAQ.filter(item => item.id === id)),
+  }))
+}

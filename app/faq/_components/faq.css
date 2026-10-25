@@ -1,0 +1,301 @@
+/* =====================================================================
+   자주 묻는 질문 — 宣紙 위 왼쪽에 큰 제목과 문의, 오른쪽에 먹빛 판 위의 문답
+   follow.art FAQ 의 구조(왼쪽 고정 제목·아래 문의 / 오른쪽 주제별 판 · 번호 붙은 문답)를 빌리고
+   색·글꼴은 Ink System 을 쓴다. 펼침만 움직이고, prefers-reduced-motion 이면 바로 열린다.
+   ===================================================================== */
+
+.fq {
+  --fq-gutter: var(--shell-gutter);
+  --fq-max: var(--shell-frame);
+  --fq-bg: var(--paper);
+  --fq-fg: var(--navy-900);
+  --fq-muted: var(--stone-700);
+  --fq-rule: var(--border);
+  --fq-panel: var(--navy-900);
+  --fq-panel-fg: var(--paper);
+  --fq-panel-muted: var(--navy-300);
+  --fq-panel-rule: hsl(222 40% 30%);
+  --fq-accent: var(--gold-800);
+  --fq-panel-accent: var(--gold-400);
+  --fq-ring: var(--gold-600);
+  --fq-font-display:
+    var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
+  --fq-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fq-header: 64px;
+
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  background: var(--fq-bg);
+  color: var(--fq-fg);
+}
+
+.dark .fq {
+  --fq-bg: var(--navy-950);
+  --fq-fg: var(--paper);
+  --fq-muted: var(--navy-300);
+  --fq-panel: var(--navy-900);
+  --fq-panel-rule: hsl(222 40% 24%);
+  --fq-accent: var(--gold-400);
+  --fq-ring: var(--gold-400);
+}
+
+.fq :focus-visible {
+  outline: 2px solid var(--fq-ring);
+  outline-offset: 3px;
+}
+
+.fq__frame {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: clamp(32px, 6vw, 112px);
+  max-width: var(--fq-max);
+  margin: 0 auto;
+  padding: calc(var(--fq-header) + clamp(32px, 5vw, 72px)) var(--fq-gutter) clamp(64px, 8vw, 120px);
+}
+
+/* ---------- 왼쪽 — 큰 제목, 맨 아래 문의 ---------- */
+.fq-side {
+  position: sticky;
+  top: calc(var(--fq-header) + 32px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+  align-self: start;
+  min-height: calc(100vh - var(--fq-header) - 96px);
+  padding-right: clamp(20px, 4vw, 56px);
+  border-right: 1px solid var(--fq-rule);
+}
+.fq-side__eyebrow {
+  margin: 0 0 16px;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fq-accent);
+}
+.fq-side__title {
+  margin: 0;
+  font-family: var(--fq-font-display);
+  font-weight: 500;
+  font-size: clamp(52px, 7vw, 120px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+.fq-side__mark {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.55em;
+  color: var(--fq-accent);
+}
+.fq-side__intro {
+  max-width: 26rem;
+  margin: 24px 0 0;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--fq-muted);
+}
+.fq-side__note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--fq-muted);
+}
+
+.fq-contact {
+  display: grid;
+  gap: 10px;
+}
+.fq-contact__title {
+  margin: 0;
+  font-family: var(--fq-font-display);
+  font-weight: 500;
+  font-size: clamp(24px, 2.4vw, 36px);
+  line-height: 1.25;
+}
+.fq-contact__body {
+  margin: 0;
+  font-size: 15px;
+  color: var(--fq-muted);
+}
+.fq-contact__mail {
+  justify-self: start;
+  font-family: var(--fq-font-display);
+  font-size: clamp(20px, 2vw, 30px);
+  color: var(--fq-fg);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  overflow-wrap: anywhere;
+}
+.fq-contact__mail:hover {
+  color: var(--fq-accent);
+}
+.fq-contact__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--fq-muted);
+}
+.fq-contact__meta a {
+  color: inherit;
+}
+.fq-contact__meta a:hover {
+  color: var(--fq-fg);
+}
+
+/* ---------- 오른쪽 — 주제별 먹빛 판 ---------- */
+.fq-groups {
+  display: grid;
+  gap: clamp(16px, 2vw, 28px);
+  min-width: 0;
+}
+.fq-group {
+  padding: clamp(20px, 2.4vw, 36px);
+  background: var(--fq-panel);
+  color: var(--fq-panel-fg);
+}
+.fq-group__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--fq-panel-fg);
+}
+.fq-group__title {
+  margin: 0;
+  font-family: var(--fq-font-display);
+  font-weight: 500;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.2;
+}
+.fq-group__count {
+  flex: none;
+  font-size: 13px;
+  color: var(--fq-panel-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.fq-item {
+  border-bottom: 1px solid var(--fq-panel-rule);
+  scroll-margin-top: calc(var(--fq-header) + 24px);
+}
+.fq-item:last-child {
+  border-bottom: 0;
+}
+.fq-q {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.fq-q:hover .fq-q__text {
+  color: var(--fq-panel-accent);
+}
+.fq-q__num {
+  padding-top: 2px;
+  font-size: 13px;
+  color: var(--fq-panel-muted);
+  font-variant-numeric: tabular-nums;
+}
+.fq-q__text {
+  transition: color 200ms var(--fq-ease);
+}
+.fq-q__icon {
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  transition: transform 260ms var(--fq-ease);
+}
+.fq-q[data-state='open'] .fq-q__icon {
+  transform: rotate(180deg);
+}
+
+.fq-a {
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .fq-a[data-state='open'] {
+    animation: fq-open 280ms var(--fq-ease);
+  }
+  .fq-a[data-state='closed'] {
+    animation: fq-close 200ms var(--fq-ease);
+  }
+}
+@keyframes fq-open {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+@keyframes fq-close {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+.fq-a__body {
+  padding: 0 0 24px calc(2.5rem + 12px);
+  font-size: 15px;
+  line-height: 1.85;
+  color: color-mix(in srgb, var(--fq-panel-fg) 82%, transparent);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.fq-a__sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  margin: 16px 0 0;
+  white-space: normal;
+  font-size: 13px;
+}
+.fq-a__sources-label {
+  margin-right: 4px;
+  color: var(--fq-panel-fg);
+  font-weight: 600;
+}
+.fq-a__sources a {
+  color: var(--fq-panel-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 899px) {
+  .fq__frame {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fq-side {
+    position: static;
+    min-height: 0;
+    padding: 0 0 28px;
+    border-right: 0;
+    border-bottom: 1px solid var(--fq-rule);
+  }
+  .fq-a__body {
+    padding-left: 0;
+  }
+  .fq-q {
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+  }
+}
