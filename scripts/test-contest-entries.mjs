@@ -74,7 +74,10 @@ try {
   // 1. 동기화 upsert — 처음엔 넣고, 다시 돌리면 같은 행을 고친다
   assert.equal((await upsert([row(recordIds[0]), row(recordIds[1])])).error, null)
   assert.equal((await upsert([row(recordIds[0], { fee_status: 'confirmed' })])).error, null)
-  const count = await db.query('select count(*)::int as n from contest_entries where airtable_record_id = any($1)', [recordIds])
+  const count = await db.query(
+    'select count(*)::int as n from contest_entries where airtable_record_id = any($1)',
+    [recordIds]
+  )
   assert.equal(count.rows[0].n, 2)
   assert.equal((await entry(recordIds[0])).fee_status, 'confirmed')
   checks += 2
@@ -84,7 +87,10 @@ try {
     "update contest_entries set artist_id=$1, match_method='admin', matched_at=now() where airtable_record_id=$2",
     [artist, recordIds[1]]
   )
-  assert.equal((await upsert([row(recordIds[1], { result_status: 'awarded', result_raw: '입선' })])).error, null)
+  assert.equal(
+    (await upsert([row(recordIds[1], { result_status: 'awarded', result_raw: '입선' })])).error,
+    null
+  )
   const kept = await entry(recordIds[1])
   assert.equal(kept.artist_id, artist)
   assert.equal(kept.match_method, 'admin')
@@ -94,7 +100,9 @@ try {
   // 3. 회원·익명 역할은 사본을 읽지도 쓰지도 못한다
   const memberRead = await member.from('contest_entries').select('id')
   assert.ok(memberRead.error || memberRead.data.length === 0, 'member must not read entries')
-  const anonRead = await createClient(local.API_URL, local.ANON_KEY).from('contest_entries').select('id')
+  const anonRead = await createClient(local.API_URL, local.ANON_KEY)
+    .from('contest_entries')
+    .select('id')
   assert.ok(anonRead.error || anonRead.data.length === 0, 'anon must not read entries')
   assert.ok((await member.from('contest_entries').insert(row('recTESTCCCCCCCCCC'))).error)
   checks += 3
@@ -103,7 +111,9 @@ try {
   const insert = values =>
     db.query(
       `insert into contest_entries(source_key, airtable_record_id, contest_year, contest_name, ${Object.keys(values).join(', ')})
-       values ('t', 'recTESTDDDDDDDDDD', 2025, 't', ${Object.keys(values).map((_, i) => `$${i + 1}`).join(', ')})`,
+       values ('t', 'recTESTDDDDDDDDDD', 2025, 't', ${Object.keys(values)
+         .map((_, i) => `$${i + 1}`)
+         .join(', ')})`,
       Object.values(values)
     )
   await rejectsCode(insert({ fee_status: 'paid' }), '23514', 'unknown fee status')

@@ -72,7 +72,10 @@ describe('fetchContestRecords', () => {
         ({
           ok: true,
           status: 200,
-          json: async () => ({ records: [{ id: 'recAAAAAAAAAAAAAA', fields: {} }], offset: 'more' }),
+          json: async () => ({
+            records: [{ id: 'recAAAAAAAAAAAAAA', fields: {} }],
+            offset: 'more',
+          }),
         }) as unknown as Response
     )
     await expect(fetchContestRecords(CONTEST_SOURCES[0], 't', fetchImpl)).rejects.toThrow(/pages/)
