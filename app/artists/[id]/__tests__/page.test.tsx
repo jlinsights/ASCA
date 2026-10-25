@@ -166,6 +166,28 @@ describe('작가 상세', () => {
     await expect(ArtistPage(params('hidden-artist'))).rejects.toThrow('NEXT_NOT_FOUND')
   })
 
+  it.each([
+    ['한자·한글 둘 다', { art_name_hanja: '靑山', art_name_ko: '청산' }, '靑山 · 청산'],
+    ['한자만', { art_name_hanja: '靑山', art_name_ko: null }, '靑山'],
+    ['한글만', { art_name_hanja: null, art_name_ko: '청산' }, '청산'],
+  ])('아호를 이름 아래 보여 준다 — %s', async (_case, artName, label) => {
+    getArtist.mockResolvedValue({ ...artistRow, ...artName })
+    await renderPage()
+    expect(screen.getByText('雅號')).toBeInTheDocument()
+    expect(screen.getByText(label)).toBeInTheDocument()
+  })
+
+  it('아호가 없으면 아호 줄을 그리지 않는다', async () => {
+    await renderPage()
+    expect(screen.queryByText('雅號')).not.toBeInTheDocument()
+  })
+
+  it('아호가 있으면 문서 제목에 호를 이름 앞에 둔다', async () => {
+    getArtist.mockResolvedValue({ ...artistRow, art_name_hanja: '靑山', art_name_ko: '청산' })
+    const meta = await generateMetadata(params(ARTIST))
+    expect(meta.title).toBe('청산 김형석 | 동양서예협회')
+  })
+
   it('slug 가 있으면 canonical 을 slug 주소로 둔다', async () => {
     const meta = await generateMetadata(params(ARTIST))
     expect(meta.alternates?.canonical).toBe('/artists/jeongam')

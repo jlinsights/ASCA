@@ -1,4 +1,4 @@
-import { toPublicArtist, type ArtistDbRow } from '../artist-mapper'
+import { artNameLabel, toPublicArtist, type ArtistDbRow } from '../artist-mapper'
 
 const row: ArtistDbRow = {
   id: 'a1',
@@ -24,6 +24,8 @@ const row: ArtistDbRow = {
   updated_at: '2026-10-10T00:00:00Z',
   airtable_id: null,
   slug: 'test-artist',
+  art_name_ko: '청산',
+  art_name_hanja: ' 靑山 ',
 }
 
 describe('toPublicArtist', () => {
@@ -46,6 +48,8 @@ describe('toPublicArtist', () => {
       artistType: '초대작가',
       title: '이사',
       slug: 'test-artist',
+      artNameKo: '청산',
+      artNameHanja: '靑山',
     })
   })
 
@@ -70,5 +74,24 @@ describe('toPublicArtist', () => {
   it('slug 를 고르지 않은 행이면 slug 는 null', () => {
     const { slug: _omit, ...withoutSlug } = row
     expect(toPublicArtist(withoutSlug).slug).toBeNull()
+  })
+
+  it('아호 컬럼을 고르지 않았거나 빈 칸이면 null', () => {
+    const { art_name_ko: _ko, ...withoutKo } = row
+    expect(toPublicArtist(withoutKo).artNameKo).toBeNull()
+    expect(toPublicArtist({ ...row, art_name_hanja: '  ' }).artNameHanja).toBeNull()
+  })
+})
+
+describe('artNameLabel', () => {
+  it.each([
+    ['청산', '靑山', '靑山 · 청산'],
+    [null, '靑山', '靑山'],
+    ['청산', null, '청산'],
+    ['청산', '청산', '청산'],
+    [null, null, null],
+    ['', '  ', null],
+  ])('한글 %p · 한자 %p → %p', (ko, hanja, expected) => {
+    expect(artNameLabel(ko, hanja)).toBe(expected)
   })
 })
