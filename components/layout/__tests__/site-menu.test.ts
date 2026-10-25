@@ -38,6 +38,12 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     ])
   })
 
+  it('소식 메뉴에서 회원 게시판으로 갈 수 있다', () => {
+    const news = headerMenu.find(group => group.key === 'news')?.items ?? []
+    expect(news.map(link => link.href)).toContain('/community/board')
+    expect(footerMenu.flatMap(s => s.items).map(link => link.href)).toContain('/community/board')
+  })
+
   it.each(links.filter(link => !('external' in link && link.external)).map(link => link.href))(
     '%s 는 실제 페이지로 간다',
     href => expect(pageExists(href)).toBe(true)
