@@ -1,128 +1,177 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { HeroFacts, PageHero, type HeroFact } from '@/components/layout/page-hero'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { Button } from '@/components/ui/button'
-import { AlertCircle, Loader2 } from 'lucide-react'
-import { getEventById, incrementEventViews, getRelatedEvents } from '@/lib/supabase/cms'
+import { ApplySectionHead, ContactList, LedgerTable } from '@/components/apply/apply-parts'
+import { EVENT_LINKS } from '@/lib/events/event-links'
+import { getPublishedEvent, listPublishedEvents } from '@/lib/events/events-data'
+import {
+  EVENT_TYPE_LABELS,
+  PHASE_LABELS,
+  eventFacts,
+  eventPeriod,
+  eventPhase,
+  parseEventContent,
+  todayKst,
+} from '@/lib/events/event-view'
 import type { Event } from '@/lib/types/cms-legacy'
 import { log } from '@/lib/utils/logger'
-import { EventDetailBody } from './_components/event-detail-body'
-import { formatEventDateTime } from './_components/event-detail-meta'
+import { toEventRow, type EventRow } from '../_components/event-rows'
+import { EventViewBeacon } from './_components/event-view-beacon'
+import '@/components/apply/apply.css'
+import '../_components/events.css'
 
-const NOT_FOUND = '주소가 바뀌었거나 공개되지 않은 행사입니다.'
+/**
+ * 행사 상세 — 서버에서 그린다. 예전엔 브라우저에서 읽었고, 관련 행사 쿼리 400 하나에 모든 상세가 오류 화면이었다(2026-10-25).
+ * 본문의 '구분: …' 항목 줄은 표로 옮기고, 옛 사이트 원문 링크는 버린다.
+ */
 
-export default function EventDetailPage() {
-  const params = useParams()
-  const eventId = params.id as string
+type PageProps = { params: Promise<{ id: string }> }
 
-  const [event, setEvent] = useState<Event | null>(null)
-  const [relatedEvents, setRelatedEvents] = useState<Event[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+const RELATED_LIMIT = 4
 
-  // 행사 데이터 로드 — 실패로 다루는 것은 행사 본문을 못 읽었을 때뿐이다.
-  // 조회수·관련 행사는 곁가지라 실패해도 본문은 보여 준다(2026-10-25: 관련 행사 쿼리 400 이 페이지 전체를 오류로 만들었다)
-  useEffect(() => {
-    const loadEvent = async () => {
-      setLoading(true)
-      setError(null)
-
-      let eventData: Event | null
-      try {
-        eventData = await getEventById(eventId)
-      } catch (err) {
-        log.error('event load failed', err)
-        setError('행사를 불러오는데 실패했습니다.')
-        setLoading(false)
-        return
-      }
-      if (!eventData) {
-        setError(NOT_FOUND)
-        setLoading(false)
-        return
-      }
-      setEvent(eventData)
-      setLoading(false)
-
-      incrementEventViews(eventId).catch(err => log.error('event views increment failed', err))
-      try {
-        setRelatedEvents(await getRelatedEvents(eventId, eventData.event_type))
-      } catch (err) {
-        log.error('related events load failed', err)
-      }
-    }
-
-    if (eventId) {
-      loadEvent()
-    }
-  }, [eventId])
-
-  const heroTitle = event?.title ?? '행사 상세'
-  const heroFacts: HeroFact[] = [
-    { label: '일시', value: event ? formatEventDateTime(event.event_date) : '—' },
-    { label: '장소', value: !event ? '—' : event.venue || event.location || null },
-  ]
-  const hero = (
-    <PageHero
-      {...PAGE_HERO_MARKS.events}
-      tier='band'
-      title={heroTitle}
-      crumbs={[{ label: '행사 목록', href: '/events' }, { label: heroTitle }]}
-    >
-      <HeroFacts facts={heroFacts} />
-    </PageHero>
-  )
-
-  if (loading) {
-    return (
-      <div className='min-h-screen bg-transparent'>
-        {hero}
-        <main className='container mx-auto px-4 py-10 md:py-16'>
-          <div className='flex items-center justify-center py-12'>
-            <div className='flex items-center gap-3'>
-              <Loader2 className='h-6 w-6 animate-spin' />
-              <span className='text-lg'>행사를 불러오는 중...</span>
-            </div>
-          </div>
-        </main>
-        <LayoutFooter />
-      </div>
-    )
+/** 같은 유형의 행사를 날짜가 가까운 순으로 — 관련 행사를 못 읽어도 본문은 그린다 */
+async function loadRelated(event: Event, today: string): Promise<EventRow[]> {
+  try {
+    const all = await listPublishedEvents()
+    const origin = new Date(event.event_date).getTime()
+    return all
+      .filter(other => other.id !== event.id && other.event_type === event.event_type)
+      .sort(
+        (a, b) =>
+          Math.abs(new Date(a.event_date).getTime() - origin) -
+          Math.abs(new Date(b.event_date).getTime() - origin)
+      )
+      .slice(0, RELATED_LIMIT)
+      .sort((a, b) => b.event_date.localeCompare(a.event_date)) // 고른 뒤엔 최신순으로 보여 준다
+      .map(other => toEventRow(other, today))
+  } catch (err) {
+    log.error('related events load failed', err)
+    return []
   }
+}
 
-  if (error || !event) {
-    return (
-      <div className='min-h-screen bg-transparent'>
-        {hero}
-        <main className='container mx-auto px-4 py-10 md:py-16'>
-          <div className='text-center py-12'>
-            <AlertCircle className='h-16 w-16 text-destructive mx-auto mb-4' />
-            <h3 className='text-lg font-semibold text-foreground mb-2'>
-              {error === NOT_FOUND ? '행사를 찾을 수 없습니다' : '오류가 발생했습니다'}
-            </h3>
-            <p className='text-muted-foreground mb-4'>{error}</p>
-            <Link href='/events'>
-              <Button variant='outline'>목록으로 돌아가기</Button>
-            </Link>
-          </div>
-        </main>
-        <LayoutFooter />
-      </div>
-    )
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const event = await getPublishedEvent((await params).id)
+  if (!event) return { title: '행사를 찾을 수 없습니다 | 동양서예협회' }
+  const description = parseEventContent(event.content, event.description ?? '')
+    .lead.replace(/\s+/g, ' ')
+    .slice(0, 150)
+  const title = `${event.title} | 동양서예협회`
+  return {
+    title,
+    description,
+    alternates: { canonical: `/events/${event.id}` },
+    openGraph: { title, description },
   }
+}
+
+export default async function EventDetailPage({ params }: PageProps) {
+  const event = await getPublishedEvent((await params).id)
+  if (!event) notFound()
+
+  const today = todayKst()
+  const parsed = parseEventContent(event.content, event.description ?? '')
+  const facts = eventFacts(event, parsed)
+  const phase = eventPhase(event, today)
+  const link = EVENT_LINKS[event.id]
+  const related = await loadRelated(event, today)
+  const typeLabel = EVENT_TYPE_LABELS[event.event_type] ?? '행사'
+  const isAhead = phase === 'upcoming' || phase === 'ongoing'
 
   return (
-    <div className='min-h-screen bg-transparent'>
-      {hero}
-      <main className='container mx-auto px-4 py-10 md:py-16'>
-        <EventDetailBody event={event} relatedEvents={relatedEvents} />
-      </main>
+    <div className='asca-apply min-h-screen'>
+      <PageHero
+        {...PAGE_HERO_MARKS.events}
+        tier='band'
+        title={event.title}
+        crumbs={[{ label: '행사', href: '/events' }, { label: event.title }]}
+      >
+        <HeroFacts
+          facts={[
+            { label: '일정', value: eventPeriod(event) },
+            { label: '장소', value: event.location || event.venue || null },
+            { label: '구분', value: typeLabel },
+          ]}
+        />
+      </PageHero>
 
+      <div className='asca-apply__body'>
+        <div className='asca-events__detail'>
+          <article className='asca-events__article' aria-labelledby='about-title'>
+            <p className='asca-events__kicker'>
+              <span className='asca-events__phase' data-phase={phase}>
+                {PHASE_LABELS[phase]}
+              </span>
+              {typeLabel}
+            </p>
+            <h2 id='about-title' className='sr-only'>
+              행사 소개
+            </h2>
+            <div className='asca-events__lead'>
+              {parsed.lead.split(/\n{2,}/).map(paragraph => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+
+            {link && (
+              <p className='asca-events__cta'>
+                <Link href={link.href} className='asca-events__more is-primary'>
+                  {link.label} →
+                </Link>
+              </p>
+            )}
+
+            <section aria-labelledby='facts-title' className='asca-events__facts'>
+              <ApplySectionHead id='facts-title' eyebrow='행사 정보' title='언제, 어디서' />
+              <LedgerTable
+                caption={`${event.title} 행사 정보`}
+                columns={[{ label: '항목' }, { label: '내용' }]}
+                rows={facts.map(fact => ({ cells: [fact.label, fact.value] }))}
+              />
+            </section>
+
+            {isAhead && (
+              <section aria-labelledby='ask-title' className='asca-events__facts'>
+                <ApplySectionHead
+                  id='ask-title'
+                  eyebrow='문의'
+                  title='참가·일정 문의'
+                  lede='세부 일정과 참가 방법은 사무국에서 안내합니다.'
+                />
+                <ContactList />
+              </section>
+            )}
+          </article>
+
+          <aside className='asca-events__aside' aria-labelledby='related-title'>
+            <h2 id='related-title' className='asca-events__aside-title'>
+              {related.length > 0 ? `다른 ${typeLabel} 행사` : '행사 기록'}
+            </h2>
+            {related.length > 0 && (
+              <ol className='asca-events__related'>
+                {related.map(row => (
+                  <li key={row.id}>
+                    <Link href={`/events/${row.id}`}>
+                      <span className='asca-events__related-date'>
+                        {row.year}.{row.monthDay}
+                      </span>
+                      <span className='asca-events__related-title'>{row.title}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            )}
+            <Link href='/events#archive' className='asca-events__more'>
+              ← 행사 목록으로
+            </Link>
+          </aside>
+        </div>
+      </div>
+
+      <EventViewBeacon eventId={event.id} />
       <LayoutFooter />
     </div>
   )

@@ -1,0 +1,454 @@
+/* =====================================================================
+   행사 — Ink System 장부 위에 얹는 행사 전용 조판. 색·글꼴은 .asca-apply 토큰(--ap-*)만 쓴다.
+   - 행사 사진이 없어(2026-10) 사진 칸 대신 날짜를 명조로 크게 세워 시선의 닻으로 쓴다
+   - 지난 행사는 해마다 묶은 장부 — 넓은 화면에선 연도가 왼쪽 칸에 붙어 따라온다
+   ===================================================================== */
+
+/* ---------- 다가오는 행사 ---------- */
+.asca-events__upcoming {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+.asca-events__feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  padding: clamp(24px, 4vw, 40px) 0;
+  border-bottom: 1px solid var(--ap-rule);
+}
+@media (min-width: 760px) {
+  .asca-events__feature {
+    grid-template-columns: clamp(150px, 18vw, 220px) minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 56px);
+  }
+}
+.asca-events__feature-date {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--ap-font-display);
+  line-height: 1;
+}
+.asca-events__feature-year {
+  font-family: var(--ap-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ap-accent);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 10px;
+}
+.asca-events__feature-md {
+  font-size: clamp(3.25rem, 2.2rem + 4vw, 5.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.asca-events__feature-dot {
+  color: var(--ap-seal);
+}
+.dark .asca-events__feature-dot {
+  color: var(--ap-accent);
+}
+.asca-events__feature-kicker,
+.asca-events__kicker {
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ap-muted);
+}
+.asca-events__phase {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--ap-rule);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ap-muted);
+}
+.asca-events__phase[data-phase='upcoming'],
+.asca-events__phase[data-phase='ongoing'] {
+  border-color: var(--ap-seal);
+  color: var(--ap-seal);
+}
+.dark .asca-events__phase[data-phase='upcoming'],
+.dark .asca-events__phase[data-phase='ongoing'] {
+  border-color: var(--ap-accent);
+  color: var(--ap-accent);
+}
+.asca-events__feature-title {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: lining-nums;
+  letter-spacing: -0.01em;
+}
+.asca-events__feature-title a {
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(var(--ap-seal), var(--ap-seal));
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 320ms var(--ap-ease);
+}
+.asca-events__feature-title a:hover {
+  background-size: 100% 1px;
+}
+.asca-events__feature-summary {
+  margin: 14px 0 0;
+  max-width: 60ch;
+  font-size: 0.975rem;
+  line-height: 1.75;
+  color: var(--ap-muted);
+}
+.asca-events__feature-facts {
+  margin: 20px 0 0;
+  display: grid;
+  gap: 6px;
+}
+.asca-events__feature-facts > div {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  font-size: 0.925rem;
+  line-height: 1.6;
+}
+.asca-events__feature-facts dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ap-accent);
+  padding-top: 0.2em;
+}
+.asca-events__feature-facts dd {
+  margin: 0;
+}
+.asca-events__feature-actions,
+.asca-events__cta {
+  margin: 24px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* 이어 보기 — 글자 버튼. 주(主) 행동만 먹색 바탕 */
+.asca-events__more {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--ap-rule-strong);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ap-fg);
+  text-decoration: none;
+  transition:
+    background-color 160ms var(--ap-ease),
+    color 160ms var(--ap-ease);
+}
+.asca-events__more:hover {
+  background: var(--ap-surface);
+}
+.asca-events__more.is-primary {
+  background: var(--ap-fg);
+  color: var(--ap-bg);
+}
+.asca-events__more.is-primary:hover {
+  background: var(--navy-700);
+}
+.dark .asca-events__more.is-primary:hover {
+  background: var(--gold-300);
+}
+.asca-events__more:active {
+  transform: translateY(1px);
+}
+
+/* ---------- 지난 행사: 도구 ---------- */
+.asca-events__tools {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 900px) {
+  .asca-events__tools {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    align-items: center;
+  }
+}
+.asca-events__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.asca-events__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--ap-rule);
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ap-muted);
+  cursor: pointer;
+  transition:
+    border-color 160ms var(--ap-ease),
+    color 160ms var(--ap-ease),
+    background-color 160ms var(--ap-ease);
+}
+.asca-events__chip:hover {
+  border-color: var(--ap-rule-strong);
+  color: var(--ap-fg);
+}
+.asca-events__chip[aria-pressed='true'] {
+  border-color: var(--ap-fg);
+  background: var(--ap-fg);
+  color: var(--ap-bg);
+}
+.asca-events__chip-count {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+.asca-events__search input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--ap-rule);
+  border-radius: var(--radius);
+  background: var(--ap-surface);
+  font: inherit;
+  font-size: 0.925rem;
+  color: var(--ap-fg);
+}
+.asca-events__search input::placeholder {
+  color: var(--ap-muted);
+}
+.asca-events__search input:focus-visible {
+  border-color: var(--ap-ring);
+}
+.asca-events__count {
+  margin: 14px 0 0;
+  font-size: 0.8125rem;
+  color: var(--ap-muted);
+  font-variant-numeric: tabular-nums;
+}
+.asca-events__empty {
+  padding: 48px 0;
+  color: var(--ap-muted);
+}
+.asca-events__empty p {
+  margin: 0 0 12px;
+}
+.asca-events__reset {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--ap-fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+/* ---------- 지난 행사: 연도별 장부 ---------- */
+.asca-events__year {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding-top: clamp(28px, 4vw, 44px);
+}
+@media (min-width: 900px) {
+  .asca-events__year {
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 32px;
+  }
+}
+.asca-events__year-label {
+  margin: 0 0 8px;
+  font-family: var(--ap-font-display);
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ap-fg);
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 900px) {
+  .asca-events__year-label {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    padding-top: 14px;
+  }
+}
+.asca-events__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ap-rule);
+}
+.asca-events__row {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  column-gap: 16px;
+  row-gap: 4px;
+  padding: 16px 8px 16px 0;
+  border-bottom: 1px solid var(--ap-rule);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 160ms var(--ap-ease);
+}
+@media (min-width: 640px) {
+  .asca-events__row {
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    align-items: baseline;
+  }
+}
+.asca-events__row:hover {
+  background: var(--ap-surface);
+}
+.asca-events__row-date {
+  padding-left: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ap-accent);
+  font-variant-numeric: tabular-nums;
+}
+.asca-events__row-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.asca-events__row-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+.asca-events__row:hover .asca-events__row-title {
+  text-decoration: underline;
+  text-decoration-color: var(--ap-seal);
+  text-underline-offset: 4px;
+}
+.asca-events__row-meta {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ap-muted);
+}
+.asca-events__row-type {
+  grid-column: 2;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ap-muted);
+  white-space: nowrap;
+}
+@media (min-width: 640px) {
+  .asca-events__row-type {
+    grid-column: auto;
+    padding-left: 12px;
+  }
+}
+
+/* ---------- 상세 ---------- */
+.asca-events__detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(48px, 6vw, 72px);
+}
+@media (min-width: 1000px) {
+  .asca-events__detail {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: clamp(48px, 5vw, 80px);
+  }
+}
+.asca-events__lead {
+  max-width: 62ch;
+  font-family: var(--ap-font-display);
+  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.4rem);
+  line-height: 1.8;
+  text-wrap: pretty;
+  /* 명조의 옛 숫자꼴은 '4박 5일'의 5 를 내려 앉힌다 */
+  font-variant-numeric: lining-nums;
+}
+.asca-events__lead p {
+  margin: 0;
+}
+.asca-events__lead p + p {
+  margin-top: 1em;
+}
+.asca-events__facts {
+  margin-top: clamp(48px, 6vw, 72px);
+}
+.asca-events__aside {
+  align-self: start;
+  display: grid;
+  gap: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 1000px) {
+  .asca-events__aside {
+    position: sticky;
+    top: 96px;
+  }
+}
+.asca-events__aside-title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ap-muted);
+}
+.asca-events__related {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.asca-events__related a {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ap-rule);
+  color: inherit;
+  text-decoration: none;
+}
+.asca-events__related-date {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ap-accent);
+  font-variant-numeric: tabular-nums;
+}
+.asca-events__related-title {
+  font-size: 0.925rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.asca-events__related a:hover .asca-events__related-title {
+  text-decoration: underline;
+  text-decoration-color: var(--ap-seal);
+  text-underline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asca-events__feature-title a,
+  .asca-events__row,
+  .asca-events__chip,
+  .asca-events__more {
+    transition: none;
+  }
+}
