@@ -17,7 +17,8 @@ export interface ArtistCareer {
 }
 
 const YEAR = /(?<!\d)((?:19|20)\d{2})(?!\d)/
-const CAREER_WORD = /회|展|전|賞|상|선|출품|수상|초대|위원|회원|역임|졸업|수료|개인전|강사|협회|대회|공모/
+const CAREER_WORD =
+  /회|展|전|賞|상|선|출품|수상|초대|위원|회원|역임|졸업|수료|개인전|강사|협회|대회|공모/
 const BULLET = /^[•·∙▪◦○●\-–—*]\s*/
 /** 산문 문장 중간에서 끊긴 줄(쉼표로 끝남)은 연보가 아니다 */
 const PROSE_TAIL = /[，,、]$/

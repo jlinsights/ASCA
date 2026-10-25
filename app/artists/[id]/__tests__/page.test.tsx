@@ -71,7 +71,15 @@ const works = [
     tags: ['特選', '행서'],
     images: { main: { path: 'w1/main.webp', width: 600, height: 1800 } },
   },
-  { id: 'w2', title: '제목 미상', title_en: null, year_created: 2023, style: null, tags: [], images: {} },
+  {
+    id: 'w2',
+    title: '제목 미상',
+    title_en: null,
+    year_created: 2023,
+    style: null,
+    tags: [],
+    images: {},
+  },
 ]
 
 const params = (id: string) => ({ params: Promise.resolve({ id }) })

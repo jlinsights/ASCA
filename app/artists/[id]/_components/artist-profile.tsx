@@ -177,9 +177,7 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
       {works.length === 0 && (
         <section className='ap-section ap-empty' aria-label='안내'>
           <p className='ap-empty__text'>
-            {hasAbout
-              ? '공개된 작품이 아직 없습니다.'
-              : '작가 소개와 작품을 준비하고 있습니다.'}
+            {hasAbout ? '공개된 작품이 아직 없습니다.' : '작가 소개와 작품을 준비하고 있습니다.'}
           </p>
           <Link href='/artists' className='ap-empty__link'>
             다른 작가 보기

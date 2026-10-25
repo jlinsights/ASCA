@@ -6,7 +6,12 @@ import { getSupabaseClient } from '@/lib/supabase'
 import { log } from '@/lib/utils/logger'
 import type { ArtistDbRow } from '@/lib/api/artist-mapper'
 import { ArtistProfile } from './_components/artist-profile'
-import { orderWorks, toArtistWork, type ArtistWork, type ArtworkRow } from './_components/artist-works'
+import {
+  orderWorks,
+  toArtistWork,
+  type ArtistWork,
+  type ArtworkRow,
+} from './_components/artist-works'
 
 /**
  * 작가 상세 — 서버에서 작가와 공개 작품을 읽어 한 번에 그린다.
