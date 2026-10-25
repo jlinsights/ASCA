@@ -293,7 +293,7 @@ export default function FormsPage() {
         <HeroFacts facts={[{ label: '서식', value: `${FORM_ITEMS.length}종` }]} />
       </PageHero>
 
-      <section className='container mx-auto px-4 py-10 md:py-16'>
+      <section className='container py-10 md:py-16'>
         <p className='mb-8 border-l-2 border-scholar-red/60 bg-muted/40 px-4 py-3 text-sm leading-relaxed'>
           <strong className='block'>작성한 서식을 보내실 곳 — {OFFICE.label}</strong>
           {formatAddress(OFFICE)}

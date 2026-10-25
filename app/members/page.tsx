@@ -165,7 +165,7 @@ export default function MembersPage() {
         />
       </PageHero>
 
-      <div className='container mx-auto px-4 py-10 md:py-16'>{renderBody()}</div>
+      <div className='container py-10 md:py-16'>{renderBody()}</div>
     </div>
   )
 }

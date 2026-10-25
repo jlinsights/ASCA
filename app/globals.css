@@ -102,13 +102,36 @@
   --font-noto-serif-kr: 'Noto Serif KR';
   /* 번체 한자 — app/layout.tsx NOTO_SERIF_TC_CSS 가 싣는다(next/font 아님) */
   --font-noto-serif-tc: 'Noto Serif TC';
+
+  /* 페이지 틀 — 헤더·히어로·본문·푸터가 같은 좌우 선에 선다 (2026-10-25)
+     본문 1200px(8px 격자 150칸), 좌우 여백은 화면에 비례해 넓어진다:
+     390px → 20 · 1024px → 46 · 1280px → 72 · 1440px → 120 · 1920px → 360 */
+  --shell-max: 75rem;
+  --shell-gutter: clamp(1.25rem, 10vw - 3.5rem, 8rem);
+  --shell-frame: calc(var(--shell-max) + 2 * var(--shell-gutter));
+  /* 읽기 문서(인사말·규정 본문 등)의 좁은 단과 한 줄 길이 */
+  --shell-narrow: 50rem;
+  --measure: 40rem;
+}
+
+/* Tailwind 기본 container 는 끄고(tailwind.config corePlugins) 이 정의 하나만 쓴다.
+   container 에 px-* 를 덧붙이지 않는다 — 여백은 --shell-gutter 가 정한다. */
+@layer components {
+  .container {
+    width: 100%;
+    max-width: var(--shell-frame);
+    margin-inline: auto;
+    padding-inline: var(--shell-gutter);
+  }
 }
 
 /* Enhanced Gallery Components */
 @layer components {
   /* Gallery Container */
   .gallery-container {
-    @apply max-w-[1400px] mx-auto px-6;
+    max-width: var(--shell-frame);
+    margin-inline: auto;
+    padding-inline: var(--shell-gutter);
   }
 
   /* Gallery Cards */
@@ -688,14 +711,6 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
-}
-
-/* Mobile-optimized container spacing */
-@media (max-width: 640px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
 }
 
 /* Safe area padding for devices with notches */

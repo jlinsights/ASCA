@@ -146,7 +146,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
         ref={headerRef}
         className={`${positionClass} z-50 transition-all duration-300 border-b ${headerClass}`}
       >
-        <div className='container mx-auto px-4'>
+        <div className='container'>
           <div className='flex items-center justify-between h-14 md:h-16'>
             <Link href='/' className='flex shrink-0 items-center'>
               <Logo width={150} height={50} className='h-10 md:h-12 lg:h-14 w-auto' />
@@ -270,7 +270,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
             className='xl:hidden bg-background border-t border-[#222222]/10 dark:border-[#fcfcfc]/10 shadow-lg'
           >
             <nav
-              className='container mx-auto px-4 py-6 space-y-2'
+              className='container py-6 space-y-2'
               role='navigation'
               aria-label={t('siteMobileNav')}
             >

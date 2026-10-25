@@ -26,7 +26,7 @@ export const AdminNavigation = React.memo(
 
     return (
       <nav aria-label='관리자 메뉴' className='border-b border-border bg-muted/30'>
-        <div className='container mx-auto px-4'>
+        <div className='container'>
           <div className='flex items-center gap-2 py-3 overflow-x-auto'>
             <Link href='/'>
               <Button variant='ghost' size='sm' className='gap-2 flex-shrink-0'>

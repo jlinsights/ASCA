@@ -102,7 +102,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
       <main className='flex-1'>
         {/* Hero Section */}
         <section className='relative bg-gradient-to-br from-rice-paper via-silk-cream to-celadon-green/10 dark:from-ink-black dark:via-stone-gray/20 dark:to-celadon-green/10 py-20'>
-          <div className='container mx-auto px-4'>
+          <div className='container'>
             <div className='max-w-5xl mx-auto'>
               <div className='flex flex-col md:flex-row gap-8 items-center md:items-start'>
                 {/* Profile Image */}
@@ -237,7 +237,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
 
         {/* Featured Artworks */}
         <section className='py-16 bg-background'>
-          <div className='container mx-auto px-4'>
+          <div className='container'>
             <div className='max-w-7xl mx-auto'>
               <div className='text-center mb-12'>
                 <h2 className='text-3xl font-serif font-bold text-foreground mb-4'>대표 작품</h2>
@@ -279,7 +279,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
         {/* Career Timeline */}
         {careerEntries.length > 0 && (
           <section className='py-16 bg-rice-paper/50 dark:bg-stone-gray/10'>
-            <div className='container mx-auto px-4'>
+            <div className='container'>
               <div className='max-w-7xl mx-auto'>
                 <div className='text-center mb-12'>
                   <h2 className='text-3xl font-serif font-bold text-foreground mb-4'>
@@ -303,7 +303,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
         {/* Contact Section */}
         {config?.showContact && (profile.email || profile.phone) && (
           <section className='py-16 bg-rice-paper/50 dark:bg-stone-gray/10'>
-            <div className='container mx-auto px-4'>
+            <div className='container'>
               <div className='max-w-2xl mx-auto text-center'>
                 <h2 className='text-3xl font-serif font-bold text-foreground mb-4'>문의하기</h2>
                 <p className='text-muted-foreground mb-8'>

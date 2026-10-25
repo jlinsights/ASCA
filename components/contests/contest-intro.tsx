@@ -37,7 +37,7 @@ export function ContestIntro({ facts }: ContestIntroProps) {
       >
         <HeroFacts facts={facts} />
       </PageHero>
-      <div className='container mx-auto px-4 py-10 md:py-16'>
+      <div className='container py-10 md:py-16'>
         <ContestFlipbook />
       </div>
     </>

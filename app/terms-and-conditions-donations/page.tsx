@@ -168,7 +168,7 @@ export default function TermsAndConditionsDonationsPage() {
         <HeroFacts facts={[{ label: '개정', value: '2026. 1. 1' }]} />
       </PageHero>
 
-      <section className='container mx-auto px-4 py-10 md:py-16'>
+      <section className='container py-10 md:py-16'>
         <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
           <aside className='lg:w-64 shrink-0'>
             <div className='sticky top-24 space-y-6'>

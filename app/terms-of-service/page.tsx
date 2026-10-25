@@ -82,7 +82,7 @@ export default function TermsOfServicePage() {
         />
       </PageHero>
 
-      <section className='container mx-auto px-4 py-10 md:py-16'>
+      <section className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-8'>
           <nav aria-label='조항 목차' className='rounded-lg border p-4 md:p-6'>
             <ol className='grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2'>

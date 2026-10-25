@@ -16,8 +16,8 @@
   --ap-seal: var(--seal-red);
   --ap-ring: var(--gold-600);
 
-  --ap-gutter: clamp(16px, 4vw, 48px);
-  --ap-max: 1200px;
+  --ap-gutter: var(--shell-gutter);
+  --ap-max: var(--shell-frame);
   --ap-font-display:
     var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
   --ap-font-sans: 'Pretendard', var(--font-noto-sans-kr), system-ui, sans-serif;
@@ -115,6 +115,9 @@
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.01em;
+  /* 한글 낱말 중간에서 줄을 바꾸지 않는다('동양서예대 / 전') */
+  word-break: keep-all;
+  text-wrap: balance;
 }
 .asca-apply__lede {
   margin: 0;

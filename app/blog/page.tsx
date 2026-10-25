@@ -106,7 +106,7 @@ export default function BlogPage() {
       </PageHero>
 
       {/* External Channels Grid */}
-      <section className='container mx-auto px-4 py-10 md:py-16'>
+      <section className='container py-10 md:py-16'>
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 max-w-4xl mx-auto'>
           {/* Kakao Channel Card - Static Link */}
           <a

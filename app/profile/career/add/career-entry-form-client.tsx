@@ -74,7 +74,7 @@ export function CareerEntryFormClient() {
 
   return (
     <div className='min-h-screen bg-transparent flex flex-col'>
-      <main className='flex-1 container mx-auto px-4 py-8'>
+      <main className='flex-1 container py-8'>
         <div className='max-w-3xl mx-auto'>
           <div className='mb-8'>
             <Button variant='ghost' onClick={() => router.back()} className='mb-4'>

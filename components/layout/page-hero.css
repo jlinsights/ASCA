@@ -10,8 +10,8 @@
 
 .asca-ph {
   --ph-header: 64px;
-  --ph-gutter: clamp(16px, 4vw, 48px);
-  --ph-max: 1400px;
+  --ph-gutter: var(--shell-gutter);
+  --ph-max: var(--shell-frame);
 
   --ph-bg: var(--paper);
   --ph-fg: var(--navy-900);

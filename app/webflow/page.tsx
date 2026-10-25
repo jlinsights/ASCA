@@ -190,7 +190,7 @@ function PageTable({ title, pages }: { title: string; pages: PageEntry[] }) {
 
 export default function WebflowMigrationPage() {
   return (
-    <section className='container max-w-6xl py-10 space-y-10'>
+    <section className='container [--shell-max:72rem] py-10 space-y-10'>
       <header className='space-y-3'>
         <h1 className='text-3xl font-bold tracking-tight'>
           Webflow → Next.js 마이그레이션 대시보드

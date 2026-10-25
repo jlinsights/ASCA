@@ -47,7 +47,7 @@ export function HeroSection() {
       >
         {/* Hero Content */}
         <m.div
-          className='relative z-10 container mx-auto px-4 py-20 md:py-32'
+          className='relative z-10 container py-20 md:py-32'
           variants={containerVariants}
           initial='hidden'
           animate='visible'

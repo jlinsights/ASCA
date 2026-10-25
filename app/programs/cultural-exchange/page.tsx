@@ -31,7 +31,7 @@ export default function CulturalExchangePage() {
         lede='한·중·일 연합전과 국내외 교류전시는 협회가 정관으로 정한 사업입니다. 지난 교류의 기록을 모았습니다.'
       />
 
-      <div className='container mx-auto space-y-10 px-4 py-10 md:py-16'>
+      <div className='container space-y-10 py-10 md:py-16'>
         <TaiwanTripFlipbook />
         <p className='max-w-2xl text-sm leading-relaxed text-muted-foreground'>
           역대 한·중·일 교류전 기록은{' '}

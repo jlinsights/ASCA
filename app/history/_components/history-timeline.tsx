@@ -14,7 +14,7 @@ export function HistoryTimeline() {
   const yearGroups = groupByYear(historyEvents)
 
   return (
-    <section className='container mx-auto px-4 py-8 md:py-12'>
+    <section className='container py-8 md:py-12'>
       <div className='max-w-4xl mx-auto'>
         {yearGroups.map(({ year, events }) => (
           <div key={year} className='mb-12'>
