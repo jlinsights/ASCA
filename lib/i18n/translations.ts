@@ -4,6 +4,7 @@ import { authTranslations } from './translations/auth'
 import { nativeAuthTranslations } from './translations/native-auth'
 import { artistClaimTranslations } from './translations/artist-claim'
 import { communityBoardTranslations } from './translations/community-board'
+import { faqTranslations } from './translations/faq'
 import { contestEntriesTranslations } from './translations/contest-entries'
 import { flipbookTranslations } from './translations/flipbooks'
 import { regulationsTranslations } from './translations/regulations'
@@ -31,6 +32,7 @@ export const translations: TranslationData = {
     ...nativeAuthTranslations.ko,
     ...artistClaimTranslations.ko,
     ...communityBoardTranslations.ko,
+    ...faqTranslations.ko,
     ...contestEntriesTranslations.ko,
     ...profileEditorTranslations.ko,
     ...flipbookTranslations.ko,
@@ -161,6 +163,7 @@ export const translations: TranslationData = {
     ...nativeAuthTranslations.en,
     ...artistClaimTranslations.en,
     ...communityBoardTranslations.en,
+    ...faqTranslations.en,
     ...contestEntriesTranslations.en,
     ...profileEditorTranslations.en,
     ...flipbookTranslations.en,
@@ -300,6 +303,7 @@ export const translations: TranslationData = {
     ...nativeAuthTranslations.ja,
     ...artistClaimTranslations.ja,
     ...communityBoardTranslations.ja,
+    ...faqTranslations.ja,
     ...contestEntriesTranslations.ja,
     ...profileEditorTranslations.ja,
     ...flipbookTranslations.ja,
@@ -430,6 +434,7 @@ export const translations: TranslationData = {
     ...nativeAuthTranslations.zh,
     ...artistClaimTranslations.zh,
     ...communityBoardTranslations.zh,
+    ...faqTranslations.zh,
     ...contestEntriesTranslations.zh,
     ...profileEditorTranslations.zh,
     ...flipbookTranslations.zh,

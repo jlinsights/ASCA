@@ -62,6 +62,7 @@ const membership: MenuLink[] = [
   { labelKey: 'siteNavMembershipGuide', href: '/membership' },
   { labelKey: 'siteNavAcademy', href: '/academy' },
   { labelKey: 'siteNavFundraising', href: '/fundraising' },
+  { labelKey: 'siteNavFaq', href: '/faq' },
   { labelKey: 'siteNavContact', href: '/contact' },
 ]
 
@@ -146,6 +147,7 @@ export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
         href: 'https://orientalcalligraphy.stibee.com/',
         external: true,
       },
+      { labelKey: 'siteNavFaq', href: '/faq' },
       { labelKey: 'siteNavContact', href: '/contact' },
     ],
   },
