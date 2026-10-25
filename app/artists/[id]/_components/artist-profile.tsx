@@ -129,6 +129,7 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
     <main className='ap'>
       <ArtistHero
         name={name}
+        baseName={baseName ?? artist.name}
         hanja={hanjaName(artist)}
         lede={lede}
         facts={[

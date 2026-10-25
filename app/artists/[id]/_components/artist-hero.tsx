@@ -10,7 +10,10 @@ export interface ArtistHeroFact {
 }
 
 interface ArtistHeroProps {
+  /** 보이는 이름 — 작고한 작가는 '故 ' 가 붙는다 */
   name: string
+  /** 크기 단계를 고를 이름 — 故 표시를 빼고 센다 */
+  baseName: string
   /** 한글 이름과 다른 한자 이름 — 이름 아래 두 번째 줄로 선다 */
   hanja: string | null
   /** 아호·등급 줄 */
@@ -37,7 +40,20 @@ export function nameScale(name: string): 'short' | 'medium' | 'long' {
  * 왼쪽 넓은 단(황금비)에 큰 이름, 오른쪽 좁은 단에 초상 또는 세로 題簽.
  * 첫 화면에서 이름에 먹이 들고(왼→오), 題簽이 위에서 아래로 펼쳐진다 — CSS 한 번뿐.
  */
-export function ArtistHero({ name, hanja, lede, facts, ledger, media }: ArtistHeroProps) {
+export function ArtistHero({
+  name,
+  baseName,
+  hanja,
+  lede,
+  facts,
+  ledger,
+  media,
+}: ArtistHeroProps) {
+  // '故 임현기' — 故 는 이름 크기로 키우지 않고 이름 앞에 작게 붙인다
+  const prefix =
+    name !== baseName && name.endsWith(baseName)
+      ? name.slice(0, name.length - baseName.length).trim()
+      : ''
   const shownFacts = facts.filter(shown)
   const shownLedger = ledger.filter(shown)
 
@@ -54,8 +70,13 @@ export function ArtistHero({ name, hanja, lede, facts, ledger, media }: ArtistHe
             </ol>
           </nav>
 
-          <h1 id='ah-name' className='ah__name' data-scale={nameScale(name)}>
-            {name}
+          <h1 id='ah-name' className='ah__name' data-scale={nameScale(baseName)}>
+            {prefix && (
+              <span className='ah__prefix' lang='zh-Hant'>
+                {prefix}{' '}
+              </span>
+            )}
+            {prefix ? baseName : name}
           </h1>
           {hanja && (
             <p className='ah__hanja' lang='zh-Hant'>
