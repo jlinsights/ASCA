@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { ContestIntro } from '@/components/contests/contest-intro'
 import {
@@ -8,7 +7,9 @@ import {
   ContactList,
   LedgerTable,
 } from '@/components/apply/apply-parts'
-import { CONTEST_EDITIONS, NEXT_CONTEST } from '@/app/awards/_components/awards-data'
+import { CONTEST_EDITIONS } from '@/app/awards/_components/awards-data'
+import { ContestGuidelines } from './_components/contest-guidelines'
+import { CONTEST_23, koDate } from './_components/contest-23-data'
 import '@/components/apply/apply.css'
 
 /**
@@ -17,7 +18,7 @@ import '@/components/apply/apply.css'
  */
 
 const DESCRIPTION =
-  '사단법인 동양서예협회가 주최하는 대한민국 동양서예대전의 다음 회차 일정, 공모 요강, 역대 대전 기록을 안내합니다.'
+  '제23회 대한민국 동양서예대전 공모요강 — 접수 마감 2027년 1월 31일, 출품 부문·자격·규격·출품료·시상과 역대 대전 기록을 안내합니다.'
 
 export const metadata: Metadata = {
   title: '공모전 | 동양서예협회',
@@ -26,7 +27,13 @@ export const metadata: Metadata = {
 }
 
 const TOC = [
-  { href: '#next', label: '다음 대전' },
+  { href: '#next', label: '일정' },
+  { href: '#entry', label: '자격·부문' },
+  { href: '#specs', label: '규격·표장' },
+  { href: '#fees', label: '출품료' },
+  { href: '#how', label: '출품 방법' },
+  { href: '#prizes', label: '시상' },
+  { href: '#notice', label: '유의사항' },
   { href: '#editions', label: '역대 대전' },
   { href: '#contact', label: '문의' },
 ] as const
@@ -38,35 +45,19 @@ export default function ContestsPage() {
       <ContestIntro
         facts={[
           { label: '역대 대전', value: `${CONTEST_EDITIONS.length}회` },
-          { label: '다음 대전', value: `제${NEXT_CONTEST.edition}회 · 2027년 4월` },
+          { label: '다음 대전', value: `제${CONTEST_23.edition}회` },
+          { label: '접수 마감', value: koDate(CONTEST_23.deadline) },
+          {
+            label: '전시',
+            value: `${koDate(CONTEST_23.exhibitionStart, false)} ~ ${koDate(CONTEST_23.exhibitionEnd, false)}`,
+          },
         ]}
       />
 
       <div className='asca-apply__body'>
         <ApplyToc items={TOC} />
 
-        <section id='next' aria-labelledby='next-title' className='asca-apply__anchor'>
-          <ApplySectionHead
-            id='next-title'
-            eyebrow='다음 대전'
-            title={`제${NEXT_CONTEST.edition}회 대한민국 동양서예대전`}
-            lede='출품 요강과 접수 일정은 확정되는 대로 공지사항에 안내합니다.'
-          />
-          <LedgerTable
-            caption={`제${NEXT_CONTEST.edition}회 대전 일정`}
-            columns={[{ label: '구분' }, { label: '내용' }]}
-            rows={[
-              { cells: ['전시 기간', NEXT_CONTEST.date], lead: true },
-              { cells: ['장소', NEXT_CONTEST.venue] },
-              { cells: ['함께 열리는 전시', '한·중·일 동양서예 초대작가전'] },
-            ]}
-          />
-          <p className='asca-apply__note'>
-            출품 방법은 <Link href='/application'>출품원서</Link>, 시상 내역과 상금은{' '}
-            <Link href='/awards'>수상</Link>, 새 소식은 <Link href='/notice'>공지사항</Link>에서
-            확인하세요.
-          </p>
-        </section>
+        <ContestGuidelines />
 
         <section id='editions' aria-labelledby='editions-title' className='asca-apply__anchor'>
           <ApplySectionHead
