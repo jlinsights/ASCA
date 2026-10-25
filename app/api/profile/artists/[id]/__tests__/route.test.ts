@@ -40,6 +40,7 @@ beforeEach(() => {
   query = {}
   for (const method of ['from', 'select', 'eq', 'update']) query[method] = jest.fn(() => query)
   query.maybeSingle = jest.fn().mockResolvedValue({ data: row, error: null })
+  query.rpc = jest.fn().mockResolvedValue({ data: 'revision-1', error: null })
   jest.mocked(archiveWriter).mockReturnValue(query as any)
 })
 const context = (value = id) => ({ params: Promise.resolve({ id: value }) })
@@ -83,13 +84,18 @@ it('maps only supported camelCase fields and scopes the write to the current own
     specialization: ['행서'],
   })
   expect(response.status).toBe(200)
-  expect(query.update).toHaveBeenCalledWith({
-    name_en: 'New name',
-    bio: '새 소개',
-    bio_en: null,
-    birth_year: null,
-    specialties: ['행서'],
-    updated_at: expect.any(String),
+  // 쓰기는 소유권 확인·이력 기록을 함께 하는 DB 함수로만 — 직접 update 하지 않는다
+  expect(query.update).not.toHaveBeenCalled()
+  expect(query.rpc).toHaveBeenCalledWith('apply_artist_profile_edit', {
+    p_artist: id,
+    p_account: accountId,
+    p_patch: {
+      name_en: 'New name',
+      bio: '새 소개',
+      bio_en: null,
+      birth_year: null,
+      specialties: ['행서'],
+    },
   })
   expect(query.eq).toHaveBeenCalledWith('id', id)
   expect(query.eq).toHaveBeenCalledWith('claimed_by_user_id', accountId)
@@ -102,6 +108,7 @@ it('maps only supported camelCase fields and scopes the write to the current own
     undefined,
     {
       fields: ['name_en', 'bio', 'bio_en', 'birth_year', 'specialties'],
+      revisionId: 'revision-1',
     }
   )
   expect(JSON.stringify(jest.mocked(auditTrail.trackDataChange).mock.calls)).not.toContain(
@@ -172,8 +179,18 @@ it('rejects malformed artist IDs', async () => {
 })
 
 it('does not report success if ownership was revoked before the write', async () => {
+  query.rpc.mockResolvedValueOnce({ data: null, error: { code: 'P0002' } })
+  expect((await patch({ bio: 'new' })).status).toBe(404)
+  expect(auditTrail.trackDataChange).not.toHaveBeenCalled()
   query.maybeSingle.mockResolvedValue({ data: null, error: null })
   expect((await patch({ bio: 'new' })).status).toBe(404)
+})
+
+it('returns a generic failure when the edit function fails', async () => {
+  query.rpc.mockResolvedValueOnce({ data: null, error: { code: 'XX000', message: 'secret' } })
+  const response = await patch({ bio: 'new' })
+  expect(response.status).toBe(500)
+  expect(JSON.stringify(await response.json())).not.toContain('secret')
 })
 
 it('returns a generic failure without exposing database errors', async () => {
