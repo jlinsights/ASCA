@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, type FormEvent } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { MemberHelp } from './member-help'
+import { ArtistClaimSection } from './artist-claim-section'
 import { useAccount } from './session-provider'
 import { useLanguage } from '@/contexts/language-context'
 import { createAuthBrowserClient } from '@/lib/auth/supabase/browser'
@@ -73,7 +74,9 @@ export function AccountPanel() {
           </p>
         )}
       </form>
-      {!user.artistIds.length && <p className='text-muted-foreground'>{t('authNativeUnlinked')}</p>}
+      {!user.artistIds.length && (
+        <ArtistClaimSection defaultName={user.displayName} onChanged={() => void refresh()} />
+      )}
       {!!user.artistIds.length && (
         <Button asChild>
           <Link href='/archive/submit'>{t('authNativeArchive')}</Link>
