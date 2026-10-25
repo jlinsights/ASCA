@@ -20,6 +20,9 @@ const artist = (overrides: Partial<PublicArtist>): PublicArtist => ({
   membershipType: null,
   artistType: null,
   title: null,
+  slug: null,
+  artNameKo: null,
+  artNameHanja: null,
   ...overrides,
 })
 
@@ -44,4 +47,18 @@ describe('ArtistCard 작가 등급', () => {
       expect(screen.queryByText('준회원')).not.toBeInTheDocument()
     }
   )
+})
+
+describe('ArtistCard 아호', () => {
+  it.each(['pc', 'mobile'] as const)('%s: 아호를 이름 아래 보여 준다', variant => {
+    render(
+      <ArtistCard artist={artist({ artNameKo: '청산', artNameHanja: '靑山' })} variant={variant} />
+    )
+    expect(screen.getByText('靑山 · 청산')).toBeInTheDocument()
+  })
+
+  it('아호가 없으면 아호 줄이 없다', () => {
+    render(<ArtistCard artist={artist({})} variant='pc' />)
+    expect(screen.queryByText(/아호/)).not.toBeInTheDocument()
+  })
 })

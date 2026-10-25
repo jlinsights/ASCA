@@ -32,6 +32,9 @@ export interface ArtistDbRow {
   airtable_id: string | null
   /** 주소용 로마자 이름 (/artists/<slug>). 없으면 null (2026-10-25 추가) */
   slug?: string | null
+  /** 아호(雅號) 한글·한자. 둘 중 하나만 있을 수 있다 (2026-10-25 공개 화면 반영) */
+  art_name_ko?: string | null
+  art_name_hanja?: string | null
 }
 
 export interface PublicArtist {
@@ -53,6 +56,9 @@ export interface PublicArtist {
   title: string | null
   /** 주소용 로마자 이름. 없으면 id 주소를 쓴다 */
   slug: string | null
+  /** 아호 한글·한자. 없으면 null */
+  artNameKo: string | null
+  artNameHanja: string | null
 }
 
 export function toPublicArtist(row: ArtistDbRow): PublicArtist {
@@ -73,5 +79,17 @@ export function toPublicArtist(row: ArtistDbRow): PublicArtist {
     artistType: row.artist_type ?? null,
     title: row.title ?? null,
     slug: row.slug ?? null,
+    artNameKo: row.art_name_ko?.trim() || null,
+    artNameHanja: row.art_name_hanja?.trim() || null,
   }
+}
+
+/** 아호 표기 — '井巖 · 정암' · '井巖' · '정암' · null. 같은 글자면 한 번만 */
+export function artNameLabel(
+  ko: string | null | undefined,
+  hanja: string | null | undefined
+): string | null {
+  const parts = [hanja?.trim(), ko?.trim()].filter((part): part is string => Boolean(part))
+  const unique = [...new Set(parts)]
+  return unique.length > 0 ? unique.join(' · ') : null
 }

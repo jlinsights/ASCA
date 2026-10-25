@@ -45,8 +45,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description =
     artist.bio?.replace(/\s+/g, ' ').trim().slice(0, 150) ||
     `${artist.name} — 동양서예협회 ${artist.membership_type ?? '작가'}`
+  // 아호로 찾는 사람이 많다 — '정암 김형석' 처럼 호를 이름 앞에
+  const artName = artist.art_name_ko?.trim() || artist.art_name_hanja?.trim()
   return {
-    title: `${artist.name} | 동양서예협회`,
+    title: `${artName ? `${artName} ` : ''}${artist.name} | 동양서예협회`,
     description,
     alternates: artist.slug ? { canonical: `/artists/${artist.slug}` } : undefined,
     openGraph: artist.profile_image ? { images: [artist.profile_image] } : undefined,

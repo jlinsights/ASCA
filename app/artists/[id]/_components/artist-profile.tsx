@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroFacts, HeroScrolls, PageHero, type PageHeroStat } from '@/components/layout/page-hero'
 import { useLanguage } from '@/contexts/language-context'
-import type { ArtistDbRow } from '@/lib/api/artist-mapper'
+import { artNameLabel, type ArtistDbRow } from '@/lib/api/artist-mapper'
 import { artistDisplayName } from '@/lib/api/artist-life'
 import { parseArtistCareer } from './artist-career'
 import { workYearSpan, type ArtistWork } from './artist-works'
@@ -106,6 +106,23 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
   ) : undefined
 
   const hasAbout = career.paragraphs.length > 0 || career.entries.length > 0
+  const artName = artNameLabel(artist.art_name_ko, artist.art_name_hanja)
+  const roleLine = roles.length > 0 ? roles.join(' · ') : null
+  // 아호는 이름 바로 아래 — 한국 서예가는 이름보다 호로 불리는 경우가 많다
+  const lede =
+    artName || roleLine ? (
+      <>
+        {artName && (
+          <span className='ap-ho'>
+            <span className='ap-ho__label' lang='zh-Hant'>
+              雅號
+            </span>
+            <span className='ap-ho__name'>{artName}</span>
+          </span>
+        )}
+        {roleLine && <span className='ap-roles'>{roleLine}</span>}
+      </>
+    ) : undefined
 
   return (
     <main className='ap'>
@@ -113,7 +130,7 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
         tier='feature'
         tc={hanjaName(artist) ?? '作家'}
         title={name}
-        lede={roles.length > 0 ? roles.join(' · ') : undefined}
+        lede={lede}
         crumbs={[{ label: '작가 목록', href: '/artists' }, { label: name }]}
         ledger={ledger}
         media={media}

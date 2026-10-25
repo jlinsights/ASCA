@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArtistShareButton } from '@/components/kakao/kakao-share-button'
-import type { PublicArtist as Artist } from '@/lib/api/artist-mapper'
+import { artNameLabel, type PublicArtist as Artist } from '@/lib/api/artist-mapper'
 import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 import { regulationGrade } from './artist-filter-options'
@@ -24,6 +24,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const grade = regulationGrade(artist.membershipType)
   const displayName = artistDisplayName(artist.name, artist.deathYear)
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
+  const artName = artNameLabel(artist.artNameKo, artist.artNameHanja)
 
   const nameClass = isPc
     ? 'font-bold text-xl text-foreground group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0'
@@ -97,6 +98,12 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
               </div>
             )}
           </div>
+          {artName && (
+            <p className={isPc ? 'text-sm text-muted-foreground' : 'text-xs text-muted-foreground'}>
+              <span className='sr-only'>아호 </span>
+              {artName}
+            </p>
+          )}
         </div>
 
         {/* 등급도 직위도 없는 작가(준회원·공모작가 등)는 빈 구분선을 그리지 않는다 */}

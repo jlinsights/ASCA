@@ -86,7 +86,9 @@ export async function getArtists(
 
     const search = sanitizeSearchTerm(filters?.search)
     if (search) {
-      query = query.or(`name.ilike.*${search}*,name_zh.ilike.*${search}*,name_en.ilike.*${search}*`)
+      query = query.or(
+        `name.ilike.*${search}*,name_zh.ilike.*${search}*,name_en.ilike.*${search}*,art_name_ko.ilike.*${search}*,art_name_hanja.ilike.*${search}*`
+      )
     }
     const membership = filters?.membershipType?.[0]
     if (membership) query = query.ilike('membership_type', spacingTolerantPattern(membership))
