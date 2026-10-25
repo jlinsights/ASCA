@@ -45,6 +45,7 @@ export const PAGE_HERO_MARKS = {
   forms: { tier: 'band', tc: '書式' },
   fundraising: { tier: 'band', tc: '後援' },
   culturalExchange: { tier: 'band', tc: '交流' },
+  calendarEvent: { tier: 'band', tc: '月曆' },
   services: { tier: 'band', tc: '服務' },
 
   // 소식
