@@ -124,9 +124,9 @@ export function ContestGuidelines() {
           <strong>
             {CONTEST_23.account.bank} {CONTEST_23.account.number}
           </strong>{' '}
-          ({CONTEST_23.account.holder}) · 입금 확인증을 출품신청서와 함께 보내 주세요. 표구비와 10점
-          이상 개인전·단체 부스전은 <Link href='/application#fees'>출품원서</Link>와 공모요강을
-          확인하세요.
+          · 예금주 {CONTEST_23.account.holder} · 입금 확인증을 출품신청서와 함께 보내 주세요.
+          표구비와 10점 이상 개인전·단체 부스전은 <Link href='/application#fees'>출품원서</Link>와
+          공모요강을 확인하세요.
         </p>
       </section>
 
@@ -135,7 +135,7 @@ export function ContestGuidelines() {
           id='how-title'
           eyebrow='출품 방법'
           title='접수는 이렇게 합니다'
-          lede={`${koDate(CONTEST_23.deadline)} ${CONTEST_23.deadlineTime}까지 도착해야 합니다.`}
+          lede={`마감은 ${koDate(CONTEST_23.deadline)} 18:00, 보낸 날이 아니라 도착한 날 기준입니다.`}
         />
         <NumberedRules items={HOW_TO_ENTER} />
         <p className='asca-apply__note'>
