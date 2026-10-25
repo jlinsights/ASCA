@@ -32,6 +32,8 @@ jobs:
         run: node scripts/test-profile-revisions.mjs
       - name: Test contest entry mirror
         run: node scripts/test-contest-entries.mjs
+      - name: Test community board tables and reads
+        run: node --conditions=react-server --import tsx scripts/test-community-board.mjs
       - name: Test archive UI public queries
         run: node --conditions=react-server --import tsx scripts/test-archive-ui.mjs
       - name: Install recovery test browser
