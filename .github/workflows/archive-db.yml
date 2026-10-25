@@ -18,6 +18,8 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 2.75.0
+      - name: Prepare real recovery email fixture
+        run: node --import tsx scripts/prepare-auth-emails.mjs
       - name: Start clean local Supabase
         run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor
       - name: Upgrade populated historical schema
@@ -26,6 +28,16 @@ jobs:
         run: node --import tsx scripts/test-archive.mjs
       - name: Test archive UI public queries
         run: node --conditions=react-server --import tsx scripts/test-archive-ui.mjs
+      - name: Install recovery test browser
+        run: npx playwright install --with-deps chromium
+      - name: Test member login and password recovery with real local mail
+        run: npx playwright test --config playwright.auth.config.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: member-auth-accessibility
+          path: test-results/
+          retention-days: 7
       - name: Check generated types
         run: |
           supabase gen types typescript --local --schema public > /tmp/archive-database.types.ts

@@ -40,3 +40,20 @@ it.each(['', '?error=access_denied', '?code=expired'])(
     expect(result.headers.get('location')).toBe('https://asca.example/sign-in?error=callback')
   }
 )
+
+it('returns an expired recovery link to the recovery request screen', async () => {
+  exchange.mockResolvedValue({ error: { code: 'flow_state_expired' } })
+  const result = await GET(
+    new NextRequest('https://asca.example/auth/callback?code=expired&next=/reset-password')
+  )
+  expect(result.headers.get('location')).toBe('https://asca.example/forgot-password?error=callback')
+})
+
+it('keeps provider exceptions private and still offers a new recovery link', async () => {
+  exchange.mockRejectedValue(new Error('private-provider-code'))
+  const result = await GET(
+    new NextRequest('https://asca.example/auth/callback?code=private&next=/reset-password')
+  )
+  expect(result.headers.get('location')).toBe('https://asca.example/forgot-password?error=callback')
+  expect(result.headers.get('location')).not.toContain('private')
+})

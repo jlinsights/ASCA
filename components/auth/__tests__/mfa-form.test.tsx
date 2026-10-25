@@ -34,7 +34,7 @@ it('uses the verified factor for a fresh challenge and preserves errors for retr
       <MfaForm />
     </LanguageProvider>
   )
-  const input = await screen.findByLabelText('6자리 인증 코드')
+  const input = await screen.findByLabelText('보안 앱의 6자리 숫자')
   fireEvent.change(input, { target: { value: '123456' } })
   fireEvent.submit(container.querySelector('form')!)
   await waitFor(() =>
@@ -51,7 +51,7 @@ it('enrolls TOTP explicitly and displays a QR image without injecting SVG markup
       <MfaForm />
     </LanguageProvider>
   )
-  const button = await screen.findByRole('button', { name: '인증 앱 등록' })
+  const button = await screen.findByRole('button', { name: '휴대전화 보안 앱 연결' })
   await waitFor(() => expect(button).not.toBeDisabled())
   fireEvent.click(button)
   expect(await screen.findByText('TEST_SETUP_KEY')).toBeInTheDocument()

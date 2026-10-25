@@ -4,6 +4,7 @@ import { type ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
+import { MemberHelp } from './member-help'
 
 export type AuthVariant = 'sign-in' | 'sign-up'
 
@@ -85,6 +86,7 @@ export function AuthShell({ variant, children, titleKey, ledeKey }: AuthShellPro
               {t(copy.switchLink)}
             </Link>
           </p>
+          <MemberHelp />
         </div>
 
         <footer className='asca-auth__legal'>

@@ -2,16 +2,20 @@
 
 import Link from 'next/link'
 import { useState, type FormEvent } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { MemberHelp } from './member-help'
 import { useAccount } from './session-provider'
 import { useLanguage } from '@/contexts/language-context'
 import { createAuthBrowserClient } from '@/lib/auth/supabase/browser'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import './auth.css'
 
 export function AccountPanel() {
   const { user, isLoaded, error, refresh, signOut } = useAccount()
   const { t } = useLanguage()
+  const search = useSearchParams()
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
   async function save(event: FormEvent<HTMLFormElement>) {
@@ -47,6 +51,9 @@ export function AccountPanel() {
   return (
     <section className='mx-auto max-w-xl space-y-6 px-6 py-12'>
       <h1 className='font-serif text-3xl'>{t('authNativeAccount')}</h1>
+      {search.get('password') === 'updated' && (
+        <p role='status'>{t('authNativePasswordUpdated')}</p>
+      )}
       <p>{user.email}</p>
       <form className='space-y-4' onSubmit={save}>
         <Label htmlFor='account-name'>{t('authNativeName')}</Label>
@@ -85,6 +92,7 @@ export function AccountPanel() {
       <Button variant='outline' onClick={() => void signOut().catch(() => {})}>
         {t('siteSignOut')}
       </Button>
+      <MemberHelp />
     </section>
   )
 }

@@ -2,7 +2,47 @@ import type { TranslationData } from '../types'
 
 export const nativeAuthTranslations: TranslationData = {
   ko: {
-    authNativeMfaRecovery: '비밀번호를 변경하려면 먼저 2단계 인증을 완료하세요.',
+    authNativeReturningTitle: '예전 홈페이지에서 쓰시던 비밀번호는 옮겨지지 않았습니다.',
+    authNativeReturningSignup: '예전 홈페이지 회원이셨나요?',
+    authNativeReturningBody:
+      '처음 로그인하시는 기존 회원께서는 비밀번호를 새로 만들어 주세요. 등록하신 이메일로 안내 메일이 갑니다.',
+    authNativeNewPassword: '비밀번호 새로 만들기',
+    authNativeExisting:
+      '이미 계정이 있는 이메일이라면 새로 가입하지 말고 비밀번호 새로 만들기를 이용해 주세요.',
+    authNativeArtistLink:
+      '이메일 확인 후, 작가 정보에 등록된 이메일이 한 명과 일치하면 자동으로 연결됩니다. 연결되지 않으면 사무국에 이름과 호를 알려 주세요.',
+    authNativeMailTitle: '안내 메일을 확인해 주세요',
+    authNativeMailAddress:
+      '받은편지함을 확인해 주세요. 주소를 잘못 쓰셨다면 아래에서 바꿀 수 있습니다.',
+    authNativeMailSubject: '다음 제목의 메일을 찾으세요:',
+    authNativeMailOpen: '메일 안의 ‘새 비밀번호 만들기’ 버튼을 누르세요.',
+    authNativeMailExpiry:
+      '링크는 1시간 동안 한 번만 사용할 수 있습니다. 메일을 요청한 브라우저에서 열어 주세요.',
+    authNativeSignupMail:
+      '가입 확인 메일의 버튼을 누르면 내 작가 공간으로 들어갑니다. 메일을 요청한 브라우저에서 열어 주세요.',
+    authNativeMailMissing: '메일이 안 오나요?',
+    authNativeSpam: '스팸함과 프로모션함도 확인해 주세요.',
+    authNativeNaverSpam: '네이버: 메일의 전체 메뉴(≡) → 스팸메일함을 열어 확인하세요.',
+    authNativeDaumSpam: '다음: 메일의 메뉴(≡) → 스팸편지함을 열어 확인하세요.',
+    authNativeMailWait:
+      '5분이 지나도 없으면 다시 보내기를 눌러 주세요. 다시 보내기는 60초 뒤부터 가능합니다.',
+    authNativeSendAgain: '안내 메일 다시 보내기',
+    authNativeChangeEmail: '이메일 주소 바꾸기',
+    authNativeMailOffice:
+      '등록한 주소가 기억나지 않거나 메일을 받지 못하면 아래 사무국으로 연락해 주세요.',
+    authNativeTooSoon: '메일을 너무 자주 요청하셨습니다. 잠시 기다린 뒤 다시 눌러 주세요.',
+    authNativeOffice: '사무국',
+    authNativeHelp: '도움이 필요하시면 사무국으로 연락해 주세요.',
+    authNativeShow: '보기',
+    authNativeHide: '숨기기',
+    authNativeEmailError: '이메일에 @와 주소가 모두 있는지 확인해 주세요. 예: artist@example.com',
+    authNativePasswordRequired:
+      '비밀번호를 입력해 주세요. 예전 비밀번호가 기억나지 않으면 비밀번호 새로 만들기를 이용하세요.',
+    authNativePasswordUpdated:
+      '비밀번호를 새로 만들었습니다. 로그인된 상태로 내 작가 공간에 들어왔습니다.',
+    authNativeNameRequired: '사용하시는 이름을 입력해 주세요.',
+    authNativeConsentRequired: '이용약관과 개인정보처리방침을 확인한 뒤 동의에 표시해 주세요.',
+    authNativeMfaRecovery: '비밀번호를 변경하려면 먼저 2단계 확인을 마쳐 주세요.',
     authNativeSave: '저장',
     authNativeEmail: '이메일',
     authNativePassword: '비밀번호',
@@ -15,36 +55,81 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeReset: '새 비밀번호 저장',
     authNativeResetTitle: '비밀번호 재설정',
     authNativeResetLede: '이메일로 받은 링크에서 새 비밀번호를 설정하세요.',
-    authNativeForgotTitle: '계정 비밀번호 찾기',
-    authNativeForgotLede: '가입한 이메일로 재설정 링크를 보내드립니다.',
+    authNativeForgotTitle: '비밀번호 새로 만들기',
+    authNativeForgotLede:
+      '예전 홈페이지에 등록하신 이메일 주소를 입력해 주세요. 새 비밀번호를 만드는 링크를 보내 드립니다.',
     authNativePasswordHint: '새 비밀번호는 12자 이상으로 입력하세요.',
     authNativeAgree: '이용약관과 개인정보처리방침을 확인하고 동의합니다.',
     authNativeMembership: '계정 가입과 협회 회원 자격·작가 등록은 별도 절차입니다.',
     authNativeBusy: '처리 중…',
-    authNativeInvalid: '이메일과 비밀번호를 확인해 주세요.',
-    authNativeUnavailable: '인증 서비스를 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
-    authNativeUnconfirmed: '먼저 이메일 인증을 완료해 주세요.',
+    authNativeInvalid:
+      '이메일 또는 비밀번호가 맞지 않습니다. 예전 홈페이지 비밀번호는 쓸 수 없으니 비밀번호 새로 만들기를 이용해 주세요.',
+    authNativeUnavailable: '잠시 연결이 원활하지 않습니다. 1~2분 뒤 다시 눌러 주세요.',
+    authNativeUnconfirmed:
+      '가입 확인 메일의 링크를 아직 누르지 않으셨습니다. 확인 메일 다시 받기를 눌러 주세요.',
     authNativeEmailSent:
       '메일이 발송될 수 있는 계정이면 안내 메일을 보내드립니다. 메일함과 스팸함을 확인해 주세요.',
     authNativeMismatch: '두 비밀번호가 일치하지 않습니다.',
-    authNativeCallback: '인증 링크가 만료되었거나 이미 사용되었습니다. 새 링크를 요청해 주세요.',
-    authNativeResend: '인증메일 다시 보내기',
+    authNativeCallback:
+      '링크 사용 시간(1시간)이 지났거나 이미 사용한 링크입니다. 새 링크를 받아 주세요.',
+    authNativeResend: '확인 메일 다시 받기',
     authNativeBack: '로그인으로 돌아가기',
-    authNativeMfaTitle: '2단계 인증',
-    authNativeMfaLede: '인증 앱의 일회용 코드를 입력하세요.',
-    authNativeMfaEnroll: '인증 앱 등록',
-    authNativeMfaCode: '6자리 인증 코드',
-    authNativeMfaVerify: '인증 확인',
-    authNativeMfaScan: '인증 앱으로 QR 코드를 스캔하거나 아래 등록 키를 입력하세요.',
+    authNativeMfaTitle: '2단계 확인',
+    authNativeMfaLede: '휴대전화 보안 앱에 표시된 6자리 숫자를 입력해 주세요.',
+    authNativeMfaEnroll: '휴대전화 보안 앱 연결',
+    authNativeMfaCode: '보안 앱의 6자리 숫자',
+    authNativeMfaVerify: '6자리 숫자 확인',
+    authNativeMfaScan: '휴대전화 보안 앱에서 QR 코드를 읽거나 아래 연결 키를 입력해 주세요.',
     authNativeMfaError: '코드를 확인하고 다시 시도해 주세요.',
     authNativeDenied: '이 계정에는 관리자 권한이 없습니다.',
     authNativeUnlinked: '연결된 작가 정보가 없습니다. 사무국에 작가 계정 연결을 요청해 주세요.',
     authNativeSessionError: '로그인 상태를 확인하지 못했습니다. 다시 시도해 주세요.',
     authNativeRetry: '다시 확인',
-    authNativeAccount: '내 계정',
+    authNativeAccount: '내 작가 공간',
     authNativeArchive: '작품 기록하기',
   },
   en: {
+    authNativeReturningTitle: 'Passwords from our previous website have not been transferred.',
+    authNativeReturningSignup: 'Were you a member of our previous website?',
+    authNativeReturningBody:
+      'Returning members signing in here for the first time should create a new password. Instructions will be sent to your registered email.',
+    authNativeNewPassword: 'Create a new password',
+    authNativeExisting:
+      'If this email already has an account, create a new password instead of signing up again.',
+    authNativeArtistLink:
+      'After you confirm your email, we will link your account if it matches exactly one artist profile. If it is not linked, contact the office with your name and art name.',
+    authNativeMailTitle: 'Check your email for instructions',
+    authNativeMailAddress: 'Check this inbox. You can correct the address below if needed.',
+    authNativeMailSubject: 'Look for an email with this subject:',
+    authNativeMailOpen: 'Select the “Create a new password” button in the email.',
+    authNativeMailExpiry:
+      'The link works once within one hour. Open it in the browser where you requested the email.',
+    authNativeSignupMail:
+      'Use the confirmation button in the email to enter your artist space. Open it in the browser where you requested the email.',
+    authNativeMailMissing: 'Has the email not arrived?',
+    authNativeSpam: 'Also check your spam and promotions folders.',
+    authNativeNaverSpam: 'Naver Mail: open the full menu (≡), then 스팸메일함 (Spam).',
+    authNativeDaumSpam: 'Daum Mail: open the menu (≡), then 스팸편지함 (Spam).',
+    authNativeMailWait:
+      'If it has not arrived after five minutes, send it again. Resending is available after 60 seconds.',
+    authNativeSendAgain: 'Send instructions again',
+    authNativeChangeEmail: 'Change email address',
+    authNativeMailOffice:
+      'If you cannot remember your registered address or receive the email, contact the office below.',
+    authNativeTooSoon: 'You have requested emails too often. Wait a little and try again.',
+    authNativeOffice: 'Association office',
+    authNativeHelp: 'Contact the association office if you need help.',
+    authNativeShow: 'Show',
+    authNativeHide: 'Hide',
+    authNativeEmailError:
+      'Check that your email includes @ and the full address, for example artist@example.com.',
+    authNativePasswordRequired:
+      'Enter your password. If you do not remember it, choose Create a new password.',
+    authNativePasswordUpdated:
+      'Your new password is saved. You are signed in to your artist space.',
+    authNativeNameRequired: 'Enter the name you use.',
+    authNativeConsentRequired:
+      'Read the Terms of Service and Privacy Policy, then check the agreement box.',
     authNativeMfaRecovery: 'Complete two-factor verification before changing your password.',
     authNativeSave: 'Save',
     authNativeEmail: 'Email',
@@ -64,7 +149,8 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeAgree: 'I have read and agree to the Terms of Service and Privacy Policy.',
     authNativeMembership: 'An account does not grant association membership or an artist profile.',
     authNativeBusy: 'Please wait…',
-    authNativeInvalid: 'Check your email and password.',
+    authNativeInvalid:
+      'Your email or password does not match. Passwords from our previous website cannot be used here. Choose Create a new password.',
     authNativeUnavailable: 'Authentication is unavailable. Please try again later.',
     authNativeUnconfirmed: 'Please verify your email first.',
     authNativeEmailSent:
@@ -85,12 +171,51 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeDenied: 'This account does not have administrator access.',
     authNativeUnlinked:
       'No artist profile is linked. Contact the office to link your artist account.',
-    authNativeSessionError: 'We could not check your session. Please try again.',
+    authNativeSessionError: 'We could not check your sign-in status. Please try again.',
     authNativeRetry: 'Try again',
-    authNativeAccount: 'My account',
+    authNativeAccount: 'My artist space',
     authNativeArchive: 'Record artwork',
   },
   ja: {
+    authNativeReturningTitle: '旧ホームページのパスワードは引き継がれていません。',
+    authNativeReturningSignup: '旧ホームページの会員でしたか？',
+    authNativeReturningBody:
+      'こちらで初めてログインする既存会員の方は、パスワードを新しく作ってください。登録メールに案内を送ります。',
+    authNativeNewPassword: 'パスワードを新しく作る',
+    authNativeExisting:
+      'すでにアカウントがあるメールの場合は、再登録せずパスワードを新しく作ってください。',
+    authNativeArtistLink:
+      'メールの確認後、作家情報のメールと1名だけ一致すると自動で連携します。連携されない場合は、氏名と雅号を事務局にお知らせください。',
+    authNativeMailTitle: '案内メールをご確認ください',
+    authNativeMailAddress: 'この受信箱をご確認ください。入力を間違えた場合は下で変更できます。',
+    authNativeMailSubject: '次の件名のメールを探してください：',
+    authNativeMailOpen: 'メール内の「新しいパスワードを作る」ボタンを押してください。',
+    authNativeMailExpiry:
+      'リンクは1時間以内に1回だけ使えます。メールを申請したブラウザで開いてください。',
+    authNativeSignupMail:
+      'メール内の登録確認ボタンから作家スペースに入れます。メールを申請したブラウザで開いてください。',
+    authNativeMailMissing: 'メールが届きませんか？',
+    authNativeSpam: '迷惑メールとプロモーションのフォルダもご確認ください。',
+    authNativeNaverSpam: 'NAVERメール：全メニュー（≡）から「스팸메일함」を開いてください。',
+    authNativeDaumSpam: 'Daumメール：メニュー（≡）から「스팸편지함」を開いてください。',
+    authNativeMailWait: '5分たっても届かない場合は再送してください。再送は60秒後から利用できます。',
+    authNativeSendAgain: '案内メールをもう一度送る',
+    authNativeChangeEmail: 'メールアドレスを変更',
+    authNativeMailOffice:
+      '登録したアドレスを思い出せない場合や届かない場合は、下の事務局にご連絡ください。',
+    authNativeTooSoon: 'メールの申請が多すぎます。少し待ってからお試しください。',
+    authNativeOffice: '事務局',
+    authNativeHelp: 'お困りの際は事務局にご連絡ください。',
+    authNativeShow: '表示',
+    authNativeHide: '隠す',
+    authNativeEmailError: 'メールに@と完全なアドレスがあるかご確認ください。例：artist@example.com',
+    authNativePasswordRequired:
+      'パスワードを入力してください。不明な場合は新しいパスワードを作ってください。',
+    authNativePasswordUpdated:
+      '新しいパスワードを保存しました。ログインしたまま作家スペースに入りました。',
+    authNativeNameRequired: 'お使いの氏名を入力してください。',
+    authNativeConsentRequired:
+      '利用規約とプライバシーポリシーを確認し、同意にチェックしてください。',
     authNativeMfaRecovery: 'パスワード変更の前に2段階認証を完了してください。',
     authNativeSave: '保存',
     authNativeEmail: 'メールアドレス',
@@ -130,10 +255,42 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeUnlinked: '作家情報が未連携です。事務局に作家アカウントの連携を依頼してください。',
     authNativeSessionError: 'ログイン状態を確認できませんでした。もう一度お試しください。',
     authNativeRetry: '再確認',
-    authNativeAccount: 'マイアカウント',
+    authNativeAccount: '作家スペース',
     authNativeArchive: '作品を記録',
   },
   zh: {
+    authNativeReturningTitle: '舊網站的密碼尚未移轉。',
+    authNativeReturningSignup: '您是舊網站的會員嗎？',
+    authNativeReturningBody:
+      '首次在此登入的舊會員，請先建立新密碼。我們會將說明寄到您登記的電子郵件。',
+    authNativeNewPassword: '建立新密碼',
+    authNativeExisting: '若此電子郵件已有帳號，請建立新密碼，不要重複註冊。',
+    authNativeArtistLink:
+      '確認電子郵件後，若與唯一一位藝術家資料的郵件相符，帳號會自動連結。若尚未連結，請將姓名及雅號告知辦公室。',
+    authNativeMailTitle: '請查看說明郵件',
+    authNativeMailAddress: '請檢查此信箱。若地址輸入有誤，可在下方修改。',
+    authNativeMailSubject: '請尋找以下主旨的郵件：',
+    authNativeMailOpen: '請按郵件中的「建立新密碼」按鈕。',
+    authNativeMailExpiry: '連結在一小時內僅能使用一次。請在申請郵件的瀏覽器開啟。',
+    authNativeSignupMail: '按郵件中的註冊確認按鈕即可進入藝術家空間。請在申請郵件的瀏覽器開啟。',
+    authNativeMailMissing: '沒有收到郵件嗎？',
+    authNativeSpam: '請同時檢查垃圾郵件和促銷郵件資料夾。',
+    authNativeNaverSpam: 'Naver郵件：開啟完整選單（≡），再選「스팸메일함」。',
+    authNativeDaumSpam: 'Daum郵件：開啟選單（≡），再選「스팸편지함」。',
+    authNativeMailWait: '若五分鐘後仍未收到，請重新寄送。六十秒後才能再次寄送。',
+    authNativeSendAgain: '重新寄送說明郵件',
+    authNativeChangeEmail: '修改電子郵件地址',
+    authNativeMailOffice: '若不記得登記的地址，或仍未收到郵件，請聯絡下方辦公室。',
+    authNativeTooSoon: '郵件申請過於頻繁，請稍候再試。',
+    authNativeOffice: '協會辦公室',
+    authNativeHelp: '需要協助時，請聯絡協會辦公室。',
+    authNativeShow: '顯示',
+    authNativeHide: '隱藏',
+    authNativeEmailError: '請確認電子郵件包含@和完整地址。例如：artist@example.com',
+    authNativePasswordRequired: '請輸入密碼。若不記得密碼，請選擇建立新密碼。',
+    authNativePasswordUpdated: '新密碼已儲存。您已登入藝術家空間。',
+    authNativeNameRequired: '請輸入您使用的姓名。',
+    authNativeConsentRequired: '請閱讀服務條款與隱私權政策，然後勾選同意。',
     authNativeMfaRecovery: '變更密碼前，請先完成雙重驗證。',
     authNativeSave: '儲存',
     authNativeEmail: '電子郵件',
@@ -172,7 +329,7 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeUnlinked: '尚未連結藝術家資料，請聯絡辦公室進行帳號連結。',
     authNativeSessionError: '無法確認登入狀態，請再試一次。',
     authNativeRetry: '重新確認',
-    authNativeAccount: '我的帳號',
+    authNativeAccount: '我的藝術家空間',
     authNativeArchive: '記錄作品',
   },
 }

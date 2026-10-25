@@ -64,5 +64,9 @@ public/images/gallery/
 # CSO security reports (local only)
 .gstack/
 
+# Member auth E2E reports and fake-fixture screenshots
+playwright-report/auth/
+test-results/auth/
+
 # 작품 원본 이미지 — Supabase Storage(artwork-images)로 올리고 git 에는 넣지 않는다 (scripts/upload-artwork-images.mjs)
 public/images/artworks/originals/
