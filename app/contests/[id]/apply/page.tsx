@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
+import { ArtworkImage as Image } from '@/components/artwork/artwork-image'
 import { ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { Button } from '@/components/ui/button'

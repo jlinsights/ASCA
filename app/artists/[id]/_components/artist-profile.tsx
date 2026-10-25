@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import { ArtworkImage as Image } from '@/components/artwork/artwork-image'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroFacts, HeroScrolls, PageHero, type PageHeroStat } from '@/components/layout/page-hero'

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
+import { ArtworkImage as Image } from '@/components/artwork/artwork-image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'

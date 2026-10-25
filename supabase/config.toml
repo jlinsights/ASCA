@@ -40,3 +40,8 @@ enabled = false
 
 [edge_runtime]
 enabled = false
+
+# Images are public only after the handler's anon DB and private-Storage RLS checks.
+[functions.public-artwork-image]
+verify_jwt = false
+entrypoint = "./functions/public-artwork-image/index.mjs"

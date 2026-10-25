@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
-import Image from 'next/image'
+import { ArtworkImage as Image } from '@/components/artwork/artwork-image'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { PageHero, HeroScrolls, type PageHeroStat } from '@/components/layout/page-hero'
