@@ -19,6 +19,23 @@ interface ApiResponse {
   pagination: GalleryPaginationData
 }
 
+/** 기본값과 같은 값은 주소에서 지운다. similar 만은 'all' 이 기본값이 아니라 '모두 펼침' 이라 남긴다 */
+const DEFAULTS: Readonly<Record<string, readonly string[]>> = {
+  year: ['all'],
+  category: ['all'],
+  page: ['1'],
+}
+
+export function nextGalleryQuery(current: string, updates: Record<string, string>): string {
+  const params = new URLSearchParams(current)
+  for (const [key, value] of Object.entries(updates)) {
+    if (value === '' || DEFAULTS[key]?.includes(value)) params.delete(key)
+    else params.set(key, value)
+  }
+  if (['year', 'category', 'search', 'similar'].some(key => key in updates)) params.delete('page')
+  return params.toString()
+}
+
 function useGalleryParams() {
   const router = useRouter()
   const pathname = usePathname()
@@ -32,20 +49,9 @@ function useGalleryParams() {
 
   const setParams = useCallback(
     (updates: Record<string, string>) => {
-      const params = new URLSearchParams(searchParams.toString())
-      for (const [k, v] of Object.entries(updates)) {
-        if (v === '' || v === 'all' || v === '1') params.delete(k)
-        else params.set(k, v)
-      }
-      if (
-        'year' in updates ||
-        'category' in updates ||
-        'search' in updates ||
-        'similar' in updates
-      ) {
-        params.delete('page')
-      }
-      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+      router.push(`${pathname}?${nextGalleryQuery(searchParams.toString(), updates)}`, {
+        scroll: false,
+      })
     },
     [router, pathname, searchParams]
   )
