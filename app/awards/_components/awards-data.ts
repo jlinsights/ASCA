@@ -20,7 +20,7 @@ export interface ContestEdition {
  */
 export const NEXT_CONTEST = {
   edition: 23,
-  date: '2027년 4월 20일(화) ~ 4월 30일(금)',
+  date: '2027년 4월 21일(수) ~ 4월 30일(금)', // 제23회 공모요강(2026-10) 기준
   venue: '예술의전당 서울서예박물관',
 } as const
 
