@@ -26,6 +26,8 @@ jobs:
         run: node scripts/test-archive-upgrade.mjs
       - name: Test actual roles, API and Storage
         run: node --import tsx scripts/test-archive.mjs
+      - name: Test artist claim approval functions
+        run: node scripts/test-artist-claims.mjs
       - name: Test archive UI public queries
         run: node --conditions=react-server --import tsx scripts/test-archive-ui.mjs
       - name: Install recovery test browser
