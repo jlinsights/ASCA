@@ -40,15 +40,7 @@ export function nameScale(name: string): 'short' | 'medium' | 'long' {
  * 왼쪽 넓은 단(황금비)에 큰 이름, 오른쪽 좁은 단에 초상 또는 세로 題簽.
  * 첫 화면에서 이름에 먹이 들고(왼→오), 題簽이 위에서 아래로 펼쳐진다 — CSS 한 번뿐.
  */
-export function ArtistHero({
-  name,
-  baseName,
-  hanja,
-  lede,
-  facts,
-  ledger,
-  media,
-}: ArtistHeroProps) {
+export function ArtistHero({ name, baseName, hanja, lede, facts, ledger, media }: ArtistHeroProps) {
   // '故 임현기' — 故 는 이름 크기로 키우지 않고 이름 앞에 작게 붙인다
   const prefix =
     name !== baseName && name.endsWith(baseName)
