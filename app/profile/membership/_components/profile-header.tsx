@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
@@ -292,7 +292,6 @@ export function ProfileHeader({
             {/* 프로필 이미지 */}
             <div className='relative'>
               <Avatar className='w-24 h-24 md:w-32 md:h-32 border-4 border-background shadow-lg'>
-                <AvatarImage src='/images/artists/kangdaehee.avif' />
                 <AvatarFallback className='text-2xl font-bold'>
                   {profile.fullName.slice(0, 2)}
                 </AvatarFallback>

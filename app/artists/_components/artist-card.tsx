@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Award, Calendar, MapPin } from 'lucide-react'
+import { Award, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -17,10 +17,17 @@ interface ArtistCardProps {
   variant: 'pc' | 'mobile'
 }
 
-const DEFAULT_IMAGE = '/images/artists/kangdaehee.avif'
+const HAN = /[㐀-鿿豈-﫿]/
+
+/** 사진이 없을 때 사진 칸에 쓸 이름 — 한자 이름이 있으면 한자, 없으면 한글 */
+export function photoPlaceholderName(artist: Pick<Artist, 'name' | 'nameZh'>): string {
+  const zh = artist.nameZh?.trim()
+  return zh && HAN.test(zh) ? zh : artist.name
+}
 
 export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const isPc = variant === 'pc'
+  const placeholderName = photoPlaceholderName(artist)
   const grade = regulationGrade(artist.membershipType)
   const displayName = artistDisplayName(artist.name, artist.deathYear)
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
@@ -46,45 +53,30 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
 
   return (
     <Card key={artist.id} className={cardShadowClass}>
-      <div className='relative aspect-square overflow-hidden'>
-        <div className='relative group'>
+      {/* 사진 칸 — 사진 한 장만. 이름·등급은 아래 본문이 한 번만 보여 준다 */}
+      <div className='relative aspect-square overflow-hidden bg-paper-2 dark:bg-navy-900'>
+        {artist.profileImage ? (
           <Image
-            src={artist.profileImage || DEFAULT_IMAGE}
+            src={artist.profileImage}
             alt={artist.name}
-            width={400}
-            height={400}
-            className='w-full h-64 object-cover rounded-lg transition-all duration-300 group-hover:scale-105'
+            fill
+            sizes={isPc ? '(max-width: 1279px) 33vw, 25vw' : '50vw'}
+            className='object-cover transition-transform duration-300 group-hover:scale-[1.02]'
           />
-          <div className='absolute inset-0 bg-black/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
-        </div>
-
-        <div className='space-y-4'>
-          {artist.profileImage && (
-            <div className='flex items-center justify-center'>
-              <Image
-                src={artist.profileImage}
-                alt={artist.name}
-                width={100}
-                height={100}
-                className='w-20 h-20 rounded-full object-cover border-2 border-celadon'
-              />
-            </div>
-          )}
-
-          <div className='text-center'>
-            <h3 className='text-xl font-bold text-celadon mb-1'>{displayName}</h3>
-            <p className='text-sm text-muted-foreground'>
-              {`${artist.nameEn || ''} ${lifeYears ? `(${lifeYears})` : ''}`.trim()}
-            </p>
+        ) : (
+          // 사진이 없으면 다른 사람 사진을 빌리지 않고, 이 작가의 이름을 세로로 쓴다
+          <div
+            aria-hidden='true'
+            className='absolute inset-0 flex items-center justify-center'
+            lang={placeholderName === artist.name ? 'ko' : 'zh-Hant'}
+          >
+            <span
+              className={`font-serif font-semibold tracking-[0.18em] text-navy-900/70 dark:text-paper/70 [writing-mode:vertical-rl] text-5xl`}
+            >
+              {placeholderName}
+            </span>
           </div>
-
-          {artist.nationality && (
-            <div className='flex items-center justify-center gap-1 text-sm text-muted-foreground'>
-              <MapPin className='w-4 h-4' />
-              <span>{artist.nationality}</span>
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
       <CardContent className={cardContentClass}>
@@ -205,7 +197,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
             <ArtistShareButton
               title={`${artist.name} 작가`}
               description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
-              imageUrl={artist.profileImage || DEFAULT_IMAGE}
+              imageUrl={artist.profileImage ?? undefined}
               webUrl={`/artists/${artist.id}`}
               variant='outline'
               isIconOnly={true}
