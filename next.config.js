@@ -183,13 +183,21 @@ const nextConfig = {
     imageSizes: [16, 48, 96, 256, 512, 1024],
     qualities: [75, 85, 90, 95, 100], // 커스텀 품질 설정 지원 (100은 라이트박스용)
     minimumCacheTTL: 86400, // 24시간 캐시 (고화질 이미지)
+    maximumRedirects: 0, // Do not follow an allowed URL into a publication-checked function.
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        // Publication-checked Supabase functions must never enter the shared
+        // optimizer cache, including manually constructed /_next/image URLs.
+        hostname: '!(*.supabase.co|*.supabase.co.)',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.supabase.co',
+        pathname: '/storage/v1/object/public/**',
       },
     ],
     // 고화질 갤러리 이미지 최적화

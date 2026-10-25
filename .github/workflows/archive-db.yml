@@ -15,6 +15,8 @@ jobs:
           node-version: '20'
           cache: npm
       - run: npm ci
+      - name: Test verified Airtable image planning
+        run: node --test scripts/media-linking/airtable-artworks.test.mjs scripts/media-linking/public-artwork-image.test.mjs scripts/media-linking/image-optimizer-policy.test.mjs
       - uses: supabase/setup-cli@v1
         with:
           version: 2.75.0
@@ -24,6 +26,8 @@ jobs:
         run: node scripts/test-archive-upgrade.mjs
       - name: Test actual roles, API and Storage
         run: node --import tsx scripts/test-archive.mjs
+      - name: Test imported private media and anonymous revocation
+        run: node scripts/test-imported-media.mjs
       - name: Test archive UI public queries
         run: node --conditions=react-server --import tsx scripts/test-archive-ui.mjs
       - name: Check generated types

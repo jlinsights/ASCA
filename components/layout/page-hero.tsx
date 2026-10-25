@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import Image from 'next/image'
+import { ArtworkImage as Image } from '@/components/artwork/artwork-image'
 import Link from 'next/link'
 import './page-hero.css'
 

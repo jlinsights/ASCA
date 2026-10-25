@@ -24,7 +24,10 @@ try {
   await db.connect()
   // Storage system migrations are owned by Supabase; only the referenced catalog shape is needed here.
   await db.query(
-    `create schema storage; create table storage.buckets(id text primary key,name text,public boolean); create table storage.objects(id uuid primary key,bucket_id text); alter table storage.objects enable row level security; grant usage on schema public,storage to anon,authenticated,service_role; alter default privileges in schema public grant all on tables to anon,authenticated,service_role`
+    `create schema storage; create table storage.buckets(id text primary key,name text,public boolean); create table storage.objects(id uuid primary key,bucket_id text,name text); alter table storage.objects enable row level security; grant usage on schema public,storage to anon,authenticated,service_role; alter default privileges in schema public grant all on tables to anon,authenticated,service_role`
+  )
+  await db.query(
+    `create function storage.operation() returns text language sql stable as $$ select current_setting('storage.operation', true) $$`
   )
   const dir = new URL('../supabase/migrations/', import.meta.url)
   const files = readdirSync(dir)
