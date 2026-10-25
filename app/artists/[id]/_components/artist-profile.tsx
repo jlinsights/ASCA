@@ -3,11 +3,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { HeroFacts, HeroScrolls, PageHero, type PageHeroStat } from '@/components/layout/page-hero'
+import { HeroScrolls } from '@/components/layout/page-hero'
 import { useLanguage } from '@/contexts/language-context'
 import { artNameLabel, type ArtistDbRow } from '@/lib/api/artist-mapper'
 import { artistDisplayName } from '@/lib/api/artist-life'
 import { parseArtistCareer } from './artist-career'
+import { ArtistHero, type ArtistHeroFact } from './artist-hero'
 import { workYearSpan, type ArtistWork } from './artist-works'
 import './artist-profile.css'
 
@@ -75,7 +76,7 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
   const roles = artistRoles(artist)
   const pictured = works.filter(work => work.imageUrl)
 
-  const ledger: PageHeroStat[] = [
+  const ledger: ArtistHeroFact[] = [
     { label: '공개 작품', value: works.length, unit: '점' },
     { label: '작품 연도', value: workYearSpan(works) },
     { label: '경력', value: career.entries.length, unit: '건' },
@@ -126,28 +127,27 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
 
   return (
     <main className='ap'>
-      <PageHero
-        tier='feature'
-        tc={hanjaName(artist) ?? '作家'}
-        title={name}
+      <ArtistHero
+        name={name}
+        baseName={baseName ?? artist.name}
+        hanja={hanjaName(artist)}
         lede={lede}
-        crumbs={[{ label: '작가 목록', href: '/artists' }, { label: name }]}
+        facts={[
+          { label: '생몰', value: lifeFact(artist) },
+          { label: '국적', value: artist.nationality?.trim() || null },
+        ]}
         ledger={ledger}
         media={media}
-      >
-        <HeroFacts
-          facts={[
-            { label: '생몰', value: lifeFact(artist) },
-            { label: '국적', value: artist.nationality?.trim() || null },
-          ]}
-        />
-      </PageHero>
+      />
 
       {works.length > 0 && (
         <section className='ap-section ap-works' aria-labelledby='ap-works-title'>
           <header className='ap-head'>
             <h2 id='ap-works-title' className='ap-head__title'>
               작품
+              <span className='ap-head__tc' lang='zh-Hant' aria-hidden='true'>
+                作品
+              </span>
             </h2>
             <p className='ap-head__note'>{works.length}점 · 최근 작품부터</p>
           </header>
@@ -166,6 +166,9 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
           <div className='ap-about__layout'>
             <h2 id='ap-about-title' className='ap-head__title ap-about__title'>
               작가 소개
+              <span className='ap-head__tc' lang='zh-Hant' aria-hidden='true'>
+                作家
+              </span>
             </h2>
             <div className='ap-about__body'>
               {career.paragraphs.map((paragraph, index) => (

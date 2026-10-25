@@ -111,13 +111,25 @@
   border-bottom: 1px solid var(--ap-fg);
 }
 .ap-head__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 0.45em;
   margin: 0;
   font-family: var(--ap-font-display);
-  font-size: clamp(28px, 3.2vw, 44px);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.015em;
+  font-size: clamp(40px, 5.6vw, 84px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
   word-break: keep-all;
+}
+/* 한글 제목 곁의 漢字 — 같은 줄, 한 단계 작고 옅게 */
+.ap-head__tc {
+  font-family: var(--ap-font-tc);
+  font-size: 0.42em;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--ap-muted);
 }
 .ap-head__note {
   margin: 0;
@@ -279,7 +291,8 @@
 }
 .ap-career__year {
   font-family: var(--ap-font-display);
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   color: var(--ap-accent-text);
   font-variant-numeric: tabular-nums;
 }
@@ -287,18 +300,26 @@
   word-break: keep-all;
 }
 
-/* ---------- 비어 있을 때 ---------- */
+/* ---------- 비어 있을 때 — 히어로와 같은 황금비 단에 한 문장 ---------- */
 .ap-empty {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr);
   align-items: baseline;
-  gap: 12px 28px;
+  gap: 16px clamp(32px, 5vw, 88px);
 }
 .ap-empty__text {
   margin: 0;
   font-family: var(--ap-font-display);
-  font-size: clamp(18px, 1.6vw, 22px);
-  color: var(--ap-muted);
+  font-size: clamp(22px, 2.4vw, 34px);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--ap-fg);
+  word-break: keep-all;
+  text-wrap: balance;
+}
+.ap-empty__link {
+  justify-self: start;
 }
 .ap-empty__link {
   font-size: 15px;
@@ -330,12 +351,66 @@
   .ap-about__title {
     position: static;
   }
+  .ap-empty {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .ap-career__item {
     grid-template-columns: 3.5rem minmax(0, 1fr);
     gap: 12px;
   }
   .ap-work__title {
     font-size: 15px;
+  }
+}
+
+/* ---------- 스크롤 — 작품이 화면에 들어오며 족자처럼 위에서 펼쳐진다 ----------
+   스크롤 진행에 묶여 있어 되감으면 다시 말린다. 지원하지 않는 브라우저와
+   움직임 줄이기 설정에서는 처음부터 다 펼쳐진 상태 그대로다. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ap-work__mat {
+      animation: ap-unroll linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 75%;
+    }
+    .ap-work__caption {
+      animation: ap-caption linear both;
+      animation-timeline: view();
+      animation-range: entry 45% entry 100%;
+    }
+    .ap-career__item {
+      animation: ap-line linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+@keyframes ap-unroll {
+  from {
+    clip-path: inset(0 0 88% 0);
+  }
+  to {
+    /* 끝에서는 hover 그림자가 잘리지 않게 바깥으로 연다 */
+    clip-path: inset(-40px -40px -40px -40px);
+  }
+}
+@keyframes ap-caption {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* 연보는 한 줄씩 먹선이 그어지듯 왼쪽부터 */
+@keyframes ap-line {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 
