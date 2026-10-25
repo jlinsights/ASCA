@@ -51,6 +51,8 @@ DB 소유자/운영자 권한은 이 클라이언트 역할 검사와 별개다.
 - 해당 메일함에서 확인 링크를 열고 이메일 확인을 완료한다. Supabase Dashboard의
   Authentication → Users에서 이메일과 확인 상태를 확인하고 **해당 사용자의
   `auth.users.id` UUID**를 복사한다. Clerk 사용자 ID를 사용하지 않는다.
+- 확인 링크는 가입한 같은 Aside 브라우저에서 열어 PKCE 검증 쿠키를 유지한다.
+  비밀번호·확인 링크·OTP는 채팅이나 운영 기록에 복사하지 않는다.
 - 가입으로 생성되는 `public.account_profiles.role`은 `member`다. 이메일이나
   `ADMIN_EMAILS`에 이름이 있다는 이유로 자동 승격하지 않는다.
 
@@ -99,7 +101,9 @@ returning p.id, p.role;
 - [x] 테이블·RPC 존재 및 역할별 실행 권한 확인
 - [x] Site URL·실제 운영/Preview callback 항목·서버 비밀번호 12자·이메일 확인
       필수·TOTP 등록/검증·refresh token rotation 설정 확인 (2026-10-25)
-- [ ] Preview 보호 변수의 DB 연결·SMTP·검증된 발신자·실제 확인 링크 검증
+- [x] Brevo 도메인 Authenticated·협회 발신자 Active 확인과 Supabase SMTP 설정
+      재조회, 발송 한도 시간당 30통 반영 (2026-10-25)
+- [ ] Preview 보호 변수의 DB 연결·실제 확인/복구메일과 PKCE 복귀 검증
 - [ ] Preview 배포 후 관리자 이메일 가입·확인과 UUID 확인
 - [ ] `public.account_profiles.role = 'admin'` 부여 및 운영 기록
 - [ ] `/auth/mfa`에서 TOTP 등록·검증, `admin` + `aal2` 확인

@@ -1,9 +1,9 @@
 # Supabase Auth 전환 준비와 실제 로컬 검증
 
-2026-10-24. `feat/supabase-auth`를 main `85b6688d`(PR #121 문서·#122 LICENSE
-포함)에 통합했다. 운영 인증 제공자·Vercel 환경변수·실제 사용자 계정은 변경하지
-않았다. 운영 DB의 Auth 기반 스키마와 2026-10-25 Auth 서버 설정은 아래 적용
-기록과 같이 준비했다.
+2026-10-25. `feat/supabase-auth`를 main `424685d8`(PR #121 문서·#122 LICENSE·
+#123 공개 경로·#125 작가 상세·#126 작가 slug 포함)에 통합했다. 운영 사이트의
+로그인은 Clerk 상태이며 운영 코드 전환은 아직 수행하지 않았다. 운영 DB의 Auth
+기반 스키마·Auth 서버 정책·Brevo SMTP는 아래 적용 기록과 같이 준비했다.
 
 ## 통합한 경계
 
@@ -77,9 +77,9 @@ HTTP 검사에서 새 세션 쿠키 기록 및 계정 조회가 성공했다.
   `account_profiles`·`auth_identity_links`·`get_my_artist_ids()`가 존재한다.
 - RPC 실행 권한은 `authenticated=true`, `anon=false`, `service_role=false`다.
   `dues_status`·`claimed_by_user_id`는 여전히 anon·authenticated가 읽을 수 없다.
-  작가 공개 범위 트리거와 새 계정/수정시각 트리거 3개도 확인했다. 실제 계정·
-  프로필과 연결 작가는 모두 0건이다. 실제 사용자 생성·작가 연결은 수행하지
-  않았다.
+  작가 공개 범위 트리거와 새 계정/수정시각 트리거 3개도 확인했다. 적용 직후 실제
+  계정·프로필과 연결 작가는 모두 0건이었다. 이 마이그레이션이 실제 사용자를
+  생성하거나 기존 작가를 자동 연결하지 않는다.
 - 보안 advisor의 `auth_identity_links` RLS 무정책과 본인 ID RPC의 authenticated
   SECURITY DEFINER 알림은 의도한 서버 전용 매핑/본인 ID 조회 경계다. 기존 조회수
   증가 RPC의 공개 SECURITY DEFINER 경고는 이번 전환에서 변경하지 않았다.
@@ -103,13 +103,15 @@ HTTP 검사에서 새 세션 쿠키 기록 및 계정 조회가 성공했다.
   주소 허용 및 외부 주소 차단 회귀 테스트가 통과했다.
 - 실제 Auth 공개 설정은 이메일 가입 가능·이메일 확인 필수이며 Kakao와 전화
   가입은 비활성이다.
-- 2026-10-25 Supabase Management API로 확인한 운영 SMTP 호스트·발신 주소· SMTP
-  자격 증명은 모두 미설정이다. 기본 이메일 한도는 시간당 2통이며 실제 사용자에게
-  초대·확인·복구 메일을 발송하지 않았다.
+- 2026-10-25 초기 조회에서 SMTP는 미설정·기본 이메일 한도는 시간당 2통이었다.
+  이후 Brevo와 연결하고 호스트 `smtp-relay.brevo.com`, 포트 `587`, 발신자
+  `info@orientalcalligraphy.org`·`동양서예협회`, 발송 한도 시간당 30통을
+  Management API 저장 후 다시 조회했다. API의 `smtp_port`는 문자열로 보낸다.
 - 서버 최소 비밀번호 길이를 기존 6자에서 앱과 같은 12자로 올리고 Site URL을
   `https://asca-main.vercel.app`로 맞췄다. 변경 후 GET으로 다시 읽어 확인했다.
   이메일 확인 필수·TOTP 등록/검증·refresh token rotation은 기존 활성 상태를
-  유지했으며 SMTP·메일 제한 등 다른 설정은 변경하지 않았다.
+  유지했다. SMTP 연결 시에도 이 보안 정책·callback 목록·재발송 대기 60초를
+  보존했다.
 - 기존 redirect allowlist를 보존하고 확인된 운영 별칭 3개와 인증 브랜치 별칭,
   `5097400b` Preview 고유 주소에 `/auth/callback**` 항목을 추가했다. 잘못된 기존
   호스트 패턴에 의존하지 않는다. 신규 항목의 와일드카드는 callback 경로에
@@ -117,18 +119,32 @@ HTTP 검사에서 새 세션 쿠키 기록 및 계정 조회가 성공했다.
 - 초기 가입에는 고정된 브랜치 별칭
   `https://asca-main-git-feat-supabase-auth-jlinsights-projects.vercel.app/sign-up`을
   사용한다. 고유 배포 주소를 쓰려면 새 주소의 callback을 추가해야 한다.
-- 연결된 Brevo는 SMTP relay가 활성화되어 있지만 `orientalcalligraphy.org`로
-  조회한 발신자는 0개다. SMTP 서비스 선택·검증된 발신자·SMTP 키 준비가 남아
-  있으며 Brevo나 Supabase에 발신자/키를 생성하지 않았다. 키·비밀번호는
-  저장소·채팅에 남기지 않는다.
+- Brevo에서 `orientalcalligraphy.org` 도메인 인증과 협회 발신자의 Active 상태를
+  확인했다. 발신자는 도메인 인증을 이용해 별도 확인메일 없이 등록했다. 기존 무료
+  relay의 하루 300통 한도를 확인했으며 요금제를 변경하지 않았다.
+- Cloudflare에 소유권 확인용 apex TXT 1개와 `brevo1._domainkey`·
+  `brevo2._domainkey` CNAME 2개를 추가했다. CNAME은 DNS only다. 기존 중복 DMARC
+  2개는 `p=none`과 기존 보고 수신처 2곳을 보존한 한 레코드로 정리했다. 다른 DNS
+  38개와 Google MX·Google/Stibee SPF·사이트 주소의 보존을 대조했고, 공개 DNS
+  반영과 Brevo의 Authenticated 상태도 확인했다. Brevo 보고 수신처를 추가하지
+  않았다.
+- SMTP relay의 TLS 연결·AUTH 성공은 초기 발급 키로 메일 발송 없이 확인했다. 최종
+  연결에는 `ASCA Supabase Auth 2026-10-25` 이름의 Active 키를 사용했다. 최종 키
+  만료는 Brevo 목록 기준 2027-10-25이며 90일 미사용 시 먼저 만료될 수 있어 회전
+  관리가 필요하다. 키 원문은 로그·채팅·저장소에 남기지 않았고 임시 전달 파일을
+  삭제했다.
+- 실제 가입·확인메일 배달·같은 브라우저의 PKCE 복귀·복구 메일은 아직 검증하지
+  않았다. 최종 연결 키의 메일 발송 검증도 이 단계에서 수행한다. 초기 관리자 가입
+  화면은 Aside에 준비했으며 비밀번호·약관 동의·가입 제출은 운영자가 직접
+  진행한다. 확인 링크는 가입한 같은 Aside 브라우저에서 연다.
 
 ## 남은 운영 순서
 
-1. Vercel 팀 접근과 조회 가능한 키·URL의 프로젝트 일치 검증은 완료했다. SMTP
-   서비스·검증된 발신 주소와 보호된 변수의 런타임 확인을 진행한다. 비밀값은
-   채팅이나 Git에 기록하지 않는다.
+1. Vercel 팀 접근·조회 가능한 키/URL의 프로젝트 일치·SMTP 도메인/발신자 준비는
+   완료했다. 보호된 변수의 런타임 확인과 실제 메일 배달 검증을 진행한다.
+   비밀값은 채팅이나 Git에 기록하지 않는다.
 2. Site URL·callback allowlist·서버 비밀번호 12자·이메일 확인 필수·TOTP 설정은
-   확인했다. SMTP 준비 뒤 실제 이메일 복귀 주소·발송·메일 요청 제한을 검증한다.
+   확인했다. 실제 이메일 복귀 주소·발송·메일 요청 제한을 검증한다.
 3. Auth 마이그레이션과 RPC 권한 검사는 완료했다. 운영 코드 전환 직전 백업과 복구
    절차를 다시 확인한다. 전체 `db:push`나 과거 마이그레이션 재실행을 하지
    않는다.

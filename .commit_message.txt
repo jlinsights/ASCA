@@ -1,1 +1,1 @@
-🔐 운영 Auth 비밀번호·callback 설정과 SMTP 준비 상태 기록
+📧 Brevo 도메인·발신자 인증과 Supabase SMTP 연결·전환 준비 기록
