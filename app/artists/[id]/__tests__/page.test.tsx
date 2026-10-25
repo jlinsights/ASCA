@@ -1,20 +1,40 @@
 import { render, screen, within } from '@testing-library/react'
-import ArtistPage from '../page'
+import ArtistPage, { generateMetadata } from '../page'
 
 const ARTIST = 'e19df5c5-0f91-431b-8891-9f79ee98f3f4'
 const PHOTO = `https://caxjyimsuvjnbmjoxfad.supabase.co/storage/v1/object/public/artist-images/profiles/${ARTIST}.png`
-const WORK_IMG = `https://caxjyimsuvjnbmjoxfad.supabase.co/storage/v1/object/public/artwork-images/w1/main.webp`
+const BASE = 'https://caxjyimsuvjnbmjoxfad.supabase.co'
+
+const getArtist = jest.fn()
+const worksQuery = jest.fn()
 
 jest.mock('next/navigation', () => ({
-  useParams: () => ({ id: 'e19df5c5-0f91-431b-8891-9f79ee98f3f4' }),
-  notFound: jest.fn(),
+  notFound: () => {
+    throw new Error('NEXT_NOT_FOUND')
+  },
 }))
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
 jest.mock('@/contexts/language-context', () => ({
   useLanguage: () => ({ language: 'ko', t: (key: string) => key }),
 }))
+jest.mock('@/lib/utils/logger', () => ({ log: { error: jest.fn() } }))
+jest.mock('@/lib/api/artists', () => ({ getArtist: (key: string) => getArtist(key) }))
+jest.mock('@/lib/supabase', () => ({
+  getSupabaseClient: () => ({
+    from: (table: string) => {
+      const filters: Array<[string, unknown]> = []
+      const chain = {
+        select: () => chain,
+        eq: (column: string, value: unknown) => {
+          filters.push([column, value])
+          return filters.length === 2 ? worksQuery(table, filters) : chain
+        },
+      }
+      return chain
+    },
+  }),
+}))
 
-// /api/artists/[id] 는 DB 행을 snake_case 그대로 돌려준다
 const artistRow = {
   id: ARTIST,
   name: '김형석',
@@ -32,72 +52,123 @@ const artistRow = {
   awards: [],
   exhibitions: [],
   profile_image: PHOTO,
-  membership_type: '초대작가',
+  membership_type: '초대작가, 심사위원',
   artist_type: null,
-  title: null,
+  title: '심사위원',
+  created_at: null,
+  updated_at: null,
+  airtable_id: null,
+  slug: 'jeongam',
 }
 
-const fetchMock = jest.fn()
-const originalFetch = global.fetch
-const ok = (body: unknown) => ({ ok: true, status: 200, json: async () => body })
+const works = [
+  {
+    id: 'w1',
+    title: '獨逍遙',
+    title_en: null,
+    year_created: 2025,
+    style: '행서',
+    tags: ['特選', '행서'],
+    images: { main: { path: 'w1/main.webp', width: 600, height: 1800 } },
+  },
+  {
+    id: 'w2',
+    title: '제목 미상',
+    title_en: null,
+    year_created: 2023,
+    style: null,
+    tags: [],
+    images: {},
+  },
+]
+
+const params = (id: string) => ({ params: Promise.resolve({ id }) })
+
+beforeAll(() => {
+  process.env.NEXT_PUBLIC_SUPABASE_URL = BASE
+})
 
 beforeEach(() => {
-  fetchMock.mockReset().mockImplementation(async (url: string) => {
-    if (url === `/api/artists/${ARTIST}`) return ok(artistRow)
-    if (url.startsWith('/api/artworks')) {
-      return ok({
-        artworks: [
-          {
-            id: 'w1',
-            title: '獨逍遙',
-            title_en: null,
-            medium: '행서',
-            year_created: 2025,
-            image_url: WORK_IMG,
-          },
-          {
-            id: 'w2',
-            title: '제목 미상',
-            title_en: null,
-            medium: '초서',
-            year_created: 2023,
-            image_url: null,
-          },
-        ],
-      })
-    }
-    throw new Error(`unexpected fetch ${url}`)
-  })
-  global.fetch = fetchMock as unknown as typeof fetch
+  getArtist.mockReset().mockResolvedValue(artistRow)
+  worksQuery.mockReset().mockResolvedValue({ data: works, error: null })
 })
-afterAll(() => {
-  global.fetch = originalFetch
-})
+
+async function renderPage(id = ARTIST) {
+  render(await ArtistPage(params(id)))
+}
 
 describe('작가 상세', () => {
   // 회귀: snake_case 응답을 artist.profileImage 로 읽어 모든 작가가 빈 아이콘이었다
   it('profile_image 의 사진을 보여 준다', async () => {
-    render(<ArtistPage />)
-    const photo = await screen.findByRole('img', { name: '김형석' })
-    expect(photo).toHaveAttribute('src', PHOTO)
+    await renderPage()
+    expect(screen.getByRole('img', { name: '김형석' })).toHaveAttribute('src', PHOTO)
   })
 
-  // 회귀: 작품 불러오기가 "임시 비활성화"로 꺼져 늘 '작품이 없습니다' 였다
-  it('그 작가의 작품만 요청해 이미지와 함께 보여 준다', async () => {
-    render(<ArtistPage />)
-    const work = await screen.findByRole('link', { name: /獨逍遙/ })
+  it('그 작가의 공개 작품만 읽어 원래 비율·수상 표시와 함께 보여 준다', async () => {
+    await renderPage()
+    expect(worksQuery).toHaveBeenCalledWith('artworks', [
+      ['artist_id', ARTIST],
+      ['status', 'published'],
+    ])
+    const work = screen.getByRole('link', { name: /獨逍遙/ })
     expect(work).toHaveAttribute('href', '/artworks/w1')
-    expect(within(work).getByRole('img', { name: '獨逍遙' })).toHaveAttribute('src', WORK_IMG)
-    const artworkCall = fetchMock.mock.calls
-      .map(c => c[0] as string)
-      .find(u => u.startsWith('/api/artworks'))
-    expect(artworkCall).toBe(`/api/artworks?artist_id=${ARTIST}`)
-    expect(screen.queryByText('작품이 없습니다')).not.toBeInTheDocument()
+    expect(within(work).getByRole('img', { name: '獨逍遙' })).toHaveAttribute(
+      'src',
+      `${BASE}/storage/v1/object/public/artwork-images/w1/main.webp`
+    )
+    expect(within(work).getByText('特選')).toBeInTheDocument()
   })
 
-  it('이미지가 없는 작품은 다른 작가 사진으로 채우지 않고 빈 칸으로 둔다', async () => {
-    render(<ArtistPage />)
-    const work = await screen.findByRole('link', { name: /제목 미상/ })
+  it('이미지가 없는 작품은 다른 사진으로 채우지 않는다', async () => {
+    await renderPage()
+    const work = screen.getByRole('link', { name: /제목 미상/ })
     expect(within(work).queryByRole('img')).not.toBeInTheDocument()
+  })
+
+  // 회귀: 실제 등급 대신 'Member'·'Artist' 배지가 고정으로 찍혔다
+  it('등급·직함을 겹치지 않게 한 줄로, 한자 이름을 題簽으로 쓴다', async () => {
+    await renderPage()
+    expect(screen.getByText('초대작가 · 심사위원')).toBeInTheDocument()
+    expect(screen.queryByText('Member')).not.toBeInTheDocument()
+    expect(screen.getAllByText('金炯石').length).toBeGreaterThan(0)
+  })
+
+  it('경력 줄은 연보로 나눠 보여 준다', async () => {
+    getArtist.mockResolvedValue({
+      ...artistRow,
+      bio: '서예를 오래 익혔다.\n제10회(2013) 동양서예대전 특선\n제11회(2014) 동양서예대전 삼체상',
+    })
+    await renderPage()
+    expect(screen.getByRole('heading', { name: '경력' })).toBeInTheDocument()
+    expect(screen.getByText('서예를 오래 익혔다.')).toBeInTheDocument()
+    expect(screen.getByText('2013')).toBeInTheDocument()
+    expect(screen.getByText('제10회 동양서예대전 특선')).toBeInTheDocument()
+  })
+
+  it('작품·소개가 모두 없으면 빈 구역 대신 안내 한 줄', async () => {
+    getArtist.mockResolvedValue({ ...artistRow, bio: null, profile_image: null })
+    worksQuery.mockResolvedValue({ data: [], error: null })
+    await renderPage()
+    expect(screen.getByText('작가 소개와 작품을 준비하고 있습니다.')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: '작품' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: '작가 소개' })).not.toBeInTheDocument()
+  })
+
+  it('작품을 못 읽어도 작가 소개는 보여 준다', async () => {
+    worksQuery.mockResolvedValue({ data: null, error: { code: '42501' } })
+    await renderPage()
+    expect(screen.getByText('고려대학교 경영대학원 수료')).toBeInTheDocument()
+    expect(screen.getByText('공개된 작품이 아직 없습니다.')).toBeInTheDocument()
+  })
+
+  it('없거나 비공개인 작가는 404', async () => {
+    getArtist.mockResolvedValue(null)
+    await expect(ArtistPage(params('hidden-artist'))).rejects.toThrow('NEXT_NOT_FOUND')
+  })
+
+  it('slug 가 있으면 canonical 을 slug 주소로 둔다', async () => {
+    const meta = await generateMetadata(params(ARTIST))
+    expect(meta.alternates?.canonical).toBe('/artists/jeongam')
+    expect(String(meta.title)).toContain('김형석')
   })
 })

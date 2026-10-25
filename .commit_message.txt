@@ -1,1 +1,1 @@
-✨ feat: 작가 주소에 slug 지원 — /artists/<slug>·옛 주소(slug_aliases) 조회, 옛 Webflow /calligrapher/<slug> 를 작가 페이지로 1:1 연결(못 찾으면 목록)
+🎨 feat: 작가 상세 페이지 재설계 — 서버 렌더(SEO·canonical), 題簽 히어로·초상, 원비율 작품 단, 경력 연보 분리, 빈 데이터 안내

@@ -1,0 +1,326 @@
+/* =====================================================================
+   작가 상세 — 圖錄 한 면
+   題簽 히어로(page-hero.css) 아래로 작품이 먼저 걸리고, 소개와 경력 연보가 뒤따른다.
+   작품은 원래 비율 그대로(세로 족자·가로 액자) 宣紙 대지 위에 앉는다.
+   움직임은 히어로의 붓 획 하나뿐 — 여기서는 hover 반응만 둔다.
+   ===================================================================== */
+
+.ap {
+  --ap-gutter: clamp(16px, 4vw, 48px);
+  --ap-max: 1400px;
+  --ap-bg: var(--paper);
+  --ap-fg: var(--navy-900);
+  --ap-muted: var(--stone-700); /* paper 위 8.9:1 */
+  --ap-rule: var(--border);
+  --ap-mat: var(--paper-2);
+  --ap-accent-text: var(--gold-800); /* paper 위 4.9:1 */
+  --ap-award-line: var(--gold-600);
+  --ap-ring: var(--gold-600);
+  --ap-shadow: 0 16px 32px -12px hsl(222 54% 8% / 0.18), 0 6px 12px -6px hsl(222 54% 8% / 0.1);
+  --ap-font-display:
+    var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
+  --ap-font-tc: var(--font-noto-serif-tc), 'Noto Serif TC', var(--font-noto-serif-kr), serif;
+  --ap-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  background: var(--ap-bg);
+  color: var(--ap-fg);
+}
+
+.dark .ap {
+  --ap-bg: var(--navy-950);
+  --ap-fg: var(--paper);
+  --ap-muted: var(--navy-300);
+  --ap-mat: var(--navy-900);
+  --ap-accent-text: var(--gold-400);
+  --ap-award-line: var(--gold-500);
+  --ap-ring: var(--gold-400);
+  --ap-shadow: 0 16px 32px -12px hsl(222 60% 3% / 0.6), 0 6px 12px -6px hsl(222 60% 3% / 0.4);
+}
+
+.ap :focus-visible {
+  outline: 2px solid var(--ap-ring);
+  outline-offset: 4px;
+}
+
+/* ---------- 히어로 안 초상 — 대지에 붙인 사진 한 장 ---------- */
+.ap-portrait {
+  margin: 0 0 0 auto;
+  width: min(100%, 340px);
+  padding: clamp(10px, 1.2vw, 16px);
+  background: var(--ap-mat);
+  border: 1px solid var(--ap-rule);
+  box-shadow: var(--ap-shadow);
+}
+.ap-portrait__frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--ap-rule);
+}
+.ap-portrait__img {
+  object-fit: cover;
+}
+
+/* ---------- 구역 공통 ---------- */
+.ap-section {
+  max-width: var(--ap-max);
+  margin: 0 auto;
+  padding: clamp(56px, 8vw, 112px) var(--ap-gutter) 0;
+}
+.ap-section:last-of-type {
+  padding-bottom: clamp(72px, 9vw, 128px);
+}
+.ap-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 24px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ap-fg);
+}
+.ap-head__title {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  word-break: keep-all;
+}
+.ap-head__note {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ap-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 작품 — 원래 비율 그대로 단을 나눠 건다 ---------- */
+.ap-works__grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  columns: 4 240px;
+  column-gap: clamp(16px, 2.4vw, 36px);
+}
+.ap-works__item {
+  break-inside: avoid;
+  margin-bottom: clamp(28px, 3.6vw, 52px);
+}
+.ap-work {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.ap-work__figure {
+  margin: 0;
+}
+.ap-work__mat {
+  display: block;
+  padding: clamp(10px, 1.3vw, 18px);
+  background: var(--ap-mat);
+  border: 1px solid var(--ap-rule);
+  transition:
+    box-shadow 260ms var(--ap-ease),
+    transform 260ms var(--ap-ease);
+}
+.ap-work__frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+.ap-work__img {
+  object-fit: contain;
+  transition: transform 420ms var(--ap-ease);
+}
+.ap-work__blank {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  writing-mode: vertical-rl;
+  font-family: var(--ap-font-tc);
+  font-size: clamp(18px, 1.6vw, 22px);
+  letter-spacing: 0.2em;
+  line-height: 1.6;
+  color: var(--ap-muted);
+  overflow: hidden;
+}
+.ap-work__caption {
+  display: grid;
+  gap: 6px;
+  padding: 14px 2px 0;
+}
+.ap-work__title {
+  font-family: var(--ap-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  word-break: keep-all;
+  text-wrap: pretty;
+}
+.ap-work__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  font-size: 13px;
+  color: var(--ap-muted);
+  font-variant-numeric: tabular-nums;
+}
+.ap-work__award {
+  padding: 1px 8px 2px;
+  border: 1px solid var(--ap-award-line);
+  border-radius: 2px;
+  font-family: var(--ap-font-tc);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ap-accent-text);
+}
+.ap-work:hover .ap-work__mat,
+.ap-work:focus-visible .ap-work__mat {
+  box-shadow: var(--ap-shadow);
+  transform: translateY(-3px);
+}
+.ap-work:hover .ap-work__img {
+  transform: scale(1.015);
+}
+.ap-work:hover .ap-work__title {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+.ap-work:active .ap-work__mat {
+  transform: translateY(-1px);
+}
+
+/* ---------- 소개와 경력 연보 ---------- */
+.ap-about__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: clamp(24px, 5vw, 96px);
+  padding-top: 20px;
+  border-top: 1px solid var(--ap-fg);
+}
+.ap-about__title {
+  align-self: start;
+  position: sticky;
+  top: 96px;
+}
+.ap-about__body {
+  max-width: 68ch;
+}
+.ap-about__para {
+  margin: 0 0 1.25em;
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.85;
+  white-space: pre-line;
+  word-break: keep-all;
+  text-wrap: pretty;
+}
+.ap-career__title {
+  margin: clamp(32px, 4vw, 48px) 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ap-muted);
+}
+.ap-about__body > .ap-career__title:first-child {
+  margin-top: 0;
+}
+.ap-career {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ap-career__item {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--ap-rule);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.ap-career__item:last-child {
+  border-bottom: 1px solid var(--ap-rule);
+}
+.ap-career__year {
+  font-family: var(--ap-font-display);
+  font-weight: 600;
+  color: var(--ap-accent-text);
+  font-variant-numeric: tabular-nums;
+}
+.ap-career__text {
+  word-break: keep-all;
+}
+
+/* ---------- 비어 있을 때 ---------- */
+.ap-empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px 28px;
+}
+.ap-empty__text {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-size: clamp(18px, 1.6vw, 22px);
+  color: var(--ap-muted);
+}
+.ap-empty__link {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ap-fg);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+  transition: color 200ms var(--ap-ease);
+}
+.ap-empty__link:hover {
+  color: var(--ap-accent-text);
+}
+
+/* ---------- 작은 화면 ---------- */
+@media (max-width: 1023px) {
+  .ap-portrait {
+    margin: 0;
+    width: min(100%, 300px);
+  }
+}
+@media (max-width: 767px) {
+  .ap-works__grid {
+    columns: 2;
+  }
+  .ap-about__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ap-about__title {
+    position: static;
+  }
+  .ap-career__item {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 12px;
+  }
+  .ap-work__title {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-work__mat,
+  .ap-work__img {
+    transition: none;
+  }
+  .ap-work:hover .ap-work__mat,
+  .ap-work:focus-visible .ap-work__mat,
+  .ap-work:hover .ap-work__img {
+    transform: none;
+  }
+}
