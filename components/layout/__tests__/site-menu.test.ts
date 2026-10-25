@@ -24,6 +24,20 @@ function pageExists(href: string) {
 }
 
 describe('site-menu — 헤더·푸터 메뉴', () => {
+  // 2026-10-25 요청 순서: 협회 소개 · 공모전 · 전시회 · 작가 · 작품 · 소식 · 정관 및 규정 · 회원·후원
+  it('헤더 메뉴는 정해진 순서로 놓인다', () => {
+    expect(headerMenu.map(group => translations.ko?.[group.labelKey])).toStrictEqual([
+      '협회 소개',
+      '공모전',
+      '전시회',
+      '작가',
+      '작품',
+      '소식',
+      '정관 및 규정',
+      '회원·후원',
+    ])
+  })
+
   it.each(links.filter(link => !('external' in link && link.external)).map(link => link.href))(
     '%s 는 실제 페이지로 간다',
     href => expect(pageExists(href)).toBe(true)
