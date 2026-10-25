@@ -6,6 +6,10 @@ export const CALENDAR_FLIPBOOK_URL = `${FLIPHTML5_ORIGIN}/orientalcalligraphy/gj
 
 export function CalendarFlipbook() {
   return (
-    <FlipbookEmbed id='calendar-flipbook' url={CALENDAR_FLIPBOOK_URL} keyPrefix='calendarFlipbook' />
+    <FlipbookEmbed
+      id='calendar-flipbook'
+      url={CALENDAR_FLIPBOOK_URL}
+      keyPrefix='calendarFlipbook'
+    />
   )
 }

@@ -10,7 +10,8 @@ export const flipbookTranslations: TranslationData = {
     flipbookOpen: '새 창에서 크게 보기',
     calendarFlipbookEyebrow: '2027 회원·캘린더 특별 행사',
     calendarFlipbookTitle: '2027 동양서예 캘린더 증정 행사',
-    calendarFlipbookLede: '신청 2026년 10월 25일(일) – 12월 15일(화) 18:00 · 소산 박대성 화백의 2027 캘린더',
+    calendarFlipbookLede:
+      '신청 2026년 10월 25일(일) – 12월 15일(화) 18:00 · 소산 박대성 화백의 2027 캘린더',
     calendarFlipbookFrameTitle: '2027 동양서예 캘린더 행사',
     contestFlipbookEyebrow: '공모 요강',
     contestFlipbookTitle: '제23회 대한민국 동양서예대전',
@@ -25,7 +26,8 @@ export const flipbookTranslations: TranslationData = {
     flipbookOpen: 'Open full screen in a new tab',
     calendarFlipbookEyebrow: '2027 Membership & Calendar Special',
     calendarFlipbookTitle: '2027 Oriental Calligraphy Calendar Gift',
-    calendarFlipbookLede: 'Apply Oct 25 – Dec 15, 2026, 18:00 KST · 2027 calendar of ink paintings by Sosan Park Dae-sung',
+    calendarFlipbookLede:
+      'Apply Oct 25 – Dec 15, 2026, 18:00 KST · 2027 calendar of ink paintings by Sosan Park Dae-sung',
     calendarFlipbookFrameTitle: 'Flipbook: 2027 Oriental Calligraphy Calendar Gift',
     contestFlipbookEyebrow: 'Call for entries',
     contestFlipbookTitle: 'The 23rd Korea Oriental Calligraphy Exhibition',
@@ -41,7 +43,8 @@ export const flipbookTranslations: TranslationData = {
     flipbookOpen: '新しいタブで大きく見る',
     calendarFlipbookEyebrow: '2027 会員・カレンダー特別企画',
     calendarFlipbookTitle: '2027 東洋書藝 カレンダー贈呈',
-    calendarFlipbookLede: '申込 2026年10月25日(日)–12月15日(火) 18:00・小山 朴大成 画伯の2027カレンダー',
+    calendarFlipbookLede:
+      '申込 2026年10月25日(日)–12月15日(火) 18:00・小山 朴大成 画伯の2027カレンダー',
     calendarFlipbookFrameTitle: '2027 東洋書藝 カレンダー贈呈 フリップブック',
     contestFlipbookEyebrow: '募集要項',
     contestFlipbookTitle: '第23回 大韓民國 東洋書藝大展',
@@ -56,7 +59,8 @@ export const flipbookTranslations: TranslationData = {
     flipbookOpen: '在新分頁中全螢幕檢視',
     calendarFlipbookEyebrow: '2027 會員・月曆特別活動',
     calendarFlipbookTitle: '2027 東洋書藝 月曆贈送活動',
-    calendarFlipbookLede: '申請 2026年10月25日(週日)–12月15日(週二) 18:00・小山 朴大成 畫伯 2027 月曆',
+    calendarFlipbookLede:
+      '申請 2026年10月25日(週日)–12月15日(週二) 18:00・小山 朴大成 畫伯 2027 月曆',
     calendarFlipbookFrameTitle: '2027 東洋書藝 月曆贈送活動 翻頁冊',
     contestFlipbookEyebrow: '徵稿簡章',
     contestFlipbookTitle: '第23回 大韓民國 東洋書藝大展',

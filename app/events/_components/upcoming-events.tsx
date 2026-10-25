@@ -36,7 +36,7 @@ export function UpcomingEvents({ rows }: { rows: readonly EventRow[] }) {
               {row.typeLabel}
             </p>
             <h3 className='asca-events__feature-title'>
-              <Link href={`/events/${row.id}`}>{row.title}</Link>
+              <Link href={row.href ?? `/events/${row.id}`}>{row.title}</Link>
             </h3>
             {row.summary && <p className='asca-events__feature-summary'>{row.summary}</p>}
             <dl className='asca-events__feature-facts'>
@@ -52,7 +52,7 @@ export function UpcomingEvents({ rows }: { rows: readonly EventRow[] }) {
               )}
             </dl>
             <p className='asca-events__feature-actions'>
-              <Link href={`/events/${row.id}`} className='asca-events__more'>
+              <Link href={row.href ?? `/events/${row.id}`} className='asca-events__more'>
                 행사 자세히 보기 →
               </Link>
               {row.link && (

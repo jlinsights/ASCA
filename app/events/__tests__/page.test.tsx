@@ -107,3 +107,22 @@ describe('행사 목록', () => {
     expect(screen.getByText('가상 개인전')).toBeInTheDocument()
   })
 })
+
+describe('캘린더 증정 행사 고정', () => {
+  beforeEach(() => listPublishedEvents.mockResolvedValue(EVENTS))
+  afterEach(() => jest.useRealTimers())
+
+  it('신청 기간에는 다가오는 행사 맨 앞에 두고 안내 페이지로 잇는다', async () => {
+    jest.useFakeTimers({ now: new Date('2026-11-01T12:00:00+09:00') })
+    await renderPage()
+    const upcoming = screen.getByRole('region', { name: '곧 열리는 행사' })
+    const links = within(upcoming).getAllByRole('link')
+    expect(links[0]).toHaveAttribute('href', '/events/calendar-2027')
+  })
+
+  it('마감 뒤에는 보이지 않는다', async () => {
+    jest.useFakeTimers({ now: new Date('2026-12-16T00:00:00+09:00') })
+    await renderPage()
+    expect(screen.queryByRole('link', { name: '2027 동양서예 캘린더 증정 행사' })).toBeNull()
+  })
+})
