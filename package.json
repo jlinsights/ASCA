@@ -95,6 +95,7 @@
     "gallery:upload": "node scripts/upload-gallery-to-supabase.js",
     "gallery:upload:test": "node scripts/upload-gallery-to-supabase.js --test",
     "gallery:upload:dry": "node scripts/upload-gallery-to-supabase.js --dry-run",
+    "gallery:similar": "node scripts/gallery-similar-hashes.mjs",
     "gallery:update-paths": "node scripts/update-gallery-paths.js",
     "gallery:update-paths:dry": "node scripts/update-gallery-paths.js --dry-run",
     "prebuild": "echo '✅ prebuild: 이미지 최적화 스킵 (Supabase CDN 사용)'"

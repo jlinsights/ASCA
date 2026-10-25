@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { error as logError } from '@/lib/logging/structured-logger'
 import { GalleryItem } from '@/lib/types/gallery/gallery-legacy'
 import { resolveGalleryItems } from '@/lib/gallery-media'
+import { collapseSimilar } from '@/lib/gallery-similar-data'
 
 const PAGE_SIZE = 24
 
@@ -33,6 +34,8 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get('search') ?? ''
   const page = Math.max(1, Number(searchParams.get('page') ?? '1'))
   const limit = Math.min(48, Math.max(12, Number(searchParams.get('limit') ?? PAGE_SIZE)))
+  // 연속 촬영으로 거의 같은 사진은 대표 한 장으로 접는다. similar=all 이면 모두 보인다
+  const showAllSimilar = searchParams.get('similar') === 'all'
 
   try {
     let items = resolveGalleryItems(await loadGalleryItems(year))
@@ -60,6 +63,9 @@ export async function GET(req: NextRequest) {
       return db.localeCompare(da)
     })
 
+    const photoCount = items.length
+    if (!showAllSimilar) items = collapseSimilar(items).items
+
     const totalCount = items.length
     const totalPages = Math.ceil(totalCount / limit)
     const start = (page - 1) * limit
@@ -74,6 +80,7 @@ export async function GET(req: NextRequest) {
           totalCount,
           totalPages,
           hasMore: page < totalPages,
+          photoCount,
         },
       },
       {

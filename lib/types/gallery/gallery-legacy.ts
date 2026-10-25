@@ -24,6 +24,18 @@ export interface GalleryItem {
     isHighRes: boolean
     suggested: number
   }
+  /** galleryMediaKey — 업로드된 사진의 고유 키(해상도 변형을 하나로). 비슷한 사진 묶기에 쓴다 */
+  mediaKey?: string
+  /** 대표 사진에 묶인 비슷한 사진들(대표 포함, 촬영 순) — 목록에선 대표만 보이고 확대 화면에서 넘겨 본다 */
+  similar?: GallerySimilarFrame[]
+}
+
+export interface GallerySimilarFrame {
+  id: string
+  src: string
+  thumbnail: string
+  width: number | null
+  height: number | null
 }
 
 export interface GalleryCategory {

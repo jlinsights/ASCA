@@ -19,6 +19,23 @@ interface ApiResponse {
   pagination: GalleryPaginationData
 }
 
+/** 기본값과 같은 값은 주소에서 지운다. similar 만은 'all' 이 기본값이 아니라 '모두 펼침' 이라 남긴다 */
+const DEFAULTS: Readonly<Record<string, readonly string[]>> = {
+  year: ['all'],
+  category: ['all'],
+  page: ['1'],
+}
+
+export function nextGalleryQuery(current: string, updates: Record<string, string>): string {
+  const params = new URLSearchParams(current)
+  for (const [key, value] of Object.entries(updates)) {
+    if (value === '' || DEFAULTS[key]?.includes(value)) params.delete(key)
+    else params.set(key, value)
+  }
+  if (['year', 'category', 'search', 'similar'].some(key => key in updates)) params.delete('page')
+  return params.toString()
+}
+
 function useGalleryParams() {
   const router = useRouter()
   const pathname = usePathname()
@@ -28,26 +45,27 @@ function useGalleryParams() {
   const category = searchParams.get('category') ?? 'all'
   const search = searchParams.get('search') ?? ''
   const page = Number(searchParams.get('page') ?? '1')
+  const similar = searchParams.get('similar') === 'all' ? 'all' : ''
 
   const setParams = useCallback(
     (updates: Record<string, string>) => {
-      const params = new URLSearchParams(searchParams.toString())
-      for (const [k, v] of Object.entries(updates)) {
-        if (v === '' || v === 'all' || v === '1') params.delete(k)
-        else params.set(k, v)
-      }
-      if ('year' in updates || 'category' in updates || 'search' in updates) {
-        params.delete('page')
-      }
-      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+      router.push(`${pathname}?${nextGalleryQuery(searchParams.toString(), updates)}`, {
+        scroll: false,
+      })
     },
     [router, pathname, searchParams]
   )
 
-  return { year, category, search, page, setParams }
+  return { year, category, search, page, similar, setParams }
 }
 
-function useGalleryData(year: string, category: string, search: string, page: number) {
+function useGalleryData(
+  year: string,
+  category: string,
+  search: string,
+  page: number,
+  similar: string
+) {
   const [data, setData] = useState<ApiResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -65,6 +83,7 @@ function useGalleryData(year: string, category: string, search: string, page: nu
       ...(year !== 'all' ? { year } : {}),
       ...(category !== 'all' ? { category } : {}),
       ...(search.trim() ? { search } : {}),
+      ...(similar ? { similar } : {}),
       page: String(page),
       limit: String(PAGE_SIZE),
     })
@@ -83,7 +102,7 @@ function useGalleryData(year: string, category: string, search: string, page: nu
       })
 
     return () => ctrl.abort()
-  }, [year, category, search, page])
+  }, [year, category, search, page, similar])
 
   return { data, loading, error }
 }
@@ -94,8 +113,8 @@ interface GalleryPageClientProps {
 }
 
 export default function GalleryPageClient({ availableYears, categories }: GalleryPageClientProps) {
-  const { year, category, search, page, setParams } = useGalleryParams()
-  const { data, loading, error } = useGalleryData(year, category, search, page)
+  const { year, category, search, page, similar, setParams } = useGalleryParams()
+  const { data, loading, error } = useGalleryData(year, category, search, page, similar)
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null)
   const [, startTransition] = useTransition()
 
@@ -126,6 +145,7 @@ export default function GalleryPageClient({ availableYears, categories }: Galler
   )
 
   const totalCount = data?.pagination.totalCount ?? 0
+  const photoCount = data?.pagination.photoCount ?? totalCount
 
   return (
     <>
@@ -136,6 +156,8 @@ export default function GalleryPageClient({ availableYears, categories }: Galler
         category={category}
         search={search}
         totalCount={totalCount}
+        photoCount={photoCount}
+        showAllSimilar={similar === 'all'}
         onChange={handleParamsChange}
       />
 
@@ -161,7 +183,12 @@ export default function GalleryPageClient({ availableYears, categories }: Galler
             <div className='columns-2 md:columns-3 lg:columns-4 gap-3'>
               {data.items.map((item, i) => (
                 <div key={item.id} className='mb-3 break-inside-avoid'>
-                  <GalleryCard item={item} index={i} onClick={setSelectedImage} />
+                  <GalleryCard
+                    item={item}
+                    index={i}
+                    showCategory={category === 'all'}
+                    onClick={setSelectedImage}
+                  />
                 </div>
               ))}
             </div>

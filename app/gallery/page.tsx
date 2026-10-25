@@ -6,10 +6,10 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { PageHero, HeroScrolls, type PageHeroStat } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import galleryMeta from '@/lib/data/gallery-data.json'
-import galleryMedia from '@/lib/data/gallery-media.json'
 import type { GalleryData } from '@/lib/types/gallery/gallery-legacy'
 import GalleryPageClient from '@/components/gallery/GalleryPageClient'
-import { galleryMediaKey, resolveGalleryData, resolveGalleryItems } from '@/lib/gallery-media'
+import { resolveGalleryData } from '@/lib/gallery-media'
+import { collapseSimilar } from '@/lib/gallery-similar-data'
 
 function GallerySkeleton() {
   return (
@@ -28,20 +28,20 @@ function GallerySkeleton() {
 // 서버에서 메타데이터만 읽음 (items 배열 클라이언트로 전달 없음)
 const meta = resolveGalleryData(galleryMeta as unknown as GalleryData)
 const availableYears = meta.metadata.availableYears ?? []
-const categories = meta.categories ?? []
 const totalImages = meta.metadata.totalImages
+// 목록은 연속 촬영으로 비슷한 사진을 대표 한 장으로 접어 보인다 — 칩·히어로 숫자도 같은 기준으로
+const { items: representatives } = collapseSimilar(meta.items.filter(item => item.mediaKey))
+const representativeCount = representatives.length
+const categories = (meta.categories ?? []).map(category => ({
+  ...category,
+  count: representatives.filter(item => item.category === category.id).length,
+}))
 
-// 히어로 사진 — 업로드가 확인된 실제 사진만 건다(미연결 항목은 제외)
-const mediaMap = galleryMedia as Record<string, unknown>
-const heroImages = resolveGalleryItems(
-  (galleryMeta as unknown as GalleryData).items.filter(item => {
-    const key = galleryMediaKey(item.src)
-    return key !== null && key in mediaMap
-  })
-).map(item => ({ src: item.src, alt: item.title }))
+// 히어로 사진 — 업로드된 사진의 대표만(같은 장면이 나란히 걸리지 않게)
+const heroImages = representatives.map(item => ({ src: item.src, alt: item.title }))
 
 const heroLedger: PageHeroStat[] = [
-  { label: '활동사진', value: totalImages },
+  { label: '대표 사진', value: representativeCount, unit: `/ ${totalImages}장` },
   { label: '카테고리', value: categories.length },
   ...(availableYears.length > 0
     ? [
