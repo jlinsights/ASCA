@@ -1,7 +1,7 @@
 -- 공모전 출품 현황 사본 — Airtable 출품 테이블(연도별)의 일부 칸만 옮겨 회원에게 진행 상황을 보인다.
 --
 -- 계약
--- - 원본은 Airtable 이다. 이 표는 scripts/sync-contest-entries.mts 가 airtable_record_id 기준으로 덮어쓴다.
+-- - 원본은 Airtable 이다. 이 표는 scripts/sync-contest-entries.ts 가 airtable_record_id 기준으로 덮어쓴다.
 -- - 옮기는 칸은 lib/contests/sources.ts 의 허용 목록뿐: 작품 명제·부문·서체·출품비·결과·출품자 이름·이메일.
 --   주소·전화·생년월일·사진·심사 점수는 옮기지 않는다.
 -- - 회원 연결: 출품 이메일 = 회원의 확인된 로그인 이메일이면 자동(읽을 때 비교, 저장 안 함).

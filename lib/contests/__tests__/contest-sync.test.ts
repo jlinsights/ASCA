@@ -66,6 +66,18 @@ describe('fetchContestRecords', () => {
     }
   })
 
+  it('throws instead of returning a truncated list when pages never end', async () => {
+    const fetchImpl = jest.fn(
+      async () =>
+        ({
+          ok: true,
+          status: 200,
+          json: async () => ({ records: [{ id: 'recAAAAAAAAAAAAAA', fields: {} }], offset: 'more' }),
+        }) as unknown as Response
+    )
+    await expect(fetchContestRecords(CONTEST_SOURCES[0], 't', fetchImpl)).rejects.toThrow(/pages/)
+  })
+
   it('fails loudly on an HTTP error', async () => {
     const fetchImpl = jest.fn(async () => ({ ok: false, status: 403 }) as unknown as Response)
     await expect(fetchContestRecords(CONTEST_SOURCES[0], 't', fetchImpl)).rejects.toThrow('403')
