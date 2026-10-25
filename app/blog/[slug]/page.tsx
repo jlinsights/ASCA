@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, Calendar, User } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { constructMetadata } from '@/lib/seo'
-import { getLocalPost, localPostSlugs } from '@/lib/blog/local-posts'
+import { getLocalPost, localPostSlugs, postDescription } from '@/lib/blog/local-posts'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {}
   return constructMetadata({
     title: post.title,
-    description: post.summary.slice(0, 160),
+    description: postDescription(post),
     image: post.thumbnail,
     url: `/blog/${post.id}`,
     type: 'article',

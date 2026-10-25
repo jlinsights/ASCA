@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 import type { HomePost } from './home-data'
@@ -31,11 +32,8 @@ export function HomeJournal({ posts }: HomeJournalProps) {
             <div>
               {/* 블로그 글은 한국어로 쓰였다 — 화면 언어와 별개로 읽기 언어를 밝힌다 */}
               <h3 className='asca-news__title' lang='ko'>
-                {/* 글 본문은 협회 블로그에 있다 — /blog 목록과 같은 외부 링크 */}
-                <a href={post.href} target='_blank' rel='noopener noreferrer'>
-                  {post.title}
-                  <span className='sr-only'> ({t('homeNewTab')})</span>
-                </a>
+                {/* 글 본문은 이 사이트의 /blog/<slug> 에 있다 — 같은 탭에서 연다 */}
+                <Link href={post.href}>{post.title}</Link>
               </h3>
             </div>
             <ArrowUpRight className='asca-news__arrow' aria-hidden='true' />

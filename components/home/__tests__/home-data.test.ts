@@ -94,13 +94,14 @@ describe('getLatestPosts', () => {
   })
 
   // 원본 요약은 HTML 을 공백 없이 벗긴 것이라 홈에 싣지 않는다
-  it('carries title, date and link only — no summary text', () => {
+  // 옛 Webflow 주소(link)가 아니라 이 사이트의 /blog/<slug> 로 보낸다(리다이렉트 2번을 거치지 않게)
+  it('carries title, date and the on-site /blog/<id> link only — no summary text', () => {
     expect(getLatestPosts(posts, 1)[0]).toEqual({
       id: 'p2',
       title: 'B',
       date: '2025.12.14',
       isoDate: '2025-12-13T15:00:00.000Z',
-      href: 'https://x/2',
+      href: '/blog/p2',
     })
   })
 })
