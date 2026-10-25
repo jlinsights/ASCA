@@ -162,7 +162,7 @@ export function ProfileEditClient() {
 
   return (
     <div className='min-h-screen bg-transparent flex flex-col'>
-      <main className='flex-1 container mx-auto px-4 py-8'>
+      <main className='flex-1 container py-8'>
         <div className='max-w-4xl mx-auto'>
           {/* Header */}
           <div className='mb-8'>

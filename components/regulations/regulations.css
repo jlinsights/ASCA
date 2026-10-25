@@ -25,8 +25,8 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 150ms;
   --dur-normal: 260ms;
-  --regs-gutter: clamp(16px, 4vw, 48px);
-  --regs-max: 1240px;
+  --regs-gutter: var(--shell-gutter);
+  --regs-max: var(--shell-frame);
   --regs-measure: 40rem;
   --regs-header-offset: 88px;
   /* #조문 으로 이동했을 때 제목이 머리글(·목차 줄)에 가리지 않게 남기는 여백 */

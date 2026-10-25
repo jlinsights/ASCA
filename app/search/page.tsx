@@ -120,7 +120,7 @@ function SearchContent() {
           className='max-w-2xl'
         />
       </PageHero>
-      <div className='container mx-auto px-4 py-10 md:py-16'>
+      <div className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto'>
           {query && (
             <div className='mb-6' aria-live='polite' aria-atomic='true'>
@@ -217,7 +217,7 @@ export default function SearchPage() {
     <Suspense
       fallback={
         <div className='min-h-screen bg-background'>
-          <div className='container mx-auto px-4 py-8'>
+          <div className='container py-8'>
             <div className='text-center py-12'>
               <div className='inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
               <p className='mt-2 text-muted-foreground'>검색 페이지를 불러오는 중...</p>

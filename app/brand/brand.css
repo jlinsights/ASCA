@@ -13,7 +13,7 @@
     var(--gold-500) 88%,
     transparent
   );
-  --brand-gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --brand-gutter: var(--shell-gutter);
   --brand-ease: cubic-bezier(0.16, 1, 0.3, 1);
   background: var(--background);
   color: var(--foreground);
@@ -72,7 +72,7 @@
   opacity: 0.14;
 }
 .brand-hero__inner {
-  max-width: 80rem;
+  max-width: var(--shell-max);
   margin: 0 auto;
 }
 .brand-hero__eyebrow {
@@ -139,7 +139,7 @@
 
 /* ── 본문 레이아웃 — 목차 + 섹션 ────────────────────────────────────── */
 .brand-body {
-  max-width: 80rem;
+  max-width: var(--shell-frame);
   margin: 0 auto;
   padding: 0 var(--brand-gutter) clamp(4rem, 3rem + 4vw, 6rem);
   display: grid;

@@ -93,7 +93,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
         />
       </PageHero>
 
-      <section className='container mx-auto grid gap-10 px-4 py-10 md:py-16 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]'>
+      <section className='container grid gap-10 py-10 md:py-16 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]'>
         <div className='relative aspect-[3/4] w-full overflow-hidden rounded-md bg-muted'>
           {image ? (
             <Image

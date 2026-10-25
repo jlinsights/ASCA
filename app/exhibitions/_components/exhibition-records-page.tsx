@@ -81,7 +81,7 @@ export function ExhibitionRecordsPage({ variant }: { variant: Variant }) {
         ledger={ledger}
       />
 
-      <section className='container mx-auto px-4 py-10 md:py-16'>
+      <section className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto'>
           {records.length > 0 ? (
             <div className='relative pl-8 border-l-2 border-muted-foreground/20 space-y-4'>
@@ -100,7 +100,7 @@ export function ExhibitionRecordsPage({ variant }: { variant: Variant }) {
       </section>
 
       <section className='bg-muted/50 py-16'>
-        <div className='container mx-auto px-4 text-center'>
+        <div className='container text-center'>
           <h2 className='text-3xl font-normal mb-4'>{t('exMoreTitle')}</h2>
           <p className='text-muted-foreground mb-8'>{t('exMoreLede')}</p>
           <div className='flex flex-wrap justify-center gap-4'>

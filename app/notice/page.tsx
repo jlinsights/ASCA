@@ -151,7 +151,7 @@ export default function NoticePage() {
     return (
       <main className='min-h-screen bg-transparent'>
         {hero}
-        <section className='container mx-auto px-4 py-16'>
+        <section className='container py-16'>
           <div className='max-w-4xl mx-auto text-center'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto'></div>
             <p className='mt-4 text-muted-foreground font-medium'>공지사항을 불러오는 중...</p>
@@ -166,7 +166,7 @@ export default function NoticePage() {
     return (
       <main className='min-h-screen bg-transparent'>
         {hero}
-        <section className='container mx-auto px-4 py-16'>
+        <section className='container py-16'>
           <div className='max-w-4xl mx-auto text-center'>
             <div className='bg-seal/5 border border-seal/30 rounded-lg p-6'>
               <p className='text-muted-foreground font-medium'>{error}</p>
@@ -184,7 +184,7 @@ export default function NoticePage() {
   return (
     <main className='min-h-screen bg-transparent'>
       {hero}
-      <section className='container mx-auto px-4 py-10 md:py-16'>
+      <section className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto'>
           {/* 검색 및 필터 */}
           <Card className='mb-8 border-border/50 shadow-sm'>

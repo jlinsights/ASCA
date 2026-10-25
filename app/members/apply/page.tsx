@@ -66,7 +66,7 @@ export default function MemberApplicationPage() {
     return (
       <>
         {hero}
-        <div className='container mx-auto px-4 py-10 md:py-16'>Loading...</div>
+        <div className='container py-10 md:py-16'>Loading...</div>
       </>
     )
   }
@@ -74,7 +74,7 @@ export default function MemberApplicationPage() {
   return (
     <>
       {hero}
-      <div className='container mx-auto px-4 py-10 md:py-16 max-w-2xl'>
+      <div className='container py-10 md:py-16 [--shell-max:42rem]'>
         <form onSubmit={handleSubmit} className='space-y-6 bg-white p-6 rounded-lg shadow'>
           <div>
             <label className='block text-sm font-medium mb-2'>한국어 이름 *</label>

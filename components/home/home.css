@@ -209,13 +209,15 @@
 }
 .asca-hero__frame {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 72px;
-  align-items: end;
-  max-width: 1440px;
+  /* 황금비 1.618 : 1 — 제목 단이 주, 주요 소식 단이 종 */
+  grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr);
+  gap: clamp(48px, 5vw, 80px);
+  /* 위 선을 맞춘다 — 끝선 정렬은 소식 카드가 길어지면 제목이 화면 아래로 밀려 빈 칸이 생겼다 */
+  align-items: start;
+  max-width: var(--shell-frame);
   margin: 0 auto;
   /* 고정 헤더(64px) 아래에서 시작한다 */
-  padding: 136px 40px 56px;
+  padding: 136px var(--shell-gutter) 56px;
 }
 .asca-hero__feature {
   position: relative;
@@ -253,6 +255,9 @@
 .asca-hero__copy {
   order: 1;
   padding-bottom: 24px;
+  /* 소식 단이 길면 제목 단이 따라 내려온다 — 고정 헤더(64px) + 여백 아래에 머문다 */
+  position: sticky;
+  top: 112px;
 }
 .asca-hero__eyebrow {
   margin-bottom: 36px;
@@ -310,9 +315,9 @@
 .asca-hero__ledger-inner {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  max-width: 1440px;
+  max-width: var(--shell-frame);
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 var(--shell-gutter);
 }
 .asca-hero__stat {
   display: flex;
@@ -361,9 +366,9 @@
    ===================================================================== */
 .asca-section {
   position: relative;
-  max-width: 1280px;
+  max-width: var(--shell-frame);
   margin: 0 auto;
-  padding: 96px 40px;
+  padding: 96px var(--shell-gutter);
 }
 .asca-section__head {
   display: grid;
@@ -539,9 +544,9 @@
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: 64px;
   align-items: end;
-  max-width: 1280px;
+  max-width: var(--shell-frame);
   margin: 0 auto;
-  padding: 112px 40px;
+  padding: 112px var(--shell-gutter);
 }
 .asca-join__tc {
   margin: 14px 0 6px;
@@ -585,20 +590,21 @@
   .asca-hero__frame {
     grid-template-columns: 1fr;
     gap: 40px;
-    padding: 104px 24px 48px;
+    padding: 104px var(--shell-gutter) 48px;
   }
   .asca-hero__feature {
     order: 1;
   }
   .asca-hero__copy {
     order: 2;
+    position: static;
   }
   .asca-hero__feature-img {
     aspect-ratio: 16 / 10;
   }
   .asca-hero__ledger-inner {
     grid-template-columns: 1fr 1fr;
-    padding: 0 24px;
+    padding: 0 var(--shell-gutter);
   }
   .asca-hero__stat:nth-child(3) {
     padding-left: 0;
@@ -608,7 +614,7 @@
     border-top: 1px solid var(--border);
   }
   .asca-section {
-    padding: 80px 24px;
+    padding: 80px var(--shell-gutter);
   }
   .asca-news__item {
     grid-template-columns: 110px minmax(0, 1fr) 20px;
@@ -616,7 +622,7 @@
   .asca-join__inner {
     grid-template-columns: 1fr;
     gap: 40px;
-    padding: 88px 24px;
+    padding: 88px var(--shell-gutter);
   }
   .asca-join__cta {
     justify-content: flex-start;
@@ -627,7 +633,7 @@
 @media (max-width: 640px) {
   .asca-hero__frame {
     gap: 28px;
-    padding: 88px 16px 40px;
+    padding: 88px var(--shell-gutter) 40px;
   }
   .asca-hero__feature-img {
     aspect-ratio: 4 / 3;
@@ -654,7 +660,7 @@
     min-height: 48px;
   }
   .asca-hero__ledger-inner {
-    padding: 0 16px;
+    padding: 0 var(--shell-gutter);
   }
   .asca-hero__stat {
     padding: 20px 12px 20px 16px;
@@ -663,7 +669,7 @@
     font-size: 32px;
   }
   .asca-section {
-    padding: 64px 16px;
+    padding: 64px var(--shell-gutter);
   }
   .asca-section__head {
     grid-template-columns: 1fr;
@@ -695,7 +701,7 @@
     display: none;
   }
   .asca-join__inner {
-    padding: 72px 16px;
+    padding: 72px var(--shell-gutter);
   }
   .asca-join__cta {
     flex-direction: column;

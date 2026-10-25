@@ -29,7 +29,7 @@ export default function GreetingsPage() {
         lede='사단법인 동양서예협회 이사장의 새해 인사말씀을 전합니다'
       />
 
-      <section className='container mx-auto px-4 py-8 md:py-12'>
+      <section className='container py-8 md:py-12'>
         <div className='max-w-3xl mx-auto'>
           <GreetingsTabs />
         </div>

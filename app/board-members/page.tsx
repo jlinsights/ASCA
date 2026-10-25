@@ -137,7 +137,7 @@ export default function BoardMembersPage() {
         />
       </PageHero>
 
-      <section className='container mx-auto px-4 py-10 md:py-16'>
+      <section className='container py-10 md:py-16'>
         <div className='max-w-5xl mx-auto space-y-12'>
           {boardSections.map(section => {
             const Icon = section.icon

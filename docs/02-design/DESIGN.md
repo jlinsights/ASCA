@@ -122,8 +122,9 @@ typography:
 layout:
   container:
     center: true
-    padding: '2rem'
-    max: '1400px'
+    # 2026-10-25 페이지 틀 — app/globals.css --shell-* (§4.1)
+    max: '75rem' # 본문 1200px
+    padding: 'clamp(1.25rem, 10vw - 3.5rem, 8rem)' # 좌우 여백 20→120px
   spacing:
     xs: '0.5rem' # 8px
     sm: '1rem' # 16px
@@ -475,10 +476,35 @@ PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 
 
 ## 4. Layout
 
-### 4.1 컨테이너
+### 4.1 페이지 틀 (2026-10-25)
 
-`gallery-container` (max 1400px, padding 2rem) 를 표준으로 쓴다. 예외는 풀블리드
-히어로뿐.
+헤더·페이지 히어로·본문·푸터가 **같은 좌우 선**에 선다. 정의는 `app/globals.css`
+`:root` 한 곳이다.
+
+| 토큰             | 값                                    | 뜻                         |
+| ---------------- | ------------------------------------- | -------------------------- |
+| `--shell-max`    | `75rem` (1200px)                      | 본문 폭                    |
+| `--shell-gutter` | `clamp(1.25rem, 10vw - 3.5rem, 8rem)` | 좌우 여백                  |
+| `--shell-frame`  | `max + 2 × gutter`                    | 여백을 포함한 틀의 최대 폭 |
+| `--shell-narrow` | `50rem`                               | 읽기 문서의 좁은 단        |
+| `--measure`      | `40rem`                               | 본문 한 줄 길이            |
+
+좌우 여백은 화면 폭에 따라 390px → 20 · 1024px → 46 · 1280px → 72 · 1440px → 120
+· 1920px → 360 이 된다. 예전 틀(1400px + 2rem)은 1440px 화면에서 여백이 36~52px
+뿐이라 내용이 화면 끝까지 퍼져 보였다.
+
+- Tailwind `container` 는 끄고(`corePlugins.container: false`) `.container` 를
+  위 토큰으로 다시 정의했다. **`container` 에 `mx-auto`·`px-*` 를 붙이지
+  않는다** — 여백은 토큰이 정한다.
+- 더 좁은 단이 필요하면 `max-w-*` 대신 `[--shell-max:56rem]` 처럼 본문 폭만
+  바꾼다. `max-w-*` 는 여백까지 포함한 폭이라 넓은 여백에서 본문이 지나치게
+  좁아진다.
+- 페이지별 CSS 의
+  `--ph-*`·`--ap-*`·`--ac-*`·`--mb-*`·`--regs-*`·`--brand-gutter`·`home.css` 도
+  모두 이 토큰을 가리킨다. 새 페이지 CSS 도 자체 폭·여백 값을 만들지 말고 토큰을
+  쓴다.
+- 두 단 배치의 기본 비율은 황금비 `1.618fr : 1fr` (홈 히어로). 예외는 풀블리드
+  히어로뿐.
 
 ### 4.2 스페이싱
 
@@ -595,10 +621,10 @@ PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 
 
 #### gallery-container
 
-| 속성      | 값                      |
-| --------- | ----------------------- |
-| max-width | `1400px`                |
-| padding   | `{spacing.md}` (1.5rem) |
+| 속성           | 값                                              |
+| -------------- | ----------------------------------------------- |
+| max-width      | `var(--shell-frame)` (§4.1)                     |
+| padding-inline | `var(--shell-gutter)` (`.container` 와 같은 틀) |
 
 #### gallery-card
 

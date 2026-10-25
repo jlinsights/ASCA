@@ -147,7 +147,7 @@ export default function ContestDetailPage() {
     return (
       <div className='min-h-screen bg-transparent'>
         {hero}
-        <main className='container mx-auto px-4 py-10 md:py-16'>
+        <main className='container py-10 md:py-16'>
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
@@ -161,7 +161,7 @@ export default function ContestDetailPage() {
     return (
       <div className='min-h-screen bg-transparent'>
         {hero}
-        <main className='container mx-auto px-4 py-10 md:py-16'>
+        <main className='container py-10 md:py-16'>
           <Alert variant='destructive'>
             <AlertCircle className='h-4 w-4' />
             <AlertDescription>{error}</AlertDescription>
@@ -183,7 +183,7 @@ export default function ContestDetailPage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {hero}
-      <main className='container mx-auto px-4 py-10 md:py-16'>
+      <main className='container py-10 md:py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Main Content */}
           <div className='lg:col-span-2 space-y-6'>

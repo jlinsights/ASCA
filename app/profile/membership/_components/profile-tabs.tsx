@@ -30,7 +30,7 @@ export function ProfileTabs({
   parsedPrivacySettings,
 }: ProfileTabsProps) {
   return (
-    <div className='container mx-auto px-4 py-8'>
+    <div className='container py-8'>
       <Tabs defaultValue='overview' className='space-y-6'>
         <TabsList className='grid w-full grid-cols-7'>
           <TabsTrigger value='overview'>개요</TabsTrigger>

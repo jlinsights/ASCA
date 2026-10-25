@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 export default function ArchiveLayout({ children }: { children: React.ReactNode }) {
   return (
     <section className='min-h-screen bg-background text-foreground pt-28 pb-20'>
-      <div className='container max-w-screen-2xl'>
+      <div className='container'>
         <ArchiveNav />
         {children}
       </div>
