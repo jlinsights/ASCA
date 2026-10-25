@@ -4,7 +4,7 @@ import { cache } from 'react'
 import { getArtist } from '@/lib/api/artists'
 import { getSupabaseClient } from '@/lib/supabase'
 import { log } from '@/lib/utils/logger'
-import type { ArtistDbRow } from '@/lib/api/artist-mapper'
+import { artNameLabel, type ArtistDbRow } from '@/lib/api/artist-mapper'
 import { ArtistProfile } from './_components/artist-profile'
 import {
   orderWorks,
@@ -45,8 +45,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description =
     artist.bio?.replace(/\s+/g, ' ').trim().slice(0, 150) ||
     `${artist.name} — 동양서예협회 ${artist.membership_type ?? '작가'}`
-  // 아호로 찾는 사람이 많다 — '정암 김형석' 처럼 호를 이름 앞에
-  const artName = artist.art_name_ko?.trim() || artist.art_name_hanja?.trim()
+  // 아호로 찾는 사람이 많다 — '井巖 김형석'·'글꽃 이영희' 처럼 호를 이름 앞에
+  const artName = artNameLabel(artist.art_name_ko, artist.art_name_hanja)
   return {
     title: `${artName ? `${artName} ` : ''}${artist.name} | 동양서예협회`,
     description,

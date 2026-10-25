@@ -84,12 +84,13 @@ export function toPublicArtist(row: ArtistDbRow): PublicArtist {
   }
 }
 
-/** 아호 표기 — '井巖 · 정암' · '井巖' · '정암' · null. 같은 글자면 한 번만 */
+/**
+ * 아호 표기 — 한자 아호는 한글 읽기 없이 한자 그대로('井巖'),
+ * 한자가 없는 순우리말 아호('글꽃'·'강바람')는 한글 그대로. 둘을 나란히 쓰지 않는다.
+ */
 export function artNameLabel(
   ko: string | null | undefined,
   hanja: string | null | undefined
 ): string | null {
-  const parts = [hanja?.trim(), ko?.trim()].filter((part): part is string => Boolean(part))
-  const unique = [...new Set(parts)]
-  return unique.length > 0 ? unique.join(' · ') : null
+  return hanja?.trim() || ko?.trim() || null
 }
