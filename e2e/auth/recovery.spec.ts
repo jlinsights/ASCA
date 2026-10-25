@@ -1,9 +1,11 @@
 import { test, expect, type Page } from '@playwright/test'
 import { createClient } from '@supabase/supabase-js'
 import { randomUUID } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 import { RECOVERY_EMAIL_SUBJECT } from '../../lib/auth/recovery-email'
 
 const officePhone = 'tel:+8250255508700'
+const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8')
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('asca-language', 'ko'))
 })
@@ -139,7 +141,9 @@ for (const width of [360, 390, 768, 1440]) {
         expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(48)
         await tabTo(page, input)
         await expect(input).toBeFocused()
-        await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') })
+        // addScriptTag also listens to unrelated iframe CSP errors. Inject this
+        // test tool in the main frame without changing the application's CSP.
+        await page.evaluate(axeSource)
         const violations = await page.evaluate(
           async () =>
             (
