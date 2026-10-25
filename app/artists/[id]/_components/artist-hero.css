@@ -1,0 +1,253 @@
+/* =====================================================================
+   작가 히어로 — 이름이 화면을 연다
+   넓은 단(1.618fr)에 큰 이름, 좁은 단(1fr)에 초상·족자 벽·세로 題簽.
+   첫 화면 한 번: 이름에 먹이 들고(왼→오, 번짐이 가라앉음), 題簽이 위에서 펼쳐진다.
+   색·글꼴은 .ap(artist-profile.css)의 Ink System 변수를 그대로 쓴다.
+   ===================================================================== */
+
+.ah {
+  --ah-header: 64px;
+  --ah-brush: 720ms;
+
+  max-width: var(--ap-max);
+  margin: 0 auto;
+  padding: calc(var(--ah-header) + clamp(32px, 5vw, 72px)) var(--ap-gutter) 0;
+}
+
+.ah__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(32px, 5vw, 88px);
+  padding-bottom: clamp(32px, 4vw, 56px);
+  border-bottom: 1px solid var(--ap-fg);
+}
+
+/* ---------- 왼쪽: 이름 ---------- */
+.ah__copy {
+  min-width: 0;
+  container-type: inline-size;
+}
+.ah__crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 clamp(24px, 3vw, 40px);
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: var(--ap-muted);
+}
+.ah__crumbs li + li::before {
+  content: '/';
+  margin-right: 8px;
+  opacity: 0.5;
+}
+.ah__crumbs a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color 200ms var(--ap-ease),
+    color 200ms var(--ap-ease);
+}
+.ah__crumbs a:hover {
+  color: var(--ap-fg);
+  border-bottom-color: currentColor;
+}
+
+.ah__name {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+/* 글자 수마다 이름 단(cqi)을 8할 남짓 채우는 크기 — 단보다 넓어지지 않는다 */
+.ah__name[data-scale='short'] {
+  font-size: clamp(64px, 28cqi, 168px);
+}
+.ah__name[data-scale='medium'] {
+  font-size: clamp(56px, 21cqi, 144px);
+}
+.ah__name[data-scale='long'] {
+  font-size: clamp(40px, 12cqi, 104px);
+  letter-spacing: -0.03em;
+}
+
+.ah__hanja {
+  margin: clamp(8px, 1vw, 14px) 0 0;
+  font-family: var(--ap-font-tc);
+  font-size: clamp(26px, 3.2vw, 48px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.12em;
+  color: var(--ap-muted);
+}
+
+.ah__lede {
+  display: grid;
+  gap: 6px;
+  margin-top: clamp(24px, 3vw, 40px);
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.6;
+  color: var(--ap-muted);
+}
+
+.ah__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 32px;
+  margin: clamp(28px, 3.5vw, 48px) 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--ap-rule);
+  font-size: 14px;
+  color: var(--ap-muted);
+}
+.ah__fact {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.ah__fact dd {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ap-fg);
+  font-variant-numeric: tabular-nums;
+}
+.ah__unit {
+  margin-left: 2px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ap-muted);
+}
+
+/* ---------- 오른쪽: 초상·족자 벽·題簽 ---------- */
+.ah__media {
+  min-width: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+.ah__media .ap-portrait {
+  width: min(100%, 360px);
+}
+.ah__media .asca-scrolls {
+  width: 100%;
+}
+
+/* 초상도 작품도 없을 때 — 宣紙 대지 위에 세로로 쓴 이름과 협회 낙관 */
+.ah-tc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: min(100%, 220px);
+  padding: clamp(28px, 3vw, 40px) 0 clamp(20px, 2.4vw, 28px);
+  background: var(--ap-mat);
+  border: 1px solid var(--ap-rule);
+  box-shadow: var(--ap-shadow);
+}
+.ah-tc__text {
+  writing-mode: vertical-rl;
+  font-family: var(--ap-font-tc);
+  font-size: clamp(48px, 5.2vw, 76px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  color: var(--ap-fg);
+}
+.ah-tc__seal {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+  background: var(--seal-red);
+  color: var(--paper);
+  font-family: var(--ap-font-tc);
+  font-size: 13px;
+  line-height: 1.05;
+  writing-mode: vertical-rl;
+}
+
+/* ---------- 첫 화면 한 번 — 먹이 든다 ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .ah__name {
+    animation: ah-ink var(--ah-brush) cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+  }
+  .ah__hanja {
+    animation: ah-ink var(--ah-brush) cubic-bezier(0.16, 1, 0.3, 1) 260ms both;
+  }
+  .ah-tc,
+  .ah__media .ap-portrait {
+    animation: ah-unroll 900ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
+  }
+  .ah-tc__seal {
+    animation: ah-seal 320ms cubic-bezier(0.16, 1, 0.3, 1) 1000ms both;
+  }
+}
+
+/* 붓이 지나간 자리만 보이고, 번진 먹(blur)이 가라앉는다 */
+@keyframes ah-ink {
+  from {
+    clip-path: inset(-0.2em 100% -0.2em 0);
+    filter: blur(6px);
+  }
+  60% {
+    filter: blur(0.5px);
+  }
+  to {
+    clip-path: inset(-0.2em -0.2em -0.2em 0);
+    filter: blur(0);
+  }
+}
+/* 족자를 위에서 아래로 펼친다 — 끝에서 그림자까지 보이도록 바깥으로 연다 */
+@keyframes ah-unroll {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(-48px -48px -48px -48px);
+  }
+}
+/* 낙관은 마지막에 찍힌다 */
+@keyframes ah-seal {
+  from {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- 작은 화면 ---------- */
+@media (max-width: 1023px) {
+  .ah__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  }
+}
+@media (max-width: 767px) {
+  .ah__grid {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  .ah__media {
+    justify-content: flex-start;
+  }
+  .ah__media .ap-portrait {
+    width: min(100%, 280px);
+  }
+  .ah-tc {
+    width: min(100%, 160px);
+  }
+}
