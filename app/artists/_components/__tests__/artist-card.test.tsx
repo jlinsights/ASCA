@@ -54,7 +54,8 @@ describe('ArtistCard 아호', () => {
     render(
       <ArtistCard artist={artist({ artNameKo: '청산', artNameHanja: '靑山' })} variant={variant} />
     )
-    expect(screen.getByText('靑山 · 청산')).toBeInTheDocument()
+    expect(screen.getByText('靑山')).toBeInTheDocument()
+    expect(screen.queryByText(/청산/)).not.toBeInTheDocument()
   })
 
   it('아호가 없으면 아호 줄이 없다', () => {

@@ -85,9 +85,9 @@ describe('toPublicArtist', () => {
 
 describe('artNameLabel', () => {
   it.each([
-    ['청산', '靑山', '靑山 · 청산'],
+    ['청산', '靑山', '靑山'],
     [null, '靑山', '靑山'],
-    ['청산', null, '청산'],
+    ['솔바람', null, '솔바람'],
     ['청산', '청산', '청산'],
     [null, null, null],
     ['', '  ', null],
