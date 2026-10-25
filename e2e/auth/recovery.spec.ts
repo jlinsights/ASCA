@@ -99,7 +99,8 @@ test('기존 회원: 로그인 실패 → 메일 → 새 비밀번호 → 로그
     await tabTo(page, page.getByRole('button', { name: '새 비밀번호 저장', exact: true }))
     await page.keyboard.press('Enter')
     await expect(page).toHaveURL(/\/profile\?password=updated$/)
-    await expect(page.getByRole('status')).toContainText('로그인된 상태')
+    // 작가 연결 칸(#140)이 불러오는 동안 '처리 중…' status 가 하나 더 있다 — 로그인 상태 줄만 고른다
+    await expect(page.getByRole('status').filter({ hasText: '로그인된 상태' })).toBeVisible()
     const session = await page.request.get('/api/auth/session')
     expect(session.ok()).toBeTruthy()
     expect((await session.json()).account.id).toBe(data.user!.id)
