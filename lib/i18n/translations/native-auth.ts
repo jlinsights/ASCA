@@ -5,12 +5,12 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeReturningTitle: '예전 홈페이지에서 쓰시던 비밀번호는 옮겨지지 않았습니다.',
     authNativeReturningSignup: '예전 홈페이지 회원이셨나요?',
     authNativeReturningBody:
-      '처음 로그인하시는 기존 회원께서는 비밀번호를 새로 만들어 주세요. 등록하신 이메일로 안내 메일이 갑니다.',
+      '새 홈페이지를 처음 이용하시면 계정 만들기를 먼저 진행해 주세요. 이미 새 계정을 만드셨다면 비밀번호 새로 만들기를 이용할 수 있습니다.',
     authNativeNewPassword: '비밀번호 새로 만들기',
     authNativeExisting:
       '이미 계정이 있는 이메일이라면 새로 가입하지 말고 비밀번호 새로 만들기를 이용해 주세요.',
     authNativeArtistLink:
-      '이메일 확인 후, 작가 정보에 등록된 이메일이 한 명과 일치하면 자동으로 연결됩니다. 연결되지 않으면 사무국에 이름과 호를 알려 주세요.',
+      '이메일 확인 후 사무국에 작가 정보 연결을 요청해 주세요. 이름과 호를 알려 주시면 본인 확인 후 연결을 도와드립니다.',
     authNativeMailTitle: '안내 메일을 확인해 주세요',
     authNativeMailAddress:
       '받은편지함을 확인해 주세요. 주소를 잘못 쓰셨다면 아래에서 바꿀 수 있습니다.',
@@ -57,13 +57,13 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeResetLede: '이메일로 받은 링크에서 새 비밀번호를 설정하세요.',
     authNativeForgotTitle: '비밀번호 새로 만들기',
     authNativeForgotLede:
-      '예전 홈페이지에 등록하신 이메일 주소를 입력해 주세요. 새 비밀번호를 만드는 링크를 보내 드립니다.',
+      '새 홈페이지 계정을 만들 때 사용한 이메일을 입력해 주세요. 아직 계정을 만들지 않으셨다면 회원가입을 먼저 진행해 주세요.',
     authNativePasswordHint: '새 비밀번호는 12자 이상으로 입력하세요.',
     authNativeAgree: '이용약관과 개인정보처리방침을 확인하고 동의합니다.',
     authNativeMembership: '계정 가입과 협회 회원 자격·작가 등록은 별도 절차입니다.',
     authNativeBusy: '처리 중…',
     authNativeInvalid:
-      '이메일 또는 비밀번호가 맞지 않습니다. 예전 홈페이지 비밀번호는 쓸 수 없으니 비밀번호 새로 만들기를 이용해 주세요.',
+      '이메일 또는 비밀번호가 맞지 않습니다. 새 홈페이지가 처음이면 계정을 만들어 주세요. 이미 가입하셨다면 비밀번호 새로 만들기를 이용해 주세요.',
     authNativeUnavailable: '잠시 연결이 원활하지 않습니다. 1~2분 뒤 다시 눌러 주세요.',
     authNativeUnconfirmed:
       '가입 확인 메일의 링크를 아직 누르지 않으셨습니다. 확인 메일 다시 받기를 눌러 주세요.',
@@ -92,12 +92,12 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeReturningTitle: 'Passwords from our previous website have not been transferred.',
     authNativeReturningSignup: 'Were you a member of our previous website?',
     authNativeReturningBody:
-      'Returning members signing in here for the first time should create a new password. Instructions will be sent to your registered email.',
+      'If this is your first visit to the new website, create an account first. If you already registered here, you can create a new password.',
     authNativeNewPassword: 'Create a new password',
     authNativeExisting:
       'If this email already has an account, create a new password instead of signing up again.',
     authNativeArtistLink:
-      'After you confirm your email, we will link your account if it matches exactly one artist profile. If it is not linked, contact the office with your name and art name.',
+      'After confirming your email, contact the office with your name and art name to request a link to your artist profile. The office will verify your identity before linking it.',
     authNativeMailTitle: 'Check your email for instructions',
     authNativeMailAddress: 'Check this inbox. You can correct the address below if needed.',
     authNativeMailSubject: 'Look for an email with this subject:',
@@ -144,13 +144,14 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeResetTitle: 'Reset your password',
     authNativeResetLede: 'Set a new password using the link in your email.',
     authNativeForgotTitle: 'Recover your account',
-    authNativeForgotLede: 'We will send a reset link to your registered email.',
+    authNativeForgotLede:
+      'Enter the email used for your new website account. If you have not created an account here yet, sign up first.',
     authNativePasswordHint: 'Use at least 12 characters for a new password.',
     authNativeAgree: 'I have read and agree to the Terms of Service and Privacy Policy.',
     authNativeMembership: 'An account does not grant association membership or an artist profile.',
     authNativeBusy: 'Please wait…',
     authNativeInvalid:
-      'Your email or password does not match. Passwords from our previous website cannot be used here. Choose Create a new password.',
+      'Your email or password does not match. Passwords from our previous website cannot be used here. Create an account if you have not registered here, or choose Create a new password if you have.',
     authNativeUnavailable: 'Authentication is unavailable. Please try again later.',
     authNativeUnconfirmed: 'Please verify your email first.',
     authNativeEmailSent:
@@ -180,12 +181,12 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeReturningTitle: '旧ホームページのパスワードは引き継がれていません。',
     authNativeReturningSignup: '旧ホームページの会員でしたか？',
     authNativeReturningBody:
-      'こちらで初めてログインする既存会員の方は、パスワードを新しく作ってください。登録メールに案内を送ります。',
+      '新しいホームページを初めて利用する方は、先にアカウントを作成してください。すでに登録済みの方は、パスワードを再設定できます。',
     authNativeNewPassword: 'パスワードを新しく作る',
     authNativeExisting:
       'すでにアカウントがあるメールの場合は、再登録せずパスワードを新しく作ってください。',
     authNativeArtistLink:
-      'メールの確認後、作家情報のメールと1名だけ一致すると自動で連携します。連携されない場合は、氏名と雅号を事務局にお知らせください。',
+      'メールの確認後、氏名と雅号を事務局に伝えて作家情報との連携をご依頼ください。本人確認後に事務局が連携します。',
     authNativeMailTitle: '案内メールをご確認ください',
     authNativeMailAddress: 'この受信箱をご確認ください。入力を間違えた場合は下で変更できます。',
     authNativeMailSubject: '次の件名のメールを探してください：',
@@ -230,7 +231,8 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeResetTitle: 'パスワード再設定',
     authNativeResetLede: 'メール内のリンクから新しいパスワードを設定してください。',
     authNativeForgotTitle: 'アカウントの復旧',
-    authNativeForgotLede: '登録したメールアドレスに再設定リンクを送ります。',
+    authNativeForgotLede:
+      '新しいホームページに登録したメールアドレスを入力してください。未登録の場合は、先にアカウントを作成してください。',
     authNativePasswordHint: '新しいパスワードは12文字以上で入力してください。',
     authNativeAgree: '利用規約とプライバシーポリシーを確認し、同意します。',
     authNativeMembership: 'アカウント登録と協会会員資格・作家登録は別の手続きです。',
@@ -261,12 +263,11 @@ export const nativeAuthTranslations: TranslationData = {
   zh: {
     authNativeReturningTitle: '舊網站的密碼尚未移轉。',
     authNativeReturningSignup: '您是舊網站的會員嗎？',
-    authNativeReturningBody:
-      '首次在此登入的舊會員，請先建立新密碼。我們會將說明寄到您登記的電子郵件。',
+    authNativeReturningBody: '首次使用新網站時，請先建立帳號。若已在新網站註冊，即可重新設定密碼。',
     authNativeNewPassword: '建立新密碼',
     authNativeExisting: '若此電子郵件已有帳號，請建立新密碼，不要重複註冊。',
     authNativeArtistLink:
-      '確認電子郵件後，若與唯一一位藝術家資料的郵件相符，帳號會自動連結。若尚未連結，請將姓名及雅號告知辦公室。',
+      '確認電子郵件後，請將姓名及雅號告知辦公室，申請連結藝術家資料。辦公室會在確認身分後協助連結。',
     authNativeMailTitle: '請查看說明郵件',
     authNativeMailAddress: '請檢查此信箱。若地址輸入有誤，可在下方修改。',
     authNativeMailSubject: '請尋找以下主旨的郵件：',
@@ -305,7 +306,7 @@ export const nativeAuthTranslations: TranslationData = {
     authNativeResetTitle: '重設密碼',
     authNativeResetLede: '請透過郵件中的連結設定新密碼。',
     authNativeForgotTitle: '帳號復原',
-    authNativeForgotLede: '我們會將重設連結寄至您註冊的電子郵件。',
+    authNativeForgotLede: '請輸入新網站帳號的註冊電子郵件。若尚未建立帳號，請先註冊。',
     authNativePasswordHint: '新密碼請使用至少12個字元。',
     authNativeAgree: '我已閱讀並同意服務條款與隱私權政策。',
     authNativeMembership: '帳號註冊與協會會員資格、藝術家登錄為不同程序。',

@@ -118,6 +118,10 @@ it('requires registered MFA before changing a recovered account password', async
 it('passes the entered email to recovery and offers labelled password visibility', () => {
   show('sign-in')
   type('이메일', 'returning@example.test')
+  expect(screen.getByRole('link', { name: '계정 만들기 →' })).toHaveAttribute(
+    'href',
+    '/sign-up?email=returning%40example.test'
+  )
   const recovery = screen.getByRole('link', { name: '비밀번호 새로 만들기 →' })
   expect(recovery).toHaveAttribute('href', '/forgot-password?email=returning%40example.test')
   const password = screen.getByLabelText('비밀번호', { exact: true })

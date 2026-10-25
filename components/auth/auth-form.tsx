@@ -357,6 +357,14 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
             <strong>{t(signup ? 'authNativeReturningSignup' : 'authNativeReturningTitle')}</strong>
           </p>
           <p>{t('authNativeReturningBody')}</p>
+          {!signup && (
+            <Link
+              href={`/sign-up?email=${encodeURIComponent(email.trim())}`}
+              className='asca-auth__link block'
+            >
+              {t('authNativeSignUp')} →
+            </Link>
+          )}
           <Link href={resetHref} className='asca-auth__link'>
             {t('authNativeNewPassword')} →
           </Link>
