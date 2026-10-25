@@ -32,8 +32,8 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   (CI 는 통과). **지우지 말 것.** UI 변경은 배포본의 CSS 로 확인한다.
 - Hobby 플랜이라 동시 빌드 1개 — Preview 는 Production 뒤에서 대기한다.
 - 프로덕션 주소는 **`https://orientalcalligraphy.org`**(루트)다. 2026-10-25 에
-  Cloudflare DNS 를 Webflow 에서 Vercel 로 옮겼다(루트 A, `www` CNAME 모두
-  DNS only — 주황 구름 Proxy 를 켜지 말 것). `www.orientalcalligraphy.org`·
+  Cloudflare DNS 를 Webflow 에서 Vercel 로 옮겼다(루트 A, `www` CNAME 모두 DNS
+  only — 주황 구름 Proxy 를 켜지 말 것). `www.orientalcalligraphy.org`·
   `asca-main.vercel.app` 은 루트로 308 리다이렉트한다. canonical·sitemap·
   `lib/seo-constants.ts` 의 `defaultSEO.url` 도 루트이므로 대표 도메인을 바꾸면
   이 셋을 함께 바꾼다. 하위 도메인 anam·heelang·catalog2025·jury 는 각각 다른
