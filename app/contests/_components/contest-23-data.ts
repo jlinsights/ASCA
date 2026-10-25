@@ -2,17 +2,11 @@
  * 제23회 대한민국 동양서예대전 공모요강 — 협회가 낸 공모요강(플립북, 2026-10)에서 옮긴 회차별 값.
  * 부문·규격·출품료·시상처럼 규정에 근거한 값은 출품원서 페이지 데이터(application-data)를 그대로 쓰고,
  * 여기에는 이번 회차에만 해당하는 날짜·장소·접수처·계좌·유의사항만 둔다.
- * 요일은 손으로 적지 않고 날짜에서 계산한다 — 요강 초안에서 4/20(화)·4/21(수)가 엇갈린 적이 있다.
  */
 
-const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'] as const
+import { koDate } from '@/lib/utils/ko-date'
 
-/** '2027-01-31' → '2027년 1월 31일(일)'. 연도가 같으면 withYear=false 로 '1월 31일(일)' */
-export function koDate(iso: string, withYear = true): string {
-  const [year, month, day] = iso.split('-').map(Number) as [number, number, number]
-  const weekday = WEEKDAYS[new Date(Date.UTC(year, month - 1, day)).getUTCDay()]
-  return `${withYear ? `${year}년 ` : ''}${month}월 ${day}일(${weekday})`
-}
+export { koDate }
 
 export const CONTEST_23 = {
   edition: 23,

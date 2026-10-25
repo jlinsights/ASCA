@@ -8,6 +8,10 @@ import { todayKst } from '@/lib/events/event-view'
 import { EventArchive } from './_components/event-archive'
 import { toEventRow } from './_components/event-rows'
 import { UpcomingEvents } from './_components/upcoming-events'
+import {
+  CALENDAR_EVENT_ROW,
+  isCalendarEventOpen,
+} from './calendar-2027/_components/calendar-2027-data'
 import '@/components/apply/apply.css'
 import './_components/events.css'
 
@@ -36,7 +40,12 @@ export default async function EventsPage({ searchParams }: PageProps) {
   const q = firstParam(params.q)
   const today = todayKst()
   const rows = (await listPublishedEvents()).map(event => toEventRow(event, today))
-  const upcoming = rows.filter(row => row.phase === 'upcoming' || row.phase === 'ongoing').reverse() // 목록은 최신순 — 다가오는 행사는 가까운 날부터
+  const upcoming = [
+    // DB 행사가 아닌 정적 안내 페이지 — 신청 기간에만 맨 앞에 둔다
+    ...(isCalendarEventOpen() ? [CALENDAR_EVENT_ROW] : []),
+    // 목록은 최신순 — 다가오는 행사는 가까운 날부터
+    ...rows.filter(row => row.phase === 'upcoming' || row.phase === 'ongoing').reverse(),
+  ]
   const past = rows.filter(row => row.phase === 'past' || row.phase === 'cancelled')
   const firstYear = past.at(-1)?.year
 

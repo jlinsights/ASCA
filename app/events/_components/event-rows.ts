@@ -30,6 +30,8 @@ export interface EventRow {
   place: string
   organizer: string
   link: EventLink | null
+  /** 상세 주소 — 없으면 /events/{id} (정적 안내 페이지용) */
+  href?: string
 }
 
 export function toEventRow(event: Event, today: string): EventRow {
