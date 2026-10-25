@@ -2,7 +2,9 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Award, Calendar, MapPin } from 'lucide-react'
+import { useState } from 'react'
+import { Award, Calendar, MapPin, UserRound } from 'lucide-react'
+import { useLanguage } from '@/contexts/language-context'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -11,15 +13,19 @@ import { artNameLabel, type PublicArtist as Artist } from '@/lib/api/artist-mapp
 import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 import { regulationGrade } from './artist-filter-options'
+import { portraitCopy } from './portrait-copy'
 
 interface ArtistCardProps {
   artist: Artist
   variant: 'pc' | 'mobile'
 }
 
-const DEFAULT_IMAGE = '/images/artists/kangdaehee.avif'
-
 export function ArtistCard({ artist, variant }: ArtistCardProps) {
+  const { language } = useLanguage()
+  const copy = portraitCopy[language]
+  const [failedImage, setFailedImage] = useState<string | null>(null)
+  const source = artist.profileImage?.trim() || null
+  const portrait = source && source !== failedImage ? source : null
   const isPc = variant === 'pc'
   const grade = regulationGrade(artist.membershipType)
   const displayName = artistDisplayName(artist.name, artist.deathYear)
@@ -48,25 +54,38 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
     <Card key={artist.id} className={cardShadowClass}>
       <div className='relative aspect-square overflow-hidden'>
         <div className='relative group'>
-          <Image
-            src={artist.profileImage || DEFAULT_IMAGE}
-            alt={artist.name}
-            width={400}
-            height={400}
-            className='w-full h-64 object-cover rounded-lg transition-all duration-300 group-hover:scale-105'
-          />
+          {portrait ? (
+            <Image
+              src={portrait}
+              alt={artist.name}
+              width={400}
+              height={400}
+              className='w-full h-64 object-cover rounded-lg transition-all duration-300 group-hover:scale-105'
+              onError={() => setFailedImage(portrait)}
+            />
+          ) : (
+            <div
+              role='img'
+              aria-label={`${artist.name} — ${copy.pending}`}
+              className='flex h-64 flex-col items-center justify-center gap-3 rounded-lg bg-muted text-muted-foreground'
+            >
+              <UserRound className='h-12 w-12' aria-hidden='true' strokeWidth={1.25} />
+              <span>{copy.pending}</span>
+            </div>
+          )}
           <div className='absolute inset-0 bg-black/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
         </div>
 
         <div className='space-y-4'>
-          {artist.profileImage && (
+          {portrait && (
             <div className='flex items-center justify-center'>
               <Image
-                src={artist.profileImage}
+                src={portrait}
                 alt={artist.name}
                 width={100}
                 height={100}
                 className='w-20 h-20 rounded-full object-cover border-2 border-celadon'
+                onError={() => setFailedImage(portrait)}
               />
             </div>
           )}
@@ -205,7 +224,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
             <ArtistShareButton
               title={`${artist.name} 작가`}
               description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
-              imageUrl={artist.profileImage || DEFAULT_IMAGE}
+              imageUrl={portrait || '/placeholder.svg'}
               webUrl={`/artists/${artist.id}`}
               variant='outline'
               isIconOnly={true}
