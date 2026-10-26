@@ -1,10 +1,8 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { HeroFacts, PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { Users, Shield, Briefcase, Gavel, MapPin } from 'lucide-react'
+import { AboutChapter, AboutHero, AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
 
 export const metadata: Metadata = {
   title: '임원 조직도 | 동양서예협회',
@@ -25,7 +23,6 @@ type BoardMember = {
 type BoardSection = {
   id: string
   title: string
-  icon: typeof Users
   members: BoardMember[]
 }
 
@@ -34,7 +31,6 @@ const boardSections: BoardSection[] = [
   {
     id: 'senior-advisor',
     title: '고문',
-    icon: Shield,
     members: [
       { name: '강대희', artName: '토우', position: '고문' },
       { name: '박영순', artName: '지용', position: '고문' },
@@ -45,7 +41,6 @@ const boardSections: BoardSection[] = [
   {
     id: 'chairperson',
     title: '이사장 | 운영위원장',
-    icon: Briefcase,
     members: [
       {
         name: '임재홍',
@@ -56,7 +51,6 @@ const boardSections: BoardSection[] = [
   {
     id: 'panel-chair',
     title: '심사위원장',
-    icon: Gavel,
     members: [
       {
         name: '배옥영',
@@ -68,7 +62,6 @@ const boardSections: BoardSection[] = [
   {
     id: 'auditor',
     title: '감사',
-    icon: Shield,
     members: [
       { name: '이권재', artName: '문원', position: '감사' },
       { name: '박성호', artName: '옥채', position: '감사' },
@@ -77,7 +70,6 @@ const boardSections: BoardSection[] = [
   {
     id: 'executive-director',
     title: '상임이사',
-    icon: Users,
     members: [
       { name: '김정례', artName: '혜전', position: '상임이사' },
       { name: '소정아', artName: '진호', position: '상임이사' },
@@ -90,7 +82,6 @@ const boardSections: BoardSection[] = [
   {
     id: 'branch-director',
     title: '지부장',
-    icon: MapPin,
     members: [
       { name: '김정희', artName: '서천', position: '청주 지부장' },
       { name: '윤경희', artName: '한솔', position: '태안 지부장' },
@@ -104,72 +95,67 @@ const BOARD_PERSON_COUNT = new Set(
   boardSections.flatMap(section => section.members.map(member => member.name))
 ).size
 
-function MemberCard({ member }: { member: BoardMember }) {
+function Person({ member }: { member: BoardMember }) {
   return (
-    <Card className='transition-shadow hover:shadow-md'>
-      <CardContent className='p-4 text-center'>
-        <div className='w-16 h-16 mx-auto mb-3 rounded-full bg-muted flex items-center justify-center'>
-          <span className='text-lg font-bold text-muted-foreground'>{member.name.charAt(0)}</span>
-        </div>
-        {member.artName && <p className='text-xs text-muted-foreground mb-0.5'>{member.artName}</p>}
-        <h3 className='text-sm font-semibold'>{member.name}</h3>
-        <Badge variant='secondary' className='mt-2 text-xs'>
-          {member.position}
-        </Badge>
-      </CardContent>
-    </Card>
+    <li className='ab-person' data-reveal>
+      <span className='ab-person__art' aria-hidden='true'>
+        {member.artName}
+      </span>
+      <p className='ab-person__name'>
+        {member.name}
+        {member.artName && <span className='sr-only'> (호 {member.artName})</span>}
+      </p>
+      <p className='ab-person__role'>{member.position}</p>
+    </li>
   )
 }
 
 export default function BoardMembersPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
-      <PageHero
-        {...PAGE_HERO_MARKS.boardMembers}
-        title='임원'
-        lede='현재 사단법인 동양서예협회의 조직도와 임원진을 소개합니다. 궁금하신 부분이 있거나 저희 협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.'
-      >
-        <HeroFacts
+    <>
+      <AboutPage>
+        <AboutHero
+          tc='任員'
+          title='임원'
+          lede='현재 사단법인 동양서예협회의 조직도와 임원진을 소개합니다. 궁금하신 부분이 있거나 저희 협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.'
           facts={[
             { label: '직책군', value: `${boardSections.length}개` },
             { label: '임원진', value: `${BOARD_PERSON_COUNT}명` },
           ]}
         />
-      </PageHero>
-
-      <section className='container py-10 md:py-16'>
-        <div className='max-w-5xl mx-auto space-y-12'>
-          {boardSections.map(section => {
-            const Icon = section.icon
-            return (
-              <div key={section.id} id={section.id}>
-                <div className='flex items-center gap-3 mb-6'>
-                  <div className='w-10 h-10 rounded-lg bg-scholar-red/10 flex items-center justify-center'>
-                    <Icon className='w-5 h-5 text-scholar-red' />
-                  </div>
-                  <h2 className='text-xl font-bold'>{section.title}</h2>
-                </div>
-
-                <div
-                  className={`grid gap-4 ${
-                    section.members.length === 1
-                      ? 'grid-cols-1 max-w-xs mx-auto'
-                      : section.members.length === 2
-                        ? 'grid-cols-1 sm:grid-cols-2 max-w-lg mx-auto'
-                        : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
-                  }`}
-                >
-                  {section.members.map((member, idx) => (
-                    <MemberCard key={`${section.id}-${idx}`} member={member} />
-                  ))}
-                </div>
+        <AboutNav />
+        <AboutChapter
+          id='board'
+          tone='navy'
+          tc='組織'
+          eyebrow='The Board'
+          title='임원진'
+          note='큰 글자는 호(號)입니다.'
+        >
+          {boardSections.map(section => (
+            <section
+              key={section.id}
+              id={section.id}
+              className='ab-roster'
+              aria-labelledby={`${section.id}-title`}
+            >
+              <div className='ab-roster__head'>
+                <h3 id={`${section.id}-title`} className='ab-roster__title'>
+                  {section.title}
+                </h3>
+                <span className='ab-roster__count'>{section.members.length}명</span>
               </div>
-            )
-          })}
-        </div>
-      </section>
-
+              <ul className='ab-roster__list'>
+                {section.members.map(member => (
+                  <Person key={`${section.id}-${member.name}`} member={member} />
+                ))}
+              </ul>
+            </section>
+          ))}
+        </AboutChapter>
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }

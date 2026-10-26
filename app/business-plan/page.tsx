@@ -1,9 +1,8 @@
 import { Metadata } from 'next'
-import { Button } from '@/components/ui/button'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { HeroFacts, PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { BusinessPlanSidebar } from './_components/business-plan-sidebar'
+import { AboutChapter, AboutHero, AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
 import { Plan2025 } from './_components/plan-2025'
 import { YearSection } from './_components/year-section'
 import { EXHIBITION_YEARS } from './_components/business-plan-data'
@@ -24,65 +23,78 @@ export const metadata: Metadata = {
   },
 }
 
+// 2025년 전시는 사업계획서(#2025)와 겹치지 않게 #2025-exhibition 으로 건다
+const yearAnchor = (year: number) => (year === 2025 ? '2025-exhibition' : String(year))
+
 export default function BusinessPlanPage() {
-  const pastYears = EXHIBITION_YEARS.filter(e => e.year < 2025)
   const years = EXHIBITION_YEARS.map(e => e.year)
   const firstYear = Math.min(...years)
   const lastYear = Math.max(...years)
 
   return (
-    <div className='min-h-screen bg-transparent'>
-      <PageHero
-        {...PAGE_HERO_MARKS.businessPlan}
-        title='사업계획'
-        lede='동양서예협회의 연도별 사업계획과 대한민국 동양서예대전 전시 아카이브를 확인하실 수 있습니다.'
-        actions={
-          <>
-            <Button asChild className='bg-scholar-red text-white hover:bg-scholar-red/90'>
-              <a href={CHAT_URL} target='_blank' rel='noopener noreferrer'>
-                상담 문의
-              </a>
-            </Button>
-            <Button asChild variant='outline'>
-              <a href={BOOKING_URL} target='_blank' rel='noopener noreferrer'>
-                상담 예약
-              </a>
-            </Button>
-          </>
-        }
-      >
-        <HeroFacts
+    <>
+      <AboutPage>
+        <AboutHero
+          tc='事業'
+          title='사업계획'
+          lede='동양서예협회의 연도별 사업계획과 대한민국 동양서예대전 전시 아카이브를 확인하실 수 있습니다.'
           facts={[
             { label: '수록 기간', value: `${firstYear}–${lastYear}` },
             { label: '전시 기록', value: `${EXHIBITION_YEARS.length}개년` },
           ]}
+          actions={
+            <>
+              <a
+                href={CHAT_URL}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ab-button ab-button--solid'
+              >
+                상담 문의
+              </a>
+              <a href={BOOKING_URL} target='_blank' rel='noopener noreferrer' className='ab-button'>
+                상담 예약
+              </a>
+            </>
+          }
         />
-      </PageHero>
-
-      <section className='container py-10 md:py-16'>
-        <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
-          <BusinessPlanSidebar />
-          <main className='flex-1 min-w-0 space-y-16'>
-            <div id='2025'>
-              <Plan2025 />
-            </div>
-
-            {EXHIBITION_YEARS[0] && (
-              <div id='2025-exhibition'>
-                <YearSection exhibition={EXHIBITION_YEARS[0]} />
-              </div>
-            )}
-
-            {pastYears.map(exhibition => (
-              <div key={exhibition.year} id={String(exhibition.year)}>
-                <YearSection exhibition={exhibition} />
-              </div>
-            ))}
-          </main>
-        </div>
-      </section>
-
+        <AboutNav />
+        <AboutChapter
+          id='2025'
+          tc='計劃'
+          eyebrow='2025 · 동양의 혼, 현대의 감각'
+          title='2025년도 사업계획서'
+          note='“전통과 현대를 잇는 동양미학 예술 플랫폼”'
+        >
+          <Plan2025 />
+        </AboutChapter>
+        <AboutChapter
+          id='archive'
+          tone='navy'
+          tc='展覽'
+          eyebrow='Archive'
+          title='대한민국 동양서예대전'
+          aside={
+            <ul className='ab-index' aria-label='연도 바로 가기'>
+              {EXHIBITION_YEARS.map(e => (
+                <li key={e.year}>
+                  <a href={`#${yearAnchor(e.year)}`}>{e.year}</a>
+                </li>
+              ))}
+            </ul>
+          }
+        >
+          {EXHIBITION_YEARS.map(exhibition => (
+            <YearSection
+              key={exhibition.year}
+              id={yearAnchor(exhibition.year)}
+              exhibition={exhibition}
+            />
+          ))}
+        </AboutChapter>
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }

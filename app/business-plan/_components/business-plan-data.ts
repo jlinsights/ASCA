@@ -64,11 +64,3 @@ export const EXHIBITION_YEARS: ExhibitionYear[] = [
     posterSrc: '/webflow/orientalcalligraphy/images/16회포스터2019_1.avif',
   },
 ]
-
-export const QUICK_LINKS = [
-  { label: '문서·서식', href: '/forms' },
-  { label: '연혁', href: '/history' },
-  { label: '임원', href: '/board-members' },
-  { label: '유관단체', href: '/partners' },
-  { label: '정관', href: '/regulations' },
-] as const

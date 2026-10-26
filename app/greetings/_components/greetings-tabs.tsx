@@ -1,6 +1,7 @@
 'use client'
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import * as TabsPrimitive from '@radix-ui/react-tabs'
+import { AboutChapter } from '@/components/about/about-layout'
 
 const koreanGreeting = `존경하는 사단법인 동양서예협회 회원 여러분,
 
@@ -56,39 +57,49 @@ January 9, 2026
 
 Lim Jae-hong, Chairman of the Asian Society of Calligraphic Arts (ASCA)`
 
+/** 편지 본문 — 끝의 날짜·서명 두 문단은 오른쪽 아래로 뗀다 */
+function Letter({ text, lang }: { text: string; lang: 'ko' | 'en' }) {
+  const paragraphs = text.split('\n\n')
+  const body = paragraphs.slice(0, -2)
+  const [date, signature] = paragraphs.slice(-2)
+  return (
+    <article className='ab-letter' lang={lang}>
+      {body.map((paragraph, index) => (
+        <p key={index}>{paragraph}</p>
+      ))}
+      <div className='ab-letter__sign'>
+        <p className='ab-letter__note'>{date}</p>
+        <p>{signature}</p>
+      </div>
+    </article>
+  )
+}
+
 export function GreetingsTabs() {
   return (
-    <Tabs defaultValue='ko' className='w-full'>
-      <TabsList className='mb-8'>
-        <TabsTrigger value='ko'>한국어</TabsTrigger>
-        <TabsTrigger value='en'>English</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value='ko'>
-        <article className='prose prose-lg dark:prose-invert max-w-none'>
-          <h2 className='text-2xl font-bold mb-6'>이사장 인사말씀</h2>
-          {koreanGreeting.split('\n\n').map((paragraph, index) => (
-            <p key={index} className='leading-relaxed text-foreground/90'>
-              {paragraph}
-            </p>
-          ))}
-        </article>
-      </TabsContent>
-
-      <TabsContent value='en'>
-        <article className='prose prose-lg dark:prose-invert max-w-none'>
-          <h2 className='text-2xl font-bold mb-6'>Greetings from the Chairman</h2>
-          {englishGreeting.split('\n\n').map((paragraph, index) => (
-            <p key={index} className='leading-relaxed text-foreground/90'>
-              {paragraph}
-            </p>
-          ))}
-        </article>
-      </TabsContent>
-
-      <p className='mt-12 text-sm text-muted-foreground text-center italic'>
-        다른 언어 버전은 준비 중입니다.
-      </p>
-    </Tabs>
+    <AboutChapter
+      id='greeting'
+      tc='新年'
+      eyebrow='2026 · 丙午年'
+      title='이사장 인사말씀'
+      note='다른 언어 버전은 준비 중입니다.'
+    >
+      <TabsPrimitive.Root defaultValue='ko'>
+        <TabsPrimitive.List className='ab-langs'>
+          <TabsPrimitive.Trigger value='ko' className='ab-lang'>
+            한국어
+          </TabsPrimitive.Trigger>
+          <TabsPrimitive.Trigger value='en' className='ab-lang'>
+            English
+          </TabsPrimitive.Trigger>
+        </TabsPrimitive.List>
+        <TabsPrimitive.Content value='ko'>
+          <Letter text={koreanGreeting} lang='ko' />
+        </TabsPrimitive.Content>
+        <TabsPrimitive.Content value='en'>
+          <Letter text={englishGreeting} lang='en' />
+        </TabsPrimitive.Content>
+      </TabsPrimitive.Root>
+    </AboutChapter>
   )
 }

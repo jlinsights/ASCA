@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
 import { MissionTabs } from './_components/mission-tabs'
 
 export const metadata: Metadata = {
@@ -22,24 +22,12 @@ export const metadata: Metadata = {
 
 export default function MissionPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
-      <PageHero
-        {...PAGE_HERO_MARKS.mission}
-        title='사명'
-        lede='동양서예협회의 사명과 핵심 가치를 소개합니다'
-      >
-        <p className='text-sm italic text-scholar-red/80'>
-          &ldquo;통합과 혁신 · 전통과 창조 · 포용과 소통&rdquo;
-        </p>
-      </PageHero>
-
-      <section className='container py-10 md:py-16'>
-        <div className='max-w-4xl mx-auto'>
-          <MissionTabs />
-        </div>
-      </section>
-
+    <>
+      <AboutPage>
+        <MissionTabs />
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }

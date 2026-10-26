@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { AboutHero, AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
 import { GreetingsTabs } from './_components/greetings-tabs'
 
 export const metadata: Metadata = {
@@ -22,20 +23,18 @@ export const metadata: Metadata = {
 
 export default function GreetingsPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
-      <PageHero
-        {...PAGE_HERO_MARKS.greetings}
-        title='인사말씀'
-        lede='사단법인 동양서예협회 이사장의 새해 인사말씀을 전합니다'
-      />
-
-      <section className='container py-8 md:py-12'>
-        <div className='max-w-3xl mx-auto'>
-          <GreetingsTabs />
-        </div>
-      </section>
-
+    <>
+      <AboutPage>
+        <AboutHero
+          tc='致辭'
+          title='인사말씀'
+          lede='사단법인 동양서예협회 이사장의 새해 인사말씀을 전합니다'
+        />
+        <AboutNav />
+        <GreetingsTabs />
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }

@@ -1,11 +1,9 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Building2, Landmark, BookOpen, Palette, Handshake, ExternalLink } from 'lucide-react'
-import Link from 'next/link'
-import { HeroFacts, PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { ArrowUpRight } from 'lucide-react'
+import { AboutChapter, AboutHero, AboutMarquee, AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
 
 export const metadata: Metadata = {
   title: '유관단체 | 동양서예협회',
@@ -25,7 +23,6 @@ type Partner = {
 type PartnerCategory = {
   id: string
   title: string
-  icon: typeof Building2
   partners: Partner[]
 }
 
@@ -33,7 +30,6 @@ const partnerCategories: PartnerCategory[] = [
   {
     id: 'organizations',
     title: '관련 기관 및 단체',
-    icon: Building2,
     partners: [
       { name: '국회사무처', url: 'https://nas.na.go.kr/nas/index.do?extendedParam=site_id=nas' },
       { name: '문화체육관광부', url: 'https://www.mcst.go.kr/kor/main.jsp' },
@@ -55,7 +51,6 @@ const partnerCategories: PartnerCategory[] = [
   {
     id: 'museums',
     title: '미술관 및 박물관',
-    icon: Landmark,
     partners: [
       { name: '예술의전당', url: 'https://www.sac.or.kr/site/main/home' },
       { name: '국립중앙박물관', url: 'https://www.museum.go.kr/site/main/home' },
@@ -79,7 +74,6 @@ const partnerCategories: PartnerCategory[] = [
   {
     id: 'publications',
     title: '서예 및 미술 전문지',
-    icon: BookOpen,
     partners: [
       { name: '월간 서예' },
       { name: '월간 서예문인화' },
@@ -89,7 +83,6 @@ const partnerCategories: PartnerCategory[] = [
   {
     id: 'galleries',
     title: '화랑 및 갤러리',
-    icon: Palette,
     partners: [
       { name: 'Artsy', url: 'https://www.artsy.net/' },
       { name: 'Lehmann Maupin', url: 'https://www.lehmannmaupin.com/' },
@@ -98,7 +91,6 @@ const partnerCategories: PartnerCategory[] = [
   {
     id: 'partners',
     title: '파트너',
-    icon: Handshake,
     partners: [
       {
         name: '사단법인 대한민국한자교육연구회 | 대한검정회',
@@ -125,6 +117,11 @@ const partnerCategories: PartnerCategory[] = [
   },
 ]
 
+// 이름 띠에는 미술관·기관 이름을 한 번씩만 싣는다
+const MARQUEE_NAMES = [
+  ...new Set(partnerCategories.flatMap(category => category.partners.map(p => p.name))),
+]
+
 export default function PartnersPage() {
   const partnerCount = partnerCategories.reduce(
     (sum, category) => sum + category.partners.length,
@@ -132,74 +129,64 @@ export default function PartnersPage() {
   )
 
   return (
-    <div className='min-h-screen bg-transparent'>
-      <PageHero
-        {...PAGE_HERO_MARKS.partners}
-        title='유관단체'
-        lede='사단법인 동양서예협회와 직접 혹은 간접적으로 관련이 있거나 파트너십 관계를 맺고 있는 협회 및 단체들을 소개합니다.'
-      >
-        <HeroFacts
+    <>
+      <AboutPage>
+        <AboutHero
+          tc='協力'
+          title='유관단체'
+          lede='사단법인 동양서예협회와 직접 혹은 간접적으로 관련이 있거나 파트너십 관계를 맺고 있는 협회 및 단체들을 소개합니다.'
           facts={[
             { label: '분류', value: `${partnerCategories.length}개` },
             { label: '등재 기관·단체', value: `${partnerCount}곳` },
           ]}
         />
-      </PageHero>
-
-      <section className='container py-10 md:py-16'>
-        <div className='max-w-5xl mx-auto space-y-12'>
-          {partnerCategories.map(category => {
-            const Icon = category.icon
-            return (
-              <div key={category.id} id={category.id}>
-                <div className='flex items-center gap-3 mb-6'>
-                  <div className='w-10 h-10 rounded-lg bg-scholar-red/10 flex items-center justify-center'>
-                    <Icon className='w-5 h-5 text-scholar-red' />
-                  </div>
-                  <h2 className='text-xl font-bold'>{category.title}</h2>
-                  <Badge variant='secondary' className='text-xs'>
-                    {category.partners.length}
-                  </Badge>
-                </div>
-
-                <Card>
-                  <CardContent className='p-0'>
-                    <div className='divide-y'>
-                      {category.partners.map((partner, idx) =>
-                        partner.url ? (
-                          <Link
-                            key={`${category.id}-${idx}`}
-                            href={partner.url}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='group flex min-h-12 items-center justify-between gap-3 px-4 py-3 hover:bg-muted/30 transition-colors'
-                          >
-                            <span className='text-sm'>{partner.name}</span>
-                            <ExternalLink
-                              aria-hidden='true'
-                              className='w-4 h-4 shrink-0 text-muted-foreground group-hover:text-scholar-red transition-colors'
-                            />
-                            <span className='sr-only'>(새 창)</span>
-                          </Link>
-                        ) : (
-                          <div
-                            key={`${category.id}-${idx}`}
-                            className='flex min-h-12 items-center px-4 py-3'
-                          >
-                            <span className='text-sm'>{partner.name}</span>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )
-          })}
-        </div>
-      </section>
-
+        <AboutNav />
+        <AboutMarquee names={MARQUEE_NAMES} label='유관단체 이름 띠' />
+        <AboutChapter
+          id='partners'
+          tone='gold'
+          tc='同行'
+          eyebrow='Partners · Institutions · Media'
+          title='함께하는 기관'
+          note='이름을 누르면 해당 기관 누리집이 새 창으로 열립니다.'
+        >
+          {partnerCategories.map(category => (
+            <section
+              key={category.id}
+              id={category.id}
+              className='ab-links__group'
+              aria-labelledby={`${category.id}-title`}
+            >
+              <h3 id={`${category.id}-title`} className='ab-links__title'>
+                {category.title}
+                <span>{category.partners.length}곳</span>
+              </h3>
+              <ul className='ab-links'>
+                {category.partners.map(partner => (
+                  <li key={`${category.id}-${partner.name}`} data-reveal>
+                    {partner.url ? (
+                      <a
+                        href={partner.url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='ab-link'
+                      >
+                        {partner.name}
+                        <ArrowUpRight aria-hidden='true' className='ab-link__arrow' />
+                        <span className='sr-only'>(새 창)</span>
+                      </a>
+                    ) : (
+                      <span className='ab-link'>{partner.name}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </AboutChapter>
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }

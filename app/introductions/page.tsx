@@ -1,5 +1,8 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
 import { IntroductionsHero } from './_components/introductions-hero'
 import { IntroductionsTabs } from './_components/introductions-tabs'
 
@@ -21,16 +24,14 @@ export const metadata: Metadata = {
 
 export default function IntroductionsPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
-      <IntroductionsHero />
-
-      <section className='container py-8 md:py-12'>
-        <div className='max-w-3xl mx-auto'>
-          <IntroductionsTabs />
-        </div>
-      </section>
-
+    <>
+      <AboutPage>
+        <IntroductionsHero />
+        <AboutNav />
+        <IntroductionsTabs />
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }
