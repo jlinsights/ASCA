@@ -85,10 +85,17 @@ describe('BoardView', () => {
   })
 })
 
+const responses = {
+  comments: [],
+  reactions: { count: 0, liked: false },
+  viewer: { signedIn: false, hasDisplayName: false },
+}
+
 describe('ThreadDetail', () => {
   it('renders the body as text with safe outbound links', () => {
     render(
       <ThreadDetail
+        {...responses}
         thread={thread({ body: '<b>굵게</b> https://example.test/x' })}
         moderation={null}
       />
@@ -102,7 +109,13 @@ describe('ThreadDetail', () => {
 
   it('lets an admin hide a thread with a reason', async () => {
     fetchMock.mockResolvedValueOnce(json({ data: { id: 't1', action: 'hide' } }))
-    render(<ThreadDetail thread={thread()} moderation={{ hiddenAt: null, hiddenReason: null }} />)
+    render(
+      <ThreadDetail
+        {...responses}
+        thread={thread()}
+        moderation={{ hiddenAt: null, hiddenReason: null }}
+      />
+    )
     fireEvent.change(screen.getByLabelText('boardHideReasonLabel'), { target: { value: '광고' } })
     fireEvent.click(screen.getByRole('button', { name: 'boardHide' }))
     await waitFor(() => expect(refresh).toHaveBeenCalled())
@@ -116,6 +129,7 @@ describe('ThreadDetail', () => {
     fetchMock.mockResolvedValueOnce(json({}, 409))
     render(
       <ThreadDetail
+        {...responses}
         thread={thread()}
         moderation={{ hiddenAt: '2026-10-25T04:00:00.000Z', hiddenReason: '시험' }}
       />
