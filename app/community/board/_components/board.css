@@ -167,6 +167,57 @@
   border-bottom: 2px solid var(--cb-fg);
 }
 
+/* 검색 — 먹 선 아래 칸 하나와 단추 */
+.cb-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  border-bottom: 1px solid var(--cb-fg);
+}
+.cb-search__input {
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: var(--cb-fg);
+  font-size: 15px;
+}
+.cb-search__input::placeholder {
+  color: var(--cb-muted);
+}
+.cb-search__input:focus-visible {
+  outline-offset: 0;
+}
+.cb-search__button {
+  min-height: 44px;
+  padding: 0 4px 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--cb-accent-text);
+  font-size: 14px;
+  cursor: pointer;
+}
+.cb-search__button:hover {
+  color: var(--cb-fg);
+}
+.cb-results {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin: 0 0 20px;
+  font-size: 15px;
+}
+.cb-results__clear {
+  font-size: 14px;
+  color: var(--cb-muted);
+  text-underline-offset: 3px;
+}
+.cb-results__clear:hover {
+  color: var(--cb-fg);
+}
+
 .cb-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
