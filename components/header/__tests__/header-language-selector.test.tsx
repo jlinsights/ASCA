@@ -7,7 +7,6 @@ jest.mock('next/navigation', () => ({ usePathname: () => '/' }))
 jest.mock('../header-auth-section', () => ({ HeaderAuthSection: () => null }))
 jest.mock('../header-mobile-auth', () => ({ HeaderMobileAuth: () => null }))
 jest.mock('../../theme-toggle', () => ({ ThemeToggle: () => null }))
-jest.mock('../../theme-transition', () => ({ ThemeTransition: () => null }))
 jest.mock('../../brand/logo', () => ({ Logo: () => null }))
 
 function renderHeader() {
