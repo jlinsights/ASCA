@@ -141,6 +141,32 @@
   flex: none;
 }
 
+/* 전체 글 · 내 글 — 글자 아래 먹 선으로 지금 탭을 표시 */
+.cb-tabs {
+  display: grid;
+  gap: 2px;
+}
+.cb-tabs__link {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 2px;
+  border-bottom: 1px solid var(--cb-rule);
+  font-size: 15px;
+  color: var(--cb-muted);
+  text-decoration: none;
+  transition:
+    color 160ms var(--cb-ease),
+    border-color 160ms var(--cb-ease);
+}
+.cb-tabs__link:hover {
+  color: var(--cb-fg);
+}
+.cb-tabs__link[aria-current='page'] {
+  color: var(--cb-fg);
+  border-bottom: 2px solid var(--cb-fg);
+}
+
 .cb-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
@@ -439,6 +465,20 @@ a.cb-author__name:hover {
   }
 }
 
+/* 내 글 목록 — 사무국이 숨긴 글 */
+.cb-card--hidden {
+  opacity: 0.78;
+}
+.cb-card__badge {
+  justify-self: start;
+  margin: 0;
+  padding: 2px 8px;
+  border-left: 3px solid var(--seal-red);
+  background: var(--cb-mat);
+  font-size: 12px;
+  color: var(--cb-muted);
+}
+
 /* 내 글 — 고치기·지우기 */
 .cb-owner {
   display: flex;
@@ -568,6 +608,7 @@ a.cb-author__name:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cb-tabs__link,
   .cb-like__button {
     transition: none;
   }
