@@ -12,16 +12,27 @@ import {
   type ThreadModerationState,
   type ThreadView,
 } from '@/lib/community/threads'
+import type { CommentView, ReactionState } from '@/lib/community/comments'
 import { AuthorLine, ThreadBody, useThreadDate } from '../_components/thread-parts'
+import { ThreadResponses, type ThreadViewer } from './thread-responses'
 import '../_components/board.css'
 
 interface ThreadDetailProps {
   thread: ThreadView
   /** 관리자에게만 넘어온다. null 이면 관리 도구를 그리지 않는다 */
   moderation: ThreadModerationState | null
+  comments: CommentView[]
+  reactions: ReactionState
+  viewer: ThreadViewer
 }
 
-export function ThreadDetail({ thread, moderation }: ThreadDetailProps) {
+export function ThreadDetail({
+  thread,
+  moderation,
+  comments,
+  reactions,
+  viewer,
+}: ThreadDetailProps) {
   const { t } = useLanguage()
   const formatDate = useThreadDate()
   return (
@@ -53,6 +64,13 @@ export function ThreadDetail({ thread, moderation }: ThreadDetailProps) {
             </p>
             <ThreadBody body={thread.body} className='cb-thread__body' />
           </div>
+          <ThreadResponses
+            threadId={thread.id}
+            comments={comments}
+            reactions={reactions}
+            viewer={viewer}
+            open={!moderation?.hiddenAt}
+          />
           {moderation && <ModerationPanel threadId={thread.id} hidden={!!moderation.hiddenAt} />}
         </article>
       </div>

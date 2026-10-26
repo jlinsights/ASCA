@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { getAccount } from '@/lib/auth/server'
 import { archiveIdentity } from '@/lib/archive/writer'
-import { getThread } from '@/lib/community/feed'
+import { getReactions, getThread, listComments } from '@/lib/community/feed'
 import { excerpt } from '@/lib/community/threads'
 import { ThreadDetail } from './thread-detail'
 
@@ -34,10 +35,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CommunityThreadPage({ params }: Props) {
   const found = await load((await params).id)
   if (!found) notFound()
+  const account = await getAccount().catch(() => null)
+  const viewerId = account?.id ?? null
+  const [comments, reactions] = await Promise.all([
+    listComments(found.thread.id, viewerId),
+    getReactions(found.thread.id, viewerId),
+  ])
   return (
     <>
       <main>
-        <ThreadDetail thread={found.thread} moderation={found.admin ? found.moderation : null} />
+        <ThreadDetail
+          thread={found.thread}
+          moderation={found.admin ? found.moderation : null}
+          comments={comments}
+          reactions={reactions}
+          viewer={{
+            signedIn: Boolean(account),
+            hasDisplayName: Boolean(account?.displayName.trim()),
+          }}
+        />
       </main>
       <LayoutFooter />
     </>
