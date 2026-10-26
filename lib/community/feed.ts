@@ -8,6 +8,7 @@ import {
   type CommentView,
   type ReactionState,
 } from './comments'
+import { searchFilter } from './search'
 import {
   FEED_LIMIT,
   THREAD_COLUMNS,
@@ -32,15 +33,24 @@ export interface ThreadFeed {
   total: number
 }
 
-export async function listThreads(limit = FEED_LIMIT): Promise<ThreadFeed> {
+export interface ListOptions {
+  limit?: number
+  /** normalizeSearch 를 거친 검색어 — 제목·본문 부분 일치 */
+  search?: string | null
+}
+
+export async function listThreads({
+  limit = FEED_LIMIT,
+  search = null,
+}: ListOptions = {}): Promise<ThreadFeed> {
   const db = archiveWriter()
-  const { data, error, count } = await db
+  let query = db
     .from('community_threads')
     .select(THREAD_COLUMNS, { count: 'exact' })
     .is('hidden_at', null)
     .is('deleted_at', null)
-    .order('created_at', { ascending: false })
-    .limit(limit)
+  if (search) query = query.or(searchFilter(search))
+  const { data, error, count } = await query.order('created_at', { ascending: false }).limit(limit)
   if (error) throw error
   const rows = (data ?? []) as ThreadRow[]
   return { threads: await withAuthors(db, rows), total: count ?? rows.length }
@@ -57,16 +67,16 @@ export interface MyThreadView extends ThreadView {
  */
 export async function listMyThreads(
   viewerId: string,
-  limit = FEED_LIMIT
+  { limit = FEED_LIMIT, search = null }: ListOptions = {}
 ): Promise<{ threads: MyThreadView[]; total: number }> {
   const db = archiveWriter()
-  const { data, error, count } = await db
+  let query = db
     .from('community_threads')
     .select(`${THREAD_COLUMNS},hidden_at`, { count: 'exact' })
     .eq('author_id', viewerId)
     .is('deleted_at', null)
-    .order('created_at', { ascending: false })
-    .limit(limit)
+  if (search) query = query.or(searchFilter(search))
+  const { data, error, count } = await query.order('created_at', { ascending: false }).limit(limit)
   if (error) throw error
   const rows = (data ?? []) as (ThreadRow & { hidden_at: string | null })[]
   const views = await withAuthors(

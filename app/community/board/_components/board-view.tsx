@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
 import { excerpt, type ThreadView } from '@/lib/community/threads'
+import { SEARCH_MAX } from '@/lib/community/search'
 import { AuthorLine, PlusMark, useThreadDate } from './thread-parts'
 import './board.css'
 
@@ -19,10 +20,18 @@ interface BoardViewProps {
   total: number
   signedIn: boolean
   view?: BoardTab
+  /** 다듬어진 검색어 — 있으면 결과 줄과 지우기 링크를 보인다 */
+  search?: string | null
 }
 
 /** 게시판 목록 — 왼쪽 행동 단, 오른쪽 쪽지 격자. 첫 칸은 점선 "새 글" 자리 */
-export function BoardView({ threads, total, signedIn, view = 'all' }: BoardViewProps) {
+export function BoardView({
+  threads,
+  total,
+  signedIn,
+  view = 'all',
+  search = null,
+}: BoardViewProps) {
   const { t } = useLanguage()
   const composeHref = signedIn ? COMPOSE_PATH : SIGN_IN_TO_COMPOSE
   const composeLabel = t(signedIn ? 'boardWrite' : 'boardSignInToWrite')
@@ -48,6 +57,7 @@ export function BoardView({ threads, total, signedIn, view = 'all' }: BoardViewP
               <PlusMark />
             </Link>
             {signedIn && <BoardTabs view={view} />}
+            <BoardSearch view={view} search={search} />
             <p className='cb-aside__note'>{t('boardPublicNote')}</p>
           </aside>
 
@@ -55,6 +65,16 @@ export function BoardView({ threads, total, signedIn, view = 'all' }: BoardViewP
             <h2 id='cb-list-title' className='sr-only'>
               {t(mine ? 'boardTabMine' : 'boardTitle')}
             </h2>
+            {search && (
+              <p className='cb-results' role='status'>
+                <span>
+                  {t('boardSearchResults').replace('{q}', search).replace('{n}', String(total))}
+                </span>
+                <Link href={mine ? MINE_PATH : '/community/board'} className='cb-results__clear'>
+                  {t('boardSearchClear')}
+                </Link>
+              </p>
+            )}
             <ul className='cb-grid'>
               <li>
                 <Link href={composeHref} className='cb-compose'>
@@ -62,7 +82,7 @@ export function BoardView({ threads, total, signedIn, view = 'all' }: BoardViewP
                   <span>{composeLabel}</span>
                   {threads.length === 0 && (
                     <span className='cb-compose__hint'>
-                      {t(mine ? 'boardMyEmpty' : 'boardEmpty')}
+                      {t(search ? 'boardSearchEmpty' : mine ? 'boardMyEmpty' : 'boardEmpty')}
                     </span>
                   )}
                 </Link>
@@ -100,6 +120,31 @@ function BoardTabs({ view }: { view: BoardTab }) {
         </Link>
       ))}
     </nav>
+  )
+}
+
+/** 검색 — 평범한 GET 양식이라 스크립트 없이도 되고, 검색어가 주소(?q=)에 남는다 */
+function BoardSearch({ view, search }: { view: BoardTab; search: string | null }) {
+  const { t } = useLanguage()
+  return (
+    <form action='/community/board' method='get' role='search' className='cb-search'>
+      {view === 'mine' && <input type='hidden' name='view' value='mine' />}
+      <label htmlFor='cb-search' className='sr-only'>
+        {t('boardSearchLabel')}
+      </label>
+      <input
+        id='cb-search'
+        type='search'
+        name='q'
+        defaultValue={search ?? ''}
+        maxLength={SEARCH_MAX}
+        placeholder={t('boardSearchPlaceholder')}
+        className='cb-search__input'
+      />
+      <button type='submit' className='cb-search__button'>
+        {t('boardSearchSubmit')}
+      </button>
+    </form>
   )
 }
 

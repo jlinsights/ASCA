@@ -94,6 +94,28 @@ describe('BoardView', () => {
     expect(mine).not.toHaveAttribute('aria-current')
   })
 
+  it('searches with a plain GET form that keeps the current tab', () => {
+    const { rerender } = render(<BoardView threads={[]} total={0} signedIn={false} />)
+    const form = screen.getByRole('search')
+    expect(form).toHaveAttribute('action', '/community/board')
+    expect(form).toHaveAttribute('method', 'get')
+    expect(within(form).getByLabelText('boardSearchLabel')).toHaveAttribute('name', 'q')
+    expect(form.querySelector('input[name="view"]')).toBeNull()
+    rerender(<BoardView threads={[]} total={0} signedIn view='mine' />)
+    expect(screen.getByRole('search').querySelector('input[name="view"]')).toHaveValue('mine')
+  })
+
+  it('shows the result line, a clear link and a search-specific empty state', () => {
+    render(<BoardView threads={[]} total={0} signedIn view='mine' search='가을' />)
+    expect(screen.getByLabelText('boardSearchLabel')).toHaveValue('가을')
+    expect(screen.getByRole('status')).toHaveTextContent('boardSearchResults')
+    expect(screen.getByRole('link', { name: 'boardSearchClear' })).toHaveAttribute(
+      'href',
+      MINE_PATH
+    )
+    expect(screen.getByText('boardSearchEmpty')).toBeInTheDocument()
+  })
+
   it('shows my threads with my count, empty state and hidden ones unlinked', () => {
     const { rerender } = render(<BoardView threads={[]} total={0} signedIn view='mine' />)
     expect(screen.getByText('boardMyEmpty')).toBeInTheDocument()

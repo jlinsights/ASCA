@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { getAccount } from '@/lib/auth/server'
 import { listMyThreads, listThreads } from '@/lib/community/feed'
+import { normalizeSearch } from '@/lib/community/search'
 import { BoardView } from './_components/board-view'
 
 /**
@@ -17,15 +18,18 @@ export const metadata: Metadata = {
   description: '협회 회원들이 작업과 전시 소식을 나누고 함께할 작가를 찾는 게시판입니다.',
 }
 
-type Props = { searchParams: Promise<{ view?: string | string[] }> }
+type Props = { searchParams: Promise<{ view?: string | string[]; q?: string | string[] }> }
 
 /** ?view=mine — 내 글만. 로그인하지 않았으면 로그인 뒤 이 탭으로 돌아온다 */
 export default async function CommunityBoardPage({ searchParams }: Props) {
-  const mine = (await searchParams).view === 'mine'
+  const params = await searchParams
+  const mine = params.view === 'mine'
+  const search = normalizeSearch(params.q)
   const account = await getAccount().catch(() => null)
   if (mine && !account)
     redirect(`/sign-in?next=${encodeURIComponent('/community/board?view=mine')}`)
-  const feed = mine && account ? await listMyThreads(account.id) : await listThreads()
+  const feed =
+    mine && account ? await listMyThreads(account.id, { search }) : await listThreads({ search })
   return (
     <>
       <main>
@@ -34,6 +38,7 @@ export default async function CommunityBoardPage({ searchParams }: Props) {
           total={feed.total}
           signedIn={Boolean(account)}
           view={mine ? 'mine' : 'all'}
+          search={search}
         />
       </main>
       <LayoutFooter />
