@@ -44,9 +44,14 @@ export interface ThreadAuthor {
   href: string | null
 }
 
-export interface ThreadView extends ThreadRow {
+/**
+ * 화면으로 보내는 글 — 작성자 계정 ID 는 싣지 않는다(페이지 데이터로 누구에게나 보이므로).
+ * 보는 사람이 쓴 글인지만 `mine` 으로 알린다.
+ */
+export interface ThreadView extends Omit<ThreadRow, 'author_id'> {
   author: ThreadAuthor
   edited: boolean
+  mine: boolean
 }
 
 /** 관리자 화면에만 넘기는 숨김 상태 */
@@ -100,11 +105,14 @@ export function resolveAuthor(
 export function toThreadView(
   row: ThreadRow,
   displayNames: ReadonlyMap<string, string>,
-  publicArtists: ReadonlyMap<string, PublicArtistLink>
+  publicArtists: ReadonlyMap<string, PublicArtistLink>,
+  viewerId: string | null = null
 ): ThreadView {
+  const { author_id: authorId, ...rest } = row
   return {
-    ...row,
-    author: resolveAuthor(row.author_id, displayNames, publicArtists),
+    ...rest,
+    author: resolveAuthor(authorId, displayNames, publicArtists),
+    mine: Boolean(viewerId) && authorId === viewerId,
     // 저장 직후 트리거가 updated_at 을 조금 늦게 찍을 수 있어 1분 넘게 차이 날 때만 "수정됨"
     edited: Date.parse(row.updated_at) - Date.parse(row.created_at) > 60_000,
   }

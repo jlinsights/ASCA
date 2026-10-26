@@ -63,6 +63,7 @@ export function ThreadDetail({
               {thread.edited && <> · {t('boardEdited')}</>}
             </p>
             <ThreadBody body={thread.body} className='cb-thread__body' />
+            {thread.mine && !moderation?.hiddenAt && <OwnerActions threadId={thread.id} />}
           </div>
           <ThreadResponses
             threadId={thread.id}
@@ -74,6 +75,62 @@ export function ThreadDetail({
           {moderation && <ModerationPanel threadId={thread.id} hidden={!!moderation.hiddenAt} />}
         </article>
       </div>
+    </div>
+  )
+}
+
+/** 내 글 — 고치기는 편집 화면으로, 지우기는 한 번 더 묻고 게시판으로 돌아간다 */
+function OwnerActions({ threadId }: { threadId: string }) {
+  const { t } = useLanguage()
+  const router = useRouter()
+  const [confirming, setConfirming] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState(false)
+
+  async function remove() {
+    setBusy(true)
+    setFailed(false)
+    try {
+      const response = await fetch(`/api/community/threads/${threadId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      if (!response.ok) throw new Error()
+      router.push('/community/board')
+      router.refresh()
+    } catch {
+      setFailed(true)
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className='cb-owner'>
+      {confirming ? (
+        <>
+          <span>{t('boardDeleteConfirm')}</span>
+          <Button size='sm' variant='destructive' disabled={busy} onClick={remove}>
+            {t('boardDeleteYes')}
+          </Button>
+          <Button size='sm' variant='ghost' disabled={busy} onClick={() => setConfirming(false)}>
+            {t('boardCommentDeleteNo')}
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button asChild size='sm' variant='outline'>
+            <Link href={`/community/board/${threadId}/edit`}>{t('boardEdit')}</Link>
+          </Button>
+          <Button size='sm' variant='ghost' onClick={() => setConfirming(true)}>
+            {t('boardDelete')}
+          </Button>
+        </>
+      )}
+      {failed && (
+        <p role='alert' className='m-0 w-full text-destructive'>
+          {t('boardDeleteFailed')}
+        </p>
+      )}
     </div>
   )
 }

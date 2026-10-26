@@ -439,6 +439,15 @@ a.cb-author__name:hover {
   }
 }
 
+/* 내 글 — 고치기·지우기 */
+.cb-owner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
 /* ---------- 좋아요 · 댓글 ---------- */
 .cb-like {
   display: flex;

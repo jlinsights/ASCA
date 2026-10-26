@@ -16,10 +16,13 @@ type Props = { params: Promise<{ id: string }> }
  * 메타데이터와 본문이 같은 요청에서 한 번만 읽도록 cache 로 묶는다.
  */
 const load = cache(async (id: string) => {
-  const identity = await archiveIdentity().catch(() => null)
+  const [identity, account] = await Promise.all([
+    archiveIdentity().catch(() => null),
+    getAccount().catch(() => null),
+  ])
   const admin = Boolean(identity?.admin)
-  const found = await getThread(id, { includeHidden: admin })
-  return found ? { ...found, admin } : null
+  const found = await getThread(id, { includeHidden: admin, viewerId: account?.id ?? null })
+  return found ? { ...found, admin, account } : null
 })
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -35,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CommunityThreadPage({ params }: Props) {
   const found = await load((await params).id)
   if (!found) notFound()
-  const account = await getAccount().catch(() => null)
+  const { account } = found
   const viewerId = account?.id ?? null
   const [comments, reactions] = await Promise.all([
     listComments(found.thread.id, viewerId),

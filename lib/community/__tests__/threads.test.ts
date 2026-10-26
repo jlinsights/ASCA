@@ -109,6 +109,16 @@ describe('toThreadView', () => {
       toThreadView({ ...row, updated_at: '2026-10-25T00:05:00.000Z' }, new Map(), new Map()).edited
     ).toBe(true)
   })
+
+  it('never sends the author account id to the page, only whether it is mine', () => {
+    const view = toThreadView(row, new Map(), new Map(), account)
+    expect(view).not.toHaveProperty('author_id')
+    expect(JSON.stringify(view)).not.toContain(account)
+    expect(view.mine).toBe(true)
+    expect(toThreadView(row, new Map(), new Map(), other).mine).toBe(false)
+    expect(toThreadView(row, new Map(), new Map()).mine).toBe(false)
+    expect(toThreadView({ ...row, author_id: null }, new Map(), new Map(), null).mine).toBe(false)
+  })
 })
 
 describe('splitLinks', () => {
