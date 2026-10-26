@@ -5,7 +5,8 @@ import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
 import { Plan2025 } from './_components/plan-2025'
 import { YearSection } from './_components/year-section'
-import { EXHIBITION_YEARS } from './_components/business-plan-data'
+import Link from 'next/link'
+import { EXHIBITION_YEARS, QUICK_LINKS } from './_components/business-plan-data'
 import { BOOKING_URL, CHAT_URL } from '@/lib/content/contact-info'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
@@ -66,6 +67,17 @@ export default function BusinessPlanPage() {
           eyebrow='2025 · 동양의 혼, 현대의 감각'
           title='2025년도 사업계획서'
           note='“전통과 현대를 잇는 동양미학 예술 플랫폼”'
+          aside={
+            <ul className='ab-index' aria-label='바로 가기'>
+              {QUICK_LINKS.map(link => (
+                <li key={link.href}>
+                  <Link href={link.href}>
+                    {link.label} <span aria-hidden='true'>→</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          }
         >
           <Plan2025 />
         </AboutChapter>
