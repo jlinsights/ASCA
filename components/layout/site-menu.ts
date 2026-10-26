@@ -97,7 +97,7 @@ const exhibitionsAndContests: MenuColumn[] = [
 
 export const headerMenu: MenuGroup[] = [
   // 순서: 소개 · 전시·공모 · 작가·작품 · 소식 · 정관·규정 · 회원·후원 (2026-10-26)
-  // 소개·정관·규정 머리 라벨은 헤더 전용 키다 — 푸터 제목·규정 페이지 경로 표시는 siteNavAbout·regsMenu 그대로
+  // 소개·정관·규정 라벨은 헤더·푸터 제목·규정 페이지 경로 표시가 같은 키를 쓴다 (2026-10-26)
   { key: 'about', labelKey: 'siteNavAboutShort', href: '/introductions', items: about },
   {
     key: 'exhibitions',
@@ -131,7 +131,7 @@ export const headerMenu: MenuGroup[] = [
 ]
 
 export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
-  { titleKey: 'siteNavAbout', items: about },
+  { titleKey: 'siteNavAboutShort', items: about },
   {
     titleKey: 'siteFtSecArtists',
     items: [
@@ -152,7 +152,7 @@ export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
       { labelKey: 'siteNavArtworks', href: '/artworks' },
     ],
   },
-  { titleKey: 'regsMenu', items: regulations },
+  { titleKey: 'siteNavRegulations', items: regulations },
   {
     titleKey: 'siteFtSecJoin',
     items: [

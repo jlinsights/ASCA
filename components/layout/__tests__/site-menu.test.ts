@@ -65,9 +65,9 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(headerMenu.some(g => g.key === 'contests')).toBe(false)
   })
 
-  it('소개·정관·규정 머리 라벨을 바꿔도 푸터 제목은 그대로다', () => {
+  it('푸터 제목도 헤더와 같은 소개·정관·규정 라벨을 쓴다', () => {
     expect(footerMenu.map(s => translations.ko?.[s.titleKey])).toEqual(
-      expect.arrayContaining(['협회 소개', '정관 및 규정'])
+      expect.arrayContaining(['소개', '정관·규정'])
     )
   })
 
