@@ -74,6 +74,8 @@ interface AboutChapterProps {
   /** 왼쪽에 세로로 붙는 漢字 표제 */
   tc: string
   title: string
+  /** 제목이 페이지 언어와 다를 때 */
+  titleLang?: string
   eyebrow?: string
   note?: ReactNode
   /** 표제 아래 덧붙임 — 연도 목차 같은 것 */
@@ -86,6 +88,7 @@ export function AboutChapter({
   tone = 'paper',
   tc,
   title,
+  titleLang,
   eyebrow,
   note,
   aside,
@@ -101,7 +104,7 @@ export function AboutChapter({
           </p>
           <div className='ab-chapter__heading'>
             {eyebrow && <p className='ab-chapter__eyebrow'>{eyebrow}</p>}
-            <h2 id={headingId} className='ab-chapter__title'>
+            <h2 id={headingId} className='ab-chapter__title' lang={titleLang}>
               {title}
             </h2>
             {note && <p className='ab-chapter__note'>{note}</p>}
@@ -138,26 +141,6 @@ export function AboutRows({
           <div className='ab-row__body'>{item.body}</div>
         </div>
       ))}
-    </div>
-  )
-}
-
-/** 옆으로 흐르는 이름 띠. 같은 목록을 두 번 이어 끊김 없이 돈다 — 두 번째 줄은 화면 읽기에서 뺀다 */
-export function AboutMarquee({ names, label }: { names: string[]; label: string }) {
-  return (
-    <div className='ab-marquee' role='region' aria-label={label}>
-      <ul className='ab-marquee__track'>
-        {names.map(name => (
-          <li key={name} className='ab-marquee__item'>
-            {name}
-          </li>
-        ))}
-        {names.map(name => (
-          <li key={`${name}-loop`} className='ab-marquee__item' aria-hidden='true'>
-            {name}
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

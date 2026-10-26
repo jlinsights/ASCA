@@ -1,9 +1,11 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { ArrowUpRight } from 'lucide-react'
-import { AboutChapter, AboutHero, AboutMarquee, AboutPage } from '@/components/about/about-layout'
+import { AboutChapter, AboutHero, AboutPage } from '@/components/about/about-layout'
+import { AboutMarquee } from '@/components/about/about-marquee'
 import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '유관단체 | 동양서예협회',
@@ -132,7 +134,7 @@ export default function PartnersPage() {
     <>
       <AboutPage>
         <AboutHero
-          tc='協力'
+          tc={PAGE_HERO_MARKS.partners.tc}
           title='유관단체'
           lede='사단법인 동양서예협회와 직접 혹은 간접적으로 관련이 있거나 파트너십 관계를 맺고 있는 협회 및 단체들을 소개합니다.'
           facts={[
@@ -141,7 +143,7 @@ export default function PartnersPage() {
           ]}
         />
         <AboutNav />
-        <AboutMarquee names={MARQUEE_NAMES} label='유관단체 이름 띠' />
+        <AboutMarquee names={MARQUEE_NAMES} label='이름 띠' />
         <AboutChapter
           id='partners'
           tone='gold'

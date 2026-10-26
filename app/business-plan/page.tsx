@@ -7,6 +7,7 @@ import { Plan2025 } from './_components/plan-2025'
 import { YearSection } from './_components/year-section'
 import { EXHIBITION_YEARS } from './_components/business-plan-data'
 import { BOOKING_URL, CHAT_URL } from '@/lib/content/contact-info'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '사업계획 | 동양서예협회',
@@ -35,7 +36,7 @@ export default function BusinessPlanPage() {
     <>
       <AboutPage>
         <AboutHero
-          tc='事業'
+          tc={PAGE_HERO_MARKS.businessPlan.tc}
           title='사업계획'
           lede='동양서예협회의 연도별 사업계획과 대한민국 동양서예대전 전시 아카이브를 확인하실 수 있습니다.'
           facts={[

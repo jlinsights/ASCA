@@ -3,6 +3,7 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { AboutChapter, AboutHero, AboutPage } from '@/components/about/about-layout'
 import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '임원 조직도 | 동양서예협회',
@@ -115,7 +116,7 @@ export default function BoardMembersPage() {
     <>
       <AboutPage>
         <AboutHero
-          tc='任員'
+          tc={PAGE_HERO_MARKS.boardMembers.tc}
           title='임원'
           lede='현재 사단법인 동양서예협회의 조직도와 임원진을 소개합니다. 궁금하신 부분이 있거나 저희 협회에 남기실 말씀이 있다면 문의하여 주시기 바랍니다.'
           facts={[

@@ -4,6 +4,7 @@ import { AboutHero, AboutPage } from '@/components/about/about-layout'
 import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
 import { GreetingsTabs } from './_components/greetings-tabs'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '인사말씀 | 동양서예협회',
@@ -26,7 +27,7 @@ export default function GreetingsPage() {
     <>
       <AboutPage>
         <AboutHero
-          tc='致辭'
+          tc={PAGE_HERO_MARKS.greetings.tc}
           title='인사말씀'
           lede='사단법인 동양서예협회 이사장의 새해 인사말씀을 전합니다'
         />

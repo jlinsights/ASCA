@@ -1,7 +1,8 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { LanguageProvider } from '@/contexts/language-context'
-import { AboutMarquee, AboutPage } from '../about-layout'
+import { AboutPage } from '../about-layout'
+import { AboutMarquee } from '../about-marquee'
 import { AboutMotion } from '../about-motion'
 import { AboutNav } from '../about-nav'
 import { MissionTabs } from '@/app/mission/_components/mission-tabs'
@@ -60,13 +61,22 @@ describe('사명 — 본문 언어', () => {
 })
 
 describe('이름 띠', () => {
-  it('끊김 없이 돌도록 두 번 싣되 두 번째 줄은 화면 읽기에서 뺀다', () => {
-    render(<AboutMarquee names={['예술의전당', '국립중앙박물관']} label='이름 띠' />)
-    const items = within(screen.getByRole('region', { name: '이름 띠' })).getAllByRole('listitem', {
-      hidden: true,
-    })
-    expect(items).toHaveLength(4)
-    expect(items.filter(item => item.getAttribute('aria-hidden') === 'true')).toHaveLength(2)
+  it('끊김 없이 두 번 싣되 띠 전체를 화면 읽기에서 빼고, 멈춤 단추를 둔다', async () => {
+    const user = userEvent.setup()
+    const { container } = render(
+      <AboutMarquee names={['예술의전당', '국립중앙박물관']} label='이름 띠' />
+    )
+    const track = container.querySelector('.ab-marquee__track')
+    expect(track).toHaveAttribute('aria-hidden', 'true')
+    expect(track?.querySelectorAll('li')).toHaveLength(4)
+
+    const toggle = screen.getByRole('button', { name: '이름 띠 멈추기' })
+    await user.click(toggle)
+    expect(screen.getByRole('button', { name: '이름 띠 다시 흐르기' })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    )
+    expect(container.querySelector('.ab-marquee')).toHaveAttribute('data-paused', 'true')
   })
 })
 

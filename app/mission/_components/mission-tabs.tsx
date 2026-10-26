@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { AboutChapter, AboutHero, AboutRows } from '@/components/about/about-layout'
 import { AboutNav } from '@/components/about/about-nav'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 interface ValueItem {
   title: string
@@ -122,7 +123,7 @@ export function MissionTabs() {
   return (
     <>
       <AboutHero
-        tc='使命'
+        tc={PAGE_HERO_MARKS.mission.tc}
         title='사명'
         lede='동양서예협회의 사명과 핵심 가치를 소개합니다'
         actions={

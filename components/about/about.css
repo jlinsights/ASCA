@@ -603,8 +603,31 @@ a.ab-link:hover .ab-link__arrow {
   width: max-content;
   animation: ab-marquee 70s linear infinite;
 }
-.ab-marquee:hover .ab-marquee__track {
+.ab-marquee:hover .ab-marquee__track,
+.ab-marquee[data-paused] .ab-marquee__track {
   animation-play-state: paused;
+}
+.ab-marquee__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: 12px auto 0;
+  padding: 0 var(--ab-gutter);
+  max-width: var(--ab-max);
+  width: 100%;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  color: var(--ab-muted);
+  cursor: pointer;
+}
+.ab-marquee__toggle:hover {
+  color: var(--ab-fg);
+}
+.ab-marquee__toggle svg {
+  width: 14px;
+  height: 14px;
 }
 .ab-marquee__item {
   display: grid;

@@ -14,7 +14,7 @@ const BROCHURE_KO =
 const BROCHURE_MULTI =
   'https://pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev/소개자료/동양서예협회%20소개_한국어%20영어%20중국어%20일본어_PDF.pdf'
 
-// 장 제목은 사이트 언어로 쓴다 — 탭으로 다른 언어 인사말을 펼쳐도 제목은 그대로다
+// 장 제목은 펼친 탭의 언어로 쓴다(사이트 언어와 무관하게 '日本語' 탭이면 '理事長あいさつ')
 const HEADINGS: Record<Language, string> = {
   ko: '이사장 인사말',
   en: 'Message from the Chairman',
@@ -48,7 +48,7 @@ export function IntroductionsTabs() {
 
   return (
     <>
-      <AboutChapter id='message' tc='致辭' eyebrow='Message' title={HEADINGS[language]}>
+      <AboutChapter id='message' tc='致辭' eyebrow='Message' title={HEADINGS[tab]} titleLang={tab}>
         <TabsPrimitive.Root
           value={tab}
           onValueChange={value => isValidLanguage(value) && setTab(value)}
