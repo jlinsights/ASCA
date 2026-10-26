@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { getAccount } from '@/lib/auth/server'
-import { listThreads } from '@/lib/community/feed'
+import { listMyThreads, listThreads } from '@/lib/community/feed'
 import { BoardView } from './_components/board-view'
 
 /**
@@ -16,12 +17,24 @@ export const metadata: Metadata = {
   description: '협회 회원들이 작업과 전시 소식을 나누고 함께할 작가를 찾는 게시판입니다.',
 }
 
-export default async function CommunityBoardPage() {
-  const [feed, account] = await Promise.all([listThreads(), getAccount().catch(() => null)])
+type Props = { searchParams: Promise<{ view?: string | string[] }> }
+
+/** ?view=mine — 내 글만. 로그인하지 않았으면 로그인 뒤 이 탭으로 돌아온다 */
+export default async function CommunityBoardPage({ searchParams }: Props) {
+  const mine = (await searchParams).view === 'mine'
+  const account = await getAccount().catch(() => null)
+  if (mine && !account)
+    redirect(`/sign-in?next=${encodeURIComponent('/community/board?view=mine')}`)
+  const feed = mine && account ? await listMyThreads(account.id) : await listThreads()
   return (
     <>
       <main>
-        <BoardView threads={feed.threads} total={feed.total} signedIn={Boolean(account)} />
+        <BoardView
+          threads={feed.threads}
+          total={feed.total}
+          signedIn={Boolean(account)}
+          view={mine ? 'mine' : 'all'}
+        />
       </main>
       <LayoutFooter />
     </>

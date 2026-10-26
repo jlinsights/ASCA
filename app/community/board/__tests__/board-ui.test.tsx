@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
-import { BoardView, COMPOSE_PATH, SIGN_IN_TO_COMPOSE } from '../_components/board-view'
+import { BoardView, COMPOSE_PATH, MINE_PATH, SIGN_IN_TO_COMPOSE } from '../_components/board-view'
 import { ComposeForm } from '../new/compose-form'
 import { ThreadDetail } from '../[id]/thread-detail'
 import type { ThreadView } from '@/lib/community/threads'
@@ -82,6 +82,45 @@ describe('BoardView', () => {
     for (const link of links) expect(link).toHaveAttribute('href', SIGN_IN_TO_COMPOSE)
     expect(screen.getByText('boardEmpty')).toBeInTheDocument()
     expect(screen.queryAllByRole('article')).toHaveLength(0)
+    expect(screen.queryByRole('navigation', { name: 'boardTabsLabel' })).toBeNull()
+  })
+
+  it('offers all / mine tabs to members and marks the current one', () => {
+    render(<BoardView threads={[]} total={0} signedIn />)
+    const tabs = within(screen.getByRole('navigation', { name: 'boardTabsLabel' }))
+    expect(tabs.getByRole('link', { name: 'boardTabAll' })).toHaveAttribute('aria-current', 'page')
+    const mine = tabs.getByRole('link', { name: 'boardTabMine' })
+    expect(mine).toHaveAttribute('href', MINE_PATH)
+    expect(mine).not.toHaveAttribute('aria-current')
+  })
+
+  it('shows my threads with my count, empty state and hidden ones unlinked', () => {
+    const { rerender } = render(<BoardView threads={[]} total={0} signedIn view='mine' />)
+    expect(screen.getByText('boardMyEmpty')).toBeInTheDocument()
+    expect(screen.getByText('boardMyCount')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'boardTabMine' })).toHaveAttribute(
+      'aria-current',
+      'page'
+    )
+    rerender(
+      <BoardView
+        threads={[
+          { ...thread({ mine: true }), hidden: false },
+          { ...thread({ id: 't2', title: '숨겨진 글', mine: true }), hidden: true },
+        ]}
+        total={2}
+        signedIn
+        view='mine'
+      />
+    )
+    const [shown, hidden] = screen.getAllByRole('article')
+    expect(within(shown!).getByRole('link', { name: '전시 소식' })).toHaveAttribute(
+      'href',
+      '/community/board/t1'
+    )
+    expect(within(hidden!).getByText('boardMyHidden')).toBeInTheDocument()
+    expect(within(hidden!).getByRole('heading', { name: '숨겨진 글' })).toBeInTheDocument()
+    expect(within(hidden!).queryByRole('link', { name: '숨겨진 글' })).toBeNull()
   })
 })
 

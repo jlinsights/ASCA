@@ -8,18 +8,26 @@ import './board.css'
 
 export const COMPOSE_PATH = '/community/board/new'
 export const SIGN_IN_TO_COMPOSE = `/sign-in?next=${encodeURIComponent(COMPOSE_PATH)}`
+export const MINE_PATH = '/community/board?view=mine'
+
+/** 내 글 목록에서만 붙는 숨김 표시 */
+type BoardThread = ThreadView & { hidden?: boolean }
+export type BoardTab = 'all' | 'mine'
 
 interface BoardViewProps {
-  threads: ThreadView[]
+  threads: BoardThread[]
   total: number
   signedIn: boolean
+  view?: BoardTab
 }
 
 /** 게시판 목록 — 왼쪽 행동 단, 오른쪽 쪽지 격자. 첫 칸은 점선 "새 글" 자리 */
-export function BoardView({ threads, total, signedIn }: BoardViewProps) {
+export function BoardView({ threads, total, signedIn, view = 'all' }: BoardViewProps) {
   const { t } = useLanguage()
   const composeHref = signedIn ? COMPOSE_PATH : SIGN_IN_TO_COMPOSE
   const composeLabel = t(signedIn ? 'boardWrite' : 'boardSignInToWrite')
+  const mine = view === 'mine'
+  const countKey = mine ? 'boardMyCount' : 'boardCount'
 
   return (
     <div className='cb'>
@@ -28,7 +36,7 @@ export function BoardView({ threads, total, signedIn }: BoardViewProps) {
           <p className='cb-head__eyebrow'>{t('boardEyebrow')}</p>
           <div className='cb-head__row'>
             <h1 className='cb-head__title'>{t('boardTitle')}</h1>
-            <p className='cb-head__count'>{t('boardCount').replace('{n}', String(total))}</p>
+            <p className='cb-head__count'>{t(countKey).replace('{n}', String(total))}</p>
           </div>
           <p className='cb-head__intro'>{t('boardIntro')}</p>
         </header>
@@ -39,12 +47,13 @@ export function BoardView({ threads, total, signedIn }: BoardViewProps) {
               <span>{composeLabel}</span>
               <PlusMark />
             </Link>
+            {signedIn && <BoardTabs view={view} />}
             <p className='cb-aside__note'>{t('boardPublicNote')}</p>
           </aside>
 
           <section aria-labelledby='cb-list-title'>
             <h2 id='cb-list-title' className='sr-only'>
-              {t('boardTitle')}
+              {t(mine ? 'boardTabMine' : 'boardTitle')}
             </h2>
             <ul className='cb-grid'>
               <li>
@@ -52,7 +61,9 @@ export function BoardView({ threads, total, signedIn }: BoardViewProps) {
                   <PlusMark size={24} />
                   <span>{composeLabel}</span>
                   {threads.length === 0 && (
-                    <span className='cb-compose__hint'>{t('boardEmpty')}</span>
+                    <span className='cb-compose__hint'>
+                      {t(mine ? 'boardMyEmpty' : 'boardEmpty')}
+                    </span>
                   )}
                 </Link>
               </li>
@@ -69,18 +80,50 @@ export function BoardView({ threads, total, signedIn }: BoardViewProps) {
   )
 }
 
-function ThreadCard({ thread }: { thread: ThreadView }) {
+/** 전체 글 · 내 글 — 주소(?view=mine)로 남겨 새로 고쳐도, 링크로 보내도 같은 탭 */
+function BoardTabs({ view }: { view: BoardTab }) {
+  const { t } = useLanguage()
+  const tabs: { key: BoardTab; href: string; label: string }[] = [
+    { key: 'all', href: '/community/board', label: t('boardTabAll') },
+    { key: 'mine', href: MINE_PATH, label: t('boardTabMine') },
+  ]
+  return (
+    <nav className='cb-tabs' aria-label={t('boardTabsLabel')}>
+      {tabs.map(tab => (
+        <Link
+          key={tab.key}
+          href={tab.href}
+          className='cb-tabs__link'
+          aria-current={tab.key === view ? 'page' : undefined}
+        >
+          {tab.label}
+        </Link>
+      ))}
+    </nav>
+  )
+}
+
+function ThreadCard({ thread }: { thread: BoardThread }) {
   const { t } = useLanguage()
   const formatDate = useThreadDate()
   const preview = excerpt(thread.body)
   return (
-    <article className='cb-card' aria-labelledby={`cb-thread-${thread.id}`}>
+    <article
+      className={`cb-card${thread.hidden ? ' cb-card--hidden' : ''}`}
+      aria-labelledby={`cb-thread-${thread.id}`}
+    >
       <AuthorLine author={thread.author} />
       <div className='cb-notch' aria-hidden='true' />
+      {thread.hidden && <p className='cb-card__badge'>{t('boardMyHidden')}</p>}
       <h3 id={`cb-thread-${thread.id}`} className='cb-card__title'>
-        <Link href={`/community/board/${thread.id}`} className='cb-card__link'>
-          {thread.title}
-        </Link>
+        {/* 숨김 글은 상세가 404 라 링크를 걸지 않는다 */}
+        {thread.hidden ? (
+          thread.title
+        ) : (
+          <Link href={`/community/board/${thread.id}`} className='cb-card__link'>
+            {thread.title}
+          </Link>
+        )}
       </h3>
       <p className='cb-card__excerpt'>{preview.text}</p>
       <p className='cb-card__foot'>

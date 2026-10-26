@@ -46,6 +46,40 @@ export async function listThreads(limit = FEED_LIMIT): Promise<ThreadFeed> {
   return { threads: await withAuthors(db, rows), total: count ?? rows.length }
 }
 
+/** 내 글 목록에서는 사무국이 숨긴 글도 보이되, 숨김 표시를 단다 */
+export interface MyThreadView extends ThreadView {
+  hidden: boolean
+}
+
+/**
+ * 내가 쓴 글 — 지운 글은 빼고, 사무국이 숨긴 글은 표시와 함께 넣는다(작성자가 사정을 알 수 있게).
+ * 숨김 사유·처리자는 싣지 않는다.
+ */
+export async function listMyThreads(
+  viewerId: string,
+  limit = FEED_LIMIT
+): Promise<{ threads: MyThreadView[]; total: number }> {
+  const db = archiveWriter()
+  const { data, error, count } = await db
+    .from('community_threads')
+    .select(`${THREAD_COLUMNS},hidden_at`, { count: 'exact' })
+    .eq('author_id', viewerId)
+    .is('deleted_at', null)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  if (error) throw error
+  const rows = (data ?? []) as (ThreadRow & { hidden_at: string | null })[]
+  const views = await withAuthors(
+    db,
+    rows.map(({ hidden_at: _hidden, ...row }) => row),
+    viewerId
+  )
+  return {
+    threads: views.map((view, index) => ({ ...view, hidden: Boolean(rows[index]?.hidden_at) })),
+    total: count ?? rows.length,
+  }
+}
+
 /**
  * 글 하나. 숨김·삭제 글은 없는 글처럼 null — 관리자 화면에서만 숨김 글을 보여 줄 수 있다.
  * viewerId 를 주면 그 사람이 쓴 글인지(`mine`)를 함께 알린다.
