@@ -218,6 +218,34 @@
   color: var(--cb-fg);
 }
 
+/* 쪽 넘기기 — 목록 아래 먹 선 하나, 오래된 글은 오른쪽 */
+.cb-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: clamp(28px, 4vw, 48px);
+  padding-top: 20px;
+  border-top: 1px solid var(--cb-rule);
+}
+.cb-pager__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 15px;
+  color: var(--cb-fg);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms var(--cb-ease);
+}
+.cb-pager__link:hover {
+  border-bottom-color: var(--cb-fg);
+}
+.cb-pager__link--older {
+  margin-left: auto;
+}
+
 .cb-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
