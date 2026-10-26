@@ -286,6 +286,6 @@ export const communityBoardTranslations: TranslationData = {
     boardTabMine: '我的文章',
     boardMyCount: '我的文章 {n} 篇',
     boardMyEmpty: '你還沒有發表文章。',
-    boardMyHidden: '已由秘書處隱藏 — 其他人看不到',
+    boardMyHidden: '已由祕書處隱藏 — 其他人看不到',
   },
 }
