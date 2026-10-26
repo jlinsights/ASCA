@@ -8,7 +8,6 @@ import { HeaderAuthSection } from './header-auth-section'
 import { HeaderMobileAuth } from './header-mobile-auth'
 import { HeaderSubmenu } from './header-submenu'
 import { ThemeToggle } from '../theme-toggle'
-import { ThemeTransition } from '../theme-transition'
 import { LanguageSelector } from '../language-selector'
 import { Logo } from '../brand/logo'
 import { useLanguage } from '@/contexts/language-context'
@@ -22,7 +21,6 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null)
   const [mobileDropdowns, setMobileDropdowns] = useState<Record<string, boolean>>({})
   const headerRef = useRef<HTMLElement>(null)
   const { t } = useLanguage()
@@ -38,10 +36,6 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const handleThemeToggle = (position: { x: number; y: number }) => {
-    setClickPosition(position)
-  }
 
   const handleMouseEnter = (key: string) => {
     setActiveDropdown(key)
@@ -142,7 +136,6 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
 
   return (
     <>
-      <ThemeTransition clickPosition={clickPosition} />
       <header
         ref={headerRef}
         className={`${positionClass} z-50 transition-all duration-300 border-b ${headerClass}`}
@@ -229,12 +222,12 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
 
               <LanguageSelector variant='compact' />
 
-              <ThemeToggle onToggle={handleThemeToggle} />
+              <ThemeToggle />
             </div>
 
             {/* Mobile Controls */}
             <div className='xl:hidden flex items-center gap-2'>
-              <ThemeToggle onToggle={handleThemeToggle} />
+              <ThemeToggle />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className='flex items-center justify-center min-w-[44px] min-h-[44px] rounded-md text-foreground hover:bg-foreground/10 active:bg-foreground/20 transition-colors'

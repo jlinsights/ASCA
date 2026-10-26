@@ -6,7 +6,7 @@ export const DEFAULT_ACCESSIBILITY_SETTINGS: AccessibilitySettings = {
   lineHeight: 1.6,
   letterSpacing: 0,
   contrast: 'normal',
-  colorScheme: 'auto',
+  colorScheme: 'light',
   motionReduced: false,
   screenReader: false,
   keyboardNavigation: true,
