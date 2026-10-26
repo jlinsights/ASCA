@@ -26,7 +26,7 @@ afterAll(() => {
 
 const thread = (overrides: Partial<ThreadView> = {}): ThreadView => ({
   id: 't1',
-  author_id: 'a1',
+  mine: false,
   title: '전시 소식',
   body: '첫 줄\n자세한 안내 https://example.test/show',
   created_at: '2026-10-25T03:00:00.000Z',
@@ -142,6 +142,50 @@ describe('ThreadDetail', () => {
   })
 })
 
+describe('ThreadDetail — my own thread', () => {
+  it('hides edit and delete on other people’s threads', () => {
+    render(<ThreadDetail {...responses} thread={thread()} moderation={null} />)
+    expect(screen.queryByRole('link', { name: 'boardEdit' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'boardDelete' })).toBeNull()
+  })
+
+  it('links to the edit page and deletes after confirming', async () => {
+    fetchMock.mockResolvedValueOnce(json({ data: { id: 't1' } }))
+    render(<ThreadDetail {...responses} thread={thread({ mine: true })} moderation={null} />)
+    expect(screen.getByRole('link', { name: 'boardEdit' })).toHaveAttribute(
+      'href',
+      '/community/board/t1/edit'
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'boardDelete' }))
+    fireEvent.click(screen.getByRole('button', { name: 'boardDeleteYes' }))
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/community/board'))
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/community/threads/t1',
+      expect.objectContaining({ method: 'DELETE' })
+    )
+  })
+
+  it('keeps the thread and explains a failed delete', async () => {
+    fetchMock.mockResolvedValueOnce(json({}, 500))
+    render(<ThreadDetail {...responses} thread={thread({ mine: true })} moderation={null} />)
+    fireEvent.click(screen.getByRole('button', { name: 'boardDelete' }))
+    fireEvent.click(screen.getByRole('button', { name: 'boardDeleteYes' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('boardDeleteFailed')
+    expect(push).not.toHaveBeenCalled()
+  })
+
+  it('offers no owner actions on my thread once the office has hidden it', () => {
+    render(
+      <ThreadDetail
+        {...responses}
+        thread={thread({ mine: true })}
+        moderation={{ hiddenAt: '2026-10-25T04:00:00.000Z', hiddenReason: null }}
+      />
+    )
+    expect(screen.queryByRole('link', { name: 'boardEdit' })).toBeNull()
+  })
+})
+
 describe('ComposeForm', () => {
   const fill = () => {
     fireEvent.change(screen.getByLabelText(/boardFieldTitle/), { target: { value: '제목' } })
@@ -165,6 +209,35 @@ describe('ComposeForm', () => {
     fireEvent.click(screen.getByRole('button', { name: 'boardSubmit' }))
     expect(await screen.findByRole('alert')).toHaveTextContent('boardErrorRate')
     expect(push).not.toHaveBeenCalled()
+  })
+
+  it('edits my thread in place and returns to it', async () => {
+    fetchMock.mockResolvedValueOnce(json({ data: { id: 't1' } }))
+    render(<ComposeForm hasDisplayName editing={{ id: 't1', title: '옛 제목', body: '옛 본문' }} />)
+    expect(screen.getByText('boardEditTitle')).toBeInTheDocument()
+    expect(screen.getByLabelText(/boardFieldTitle/)).toHaveValue('옛 제목')
+    expect(screen.getByRole('link', { name: 'boardCancel' })).toHaveAttribute(
+      'href',
+      '/community/board/t1'
+    )
+    fireEvent.change(screen.getByLabelText(/boardFieldTitle/), { target: { value: '새 제목' } })
+    fireEvent.click(screen.getByRole('button', { name: 'boardSave' }))
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/community/board/t1'))
+    expect(refresh).toHaveBeenCalled()
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/community/threads/t1',
+      expect.objectContaining({
+        method: 'PATCH',
+        body: JSON.stringify({ title: '새 제목', body: '옛 본문' }),
+      })
+    )
+  })
+
+  it('explains when my thread can no longer be edited', async () => {
+    fetchMock.mockResolvedValueOnce(json({ code: 'THREAD_NOT_FOUND' }, 404))
+    render(<ComposeForm hasDisplayName editing={{ id: 't1', title: '제목', body: '본문' }} />)
+    fireEvent.click(screen.getByRole('button', { name: 'boardSave' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('boardEditGone')
   })
 
   it('asks for a display name first', () => {

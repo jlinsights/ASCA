@@ -48,10 +48,14 @@ export async function listThreads(limit = FEED_LIMIT): Promise<ThreadFeed> {
 
 /**
  * 글 하나. 숨김·삭제 글은 없는 글처럼 null — 관리자 화면에서만 숨김 글을 보여 줄 수 있다.
+ * viewerId 를 주면 그 사람이 쓴 글인지(`mine`)를 함께 알린다.
  */
 export async function getThread(
   id: string,
-  { includeHidden = false }: { includeHidden?: boolean } = {}
+  {
+    includeHidden = false,
+    viewerId = null,
+  }: { includeHidden?: boolean; viewerId?: string | null } = {}
 ): Promise<{ thread: ThreadView; moderation: ThreadModerationState } | null> {
   if (!z.string().uuid().safeParse(id).success) return null
   const db = archiveWriter()
@@ -72,7 +76,7 @@ export async function getThread(
     hidden_reason: string | null
   }
   if (hiddenAt && !includeHidden) return null
-  const [thread] = await withAuthors(db, [row])
+  const [thread] = await withAuthors(db, [row], viewerId)
   if (!thread) return null
   return { thread, moderation: { hiddenAt, hiddenReason } }
 }
@@ -104,12 +108,16 @@ async function authorMaps(db: Db, authorIds: (string | null)[]): Promise<AuthorM
   return { names, linked }
 }
 
-async function withAuthors(db: Db, rows: ThreadRow[]): Promise<ThreadView[]> {
+async function withAuthors(
+  db: Db,
+  rows: ThreadRow[],
+  viewerId: string | null = null
+): Promise<ThreadView[]> {
   const { names, linked } = await authorMaps(
     db,
     rows.map(row => row.author_id)
   )
-  return rows.map(row => toThreadView(row, names, linked))
+  return rows.map(row => toThreadView(row, names, linked, viewerId))
 }
 
 /**

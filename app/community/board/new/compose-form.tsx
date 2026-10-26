@@ -12,16 +12,24 @@ import '../_components/board.css'
 
 const ERROR_KEYS: Record<string, string> = {
   INVALID_THREAD_FIELDS: 'boardErrorFields',
+  THREAD_NOT_FOUND: 'boardEditGone',
   DISPLAY_NAME_REQUIRED: 'boardNeedName',
   RATE_LIMITED: 'boardErrorRate',
 }
 
-/** 새 글 — 평문 제목·본문만. 올리면 그 글로 간다 */
-export function ComposeForm({ hasDisplayName }: { hasDisplayName: boolean }) {
+interface ComposeFormProps {
+  hasDisplayName: boolean
+  /** 내 글 고치기 — 있으면 그 글을 PATCH 하고, 없으면 새 글을 올린다 */
+  editing?: { id: string; title: string; body: string }
+}
+
+/** 새 글·내 글 고치기 — 평문 제목·본문만. 저장하면 그 글로 간다 */
+export function ComposeForm({ hasDisplayName, editing }: ComposeFormProps) {
   const { t } = useLanguage()
   const router = useRouter()
-  const [title, setTitle] = useState('')
-  const [body, setBody] = useState('')
+  const [title, setTitle] = useState(editing?.title ?? '')
+  const [body, setBody] = useState(editing?.body ?? '')
+  const backHref = editing ? `/community/board/${editing.id}` : '/community/board'
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState<string | null>(null)
 
@@ -30,12 +38,15 @@ export function ComposeForm({ hasDisplayName }: { hasDisplayName: boolean }) {
     setBusy(true)
     setFailed(null)
     try {
-      const response = await fetch('/api/community/threads', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, body }),
-      })
+      const response = await fetch(
+        editing ? `/api/community/threads/${editing.id}` : '/api/community/threads',
+        {
+          method: editing ? 'PATCH' : 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, body }),
+        }
+      )
       const payload = (await response.json().catch(() => null)) as {
         code?: string
         data?: { id: string }
@@ -46,6 +57,7 @@ export function ComposeForm({ hasDisplayName }: { hasDisplayName: boolean }) {
         return
       }
       router.push(`/community/board/${payload.data.id}`)
+      if (editing) router.refresh()
     } catch {
       setFailed('boardErrorGeneric')
     } finally {
@@ -57,11 +69,11 @@ export function ComposeForm({ hasDisplayName }: { hasDisplayName: boolean }) {
     <div className='cb'>
       <div className='cb__frame'>
         <section className='cb-thread' aria-labelledby='cb-compose-title'>
-          <Link href='/community/board' className='cb-back'>
-            ← {t('boardBack')}
+          <Link href={backHref} className='cb-back'>
+            ← {t(editing ? 'boardBackToThread' : 'boardBack')}
           </Link>
           <h1 id='cb-compose-title' className='cb-thread__title mb-8'>
-            {t('boardComposeTitle')}
+            {t(editing ? 'boardEditTitle' : 'boardComposeTitle')}
           </h1>
           {!hasDisplayName ? (
             <div className='cb-panel cb-panel--flush'>
@@ -117,10 +129,10 @@ export function ComposeForm({ hasDisplayName }: { hasDisplayName: boolean }) {
               )}
               <div className='cb-form__actions'>
                 <Button type='submit' disabled={busy || !title.trim() || !body.trim()}>
-                  {t(busy ? 'boardSubmitting' : 'boardSubmit')}
+                  {t(busy ? 'boardSubmitting' : editing ? 'boardSave' : 'boardSubmit')}
                 </Button>
                 <Button asChild variant='outline'>
-                  <Link href='/community/board'>{t('boardCancel')}</Link>
+                  <Link href={backHref}>{t('boardCancel')}</Link>
                 </Button>
               </div>
             </form>
