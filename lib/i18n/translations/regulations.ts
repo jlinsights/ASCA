@@ -6,7 +6,6 @@ import type { TranslationData } from '../types'
 // zh 는 사이트 다른 화면처럼 번체(臺灣) 표기.
 export const regulationsTranslations: TranslationData = {
   ko: {
-    regsMenu: '정관 및 규정',
     regsAll: '전체 규정 보기',
     regsEyebrow: '정관 및 규정',
     regsHeroTitle: '정관 및 규정',
@@ -46,7 +45,6 @@ export const regulationsTranslations: TranslationData = {
     regsNameQualifications: '회원·임원 자격 및 요건',
   },
   en: {
-    regsMenu: 'Articles & Bylaws',
     regsAll: 'All regulations',
     regsEyebrow: 'Articles & Bylaws',
     regsHeroTitle: 'Articles of Incorporation & Bylaws',
@@ -87,7 +85,6 @@ export const regulationsTranslations: TranslationData = {
     regsNameQualifications: 'Membership Qualifications',
   },
   ja: {
-    regsMenu: '定款・規程',
     regsAll: '規程一覧',
     regsEyebrow: '定款・規程',
     regsHeroTitle: '定款・規程',
@@ -127,7 +124,6 @@ export const regulationsTranslations: TranslationData = {
     regsNameQualifications: '会員・役員の資格と要件',
   },
   zh: {
-    regsMenu: '章程與規章',
     regsAll: '全部規章',
     regsEyebrow: '章程與規章',
     regsHeroTitle: '章程與規章',

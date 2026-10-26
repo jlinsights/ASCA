@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 
 import { HeaderAuthSection } from './header-auth-section'
 import { HeaderMobileAuth } from './header-mobile-auth'
+import { HeaderSubmenu } from './header-submenu'
 import { ThemeToggle } from '../theme-toggle'
 import { ThemeTransition } from '../theme-transition'
 import { LanguageSelector } from '../language-selector'
@@ -185,37 +186,25 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                     <div
                       role='menu'
                       aria-label={`${t(menu.labelKey)} ${t('siteSubmenu')}`}
-                      className={`absolute top-full left-0 w-48 glass-panel rounded-lg transition-all duration-200 z-50 ${
+                      className={`absolute top-full left-0 w-48 bg-background border border-border shadow-lg rounded-lg transition-all duration-200 z-50 ${
                         activeDropdown === menu.key
                           ? 'opacity-100 visible translate-y-0'
                           : 'opacity-0 invisible -translate-y-2'
                       }`}
+                      // 칸이 나뉜 드롭다운만 넓힌다 — 칸당 13rem
+                      style={
+                        menu.columns?.length
+                          ? { width: `${menu.columns.length * 13}rem` }
+                          : undefined
+                      }
                     >
                       <div className='py-2'>
-                        {menu.items?.map((subItem, index) => {
-                          const isExternalLink = subItem.href.startsWith('http')
-                          return isExternalLink ? (
-                            <a
-                              key={index}
-                              href={subItem.href}
-                              target='_blank'
-                              rel='noopener noreferrer'
-                              role='menuitem'
-                              className='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
-                            >
-                              {t(subItem.labelKey)}
-                            </a>
-                          ) : (
-                            <Link
-                              key={index}
-                              href={subItem.href}
-                              role='menuitem'
-                              className='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
-                            >
-                              {t(subItem.labelKey)}
-                            </Link>
-                          )
-                        })}
+                        <HeaderSubmenu
+                          menu={menu}
+                          t={t}
+                          variant='desktop'
+                          itemClassName='block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
+                        />
                       </div>
                     </div>
                   )}
@@ -312,32 +301,13 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                           : 'max-h-0 opacity-0'
                       }`}
                     >
-                      {menu.items?.map((subItem, index) => {
-                        const isExternalLink = subItem.href.startsWith('http')
-                        return isExternalLink ? (
-                          <a
-                            key={index}
-                            href={subItem.href}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            role='menuitem'
-                            className='block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {t(subItem.labelKey)}
-                          </a>
-                        ) : (
-                          <Link
-                            key={index}
-                            href={subItem.href}
-                            role='menuitem'
-                            className='block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {t(subItem.labelKey)}
-                          </Link>
-                        )
-                      })}
+                      <HeaderSubmenu
+                        menu={menu}
+                        t={t}
+                        variant='mobile'
+                        itemClassName='block text-sm text-muted-foreground py-3 px-3 min-h-[44px] flex items-center hover:bg-foreground/5 hover:text-foreground rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
+                        onSelect={() => setIsMenuOpen(false)}
+                      />
                     </div>
                   )}
                 </div>

@@ -24,18 +24,51 @@ function pageExists(href: string) {
 }
 
 describe('site-menu — 헤더·푸터 메뉴', () => {
-  // 2026-10-25 요청 순서: 협회 소개 · 공모전 · 전시회 · 작가 · 작품 · 소식 · 정관 및 규정 · 회원·후원
+  // 2026-10-25 요청 순서, 2026-10-26 전시·공모와 작가·작품을 각각 한 메뉴로 묶음
   it('헤더 메뉴는 정해진 순서로 놓인다', () => {
     expect(headerMenu.map(group => translations.ko?.[group.labelKey])).toStrictEqual([
-      '협회 소개',
-      '공모전',
-      '전시회',
-      '작가',
-      '작품',
+      '소개',
+      '전시·공모',
+      '작가·작품',
       '소식',
-      '정관 및 규정',
+      '정관·규정',
       '회원·후원',
     ])
+  })
+
+  it('작품은 작가·작품 메뉴 아래 하위 메뉴로 들어간다', () => {
+    const artists = headerMenu.find(group => group.key === 'artists')?.items ?? []
+    expect(artists.map(link => link.href)).toContain('/artworks')
+    expect(headerMenu.some(group => group.href === '/artworks')).toBe(false)
+  })
+
+  it('전시·공모 메뉴는 왼쪽 전시, 오른쪽 공모 두 칸으로 하위 메뉴를 나눈다', () => {
+    const group = headerMenu.find(g => g.key === 'exhibitions')
+    expect(group?.columns?.map(c => translations.ko?.[c.titleKey])).toStrictEqual(['전시', '공모'])
+    const [exhibitions, contests] = group?.columns ?? []
+    expect(exhibitions?.items.map(link => link.href)).toStrictEqual([
+      '/exhibitions/current',
+      '/exhibitions/upcoming',
+      '/exhibitions/past',
+      '/exhibitions/online',
+    ])
+    expect(contests?.items.map(link => link.href)).toStrictEqual([
+      '/contests',
+      '/application',
+      '/application-for-recommended-invited-calligrapher',
+      '/commissioning-application',
+      '/forms',
+      '/profile/applications',
+    ])
+    // 평평한 목록(items)은 두 칸을 순서대로 이은 것 — 모바일·검사가 이걸 쓴다
+    expect(group?.items).toStrictEqual([...(exhibitions?.items ?? []), ...(contests?.items ?? [])])
+    expect(headerMenu.some(g => g.key === 'contests')).toBe(false)
+  })
+
+  it('푸터 제목도 헤더와 같은 소개·정관·규정 라벨을 쓴다', () => {
+    expect(footerMenu.map(s => translations.ko?.[s.titleKey])).toEqual(
+      expect.arrayContaining(['소개', '정관·규정'])
+    )
   })
 
   it('소식 메뉴에서 회원 게시판으로 갈 수 있다', () => {

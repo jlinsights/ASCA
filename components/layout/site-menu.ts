@@ -9,11 +9,20 @@ export interface MenuLink {
   external?: boolean
 }
 
+/** 드롭다운을 여러 칸으로 나눌 때 한 칸 — 제목과 그 아래 링크 */
+export interface MenuColumn {
+  titleKey: string
+  items: MenuLink[]
+}
+
 export interface MenuGroup {
   key: string
   labelKey: string
   href: string
+  /** 평평한 하위 메뉴 목록. columns 가 있으면 칸들을 순서대로 이은 것 */
   items?: MenuLink[]
+  /** 데스크톱 드롭다운을 칸으로 나눠 보일 때 */
+  columns?: MenuColumn[]
 }
 
 const artistsBy = (params: Record<string, string>) =>
@@ -73,21 +82,30 @@ const contestApplications: MenuLink[] = [
   { labelKey: 'siteNavCommissioning', href: '/commissioning-application' },
 ]
 
+const contests: MenuLink[] = [
+  { labelKey: 'siteNavContestsGuide', href: '/contests' },
+  ...contestApplications,
+  { labelKey: 'siteNavForms', href: '/forms' },
+  { labelKey: 'siteContestMine', href: '/profile/applications' },
+]
+
+// 왼쪽 전시, 오른쪽 공모 — 데스크톱 드롭다운은 두 칸, 모바일은 칸 제목 아래로 이어 붙인다
+const exhibitionsAndContests: MenuColumn[] = [
+  { titleKey: 'siteNavColExhibitions', items: exhibitions },
+  { titleKey: 'siteNavColContests', items: contests },
+]
+
 export const headerMenu: MenuGroup[] = [
-  // 순서: 협회 소개 · 공모전 · 전시회 · 작가 · 작품 · 소식 · 정관 및 규정 · 회원·후원 (2026-10-25)
-  { key: 'about', labelKey: 'siteNavAbout', href: '/introductions', items: about },
+  // 순서: 소개 · 전시·공모 · 작가·작품 · 소식 · 정관·규정 · 회원·후원 (2026-10-26)
+  // 소개·정관·규정 라벨은 헤더·푸터 제목·규정 페이지 경로 표시가 같은 키를 쓴다 (2026-10-26)
+  { key: 'about', labelKey: 'siteNavAboutShort', href: '/introductions', items: about },
   {
-    key: 'contests',
-    labelKey: 'siteNavContests',
-    href: '/contests',
-    items: [
-      { labelKey: 'siteNavContestsGuide', href: '/contests' },
-      ...contestApplications,
-      { labelKey: 'siteNavForms', href: '/forms' },
-      { labelKey: 'siteContestMine', href: '/profile/applications' },
-    ],
+    key: 'exhibitions',
+    labelKey: 'siteNavExhibitionsContests',
+    href: '/exhibitions',
+    columns: exhibitionsAndContests,
+    items: exhibitionsAndContests.flatMap(column => column.items),
   },
-  { key: 'exhibitions', labelKey: 'siteNavExhibitions', href: '/exhibitions', items: exhibitions },
   {
     key: 'artists',
     labelKey: 'siteNavArtists',
@@ -97,15 +115,15 @@ export const headerMenu: MenuGroup[] = [
       { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
       { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
       ...artistGrades,
+      // 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
+      { labelKey: 'siteNavArtworks', href: '/artworks' },
     ],
   },
-  // 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
-  { key: 'artworks', labelKey: 'siteNavArtworks', href: '/artworks' },
   // 공지사항·행사는 옛 CMS 데이터가 없어 비어 있다 — 메뉴 머리는 사진이 있는 갤러리로 보낸다
   { key: 'news', labelKey: 'siteFtNews', href: '/gallery', items: news },
   {
     key: 'regulations',
-    labelKey: 'regsMenu',
+    labelKey: 'siteNavRegulations',
     href: REGULATIONS_BASE_PATH,
     items: [{ labelKey: 'regsAll', href: REGULATIONS_BASE_PATH }, ...regulations],
   },
@@ -113,7 +131,7 @@ export const headerMenu: MenuGroup[] = [
 ]
 
 export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
-  { titleKey: 'siteNavAbout', items: about },
+  { titleKey: 'siteNavAboutShort', items: about },
   {
     titleKey: 'siteFtSecArtists',
     items: [
@@ -134,7 +152,7 @@ export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
       { labelKey: 'siteNavArtworks', href: '/artworks' },
     ],
   },
-  { titleKey: 'regsMenu', items: regulations },
+  { titleKey: 'siteNavRegulations', items: regulations },
   {
     titleKey: 'siteFtSecJoin',
     items: [
