@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Card, CardContent } from '@/components/ui/card'
-import { FileDown } from 'lucide-react'
+import { useState } from 'react'
+import * as TabsPrimitive from '@radix-ui/react-tabs'
+import { ArrowDownToLine } from 'lucide-react'
+import { AboutChapter } from '@/components/about/about-layout'
 import { useLanguage } from '@/contexts/language-context'
 import { SUPPORTED_LANGUAGES, isValidLanguage } from '@/lib/i18n'
 import type { Language } from '@/lib/i18n/types'
@@ -14,7 +14,7 @@ const BROCHURE_KO =
 const BROCHURE_MULTI =
   'https://pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev/소개자료/동양서예협회%20소개_한국어%20영어%20중국어%20일본어_PDF.pdf'
 
-// 탭 제목은 그 탭의 언어로 쓴다(사이트 언어와 무관하게 '理事長あいさつ' 탭은 일본어 제목)
+// 장 제목은 펼친 탭의 언어로 쓴다(사이트 언어와 무관하게 '日本語' 탭이면 '理事長あいさつ')
 const HEADINGS: Record<Language, string> = {
   ko: '이사장 인사말',
   en: 'Message from the Chairman',
@@ -22,72 +22,79 @@ const HEADINGS: Record<Language, string> = {
   zh: '理事長致辭',
 }
 
+/** 인사말 본문 — 마지막 문단(서명)은 오른쪽 아래로 뗀다 */
+function Letter({ lang }: { lang: Language }) {
+  const message = chairmanMessages[lang]
+  const paragraphs = message.body.split('\n\n')
+  const signature = paragraphs.at(-1)
+  return (
+    <article className='ab-letter' lang={lang}>
+      {paragraphs.slice(0, -1).map((paragraph, index) => (
+        <p key={index}>{paragraph}</p>
+      ))}
+      <p className='ab-letter__sign'>{signature}</p>
+      {message.translationNote && <p className='ab-letter__note'>{message.translationNote}</p>}
+    </article>
+  )
+}
+
 export function IntroductionsTabs() {
   const { language, t } = useLanguage()
   // 사이트 언어를 바꾸면 그 언어의 인사말 탭으로 따라간다. 사용자가 탭을 직접 고를 수도 있다.
-  const [tab, setTab] = useState<Language>(language)
-  useEffect(() => setTab(language), [language])
+  // 고른 탭은 그때의 사이트 언어와 함께 적어 두고, 사이트 언어가 바뀌면 버린다 — 같은 그림에서 제목과 탭이 함께 바뀐다
+  const [picked, setPicked] = useState<{ site: Language; tab: Language } | null>(null)
+  const tab = picked?.site === language ? picked.tab : language
+  const setTab = (value: Language) => setPicked({ site: language, tab: value })
 
   return (
-    <div className='space-y-10'>
-      <Tabs
-        value={tab}
-        onValueChange={value => isValidLanguage(value) && setTab(value)}
-        className='w-full'
-      >
-        <TabsList className='mb-8'>
+    <>
+      <AboutChapter id='message' tc='致辭' eyebrow='Message' title={HEADINGS[tab]} titleLang={tab}>
+        <TabsPrimitive.Root
+          value={tab}
+          onValueChange={value => isValidLanguage(value) && setTab(value)}
+        >
+          <TabsPrimitive.List className='ab-langs'>
+            {SUPPORTED_LANGUAGES.map(lang => (
+              <TabsPrimitive.Trigger key={lang} value={lang} lang={lang} className='ab-lang'>
+                {chairmanMessages[lang].tabLabel}
+              </TabsPrimitive.Trigger>
+            ))}
+          </TabsPrimitive.List>
           {SUPPORTED_LANGUAGES.map(lang => (
-            <TabsTrigger key={lang} value={lang} lang={lang}>
-              {chairmanMessages[lang].tabLabel}
-            </TabsTrigger>
+            <TabsPrimitive.Content key={lang} value={lang}>
+              <Letter lang={lang} />
+            </TabsPrimitive.Content>
           ))}
-        </TabsList>
+        </TabsPrimitive.Root>
+      </AboutChapter>
 
-        {SUPPORTED_LANGUAGES.map(lang => {
-          const message = chairmanMessages[lang]
-          return (
-            <TabsContent key={lang} value={lang} lang={lang}>
-              <article className='prose prose-lg dark:prose-invert max-w-none'>
-                <h2 className='text-2xl font-bold mb-6'>{HEADINGS[lang]}</h2>
-                {message.body.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className='leading-relaxed text-foreground/90'>
-                    {paragraph}
-                  </p>
-                ))}
-                {message.translationNote && (
-                  <p className='text-sm text-muted-foreground'>{message.translationNote}</p>
-                )}
-              </article>
-            </TabsContent>
-          )
-        })}
-      </Tabs>
-
-      <Card>
-        <CardContent className='pt-6'>
-          <h3 className='text-lg font-semibold mb-4'>{t('introDownloadTitle')}</h3>
-          <div className='flex flex-col sm:flex-row gap-4'>
-            <a
-              href={BROCHURE_KO}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center gap-2 rounded-md bg-scholar-red px-4 py-2.5 text-sm font-medium text-white hover:bg-scholar-red/90 transition-colors'
-            >
-              <FileDown className='h-4 w-4' />
-              {t('introBrochureKo')}
-            </a>
-            <a
-              href={BROCHURE_MULTI}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center gap-2 rounded-md border border-scholar-red px-4 py-2.5 text-sm font-medium text-scholar-red hover:bg-scholar-red/10 transition-colors'
-            >
-              <FileDown className='h-4 w-4' />
-              {t('introBrochureMulti')}
-            </a>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+      <AboutChapter
+        id='brochures'
+        tone='navy'
+        tc='資料'
+        eyebrow='Brochure'
+        title={t('introDownloadTitle')}
+      >
+        <ul className='ab-links'>
+          {[
+            { href: BROCHURE_KO, label: t('introBrochureKo') },
+            { href: BROCHURE_MULTI, label: t('introBrochureMulti') },
+          ].map(item => (
+            <li key={item.href}>
+              <a
+                href={item.href}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ab-link'
+                data-reveal
+              >
+                {item.label}
+                <ArrowDownToLine aria-hidden='true' className='ab-link__arrow' />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </AboutChapter>
+    </>
   )
 }

@@ -1,7 +1,9 @@
 'use client'
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState } from 'react'
+import { AboutChapter, AboutHero, AboutRows } from '@/components/about/about-layout'
+import { AboutNav } from '@/components/about/about-nav'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 interface ValueItem {
   title: string
@@ -101,85 +103,74 @@ const englishContent = {
   ] as ObjectiveItem[],
 }
 
-function ValuesGrid({ values }: { values: ValueItem[] }) {
-  return (
-    <div className='grid gap-6 md:grid-cols-3'>
-      {values.map(value => (
-        <Card key={value.title}>
-          <CardHeader>
-            <CardTitle className='text-lg'>{value.title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className='text-sm text-muted-foreground leading-relaxed'>{value.description}</p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  )
+const CONTENT = { ko: koreanContent, en: englishContent } as const
+type MissionLang = keyof typeof CONTENT
+
+const LABELS: Record<MissionLang, { statement: string; values: string; objectives: string }> = {
+  ko: { statement: '사명 선언', values: '핵심 가치', objectives: '주요 목표' },
+  en: { statement: 'Mission Statement', values: 'Core Values', objectives: 'Key Objectives' },
 }
 
-function ObjectivesGrid({ objectives }: { objectives: ObjectiveItem[] }) {
-  return (
-    <div className='grid gap-6 sm:grid-cols-2'>
-      {objectives.map(objective => (
-        <Card key={objective.title}>
-          <CardHeader>
-            <CardTitle className='text-lg'>{objective.title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className='text-sm text-muted-foreground leading-relaxed'>{objective.description}</p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  )
-}
+const toRows = (items: ValueItem[] | ObjectiveItem[]) =>
+  items.map(item => ({ label: item.title, body: <p>{item.description}</p> }))
 
+/** 사명 페이지 본문 — 머리의 한국어/English 단추가 세 장 모두의 언어를 바꾼다 */
 export function MissionTabs() {
+  const [lang, setLang] = useState<MissionLang>('ko')
+  const content = CONTENT[lang]
+  const labels = LABELS[lang]
+
   return (
-    <Tabs defaultValue='ko' className='w-full'>
-      <TabsList className='mb-8'>
-        <TabsTrigger value='ko'>한국어</TabsTrigger>
-        <TabsTrigger value='en'>English</TabsTrigger>
-      </TabsList>
+    <>
+      <AboutHero
+        tc={PAGE_HERO_MARKS.mission.tc}
+        title='사명'
+        lede='동양서예협회의 사명과 핵심 가치를 소개합니다'
+        actions={
+          <div className='ab-langs' role='group' aria-label='본문 언어'>
+            {(['ko', 'en'] as const).map(code => (
+              <button
+                key={code}
+                type='button'
+                className='ab-lang'
+                aria-pressed={lang === code}
+                onClick={() => setLang(code)}
+              >
+                {code === 'ko' ? '한국어' : 'English'}
+              </button>
+            ))}
+          </div>
+        }
+      >
+        <p>&ldquo;통합과 혁신 · 전통과 창조 · 포용과 소통&rdquo;</p>
+      </AboutHero>
+      <AboutNav />
 
-      <TabsContent value='ko' className='space-y-12'>
-        <section>
-          <h2 className='text-2xl font-bold mb-4'>사명 선언</h2>
-          <p className='text-lg leading-relaxed text-foreground/90'>
-            {koreanContent.missionStatement}
+      <div lang={lang}>
+        <AboutChapter
+          id='statement'
+          tone='navy'
+          tc='宣言'
+          eyebrow='Mission'
+          title={labels.statement}
+        >
+          <p className='ab-quote' data-reveal>
+            {content.missionStatement}
           </p>
-        </section>
-
-        <section>
-          <h2 className='text-2xl font-bold mb-6'>핵심 가치</h2>
-          <ValuesGrid values={koreanContent.coreValues} />
-        </section>
-
-        <section>
-          <h2 className='text-2xl font-bold mb-6'>주요 목표</h2>
-          <ObjectivesGrid objectives={koreanContent.objectives} />
-        </section>
-      </TabsContent>
-
-      <TabsContent value='en' className='space-y-12'>
-        <section>
-          <h2 className='text-2xl font-bold mb-4'>Mission Statement</h2>
-          <p className='text-lg leading-relaxed text-foreground/90'>
-            {englishContent.missionStatement}
-          </p>
-        </section>
-
-        <section>
-          <h2 className='text-2xl font-bold mb-6'>Core Values</h2>
-          <ValuesGrid values={englishContent.coreValues} />
-        </section>
-
-        <section>
-          <h2 className='text-2xl font-bold mb-6'>Key Objectives</h2>
-          <ObjectivesGrid objectives={englishContent.objectives} />
-        </section>
-      </TabsContent>
-    </Tabs>
+        </AboutChapter>
+        <AboutChapter id='values' tc='價値' eyebrow='Values' title={labels.values}>
+          <AboutRows numbered items={toRows(content.coreValues)} />
+        </AboutChapter>
+        <AboutChapter
+          id='objectives'
+          tone='gold'
+          tc='目標'
+          eyebrow='Objectives'
+          title={labels.objectives}
+        >
+          <AboutRows numbered items={toRows(content.objectives)} />
+        </AboutChapter>
+      </div>
+    </>
   )
 }
