@@ -22,6 +22,10 @@ interface BoardViewProps {
   view?: BoardTab
   /** 다듬어진 검색어 — 있으면 결과 줄과 지우기 링크를 보인다 */
   search?: string | null
+  /** 더 오래된 글 쪽 주소 — 남은 글이 없으면 null */
+  olderHref?: string | null
+  /** 첫 쪽(최신 글) 주소 — 이미 첫 쪽이면 null */
+  newestHref?: string | null
 }
 
 /** 게시판 목록 — 왼쪽 행동 단, 오른쪽 쪽지 격자. 첫 칸은 점선 "새 글" 자리 */
@@ -31,6 +35,8 @@ export function BoardView({
   signedIn,
   view = 'all',
   search = null,
+  olderHref = null,
+  newestHref = null,
 }: BoardViewProps) {
   const { t } = useLanguage()
   const composeHref = signedIn ? COMPOSE_PATH : SIGN_IN_TO_COMPOSE
@@ -82,7 +88,7 @@ export function BoardView({
                   <span>{composeLabel}</span>
                   {threads.length === 0 && (
                     <span className='cb-compose__hint'>
-                      {t(search ? 'boardSearchEmpty' : mine ? 'boardMyEmpty' : 'boardEmpty')}
+                      {t(emptyKey({ search, mine, paged: Boolean(newestHref) }))}
                     </span>
                   )}
                 </Link>
@@ -93,10 +99,52 @@ export function BoardView({
                 </li>
               ))}
             </ul>
+            <BoardPager olderHref={olderHref} newestHref={newestHref} />
           </section>
         </div>
       </div>
     </div>
+  )
+}
+
+/** 빈 목록 안내 — 넘긴 쪽이 비었으면(표지가 낡았을 때) "더 오래된 글 없음" */
+function emptyKey({
+  search,
+  mine,
+  paged,
+}: {
+  search: string | null
+  mine: boolean
+  paged: boolean
+}) {
+  if (paged) return 'boardPageEnd'
+  if (search) return 'boardSearchEmpty'
+  return mine ? 'boardMyEmpty' : 'boardEmpty'
+}
+
+/** 쪽 넘기기 — 평범한 링크라 스크립트 없이 되고, 주소로 남아 뒤로 가기가 그대로 통한다 */
+function BoardPager({
+  olderHref,
+  newestHref,
+}: {
+  olderHref: string | null
+  newestHref: string | null
+}) {
+  const { t } = useLanguage()
+  if (!olderHref && !newestHref) return null
+  return (
+    <nav className='cb-pager' aria-label={t('boardPagerLabel')}>
+      {newestHref && (
+        <Link href={newestHref} className='cb-pager__link'>
+          <span aria-hidden='true'>←</span> {t('boardPageNewest')}
+        </Link>
+      )}
+      {olderHref && (
+        <Link href={olderHref} rel='next' className='cb-pager__link cb-pager__link--older'>
+          {t('boardPageOlder')} <span aria-hidden='true'>→</span>
+        </Link>
+      )}
+    </nav>
   )
 }
 

@@ -8,6 +8,7 @@ import {
   type CommentView,
   type ReactionState,
 } from './comments'
+import { beforeFilter, encodeCursor, type Cursor } from './paging'
 import { searchFilter } from './search'
 import {
   FEED_LIMIT,
@@ -28,32 +29,80 @@ import {
 
 type Db = ReturnType<typeof archiveWriter>
 
-export interface ThreadFeed {
-  threads: ThreadView[]
+export interface ThreadFeed<T extends ThreadView = ThreadView> {
+  threads: T[]
+  /** 이 쪽만이 아니라 조건(검색·탭)에 맞는 글 전체 수 */
   total: number
+  /** 더 오래된 글이 남아 있으면 다음 쪽 표지, 없으면 null */
+  nextCursor: string | null
 }
 
 export interface ListOptions {
   limit?: number
   /** normalizeSearch 를 거친 검색어 — 제목·본문 부분 일치 */
   search?: string | null
+  /** decodeCursor 를 거친 표지 — 이 글보다 오래된 글부터 */
+  before?: Cursor | null
+}
+
+/** readPage 가 쓰는 만큼만 적은 질의 모양 — supabase 빌더의 제네릭을 그대로 넘기면 타입이 갈라진다 */
+interface PageQuery
+  extends PromiseLike<{ data: unknown; error: Error | null; count: number | null }> {
+  or(filter: string): PageQuery
+  order(column: string, options: { ascending: boolean }): PageQuery
+  limit(count: number): PageQuery
+}
+
+/**
+ * 공통 쪽 조건 — 최신순(같은 시각이면 ID 역순)으로 한 편 더 읽어 다음 쪽이 있는지 안다.
+ * total 은 쪽 조건 없이 따로 센다(쪽을 넘겨도 "글 n편"이 바뀌지 않게).
+ */
+async function readPage<R extends { id: string; created_at: string }>(
+  build: () => PageQuery,
+  { limit, search, before }: Required<ListOptions>
+): Promise<{ rows: R[]; total: number; nextCursor: string | null }> {
+  let pageQuery = build()
+  let countQuery = build()
+  if (search) {
+    pageQuery = pageQuery.or(searchFilter(search))
+    countQuery = countQuery.or(searchFilter(search))
+  }
+  if (before) pageQuery = pageQuery.or(beforeFilter(before))
+  const [page, counted] = await Promise.all([
+    pageQuery
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .limit(limit + 1),
+    before ? countQuery.limit(1) : Promise.resolve(null),
+  ])
+  if (page.error) throw page.error
+  if (counted?.error) throw counted.error
+  const fetched = (page.data ?? []) as unknown as R[]
+  const rows = fetched.slice(0, limit)
+  const last = rows[rows.length - 1]
+  return {
+    rows,
+    total: (counted ? counted.count : page.count) ?? rows.length,
+    nextCursor: fetched.length > limit && last ? encodeCursor(last) : null,
+  }
 }
 
 export async function listThreads({
   limit = FEED_LIMIT,
   search = null,
+  before = null,
 }: ListOptions = {}): Promise<ThreadFeed> {
   const db = archiveWriter()
-  let query = db
-    .from('community_threads')
-    .select(THREAD_COLUMNS, { count: 'exact' })
-    .is('hidden_at', null)
-    .is('deleted_at', null)
-  if (search) query = query.or(searchFilter(search))
-  const { data, error, count } = await query.order('created_at', { ascending: false }).limit(limit)
-  if (error) throw error
-  const rows = (data ?? []) as ThreadRow[]
-  return { threads: await withAuthors(db, rows), total: count ?? rows.length }
+  const { rows, total, nextCursor } = await readPage<ThreadRow>(
+    () =>
+      db
+        .from('community_threads')
+        .select(THREAD_COLUMNS, { count: 'exact' })
+        .is('hidden_at', null)
+        .is('deleted_at', null),
+    { limit, search, before }
+  )
+  return { threads: await withAuthors(db, rows), total, nextCursor }
 }
 
 /** 내 글 목록에서는 사무국이 숨긴 글도 보이되, 숨김 표시를 단다 */
@@ -67,18 +116,18 @@ export interface MyThreadView extends ThreadView {
  */
 export async function listMyThreads(
   viewerId: string,
-  { limit = FEED_LIMIT, search = null }: ListOptions = {}
-): Promise<{ threads: MyThreadView[]; total: number }> {
+  { limit = FEED_LIMIT, search = null, before = null }: ListOptions = {}
+): Promise<ThreadFeed<MyThreadView>> {
   const db = archiveWriter()
-  let query = db
-    .from('community_threads')
-    .select(`${THREAD_COLUMNS},hidden_at`, { count: 'exact' })
-    .eq('author_id', viewerId)
-    .is('deleted_at', null)
-  if (search) query = query.or(searchFilter(search))
-  const { data, error, count } = await query.order('created_at', { ascending: false }).limit(limit)
-  if (error) throw error
-  const rows = (data ?? []) as (ThreadRow & { hidden_at: string | null })[]
+  const { rows, total, nextCursor } = await readPage<ThreadRow & { hidden_at: string | null }>(
+    () =>
+      db
+        .from('community_threads')
+        .select(`${THREAD_COLUMNS},hidden_at`, { count: 'exact' })
+        .eq('author_id', viewerId)
+        .is('deleted_at', null),
+    { limit, search, before }
+  )
   const views = await withAuthors(
     db,
     rows.map(({ hidden_at: _hidden, ...row }) => row),
@@ -86,7 +135,8 @@ export async function listMyThreads(
   )
   return {
     threads: views.map((view, index) => ({ ...view, hidden: Boolean(rows[index]?.hidden_at) })),
-    total: count ?? rows.length,
+    total,
+    nextCursor,
   }
 }
 

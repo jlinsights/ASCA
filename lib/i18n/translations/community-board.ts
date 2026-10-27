@@ -78,6 +78,10 @@ export const communityBoardTranslations: TranslationData = {
     boardSearchResults: '“{q}” 검색 결과 {n}편',
     boardSearchClear: '검색 지우기',
     boardSearchEmpty: '찾는 글이 없습니다.',
+    boardPagerLabel: '게시판 쪽 넘기기',
+    boardPageOlder: '이전 글 더 보기',
+    boardPageNewest: '최신 글로',
+    boardPageEnd: '더 오래된 글이 없습니다.',
   },
   en: {
     boardEyebrow: 'Member community',
@@ -157,6 +161,10 @@ export const communityBoardTranslations: TranslationData = {
     boardSearchResults: '{n} results for “{q}”',
     boardSearchClear: 'Clear search',
     boardSearchEmpty: 'No threads match your search.',
+    boardPagerLabel: 'Board pages',
+    boardPageOlder: 'Older threads',
+    boardPageNewest: 'Back to newest',
+    boardPageEnd: 'There are no older threads.',
   },
   ja: {
     boardEyebrow: '会員コミュニティ',
@@ -234,6 +242,10 @@ export const communityBoardTranslations: TranslationData = {
     boardSearchResults: '「{q}」の検索結果 {n}件',
     boardSearchClear: '検索をクリア',
     boardSearchEmpty: '該当する投稿はありません。',
+    boardPagerLabel: '掲示板のページ',
+    boardPageOlder: '以前の投稿を見る',
+    boardPageNewest: '最新の投稿へ',
+    boardPageEnd: 'これより古い投稿はありません。',
   },
   zh: {
     boardEyebrow: '會員交流',
@@ -311,5 +323,9 @@ export const communityBoardTranslations: TranslationData = {
     boardSearchResults: '「{q}」的搜尋結果 {n} 篇',
     boardSearchClear: '清除搜尋',
     boardSearchEmpty: '找不到符合的文章。',
+    boardPagerLabel: '留言板分頁',
+    boardPageOlder: '查看較早的文章',
+    boardPageNewest: '回到最新文章',
+    boardPageEnd: '沒有更早的文章。',
   },
 }

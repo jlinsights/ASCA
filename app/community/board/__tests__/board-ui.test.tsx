@@ -144,6 +144,44 @@ describe('BoardView', () => {
     expect(within(hidden!).getByRole('heading', { name: '숨겨진 글' })).toBeInTheDocument()
     expect(within(hidden!).queryByRole('link', { name: '숨겨진 글' })).toBeNull()
   })
+
+  it('shows no pager when everything fits on the first page', () => {
+    render(<BoardView threads={[thread()]} total={1} signedIn={false} />)
+    expect(screen.queryByRole('navigation', { name: 'boardPagerLabel' })).toBeNull()
+  })
+
+  it('links to older threads and back to the newest', () => {
+    render(
+      <BoardView
+        threads={[thread()]}
+        total={130}
+        signedIn={false}
+        olderHref='/community/board?before=b2'
+        newestHref='/community/board'
+      />
+    )
+    const pager = screen.getByRole('navigation', { name: 'boardPagerLabel' })
+    expect(within(pager).getByRole('link', { name: /boardPageOlder/ })).toHaveAttribute(
+      'href',
+      '/community/board?before=b2'
+    )
+    expect(within(pager).getByRole('link', { name: /boardPageOlder/ })).toHaveAttribute(
+      'rel',
+      'next'
+    )
+    expect(within(pager).getByRole('link', { name: /boardPageNewest/ })).toHaveAttribute(
+      'href',
+      '/community/board'
+    )
+    // 쪽을 넘겨도 "글 n편"은 전체 수
+    expect(screen.getByText('boardCount')).toBeInTheDocument()
+  })
+
+  it('says there is nothing older when a later page comes back empty', () => {
+    render(<BoardView threads={[]} total={3} signedIn={false} newestHref='/community/board' />)
+    expect(screen.getByText('boardPageEnd')).toBeInTheDocument()
+    expect(screen.queryByText('boardEmpty')).toBeNull()
+  })
 })
 
 const responses = {
