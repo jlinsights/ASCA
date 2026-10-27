@@ -71,7 +71,7 @@ describe('sweepExpiredPendingImages', () => {
       'in(["id",["a","b"]])',
       'is(["thread_id",null])',
       `lt(["created_at","${CUTOFF}"])`,
-      'select(["id, uploader_id, storage_path, width, height, byte_size, created_at"])',
+      'select(["id, storage_path, width, height, byte_size, created_at"])',
     ])
     expect(db.storage.from).toHaveBeenCalledWith('community-images')
     expect(remove).toHaveBeenCalledWith(['a.webp'])
@@ -83,10 +83,10 @@ describe('sweepExpiredPendingImages', () => {
     expect(remove).not.toHaveBeenCalled()
   })
 
+  // 올린 사람(uploader_id)은 되살리지 않는다 — 그 사이 탈퇴했으면 외래 키에 걸려 묶음 전체가 실패한다
   it('puts the rows back when the files cannot be removed, so the next sweep retries them', async () => {
     const row = {
       id: 'a',
-      uploader_id: 'u',
       storage_path: 'a.webp',
       width: 10,
       height: 10,

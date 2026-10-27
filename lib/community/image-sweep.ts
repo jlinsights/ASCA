@@ -13,8 +13,12 @@ export const SWEEP_BATCH = 20
 
 type Writer = ReturnType<typeof archiveWriter>
 
-/** 지운 행을 되살릴 수 있도록 돌려받는 열 — 미첨부 행이라 thread_id·position 은 비어 있다 */
-const SWEPT_COLUMNS = 'id, uploader_id, storage_path, width, height, byte_size, created_at'
+/**
+ * 지운 행을 되살릴 수 있도록 돌려받는 열 — 미첨부 행이라 thread_id·position 은 비어 있다.
+ * uploader_id 는 받지 않는다: 그 사이 탈퇴한 계정이면 외래 키에 걸려 같은 묶음 전체가 복원되지
+ * 못한다. 어차피 다음 청소에 지워질 행이라 올린 사람은 필요 없다.
+ */
+const SWEPT_COLUMNS = 'id, storage_path, width, height, byte_size, created_at'
 
 /**
  * 대기 시간(24시간)이 지난 미첨부 사진을 오래된 순으로 지운다. 지운 장수를 돌려준다.
