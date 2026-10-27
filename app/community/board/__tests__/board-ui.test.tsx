@@ -3,9 +3,16 @@ import { BoardView, COMPOSE_PATH, MINE_PATH, SIGN_IN_TO_COMPOSE } from '../_comp
 import { ComposeForm } from '../new/compose-form'
 import { ThreadDetail } from '../[id]/thread-detail'
 import type { ThreadView } from '@/lib/community/threads'
+import { PhotoUploadError, shrinkPhoto, uploadPhoto } from '@/lib/community/photo-upload'
 
 jest.mock('@/contexts/language-context', () => ({
   useLanguage: () => ({ t: (key: string) => key, language: 'ko' }),
+}))
+
+jest.mock('@/lib/community/photo-upload', () => ({
+  ...jest.requireActual('@/lib/community/photo-upload'),
+  shrinkPhoto: jest.fn(),
+  uploadPhoto: jest.fn(),
 }))
 
 const push = jest.fn()
@@ -191,6 +198,34 @@ const responses = {
 }
 
 describe('ThreadDetail', () => {
+  it('shows photos at their stored size through the checked image route', () => {
+    render(
+      <ThreadDetail
+        {...responses}
+        thread={thread({
+          images: [
+            { id: 'i1', width: 1600, height: 1200 },
+            { id: 'i2', width: 900, height: 1200 },
+          ],
+        })}
+        moderation={null}
+      />
+    )
+    const gallery = screen.getByRole('list', { name: 'boardPhotos' })
+    const images = within(gallery).getAllByRole('img')
+    expect(images).toHaveLength(2)
+    expect(images[0]).toHaveAttribute('src', '/api/community/images/i1')
+    expect(images[0]).toHaveAttribute('width', '1600')
+    expect(images[0]).toHaveAttribute('height', '1200')
+    expect(images[0]).toHaveAttribute('alt', '전시 소식 — boardPhotoN')
+    expect(images[1]).toHaveAttribute('loading', 'lazy')
+  })
+
+  it('draws no gallery for a thread without photos', () => {
+    render(<ThreadDetail {...responses} thread={thread()} moderation={null} />)
+    expect(screen.queryByRole('list', { name: 'boardPhotos' })).toBeNull()
+  })
+
   it('renders the body as text with safe outbound links', () => {
     render(
       <ThreadDetail
@@ -298,7 +333,11 @@ describe('ComposeForm', () => {
     fill()
     fireEvent.click(screen.getByRole('button', { name: 'boardSubmit' }))
     await waitFor(() => expect(push).toHaveBeenCalledWith('/community/board/new1'))
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ title: '제목', body: '본문' })
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({
+      title: '제목',
+      body: '본문',
+      imageIds: [],
+    })
   })
 
   it('explains rate limits and other failures', async () => {
@@ -344,5 +383,130 @@ describe('ComposeForm', () => {
     expect(screen.getByText('boardNeedName')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'boardGoProfile' })).toHaveAttribute('href', '/profile')
     expect(screen.queryByRole('textbox')).toBeNull()
+  })
+})
+
+describe('ComposeForm — photos', () => {
+  const shrink = jest.mocked(shrinkPhoto)
+  const upload = jest.mocked(uploadPhoto)
+  let counter = 0
+
+  beforeEach(() => {
+    counter = 0
+    shrink.mockReset().mockImplementation(async file => file)
+    upload.mockReset().mockImplementation(async () => {
+      counter += 1
+      return { id: `img${counter}`, width: 800, height: 600 }
+    })
+    URL.createObjectURL = jest.fn(() => `blob:preview-${Math.random()}`)
+    URL.revokeObjectURL = jest.fn()
+  })
+
+  const fill = () => {
+    fireEvent.change(screen.getByLabelText(/boardFieldTitle/), { target: { value: '제목' } })
+    fireEvent.change(screen.getByLabelText(/boardFieldBody/), { target: { value: '본문' } })
+  }
+  const photo = (name: string) => new File(['x'], name, { type: 'image/jpeg' })
+  const choose = (...files: File[]) =>
+    fireEvent.change(screen.getByLabelText('boardPhotoAdd'), { target: { files } })
+
+  it('uploads chosen photos in order and posts their IDs with the thread', async () => {
+    fetchMock.mockResolvedValueOnce(json({ data: { id: 'new1' } }, 201))
+    render(<ComposeForm hasDisplayName />)
+    fill()
+    choose(photo('a.jpg'), photo('b.jpg'))
+    await waitFor(() => expect(screen.getAllByRole('img')).toHaveLength(2))
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'boardSubmit' })).not.toBeDisabled()
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'boardSubmit' }))
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/community/board/new1'))
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).imageIds).toEqual(['img1', 'img2'])
+  })
+
+  it('keeps the post button off while a photo is still uploading', async () => {
+    let finish: (value: { id: string; width: number; height: number }) => void = () => {}
+    upload.mockImplementationOnce(() => new Promise(resolve => (finish = resolve)))
+    render(<ComposeForm hasDisplayName />)
+    fill()
+    choose(photo('a.jpg'))
+    expect(await screen.findByText('boardPhotoUploading')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'boardSubmit' })).toBeDisabled()
+    // 올리는 중에는 더 고르지 못한다(4장 한도 계산이 어긋나지 않게)
+    expect(screen.getByLabelText('boardPhotoAdd')).toBeDisabled()
+    finish({ id: 'img9', width: 1, height: 1 })
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'boardSubmit' })).not.toBeDisabled()
+    )
+    expect(screen.getByLabelText('boardPhotoAdd')).not.toBeDisabled()
+  })
+
+  it('keeps the post button and picker off while a photo is still being shrunk', async () => {
+    // 줄이는 동안에는 아직 미리보기 칸이 없다 — 그래도 올리기·추가 선택을 막아야
+    // 사진이 빠진 채 글이 올라가거나 4장을 넘기지 않는다
+    let shrunk: (file: Blob) => void = () => {}
+    shrink.mockImplementationOnce(() => new Promise(resolve => (shrunk = resolve)))
+    render(<ComposeForm hasDisplayName />)
+    fill()
+    choose(photo('big.jpg'))
+    await waitFor(() => expect(shrink).toHaveBeenCalledTimes(1))
+    expect(screen.queryAllByRole('img')).toHaveLength(0)
+    expect(screen.getByRole('button', { name: 'boardSubmit' })).toBeDisabled()
+    expect(screen.getByLabelText('boardPhotoAdd')).toBeDisabled()
+    shrunk(photo('big.jpg'))
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'boardSubmit' })).not.toBeDisabled()
+    )
+    expect(screen.getByLabelText('boardPhotoAdd')).not.toBeDisabled()
+  })
+
+  it('takes four photos at most and says so', async () => {
+    render(<ComposeForm hasDisplayName />)
+    choose(photo('1'), photo('2'), photo('3'), photo('4'), photo('5'))
+    expect(await screen.findByRole('alert')).toHaveTextContent('boardPhotoErrorLimit')
+    await waitFor(() => expect(upload).toHaveBeenCalledTimes(4))
+    await waitFor(() => expect(screen.queryByLabelText('boardPhotoAdd')).toBeNull())
+  })
+
+  it('drops a photo that fails and explains why', async () => {
+    shrink.mockRejectedValueOnce(new PhotoUploadError('unreadable'))
+    render(<ComposeForm hasDisplayName />)
+    choose(photo('heic.heic'))
+    expect(await screen.findByRole('alert')).toHaveTextContent('boardPhotoErrorUnreadable')
+    expect(screen.queryAllByRole('img')).toHaveLength(0)
+    expect(upload).not.toHaveBeenCalled()
+  })
+
+  it('removes a photo before posting, so it is not attached', async () => {
+    fetchMock.mockResolvedValueOnce(json({ data: { id: 'new1' } }, 201))
+    render(<ComposeForm hasDisplayName />)
+    fill()
+    choose(photo('a.jpg'), photo('b.jpg'))
+    await waitFor(() =>
+      expect(screen.getAllByRole('button', { name: 'boardPhotoRemove' })[0]).not.toBeDisabled()
+    )
+    await waitFor(() => expect(upload).toHaveBeenCalledTimes(2))
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'boardSubmit' })).not.toBeDisabled()
+    )
+    fireEvent.click(screen.getAllByRole('button', { name: 'boardPhotoRemove' })[0]!)
+    expect(screen.getAllByRole('img')).toHaveLength(1)
+    expect(URL.revokeObjectURL).toHaveBeenCalled()
+    fireEvent.click(screen.getByRole('button', { name: 'boardSubmit' }))
+    await waitFor(() => expect(push).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).imageIds).toEqual(['img2'])
+  })
+
+  it('explains photos the server can no longer attach', async () => {
+    fetchMock.mockResolvedValueOnce(json({ code: 'IMAGES_UNAVAILABLE' }, 409))
+    render(<ComposeForm hasDisplayName />)
+    fill()
+    fireEvent.click(screen.getByRole('button', { name: 'boardSubmit' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('boardPhotoErrorStale')
+  })
+
+  it('offers no photo picker when editing (photos stay as they are)', () => {
+    render(<ComposeForm hasDisplayName editing={{ id: 't1', title: 't', body: 'b' }} />)
+    expect(screen.queryByLabelText('boardPhotoAdd')).toBeNull()
   })
 })
