@@ -124,6 +124,34 @@ const THIRD_PARTY = {
   webflowCdn: { img: ['https://cdn.prod.website-files.com'] },
 }
 
+/** next/image 가 최적화해 줄 로컬 경로 — public/ 의 이미지 폴더와 루트 파일, Next 정적 파일 */
+const IMAGE_LOCAL_PATHS = [
+  '/images/**',
+  '/logo/**',
+  '/sponsor/**',
+  '/favicon/**',
+  '/webflow/**',
+  '/og/**',
+  '/_next/static/media/**',
+  // public/ 바로 아래 파일(placeholder.jpg 등) — 한 단계만, /api/... 는 걸리지 않는다
+  '/*',
+]
+
+/** next/image 가 대신 받아 올 원격 호스트 — 실제로 쓰는 곳만 (2026-10-27 코드·DB 조사) */
+const IMAGE_REMOTE_HOSTS = [
+  ...new Set(
+    [
+      // 작가 사진·작품 이미지(Supabase Storage). 환경별 프로젝트 + 운영 프로젝트
+      supabaseOrigin && new URL(supabaseOrigin).hostname,
+      'caxjyimsuvjnbmjoxfad.supabase.co',
+      'imagedelivery.net', // Cloudflare Images — 소개 페이지 등
+      'pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev', // 지원 서식·위원 위촉 페이지
+      'cdn.prod.website-files.com', // 옛 Webflow — 블로그 썸네일, 옮기면 지운다
+      'img.clerk.com', // 회원 아바타
+    ].filter(Boolean)
+  ),
+]
+
 /** THIRD_PARTY에서 특정 디렉티브에 해당하는 오리진을 모아 중복 제거한다. */
 function vendorOrigins(directive) {
   return [...new Set(Object.values(THIRD_PARTY).flatMap(v => v[directive] || []))]
@@ -186,12 +214,12 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    // 이미지 최적화(/_next/image)는 받아 온 결과를 공개 캐시에 하루(minimumCacheTTL) 둔다.
+    // 그래서 아무 주소나 받아 주면 안 된다 — 특히 /api/community/images 처럼 볼 때마다 권한을
+    // 확인하는 라우트를 거치면, 글을 숨기거나 지운 뒤에도 캐시로 사진이 보인다.
+    // 로컬은 public/ 폴더·Next 정적 파일만, 원격은 실제로 쓰는 이미지 호스트만 연다.
+    localPatterns: IMAGE_LOCAL_PATHS.map(pathname => ({ pathname })),
+    remotePatterns: IMAGE_REMOTE_HOSTS.map(hostname => ({ protocol: 'https', hostname })),
     // 고화질 갤러리 이미지 최적화
     loader: 'default',
     path: '/_next/image',
