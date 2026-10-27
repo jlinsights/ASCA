@@ -140,6 +140,67 @@ export async function listMyThreads(
   }
 }
 
+/** 사무국 숨긴 글 목록 한 번에 보일 수 */
+export const HIDDEN_LIMIT = 100
+
+/** 관리자 화면 전용 — 언제·왜·누가 숨겼는지 함께 */
+export interface HiddenThreadView extends ThreadView {
+  hidden_at: string
+  hidden_reason: string | null
+  /** 숨긴 관리자의 표시 이름. 계정이 없어졌으면 null */
+  hidden_by_name: string | null
+}
+
+/**
+ * 사무국이 숨긴 글 — 최근에 숨긴 순. 작성자가 지운 글은 되살릴 수 없으니 뺀다.
+ * 숨김 사유·처리자를 싣으므로 관리자 확인을 거친 곳(관리자 API)에서만 부른다.
+ */
+export async function listHiddenThreads(
+  limit = HIDDEN_LIMIT
+): Promise<{ threads: HiddenThreadView[]; total: number }> {
+  const db = archiveWriter()
+  const { data, error, count } = await db
+    .from('community_threads')
+    .select(`${THREAD_COLUMNS},hidden_at,hidden_reason,hidden_by`, { count: 'exact' })
+    .not('hidden_at', 'is', null)
+    .is('deleted_at', null)
+    .order('hidden_at', { ascending: false })
+    .order('id', { ascending: false })
+    .limit(limit)
+  if (error) throw error
+  const rows = (data ?? []) as (ThreadRow & {
+    hidden_at: string
+    hidden_reason: string | null
+    hidden_by: string | null
+  })[]
+  const moderatorIds = [
+    ...new Set(rows.map(row => row.hidden_by).filter((id): id is string => !!id)),
+  ]
+  const [views, moderators] = await Promise.all([
+    withAuthors(
+      db,
+      rows.map(({ hidden_at: _at, hidden_reason: _reason, hidden_by: _by, ...row }) => row)
+    ),
+    moderatorIds.length
+      ? db.from('account_profiles').select('id,display_name').in('id', moderatorIds)
+      : Promise.resolve({ data: [] as { id: string; display_name: string }[], error: null }),
+  ])
+  if (moderators.error) throw moderators.error
+  const names = new Map((moderators.data ?? []).map(p => [p.id, p.display_name.trim() || null]))
+  return {
+    threads: views.map((view, index) => {
+      const row = rows[index]!
+      return {
+        ...view,
+        hidden_at: row.hidden_at,
+        hidden_reason: row.hidden_reason,
+        hidden_by_name: row.hidden_by ? (names.get(row.hidden_by) ?? null) : null,
+      }
+    }),
+    total: count ?? rows.length,
+  }
+}
+
 /**
  * 글 하나. 숨김·삭제 글은 없는 글처럼 null — 관리자 화면에서만 숨김 글을 보여 줄 수 있다.
  * viewerId 를 주면 그 사람이 쓴 글인지(`mine`)를 함께 알린다.
