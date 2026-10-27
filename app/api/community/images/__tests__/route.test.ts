@@ -4,6 +4,7 @@ import { getAccount } from '@/lib/auth/server'
 import { archiveIdentity, archiveWriter } from '@/lib/archive/writer'
 import { checkOrigin } from '@/lib/security/origin-check'
 import { ImageRejected, processImage } from '@/lib/community/images'
+import { sweepAfterResponse } from '@/lib/community/image-sweep'
 import { POST } from '../route'
 import { GET } from '../[id]/route'
 
@@ -12,6 +13,7 @@ jest.mock('@/lib/archive/writer', () => ({ archiveIdentity: jest.fn(), archiveWr
 jest.mock('@/lib/security/origin-check', () => ({ checkOrigin: jest.fn() }))
 const limiter = jest.fn(async () => null as Response | null)
 jest.mock('@/lib/security/rate-limit', () => ({ rateLimit: () => ({ check: () => limiter() }) }))
+jest.mock('@/lib/community/image-sweep', () => ({ sweepAfterResponse: jest.fn() }))
 jest.mock('@/lib/community/images', () => {
   const actual = jest.requireActual('@/lib/community/images')
   return { ...actual, processImage: jest.fn() }
@@ -130,12 +132,15 @@ describe('POST /api/community/images', () => {
       height: 1200,
       byte_size: 4,
     })
+    // 버려진 대기 사진 정리는 응답 뒤로 예약한다
+    expect(sweepAfterResponse).toHaveBeenCalledWith(query)
   })
 
   it('removes the stored file when the row cannot be saved', async () => {
     query.single.mockResolvedValueOnce({ data: null, error: { message: 'boom' } })
     expect((await upload()).status).toBe(500)
     expect(bucket.remove).toHaveBeenCalledWith([bucket.upload.mock.calls[0]![0]])
+    expect(sweepAfterResponse).not.toHaveBeenCalled()
   })
 })
 

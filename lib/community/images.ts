@@ -15,7 +15,7 @@ export const PUBLIC_IMAGE_MAX_AGE = 60
 export const PENDING_IMAGES_MAX = 12
 /**
  * 한도는 최근에 올린 대기 사진만 센다. 빼거나 버린 사진이 영영 쌓여 사진을 다시는 못 올리는
- * 일이 없게 — 오래된 대기 사진은 정리 작업이 지운다.
+ * 일이 없게 — 이 시간이 지난 대기 사진은 올리기 때마다 image-sweep 이 지운다.
  */
 export const PENDING_WINDOW_MS = 24 * 60 * 60_000
 /** 디코딩 전에 거절할 픽셀 수(압축 폭탄 방지) — 약 8000×6000 */

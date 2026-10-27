@@ -12,6 +12,7 @@ import {
   PENDING_WINDOW_MS,
   processImage,
 } from '@/lib/community/images'
+import { sweepAfterResponse } from '@/lib/community/image-sweep'
 import { IMAGE_UPLOAD_MAX_BYTES } from '@/lib/community/threads'
 import { log } from '@/lib/utils/logger'
 
@@ -85,6 +86,7 @@ export async function POST(request: NextRequest) {
       await bucket.remove([path])
       throw error
     }
+    sweepAfterResponse(db)
     return json({ data: { id: data.id, width: image.width, height: image.height } }, 201)
   } catch (error) {
     if (error instanceof ImageRejected)
