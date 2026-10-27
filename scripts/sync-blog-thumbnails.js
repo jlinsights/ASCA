@@ -10,8 +10,8 @@ const blogPosts = JSON.parse(fs.readFileSync(blogPostsPath, 'utf-8'))
 console.log(`📚 Processing ${blogPosts.length} blog posts...`)
 
 let updatedCount = 0
-const defaultThumbnail =
-  'https://cdn.prod.website-files.com/6220af701a295f35d5c625ff/67bad637100432195863fad7_Logo%20%26%20Tagline_black%20BG.avif'
+// 옛 Webflow CDN 에서 옮겨 온 로고 이미지(public/images/blog)
+const defaultThumbnail = '/images/blog/67bad637100432195863fad7.avif'
 
 // Process each post
 const updatedPosts = blogPosts.map((post, index) => {

@@ -31,10 +31,12 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   Production 이 **옛 Tailwind CSS 를 그대로 내보내** 새 클래스가 빠진 적이 있다
   (CI 는 통과). **지우지 말 것.** UI 변경은 배포본의 CSS 로 확인한다.
 - Hobby 플랜이라 동시 빌드 1개 — Preview 는 Production 뒤에서 대기한다.
-- 프로덕션 주소는 `asca-main.vercel.app` 이다. ⚠️ `orientalcalligraphy.org`
-  루트· `www` 의 DNS(Cloudflare)는 아직 **Webflow** 를 가리킨다. 이 저장소를
-  배포해도 그 도메인은 바뀌지 않는다(하위 도메인 anam·heelang·catalog2025·jury
-  는 각각 다른 Vercel 프로젝트).
+- 운영 도메인은 **`orientalcalligraphy.org`(루트)** 다 — 2026-10-25 Webflow 에서
+  이 저장소(Vercel `asca-main`)로 옮겼다. `www.orientalcalligraphy.org` 와
+  `asca-main.vercel.app` 은 루트로 308 리다이렉트한다(2026-10-27 Vercel 도메인
+  설정·DNS 확인). `lib/seo.ts` 의 `metadataBase` 도 루트다. 하위 도메인
+  anam·heelang·catalog2025·jury 는 각각 다른 Vercel 프로젝트. 옛 Webflow
+  사이트는 해지 전까지 Webflow 쪽에만 남아 있다.
 - 운영도 Clerk **개발용 인스턴스**(`pk_test_…`)로 돈다.
 - `proxy.ts` 의 CSRF 검사(`lib/security/origin-check.ts`)는 POST·PUT·PATCH·
   DELETE 의 Origin 을 허용 목록과 대조한다. 허용 목록은 `NEXT_PUBLIC_APP_URL`·
