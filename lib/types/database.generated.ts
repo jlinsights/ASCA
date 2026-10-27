@@ -710,6 +710,57 @@ export type Database = {
           },
         ]
       }
+      community_thread_images: {
+        Row: {
+          byte_size: number
+          created_at: string
+          height: number
+          id: string
+          position: number | null
+          storage_path: string
+          thread_id: string | null
+          uploader_id: string | null
+          width: number
+        }
+        Insert: {
+          byte_size: number
+          created_at?: string
+          height: number
+          id?: string
+          position?: number | null
+          storage_path: string
+          thread_id?: string | null
+          uploader_id?: string | null
+          width: number
+        }
+        Update: {
+          byte_size?: number
+          created_at?: string
+          height?: number
+          id?: string
+          position?: number | null
+          storage_path?: string
+          thread_id?: string | null
+          uploader_id?: string | null
+          width?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'community_thread_images_thread_id_fkey'
+            columns: ['thread_id']
+            isOneToOne: false
+            referencedRelation: 'community_threads'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'community_thread_images_uploader_id_fkey'
+            columns: ['uploader_id']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       community_threads: {
         Row: {
           author_id: string | null
@@ -1536,6 +1587,10 @@ export type Database = {
         Returns: string
       }
       assert_claim_reviewer: { Args: { p_admin: string }; Returns: undefined }
+      community_create_thread: {
+        Args: { p_author: string; p_body: string; p_image_ids?: string[]; p_title: string }
+        Returns: string
+      }
       get_my_artist_ids: {
         Args: never
         Returns: {

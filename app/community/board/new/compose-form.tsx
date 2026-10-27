@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { BODY_MAX, TITLE_MAX } from '@/lib/community/threads'
+import { PhotoPicker, usePhotoPicker } from './photo-picker'
 import '../_components/board.css'
 
 const ERROR_KEYS: Record<string, string> = {
@@ -15,6 +16,7 @@ const ERROR_KEYS: Record<string, string> = {
   THREAD_NOT_FOUND: 'boardEditGone',
   DISPLAY_NAME_REQUIRED: 'boardNeedName',
   RATE_LIMITED: 'boardErrorRate',
+  IMAGES_UNAVAILABLE: 'boardPhotoErrorStale',
 }
 
 interface ComposeFormProps {
@@ -23,7 +25,7 @@ interface ComposeFormProps {
   editing?: { id: string; title: string; body: string }
 }
 
-/** 새 글·내 글 고치기 — 평문 제목·본문만. 저장하면 그 글로 간다 */
+/** 새 글·내 글 고치기 — 평문 제목·본문, 새 글에는 사진 4장까지. 저장하면 그 글로 간다 */
 export function ComposeForm({ hasDisplayName, editing }: ComposeFormProps) {
   const { t } = useLanguage()
   const router = useRouter()
@@ -32,6 +34,8 @@ export function ComposeForm({ hasDisplayName, editing }: ComposeFormProps) {
   const backHref = editing ? `/community/board/${editing.id}` : '/community/board'
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState<string | null>(null)
+  // 사진 고치기는 다음 단계 — 지금은 새 글에만 붙인다(고쳐도 붙은 사진은 그대로)
+  const picker = usePhotoPicker()
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -44,7 +48,9 @@ export function ComposeForm({ hasDisplayName, editing }: ComposeFormProps) {
           method: editing ? 'PATCH' : 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, body }),
+          body: JSON.stringify(
+            editing ? { title, body } : { title, body, imageIds: picker.imageIds }
+          ),
         }
       )
       const payload = (await response.json().catch(() => null)) as {
@@ -122,13 +128,25 @@ export function ComposeForm({ hasDisplayName, editing }: ComposeFormProps) {
                   {t('boardFieldBodyHint')}
                 </p>
               </div>
+              {!editing && (
+                <PhotoPicker
+                  photos={picker.photos}
+                  failure={picker.failure}
+                  disabled={busy}
+                  onAdd={files => void picker.add(files)}
+                  onRemove={picker.remove}
+                />
+              )}
               {failed && (
                 <p role='alert' className='m-0 text-destructive'>
                   {t(failed)}
                 </p>
               )}
               <div className='cb-form__actions'>
-                <Button type='submit' disabled={busy || !title.trim() || !body.trim()}>
+                <Button
+                  type='submit'
+                  disabled={busy || picker.uploading || !title.trim() || !body.trim()}
+                >
                   {t(busy ? 'boardSubmitting' : editing ? 'boardSave' : 'boardSubmit')}
                 </Button>
                 <Button asChild variant='outline'>

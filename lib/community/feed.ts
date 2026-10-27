@@ -17,6 +17,7 @@ import {
   toThreadView,
   type PublicArtistLink,
   type ThreadModerationState,
+  type ThreadImage,
   type ThreadRow,
   type ThreadView,
 } from './threads'
@@ -231,9 +232,20 @@ export async function getThread(
     hidden_reason: string | null
   }
   if (hiddenAt && !includeHidden) return null
-  const [thread] = await withAuthors(db, [row], viewerId)
+  const [[thread], images] = await Promise.all([
+    withAuthors(db, [row], viewerId),
+    db
+      .from('community_thread_images')
+      .select('id,width,height')
+      .eq('thread_id', id)
+      .order('position', { ascending: true }),
+  ])
+  if (images.error) throw images.error
   if (!thread) return null
-  return { thread, moderation: { hiddenAt, hiddenReason } }
+  return {
+    thread: { ...thread, images: (images.data ?? []) as ThreadImage[] },
+    moderation: { hiddenAt, hiddenReason },
+  }
 }
 
 interface AuthorMaps {

@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
   HIDE_REASON_MAX,
+  imageSrc,
+  type ThreadImage,
   type ThreadModerationState,
   type ThreadView,
 } from '@/lib/community/threads'
@@ -63,6 +65,9 @@ export function ThreadDetail({
               {thread.edited && <> · {t('boardEdited')}</>}
             </p>
             <ThreadBody body={thread.body} className='cb-thread__body' />
+            {thread.images && thread.images.length > 0 && (
+              <ThreadPhotos images={thread.images} title={thread.title} />
+            )}
             {thread.mine && !moderation?.hiddenAt && <OwnerActions threadId={thread.id} />}
           </div>
           <ThreadResponses
@@ -76,6 +81,37 @@ export function ThreadDetail({
         </article>
       </div>
     </div>
+  )
+}
+
+/**
+ * 글 사진 — 저장된 크기로 자리를 먼저 잡고(레이아웃 밀림 없음), 누르면 원래 크기로 연다.
+ * next/image 를 쓰지 않는다: 최적화 서버가 쿠키 없이 가져가 숨긴 글 사진을 관리자도 못 보고,
+ * 결과를 공유 캐시에 남겨 글을 숨겨도 계속 보이게 된다.
+ */
+function ThreadPhotos({ images, title }: { images: ThreadImage[]; title: string }) {
+  const { t } = useLanguage()
+  return (
+    <ul
+      className={`cb-gallery${images.length === 1 ? ' cb-gallery--single' : ''}`}
+      aria-label={t('boardPhotos')}
+    >
+      {images.map((image, index) => (
+        <li key={image.id}>
+          <a href={imageSrc(image.id)} target='_blank' rel='noopener' className='cb-gallery__link'>
+            {/* eslint-disable-next-line @next/next/no-img-element -- 위 설명 */}
+            <img
+              src={imageSrc(image.id)}
+              width={image.width}
+              height={image.height}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding='async'
+              alt={`${title} — ${t('boardPhotoN').replace('{n}', String(index + 1))}`}
+            />
+          </a>
+        </li>
+      ))}
+    </ul>
   )
 }
 

@@ -532,6 +532,121 @@ a.cb-author__name:hover {
   gap: 12px;
 }
 
+/* 사진 고르기 — 고른 사진은 네모 쪽, 빈자리는 "새 글" 칸과 같은 점선 */
+.cb-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cb-photos__item,
+.cb-photos__add {
+  position: relative;
+  width: 112px;
+  aspect-ratio: 1;
+}
+.cb-photos__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid var(--cb-rule);
+  background: var(--cb-mat);
+}
+.cb-photos__item[aria-busy='true'] img {
+  opacity: 0.45;
+}
+.cb-photos__status {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 4px 6px;
+  font-size: 12px;
+  text-align: center;
+  background: color-mix(in srgb, var(--cb-bg) 85%, transparent);
+}
+.cb-photos__remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: var(--cb-fg);
+  color: var(--cb-bg);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.cb-photos__remove:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.cb-photos__add {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  border: 1px dashed color-mix(in srgb, var(--cb-fg) 45%, transparent);
+  font-size: 13px;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 200ms var(--cb-ease),
+    background 200ms var(--cb-ease);
+}
+.cb-photos__add:hover {
+  border-color: var(--cb-fg);
+  background: color-mix(in srgb, var(--cb-mat) 60%, transparent);
+}
+.cb-photos__add:focus-within {
+  outline: 2px solid var(--cb-ring);
+  outline-offset: 3px;
+}
+.cb-photos__add[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* 글 사진 — 본문 아래 표구(mat) 위에 두 장씩, 한 장이면 폭 가득 */
+.cb-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.cb-gallery--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+.cb-gallery__link {
+  display: block;
+  padding: 10px;
+  background: var(--cb-mat);
+  border: 1px solid var(--cb-rule);
+}
+.cb-gallery__link img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cb-gallery:not(.cb-gallery--single) .cb-gallery__link img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+@media (max-width: 479px) {
+  .cb-gallery {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cb-gallery:not(.cb-gallery--single) .cb-gallery__link img {
+    aspect-ratio: auto;
+    object-fit: contain;
+  }
+}
+
 @media (max-width: 899px) {
   .cb-layout {
     grid-template-columns: minmax(0, 1fr);
