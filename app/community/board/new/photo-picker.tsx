@@ -36,6 +36,8 @@ let nextKey = 0
 export function usePhotoPicker() {
   const [photos, setPhotos] = useState<PickedPhoto[]>([])
   const [failure, setFailure] = useState<PickerFailure | null>(null)
+  // 고른 순간부터 마지막 사진을 다 올릴 때까지 — 줄이는 중에는 아직 미리보기 칸이 없다
+  const [processing, setProcessing] = useState(false)
   const previews = useRef(new Set<string>())
 
   useEffect(() => {
@@ -48,19 +50,24 @@ export function usePhotoPicker() {
       setFailure(null)
       const room = IMAGES_MAX - photos.length
       if (files.length > room) setFailure('limit')
-      for (const file of files.slice(0, Math.max(0, room))) {
-        const key = `photo-${nextKey++}`
-        try {
-          const shrunk = await shrinkPhoto(file)
-          const preview = URL.createObjectURL(shrunk)
-          previews.current.add(preview)
-          setPhotos(current => [...current, { key, preview, image: null }])
-          const image = await uploadPhoto(shrunk)
-          setPhotos(current => current.map(p => (p.key === key ? { ...p, image } : p)))
-        } catch (error) {
-          setPhotos(current => current.filter(p => p.key !== key))
-          setFailure(error instanceof PhotoUploadError ? error.reason : 'generic')
+      setProcessing(true)
+      try {
+        for (const file of files.slice(0, Math.max(0, room))) {
+          const key = `photo-${nextKey++}`
+          try {
+            const shrunk = await shrinkPhoto(file)
+            const preview = URL.createObjectURL(shrunk)
+            previews.current.add(preview)
+            setPhotos(current => [...current, { key, preview, image: null }])
+            const image = await uploadPhoto(shrunk)
+            setPhotos(current => current.map(p => (p.key === key ? { ...p, image } : p)))
+          } catch (error) {
+            setPhotos(current => current.filter(p => p.key !== key))
+            setFailure(error instanceof PhotoUploadError ? error.reason : 'generic')
+          }
         }
+      } finally {
+        setProcessing(false)
       }
     },
     [photos.length]
@@ -82,7 +89,7 @@ export function usePhotoPicker() {
     failure,
     add,
     remove,
-    uploading: photos.some(p => !p.image),
+    uploading: processing || photos.some(p => !p.image),
     imageIds: photos.flatMap(p => (p.image ? [p.image.id] : [])),
   }
 }

@@ -441,6 +441,25 @@ describe('ComposeForm — photos', () => {
     expect(screen.getByLabelText('boardPhotoAdd')).not.toBeDisabled()
   })
 
+  it('keeps the post button and picker off while a photo is still being shrunk', async () => {
+    // 줄이는 동안에는 아직 미리보기 칸이 없다 — 그래도 올리기·추가 선택을 막아야
+    // 사진이 빠진 채 글이 올라가거나 4장을 넘기지 않는다
+    let shrunk: (file: Blob) => void = () => {}
+    shrink.mockImplementationOnce(() => new Promise(resolve => (shrunk = resolve)))
+    render(<ComposeForm hasDisplayName />)
+    fill()
+    choose(photo('big.jpg'))
+    await waitFor(() => expect(shrink).toHaveBeenCalledTimes(1))
+    expect(screen.queryAllByRole('img')).toHaveLength(0)
+    expect(screen.getByRole('button', { name: 'boardSubmit' })).toBeDisabled()
+    expect(screen.getByLabelText('boardPhotoAdd')).toBeDisabled()
+    shrunk(photo('big.jpg'))
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'boardSubmit' })).not.toBeDisabled()
+    )
+    expect(screen.getByLabelText('boardPhotoAdd')).not.toBeDisabled()
+  })
+
   it('takes four photos at most and says so', async () => {
     render(<ComposeForm hasDisplayName />)
     choose(photo('1'), photo('2'), photo('3'), photo('4'), photo('5'))

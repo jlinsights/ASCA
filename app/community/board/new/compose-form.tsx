@@ -132,7 +132,7 @@ export function ComposeForm({ hasDisplayName, editing }: ComposeFormProps) {
                 <PhotoPicker
                   photos={picker.photos}
                   failure={picker.failure}
-                  disabled={busy}
+                  disabled={busy || picker.uploading}
                   onAdd={files => void picker.add(files)}
                   onRemove={picker.remove}
                 />
