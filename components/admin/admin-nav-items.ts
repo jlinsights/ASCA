@@ -1,4 +1,4 @@
-import { FileCheck2, History, Link2, Users, type LucideIcon } from 'lucide-react'
+import { EyeOff, FileCheck2, History, Link2, Users, type LucideIcon } from 'lucide-react'
 
 export interface AdminNavItem {
   key: string
@@ -35,6 +35,12 @@ export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
     href: '/admin/profile-changes',
     icon: History,
     label: { ko: '프로필 수정 기록', en: 'Profile changes' },
+  },
+  {
+    key: 'board-hidden',
+    href: '/admin/board-hidden',
+    icon: EyeOff,
+    label: { ko: '게시판 숨긴 글', en: 'Hidden board posts' },
   },
 ]
 
