@@ -80,7 +80,7 @@ export function generateOrganizationSchema() {
     name: '동양서예협회',
     alternateName: 'ASCA',
     url: defaultSEO.url,
-    logo: `${defaultSEO.url}/logo/Logo & Tagline_black BG.png`,
+    logo: encodeURI(`${defaultSEO.url}/logo/Logo & Tagline_black BG.png`).replace('&', '%26'),
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '+82-502-5550-8700',

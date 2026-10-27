@@ -46,12 +46,12 @@ test.describe('home / ink-system — 4언어 구조 회귀', () => {
         expect(await page.locator('.asca-ex').count()).toBeGreaterThan(0)
       })
 
-      test('학술 글 링크는 새 창 + noopener 로 열린다', async ({ page }) => {
+      test('학술 글 링크는 이 사이트의 /blog/<slug> 를 같은 창에서 연다', async ({ page }) => {
         await gotoHomeWithLanguage(page, lang)
         const links = page.locator('.asca-news__title a')
         expect(await links.count()).toBeGreaterThan(0)
-        await expect(links.first()).toHaveAttribute('target', '_blank')
-        await expect(links.first()).toHaveAttribute('rel', /noopener/)
+        await expect(links.first()).toHaveAttribute('href', /^\/blog\/[a-z0-9-]+$/)
+        await expect(links.first()).not.toHaveAttribute('target', '_blank')
       })
 
       test('입회 섹션이 입회 안내·문의로 연결된다', async ({ page }) => {
