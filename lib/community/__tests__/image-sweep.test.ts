@@ -1,0 +1,106 @@
+/** @jest-environment node */
+import { PENDING_WINDOW_MS } from '../images'
+import { SWEEP_BATCH, sweepExpiredPendingImages } from '../image-sweep'
+
+jest.mock('server-only', () => ({}))
+
+const NOW = Date.parse('2026-10-28T00:00:00Z')
+const CUTOFF = new Date(NOW - PENDING_WINDOW_MS).toISOString()
+
+/** 고른 행(select)과 지운 행(delete … select) 결과를 정해 두는 가짜 클라이언트 */
+function fakeDb(
+  picked: { id: string }[],
+  removed: { storage_path: string }[],
+  storageError: unknown = null
+) {
+  const calls: string[] = []
+  const chain = (result: unknown) => {
+    const q: Record<string, jest.Mock> & { then?: unknown } = {}
+    for (const m of ['select', 'is', 'lt', 'order', 'in'])
+      q[m] = jest.fn((...args: unknown[]) => {
+        calls.push(`${m}(${JSON.stringify(args)})`)
+        return q
+      })
+    q.limit = jest.fn(async (...args: unknown[]) => {
+      calls.push(`limit(${JSON.stringify(args)})`)
+      return result
+    })
+    q.delete = jest.fn(() => {
+      calls.push('delete()')
+      // delete 사슬은 마지막 select 가 끝
+      q.select = jest.fn(async (...args: unknown[]) => {
+        calls.push(`select(${JSON.stringify(args)})`)
+        return { data: removed, error: null }
+      })
+      return q
+    })
+    q.insert = jest.fn(async (rows: unknown) => {
+      calls.push(`insert(${JSON.stringify(rows)})`)
+      return { data: null, error: null }
+    })
+    return q
+  }
+  const remove = jest.fn().mockResolvedValue({ data: [], error: storageError })
+  const db = {
+    from: jest.fn(() => chain({ data: picked, error: null })),
+    storage: { from: jest.fn(() => ({ remove })) },
+  }
+  return { db: db as any, calls, remove }
+}
+
+describe('sweepExpiredPendingImages', () => {
+  it('picks only unattached photos older than the pending window, oldest first, in a batch', async () => {
+    const { db, calls } = fakeDb([], [])
+    expect(await sweepExpiredPendingImages(db, NOW)).toBe(0)
+    expect(calls).toEqual([
+      'select(["id"])',
+      'is(["thread_id",null])',
+      `lt(["created_at","${CUTOFF}"])`,
+      'order(["created_at",{"ascending":true}])',
+      `limit([${SWEEP_BATCH}])`,
+    ])
+  })
+
+  it('deletes rows first — only if still unattached — then removes exactly those files', async () => {
+    const { db, calls, remove } = fakeDb([{ id: 'a' }, { id: 'b' }], [{ storage_path: 'a.webp' }])
+    // b 는 그 사이 글에 붙었다 — 행이 지워지지 않았으니 파일도 남긴다
+    expect(await sweepExpiredPendingImages(db, NOW)).toBe(1)
+    const tail = calls.slice(calls.indexOf('delete()'))
+    expect(tail).toEqual([
+      'delete()',
+      'in(["id",["a","b"]])',
+      'is(["thread_id",null])',
+      `lt(["created_at","${CUTOFF}"])`,
+      'select(["id, storage_path, width, height, byte_size, created_at"])',
+    ])
+    expect(db.storage.from).toHaveBeenCalledWith('community-images')
+    expect(remove).toHaveBeenCalledWith(['a.webp'])
+  })
+
+  it('touches no files when nothing was deleted', async () => {
+    const { db, remove } = fakeDb([{ id: 'a' }], [])
+    expect(await sweepExpiredPendingImages(db, NOW)).toBe(0)
+    expect(remove).not.toHaveBeenCalled()
+  })
+
+  // 올린 사람(uploader_id)은 되살리지 않는다 — 그 사이 탈퇴했으면 외래 키에 걸려 묶음 전체가 실패한다
+  it('puts the rows back when the files cannot be removed, so the next sweep retries them', async () => {
+    const row = {
+      id: 'a',
+      storage_path: 'a.webp',
+      width: 10,
+      height: 10,
+      byte_size: 4,
+      created_at: '2026-10-26T00:00:00Z',
+    }
+    const { db, calls } = fakeDb([{ id: 'a' }], [row], { message: 'storage down' })
+    expect(await sweepExpiredPendingImages(db, NOW)).toBe(0)
+    expect(calls.at(-1)).toBe(`insert(${JSON.stringify([row])})`)
+  })
+
+  it('never re-inserts rows when the files were removed', async () => {
+    const { db, calls } = fakeDb([{ id: 'a' }], [{ storage_path: 'a.webp' }])
+    await sweepExpiredPendingImages(db, NOW)
+    expect(calls.some(c => c.startsWith('insert('))).toBe(false)
+  })
+})
