@@ -8,7 +8,11 @@ const NOW = Date.parse('2026-10-28T00:00:00Z')
 const CUTOFF = new Date(NOW - PENDING_WINDOW_MS).toISOString()
 
 /** 고른 행(select)과 지운 행(delete … select) 결과를 정해 두는 가짜 클라이언트 */
-function fakeDb(picked: { id: string }[], removed: { storage_path: string }[]) {
+function fakeDb(
+  picked: { id: string }[],
+  removed: { storage_path: string }[],
+  storageError: unknown = null
+) {
   const calls: string[] = []
   const chain = (result: unknown) => {
     const q: Record<string, jest.Mock> & { then?: unknown } = {}
@@ -30,9 +34,13 @@ function fakeDb(picked: { id: string }[], removed: { storage_path: string }[]) {
       })
       return q
     })
+    q.insert = jest.fn(async (rows: unknown) => {
+      calls.push(`insert(${JSON.stringify(rows)})`)
+      return { data: null, error: null }
+    })
     return q
   }
-  const remove = jest.fn().mockResolvedValue({ data: [], error: null })
+  const remove = jest.fn().mockResolvedValue({ data: [], error: storageError })
   const db = {
     from: jest.fn(() => chain({ data: picked, error: null })),
     storage: { from: jest.fn(() => ({ remove })) },
@@ -63,7 +71,7 @@ describe('sweepExpiredPendingImages', () => {
       'in(["id",["a","b"]])',
       'is(["thread_id",null])',
       `lt(["created_at","${CUTOFF}"])`,
-      'select(["storage_path"])',
+      'select(["id, uploader_id, storage_path, width, height, byte_size, created_at"])',
     ])
     expect(db.storage.from).toHaveBeenCalledWith('community-images')
     expect(remove).toHaveBeenCalledWith(['a.webp'])
@@ -73,5 +81,26 @@ describe('sweepExpiredPendingImages', () => {
     const { db, remove } = fakeDb([{ id: 'a' }], [])
     expect(await sweepExpiredPendingImages(db, NOW)).toBe(0)
     expect(remove).not.toHaveBeenCalled()
+  })
+
+  it('puts the rows back when the files cannot be removed, so the next sweep retries them', async () => {
+    const row = {
+      id: 'a',
+      uploader_id: 'u',
+      storage_path: 'a.webp',
+      width: 10,
+      height: 10,
+      byte_size: 4,
+      created_at: '2026-10-26T00:00:00Z',
+    }
+    const { db, calls } = fakeDb([{ id: 'a' }], [row], { message: 'storage down' })
+    expect(await sweepExpiredPendingImages(db, NOW)).toBe(0)
+    expect(calls.at(-1)).toBe(`insert(${JSON.stringify([row])})`)
+  })
+
+  it('never re-inserts rows when the files were removed', async () => {
+    const { db, calls } = fakeDb([{ id: 'a' }], [{ storage_path: 'a.webp' }])
+    await sweepExpiredPendingImages(db, NOW)
+    expect(calls.some(c => c.startsWith('insert('))).toBe(false)
   })
 })
