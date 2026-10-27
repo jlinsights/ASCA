@@ -432,10 +432,13 @@ describe('ComposeForm — photos', () => {
     choose(photo('a.jpg'))
     expect(await screen.findByText('boardPhotoUploading')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'boardSubmit' })).toBeDisabled()
+    // 올리는 중에는 더 고르지 못한다(4장 한도 계산이 어긋나지 않게)
+    expect(screen.getByLabelText('boardPhotoAdd')).toBeDisabled()
     finish({ id: 'img9', width: 1, height: 1 })
     await waitFor(() =>
       expect(screen.getByRole('button', { name: 'boardSubmit' })).not.toBeDisabled()
     )
+    expect(screen.getByLabelText('boardPhotoAdd')).not.toBeDisabled()
   })
 
   it('takes four photos at most and says so', async () => {

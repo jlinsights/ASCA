@@ -32,8 +32,9 @@ beforeEach(() => {
   pendingCount = 0
   query = {}
   for (const method of ['from', 'select', 'eq', 'insert']) query[method] = jest.fn(() => query)
-  // 대기 사진 수 세기(head) — is() 가 끝
-  query.is = jest.fn(async () => ({ count: pendingCount, error: null }))
+  query.is = jest.fn(() => query)
+  // 대기 사진 수 세기(head) — gte() 가 끝
+  query.gte = jest.fn(async () => ({ count: pendingCount, error: null }))
   query.single = jest.fn().mockResolvedValue({ data: { id: imageId }, error: null })
   query.maybeSingle = jest.fn()
   bucket = {
@@ -94,6 +95,14 @@ describe('POST /api/community/images', () => {
     expect(query.eq).toHaveBeenCalledWith('uploader_id', accountId)
     expect(query.is).toHaveBeenCalledWith('thread_id', null)
     expect(bucket.upload).not.toHaveBeenCalled()
+  })
+
+  it('counts only recent unused photos, so old leftovers never lock a member out', async () => {
+    const now = Date.parse('2026-10-27T12:00:00Z')
+    jest.spyOn(Date, 'now').mockReturnValue(now)
+    await upload()
+    expect(query.gte).toHaveBeenCalledWith('created_at', '2026-10-26T12:00:00.000Z')
+    jest.mocked(Date.now).mockRestore()
   })
 
   it('answers 415 for files that are not usable images', async () => {

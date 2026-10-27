@@ -9,6 +9,7 @@ import {
   COMMUNITY_IMAGE_BUCKET,
   ImageRejected,
   PENDING_IMAGES_MAX,
+  PENDING_WINDOW_MS,
   processImage,
 } from '@/lib/community/images'
 import { IMAGE_UPLOAD_MAX_BYTES } from '@/lib/community/threads'
@@ -55,6 +56,7 @@ export async function POST(request: NextRequest) {
       .select('id', { count: 'exact', head: true })
       .eq('uploader_id', account.id)
       .is('thread_id', null)
+      .gte('created_at', new Date(Date.now() - PENDING_WINDOW_MS).toISOString())
     if (pending.error) throw pending.error
     if ((pending.count ?? 0) >= PENDING_IMAGES_MAX)
       return json({ error: 'Too many unused images', code: 'TOO_MANY_PENDING_IMAGES' }, 409)

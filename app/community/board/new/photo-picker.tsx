@@ -98,6 +98,8 @@ interface PhotoPickerProps {
 export function PhotoPicker({ photos, failure, disabled, onAdd, onRemove }: PhotoPickerProps) {
   const { t } = useLanguage()
   const full = photos.length >= IMAGES_MAX
+  // 올리는 중에 또 고르면 남은 자리 계산이 어긋난다 — 다 올린 뒤에 고르게 한다
+  const locked = disabled || photos.some(photo => !photo.image)
 
   function pick(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? [])
@@ -140,13 +142,13 @@ export function PhotoPicker({ photos, failure, disabled, onAdd, onRemove }: Phot
         })}
         {!full && (
           <li>
-            <label className='cb-photos__add' aria-disabled={disabled || undefined}>
+            <label className='cb-photos__add' aria-disabled={locked || undefined}>
               <input
                 type='file'
                 accept='image/*'
                 multiple
                 className='sr-only'
-                disabled={disabled}
+                disabled={locked}
                 aria-describedby='cb-photos-hint'
                 onChange={pick}
               />
