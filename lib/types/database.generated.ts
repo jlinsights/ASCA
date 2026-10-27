@@ -1588,7 +1588,12 @@ export type Database = {
       }
       assert_claim_reviewer: { Args: { p_admin: string }; Returns: undefined }
       community_create_thread: {
-        Args: { p_author: string; p_body: string; p_image_ids?: string[]; p_title: string }
+        Args: {
+          p_author: string
+          p_body: string
+          p_image_ids?: string[]
+          p_title: string
+        }
         Returns: string
       }
       get_my_artist_ids: {
