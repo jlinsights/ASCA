@@ -5,6 +5,7 @@ const originalFetch = global.fetch
 const json = (body: unknown, status = 200) => ({ ok: status < 400, status, json: async () => body })
 
 let drawn: number[] = []
+let ops: string[] = []
 let blobOut: Blob | null = new Blob(['jpeg'], { type: 'image/jpeg' })
 const close = jest.fn()
 
@@ -15,12 +16,19 @@ beforeEach(() => {
   blobOut = new Blob(['jpeg'], { type: 'image/jpeg' })
   close.mockReset()
   ;(global as any).createImageBitmap = jest.fn(async () => ({ width: 4800, height: 3600, close }))
-  jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(
-    () =>
-      ({
-        drawImage: (_b: unknown, _x: number, _y: number, w: number, h: number) => (drawn = [w, h]),
-      }) as any
-  )
+  ops = []
+  jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => {
+    const context = {
+      fillStyle: '',
+      fillRect: (_x: number, _y: number, w: number, h: number) =>
+        ops.push(`fill ${context.fillStyle} ${w}x${h}`),
+      drawImage: (_b: unknown, _x: number, _y: number, w: number, h: number) => {
+        drawn = [w, h]
+        ops.push('draw')
+      },
+    }
+    return context as any
+  })
   jest.spyOn(HTMLCanvasElement.prototype, 'toBlob').mockImplementation(function (
     callback: BlobCallback
   ) {
@@ -42,6 +50,11 @@ describe('shrinkPhoto', () => {
       'image/jpeg',
       0.88
     )
+  })
+
+  it('paints white under the photo so transparent areas do not turn black in JPEG', async () => {
+    await shrinkPhoto(new Blob(['x']))
+    expect(ops).toEqual([`fill #ffffff ${CLIENT_MAX_EDGE}x1800`, 'draw'])
   })
 
   it('reports photos the browser cannot open (e.g. HEIC on Chrome)', async () => {

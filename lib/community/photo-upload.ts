@@ -44,6 +44,9 @@ export async function shrinkPhoto(file: Blob): Promise<Blob> {
     canvas.height = height
     const context = canvas.getContext('2d')
     if (!context) throw new PhotoUploadError('unreadable')
+    // JPEG 는 투명도가 없어 투명한 곳이 검게 된다 — 투명 배경의 먹 글씨가 묻히지 않게 흰 바탕을 깐다
+    context.fillStyle = '#ffffff'
+    context.fillRect(0, 0, width, height)
     context.drawImage(bitmap, 0, 0, width, height)
     const blob = await new Promise<Blob | null>(resolve =>
       canvas.toBlob(resolve, 'image/jpeg', JPEG_QUALITY)
