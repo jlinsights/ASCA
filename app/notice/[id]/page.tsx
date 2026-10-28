@@ -202,14 +202,14 @@ export default function NoticeDetailPage() {
     return (
       <div className='min-h-screen bg-transparent'>
         {hero}
-        <main className='container py-10 md:py-16'>
+        <div className='container py-10 md:py-16'>
           <div className='flex items-center justify-center py-12'>
             <div className='flex items-center gap-3'>
               <Loader2 className='h-6 w-6 animate-spin' />
               <span className='text-lg'>공지사항을 불러오는 중...</span>
             </div>
           </div>
-        </main>
+        </div>
         <LayoutFooter />
       </div>
     )
@@ -219,7 +219,7 @@ export default function NoticeDetailPage() {
     return (
       <div className='min-h-screen bg-transparent'>
         {hero}
-        <main className='container py-10 md:py-16'>
+        <div className='container py-10 md:py-16'>
           <div className='text-center py-12'>
             <AlertCircle className='h-16 w-16 text-destructive mx-auto mb-4' />
             <h3 className='text-lg font-semibold text-foreground mb-2'>오류가 발생했습니다</h3>
@@ -228,7 +228,7 @@ export default function NoticeDetailPage() {
               <Button variant='outline'>목록으로 돌아가기</Button>
             </Link>
           </div>
-        </main>
+        </div>
         <LayoutFooter />
       </div>
     )
@@ -237,7 +237,7 @@ export default function NoticeDetailPage() {
   return (
     <div className='min-h-screen bg-transparent'>
       {hero}
-      <main className='container py-10 md:py-16'>
+      <div className='container py-10 md:py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-4 gap-8'>
           {/* 메인 콘텐츠 */}
           <div className='lg:col-span-3'>
@@ -453,7 +453,7 @@ export default function NoticeDetailPage() {
             </Card>
           </div>
         </div>
-      </main>
+      </div>
 
       <LayoutFooter />
     </div>

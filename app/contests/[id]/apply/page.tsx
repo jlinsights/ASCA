@@ -198,11 +198,11 @@ export default function ContestApplyPage() {
   if (loading) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container py-8'>
+        <div className='container py-8'>
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
-        </main>
+        </div>
         <LayoutFooter />
       </div>
     )
@@ -211,7 +211,7 @@ export default function ContestApplyPage() {
   if (success) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container py-8'>
+        <div className='container py-8'>
           <Card className='max-w-2xl mx-auto'>
             <CardContent className='p-12 text-center'>
               <CheckCircle className='w-16 h-16 mx-auto mb-4 text-celadon-green' />
@@ -228,7 +228,7 @@ export default function ContestApplyPage() {
               </Link>
             </CardContent>
           </Card>
-        </main>
+        </div>
         <LayoutFooter />
       </div>
     )
@@ -237,7 +237,7 @@ export default function ContestApplyPage() {
   if (error && !contest) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container py-8'>
+        <div className='container py-8'>
           <Alert variant='destructive' className='max-w-2xl mx-auto'>
             <AlertCircle className='h-4 w-4' />
             <AlertDescription>{error}</AlertDescription>
@@ -247,7 +247,7 @@ export default function ContestApplyPage() {
               <Button variant='outline'>공모전 목록으로</Button>
             </Link>
           </div>
-        </main>
+        </div>
         <LayoutFooter />
       </div>
     )
@@ -255,7 +255,7 @@ export default function ContestApplyPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container py-8 [--shell-max:56rem]'>
+      <div className='container py-8 [--shell-max:56rem]'>
         {/* Navigation */}
         <div className='flex items-center gap-4 mb-8'>
           <Link href={`/contests/${contestId}`}>
@@ -507,7 +507,7 @@ export default function ContestApplyPage() {
             </Button>
           </div>
         </form>
-      </main>
+      </div>
 
       <LayoutFooter />
     </div>

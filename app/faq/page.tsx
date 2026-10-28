@@ -34,9 +34,9 @@ export default function FaqPage() {
         // 정적 상수만 직렬화한다. </script> 가 끼어들 수 없게 < 를 이스케이프
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
       />
-      <main>
+      <div>
         <FaqView />
-      </main>
+      </div>
       <LayoutFooter />
     </>
   )

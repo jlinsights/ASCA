@@ -145,18 +145,18 @@ export default function AdminContestApplicationsPage() {
   if (loading) {
     return (
       <div className='min-h-screen bg-background'>
-        <main className='container py-8'>
+        <div className='container py-8'>
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
-        </main>
+        </div>
       </div>
     )
   }
 
   return (
     <div className='min-h-screen bg-background'>
-      <main className='container py-8'>
+      <div className='container py-8'>
         {/* Header */}
         <div className='mb-8'>
           <Link href='/admin/contests'>
@@ -398,7 +398,7 @@ export default function AdminContestApplicationsPage() {
             </Card>
           </div>
         )}
-      </main>
+      </div>
     </div>
   )
 }

@@ -132,7 +132,7 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
     ) : undefined
 
   return (
-    <main className='ap'>
+    <div className='ap'>
       <ArtistHero
         name={name}
         baseName={baseName ?? artist.name}
@@ -212,7 +212,7 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
       )}
 
       <LayoutFooter />
-    </main>
+    </div>
   )
 }
 

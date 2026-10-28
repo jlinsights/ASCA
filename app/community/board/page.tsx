@@ -46,7 +46,7 @@ export default async function CommunityBoardPage({ searchParams }: Props) {
       : await listThreads({ search, before })
   return (
     <>
-      <main>
+      <div>
         <BoardView
           threads={feed.threads}
           total={feed.total}
@@ -56,7 +56,7 @@ export default async function CommunityBoardPage({ searchParams }: Props) {
           olderHref={feed.nextCursor ? pageHref({ view, search, before: feed.nextCursor }) : null}
           newestHref={before ? pageHref({ view, search }) : null}
         />
-      </main>
+      </div>
       <LayoutFooter />
     </>
   )

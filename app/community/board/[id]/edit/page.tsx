@@ -23,12 +23,12 @@ export default async function EditThreadPage({ params }: Props) {
   const { thread } = found
   return (
     <>
-      <main>
+      <div>
         <ComposeForm
           hasDisplayName
           editing={{ id: thread.id, title: thread.title, body: thread.body }}
         />
-      </main>
+      </div>
       <LayoutFooter />
     </>
   )

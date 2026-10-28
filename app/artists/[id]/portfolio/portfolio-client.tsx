@@ -99,7 +99,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
 
   return (
     <div className='min-h-screen bg-transparent flex flex-col'>
-      <main className='flex-1'>
+      <div className='flex-1'>
         {/* Hero Section */}
         <section className='relative bg-gradient-to-br from-rice-paper via-silk-cream to-celadon-green/10 dark:from-ink-black dark:via-stone-gray/20 dark:to-celadon-green/10 py-20'>
           <div className='container'>
@@ -332,7 +332,7 @@ export function PortfolioClient({ artistId }: PortfolioClientProps) {
             </div>
           </section>
         )}
-      </main>
+      </div>
 
       <LayoutFooter />
     </div>

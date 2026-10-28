@@ -149,7 +149,7 @@ export default function NoticePage() {
 
   if (loading) {
     return (
-      <main className='min-h-screen bg-transparent'>
+      <div className='min-h-screen bg-transparent'>
         {hero}
         <section className='container py-16'>
           <div className='max-w-4xl mx-auto text-center'>
@@ -158,13 +158,13 @@ export default function NoticePage() {
           </div>
         </section>
         <LayoutFooter />
-      </main>
+      </div>
     )
   }
 
   if (error) {
     return (
-      <main className='min-h-screen bg-transparent'>
+      <div className='min-h-screen bg-transparent'>
         {hero}
         <section className='container py-16'>
           <div className='max-w-4xl mx-auto text-center'>
@@ -177,12 +177,12 @@ export default function NoticePage() {
           </div>
         </section>
         <LayoutFooter />
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className='min-h-screen bg-transparent'>
+    <div className='min-h-screen bg-transparent'>
       {hero}
       <section className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto'>
@@ -443,6 +443,6 @@ export default function NoticePage() {
       </section>
 
       <LayoutFooter />
-    </main>
+    </div>
   )
 }

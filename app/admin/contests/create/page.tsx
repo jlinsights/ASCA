@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function AdminContestCreatePage() {
   return (
     <div className='min-h-screen bg-background'>
-      <main className='container py-8 [--shell-max:56rem]'>
+      <div className='container py-8 [--shell-max:56rem]'>
         <div className='mb-8'>
           <Link href='/admin/contests'>
             <Button variant='ghost' className='mb-4'>
@@ -27,7 +27,7 @@ export default function AdminContestCreatePage() {
         </div>
 
         <ContestForm />
-      </main>
+      </div>
     </div>
   )
 }

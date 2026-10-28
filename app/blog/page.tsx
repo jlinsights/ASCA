@@ -85,7 +85,7 @@ export default function BlogPage() {
   }
 
   return (
-    <main className='min-h-screen bg-transparent'>
+    <div className='min-h-screen bg-transparent'>
       <PageHero
         {...PAGE_HERO_MARKS.blog}
         title={language === 'ko' ? '동양서예 블로그' : 'Oriental Calligraphy Blog'}
@@ -296,6 +296,6 @@ export default function BlogPage() {
       </section>
 
       <LayoutFooter />
-    </main>
+    </div>
   )
 }

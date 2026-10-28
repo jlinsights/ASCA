@@ -73,7 +73,7 @@ export function ExhibitionRecordsPage({ variant }: { variant: Variant }) {
   }
 
   return (
-    <main className='min-h-screen'>
+    <div className='min-h-screen'>
       <PageHero
         {...PAGE_HERO_MARKS[config.mark]}
         title={t(config.titleKey)}
@@ -117,6 +117,6 @@ export function ExhibitionRecordsPage({ variant }: { variant: Variant }) {
       </section>
 
       <LayoutFooter />
-    </main>
+    </div>
   )
 }

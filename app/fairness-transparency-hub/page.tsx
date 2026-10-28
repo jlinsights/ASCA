@@ -209,7 +209,7 @@ export default function FairnessTransparencyHubPage() {
             </div>
           </aside>
 
-          <main className='flex-1 min-w-0 space-y-16'>
+          <div className='flex-1 min-w-0 space-y-16'>
             <Card className='border-scholar-red/20 bg-muted/30'>
               <CardContent className='pt-6'>
                 <h3 className='font-semibold mb-3'>한눈에 요약</h3>
@@ -482,7 +482,7 @@ export default function FairnessTransparencyHubPage() {
                 <strong>시행일</strong>: 2026.01.01 | <strong>버전</strong>: v1.0
               </p>
             </div>
-          </main>
+          </div>
         </div>
       </section>
 
