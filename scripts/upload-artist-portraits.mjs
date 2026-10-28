@@ -4,7 +4,7 @@
  *
  * 옛 Webflow 사이트의 작가 대표 사진(album-featured-image)을 ASCA 작가 프로필로 옮길 때 쓴다.
  * 원본은 저장소 밖(~/Developer/Archive/…)에 둔다. 파일 이름(확장자 제외) = 작가 slug.
- * 기존 프로필과 같은 폴더(profiles/)에 <작가 id>-<내용 해시>.webp 로 올린다 — 덮어쓰지 않는다.
+ * 기존 프로필과 같은 폴더(profiles/)에 <작가 id>-<실행 표식>.webp 로 올린다 — 덮어쓰지 않는다.
  *
  * 사용법:
  *   node scripts/upload-artist-portraits.mjs --dir <폴더>            # 미리 보기 — 무엇이 누구에게 붙는지만 출력
@@ -17,7 +17,7 @@
  * .env.local 은 읽지 않는다 — 그 파일은 옛 프로젝트를 가리킨다.
  * 키는 화면·로그에 찍지 않는다. 터미널에서 직접 export 해서 쓰고, 대화창(!)에는 붙여 넣지 말 것.
  */
-import { createHash } from 'node:crypto'
+import { randomBytes } from 'node:crypto'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -30,6 +30,8 @@ const BUCKET = 'artist-images'
 const MAX_EDGE = 1200
 const QUALITY = 85
 const EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif'])
+/** 이번 실행만의 표식 — 파일 이름에 붙여 실행끼리 자리를 나눈다 */
+const RUN_ID = randomBytes(6).toString('hex')
 
 const dirFlag = process.argv.indexOf('--dir')
 if (dirFlag === -1 || !process.argv[dirFlag + 1]) {
@@ -104,17 +106,14 @@ async function uploadOne({ file, artist }) {
     .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: 'inside', withoutEnlargement: true })
     .webp({ quality: QUALITY })
     .toBuffer({ resolveWithObject: true })
-  // 내용 해시로 자리를 나누고 덮어쓰지 않는다 — 동시에 돌아도 이미 연결된 사진의 내용이 바뀌지 않는다.
-  // 같은 내용을 다시 올리면(앞선 실행이 파일만 올리고 멈춘 경우) 이미 있는 파일을 그대로 쓴다.
-  const hash = createHash('sha256').update(buffer).digest('hex').slice(0, 12)
-  const objectPath = `profiles/${artist.id}-${hash}.webp`
+  // 실행마다 고유한 자리에 덮어쓰지 않고 올린다 — 다른 실행의 파일을 바꾸거나 지울 일이 없다
+  const objectPath = `profiles/${artist.id}-${RUN_ID}.webp`
   const { error } = await supabase.storage.from(BUCKET).upload(objectPath, buffer, {
     contentType: 'image/webp',
     upsert: false,
     cacheControl: '31536000',
   })
-  const alreadyThere = error && /exists|duplicate/i.test(error.message)
-  if (error && !alreadyThere) throw new Error(`${file}: 업로드 실패 — ${error.message}`)
+  if (error) throw new Error(`${file}: 업로드 실패 — ${error.message}`)
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(objectPath)
   const { data: updated, error: updateError } = await supabase
     .from('artists')
@@ -124,11 +123,9 @@ async function uploadOne({ file, artist }) {
     .is('profile_image', null)
     .select('id')
   if (updateError || !updated?.length) {
-    // 이번 실행이 만든 파일만 지운다 — 연결되지 않은 사진(특히 그 사이 비공개가 된 작가의 것)을 공개 버킷에 남기지 않는다
-    if (!alreadyThere) {
-      const { error: removeError } = await supabase.storage.from(BUCKET).remove([objectPath])
-      if (removeError) console.error(`  ⚠ ${file}: 올린 파일 회수 실패 — ${objectPath}`)
-    }
+    // 이번 실행만 쓰는 자리라 지워도 안전하다 — 연결되지 않은 사진(특히 그 사이 비공개가 된 작가의 것)을 공개 버킷에 남기지 않는다
+    const { error: removeError } = await supabase.storage.from(BUCKET).remove([objectPath])
+    if (removeError) console.error(`  ⚠ ${file}: 올린 파일 회수 실패 — ${objectPath}`)
     if (updateError) throw new Error(`${file}: DB 갱신 실패 — ${updateError.message}`)
     throw new Error(`${file}: 그 사이 프로필 사진이 생겼거나 비공개가 되어 건너뜀`)
   }
