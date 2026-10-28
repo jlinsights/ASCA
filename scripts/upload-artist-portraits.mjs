@@ -56,13 +56,20 @@ function listSourceFiles() {
     .sort()
 }
 
+// PostgREST 는 한 번에 최대 1,000행만 돌려준다 — 잘려서 작가가 조용히 빠지지 않게 나눠 읽는다
+const LOOKUP_BATCH = 200
+
 async function loadArtists(slugs) {
-  const { data, error } = await supabase
-    .from('artists')
-    .select('id,slug,name,profile_image')
-    .in('slug', slugs)
-  if (error) throw new Error(`작가 조회 실패: ${error.message}`)
-  return data
+  const artists = []
+  for (let i = 0; i < slugs.length; i += LOOKUP_BATCH) {
+    const { data, error } = await supabase
+      .from('artists')
+      .select('id,slug,name,profile_image')
+      .in('slug', slugs.slice(i, i + LOOKUP_BATCH))
+    if (error) throw new Error(`작가 조회 실패: ${error.message}`)
+    artists.push(...data)
+  }
+  return artists
 }
 
 function plan(files, artists) {
@@ -76,7 +83,11 @@ function plan(files, artists) {
     else if (artist.profile_image) skipped.push({ file, reason: '이미 프로필 사진 있음' })
     else ready.push({ file, artist })
   }
-  return { ready, skipped }
+  // 같은 작가에 파일이 둘이면 뒤 파일이 같은 자리를 덮어쓴다 — 쓰기 전에 막는다
+  const byArtist = new Map()
+  for (const r of ready) byArtist.set(r.artist.id, [...(byArtist.get(r.artist.id) ?? []), r.file])
+  const duplicates = [...byArtist.values()].filter(list => list.length > 1)
+  return { ready, skipped, duplicates }
 }
 
 async function uploadOne({ file, artist }) {
@@ -123,11 +134,17 @@ function writeBackup(ready) {
 const files = listSourceFiles()
 const slugs = files.map(f => path.basename(f, path.extname(f)).normalize('NFC'))
 const artists = await loadArtists(slugs)
-const { ready, skipped } = plan(files, artists)
+const { ready, skipped, duplicates } = plan(files, artists)
 
 console.log(`원본 ${files.length}개 · 올릴 것 ${ready.length} · 건너뜀 ${skipped.length}`)
 for (const r of ready) console.log(`  ✓ ${r.file} → ${r.artist.name} (${r.artist.slug})`)
 for (const s of skipped) console.log(`  – ${s.file} — ${s.reason}`)
+if (duplicates.length) {
+  for (const list of duplicates)
+    console.log(`  ⚠ 한 작가에 파일 ${list.length}개: ${list.join(', ')}`)
+  console.error('❌ 한 작가에 파일이 여럿입니다. 하나만 남기고 다시 실행하세요.')
+  process.exit(1)
+}
 
 if (!apply) {
   console.log('\n미리 보기입니다. 올리려면 --apply 를 붙여 다시 실행하세요.')
