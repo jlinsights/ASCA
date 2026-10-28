@@ -11,6 +11,7 @@
  *   node scripts/upload-artist-portraits.mjs --dir <폴더> --apply    # 업로드 + artists.profile_image 설정 (백업 먼저)
  *
  * 이미 프로필 사진이 있는 작가는 건너뛴다 — 덮어쓰지 않는다 (갱신도 profile_image 가 비어 있을 때만).
+ * 공개(visibility='public') 작가만 올린다 — 숨김·회원 공개 작가의 사진을 공개 버킷에 올리지 않는다.
  *
  * 키: ASCA_SUPABASE_SERVICE_ROLE_KEY (미리 보기·업로드 모두).
  * .env.local 은 읽지 않는다 — 그 파일은 옛 프로젝트를 가리킨다.
@@ -65,7 +66,7 @@ async function loadArtists(slugs) {
   for (let i = 0; i < slugs.length; i += LOOKUP_BATCH) {
     const { data, error } = await supabase
       .from('artists')
-      .select('id,slug,name,profile_image')
+      .select('id,slug,name,profile_image,visibility')
       .in('slug', slugs.slice(i, i + LOOKUP_BATCH))
     if (error) throw new Error(`작가 조회 실패: ${error.message}`)
     artists.push(...data)
@@ -81,6 +82,9 @@ function plan(files, artists) {
     const slug = path.basename(file, path.extname(file)).normalize('NFC')
     const artist = bySlug.get(slug)
     if (!artist) skipped.push({ file, reason: '같은 slug 의 작가 없음' })
+    // 버킷이 공개라 사진 주소는 누구나 연다 — 서비스 키는 RLS 를 우회하니 공개 작가만 직접 고른다
+    else if (artist.visibility !== 'public')
+      skipped.push({ file, reason: `공개 작가가 아님(${artist.visibility})` })
     else if (artist.profile_image) skipped.push({ file, reason: '이미 프로필 사진 있음' })
     else ready.push({ file, artist })
   }
@@ -114,10 +118,12 @@ async function uploadOne({ file, artist }) {
     .from('artists')
     .update({ profile_image: data.publicUrl })
     .eq('id', artist.id)
+    .eq('visibility', 'public')
     .is('profile_image', null)
     .select('id')
   if (updateError) throw new Error(`${file}: DB 갱신 실패 — ${updateError.message}`)
-  if (!updated?.length) throw new Error(`${file}: 그 사이 프로필 사진이 생겨 건너뜀`)
+  if (!updated?.length)
+    throw new Error(`${file}: 그 사이 프로필 사진이 생겼거나 비공개가 되어 건너뜀`)
   return { kb: Math.round(buffer.length / 1024), size: `${info.width}×${info.height}` }
 }
 
