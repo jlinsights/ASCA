@@ -4,7 +4,7 @@
  *
  * 옛 Webflow 사이트의 작가 대표 사진(album-featured-image)을 ASCA 작가 프로필로 옮길 때 쓴다.
  * 원본은 저장소 밖(~/Developer/Archive/…)에 둔다. 파일 이름(확장자 제외) = 작가 slug.
- * 기존 프로필과 같은 자리(profiles/<작가 id>.webp)에 올린다.
+ * 기존 프로필과 같은 폴더(profiles/)에 <작가 id>-<내용 해시>.webp 로 올린다 — 덮어쓰지 않는다.
  *
  * 사용법:
  *   node scripts/upload-artist-portraits.mjs --dir <폴더>            # 미리 보기 — 무엇이 누구에게 붙는지만 출력
@@ -16,6 +16,7 @@
  * .env.local 은 읽지 않는다 — 그 파일은 옛 프로젝트를 가리킨다.
  * 키는 화면·로그에 찍지 않는다. 터미널에서 직접 export 해서 쓰고, 대화창(!)에는 붙여 넣지 말 것.
  */
+import { createHash } from 'node:crypto'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -97,14 +98,17 @@ async function uploadOne({ file, artist }) {
     .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: 'inside', withoutEnlargement: true })
     .webp({ quality: QUALITY })
     .toBuffer({ resolveWithObject: true })
-  const objectPath = `profiles/${artist.id}.webp`
-  // 가리키는 행이 없는 자리라 덮어써도 안전하다 — 앞선 실행이 파일만 올리고 멈췄어도 다시 돌릴 수 있다
+  // 내용 해시로 자리를 나누고 덮어쓰지 않는다 — 동시에 돌아도 이미 연결된 사진의 내용이 바뀌지 않는다.
+  // 같은 내용을 다시 올리면(앞선 실행이 파일만 올리고 멈춘 경우) 이미 있는 파일을 그대로 쓴다.
+  const hash = createHash('sha256').update(buffer).digest('hex').slice(0, 12)
+  const objectPath = `profiles/${artist.id}-${hash}.webp`
   const { error } = await supabase.storage.from(BUCKET).upload(objectPath, buffer, {
     contentType: 'image/webp',
-    upsert: true,
+    upsert: false,
     cacheControl: '31536000',
   })
-  if (error) throw new Error(`${file}: 업로드 실패 — ${error.message}`)
+  const alreadyThere = error && /exists|duplicate/i.test(error.message)
+  if (error && !alreadyThere) throw new Error(`${file}: 업로드 실패 — ${error.message}`)
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(objectPath)
   const { data: updated, error: updateError } = await supabase
     .from('artists')
