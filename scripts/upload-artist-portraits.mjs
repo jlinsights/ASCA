@@ -85,7 +85,9 @@ function plan(files, artists) {
     // 버킷이 공개라 사진 주소는 누구나 연다 — 서비스 키는 RLS 를 우회하니 공개 작가만 직접 고른다
     else if (artist.visibility !== 'public')
       skipped.push({ file, reason: `공개 작가가 아님(${artist.visibility})` })
-    else if (artist.profile_image) skipped.push({ file, reason: '이미 프로필 사진 있음' })
+    // 갱신 조건(profile_image IS NULL)과 같은 기준 — 빈 문자열도 '있음'으로 보고 건너뛴다
+    else if (artist.profile_image !== null)
+      skipped.push({ file, reason: '이미 프로필 사진 값이 있음' })
     else ready.push({ file, artist })
   }
   // 같은 작가에 파일이 둘이면 뒤 파일이 같은 자리를 덮어쓴다 — 쓰기 전에 막는다
@@ -121,9 +123,15 @@ async function uploadOne({ file, artist }) {
     .eq('visibility', 'public')
     .is('profile_image', null)
     .select('id')
-  if (updateError) throw new Error(`${file}: DB 갱신 실패 — ${updateError.message}`)
-  if (!updated?.length)
+  if (updateError || !updated?.length) {
+    // 이번 실행이 만든 파일만 지운다 — 연결되지 않은 사진(특히 그 사이 비공개가 된 작가의 것)을 공개 버킷에 남기지 않는다
+    if (!alreadyThere) {
+      const { error: removeError } = await supabase.storage.from(BUCKET).remove([objectPath])
+      if (removeError) console.error(`  ⚠ ${file}: 올린 파일 회수 실패 — ${objectPath}`)
+    }
+    if (updateError) throw new Error(`${file}: DB 갱신 실패 — ${updateError.message}`)
     throw new Error(`${file}: 그 사이 프로필 사진이 생겼거나 비공개가 되어 건너뜀`)
+  }
   return { kb: Math.round(buffer.length / 1024), size: `${info.width}×${info.height}` }
 }
 
