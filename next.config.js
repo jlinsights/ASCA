@@ -120,8 +120,6 @@ const THIRD_PARTY = {
   },
   // Cloudflare Images — 정적 이미지 호스팅
   cloudflareImages: { img: ['https://imagedelivery.net'] },
-  // 옛 Webflow CDN — 블로그 글 본문·썸네일(lib/data/blog-posts.json). Webflow 해지 전에 옮겨야 한다
-  webflowCdn: { img: ['https://cdn.prod.website-files.com'] },
 }
 
 /** next/image 가 최적화해 줄 로컬 경로 — public/ 의 이미지 폴더와 루트 파일, Next 정적 파일 */
@@ -146,7 +144,6 @@ const IMAGE_REMOTE_HOSTS = [
       'caxjyimsuvjnbmjoxfad.supabase.co',
       'imagedelivery.net', // Cloudflare Images — 소개 페이지 등
       'pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev', // 지원 서식·위원 위촉 페이지
-      'cdn.prod.website-files.com', // 옛 Webflow — 블로그 썸네일, 옮기면 지운다
       'img.clerk.com', // 회원 아바타
     ].filter(Boolean)
   ),
