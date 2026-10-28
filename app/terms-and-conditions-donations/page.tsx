@@ -222,7 +222,7 @@ export default function TermsAndConditionsDonationsPage() {
             </div>
           </aside>
 
-          <main className='flex-1 min-w-0'>
+          <div className='flex-1 min-w-0'>
             <Card>
               <CardHeader>
                 <div className='flex items-center gap-2 mb-2'>
@@ -275,7 +275,7 @@ export default function TermsAndConditionsDonationsPage() {
                 </section>
               </CardContent>
             </Card>
-          </main>
+          </div>
         </div>
       </section>
 

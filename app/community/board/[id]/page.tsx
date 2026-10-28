@@ -46,7 +46,7 @@ export default async function CommunityThreadPage({ params }: Props) {
   ])
   return (
     <>
-      <main>
+      <div>
         <ThreadDetail
           thread={found.thread}
           moderation={found.admin ? found.moderation : null}
@@ -57,7 +57,7 @@ export default async function CommunityThreadPage({ params }: Props) {
             hasDisplayName: Boolean(account?.displayName.trim()),
           }}
         />
-      </main>
+      </div>
       <LayoutFooter />
     </>
   )

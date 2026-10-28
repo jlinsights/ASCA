@@ -31,14 +31,14 @@ export const metadata: Metadata = {
 export default function CommunityPage() {
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='flex-1'>
+      <div className='flex-1'>
         <CommunityHero />
         <DaoArchitecture />
         <ImseoCard />
         <BoardEntry />
         <CafeEntry />
         <MembershipBranch />
-      </main>
+      </div>
       <LayoutFooter />
     </div>
   )

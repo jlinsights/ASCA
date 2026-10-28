@@ -15,7 +15,7 @@ export const AdminLayout = React.memo(({ children, currentPage }: AdminLayoutPro
       <div className='min-h-screen bg-background'>
         <Header />
         <AdminNavigation currentPage={currentPage} />
-        <main className='container py-8'>{children}</main>
+        <div className='container py-8'>{children}</div>
         <LayoutFooter />
       </div>
     </AdminProtectedRoute>

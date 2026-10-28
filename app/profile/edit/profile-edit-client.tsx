@@ -127,24 +127,24 @@ export function ProfileEditClient() {
     )
   if (!artistId)
     return (
-      <main className='mx-auto max-w-xl space-y-4 px-6 py-12'>
+      <div className='mx-auto max-w-xl space-y-4 px-6 py-12'>
         <p>{t('authNativeUnlinked')}</p>
         <Link className='underline' href='/profile'>
           {t('authNativeAccount')}
         </Link>
-      </main>
+      </div>
     )
   if (loadError || !profile)
     return (
-      <main className='mx-auto max-w-xl space-y-4 px-6 py-12'>
+      <div className='mx-auto max-w-xl space-y-4 px-6 py-12'>
         <p role='alert'>{t('profileEditorLoadError')}</p>
         <Button onClick={() => setAttempt(value => value + 1)}>{t('authNativeRetry')}</Button>
-      </main>
+      </div>
     )
 
   return (
     <div className='min-h-screen flex flex-col'>
-      <main className='container flex-1 py-12'>
+      <div className='container flex-1 py-12'>
         <div className='mx-auto w-full max-w-3xl space-y-8'>
           <header className='space-y-3'>
             <Link href='/profile' className='underline'>
@@ -256,7 +256,7 @@ export function ProfileEditClient() {
             </Button>
           </form>
         </div>
-      </main>
+      </div>
       <LayoutFooter />
     </div>
   )

@@ -142,7 +142,7 @@ export function CareerManagementClient() {
 
   return (
     <div className='min-h-screen bg-transparent flex flex-col'>
-      <main className='flex-1 container py-8'>
+      <div className='flex-1 container py-8'>
         <div className='max-w-6xl mx-auto'>
           {/* Header */}
           <div className='mb-8'>
@@ -312,7 +312,7 @@ export function CareerManagementClient() {
             showActions={true}
           />
         </div>
-      </main>
+      </div>
 
       <LayoutFooter />
     </div>
