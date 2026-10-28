@@ -122,22 +122,16 @@ async function uploadOne({ file, artist }) {
     .eq('visibility', 'public')
     .is('profile_image', null)
     .select('id')
-  if (updateError || !updated?.length) {
-    // 연결되지 않은 사진(특히 그 사이 비공개가 된 작가의 것)을 공개 버킷에 남기지 않는다.
-    // 다만 갱신이 저장되고 응답만 잃었을 수 있으니, 이 파일이 연결되지 않았음을 확인했을 때만 지운다
-    const { data: now, error: readError } = await supabase
-      .from('artists')
-      .select('profile_image')
-      .eq('id', artist.id)
-      .maybeSingle()
-    if (readError)
-      console.error(`  ⚠ ${file}: 연결 여부를 확인하지 못해 파일을 남김 — ${objectPath}`)
-    else if (now?.profile_image === data.publicUrl) return linked(buffer, info)
-    else {
-      const { error: removeError } = await supabase.storage.from(BUCKET).remove([objectPath])
-      if (removeError) console.error(`  ⚠ ${file}: 올린 파일 회수 실패 — ${objectPath}`)
-    }
-    if (updateError) throw new Error(`${file}: DB 갱신 실패 — ${updateError.message}`)
+  if (updateError) {
+    // 갱신이 저장됐는지 알 수 없다(응답만 잃었거나 아직 커밋 중일 수 있다) — 연결됐을지 모르는 파일은 지우지 않는다
+    console.error(`  ⚠ ${file}: 결과를 알 수 없어 파일을 남김 — ${objectPath} (확인 후 직접 정리)`)
+    throw new Error(`${file}: DB 갱신 실패 — ${updateError.message}`)
+  }
+  if (!updated.length) {
+    // 조건에 맞는 행이 없어 갱신하지 않았다고 확정된 경우만 — 이번 실행만 쓰는 자리라 지워도 안전하고,
+    // 그 사이 비공개가 된 작가의 사진을 공개 버킷에 남기지 않는다
+    const { error: removeError } = await supabase.storage.from(BUCKET).remove([objectPath])
+    if (removeError) console.error(`  ⚠ ${file}: 올린 파일 회수 실패 — ${objectPath}`)
     throw new Error(`${file}: 그 사이 프로필 사진이 생겼거나 비공개가 되어 건너뜀`)
   }
   return linked(buffer, info)
