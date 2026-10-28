@@ -6,7 +6,8 @@
 import { hasLocalMatch } from 'next/dist/shared/lib/match-local-pattern'
 import { hasRemoteMatch } from 'next/dist/shared/lib/match-remote-pattern'
 
-const { images } = require('../../../next.config.js')
+const nextConfig = require('../../../next.config.js')
+const { images } = nextConfig
 
 const local = (path: string) => hasLocalMatch(images.localPatterns, path)
 const remote = (url: string) =>
@@ -39,13 +40,33 @@ describe('image optimizer — remote hosts', () => {
     'https://asca-main.vercel.app/api/community/images/x',
     'https://evil.example/x.svg',
     'http://caxjyimsuvjnbmjoxfad.supabase.co/storage/v1/object/public/a.jpg',
+    // 옛 Webflow CDN — 블로그 이미지까지 옮겨 쓰는 곳이 없다(#169·#172)
+    'https://cdn.prod.website-files.com/6220af701a295f89dac62631/a.jpg',
   ])('refuses %s', url => expect(remote(url)).toBe(false))
 
   it.each([
     'https://caxjyimsuvjnbmjoxfad.supabase.co/storage/v1/object/public/artwork-images/a/main.webp',
     'https://imagedelivery.net/abc/def/Contain',
     'https://pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev/forms/a.png',
-    'https://cdn.prod.website-files.com/6220af701a295f89dac62631/a.jpg',
     'https://img.clerk.com/avatar.png',
   ])('allows %s', url => expect(remote(url)).toBe(true))
+})
+
+describe('production CSP img-src', () => {
+  // 브라우저가 직접 여는 이미지 출처 — 옮긴 뒤 남은 허용은 지운다
+  it('no longer lets pages load images from the old Webflow CDN', async () => {
+    const env = process.env as Record<string, string | undefined>
+    const original = env.NODE_ENV
+    env.NODE_ENV = 'production'
+    let groups: { headers: { key: string; value: string }[] }[]
+    try {
+      groups = await nextConfig.headers()
+    } finally {
+      env.NODE_ENV = original
+    }
+    const csp = groups.flatMap(g => g.headers).find(h => h.key === 'Content-Security-Policy')
+    const imgSrc = csp?.value.split(';').find(d => d.trim().startsWith('img-src')) ?? ''
+    expect(imgSrc).toContain("'self'")
+    expect(imgSrc).not.toContain('website-files.com')
+  })
 })
