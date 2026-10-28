@@ -123,12 +123,27 @@ async function uploadOne({ file, artist }) {
     .is('profile_image', null)
     .select('id')
   if (updateError || !updated?.length) {
-    // 이번 실행만 쓰는 자리라 지워도 안전하다 — 연결되지 않은 사진(특히 그 사이 비공개가 된 작가의 것)을 공개 버킷에 남기지 않는다
-    const { error: removeError } = await supabase.storage.from(BUCKET).remove([objectPath])
-    if (removeError) console.error(`  ⚠ ${file}: 올린 파일 회수 실패 — ${objectPath}`)
+    // 연결되지 않은 사진(특히 그 사이 비공개가 된 작가의 것)을 공개 버킷에 남기지 않는다.
+    // 다만 갱신이 저장되고 응답만 잃었을 수 있으니, 이 파일이 연결되지 않았음을 확인했을 때만 지운다
+    const { data: now, error: readError } = await supabase
+      .from('artists')
+      .select('profile_image')
+      .eq('id', artist.id)
+      .maybeSingle()
+    if (readError)
+      console.error(`  ⚠ ${file}: 연결 여부를 확인하지 못해 파일을 남김 — ${objectPath}`)
+    else if (now?.profile_image === data.publicUrl) return linked(buffer, info)
+    else {
+      const { error: removeError } = await supabase.storage.from(BUCKET).remove([objectPath])
+      if (removeError) console.error(`  ⚠ ${file}: 올린 파일 회수 실패 — ${objectPath}`)
+    }
     if (updateError) throw new Error(`${file}: DB 갱신 실패 — ${updateError.message}`)
     throw new Error(`${file}: 그 사이 프로필 사진이 생겼거나 비공개가 되어 건너뜀`)
   }
+  return linked(buffer, info)
+}
+
+function linked(buffer, info) {
   return { kb: Math.round(buffer.length / 1024), size: `${info.width}×${info.height}` }
 }
 
