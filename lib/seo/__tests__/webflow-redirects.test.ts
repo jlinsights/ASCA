@@ -171,6 +171,12 @@ describe('Webflow 주소 이관', () => {
     expect(hops).toBeLessThanOrEqual(2)
   })
 
+  test('옛 블로그 글 주소는 목록이 아니라 같은 글로 간다', async () => {
+    const redirects = await allRedirects()
+    const posts = require('../../data/blog-posts.json') as { id: string }[]
+    for (const { id } of posts) expect(applyRedirect(redirects, `/post/${id}`)).toBe(`/blog/${id}`)
+  })
+
   test('작가 slug 를 표에 적지 않는다 (비공개 등급 이름 노출 방지)', () => {
     const sources = webflowRedirects.map(r => r.source).join('\n')
     expect(sources).not.toMatch(/\/calligrapher\/[a-z]/)
