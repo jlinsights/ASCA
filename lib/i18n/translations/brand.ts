@@ -9,7 +9,7 @@ export const brandTranslations: TranslationData = {
     brandTitle: '브랜드 · 스타일 가이드',
     brandLede:
       '동양서예협회의 시각 언어 ASCA Ink System — 먹을 머금은 남색과 절제된 금색, 선지의 바탕, 낙관의 붉은 인장. 사이트와 인쇄물의 모든 화면이 이 규칙을 따릅니다.',
-    brandSloganGloss: '옛법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어집니다',
+    brandSloganGloss: '옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어집니다',
     brandOnThisPage: '이 페이지',
     brandNavEssence: '브랜드 정신',
     brandNavNames: '공식 명칭',
@@ -155,7 +155,8 @@ export const brandTranslations: TranslationData = {
     brandTitle: 'Brand & Style Guide',
     brandLede:
       'The ASCA Ink System is the Society’s visual language — ink-soaked navy and restrained gold, rice-paper grounds, and a red seal kept for mark-making. Every page and printed piece follows these rules.',
-    brandSloganGloss: 'Learn from the ancients to open the new; brush and person deepen together.',
+    brandSloganGloss:
+      'Creating anew through tradition, where calligraphy and character mature together.',
     brandOnThisPage: 'On this page',
     brandNavEssence: 'Brand essence',
     brandNavNames: 'Official names',

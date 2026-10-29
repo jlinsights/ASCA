@@ -7,9 +7,9 @@ export const homeTranslations: TranslationData = {
   ko: {
     homeHeroEyebrow: '사단법인 동양서예협회',
     homeHeroTitle: '동양서예',
-    homeHeroGloss: '옛법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어집니다',
+    homeHeroGloss: '옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어집니다',
     homeHeroLede:
-      '동양 서예의 바른 법을 잇고, 국제 전시·학술 교류·연구 출판으로 전통 필묵의 새로운 장을 엽니다.',
+      '동양 서예의 전통을 잇고, 전시·공모전·교육·국제 교류로 오늘의 필묵을 새롭게 엽니다.',
     homeHeroCta: '전시 연혁 보기',
     homeHeroLink: '협회 소개',
     homeHeroImgAlt: '수묵 산수',
@@ -34,13 +34,14 @@ export const homeTranslations: TranslationData = {
   en: {
     homeHeroEyebrow: 'The Asian Society of Calligraphic Arts',
     homeHeroTitle: 'East Asian Calligraphy',
-    homeHeroGloss: 'Learn from the ancients to open the new; brush and person deepen together.',
+    homeHeroGloss:
+      'Creating anew through tradition, where calligraphy and character mature together.',
     homeHeroLede:
-      'Carrying the orthodox method of East Asian calligraphy forward through international exhibitions, scholarly exchange and research publishing.',
+      'Carrying East Asian calligraphy forward through exhibitions, competitions, education and international exchange.',
     homeHeroCta: 'Exhibition History',
     homeHeroLink: 'About the Society',
     homeHeroImgAlt: 'Ink-wash mountain landscape',
-    homeStatSince: 'First Korea–China–Japan exchange',
+    homeStatSince: 'Start of the Korea–China–Japan exchange',
     // 영어는 단위(homeStatEditionUnit) 없이 라벨로 푼다 — home-hero.tsx 참조
     homeStatEdition: 'Editions of the Korea Grand Calligraphy Exhibition',
     homeStatExhibitions: 'Exhibitions on record',
@@ -64,7 +65,7 @@ export const homeTranslations: TranslationData = {
     homeHeroTitle: '東洋書芸',
     homeHeroGloss: '古法に学び新しきを拓き、書と人はともに深まる',
     homeHeroLede:
-      '東洋書芸の正統を継ぎ、国際展覧・学術交流・研究出版を通じて伝統筆墨の新たな章を拓きます。',
+      '東洋書芸の伝統を受け継ぎ、展覧会・公募展・教育・国際交流を通じて、今日の筆墨に新たな章をひらきます。',
     homeHeroCta: '展示の沿革',
     homeHeroLink: '協会について',
     homeHeroImgAlt: '水墨山水',
@@ -81,7 +82,7 @@ export const homeTranslations: TranslationData = {
     homeJournalMore: 'ブログを見る',
     homeNewTab: '新しいタブで開きます',
     homeJoinEyebrow: '入会・お問い合わせ',
-    homeJoinTitle: '協会に入会する',
+    homeJoinTitle: '協会とともに',
     homeJoinLede: '正会員・準会員の入会、展示・講座のお問い合わせを受け付けています。',
     homeJoinCta: '入会案内',
     homeJoinContact: 'お問い合わせ',
@@ -90,8 +91,7 @@ export const homeTranslations: TranslationData = {
     homeHeroEyebrow: '社團法人 東洋書藝協會',
     homeHeroTitle: '東洋書藝',
     // homeHeroGloss 없음 — 번체에서는 슬로건이 이미 원문이라 풀이를 숨긴다(home-hero.tsx)
-    homeHeroLede:
-      '承繼東洋書藝之正法，以國際展覽、學術交流與研究出版，開創傳統筆墨於當代的嶄新篇章。',
+    homeHeroLede: '承古開新，以展覽、公募、教育與國際交流，開創當代筆墨的新篇章。',
     homeHeroCta: '展覽沿革',
     homeHeroLink: '協會簡介',
     homeHeroImgAlt: '水墨山水',
