@@ -610,3 +610,31 @@
     display: none;
   }
 }
+
+/* 정의 목록 — 왼쪽 굵은 라벨, 오른쪽 설명(특별선임의 회원 상태별 처리) */
+.asca-apply__defs {
+  margin: 0;
+  border-top: 1px solid var(--ap-rule);
+}
+.asca-apply__defs > div {
+  display: grid;
+  gap: 4px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--ap-rule);
+}
+@media (min-width: 600px) {
+  .asca-apply__defs > div {
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 16px;
+  }
+}
+.asca-apply__defs dt {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.asca-apply__defs dd {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--ap-muted);
+}

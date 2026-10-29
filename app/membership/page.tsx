@@ -7,6 +7,7 @@ import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { CONSULT_LINKS, MEMBER_TIERS } from './_components/membership-data'
 import { MembershipTiers } from './_components/membership-tiers'
 import { MembershipPromotion } from './_components/membership-promotion'
+import { MembershipSpecial } from './_components/membership-special'
 import { MembershipBenefits } from './_components/membership-benefits'
 import { MembershipDues } from './_components/membership-dues'
 import { MembershipLifetime } from './_components/membership-lifetime'
@@ -32,7 +33,7 @@ export default function MembershipPage() {
       <PageHero
         {...PAGE_HERO_MARKS.membership}
         title='회원 안내'
-        lede='회원 등급과 연회비, 추천·초대작가 승급 기준, 등급별 혜택과 가입 방법을 협회 정관과 규정에 따라 안내합니다.'
+        lede='회원 등급과 연회비, 추천·초대작가 승급 기준과 특별선임, 등급별 혜택과 가입 방법을 협회 정관과 규정에 따라 안내합니다.'
         actions={
           <>
             <Link
@@ -67,6 +68,7 @@ export default function MembershipPage() {
       <div className='asca-mb__body'>
         <MembershipTiers />
         <MembershipPromotion />
+        <MembershipSpecial />
         <MembershipBenefits />
         <MembershipDues />
         <MembershipLifetime />
