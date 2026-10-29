@@ -820,6 +820,10 @@
   white-space: nowrap;
   background: var(--surface-2);
 }
+/* 구분 이름·금액처럼 짧은 칸 — 언어와 관계없이 한 줄로 둔다 (regulation-body 의 SHORT_CELL_MAX) */
+.asca-regs-table .asca-regs-table__short {
+  white-space: nowrap;
+}
 .asca-regs-table tr:last-child td {
   border-bottom: 0;
 }
