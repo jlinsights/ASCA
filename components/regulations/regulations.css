@@ -809,6 +809,9 @@
   vertical-align: top;
   border-bottom: 1px solid var(--border);
   word-break: keep-all;
+  /* 본문(.asca-regs-text)의 overflow-wrap:anywhere 를 끊는다 — 남겨 두면 표가 열을 좁히며
+     "청년작가"·"20만원" 같은 낱말을 글자 단위로 쪼갠다. 넘치면 표가 가로로 밀린다 */
+  overflow-wrap: normal;
 }
 .asca-regs-table th {
   font-size: 12px;
@@ -816,6 +819,10 @@
   letter-spacing: 0.04em;
   white-space: nowrap;
   background: var(--surface-2);
+}
+/* 구분 이름·금액처럼 짧은 칸 — 언어와 관계없이 한 줄로 둔다 (regulation-body 의 SHORT_CELL_MAX) */
+.asca-regs-table .asca-regs-table__short {
+  white-space: nowrap;
 }
 .asca-regs-table tr:last-child td {
   border-bottom: 0;
@@ -998,7 +1005,9 @@
 /* 일본어·중국어 번역본: keep-all 은 한자·가나 사이 줄바꿈을 막아 원문 줄 끝에서만 꺾인다 */
 .asca-regs-text:is(:lang(ja), :lang(zh)),
 .asca-regs-toc__list:is(:lang(ja), :lang(zh)),
-.asca-regs-doc-head__title:is(:lang(ja), :lang(zh)) {
+.asca-regs-doc-head__title:is(:lang(ja), :lang(zh)),
+/* 표 칸은 overflow-wrap:normal 이라 keep-all 이 남으면 띄어쓰기 없는 긴 칸이 줄을 못 바꾼다 */
+.asca-regs-table :is(th, td):is(:lang(ja), :lang(zh)) {
   word-break: normal;
   line-break: strict;
 }
