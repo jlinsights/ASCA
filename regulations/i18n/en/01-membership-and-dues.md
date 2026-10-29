@@ -104,6 +104,23 @@ to pay annual dues (Paragraph ①) thereafter.
 **e. (Obligation upon Assuming Office)** The development fund for a Lifetime
 Member who assumes office shall be as provided in Article 4, Paragraph 4.
 
+**④ Special Appointment Registration Fee (Regulations on the Appointment of
+Recommended and Invited Artists, Article 11)**
+
+| Category           | Review Fee (upon application) | Registration Fee (after resolution) | First-Year Annual Dues (after resolution) | Total       |
+| ------------------ | ----------------------------- | ----------------------------------- | ----------------------------------------- | ----------- |
+| Recommended Artist | KRW 50,000                    | KRW 50,000                          | KRW 80,000                                | KRW 180,000 |
+| Invited Artist     | KRW 50,000                    | KRW 100,000                         | KRW 100,000                               | KRW 250,000 |
+
+※ This applies where a person who is not a Full Member of the Society is
+specially appointed. The registration fee is the sum of the admission and
+promotion registration fees (Paragraph 2) that a Full Member pays to reach the
+same status, and the first-year annual dues are the annual dues for that grade
+under Paragraph 1. The registration fee and first-year annual dues are based on
+the status resolved by the Board of Directors, and reductions follow Article 11,
+Paragraph 7 of the Regulations on the Appointment of Recommended and Invited
+Artists.
+
 ### Article 4 (Officer Development Fund and Benefits)
 
 ① A member who assumes office as an officer shall pay a **development fund of
