@@ -201,6 +201,66 @@ two-thirds or more of the Board of Directors.
 3. Invited Artists of other calligraphy organizations registered with the
    Ministry of Culture, Sports and Tourism
 
+② A special appointment may be made only upon the person's own application.
+Where the Board of Directors recommends a candidate, the candidate is deemed to
+have applied once the candidate consents. The application shall state the status
+applied for (Recommended Artist or Invited Artist) and the category (Traditional
+or Contemporary).
+
+③ An applicant shall undergo the document review and review of works conducted
+by the Qualification Review Committee under Article 7 in accordance with Article
+8, Paragraphs 2 and 3, at the regular review under Article 8, Paragraph 1, and
+the Board of Directors shall pass the resolution under Paragraph 1 only for an
+applicant who has passed the Committee's review. The Board may resolve on the
+status applied for or a lower status, and once resolved, the Chairperson makes
+the appointment. In this case, Article 2, Article 3, Paragraph 1, Items 1 and 3,
+and Article 9, Paragraph 2 do not apply, while Article 3, Paragraph 1, Items 2
+and 4 apply.
+
+④ Where a person who is not a Full Member of the Society applies, the following
+apply.
+
+1. The application also serves as the application for admission under Article 5
+   of the Articles of Incorporation, and the Board's resolution under Paragraph
+   1 also serves as approval of admission under that Article.
+2. The applicant pays the special appointment registration fee under Article 3,
+   Paragraph 4 of the Regulations on Membership and Dues instead of the
+   registration fee under Paragraph 2 of that Article. The review fee is paid
+   upon application and is not refunded regardless of the outcome; the
+   registration fee and the annual dues for the year of appointment are paid
+   together after the appointment is resolved, based on the status resolved.
+3. The appointment takes effect, and the person becomes a Full Member of that
+   grade, on the day the registration fee and the annual dues for the year of
+   appointment are paid (or on the day of the Board's resolution where both are
+   fully waived under Paragraph 7). The annual dues for the year of appointment
+   are deemed paid (including where waived under Paragraph 7), and from the
+   following year annual dues are paid under Article 3, Paragraph 1 and Article
+   5 of the Regulations on Membership and Dues.
+
+⑤ Where a Full Member of the Society applies, the member pays, after the
+appointment is resolved, the sum of the promotion registration fees under
+Article 3, Paragraph 2 of the Regulations on Membership and Dues for each step
+from the current grade to the grade resolved (for example, KRW 30,000 plus KRW
+50,000, or KRW 80,000, for appointment from General Artist to Invited Artist),
+and the appointment takes effect on the day of payment (or on the day of the
+Board's resolution where waived under Paragraph 7). Annual dues already paid,
+and the exemption from annual dues of a Lifetime Member under Paragraph 3 of
+that Article, remain unaffected.
+
+⑥ A member whose powers are restricted or whose status is suspended under
+Article 5 of the Regulations on Membership and Dues may apply only after
+restoring that status by paying all outstanding annual dues, in which case
+Paragraph 5 applies.
+
+⑦ For a person falling under Paragraph 1, Item 1, the Board of Directors may,
+when resolving on the appointment, reduce or waive in whole or in part the
+registration fee and the annual dues for the year of appointment under Paragraph
+4, or the promotion registration fees under Paragraph 5. The review fee is not
+reduced.
+
+⑧ A specially appointed person bears the obligations under Article 9, Paragraph
+1 from the day the appointment takes effect.
+
 ### Article 12 (Honorary Artist)
 
 ① Any of the following persons may be nominated as an Honorary Artist.

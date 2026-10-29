@@ -91,10 +91,11 @@ describe('parseRegulation — 실제 규정 9종', () => {
     expect(doc.sections.some(section => section.isAddendum)).toBe(true)
   })
 
-  it('회비·심사 표 13개(이관 때 텍스트로 바꾼 것)와 자격 표 1개를 모두 표로 읽는다', () => {
+  // 2026-10-30: 회비 규정 제3조 ④ 특별선임 등록비 표 신설로 01 은 10개, 전체 15개
+  it('회비·심사 표 14개(이관 때 텍스트로 바꾼 것 13개 + 특별선임 등록비)와 자격 표 1개를 모두 표로 읽는다', () => {
     const counts = REGULATIONS.map(entry => load(entry.file).doc.tableCount)
-    expect(counts.reduce((sum, count) => sum + count, 0)).toBe(14)
-    expect(load('01-membership-and-dues.md').doc.tableCount).toBe(9)
+    expect(counts.reduce((sum, count) => sum + count, 0)).toBe(15)
+    expect(load('01-membership-and-dues.md').doc.tableCount).toBe(10)
     expect(load('02-operation-and-review.md').doc.tableCount).toBe(4)
     for (const entry of REGULATIONS) {
       const { doc } = load(entry.file)
