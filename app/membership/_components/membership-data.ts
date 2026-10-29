@@ -3,7 +3,7 @@ import { BOOKING_URL, CHAT_URL, PHONE } from '@/lib/content/contact-info'
 /**
  * 회원 안내 페이지의 사실 데이터.
  * 기준은 /regulations 가 공개하는 regulations/*.md 원문이다(정관·회원 및 회비 규정·추천·초대작가 선임 규정·
- * 회원·임원 자격 및 요건). 항목마다 근거 조문(source)을 달아 둔다 — 규정이 바뀌면 여기를 같이 고친다.
+ * 작가·회원·임원 자격 및 요건). 항목마다 근거 조문(source)을 달아 둔다 — 규정이 바뀌면 여기를 같이 고친다.
  */
 
 export interface RegSource {
@@ -36,7 +36,7 @@ export const SRC = {
   select8: reg('artist-selection', 8, '추천·초대작가 선임 규정 제8조'),
   select9: reg('artist-selection', 9, '추천·초대작가 선임 규정 제9조'),
   select12: reg('artist-selection', 12, '추천·초대작가 선임 규정 제12조'),
-  qualifications: reg('qualifications', undefined, '회원·임원 자격 및 요건'),
+  qualifications: reg('qualifications', undefined, '작가·회원·임원 자격 및 요건'),
 } as const satisfies Record<string, RegSource>
 
 /* ---------- 회원 자격 ---------- */

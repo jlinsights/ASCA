@@ -42,7 +42,7 @@ export const regulationsTranslations: TranslationData = {
     regsNameAppraisal: '작품 감정 및 보증서 발행 규정',
     regsNameBranches: '지부 및 지회 설치·운영 규정',
     regsNameObjections: '이의제기 처리 규정',
-    regsNameQualifications: '회원·임원 자격 및 요건',
+    regsNameQualifications: '작가·회원·임원 자격 및 요건',
   },
   en: {
     regsAll: 'All regulations',
@@ -82,7 +82,7 @@ export const regulationsTranslations: TranslationData = {
     regsNameAppraisal: 'Appraisal & Certificates',
     regsNameBranches: 'Branches & Chapters',
     regsNameObjections: 'Handling of Objections',
-    regsNameQualifications: 'Membership Qualifications',
+    regsNameQualifications: 'Qualifications for Artists, Members and Officers',
   },
   ja: {
     regsAll: '規程一覧',
@@ -121,7 +121,7 @@ export const regulationsTranslations: TranslationData = {
     regsNameAppraisal: '作品鑑定・保証書発行規程',
     regsNameBranches: '支部・支会設置運営規程',
     regsNameObjections: '異議申立処理規程',
-    regsNameQualifications: '会員・役員の資格と要件',
+    regsNameQualifications: '作家・会員・役員の資格と要件',
   },
   zh: {
     regsAll: '全部規章',
@@ -160,6 +160,6 @@ export const regulationsTranslations: TranslationData = {
     regsNameAppraisal: '作品鑑定及證書發放規定',
     regsNameBranches: '分會及支會設立與運營規定',
     regsNameObjections: '異議處理規定',
-    regsNameQualifications: '會員·理事資格與要件',
+    regsNameQualifications: '作家·會員·理監事資格與要件',
   },
 }
