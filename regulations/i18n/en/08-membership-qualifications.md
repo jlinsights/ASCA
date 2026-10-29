@@ -29,8 +29,9 @@ Regulation prevails, including the
 ## Artists
 
 1. Artists are classified as Young Artists, General Artists, Recommended Artists
-   and Invited Artists. Young and General Artists are determined by age upon
-   joining; Recommended and Invited Artists are appointed after review.
+   and Invited Artists. Young and General Artists are determined by age as of
+   January 1 of the year; Recommended and Invited Artists are appointed after
+   review.
 2. Since 2024, certificates for Recommended and Invited Artists have been
    awarded separately in the Traditional and Contemporary categories
    (Regulations on the Appointment of Recommended and Invited Artists, Article
