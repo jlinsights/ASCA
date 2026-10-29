@@ -64,7 +64,16 @@ Regulation prevails, including the
    Korea or abroad for 20 years or more, or an Invited Artist of another
    calligraphy organization registered with the Ministry of Culture, Sports and
    Tourism may be specially appointed by a resolution of two-thirds or more of
-   the Board of Directors (Appointment Regulations, Article 11).
+   the Board of Directors. The person must apply (or consent, if recommended by
+   the Board), and the Board votes only on applicants who have passed the
+   Qualification Review Committee's document and works review. For a person who
+   is not a Full Member, the application also serves as the application for
+   admission, and the special appointment registration fee under Article 3(4) of
+   the Regulations on Membership and Dues applies (review fee, registration fee
+   and first-year dues totalling KRW 180,000 for a Recommended Artist and KRW
+   250,000 for an Invited Artist). Full Members pay the step-by-step promotion
+   registration fees, and a suspended member must first pay all outstanding dues
+   (Appointment Regulations, Article 11).
 5. A person who has held Invited Artist status for 30 years or more, or a person
    aged 70 or over who has made a remarkable contribution to the Society's
    development, may be named an Honorary Artist. Honorary Artists are exempt
