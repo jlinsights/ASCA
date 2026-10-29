@@ -1001,7 +1001,9 @@
 /* 일본어·중국어 번역본: keep-all 은 한자·가나 사이 줄바꿈을 막아 원문 줄 끝에서만 꺾인다 */
 .asca-regs-text:is(:lang(ja), :lang(zh)),
 .asca-regs-toc__list:is(:lang(ja), :lang(zh)),
-.asca-regs-doc-head__title:is(:lang(ja), :lang(zh)) {
+.asca-regs-doc-head__title:is(:lang(ja), :lang(zh)),
+/* 표 칸은 overflow-wrap:normal 이라 keep-all 이 남으면 띄어쓰기 없는 긴 칸이 줄을 못 바꾼다 */
+.asca-regs-table :is(th, td):is(:lang(ja), :lang(zh)) {
   word-break: normal;
   line-break: strict;
 }
