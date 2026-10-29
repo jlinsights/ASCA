@@ -137,6 +137,8 @@
 /* 두 덩어리를 나란히 — 좁은 화면에선 쌓인다 */
 .asca-apply__split {
   display: grid;
+  /* 한 열일 때도 minmax(0) — 암묵 열은 auto 라 넓은 표의 최소 폭만큼 페이지를 밀어낸다 */
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(40px, 5vw, 56px);
 }
 @media (min-width: 900px) {
