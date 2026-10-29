@@ -879,3 +879,32 @@
     transition: none;
   }
 }
+
+/* ---------- 특별선임 ---------- */
+.asca-mb__special {
+  margin-top: clamp(36px, 5vw, 56px);
+}
+.asca-mb__special .asca-mb__subhead {
+  margin-bottom: 10px;
+}
+/* 다섯 열 비용표 — 좁은 화면에선 표만 가로로 민다 */
+.asca-mb__table-scroll {
+  overflow-x: auto;
+}
+.asca-mb__table-scroll .asca-mb__scores th,
+.asca-mb__table-scroll .asca-mb__scores td {
+  padding-inline: 0 14px;
+}
+.asca-mb__table-scroll .asca-mb__scores thead th:not(:first-child) {
+  text-align: right;
+}
+.asca-mb__table-scroll .asca-mb__scores :is(td, th):last-child {
+  padding-right: 0;
+  font-weight: 600;
+  color: var(--mb-fg);
+}
+.asca-mb__note a {
+  color: var(--mb-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

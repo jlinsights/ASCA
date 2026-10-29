@@ -19,6 +19,12 @@ import {
   SCORE_NOTE,
   SCORING_RULES,
   SCORING_TABLE,
+  SPECIAL_CASES,
+  SPECIAL_ELIGIBLE,
+  SPECIAL_FEE_COLUMNS,
+  SPECIAL_FEES,
+  SPECIAL_LEDE,
+  SPECIAL_STEPS,
   SRC,
 } from '@/app/membership/_components/membership-data'
 import '@/components/apply/apply.css'
@@ -30,7 +36,7 @@ import '@/components/apply/apply.css'
  */
 
 const DESCRIPTION =
-  '추천작가·초대작가 승급을 온라인으로 신청하세요. 대한민국 동양서예대전 입상 배점, 점수와 별개로 갖춰야 하는 필수 요건, 자격심사위원회 심사 절차를 규정 원문과 함께 안내합니다.'
+  '추천작가·초대작가 승급과 특별선임을 온라인으로 신청하세요. 대한민국 동양서예대전 입상 배점, 점수와 별개로 갖춰야 하는 필수 요건, 자격심사위원회 심사 절차, 비회원 특별선임 비용을 규정 원문과 함께 안내합니다.'
 
 export const metadata: Metadata = {
   title: '추천·초대작가 신청 | 동양서예협회',
@@ -44,6 +50,7 @@ const TOC = [
   { href: '#apply', label: '신청서 작성' },
   { href: '#criteria', label: '선정 기준' },
   { href: '#review', label: '심사 절차' },
+  { href: '#special', label: '특별선임' },
   { href: '#faq', label: '자주 묻는 질문' },
   { href: '#contact', label: '문의' },
 ] as const
@@ -57,7 +64,7 @@ export default function RecommendedInvitedCalligrapherPage() {
       <PageHero
         {...PAGE_HERO_MARKS.recommendedApplication}
         title='추천·초대작가 신청'
-        lede='대한민국 동양서예대전 입상 점수와 필수 요건을 갖춘 정회원은 추천작가·초대작가 자격심사를 신청할 수 있습니다.'
+        lede='대한민국 동양서예대전 입상 점수와 필수 요건을 갖춘 정회원은 추천작가·초대작가 자격심사를 신청할 수 있습니다. 공헌·경력이 있는 분은 정회원이 아니어도 특별선임을 신청할 수 있습니다.'
         actions={
           <>
             <a
@@ -79,6 +86,7 @@ export default function RecommendedInvitedCalligrapherPage() {
             { label: '추천작가', value: '10점 이상' },
             { label: '초대작가', value: '15점 이상' },
             { label: '자격심사', value: '연 2회' },
+            { label: '특별선임', value: '비회원 신청 가능' },
           ]}
         />
       </PageHero>
@@ -163,13 +171,61 @@ export default function RecommendedInvitedCalligrapherPage() {
           <RegCite sources={[SRC.select8]} />
         </section>
 
+        <section id='special' aria-labelledby='special-title' className='asca-apply__anchor'>
+          <ApplySectionHead
+            id='special-title'
+            eyebrow='특별선임'
+            title='점수 대신 공헌·경력으로'
+            lede={SPECIAL_LEDE}
+          />
+          <div className='asca-apply__split'>
+            <div>
+              <h3 className='asca-apply__subhead'>신청할 수 있는 분</h3>
+              <ul className='asca-apply__dash-list'>
+                {SPECIAL_ELIGIBLE.map(item => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <h3 className='asca-apply__subhead mt-8'>신청부터 선임까지</h3>
+              <ol className='asca-apply__numbered'>
+                {SPECIAL_STEPS.map(step => (
+                  <li key={step}>
+                    <div>
+                      <span>{step}</span>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div>
+              <LedgerTable
+                caption='비회원 특별선임 비용'
+                columns={SPECIAL_FEE_COLUMNS.map((label, index) => ({
+                  label,
+                  numeric: index > 0,
+                }))}
+                rows={SPECIAL_FEES}
+              />
+              <dl className='asca-apply__defs mt-6'>
+                {SPECIAL_CASES.map(fact => (
+                  <div key={fact.label}>
+                    <dt>{fact.label}</dt>
+                    <dd>{fact.body}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+          <RegCite sources={[SRC.select11, SRC.dues3, SRC.articles5]} />
+        </section>
+
         <section id='faq' aria-labelledby='faq-title' className='asca-apply__anchor'>
           <ApplySectionHead
             id='faq-title'
             eyebrow='자주 묻는 질문'
             title='신청 전에 많이 묻는 것'
           />
-          <SiteFaqList ids={['artist-selection']} />
+          <SiteFaqList ids={['artist-selection', 'special-appointment']} />
         </section>
 
         <section id='contact' aria-labelledby='contact-title' className='asca-apply__anchor'>

@@ -5,6 +5,9 @@ import { parseRegulation } from '@/lib/regulations/parse'
 import type { LedgerRow, RegSource } from '../apply-parts'
 import * as entry from '@/app/application/_components/application-data'
 import * as commission from '@/app/commissioning-application/_components/commissioning-data'
+import * as member from '@/app/membership/_components/membership-data'
+import { SITE_FAQ } from '@/lib/content/site-faq'
+import { ELIGIBILITY } from '@/app/contests/_components/contest-23-data'
 
 const ROOT = path.join(__dirname, '..', '..', '..', 'regulations')
 
@@ -75,6 +78,48 @@ describe('출품원서 페이지 ↔ 규정 원문', () => {
   })
 })
 
+describe('특별선임(회원 안내·추천·초대작가 신청) ↔ 규정 원문', () => {
+  const selection = flat(sourceOf('artist-selection'))
+
+  it.each(member.SPECIAL_FEES.map(row => row.cells))(
+    '특별선임 비용 %s 행이 회원 및 회비 규정 제3조 ④ 표에 있다',
+    (...cells) => {
+      expect(hasTableRow(membership, cells)).toBe(true)
+    }
+  )
+
+  it('합계 = 심사료 + 등록비 + 첫해 연회비', () => {
+    const won = (s: string) => Number(s.replace('만원', ''))
+    for (const { cells } of member.SPECIAL_FEES) {
+      const [, review, registration, dues, total] = cells
+      expect(won(review) + won(registration) + won(dues)).toBe(won(total))
+    }
+  })
+
+  it.each(member.SPECIAL_ELIGIBLE)('신청 대상 「%s」가 선임 규정 제11조 ①에 있다', item => {
+    expect(selection).toContain(item)
+  })
+
+  it('공모요강 특별규정과 FAQ 연회비 답의 금액이 표와 같다', () => {
+    const rule = ELIGIBILITY.find(item => item.title === '특별규정')?.body ?? ''
+    const dues = SITE_FAQ.find(item => item.id === 'dues')?.a ?? ''
+    for (const { cells } of member.SPECIAL_FEES) {
+      const [name, review, registration, , total] = cells
+      expect(rule).toContain(`${name} ${total}`)
+      expect(dues).toContain(`${name} ${registration}`)
+      expect(dues).toContain(`심사료 ${review}`)
+    }
+  })
+
+  it('FAQ 의 특별선임 금액이 표와 같다', () => {
+    const answer = SITE_FAQ.find(item => item.id === 'special-appointment')?.a ?? ''
+    for (const { cells } of member.SPECIAL_FEES) {
+      const [name, review, registration, dues, total] = cells
+      expect(answer).toContain(`${name}: ${review} + ${registration} + ${dues} = ${total}`)
+    }
+  })
+})
+
 describe('위원 위촉 페이지 ↔ 규정 원문', () => {
   it.each(commission.ROLES.flatMap(role => role.qualifications.map(q => [role.title, q])))(
     '%s 자격 「%s」가 원문에 있다',
@@ -106,6 +151,7 @@ describe('근거 링크', () => {
     ...commission.STEP_SOURCES,
     ...commission.PAY_SOURCES,
     ...commission.FAIRNESS_SOURCES,
+    ...Object.values(member.SRC).filter(s => s.href.includes('#')),
   ]
 
   it.each(sources.map(s => [s.label, s.href]))('%s(%s)가 실제 조문을 가리킨다', (_label, href) => {

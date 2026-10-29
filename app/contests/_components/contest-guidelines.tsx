@@ -165,7 +165,8 @@ export function ContestGuidelines() {
           }))}
         />
         <p className='asca-apply__note'>
-          특선·입선 작품은 도록에 실리고 전시됩니다. 수상 실적은 초대작가 추천 심의에 반영합니다.
+          특선·입선 작품은 도록에 실리고 전시됩니다. 수상 실적은 추천·초대작가 선임 배점에
+          반영합니다.
         </p>
       </section>
 
