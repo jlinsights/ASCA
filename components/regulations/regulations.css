@@ -809,6 +809,9 @@
   vertical-align: top;
   border-bottom: 1px solid var(--border);
   word-break: keep-all;
+  /* 본문(.asca-regs-text)의 overflow-wrap:anywhere 를 끊는다 — 남겨 두면 표가 열을 좁히며
+     "청년작가"·"20만원" 같은 낱말을 글자 단위로 쪼갠다. 넘치면 표가 가로로 밀린다 */
+  overflow-wrap: normal;
 }
 .asca-regs-table th {
   font-size: 12px;
