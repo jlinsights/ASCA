@@ -16,15 +16,17 @@ const table: Block = {
       text('当該年の1月1日基準で満40歳以下の作家であって、協会の理念と目的に賛同する者'),
       text('10万ウォン'),
     ],
+    [text('Officer'), text('Elected by the General Assembly'), text('KRW 100,000')],
   ],
 }
 
 describe('Blocks — 규정 표', () => {
   beforeEach(() => render(<Blocks blocks={[table]} tableLabel='표' />))
 
-  it('짧은 칸(8자 이하)은 줄바꿈하지 않는다', () => {
+  it('짧은 칸(11자 이하)은 줄바꿈하지 않는다', () => {
     expect(screen.getByText('青年作家')).toHaveClass('asca-regs-table__short')
     expect(screen.getByText('10万ウォン')).toHaveClass('asca-regs-table__short')
+    expect(screen.getByText('KRW 100,000')).toHaveClass('asca-regs-table__short')
   })
 
   it('긴 설명 칸은 그대로 줄바꿈한다', () => {

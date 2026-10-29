@@ -54,8 +54,8 @@ export function Inlines({ inlines }: InlinesProps) {
   )
 }
 
-/** 이 글자 수 이하인 표 칸(구분 이름·금액)은 줄바꿈하지 않는다 */
-const SHORT_CELL_MAX = 8
+/** 이 글자 수 이하인 표 칸(구분 이름·금액, "KRW 100,000" 포함)은 줄바꿈하지 않는다 */
+const SHORT_CELL_MAX = 11
 
 function cellLength(inlines: Inline[]): number {
   return inlines.reduce((sum, inline) => {
