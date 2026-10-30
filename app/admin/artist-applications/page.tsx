@@ -35,7 +35,8 @@ export default function AdminArtistApplicationsPage() {
   const [list, setList] = useState<ListBody | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
-  const [busyId, setBusyId] = useState<string | null>(null)
+  // 저장 중인 카드들 — 여러 카드를 잇달아 저장해도 각자 끝날 때까지 잠겨 있다
+  const [busyIds, setBusyIds] = useState<ReadonlySet<string>>(() => new Set())
   // 지금 보고 있는 탭·쪽과 마지막 요청 번호 — 늦게 온 옛 응답이 화면을 덮지 않게 한다
   const query = useRef({ view, page })
   const latest = useRef(0)
@@ -71,7 +72,7 @@ export default function AdminArtistApplicationsPage() {
   }
 
   const review = async (application: AdminApplication, change: ReviewChange) => {
-    setBusyId(application.id)
+    setBusyIds(current => new Set(current).add(application.id))
     setNotice(null)
     try {
       const response = await fetch(`/api/admin/artist-applications/${application.id}`, {
@@ -104,7 +105,11 @@ export default function AdminArtistApplicationsPage() {
       // 다시 읽기가 끝날 때까지 카드를 잠가 둔다 — 그 사이 쓴 메모가 새 카드에 덮이지 않게
       await load()
     } finally {
-      setBusyId(null)
+      setBusyIds(current => {
+        const next = new Set(current)
+        next.delete(application.id)
+        return next
+      })
     }
   }
 
@@ -161,7 +166,7 @@ export default function AdminArtistApplicationsPage() {
                 // 상태·메모가 바뀌면 카드를 새로 그려 입력칸을 서버 값으로 맞춘다
                 key={`${application.id}:${application.status}:${application.reviewed_at ?? ''}`}
                 application={application}
-                busy={busyId === application.id}
+                busy={busyIds.has(application.id)}
                 onReview={(target, change) => void review(target, change)}
               />
             ))

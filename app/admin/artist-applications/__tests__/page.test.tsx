@@ -135,6 +135,35 @@ describe('관리자 — 작가 신청 심사', () => {
     expect(screen.getByLabelText('심사 메모')).toHaveValue('서류 보완 요청')
   })
 
+  it('두 카드를 잇달아 저장해도 앞 카드는 제 저장이 끝날 때까지 잠겨 있다', async () => {
+    let resolveFirst: (value: unknown) => void = () => {}
+    const first = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    const second = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    fetchMock
+      .mockResolvedValueOnce(page([first, second]))
+      .mockReturnValueOnce(new Promise(resolve => (resolveFirst = resolve)))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValue(page([first, second]))
+    render(<AdminArtistApplicationsPage />)
+
+    const a = await card()
+    const b = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(a).getByLabelText('심사 메모'), { target: { value: 'A 메모' } })
+    fireEvent.click(within(a).getByRole('button', { name: '메모만 저장' }))
+    fireEvent.change(within(b).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(b).getByRole('button', { name: '메모만 저장' }))
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(4))
+    expect(within(a).getByLabelText('심사 메모')).toHaveAttribute('readonly')
+
+    resolveFirst(json({ data: { id: 'app-1', status: 'reviewing' } }))
+    await waitFor(() =>
+      expect(
+        within(screen.getByRole('article', { name: /홍길동/ })).getByLabelText('심사 메모')
+      ).not.toHaveAttribute('readonly')
+    )
+  })
+
   it('다른 관리자가 먼저 바꿨으면 알리고 목록을 새로 읽는다', async () => {
     fetchMock
       .mockResolvedValueOnce(page([application()]))
