@@ -3,57 +3,63 @@
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 import { AboutChapter } from '@/components/about/about-layout'
 
-const koreanGreeting = `존경하는 사단법인 동양서예협회 회원 여러분,
+const koreanGreeting = `존경하는 사단법인 동양서예협회 회원 여러분, 그리고 묵향을 사랑하시는 모든 작가 여러분,
 
-2026년 병오년(丙午年) 새해 벽두, 차가운 겨울바람 속에서도 묵향에 대한 열정으로 심신을 갈고닦으시는 회원 여러분께 깊은 존경과 감사의 인사를 올립니다.
+깊어 가는 가을, 한 해의 결실을 거두는 이 계절에 협회가 오랫동안 준비해 온 소식을 전해 드리게 되어 기쁜 마음으로 인사를 올립니다.
 
-한겨울의 추위 속에서 매화가 향기를 준비하듯, 우리 협회 또한 새로운 도약을 위한 힘찬 발걸음을 내딛고자 합니다.
+제23회 대한민국 동양서예대전은 2027년 4월 21일부터 30일까지 예술의전당 서울서예박물관에서 열립니다. 이번 대전은 협회 역사에서 뜻깊은 전환점입니다. 서울서예박물관 제1전시실과 제2전시실을 모두 대관하여, 하나의 대전 안에 공모전과 '書境(서경)' 초대작가전·개인전·부스전을 함께 펼치게 되었기 때문입니다.
 
-지난해 우리는 전통과 현대라는 이원화된 초대작가 제도를 안착시키며 온고지신(溫故知新)의 길을 확고히 다졌습니다. 올해는 이를 발판 삼아 우리 협회의 위상을 국내외에 더욱 널리 알리는 한편, 내실 있고 투명한 운영 시스템을 구축하는 원년으로 삼고자 합니다.
+제2전시실에서는 공모전이 열려 새로운 작가를 발굴하는 무대가 되고, 제1전시실에서는 '서경' 초대작가전과 개인전, 단체 부스전이 어우러져 동양서예의 현재와 미래를 한자리에서 보여 드립니다. 신진 작가의 첫 출품작과 원로·중진 작가의 원숙한 필묵이 같은 기간, 같은 공간에서 마주하는 것, 이것이 이번 대전이 지향하는 '새로운 지평'입니다.
 
-그 첫 여정으로, 다가오는 2월 27일부터 3월 2일까지 3박 4일간 중국 소흥과 항주로 '서예 인문학 탐방'을 떠납니다. 특히 중국 서예 교육의 본산인 중국미술학원(남산 교구)에서 "한묵전정·중한화명(翰墨传情·中韩和鸣)"이라는 주제 아래 양국 작가들이 필묵으로 소통하는 특별한 자리를 마련했습니다.
-한·중 서예의 미래를 밝히는 이 소중한 교류는 우리 협회의 국제적 지평을 넓히는 계기가 될 것입니다.
+이번 대전을 준비하며 무엇보다 공을 들인 것은 문을 넓히는 일이었습니다.
 
-이어지는 4월 15일부터 28일까지는 예술의전당 서울서예박물관에서 '書境(서경) 새로운 지평 - 동양서예의 현재와 미래' 특별 기획전이 개최됩니다. 이번 전시는 개인전과 소규모 단체의 연합전이 어우러지는 통합의 장입니다. 협회 회원 여부를 떠나 누구나 참여 가능한 전시회이오니 설 연휴 이전까지 서둘러 출품하여 주시기 바랍니다.
+먼저 청년작가의 참여 기회를 넓혔습니다. 대학 서예 전공자와 전국대학서예연합 소속·출신 청년작가의 출품을 적극 권장하고, 청년부에는 별도의 심사 기준을 두어 젊은 작가들이 자신의 목소리로 평가받을 수 있도록 하였습니다. 서예의 내일은 오늘 붓을 잡는 젊은 손에 달려 있다고 믿기 때문입니다.
 
-새롭게 공표된 '운영 및 심사 규정'과 '전시 관리 및 운영 규정'을 바탕으로, 회원 작가뿐만 아니라 외부의 역량 있는 작가들을 적극 영입하여 협회의 예술적 스펙트럼을 확장하겠습니다.
+다음으로 외부 작가에게도 초대작가전의 문을 열었습니다. 이번 회차에 신설한 특별규정에 따라, 협회 정회원이 아니더라도 실력을 갖춘 작가라면 '서경' 초대작가전에 참여할 수 있습니다. 추천·초대작가 선임 규정의 특별선임 절차도 함께 마련하였습니다. 역량 있는 작가들이 소속을 넘어 한자리에 모일 때 협회의 예술적 스펙트럼은 더욱 넓고 깊어질 것입니다.
 
-또한 전시의 혜택과 경제성을 투명하게 보장하는 시스템을 통해 매년 예술의전당에서 실험적이면서도 품격 있는 전시 경험을 제공할 것입니다.
-무엇보다 올해부터는 새롭게 개정된 '회원 및 회비 규정'에 따라 '평생회원' 제도를 전격 시행합니다. 이는 협회 운영의 기초를 더욱 단단히 다지는 계기가 될 것입니다.
+아울러 개인전과 소규모 단체의 부스전을 대전 안에 품어, 작가 개인의 세계와 단체의 연구 성과를 품격 있는 공간에서 선보일 수 있게 하였습니다. 출품 접수부터 심사, 전시와 시상에 이르는 모든 과정은 새로 정비한 운영 및 심사 규정에 따라 투명하고 공정하게 진행하겠습니다.
 
-아울러 연회비 제도의 합리적 현실화를 통해 그동안 협회에 헌신해 오신 초대작가님들과 임원진의 부담을 덜어드리고, 진정으로 예술에만 전념할 수 있는 환경을 조성해 나가겠습니다.
+출품 접수는 2027년 1월 31일에 마감합니다. 자세한 내용은 협회 홈페이지의 공모요강과 출품원서에서 확인하실 수 있습니다. 회원 여러분은 물론, 서예·문인화·전각을 수련하는 모든 분의 많은 관심과 참여를 부탁드립니다.
 
-마지막으로, 대한민국 동양서예대전(공모전)과 초대작가전은 더욱 깊이 있는 준비를 위해 올해부터 10월에서 11월 이후로 일정을 조정하였습니다.
+이와 함께 협회 홈페이지를 대대적으로 새롭게 단장하였습니다. 무엇보다 한국어뿐 아니라 영어, 일본어, 중국어로 언제든 전환해 보실 수 있도록 다국어 환경을 갖추었습니다. 우리 협회가 오랜 세월 이어 온 한·중·일 서예 교류의 역사를 온라인에서도 이어 가며, 국경을 넘어 더 많은 작가와 애호가가 협회의 활동을 함께 나눌 수 있도록 하겠습니다.
 
-만추의 결실처럼 회원 여러분의 성취가 가장 빛나는 시기에 최고의 축제를 열 수 있도록 만반의 준비를 다하겠습니다.
+새 홈페이지는 협회 커뮤니티를 활성화하는 터전이 될 것입니다. 작가 소개와 작품 아카이브, 온라인 출품과 같은 다양한 기술을 적용하여 작가 한 분 한 분의 온라인 활동(Online Presence)을 넓히고, 이를 뒷받침하는 정책 지원을 꾸준히 개발해 나가겠습니다. 전시장에서 맺은 인연이 온라인에서도 이어져, 작가와 관람객, 작가와 작가가 더 가까이 만나는 협회를 만들어 가겠습니다.
 
-법고창신(法古創新)의 정신으로 우리 서예의 전통을 지키되, 투명하고 합리적인 혁신으로 동양 문자예술의 새로운 지평을 함께 열어갑시다.
+법고창신(法古創新)의 정신으로 전통을 지키되, 더 많은 작가에게 열린 무대를 마련하는 일에 협회가 앞장서겠습니다. 내년 봄, 예술의전당에서 여러분을 반갑게 맞이하겠습니다.
 
-회원 여러분의 가정에 늘 평안과 행복이 깃들고, 묵향 가득한 창작의 기쁨이 1년 내내 이어지기를 진심으로 기원합니다.
+회원 여러분의 가정에 늘 평안과 건강이 함께하시기를 진심으로 기원합니다.
 
-2026년 1월 9일
+2026년 10월 30일
 
 사단법인 동양서예협회 이사장 임재홍`
 
-const englishGreeting = `Dear Members of the Asian Society of Calligraphic Arts (ASCA),
+const englishGreeting = `Dear Members of the Asian Society of Calligraphic Arts (ASCA), and all artists who love the fragrance of ink,
 
-At the dawn of 2026, the Year of the Fire Horse (Byeongo, 丙午年), I extend my deepest respect and gratitude to all of you who continue to sharpen your craft with passion for the art of ink, even amidst the cold winter winds.
+As autumn deepens and the year's work comes to fruition, I am delighted to share news that our association has long been preparing.
 
-Just as the plum blossom prepares its fragrance in the depths of winter, our association is also taking bold steps toward a new leap forward.
+The 23rd Korea Oriental Calligraphy Exhibition will be held from April 21 to 30, 2027, at the Seoul Calligraphy Museum in the Seoul Arts Center. This exhibition marks a meaningful turning point in our history: we have reserved both Gallery 1 and Gallery 2 of the museum, bringing the open competition and the "Seogyeong (書境)" exhibition of invited artists, solo shows and booth exhibitions together under one roof.
 
-Last year, we successfully established a dual invited artist system that embraces both tradition and modernity, firmly paving the way of Ongojishin (溫故知新) — learning from the old to create the new. This year, building on that foundation, we aim to elevate ASCA's stature both domestically and internationally, while establishing a substantive and transparent operational framework.
+Gallery 2 will host the open competition, a stage for discovering new artists. Gallery 1 will bring together the Seogyeong invited artists' exhibition, solo shows and group booth exhibitions, presenting the present and future of Oriental calligraphy in one place. A newcomer's first entry and the mature brushwork of senior artists, facing each other in the same space at the same time: this is the "new horizon" this exhibition aims for.
 
-As our first journey of the year, from February 27 to March 2, we will embark on a four-day "Calligraphy Humanities Exploration" trip to Shaoxing and Hangzhou, China. At the China Academy of Art (Nanshan Campus), we have arranged a special gathering under the theme "Hanmok Jeonjeong · Junghan Hwamyeong (翰墨传情·中韩和鸣)," where artists from both nations will communicate through brush and ink.
+Above all, our preparations have focused on opening the doors wider.
 
-From April 15 to 28, a special exhibition titled "Seogyeong (書境): New Horizons — The Present and Future of Oriental Calligraphy" will be held at the Seoul Calligraphy Museum in the Seoul Arts Center. This exhibition is an integrated platform where solo exhibitions and small-group collaborative exhibitions come together. We welcome participation from all, regardless of ASCA membership.
+First, we have expanded opportunities for young artists. We warmly encourage entries from university calligraphy majors and from current and former members of the National University Calligraphy Association, and the youth division will be judged by its own criteria so that young artists are evaluated in their own voice. We believe the future of calligraphy rests in the young hands that take up the brush today.
 
-This year, we are fully implementing the newly revised "Lifetime Membership" system, which will further strengthen the foundation of our association's operations. We have also adjusted the schedule for the Korea Oriental Calligraphy Exhibition (Competition) and Invited Artists' Exhibition from October to November onwards, to allow for more thorough preparation.
+Second, we have opened the invited artists' exhibition to artists from outside the association. Under a special provision introduced for this edition, accomplished artists may take part in the Seogyeong invited artists' exhibition even if they are not full members of ASCA, and a special appointment procedure for recommended and invited artists has been prepared as well. When capable artists gather beyond their affiliations, the artistic range of our association grows wider and deeper.
 
-In the spirit of Beopgochang-shin (法古創新) — preserving tradition while creating innovation — let us together open new horizons for the art of Eastern calligraphy through transparent and rational reform.
+We have also made room within the exhibition for solo shows and booth exhibitions by small groups, so that individual artistic worlds and the research of each group can be shown in a dignified space. Every step, from entry and judging to exhibition and awards, will be conducted transparently and fairly under our newly revised operating and judging regulations.
 
-I sincerely wish that peace and happiness always dwell in the homes of all our members, and that the joy of creation, filled with the fragrance of ink, continues throughout the year.
+Entries close on January 31, 2027. Full details are available in the competition guidelines and entry form on our website. We warmly invite not only our members but everyone who practices calligraphy, literati painting or seal carving to take part.
 
-January 9, 2026
+We have also carried out a major renovation of the association's website. Above all, it now offers a multilingual environment: visitors can switch at any time between Korean, English, Japanese and Chinese. Through it we will carry the long history of calligraphic exchange among Korea, China and Japan into the online world, so that more artists and admirers across borders can share in the association's activities.
+
+The new website will be a home for our community. By applying a range of technologies, such as artist profiles, artwork archives and online entry, we will expand the online presence of each of our artists, and we will continue to develop policies that support it. We hope the connections made in the exhibition hall will carry on online, bringing artists and visitors, and artists and one another, closer together.
+
+In the spirit of Beopgochangsin (法古創新), preserving tradition while creating anew, our association will lead the way in building an open stage for more artists. We look forward to welcoming you at the Seoul Arts Center next spring.
+
+I sincerely wish peace and good health to all our members and their families.
+
+October 30, 2026
 
 Lim Jae-hong, Chairman of the Asian Society of Calligraphic Arts (ASCA)`
 
@@ -79,8 +85,8 @@ export function GreetingsTabs() {
   return (
     <AboutChapter
       id='greeting'
-      tc='新年'
-      eyebrow='2026 · 丙午年'
+      tc='書境'
+      eyebrow='제23회 대한민국 동양서예대전'
       title='이사장 인사말씀'
       note='다른 언어 버전은 준비 중입니다.'
     >
