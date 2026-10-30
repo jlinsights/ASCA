@@ -2,7 +2,7 @@ import { existsSync } from 'fs'
 import path from 'path'
 import { headerMenu, footerMenu } from '../site-menu'
 import { translations } from '@/lib/i18n/translations'
-import { findRegulation } from '@/lib/regulations/catalog'
+import { REGULATIONS, findRegulation, regulationHref } from '@/lib/regulations/catalog'
 
 const groups = headerMenu.map(group => ({ labelKey: group.labelKey, href: group.href }))
 const links = [
@@ -33,6 +33,7 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
       '소식',
       '정관·규정',
       '회원·후원',
+      '문의',
     ])
   })
 
@@ -65,6 +66,36 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(headerMenu.some(g => g.key === 'contests')).toBe(false)
   })
 
+  it('정관·규정 메뉴는 왼쪽 전체·정관·자격 요건, 오른쪽 나머지 규정 두 칸으로 나눈다', () => {
+    const group = headerMenu.find(g => g.key === 'regulations')
+    expect(group?.columns?.map(c => translations.ko?.[c.titleKey])).toStrictEqual([
+      '정관·자격',
+      '운영 규정',
+    ])
+    const [core, rules] = group?.columns ?? []
+    expect(core?.items.map(link => translations.ko?.[link.labelKey])).toStrictEqual([
+      '전체 규정 보기',
+      '정관',
+      '작가·회원·임원 자격 및 요건',
+    ])
+    // 나머지 규정은 빠짐없이, 겹치지 않게 오른쪽에
+    const all = REGULATIONS.map(entry => regulationHref(entry.slug))
+    const right = rules?.items.map(link => link.href) ?? []
+    expect([...right].sort()).toStrictEqual(
+      all.filter(href => !core?.items.some(link => link.href === href)).sort()
+    )
+    expect(right).not.toContain(regulationHref('articles'))
+    expect(group?.items).toStrictEqual([...(core?.items ?? []), ...(rules?.items ?? [])])
+  })
+
+  it('칸 제목은 네 언어 모두 번역이 있다', () => {
+    for (const lang of ['ko', 'en', 'ja', 'zh'] as const) {
+      for (const key of ['siteNavColRegsCore', 'siteNavColRegsRules']) {
+        expect(translations[lang]?.[key]).toBeTruthy()
+      }
+    }
+  })
+
   it('푸터 제목도 헤더와 같은 소개·정관·규정 라벨을 쓴다', () => {
     expect(footerMenu.map(s => translations.ko?.[s.titleKey])).toEqual(
       expect.arrayContaining(['소개', '정관·규정'])
@@ -77,9 +108,19 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(footerMenu.flatMap(s => s.items).map(link => link.href)).toContain('/community/board')
   })
 
-  it('회원·후원 메뉴와 푸터에서 자주 묻는 질문으로 갈 수 있다', () => {
+  it('소식 메뉴는 머리와 첫 하위 메뉴가 회원 게시판이다', () => {
+    const news = headerMenu.find(group => group.key === 'news')
+    expect(news?.href).toBe('/community/board')
+    expect(news?.items?.[0]?.href).toBe('/community/board')
+  })
+
+  it('문의는 따로 된 메뉴이고, 자주 묻는 질문이 그 아래에 있다', () => {
+    const contact = headerMenu.find(group => group.key === 'contact')
+    expect(contact?.href).toBe('/contact')
+    expect(contact?.items?.map(link => link.href)).toStrictEqual(['/contact', '/faq'])
     const membership = headerMenu.find(group => group.key === 'membership')?.items ?? []
-    expect(membership.map(link => link.href)).toContain('/faq')
+    expect(membership.map(link => link.href)).not.toContain('/faq')
+    expect(membership.map(link => link.href)).not.toContain('/contact')
     expect(footerMenu.flatMap(s => s.items).map(link => link.href)).toContain('/faq')
   })
 
