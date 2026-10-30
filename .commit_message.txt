@@ -1,1 +1,1 @@
-✨ Tally 추천·초대작가 신청서를 서명 확인 후 artist_applications 접수함에 저장하는 웹훅 추가 (허용 칸만, 전화·생년월일·주소 제외)
+🗃️ artist_applications 타입 칸 순서를 적용된 스키마의 생성 결과와 맞춤

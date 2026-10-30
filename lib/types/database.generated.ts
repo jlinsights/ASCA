@@ -45,9 +45,9 @@ export type Database = {
           genres: string[]
           id: string
           match_method: string | null
-          membership_raw: string | null
           matched_at: string | null
           matched_by: string | null
+          membership_raw: string | null
           pen_name: string | null
           received_at: string
           requested_grade: string
@@ -76,9 +76,9 @@ export type Database = {
           genres?: string[]
           id?: string
           match_method?: string | null
-          membership_raw?: string | null
           matched_at?: string | null
           matched_by?: string | null
+          membership_raw?: string | null
           pen_name?: string | null
           received_at?: string
           requested_grade?: string
@@ -107,9 +107,9 @@ export type Database = {
           genres?: string[]
           id?: string
           match_method?: string | null
-          membership_raw?: string | null
           matched_at?: string | null
           matched_by?: string | null
+          membership_raw?: string | null
           pen_name?: string | null
           received_at?: string
           requested_grade?: string
