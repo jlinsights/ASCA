@@ -84,8 +84,9 @@ export default function AdminArtistApplicationsPage() {
         ...current,
         [application.id]: {
           note,
-          from: base?.from ?? application.status,
-          seen: base?.seen ?? application.reviewed_at,
+          // 기준 버전은 처음 쓸 때 한 번만 정한다. seen 은 null(처리된 적 없음)도 유효한 기준이라 ?? 를 쓰지 않는다
+          from: base ? base.from : application.status,
+          seen: base ? base.seen : application.reviewed_at,
         },
       }
     })
@@ -114,8 +115,8 @@ export default function AdminArtistApplicationsPage() {
         headers: { 'Content-Type': 'application/json' },
         // 초안이 있으면 그 기준 버전으로 보낸다 — 그 사이 바뀌었으면 서버가 409 로 막는다
         body: JSON.stringify({
-          from: draft?.from ?? application.status,
-          seen: draft?.seen ?? application.reviewed_at,
+          from: draft ? draft.from : application.status,
+          seen: draft ? draft.seen : application.reviewed_at,
           ...change,
         }),
       })

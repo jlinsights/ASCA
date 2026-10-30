@@ -242,6 +242,36 @@ describe('관리자 — 작가 신청 심사', () => {
     })
   })
 
+  it('처리된 적 없던 신청의 초안도 충돌이 이어진다 — 글자를 더 써도 경고가 사라지지 않는다', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: null })
+    const b = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    fetchMock
+      .mockResolvedValueOnce(page([a, b]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValue(
+        page([{ ...a, review_note: '다른 관리자 메모', reviewed_at: '2026-10-30T05:00:00Z' }, b])
+      )
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    const cardB = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(cardB).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(cardB).getByRole('button', { name: '메모만 저장' }))
+    await within(await card()).findByRole('alert')
+    await waitFor(() =>
+      expect(within(cardB).getByLabelText('심사 메모')).not.toHaveAttribute('readonly')
+    )
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안 더' },
+    })
+    const cardA = await card()
+    expect(within(cardA).getByRole('alert')).toHaveTextContent('다른 관리자가 이 신청을 바꿨습니다')
+    expect(within(cardA).queryByRole('button', { name: '메모만 저장' })).toBeNull()
+  })
+
   it('충돌한 초안을 버리면 지금 저장된 메모가 보인다', async () => {
     const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
     fetchMock
