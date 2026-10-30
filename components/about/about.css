@@ -760,6 +760,27 @@ a.ab-year__poster:hover img {
   font-weight: 600;
   color: var(--ab-fg);
 }
+/* 큰 인용 뒤에 이어지는 풀이 글 */
+.ab-quote + .ab-letter {
+  margin-top: 32px;
+}
+/* 일정표 — 날짜를 앞에, 좁은 화면에서는 날짜 아래로 내용을 내린다 */
+.ab-ledger--dates div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  padding: 12px 0;
+}
+.ab-ledger--dates dt {
+  color: var(--ab-muted);
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 768px) {
+  .ab-ledger--dates div {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 24px;
+  }
+}
 
 /* 단추 — 머리·자료 */
 .ab-button {

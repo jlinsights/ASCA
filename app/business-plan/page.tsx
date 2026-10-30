@@ -3,7 +3,15 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { AboutChapter, AboutHero, AboutPage } from '@/components/about/about-layout'
 import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
-import { Plan2025 } from './_components/plan-2025'
+import {
+  PlanDirections,
+  PlanIndicators,
+  PlanKeynote,
+  PlanManagement,
+  PlanPrograms,
+  PlanSchedule,
+} from './_components/plan-2027'
+import { PLAN_YEAR } from './_components/plan-2027-data'
 import { YearSection } from './_components/year-section'
 import Link from 'next/link'
 import { EXHIBITION_YEARS, QUICK_LINKS } from './_components/business-plan-data'
@@ -13,10 +21,11 @@ import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 export const metadata: Metadata = {
   title: '사업계획 | 동양서예협회',
   description:
-    '동양서예협회 연도별 사업계획 및 전시 아카이브. 2025년 사업계획서, 대한민국 동양서예대전 역대 전시 기록을 확인하세요.',
+    '동양서예협회 2027년도 사업계획. 제23회 대한민국 동양서예대전과 書境 초대작가전, 한·중·일 교류, 교육과 차세대, 작가의 온라인 활동, 예술경영 원칙과 역대 전시 아카이브를 안내합니다.',
   openGraph: {
-    title: '사업계획 | Business Plans - 동양서예협회',
-    description: '전통과 현대를 잇는 동양미학 예술 플랫폼. 연도별 사업계획 및 전시 아카이브.',
+    title: '사업계획 | Business Plan - 동양서예협회',
+    description:
+      '느리게 쓰고, 깊게 보고, 오래 남긴다 — 法古創新 · 人書俱老 의 정신으로 서예와 전시 문화를 이끄는 동양서예협회의 2027년도 사업계획.',
     images: [
       {
         url: 'https://imagedelivery.net/iELritu8tmGaSR8tZ-NWcg/561446ce-48df-41cf-c8d8-ac7427ed2600/Contain',
@@ -24,9 +33,6 @@ export const metadata: Metadata = {
     ],
   },
 }
-
-// 2025년 전시는 사업계획서(#2025)와 겹치지 않게 #2025-exhibition 으로 건다
-const yearAnchor = (year: number) => (year === 2025 ? '2025-exhibition' : String(year))
 
 export default function BusinessPlanPage() {
   const years = EXHIBITION_YEARS.map(e => e.year)
@@ -39,10 +45,11 @@ export default function BusinessPlanPage() {
         <AboutHero
           tc={PAGE_HERO_MARKS.businessPlan.tc}
           title='사업계획'
-          lede='동양서예협회의 연도별 사업계획과 대한민국 동양서예대전 전시 아카이브를 확인하실 수 있습니다.'
+          lede={`${PLAN_YEAR}년, 느리지만 깊은 예술로 서예와 전시 문화의 품격을 이끌겠습니다.`}
           facts={[
-            { label: '수록 기간', value: `${firstYear}–${lastYear}` },
-            { label: '전시 기록', value: `${EXHIBITION_YEARS.length}개년` },
+            { label: '계획 연도', value: String(PLAN_YEAR) },
+            { label: '중심 사업', value: '제23회 대전' },
+            { label: '전시 기록', value: `${firstYear}–${lastYear}` },
           ]}
           actions={
             <>
@@ -62,11 +69,11 @@ export default function BusinessPlanPage() {
         />
         <AboutNav />
         <AboutChapter
-          id='2025'
-          tc='計劃'
-          eyebrow='2025 · 동양의 혼, 현대의 감각'
-          title='2025년도 사업계획서'
-          note='“전통과 현대를 잇는 동양미학 예술 플랫폼”'
+          id='keynote'
+          tone='navy'
+          tc='基調'
+          eyebrow={`${PLAN_YEAR} · 法古創新 · 人書俱老`}
+          title={`${PLAN_YEAR}년도 사업계획`}
           aside={
             <ul className='ab-index' aria-label='바로 가기'>
               {QUICK_LINKS.map(link => (
@@ -79,7 +86,35 @@ export default function BusinessPlanPage() {
             </ul>
           }
         >
-          <Plan2025 />
+          <PlanKeynote />
+        </AboutChapter>
+        <AboutChapter id='directions' tc='方向' eyebrow='Direction' title='운영 방향'>
+          <PlanDirections />
+        </AboutChapter>
+        <AboutChapter
+          id='schedule'
+          tone='gold'
+          tc='日程'
+          eyebrow='Calendar'
+          title={`${PLAN_YEAR} 주요 일정`}
+          note='확정된 일정만 싣고, 정해지는 대로 더합니다.'
+        >
+          <PlanSchedule />
+        </AboutChapter>
+        <AboutChapter id='programs' tc='事業' eyebrow='Programs' title='핵심 사업'>
+          <PlanPrograms />
+        </AboutChapter>
+        <AboutChapter
+          id='management'
+          tone='navy'
+          tc='經營'
+          eyebrow='Management'
+          title='예술경영 원칙'
+        >
+          <PlanManagement />
+        </AboutChapter>
+        <AboutChapter id='review' tc='省察' eyebrow='Review' title='한 해를 돌아볼 때'>
+          <PlanIndicators />
         </AboutChapter>
         <AboutChapter
           id='archive'
@@ -91,7 +126,7 @@ export default function BusinessPlanPage() {
             <ul className='ab-index' aria-label='연도 바로 가기'>
               {EXHIBITION_YEARS.map(e => (
                 <li key={e.year}>
-                  <a href={`#${yearAnchor(e.year)}`}>{e.year}</a>
+                  <a href={`#${e.year}`}>{e.year}</a>
                 </li>
               ))}
             </ul>
@@ -100,7 +135,7 @@ export default function BusinessPlanPage() {
           {EXHIBITION_YEARS.map(exhibition => (
             <YearSection
               key={exhibition.year}
-              id={yearAnchor(exhibition.year)}
+              id={String(exhibition.year)}
               exhibition={exhibition}
             />
           ))}
