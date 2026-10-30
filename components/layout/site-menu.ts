@@ -59,9 +59,31 @@ const regulations: MenuLink[] = REGULATIONS.map(entry => ({
   href: regulationHref(entry.slug),
 }))
 
+// 왼쪽 전체 보기·정관·자격 요건, 오른쪽 나머지 운영 규정 — 전시·공모처럼 두 칸 (2026-10-31)
+const REGULATION_CORE_SLUGS = ['articles', 'qualifications']
+const regulationColumns: MenuColumn[] = [
+  {
+    titleKey: 'siteNavColRegsCore',
+    items: [
+      { labelKey: 'regsAll', href: REGULATIONS_BASE_PATH },
+      ...REGULATION_CORE_SLUGS.map(slug => ({
+        labelKey: REGULATIONS.find(entry => entry.slug === slug)?.nameKey ?? slug,
+        href: regulationHref(slug),
+      })),
+    ],
+  },
+  {
+    titleKey: 'siteNavColRegsRules',
+    items: regulations.filter(
+      link => !REGULATION_CORE_SLUGS.some(slug => link.href === regulationHref(slug))
+    ),
+  },
+]
+
+// 회원 게시판을 맨 앞에 — 소식 메뉴 머리도 게시판으로 간다 (2026-10-31)
 const news: MenuLink[] = [
-  { labelKey: 'siteNewsNotices', href: '/notice' },
   { labelKey: 'siteNavCommunityBoard', href: '/community/board' },
+  { labelKey: 'siteNewsNotices', href: '/notice' },
   { labelKey: 'siteNewsEvents', href: '/events' },
   { labelKey: 'siteNavGallery', href: '/gallery' },
   { labelKey: 'siteNavBlog', href: '/blog' },
@@ -71,8 +93,12 @@ const membership: MenuLink[] = [
   { labelKey: 'siteNavMembershipGuide', href: '/membership' },
   { labelKey: 'siteNavAcademy', href: '/academy' },
   { labelKey: 'siteNavFundraising', href: '/fundraising' },
-  { labelKey: 'siteNavFaq', href: '/faq' },
+]
+
+// 문의는 회원·후원에서 꺼내 따로 둔 메뉴 — 자주 묻는 질문을 그 아래에 (2026-10-31)
+const contact: MenuLink[] = [
   { labelKey: 'siteNavContact', href: '/contact' },
+  { labelKey: 'siteNavFaq', href: '/faq' },
 ]
 
 // 동양서예대전 신청서 — 지원하는 사람과 시점 순서(출품자 → 수상 작가 → 위원)
@@ -96,7 +122,7 @@ const exhibitionsAndContests: MenuColumn[] = [
 ]
 
 export const headerMenu: MenuGroup[] = [
-  // 순서: 소개 · 전시·공모 · 작가·작품 · 소식 · 정관·규정 · 회원·후원 (2026-10-26)
+  // 순서: 소개 · 전시·공모 · 작가·작품 · 소식 · 정관·규정 · 회원·후원 · 문의 (2026-10-31)
   // 소개·정관·규정 라벨은 헤더·푸터 제목·규정 페이지 경로 표시가 같은 키를 쓴다 (2026-10-26)
   { key: 'about', labelKey: 'siteNavAboutShort', href: '/introductions', items: about },
   {
@@ -119,15 +145,17 @@ export const headerMenu: MenuGroup[] = [
       { labelKey: 'siteNavArtworks', href: '/artworks' },
     ],
   },
-  // 공지사항·행사는 옛 CMS 데이터가 없어 비어 있다 — 메뉴 머리는 사진이 있는 갤러리로 보낸다
-  { key: 'news', labelKey: 'siteFtNews', href: '/gallery', items: news },
+  // 메뉴 머리는 회원 게시판으로 — 공지사항·행사는 옛 CMS 데이터가 없어 비어 있다 (2026-10-31)
+  { key: 'news', labelKey: 'siteFtNews', href: '/community/board', items: news },
   {
     key: 'regulations',
     labelKey: 'siteNavRegulations',
     href: REGULATIONS_BASE_PATH,
-    items: [{ labelKey: 'regsAll', href: REGULATIONS_BASE_PATH }, ...regulations],
+    columns: regulationColumns,
+    items: regulationColumns.flatMap(column => column.items),
   },
   { key: 'membership', labelKey: 'siteNavMembership', href: '/membership', items: membership },
+  { key: 'contact', labelKey: 'siteNavContact', href: '/contact', items: contact },
 ]
 
 export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
