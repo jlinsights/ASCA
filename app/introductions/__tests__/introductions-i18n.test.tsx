@@ -18,24 +18,20 @@ afterEach(() => {
 })
 
 describe('소개 페이지 — 번역', () => {
-  it('ko: 기존 문구와 한국어 인사말이 그대로다', async () => {
+  it('ko: 한국어 협회 소개가 원문으로 열린다', async () => {
     renderPage('ko')
     expect(await screen.findByRole('heading', { level: 1, name: '소개' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '이사장 인사말' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '협회 소개' })).toBeInTheDocument()
+    expect(screen.getByText(/人書俱老, 글씨와 사람이 함께 깊어집니다/)).toBeInTheDocument()
+    expect(screen.queryByText(/원문/)).not.toBeInTheDocument()
     expect(screen.getByRole('link', { name: /협회 소개 브로셔/ })).toBeInTheDocument()
   })
 
-  // 회귀: 탭 기본값이 항상 '한국어' 라 영어 사용자도 한국어 인사말을 먼저 봤다.
-  it('en: 영어 인사말 탭이 기본으로 열린다', async () => {
-    renderPage('en')
-    expect(await screen.findByRole('heading', { name: 'Message from the Chairman' })).toBeVisible()
-    expect(screen.getByRole('tab', { name: 'English' })).toHaveAttribute('aria-selected', 'true')
-    expect(screen.getByRole('link', { name: /ASCA Brochure \(Korean\)/ })).toBeInTheDocument()
-  })
-
+  // 회귀: 탭 기본값이 항상 '한국어' 라 영어 사용자도 한국어 소개를 먼저 봤다.
   it.each([
-    ['ja', '日本語', '理事長あいさつ', '韓国語原文からの翻訳'],
-    ['zh', '中文', '理事長致辭', '譯自韓文原文'],
+    ['en', 'English', 'About ASCA', 'Translated from the Korean original'],
+    ['ja', '日本語', '協会について', '韓国語原文からの翻訳'],
+    ['zh', '中文', '關於本會', '譯自韓文原文'],
   ])('%s: 번역본 탭이 열리고 번역임을 밝힌다', async (lang, tab, heading, note) => {
     renderPage(lang)
     expect(await screen.findByRole('heading', { name: heading })).toBeVisible()

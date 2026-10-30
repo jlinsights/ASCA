@@ -48,15 +48,34 @@ describe('사명 — 본문 언어', () => {
       </LanguageProvider>
     )
     expect(screen.getByRole('heading', { name: '핵심 가치' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /통합과 혁신/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /人書俱老 · 함께 깊어지다/ })).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'English' }))
 
     expect(screen.getByRole('button', { name: 'English' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('heading', { name: 'Core Values' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Key Objectives' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /Integration & Innovation/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Deepening Together/ })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: '핵심 가치' })).toBeNull()
+  })
+
+  it.each([
+    ['日本語', '核心価値', /ともに深まる/],
+    ['中文', '核心價值', /一同深化/],
+  ])('%s 를 누르면 그 언어로 바뀐다', async (button, heading, value) => {
+    const user = userEvent.setup()
+    render(
+      <LanguageProvider>
+        <AboutPage>
+          <MissionTabs />
+        </AboutPage>
+      </LanguageProvider>
+    )
+    await user.click(screen.getByRole('button', { name: button }))
+
+    expect(screen.getByRole('button', { name: button })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('heading', { name: heading })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: value })).toBeInTheDocument()
   })
 })
 
