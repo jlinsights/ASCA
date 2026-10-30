@@ -33,6 +33,124 @@ export type Database = {
         }
         Relationships: []
       }
+      artist_applications: {
+        Row: {
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_name_en: string | null
+          applicant_name_hanja: string | null
+          artist_id: string | null
+          awards_text: string | null
+          created_at: string
+          genres: string[]
+          id: string
+          match_method: string | null
+          matched_at: string | null
+          matched_by: string | null
+          membership_raw: string | null
+          pen_name: string | null
+          received_at: string
+          requested_grade: string
+          requested_grade_raw: string | null
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          route: string
+          route_raw: string | null
+          special_basis_raw: string | null
+          status: string
+          submitted_at: string
+          tally_form_id: string
+          tally_response_id: string
+          track: string
+          track_raw: string | null
+        }
+        Insert: {
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_name_en?: string | null
+          applicant_name_hanja?: string | null
+          artist_id?: string | null
+          awards_text?: string | null
+          created_at?: string
+          genres?: string[]
+          id?: string
+          match_method?: string | null
+          matched_at?: string | null
+          matched_by?: string | null
+          membership_raw?: string | null
+          pen_name?: string | null
+          received_at?: string
+          requested_grade?: string
+          requested_grade_raw?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          route?: string
+          route_raw?: string | null
+          special_basis_raw?: string | null
+          status?: string
+          submitted_at: string
+          tally_form_id: string
+          tally_response_id: string
+          track?: string
+          track_raw?: string | null
+        }
+        Update: {
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_name_en?: string | null
+          applicant_name_hanja?: string | null
+          artist_id?: string | null
+          awards_text?: string | null
+          created_at?: string
+          genres?: string[]
+          id?: string
+          match_method?: string | null
+          matched_at?: string | null
+          matched_by?: string | null
+          membership_raw?: string | null
+          pen_name?: string | null
+          received_at?: string
+          requested_grade?: string
+          requested_grade_raw?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          route?: string
+          route_raw?: string | null
+          special_basis_raw?: string | null
+          status?: string
+          submitted_at?: string
+          tally_form_id?: string
+          tally_response_id?: string
+          track?: string
+          track_raw?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'artist_applications_artist_id_fkey'
+            columns: ['artist_id']
+            isOneToOne: false
+            referencedRelation: 'artists'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_applications_matched_by_fkey'
+            columns: ['matched_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_applications_reviewed_by_fkey'
+            columns: ['reviewed_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       artist_claim_requests: {
         Row: {
           account_id: string
