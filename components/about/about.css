@@ -760,6 +760,10 @@ a.ab-year__poster:hover img {
   font-weight: 600;
   color: var(--ab-fg);
 }
+/* 큰 인용 뒤에 이어지는 풀이 글 */
+.ab-quote + .ab-letter {
+  margin-top: 32px;
+}
 /* 일정표 — 날짜를 앞에, 좁은 화면에서는 날짜 아래로 내용을 내린다 */
 .ab-ledger--dates div {
   display: grid;
