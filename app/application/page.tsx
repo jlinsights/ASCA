@@ -3,7 +3,7 @@ import { BookOpen, PenLine } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { ContestFlipbook } from '@/components/contests/contest-flipbook'
+import { CONTEST_FLIPBOOK_URL, ContestFlipbook } from '@/components/contests/contest-flipbook'
 import { SiteFaqList } from '@/components/faq/site-faq-list'
 import {
   ApplySectionHead,
@@ -98,7 +98,7 @@ export default function ApplicationPage() {
             id='apply-title'
             eyebrow='작성 방법 세 가지'
             title='출품원서 작성'
-            lede='온라인 양식은 단계별 질문에 답한 뒤 마지막에 전송 버튼을 누르면 접수됩니다. 인쇄해 쓰시려면 아래 Word·PDF 양식을 내려받으세요.'
+            lede='온라인 양식은 단계별 질문에 답한 뒤 마지막에 전송 버튼을 누르면 접수됩니다. 인쇄해 쓰시려면 아래 Word·PDF 양식을 내려받거나, 공모요강 플립북 5~7쪽의 양식을 내려받아 인쇄하세요.'
           />
           <div className='asca-apply__form'>
             <div className='asca-apply__form-head'>
@@ -114,6 +114,18 @@ export default function ApplicationPage() {
             />
           </div>
           <DownloadList items={ENTRY_DOWNLOADS} />
+          {/* 공모요강 플립북 5~7쪽에 출품원서 양식이 들어 있다 — 플립북에서 내려받거나 바로 인쇄할 수 있다 (2026-10-31) */}
+          <p className='asca-apply__flipnote'>
+            <strong>공모요강 플립북에서도 출품원서를 받을 수 있습니다</strong>
+            출품원서 양식은 공모요강 플립북 <b>5~7쪽</b>에 실려 있습니다. 플립북을 열어 해당 쪽을
+            찾은 뒤, 플립북의 다운로드·인쇄 기능으로 내려받거나 바로 인쇄해 쓰시면 됩니다.
+            <span className='asca-apply__flipnote-links'>
+              <a href='#guide'>아래에서 공모요강 보기</a>
+              <a href={CONTEST_FLIPBOOK_URL} target='_blank' rel='noopener noreferrer'>
+                새 창에서 플립북 열기<span className='sr-only'> (새 창)</span>
+              </a>
+            </span>
+          </p>
           <p className='asca-apply__sendto'>
             <strong>출품원서 접수처 — {OFFICE.label}</strong>
             {formatAddress(OFFICE)}
