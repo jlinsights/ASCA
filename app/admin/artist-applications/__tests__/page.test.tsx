@@ -164,6 +164,45 @@ describe('관리자 — 작가 신청 심사', () => {
     )
   })
 
+  it('다른 카드를 저장해 목록이 다시 읽혀도 쓰던 메모는 남는다(처리 시각이 바뀌어도)', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    const b = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    fetchMock
+      .mockResolvedValueOnce(page([a, b]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValueOnce(page([{ ...a, reviewed_at: '2026-10-30T05:00:00Z' }, b]))
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    const cardB = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(cardB).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(cardB).getByRole('button', { name: '메모만 저장' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    await screen.findByText(/메모를 저장했습니다/)
+    expect(within(await card()).getByLabelText('심사 메모')).toHaveValue('A 초안')
+  })
+
+  it('다시 읽기가 실패해도 보이던 목록과 쓰던 메모를 지우지 않는다', async () => {
+    const a = application({ status: 'reviewing' })
+    const b = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    fetchMock
+      .mockResolvedValueOnce(page([a, b]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValueOnce(json({}, 500))
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    const cardB = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(cardB).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(cardB).getByRole('button', { name: '메모만 저장' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('신청 목록을 불러오지 못했습니다.')
+    expect(within(await card()).getByLabelText('심사 메모')).toHaveValue('A 초안')
+  })
+
   it('다른 관리자가 먼저 바꿨으면 알리고 목록을 새로 읽는다', async () => {
     fetchMock
       .mockResolvedValueOnce(page([application()]))

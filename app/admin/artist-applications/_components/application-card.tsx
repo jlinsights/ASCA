@@ -56,12 +56,21 @@ function Field({ label, value }: { label: string; value: string | null }) {
 
 interface ApplicationCardProps {
   application: AdminApplication
+  /** 아직 저장하지 않은 메모 — 페이지가 신청 ID 로 들고 있어 다시 읽기·카드 재생성에도 남는다 */
+  draft: string | undefined
   busy: boolean
+  onDraft: (id: string, note: string) => void
   onReview: (application: AdminApplication, change: ReviewChange) => void
 }
 
-export function ApplicationCard({ application, busy, onReview }: ApplicationCardProps) {
-  const [note, setNote] = useState(application.review_note ?? '')
+export function ApplicationCard({
+  application,
+  draft,
+  busy,
+  onDraft,
+  onReview,
+}: ApplicationCardProps) {
+  const note = draft ?? application.review_note ?? ''
   const [pending, setPending] = useState<ApplicationStatus | null>(null)
   const noteChanged = note.trim() !== (application.review_note ?? '').trim()
   // 메모를 고쳤으면 상태 변경과 함께 보낸다
@@ -119,10 +128,10 @@ export function ApplicationCard({ application, busy, onReview }: ApplicationCard
           value={note}
           maxLength={REVIEW_NOTE_MAX}
           rows={3}
-          // 저장·다시 읽기 중에는 잠근다 — 그 사이 쓴 글은 보내지 않은 채 새 카드에 덮인다
+          // 저장·다시 읽기 중에는 잠근다 — 보낸 메모와 그 뒤에 쓴 글이 섞이지 않게
           readOnly={busy}
           aria-busy={busy}
-          onChange={event => setNote(event.target.value)}
+          onChange={event => onDraft(application.id, event.target.value)}
           placeholder='점수 확인·서류 보완 요청·이사회 의결 일자 등'
         />
       </div>

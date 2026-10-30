@@ -37,6 +37,8 @@ export default function AdminArtistApplicationsPage() {
   const [notice, setNotice] = useState<string | null>(null)
   // 저장 중인 카드들 — 여러 카드를 잇달아 저장해도 각자 끝날 때까지 잠겨 있다
   const [busyIds, setBusyIds] = useState<ReadonlySet<string>>(() => new Set())
+  // 저장하지 않은 메모 — 카드가 아니라 여기 신청 ID 로 둔다. 다시 읽기·카드 재생성·목록 오류에도 남는다
+  const [drafts, setDrafts] = useState<Readonly<Record<string, string>>>({})
   // 지금 보고 있는 탭·쪽과 마지막 요청 번호 — 늦게 온 옛 응답이 화면을 덮지 않게 한다
   const query = useRef({ view, page })
   const latest = useRef(0)
@@ -55,7 +57,7 @@ export default function AdminArtistApplicationsPage() {
       if (request === latest.current) setList(body)
     } catch {
       if (request !== latest.current) return
-      setList(null)
+      // 이미 보이던 목록은 그대로 둔다 — 지우면 그 위에서 쓰던 메모 카드까지 사라진다
       setError('신청 목록을 불러오지 못했습니다.')
     }
   }, [])
@@ -89,6 +91,15 @@ export default function AdminArtistApplicationsPage() {
         const body = (await response.json().catch(() => null)) as { code?: string } | null
         setNotice(FAILURES[body?.code ?? ''] ?? '처리하지 못했습니다. 잠시 후 다시 시도해 주세요.')
       } else {
+        // 보낸 메모가 저장됐으면 초안을 지운다(그 뒤 고친 글이면 남긴다)
+        if (change.note !== undefined) {
+          const sent = change.note
+          setDrafts(({ [application.id]: current, ...rest }) =>
+            current === sent || current === undefined
+              ? rest
+              : { ...rest, [application.id]: current }
+          )
+        }
         const name = application.applicant_name ?? '신청'
         setNotice(
           change.to === application.status
@@ -147,15 +158,17 @@ export default function AdminArtistApplicationsPage() {
         </p>
       )}
 
-      {error ? (
+      {error && (
         <div role='alert' className='rounded-md border border-destructive/40 p-4 text-sm'>
           {error}
           <Button variant='outline' size='sm' className='ml-3' onClick={() => void load()}>
             다시 시도
           </Button>
         </div>
-      ) : !list ? (
-        <p className='text-sm text-muted-foreground'>불러오는 중…</p>
+      )}
+
+      {!list ? (
+        !error && <p className='text-sm text-muted-foreground'>불러오는 중…</p>
       ) : (
         <div className='space-y-4'>
           {list.data.length === 0 ? (
@@ -163,10 +176,12 @@ export default function AdminArtistApplicationsPage() {
           ) : (
             list.data.map(application => (
               <ApplicationCard
-                // 상태·메모가 바뀌면 카드를 새로 그려 입력칸을 서버 값으로 맞춘다
-                key={`${application.id}:${application.status}:${application.reviewed_at ?? ''}`}
+                // 상태가 바뀌면 카드를 새로 그려 확인 단계를 닫는다. 메모 초안은 drafts 에 있어 남는다
+                key={`${application.id}:${application.status}`}
                 application={application}
+                draft={drafts[application.id]}
                 busy={busyIds.has(application.id)}
+                onDraft={(id, note) => setDrafts(current => ({ ...current, [id]: note }))}
                 onReview={(target, change) => void review(target, change)}
               />
             ))
