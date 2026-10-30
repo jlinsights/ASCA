@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server'
 import { archiveIdentity, archiveWriter } from '@/lib/archive/writer'
 import { checkOrigin } from '@/lib/security/origin-check'
 import { auditTrail } from '@/lib/audit/audit-trail'
-import { ADMIN_APPLICATION_COLUMNS } from '@/lib/applications/admin-applications'
+import { ADMIN_APPLICATION_COLUMNS, REVIEWED_COLUMNS } from '@/lib/applications/admin-applications'
 import { GET } from '../route'
 import { POST } from '../[id]/route'
 
@@ -139,10 +139,18 @@ describe('POST /api/admin/artist-applications/[id]', () => {
   })
 
   it('본 상태일 때만 바꾸고, 관리자·시각·메모를 남기고, 감사 기록엔 메모 본문을 싣지 않는다', async () => {
-    results.artist_applications = [{ data: [{ id: appId }], error: null }]
+    const saved = {
+      id: appId,
+      status: 'approved',
+      review_note: '이사회 의결 완료',
+      reviewed_at: '2026-10-30T05:00:00.000+00:00',
+    }
+    results.artist_applications = [{ data: [saved], error: null }]
     const res = await decide({ from: 'reviewing', to: 'approved', note: ' 이사회 의결 완료 ' })
     expect(res.status).toBe(200)
-    expect(await res.json()).toEqual({ data: { id: appId, status: 'approved' } })
+    // 바뀐 행을 돌려준다 — 화면이 다시 읽기 없이 이 행을 고친다
+    expect(await res.json()).toEqual({ data: saved })
+    expect(opsOf()).toContainEqual(['select', [REVIEWED_COLUMNS]])
     const ops = opsOf()
     expect(ops[0]).toEqual([
       'update',

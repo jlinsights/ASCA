@@ -9,9 +9,11 @@ import {
   ROUTE_LABELS,
   STATUS_LABELS,
   TRACK_LABELS,
+  draftConflicts,
   labelOf,
   type AdminApplication,
   type ApplicationStatus,
+  type NoteDraft,
 } from '@/lib/applications/admin-applications'
 
 export interface ReviewChange {
@@ -57,9 +59,11 @@ function Field({ label, value }: { label: string; value: string | null }) {
 interface ApplicationCardProps {
   application: AdminApplication
   /** 아직 저장하지 않은 메모 — 페이지가 신청 ID 로 들고 있어 다시 읽기·카드 재생성에도 남는다 */
-  draft: string | undefined
+  draft: NoteDraft | undefined
   busy: boolean
-  onDraft: (id: string, note: string) => void
+  onDraft: (application: AdminApplication, note: string) => void
+  onRebase: (application: AdminApplication) => void
+  onDiscard: (id: string) => void
   onReview: (application: AdminApplication, change: ReviewChange) => void
 }
 
@@ -68,9 +72,13 @@ export function ApplicationCard({
   draft,
   busy,
   onDraft,
+  onRebase,
+  onDiscard,
   onReview,
 }: ApplicationCardProps) {
-  const note = draft ?? application.review_note ?? ''
+  const note = draft?.note ?? application.review_note ?? ''
+  // 초안을 쓰는 사이 다른 관리자가 이 신청을 바꿨다 — 확인하기 전에는 저장하지 못한다
+  const conflict = draftConflicts(draft, application)
   const [pending, setPending] = useState<ApplicationStatus | null>(null)
   const noteChanged = note.trim() !== (application.review_note ?? '').trim()
   // 메모를 고쳤으면 상태 변경과 함께 보낸다
@@ -131,12 +139,36 @@ export function ApplicationCard({
           // 저장·다시 읽기 중에는 잠근다 — 보낸 메모와 그 뒤에 쓴 글이 섞이지 않게
           readOnly={busy}
           aria-busy={busy}
-          onChange={event => onDraft(application.id, event.target.value)}
+          onChange={event => onDraft(application, event.target.value)}
           placeholder='점수 확인·서류 보완 요청·이사회 의결 일자 등'
         />
       </div>
 
-      {pending ? (
+      {conflict ? (
+        <div role='alert' className='space-y-2 rounded-md border border-amber-500/50 p-3 text-sm'>
+          <p>
+            메모를 쓰는 사이 다른 관리자가 이 신청을 바꿨습니다(지금 상태:{' '}
+            {STATUS_LABELS[application.status]}).
+          </p>
+          <p className='whitespace-pre-wrap text-muted-foreground'>
+            지금 저장된 메모: {application.review_note || '(없음)'}
+          </p>
+          <div className='flex flex-wrap gap-2'>
+            <Button type='button' size='sm' disabled={busy} onClick={() => onRebase(application)}>
+              확인했고 내 메모로 이어 쓰기
+            </Button>
+            <Button
+              type='button'
+              size='sm'
+              variant='outline'
+              disabled={busy}
+              onClick={() => onDiscard(application.id)}
+            >
+              내 초안 버리기
+            </Button>
+          </div>
+        </div>
+      ) : pending ? (
         <div className='flex flex-wrap items-center gap-2 text-sm'>
           <span>
             &lsquo;{STATUS_LABELS[pending]}&rsquo;(으)로 바꿉니다. 작가 행은 따로 만들어야 합니다.

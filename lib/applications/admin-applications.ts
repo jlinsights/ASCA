@@ -74,6 +74,35 @@ export interface AdminApplication {
   reviewed_at: string | null
 }
 
+/** 심사 저장이 돌려주는 칸 — 화면이 다시 읽기를 기다리지 않고 이 행을 바로 고친다 */
+export const REVIEWED_COLUMNS = 'id,status,review_note,reviewed_at'
+export type ReviewedFields = Pick<AdminApplication, 'id' | 'status' | 'review_note' | 'reviewed_at'>
+
+/**
+ * 저장하지 않은 메모 — 처음 고치기 시작할 때 본 상태·처리 시각(기준 버전)을 함께 둔다.
+ * 그 사이 다른 관리자가 이 신청을 바꾸면 기준 버전이 어긋나 충돌로 보이고, 저장은 409 를 받는다.
+ */
+export interface NoteDraft {
+  note: string
+  from: ApplicationStatus
+  seen: string | null
+}
+
+/** 초안을 쓰는 사이 이 신청이 바뀌었는가 */
+export function draftConflicts(
+  draft: NoteDraft | undefined,
+  application: Pick<AdminApplication, 'status' | 'reviewed_at'>
+): boolean {
+  if (!draft) return false
+  return draft.from !== application.status || !sameInstant(draft.seen, application.reviewed_at)
+}
+
+/** 같은 시각인가 — 표기('Z'·'+00:00'·소수 자릿수)가 달라도 같게 본다 */
+function sameInstant(a: string | null, b: string | null): boolean {
+  if (a === null || b === null) return a === b
+  return new Date(a).getTime() === new Date(b).getTime()
+}
+
 export const adminApplicationQuerySchema = z.object({
   view: z.enum(APPLICATION_VIEWS).default('open'),
   page: z.coerce.number().int().min(1).max(10_000).default(1),

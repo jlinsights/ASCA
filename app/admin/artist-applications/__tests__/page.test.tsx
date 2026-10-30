@@ -203,6 +203,92 @@ describe('관리자 — 작가 신청 심사', () => {
     expect(within(await card()).getByLabelText('심사 메모')).toHaveValue('A 초안')
   })
 
+  it('초안을 쓰는 사이 다른 관리자가 바꾸면 충돌을 보이고, 확인해야 이어서 저장한다', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    const b = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    const changedAt = '2026-10-30T05:00:00Z'
+    fetchMock
+      .mockResolvedValueOnce(page([a, b]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValueOnce(
+        page([{ ...a, review_note: '다른 관리자 메모', reviewed_at: changedAt }, b])
+      )
+      .mockResolvedValueOnce(json({ data: { id: 'app-1', status: 'reviewing' } }))
+      .mockResolvedValue(page([a, b]))
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    const cardB = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(cardB).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(cardB).getByRole('button', { name: '메모만 저장' }))
+
+    const conflict = await within(await card()).findByRole('alert')
+    expect(conflict).toHaveTextContent('다른 관리자가 이 신청을 바꿨습니다')
+    expect(conflict).toHaveTextContent('지금 저장된 메모: 다른 관리자 메모')
+    const cardA = await card()
+    expect(within(cardA).getByLabelText('심사 메모')).toHaveValue('A 초안')
+    expect(within(cardA).queryByRole('button', { name: '메모만 저장' })).toBeNull()
+
+    fireEvent.click(within(cardA).getByRole('button', { name: '확인했고 내 메모로 이어 쓰기' }))
+    fireEvent.click(within(await card()).getByRole('button', { name: '메모만 저장' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(4))
+    expect(JSON.parse(fetchMock.mock.calls[3][1].body as string)).toEqual({
+      from: 'reviewing',
+      seen: changedAt,
+      to: 'reviewing',
+      note: 'A 초안',
+    })
+  })
+
+  it('충돌한 초안을 버리면 지금 저장된 메모가 보인다', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    fetchMock
+      .mockResolvedValueOnce(page([a]))
+      .mockResolvedValueOnce(json({ code: 'APPLICATION_CHANGED' }, 409))
+      .mockResolvedValueOnce(
+        page([{ ...a, review_note: '다른 관리자 메모', reviewed_at: '2026-10-30T05:00:00Z' }])
+      )
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '메모만 저장' }))
+    fireEvent.click(await screen.findByRole('button', { name: '내 초안 버리기' }))
+    expect(within(await card()).getByLabelText('심사 메모')).toHaveValue('다른 관리자 메모')
+  })
+
+  it('저장은 됐는데 다시 읽기가 실패해도 저장된 메모를 보인다', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    fetchMock
+      .mockResolvedValueOnce(page([a]))
+      .mockResolvedValueOnce(
+        json({
+          data: {
+            id: 'app-1',
+            status: 'reviewing',
+            review_note: '서류 보완 요청',
+            reviewed_at: '2026-10-30T05:00:00Z',
+          },
+        })
+      )
+      .mockResolvedValueOnce(json({}, 500))
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: '서류 보완 요청' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '메모만 저장' }))
+    expect(await screen.findByText('신청 목록을 불러오지 못했습니다.')).toBeInTheDocument()
+    const memo = within(await card()).getByLabelText('심사 메모')
+    await waitFor(() => expect(memo).not.toHaveAttribute('readonly'))
+    expect(memo).toHaveValue('서류 보완 요청')
+    expect(within(await card()).queryByRole('alert')).toBeNull()
+    expect(screen.queryByRole('button', { name: '메모만 저장' })).toBeNull()
+  })
+
   it('다른 관리자가 먼저 바꿨으면 알리고 목록을 새로 읽는다', async () => {
     fetchMock
       .mockResolvedValueOnce(page([application()]))

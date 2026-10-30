@@ -6,6 +6,8 @@ import {
   STATUS_LABELS,
   type AdminApplication,
   type ApplicationView,
+  type NoteDraft,
+  type ReviewedFields,
 } from '@/lib/applications/admin-applications'
 import { ApplicationCard, type ReviewChange } from './_components/application-card'
 
@@ -18,7 +20,8 @@ const VIEWS: readonly { value: ApplicationView; label: string }[] = [
 
 // 서버가 돌려주는 코드 → 관리자에게 보일 말
 const FAILURES: Record<string, string> = {
-  APPLICATION_CHANGED: '다른 관리자가 먼저 이 신청을 바꿨습니다. 목록을 새로 불러왔습니다.',
+  APPLICATION_CHANGED:
+    '다른 관리자가 먼저 이 신청을 바꿨습니다. 목록을 새로 불러왔으니 카드에서 확인해 주세요.',
   APPLICATION_NOT_FOUND: '신청을 찾을 수 없습니다.',
 }
 
@@ -37,8 +40,9 @@ export default function AdminArtistApplicationsPage() {
   const [notice, setNotice] = useState<string | null>(null)
   // 저장 중인 카드들 — 여러 카드를 잇달아 저장해도 각자 끝날 때까지 잠겨 있다
   const [busyIds, setBusyIds] = useState<ReadonlySet<string>>(() => new Set())
-  // 저장하지 않은 메모 — 카드가 아니라 여기 신청 ID 로 둔다. 다시 읽기·카드 재생성·목록 오류에도 남는다
-  const [drafts, setDrafts] = useState<Readonly<Record<string, string>>>({})
+  // 저장하지 않은 메모 — 카드가 아니라 여기 신청 ID 로 둔다. 다시 읽기·카드 재생성·목록 오류에도 남는다.
+  // 고치기 시작할 때 본 상태·처리 시각을 함께 두어, 그 사이 남이 바꾼 것을 덮지 않는다
+  const [drafts, setDrafts] = useState<Readonly<Record<string, NoteDraft>>>({})
   // 지금 보고 있는 탭·쪽과 마지막 요청 번호 — 늦게 온 옛 응답이 화면을 덮지 않게 한다
   const query = useRef({ view, page })
   const latest = useRef(0)
@@ -73,7 +77,34 @@ export default function AdminArtistApplicationsPage() {
     setPage(1)
   }
 
+  const writeDraft = (application: AdminApplication, note: string) =>
+    setDrafts(current => {
+      const base = current[application.id]
+      return {
+        ...current,
+        [application.id]: {
+          note,
+          from: base?.from ?? application.status,
+          seen: base?.seen ?? application.reviewed_at,
+        },
+      }
+    })
+
+  /** 충돌 뒤 '최신 기준으로' — 지금 보이는 상태·처리 시각을 새 기준으로 삼는다(남의 변경을 본 뒤에만 누른다) */
+  const rebaseDraft = (application: AdminApplication) =>
+    setDrafts(current => {
+      const base = current[application.id]
+      if (!base) return current
+      return {
+        ...current,
+        [application.id]: { ...base, from: application.status, seen: application.reviewed_at },
+      }
+    })
+
+  const discardDraft = (id: string) => setDrafts(({ [id]: _dropped, ...rest }) => rest)
+
   const review = async (application: AdminApplication, change: ReviewChange) => {
+    const draft = drafts[application.id]
     setBusyIds(current => new Set(current).add(application.id))
     setNotice(null)
     try {
@@ -81,9 +112,10 @@ export default function AdminArtistApplicationsPage() {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
+        // 초안이 있으면 그 기준 버전으로 보낸다 — 그 사이 바뀌었으면 서버가 409 로 막는다
         body: JSON.stringify({
-          from: application.status,
-          seen: application.reviewed_at,
+          from: draft?.from ?? application.status,
+          seen: draft?.seen ?? application.reviewed_at,
           ...change,
         }),
       })
@@ -91,15 +123,25 @@ export default function AdminArtistApplicationsPage() {
         const body = (await response.json().catch(() => null)) as { code?: string } | null
         setNotice(FAILURES[body?.code ?? ''] ?? '처리하지 못했습니다. 잠시 후 다시 시도해 주세요.')
       } else {
-        // 보낸 메모가 저장됐으면 초안을 지운다(그 뒤 고친 글이면 남긴다)
-        if (change.note !== undefined) {
-          const sent = change.note
-          setDrafts(({ [application.id]: current, ...rest }) =>
-            current === sent || current === undefined
-              ? rest
-              : { ...rest, [application.id]: current }
-          )
-        }
+        const saved = ((await response.json()) as { data: ReviewedFields }).data
+        // 다시 읽기를 기다리지 않고 이 행을 바로 고친다 — 다시 읽기가 실패해도 저장된 값이 보인다
+        setList(
+          current =>
+            current && {
+              ...current,
+              data: current.data.map(row => (row.id === saved.id ? { ...row, ...saved } : row)),
+            }
+        )
+        // 보낸 메모가 저장됐으면 초안을 지우고, 그 뒤 고친 글이면 새 버전을 기준으로 남긴다
+        const sent = change.note
+        setDrafts(({ [application.id]: current, ...rest }) =>
+          !current || current.note === sent || current.note.trim() === (saved.review_note ?? '')
+            ? rest
+            : {
+                ...rest,
+                [application.id]: { ...current, from: saved.status, seen: saved.reviewed_at },
+              }
+        )
         const name = application.applicant_name ?? '신청'
         setNotice(
           change.to === application.status
@@ -181,7 +223,9 @@ export default function AdminArtistApplicationsPage() {
                 application={application}
                 draft={drafts[application.id]}
                 busy={busyIds.has(application.id)}
-                onDraft={(id, note) => setDrafts(current => ({ ...current, [id]: note }))}
+                onDraft={writeDraft}
+                onRebase={rebaseDraft}
+                onDiscard={discardDraft}
                 onReview={(target, change) => void review(target, change)}
               />
             ))

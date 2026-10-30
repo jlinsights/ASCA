@@ -4,7 +4,11 @@ import { archiveIdentity, archiveWriter } from '@/lib/archive/writer'
 import { checkOrigin } from '@/lib/security/origin-check'
 import { rateLimit } from '@/lib/security/rate-limit'
 import { auditTrail } from '@/lib/audit/audit-trail'
-import { applicationDecisionSchema } from '@/lib/applications/admin-applications'
+import {
+  REVIEWED_COLUMNS,
+  applicationDecisionSchema,
+  type ReviewedFields,
+} from '@/lib/applications/admin-applications'
 import { log } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
@@ -47,7 +51,7 @@ export async function POST(request: NextRequest, { params }: Context) {
     const target = db.from('artist_applications').update(changes).eq('id', id).eq('status', from)
     const changed = await (
       seen === null ? target.is('reviewed_at', null) : target.eq('reviewed_at', seen)
-    ).select('id')
+    ).select(REVIEWED_COLUMNS)
     if (changed.error) throw changed.error
     if ((changed.data ?? []).length === 0) {
       // 없는 신청인지, 다른 관리자가 먼저 바꿨는지 가린다
@@ -75,7 +79,8 @@ export async function POST(request: NextRequest, { params }: Context) {
       // 바뀐 것은 이미 저장됐다 — 감사 기록 실패로 관리자에게 실패를 보이지 않는다
       log.error('artist application review audit failed', error)
     }
-    return json({ data: { id, status: to } })
+    // 바뀐 행을 돌려준다 — 화면은 다시 읽기가 실패해도 저장된 값을 보인다
+    return json({ data: (changed.data as unknown as ReviewedFields[])[0] })
   } catch (error) {
     log.error('artist application review failed', error)
     return json({ error: 'Review failed', code: 'APPLICATION_UNAVAILABLE' }, 500)
