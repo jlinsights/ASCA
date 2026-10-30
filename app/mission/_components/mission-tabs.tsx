@@ -5,116 +5,238 @@ import { AboutChapter, AboutHero, AboutRows } from '@/components/about/about-lay
 import { AboutNav } from '@/components/about/about-nav'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
-interface ValueItem {
+// 협회 슬로건 法古創新 · 人書俱老 를 축으로 다시 쓴 사명(2026-10-30). 한국어가 원문이고 영어·일본어·중국어(번체)는 번역.
+// 한·중·일 교류(1997~)·이원화된 초대작가 제도는 연혁과 규정을 따른다.
+
+interface MissionItem {
   title: string
   description: string
 }
 
-interface ObjectiveItem {
-  title: string
-  description: string
+interface MissionContent {
+  missionStatement: string
+  coreValues: readonly MissionItem[]
+  objectives: readonly MissionItem[]
 }
 
-const koreanContent = {
+const koreanContent: MissionContent = {
   missionStatement:
-    '동양서예협회는 동아시아 서예(한국 書藝, 중국 書法, 일본 書道)의 전통을 계승하고 현대적 가치를 창출하는 전문 예술문화기관입니다. 정법(正法)의 계승과 창신(創新)의 조화를 통해 동양 문자예술의 새로운 지평을 열어갑니다.',
+    '동양서예협회는 法古創新의 정신으로 옛 법을 깊이 익혀 오늘의 새로움을 열고, 人書俱老의 자세로 글씨와 사람이 함께 깊어지는 서예 문화를 만들어 갑니다. 한·중·일을 잇는 교류의 전통 위에서, 동양 문자예술이 이 시대의 예술로 살아 숨 쉬도록 합니다.',
   coreValues: [
     {
-      title: '통합과 혁신',
+      title: '法古 · 옛 법을 익히다',
       description:
-        '전통 서예의 정수를 보존하면서도, 현대적 기법과 매체를 적극 수용하여 서예 예술의 외연을 확장합니다. 이원화된 초대작가 제도를 통해 전통과 현대의 조화로운 공존을 추구합니다.',
+        '수천 년 이어 온 고전과 정법(正法)을 깊이 배우고 존중합니다. 임서와 수련으로 다진 바탕이 모든 창작의 출발점입니다.',
     },
     {
-      title: '전통과 창조',
+      title: '創新 · 새로움을 열다',
       description:
-        '법고창신(法古創新)의 정신으로 수천 년 이어져 온 동양 서예의 정법을 존중하되, 새 시대에 맞는 창의적 표현과 혁신적 접근을 장려합니다.',
+        '익힌 법 위에서 오늘의 감각과 새로운 매체를 받아들입니다. 전통부문과 현대부문의 이원화된 초대작가 제도로 전통과 현대가 함께 서는 자리를 만듭니다.',
     },
     {
-      title: '포용과 소통',
+      title: '人書俱老 · 함께 깊어지다',
       description:
-        '한국, 중국, 일본의 서예 전통을 아우르며, 국경과 세대를 초월한 예술적 교류와 소통의 장을 만들어갑니다. 회원 자격에 관계없이 열린 참여를 지향합니다.',
+        '글씨는 사람을 닮습니다. 빠른 성과보다 오랜 수양을 귀히 여기며, 글씨와 함께 사람이 성숙하는 문화를 지향합니다.',
     },
-  ] as ValueItem[],
+    {
+      title: '열린 교류 · 함께 나누다',
+      description:
+        '한·중·일의 서예 전통을 아우르고, 회원 여부와 세대를 넘어 누구에게나 열린 무대를 마련합니다.',
+    },
+  ],
   objectives: [
     {
-      title: '교육 발전',
+      title: '전시와 공모',
       description:
-        '체계적인 서예 교육 프로그램 운영, 아카데미 강좌 제공, 차세대 서예 인재 양성을 통해 서예 문화의 지속 가능한 발전을 도모합니다.',
+        '대한민국 동양서예대전과 초대작가전을 통해 새로운 작가를 발굴하고, 원숙한 작품을 품격 있는 공간에서 선보입니다.',
     },
     {
-      title: '문화 확산',
+      title: '차세대 육성',
       description:
-        '정기 전시회, 국제 교류전, 서예 인문학 탐방 등 다양한 문화 행사를 통해 동양 서예의 아름다움과 가치를 널리 알립니다.',
+        '청년작가의 참여를 넓히고, 교육 프로그램과 강좌로 서예를 이어 갈 다음 세대를 기릅니다.',
     },
     {
-      title: '디지털 혁신',
+      title: '한·중·일 교류',
       description:
-        '온라인 갤러리, 디지털 아카이브, 웹 기반 소통 플랫폼을 구축하여 서예 예술의 접근성을 높이고 글로벌 교류를 촉진합니다.',
+        '1997년부터 이어 온 교류의 역사를 국제 교류전과 서예 인문학 탐방으로 이어 갑니다.',
     },
     {
-      title: '학술 연구',
+      title: '디지털과 온라인 활동',
       description:
-        '동양 서예의 역사, 미학, 기법에 대한 학술 연구를 지원하고, 세미나·학술 대회를 통해 서예 분야의 지적 담론을 활성화합니다.',
+        '다국어 홈페이지, 작가 소개와 작품 아카이브, 온라인 출품으로 작가의 온라인 활동(Online Presence)을 넓히고, 이를 뒷받침할 정책을 꾸준히 개발합니다.',
     },
-  ] as ObjectiveItem[],
+  ],
 }
 
-const englishContent = {
+const englishContent: MissionContent = {
   missionStatement:
-    'The Asian Society of Calligraphic Arts (ASCA) is a professional art and cultural organization dedicated to inheriting the traditions of East Asian calligraphy — Korean Seoyae (書藝), Chinese Shufa (書法), and Japanese Shodō (書道) — while creating contemporary value. Through the harmony of inheriting the Orthodox Way (正法) and realizing Creative Innovation (創新), we open new horizons for the art of Eastern calligraphy.',
+    'In the spirit of 法古創新, the Asian Society of Calligraphic Arts learns the old methods deeply to open what is new today, and in the spirit of 人書俱老, it builds a calligraphic culture in which calligraphy and the person deepen together. Standing on a tradition of exchange that links Korea, China and Japan, we keep Eastern character art alive as an art of our time.',
   coreValues: [
     {
-      title: 'Integration & Innovation',
+      title: '法古 · Learning the Old Methods',
       description:
-        'While preserving the essence of traditional calligraphy, we actively embrace modern techniques and media to expand the scope of calligraphic art. Through a dual invited artist system, we pursue harmonious coexistence of tradition and modernity.',
+        'We study and respect the classics and the orthodox way (正法) handed down over thousands of years. A foundation built through copying the masters and steady practice is the starting point of all creation.',
     },
     {
-      title: 'Tradition & Creation',
+      title: '創新 · Opening the New',
       description:
-        'In the spirit of Beopgochang-shin (法古創新), we respect the orthodox methods of East Asian calligraphy that have been passed down for thousands of years, while encouraging creative expression and innovative approaches suited to the new era.',
+        'On the methods we have learned, we embrace the sensibility and new media of today. Our invited artist system, with its traditional and contemporary tracks, gives tradition and the contemporary a place to stand side by side.',
     },
     {
-      title: 'Inclusivity & Communication',
+      title: '人書俱老 · Deepening Together',
       description:
-        'Encompassing the calligraphic traditions of Korea, China, and Japan, we create spaces for artistic exchange and communication that transcend borders and generations. We aim for open participation regardless of membership status.',
+        'Calligraphy resembles the person who writes it. We value long cultivation over quick results, and pursue a culture in which the person matures along with the brush.',
     },
-  ] as ValueItem[],
+    {
+      title: 'Open Exchange · Sharing Together',
+      description:
+        'Embracing the calligraphic traditions of Korea, China and Japan, we provide a stage open to everyone, regardless of membership or generation.',
+    },
+  ],
   objectives: [
     {
-      title: 'Education Development',
+      title: 'Exhibitions and Competitions',
       description:
-        'We promote the sustainable development of calligraphic culture through systematic calligraphy education programs, academy courses, and nurturing next-generation calligraphy talent.',
+        'Through the Korea Oriental Calligraphy Exhibition and the invited artists’ exhibition, we discover new artists and present mature works in a dignified setting.',
     },
     {
-      title: 'Cultural Dissemination',
+      title: 'Nurturing the Next Generation',
       description:
-        'Through various cultural events including regular exhibitions, international exchange exhibitions, and calligraphy humanities explorations, we widely promote the beauty and value of Oriental calligraphy.',
+        'We widen the participation of young artists and raise the next generation of calligraphers through education programs and courses.',
     },
     {
-      title: 'Digital Innovation',
+      title: 'Korea–China–Japan Exchange',
       description:
-        'By building online galleries, digital archives, and web-based communication platforms, we enhance accessibility to calligraphic art and promote global exchange.',
+        'We carry forward a history of exchange that began in 1997 through international exchange exhibitions and calligraphy humanities tours.',
     },
     {
-      title: 'Academic Research',
+      title: 'Digital and Online Presence',
       description:
-        'We support academic research on the history, aesthetics, and techniques of Oriental calligraphy, and revitalize intellectual discourse in the calligraphy field through seminars and academic conferences.',
+        'Through our multilingual website, artist profiles, artwork archives and online entry, we expand the online presence of our artists and continue to develop policies that support it.',
     },
-  ] as ObjectiveItem[],
+  ],
 }
 
-const CONTENT = { ko: koreanContent, en: englishContent } as const
-type MissionLang = keyof typeof CONTENT
+const japaneseContent: MissionContent = {
+  missionStatement:
+    '東洋書芸協会は、法古創新の精神のもと古法に深く学んで今日の新しきを拓き、人書俱老の姿勢をもって、書と人がともに深まる書芸文化を築いてまいります。韓・中・日を結ぶ交流の伝統の上に、東洋の文字芸術がこの時代の芸術として息づくよう努めます。',
+  coreValues: [
+    {
+      title: '法古 · 古法に学ぶ',
+      description:
+        '数千年にわたり受け継がれてきた古典と正法を深く学び、尊びます。臨書と修練によって培った基礎こそが、あらゆる創作の出発点です。',
+    },
+    {
+      title: '創新 · 新しきを拓く',
+      description:
+        '学んだ法の上に、今日の感性と新たな媒体を取り入れます。伝統部門と現代部門に分けた招待作家制度により、伝統と現代がともに立つ場を設けます。',
+    },
+    {
+      title: '人書俱老 · ともに深まる',
+      description:
+        '書は人に似ます。速やかな成果よりも長い修養を尊び、書とともに人が成熟する文化を目指します。',
+    },
+    {
+      title: '開かれた交流 · ともに分かち合う',
+      description:
+        '韓・中・日の書の伝統を包み込み、会員であるか否か、世代を問わず、誰にでも開かれた舞台を設けます。',
+    },
+  ],
+  objectives: [
+    {
+      title: '展示と公募',
+      description:
+        '大韓民国 東洋書芸大展と招待作家展を通じて新たな作家を発掘し、円熟した作品を品格ある空間で披露します。',
+    },
+    {
+      title: '次世代の育成',
+      description:
+        '青年作家の参加を広げ、教育プログラムと講座によって書芸を受け継ぐ次の世代を育てます。',
+    },
+    {
+      title: '韓・中・日の交流',
+      description:
+        '1997年から続く交流の歴史を、国際交流展と書芸人文学の探訪によって受け継いでいきます。',
+    },
+    {
+      title: 'デジタルとオンライン活動',
+      description:
+        '多言語ホームページ、作家紹介と作品アーカイブ、オンライン出品によって作家のオンライン上での活動(Online Presence)を広げ、それを支える政策を継続して開発します。',
+    },
+  ],
+}
+
+const chineseContent: MissionContent = {
+  missionStatement:
+    '東洋書藝協會秉持法古創新的精神，深學古法以開啟今日之新境；並以人書俱老的態度，營造書與人一同深化的書藝文化。立足於連結韓、中、日的交流傳統，使東方文字藝術成為這個時代鮮活的藝術。',
+  coreValues: [
+    {
+      title: '法古 · 師法古人',
+      description:
+        '深入學習並尊重傳承數千年的經典與正法。以臨帖與修練奠定的根基，是一切創作的起點。',
+    },
+    {
+      title: '創新 · 開創新境',
+      description:
+        '在所學之法的基礎上，接納當代的感性與新媒材。透過分為傳統部門與現代部門的邀請作家制度，讓傳統與現代並立共存。',
+    },
+    {
+      title: '人書俱老 · 一同深化',
+      description: '書如其人。我們重視長久的修養勝於速成，追求人隨書藝一同成熟的文化。',
+    },
+    {
+      title: '開放交流 · 共同分享',
+      description: '涵納韓、中、日的書藝傳統，不分會員與否、不論世代，為所有人提供開放的舞台。',
+    },
+  ],
+  objectives: [
+    {
+      title: '展覽與公募',
+      description: '透過大韓民國東洋書藝大展與邀請作家展發掘新秀，並在高雅的空間中呈現成熟的作品。',
+    },
+    {
+      title: '培育新世代',
+      description: '擴大青年作家的參與，並以教育課程與講座培養傳承書藝的下一代。',
+    },
+    {
+      title: '韓·中·日交流',
+      description: '以國際交流展與書藝人文探訪，延續自1997年以來的交流歷史。',
+    },
+    {
+      title: '數位與線上活動',
+      description:
+        '透過多語言網站、作家介紹與作品典藏、線上參展，擴展作家的線上影響力(Online Presence)，並持續研擬支持此一目標的政策。',
+    },
+  ],
+}
+
+type MissionLang = 'ko' | 'en' | 'ja' | 'zh'
+
+const CONTENT: Record<MissionLang, MissionContent> = {
+  ko: koreanContent,
+  en: englishContent,
+  ja: japaneseContent,
+  zh: chineseContent,
+}
+
+const LANGS: readonly { code: MissionLang; label: string }[] = [
+  { code: 'ko', label: '한국어' },
+  { code: 'en', label: 'English' },
+  { code: 'ja', label: '日本語' },
+  { code: 'zh', label: '中文' },
+]
 
 const LABELS: Record<MissionLang, { statement: string; values: string; objectives: string }> = {
   ko: { statement: '사명 선언', values: '핵심 가치', objectives: '주요 목표' },
   en: { statement: 'Mission Statement', values: 'Core Values', objectives: 'Key Objectives' },
+  ja: { statement: '使命宣言', values: '核心価値', objectives: '主要目標' },
+  zh: { statement: '使命宣言', values: '核心價值', objectives: '主要目標' },
 }
 
-const toRows = (items: ValueItem[] | ObjectiveItem[]) =>
+const toRows = (items: readonly MissionItem[]) =>
   items.map(item => ({ label: item.title, body: <p>{item.description}</p> }))
 
-/** 사명 페이지 본문 — 머리의 한국어/English 단추가 세 장 모두의 언어를 바꾼다 */
+/** 사명 페이지 본문 — 머리의 언어 단추가 세 장 모두의 언어를 바꾼다 */
 export function MissionTabs() {
   const [lang, setLang] = useState<MissionLang>('ko')
   const content = CONTENT[lang]
@@ -125,24 +247,25 @@ export function MissionTabs() {
       <AboutHero
         tc={PAGE_HERO_MARKS.mission.tc}
         title='사명'
-        lede='동양서예협회의 사명과 핵심 가치를 소개합니다'
+        lede='옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어집니다'
         actions={
           <div className='ab-langs' role='group' aria-label='본문 언어'>
-            {(['ko', 'en'] as const).map(code => (
+            {LANGS.map(({ code, label }) => (
               <button
                 key={code}
                 type='button'
+                lang={code}
                 className='ab-lang'
                 aria-pressed={lang === code}
                 onClick={() => setLang(code)}
               >
-                {code === 'ko' ? '한국어' : 'English'}
+                {label}
               </button>
             ))}
           </div>
         }
       >
-        <p>&ldquo;통합과 혁신 · 전통과 창조 · 포용과 소통&rdquo;</p>
+        <p lang='zh-Hant'>&ldquo;法古創新 · 人書俱老&rdquo;</p>
       </AboutHero>
       <AboutNav />
 
