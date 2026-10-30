@@ -866,3 +866,50 @@ a.ab-year__poster:hover img {
     grid-column: 1 / -1;
   }
 }
+
+/* keep-all 은 한국어를 띄어쓰기 단위로만 줄바꿈하려는 것 — 띄어쓰기가 없는 일본어·중국어에 걸리면
+   'デジタルとオンライン活動' 같은 제목이 한 덩어리가 되어 옆 칸 위로 넘친다. 이 두 언어는 글자 단위로 끊는다 */
+.ab-hero__title:lang(ja),
+.ab-hero__lede:lang(ja),
+.ab-chapter__title:lang(ja),
+.ab-chapter__note:lang(ja),
+.ab-row__label:lang(ja),
+.ab-row__body:lang(ja),
+.ab-quote:lang(ja),
+.ab-letter p:lang(ja),
+.ab-link:lang(ja),
+.ab-year__title:lang(ja),
+.ab-hero__title:lang(zh),
+.ab-hero__lede:lang(zh),
+.ab-chapter__title:lang(zh),
+.ab-chapter__note:lang(zh),
+.ab-row__label:lang(zh),
+.ab-row__body:lang(zh),
+.ab-quote:lang(zh),
+.ab-letter p:lang(zh),
+.ab-link:lang(zh),
+.ab-year__title:lang(zh) {
+  word-break: normal;
+  line-break: strict;
+}
+/* 글자 단위로 끊으면 '韓・中・日の交 / 流' 처럼 한 글자만 남는 줄이 생긴다 — 제목은 줄 길이를 고르게 */
+.ab-hero__title:lang(ja),
+.ab-chapter__title:lang(ja),
+.ab-row__label:lang(ja),
+.ab-year__title:lang(ja),
+.ab-hero__title:lang(zh),
+.ab-chapter__title:lang(zh),
+.ab-row__label:lang(zh),
+.ab-year__title:lang(zh) {
+  text-wrap: balance;
+}
+/* 일본어 제목은 문절(文節) 단위로 — 'デジタルとオ / ンライン' 처럼 낱말 가운데가 갈리지 않게.
+   auto-phrase 를 모르는 브라우저는 위의 normal 로 남는다.
+   문절 하나가 칸보다 길면 넘치므로, 그때만 문절 안에서도 끊는다(overflow-wrap: anywhere — 최소 폭도 줄인다) */
+.ab-hero__title:lang(ja),
+.ab-chapter__title:lang(ja),
+.ab-row__label:lang(ja),
+.ab-year__title:lang(ja) {
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+}
