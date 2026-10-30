@@ -904,10 +904,12 @@ a.ab-year__poster:hover img {
   text-wrap: balance;
 }
 /* 일본어 제목은 문절(文節) 단위로 — 'デジタルとオ / ンライン' 처럼 낱말 가운데가 갈리지 않게.
-   auto-phrase 를 모르는 브라우저는 위의 normal 로 남는다 */
+   auto-phrase 를 모르는 브라우저는 위의 normal 로 남는다.
+   문절 하나가 칸보다 길면 넘치므로, 그때만 문절 안에서도 끊는다(overflow-wrap: anywhere — 최소 폭도 줄인다) */
 .ab-hero__title:lang(ja),
 .ab-chapter__title:lang(ja),
 .ab-row__label:lang(ja),
 .ab-year__title:lang(ja) {
   word-break: auto-phrase;
+  overflow-wrap: anywhere;
 }
