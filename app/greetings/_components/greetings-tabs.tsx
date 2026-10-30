@@ -155,7 +155,7 @@ export function GreetingsTabs() {
     <AboutChapter
       id='greeting'
       tc='書境'
-      eyebrow='제23회 대한민국 동양서예대전'
+      eyebrow='2027 · 제23회 대전'
       title='이사장 인사말씀'
     >
       <TabsPrimitive.Root defaultValue='ko'>
