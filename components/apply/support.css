@@ -502,6 +502,44 @@ a.asca-apply__channel:hover {
   margin-bottom: 2px;
 }
 
+/* 공모요강 플립북 안내 — 접수처(인주색 선)와 구분해 금색 가는 선으로 */
+.asca-apply__flipnote {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border: 1px solid var(--ap-rule);
+  border-left: 3px solid var(--ap-accent);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--ap-fg);
+  word-break: keep-all;
+}
+.asca-apply__flipnote strong {
+  display: block;
+  margin-bottom: 4px;
+}
+.asca-apply__flipnote b {
+  font-weight: 600;
+  color: var(--ap-accent);
+}
+.asca-apply__flipnote-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 10px;
+}
+.asca-apply__flipnote-links a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.asca-apply__flipnote-links a:hover {
+  color: var(--ap-accent);
+}
+.asca-apply__flipnote-links a:focus-visible {
+  outline: 2px solid var(--ap-ring);
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .asca-apply__route-cta svg {
     transition: none;
