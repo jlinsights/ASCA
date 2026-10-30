@@ -2,10 +2,12 @@
 import { createHmac } from 'crypto'
 import { NextRequest } from 'next/server'
 import { archiveWriter } from '@/lib/archive/writer'
+import { auditTrail } from '@/lib/audit/audit-trail'
 import { tallyPayload } from '@/lib/applications/__fixtures__/tally-payload'
 import { POST } from '../route'
 
 jest.mock('@/lib/archive/writer', () => ({ archiveWriter: jest.fn() }))
+jest.mock('@/lib/audit/audit-trail', () => ({ auditTrail: { trackDataChange: jest.fn() } }))
 
 const secret = 'test-secret'
 const sign = (body: string) => createHmac('sha256', secret).update(body).digest('base64')
@@ -19,7 +21,10 @@ function request(body: string, signature: string | null = sign(body)) {
   return new NextRequest('http://localhost/api/webhooks/tally', { method: 'POST', body, headers })
 }
 
+const audit = jest.mocked(auditTrail.trackDataChange)
+
 beforeEach(() => {
+  jest.clearAllMocks()
   process.env.TALLY_SIGNING_SECRET = secret
   delete process.env.TALLY_APPLICATION_FORM_ID
   upserts = []
@@ -65,9 +70,33 @@ describe('POST /api/webhooks/tally', () => {
     expect(JSON.stringify(upserts[0].row)).not.toContain('+821000000000')
   })
 
-  it('같은 응답이 다시 오면 duplicate', async () => {
+  it('새 행은 개인정보 없이 감사 기록에 남긴다', async () => {
+    await POST(request(body))
+    expect(audit).toHaveBeenCalledTimes(1)
+    expect(audit).toHaveBeenCalledWith(
+      'system:tally-webhook',
+      'create',
+      'artist_application',
+      'x',
+      null,
+      { requested_grade: 'invited', route: 'special', track: 'traditional' },
+      { source: 'tally_webhook' }
+    )
+    expect(JSON.stringify(audit.mock.calls)).not.toMatch(/홍길동|example\.com/i)
+  })
+
+  it('감사 기록이 실패해도 저장은 끝났으므로 200', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    audit.mockRejectedValueOnce(new Error('audit down'))
+    const res = await POST(request(body))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ ok: true, result: 'stored' })
+  })
+
+  it('같은 응답이 다시 오면 duplicate 이고 감사 기록을 다시 남기지 않는다', async () => {
     result = { data: [], error: null }
     expect(await (await POST(request(body))).json()).toEqual({ ok: true, result: 'duplicate' })
+    expect(audit).not.toHaveBeenCalled()
   })
 
   it('다른 폼의 웹훅은 저장하지 않는다', async () => {

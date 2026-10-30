@@ -1,1 +1,1 @@
-🗃️ artist_applications 타입 칸 순서를 적용된 스키마의 생성 결과와 맞춤
+🔒 신청서 웹훅 감사 기록 추가 및 작가 연결 CHECK 의 NULL 통과 보강
