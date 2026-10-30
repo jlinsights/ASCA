@@ -119,6 +119,9 @@ export function ApplicationCard({ application, busy, onReview }: ApplicationCard
           value={note}
           maxLength={REVIEW_NOTE_MAX}
           rows={3}
+          // 저장·다시 읽기 중에는 잠근다 — 그 사이 쓴 글은 보내지 않은 채 새 카드에 덮인다
+          readOnly={busy}
+          aria-busy={busy}
           onChange={event => setNote(event.target.value)}
           placeholder='점수 확인·서류 보완 요청·이사회 의결 일자 등'
         />

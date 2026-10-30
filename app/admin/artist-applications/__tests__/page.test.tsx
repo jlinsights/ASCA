@@ -113,6 +113,28 @@ describe('관리자 — 작가 신청 심사', () => {
     expect(await screen.findByRole('status')).toHaveTextContent('홍길동: 메모를 저장했습니다')
   })
 
+  it('저장 뒤 다시 읽기가 끝날 때까지 메모 입력을 잠근다', async () => {
+    let resolveReload: (value: unknown) => void = () => {}
+    const saved = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    fetchMock
+      .mockResolvedValueOnce(page([saved]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-1', status: 'reviewing' } }))
+      .mockReturnValueOnce(new Promise(resolve => (resolveReload = resolve)))
+    render(<AdminArtistApplicationsPage />)
+
+    const memo = within(await card()).getByLabelText('심사 메모')
+    fireEvent.change(memo, { target: { value: '서류 보완 요청' } })
+    fireEvent.click(screen.getByRole('button', { name: '메모만 저장' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    expect(screen.getByLabelText('심사 메모')).toHaveAttribute('readonly')
+
+    resolveReload(
+      page([{ ...saved, review_note: '서류 보완 요청', reviewed_at: '2026-10-30T04:00:00Z' }])
+    )
+    await waitFor(() => expect(screen.getByLabelText('심사 메모')).not.toHaveAttribute('readonly'))
+    expect(screen.getByLabelText('심사 메모')).toHaveValue('서류 보완 요청')
+  })
+
   it('다른 관리자가 먼저 바꿨으면 알리고 목록을 새로 읽는다', async () => {
     fetchMock
       .mockResolvedValueOnce(page([application()]))

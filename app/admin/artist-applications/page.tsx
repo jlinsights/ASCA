@@ -98,11 +98,14 @@ export default function AdminArtistApplicationsPage() {
     } catch {
       // 요청이 서버에 닿았는지 모른다 — 목록을 새로 읽어 실제 상태를 보인다
       setNotice('연결이 끊겨 저장됐는지 확인하지 못했습니다. 목록을 새로 불러왔으니 확인해 주세요.')
+    }
+    try {
+      // 그 사이 탭을 옮겼다면 지금 탭을 읽는다(query 는 언제나 최신 탭).
+      // 다시 읽기가 끝날 때까지 카드를 잠가 둔다 — 그 사이 쓴 메모가 새 카드에 덮이지 않게
+      await load()
     } finally {
       setBusyId(null)
     }
-    // 그 사이 탭을 옮겼다면 지금 탭을 읽는다(query 는 언제나 최신 탭)
-    await load()
   }
 
   const pages = list ? Math.max(1, Math.ceil(list.total / list.limit)) : 1
