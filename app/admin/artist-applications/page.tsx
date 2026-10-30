@@ -1,0 +1,193 @@
+'use client'
+
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import {
+  STATUS_LABELS,
+  type AdminApplication,
+  type ApplicationView,
+} from '@/lib/applications/admin-applications'
+import { ApplicationCard, type ReviewChange } from './_components/application-card'
+
+const VIEWS: readonly { value: ApplicationView; label: string }[] = [
+  { value: 'open', label: '처리할 신청' },
+  { value: 'approved', label: '승인' },
+  { value: 'rejected', label: '반려' },
+  { value: 'withdrawn', label: '철회' },
+]
+
+// 서버가 돌려주는 코드 → 관리자에게 보일 말
+const FAILURES: Record<string, string> = {
+  APPLICATION_CHANGED: '다른 관리자가 먼저 이 신청을 바꿨습니다. 목록을 새로 불러왔습니다.',
+  APPLICATION_NOT_FOUND: '신청을 찾을 수 없습니다.',
+}
+
+interface ListBody {
+  data: AdminApplication[]
+  page: number
+  limit: number
+  total: number
+}
+
+export default function AdminArtistApplicationsPage() {
+  const [view, setView] = useState<ApplicationView>('open')
+  const [page, setPage] = useState(1)
+  const [list, setList] = useState<ListBody | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
+  const [busyId, setBusyId] = useState<string | null>(null)
+  // 지금 보고 있는 탭·쪽과 마지막 요청 번호 — 늦게 온 옛 응답이 화면을 덮지 않게 한다
+  const query = useRef({ view, page })
+  const latest = useRef(0)
+
+  const load = useCallback(async () => {
+    const request = ++latest.current
+    const { view: wanted, page: wantedPage } = query.current
+    setError(null)
+    try {
+      const params = new URLSearchParams({ view: wanted, page: String(wantedPage) })
+      const response = await fetch(`/api/admin/artist-applications?${params}`, {
+        credentials: 'include',
+      })
+      if (!response.ok) throw new Error()
+      const body = (await response.json()) as ListBody
+      if (request === latest.current) setList(body)
+    } catch {
+      if (request !== latest.current) return
+      setList(null)
+      setError('신청 목록을 불러오지 못했습니다.')
+    }
+  }, [])
+
+  useEffect(() => {
+    query.current = { view, page }
+    setList(null)
+    void load()
+  }, [view, page, load])
+
+  const switchView = (next: ApplicationView) => {
+    setView(next)
+    setPage(1)
+  }
+
+  const review = async (application: AdminApplication, change: ReviewChange) => {
+    setBusyId(application.id)
+    setNotice(null)
+    try {
+      const response = await fetch(`/api/admin/artist-applications/${application.id}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: application.status,
+          seen: application.reviewed_at,
+          ...change,
+        }),
+      })
+      if (!response.ok) {
+        const body = (await response.json().catch(() => null)) as { code?: string } | null
+        setNotice(FAILURES[body?.code ?? ''] ?? '처리하지 못했습니다. 잠시 후 다시 시도해 주세요.')
+      } else {
+        const name = application.applicant_name ?? '신청'
+        setNotice(
+          change.to === application.status
+            ? `${name}: 메모를 저장했습니다`
+            : `${name}: ${STATUS_LABELS[change.to]}(으)로 바꿨습니다`
+        )
+      }
+    } catch {
+      // 요청이 서버에 닿았는지 모른다 — 목록을 새로 읽어 실제 상태를 보인다
+      setNotice('연결이 끊겨 저장됐는지 확인하지 못했습니다. 목록을 새로 불러왔으니 확인해 주세요.')
+    } finally {
+      setBusyId(null)
+    }
+    // 그 사이 탭을 옮겼다면 지금 탭을 읽는다(query 는 언제나 최신 탭)
+    await load()
+  }
+
+  const pages = list ? Math.max(1, Math.ceil(list.total / list.limit)) : 1
+
+  return (
+    <div className='space-y-6'>
+      <div>
+        <h1 className='text-2xl font-bold'>작가 신청 심사</h1>
+        <p className='mt-1 text-sm text-muted-foreground'>
+          Tally 추천·초대작가 신청서로 들어온 신청입니다. 전화·주소·납부정보·첨부파일은 여기 옮기지
+          않으니 Tally 원본에서 확인하세요. 상태를 &lsquo;승인&rsquo;으로 바꿔도 작가로 선임되지는
+          않습니다 — 이사회 의결·납부를 확인한 뒤 작가 행을 따로 만드세요.
+        </p>
+      </div>
+
+      <div role='tablist' aria-label='신청 상태' className='flex flex-wrap gap-2'>
+        {VIEWS.map(item => (
+          <Button
+            key={item.value}
+            role='tab'
+            aria-selected={view === item.value}
+            variant={view === item.value ? 'default' : 'outline'}
+            size='sm'
+            onClick={() => switchView(item.value)}
+          >
+            {item.label}
+          </Button>
+        ))}
+      </div>
+
+      {notice && (
+        <p role='status' className='rounded-md bg-muted px-3 py-2 text-sm'>
+          {notice}
+        </p>
+      )}
+
+      {error ? (
+        <div role='alert' className='rounded-md border border-destructive/40 p-4 text-sm'>
+          {error}
+          <Button variant='outline' size='sm' className='ml-3' onClick={() => void load()}>
+            다시 시도
+          </Button>
+        </div>
+      ) : !list ? (
+        <p className='text-sm text-muted-foreground'>불러오는 중…</p>
+      ) : (
+        <div className='space-y-4'>
+          {list.data.length === 0 ? (
+            <p className='text-sm text-muted-foreground'>해당하는 신청이 없습니다.</p>
+          ) : (
+            list.data.map(application => (
+              <ApplicationCard
+                // 상태·메모가 바뀌면 카드를 새로 그려 입력칸을 서버 값으로 맞춘다
+                key={`${application.id}:${application.status}:${application.reviewed_at ?? ''}`}
+                application={application}
+                busy={busyId === application.id}
+                onReview={(target, change) => void review(target, change)}
+              />
+            ))
+          )}
+          {(pages > 1 || page > 1) && (
+            <nav aria-label='쪽 이동' className='flex items-center gap-3 text-sm'>
+              <Button
+                variant='outline'
+                size='sm'
+                disabled={page <= 1}
+                onClick={() => setPage(current => Math.max(1, current - 1))}
+              >
+                이전
+              </Button>
+              <span>
+                {page} / {pages}쪽 · 모두 {list.total}건
+              </span>
+              <Button
+                variant='outline'
+                size='sm'
+                disabled={page >= pages}
+                onClick={() => setPage(current => current + 1)}
+              >
+                다음
+              </Button>
+            </nav>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
