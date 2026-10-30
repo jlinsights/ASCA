@@ -1,0 +1,398 @@
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import AdminArtistApplicationsPage from '../page'
+
+const fetchMock = jest.fn()
+const originalFetch = global.fetch
+const json = (body: unknown, status = 200) => ({ ok: status < 400, status, json: async () => body })
+
+const application = (over: Record<string, unknown> = {}) => ({
+  id: 'app-1',
+  submitted_at: '2026-10-30T09:00:00Z',
+  applicant_name: '홍길동',
+  applicant_name_hanja: '洪吉童',
+  applicant_name_en: 'Hong Gildong',
+  pen_name: null,
+  applicant_email: 'applicant@example.test',
+  requested_grade: 'invited',
+  requested_grade_raw: '초대작가',
+  track: 'traditional',
+  track_raw: '전통부문',
+  genres: ['한글서예'],
+  route: 'special',
+  route_raw: '특별선임 (선임 규정 제11조)',
+  membership_raw: '정회원 아님',
+  special_basis_raw: '국내외 서예교육 25년',
+  awards_text: null,
+  status: 'received',
+  review_note: null,
+  reviewed_at: null,
+  ...over,
+})
+
+beforeEach(() => {
+  fetchMock.mockReset()
+  global.fetch = fetchMock
+})
+afterAll(() => {
+  global.fetch = originalFetch
+})
+
+const card = () => screen.findByRole('article', { name: /홍길동/ })
+const posted = () => JSON.parse(fetchMock.mock.calls[1][1].body as string)
+/** 목록 응답 — 기본 한 쪽 */
+const page = (data: unknown[], over: Record<string, unknown> = {}) =>
+  json({ data, page: 1, limit: 50, total: data.length, ...over })
+const reviewedAt = '2026-10-30T03:00:00.123+00:00'
+
+describe('관리자 — 작가 신청 심사', () => {
+  it('처리할 신청을 보이고, 심사 시작은 본 상태·처리 시각과 함께 바로 보낸다', async () => {
+    fetchMock
+      .mockResolvedValueOnce(page([application()]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-1', status: 'reviewing' } }))
+      .mockResolvedValueOnce(page([]))
+    render(<AdminArtistApplicationsPage />)
+
+    const article = await card()
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/admin/artist-applications?view=open&page=1',
+      expect.anything()
+    )
+    expect(within(article).getByText('초대작가 · 전통부문 · 특별선임')).toBeInTheDocument()
+    expect(within(article).getByText('국내외 서예교육 25년')).toBeInTheDocument()
+
+    fireEvent.click(within(article).getByRole('button', { name: '심사 시작' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    expect(fetchMock.mock.calls[1][0]).toBe('/api/admin/artist-applications/app-1')
+    expect(posted()).toEqual({ from: 'received', seen: null, to: 'reviewing' })
+    expect(await screen.findByRole('status')).toHaveTextContent('홍길동: 심사 중(으)로 바꿨습니다')
+  })
+
+  it('승인은 한 번 더 확인하고, 고친 메모를 함께 보낸다', async () => {
+    fetchMock
+      .mockResolvedValueOnce(page([application({ status: 'reviewing', reviewed_at: reviewedAt })]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-1', status: 'approved' } }))
+      .mockResolvedValueOnce(page([]))
+    render(<AdminArtistApplicationsPage />)
+
+    const article = await card()
+    fireEvent.change(within(article).getByLabelText('심사 메모'), {
+      target: { value: '이사회 의결 완료' },
+    })
+    fireEvent.click(within(article).getByRole('button', { name: '승인' }))
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    fireEvent.click(within(article).getByRole('button', { name: '승인 확인' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    expect(posted()).toEqual({
+      from: 'reviewing',
+      seen: reviewedAt,
+      to: 'approved',
+      note: '이사회 의결 완료',
+    })
+  })
+
+  it('메모만 저장할 수 있다', async () => {
+    fetchMock
+      .mockResolvedValueOnce(page([application({ status: 'reviewing', reviewed_at: reviewedAt })]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-1', status: 'reviewing' } }))
+      .mockResolvedValueOnce(page([]))
+    render(<AdminArtistApplicationsPage />)
+
+    const article = await card()
+    expect(within(article).queryByRole('button', { name: '메모만 저장' })).toBeNull()
+    fireEvent.change(within(article).getByLabelText('심사 메모'), {
+      target: { value: '서류 보완 요청' },
+    })
+    fireEvent.click(within(article).getByRole('button', { name: '메모만 저장' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    expect(posted()).toEqual({
+      from: 'reviewing',
+      seen: reviewedAt,
+      to: 'reviewing',
+      note: '서류 보완 요청',
+    })
+    expect(await screen.findByRole('status')).toHaveTextContent('홍길동: 메모를 저장했습니다')
+  })
+
+  it('저장 뒤 다시 읽기가 끝날 때까지 메모 입력을 잠근다', async () => {
+    let resolveReload: (value: unknown) => void = () => {}
+    const saved = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    fetchMock
+      .mockResolvedValueOnce(page([saved]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-1', status: 'reviewing' } }))
+      .mockReturnValueOnce(new Promise(resolve => (resolveReload = resolve)))
+    render(<AdminArtistApplicationsPage />)
+
+    const memo = within(await card()).getByLabelText('심사 메모')
+    fireEvent.change(memo, { target: { value: '서류 보완 요청' } })
+    fireEvent.click(screen.getByRole('button', { name: '메모만 저장' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    expect(screen.getByLabelText('심사 메모')).toHaveAttribute('readonly')
+
+    resolveReload(
+      page([{ ...saved, review_note: '서류 보완 요청', reviewed_at: '2026-10-30T04:00:00Z' }])
+    )
+    await waitFor(() => expect(screen.getByLabelText('심사 메모')).not.toHaveAttribute('readonly'))
+    expect(screen.getByLabelText('심사 메모')).toHaveValue('서류 보완 요청')
+  })
+
+  it('두 카드를 잇달아 저장해도 앞 카드는 제 저장이 끝날 때까지 잠겨 있다', async () => {
+    let resolveFirst: (value: unknown) => void = () => {}
+    const first = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    const second = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    fetchMock
+      .mockResolvedValueOnce(page([first, second]))
+      .mockReturnValueOnce(new Promise(resolve => (resolveFirst = resolve)))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValue(page([first, second]))
+    render(<AdminArtistApplicationsPage />)
+
+    const a = await card()
+    const b = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(a).getByLabelText('심사 메모'), { target: { value: 'A 메모' } })
+    fireEvent.click(within(a).getByRole('button', { name: '메모만 저장' }))
+    fireEvent.change(within(b).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(b).getByRole('button', { name: '메모만 저장' }))
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(4))
+    expect(within(a).getByLabelText('심사 메모')).toHaveAttribute('readonly')
+
+    resolveFirst(json({ data: { id: 'app-1', status: 'reviewing' } }))
+    await waitFor(() =>
+      expect(
+        within(screen.getByRole('article', { name: /홍길동/ })).getByLabelText('심사 메모')
+      ).not.toHaveAttribute('readonly')
+    )
+  })
+
+  it('다른 카드를 저장해 목록이 다시 읽혀도 쓰던 메모는 남는다(처리 시각이 바뀌어도)', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    const b = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    fetchMock
+      .mockResolvedValueOnce(page([a, b]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValueOnce(page([{ ...a, reviewed_at: '2026-10-30T05:00:00Z' }, b]))
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    const cardB = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(cardB).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(cardB).getByRole('button', { name: '메모만 저장' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    await screen.findByText(/메모를 저장했습니다/)
+    expect(within(await card()).getByLabelText('심사 메모')).toHaveValue('A 초안')
+  })
+
+  it('다시 읽기가 실패해도 보이던 목록과 쓰던 메모를 지우지 않는다', async () => {
+    const a = application({ status: 'reviewing' })
+    const b = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    fetchMock
+      .mockResolvedValueOnce(page([a, b]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValueOnce(json({}, 500))
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    const cardB = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(cardB).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(cardB).getByRole('button', { name: '메모만 저장' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('신청 목록을 불러오지 못했습니다.')
+    expect(within(await card()).getByLabelText('심사 메모')).toHaveValue('A 초안')
+  })
+
+  it('초안을 쓰는 사이 다른 관리자가 바꾸면 충돌을 보이고, 확인해야 이어서 저장한다', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    const b = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    const changedAt = '2026-10-30T05:00:00Z'
+    fetchMock
+      .mockResolvedValueOnce(page([a, b]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValueOnce(
+        page([{ ...a, review_note: '다른 관리자 메모', reviewed_at: changedAt }, b])
+      )
+      .mockResolvedValueOnce(json({ data: { id: 'app-1', status: 'reviewing' } }))
+      .mockResolvedValue(page([a, b]))
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    const cardB = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(cardB).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(cardB).getByRole('button', { name: '메모만 저장' }))
+
+    const conflict = await within(await card()).findByRole('alert')
+    expect(conflict).toHaveTextContent('다른 관리자가 이 신청을 바꿨습니다')
+    expect(conflict).toHaveTextContent('지금 저장된 메모: 다른 관리자 메모')
+    const cardA = await card()
+    expect(within(cardA).getByLabelText('심사 메모')).toHaveValue('A 초안')
+    expect(within(cardA).queryByRole('button', { name: '메모만 저장' })).toBeNull()
+
+    fireEvent.click(within(cardA).getByRole('button', { name: '확인했고 내 메모로 이어 쓰기' }))
+    fireEvent.click(within(await card()).getByRole('button', { name: '메모만 저장' }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(4))
+    expect(JSON.parse(fetchMock.mock.calls[3][1].body as string)).toEqual({
+      from: 'reviewing',
+      seen: changedAt,
+      to: 'reviewing',
+      note: 'A 초안',
+    })
+  })
+
+  it('처리된 적 없던 신청의 초안도 충돌이 이어진다 — 글자를 더 써도 경고가 사라지지 않는다', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: null })
+    const b = application({ id: 'app-2', applicant_name: '김철수', status: 'reviewing' })
+    fetchMock
+      .mockResolvedValueOnce(page([a, b]))
+      .mockResolvedValueOnce(json({ data: { id: 'app-2', status: 'reviewing' } }))
+      .mockResolvedValue(
+        page([{ ...a, review_note: '다른 관리자 메모', reviewed_at: '2026-10-30T05:00:00Z' }, b])
+      )
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    const cardB = screen.getByRole('article', { name: /김철수/ })
+    fireEvent.change(within(cardB).getByLabelText('심사 메모'), { target: { value: 'B 메모' } })
+    fireEvent.click(within(cardB).getByRole('button', { name: '메모만 저장' }))
+    await within(await card()).findByRole('alert')
+    await waitFor(() =>
+      expect(within(cardB).getByLabelText('심사 메모')).not.toHaveAttribute('readonly')
+    )
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안 더' },
+    })
+    const cardA = await card()
+    expect(within(cardA).getByRole('alert')).toHaveTextContent('다른 관리자가 이 신청을 바꿨습니다')
+    expect(within(cardA).queryByRole('button', { name: '메모만 저장' })).toBeNull()
+  })
+
+  it('충돌한 초안을 버리면 지금 저장된 메모가 보인다', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    fetchMock
+      .mockResolvedValueOnce(page([a]))
+      .mockResolvedValueOnce(json({ code: 'APPLICATION_CHANGED' }, 409))
+      .mockResolvedValueOnce(
+        page([{ ...a, review_note: '다른 관리자 메모', reviewed_at: '2026-10-30T05:00:00Z' }])
+      )
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: 'A 초안' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '메모만 저장' }))
+    fireEvent.click(await screen.findByRole('button', { name: '내 초안 버리기' }))
+    expect(within(await card()).getByLabelText('심사 메모')).toHaveValue('다른 관리자 메모')
+  })
+
+  it('저장은 됐는데 다시 읽기가 실패해도 저장된 메모를 보인다', async () => {
+    const a = application({ status: 'reviewing', reviewed_at: reviewedAt })
+    fetchMock
+      .mockResolvedValueOnce(page([a]))
+      .mockResolvedValueOnce(
+        json({
+          data: {
+            id: 'app-1',
+            status: 'reviewing',
+            review_note: '서류 보완 요청',
+            reviewed_at: '2026-10-30T05:00:00Z',
+          },
+        })
+      )
+      .mockResolvedValueOnce(json({}, 500))
+    render(<AdminArtistApplicationsPage />)
+
+    fireEvent.change(within(await card()).getByLabelText('심사 메모'), {
+      target: { value: '서류 보완 요청' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '메모만 저장' }))
+    expect(await screen.findByText('신청 목록을 불러오지 못했습니다.')).toBeInTheDocument()
+    const memo = within(await card()).getByLabelText('심사 메모')
+    await waitFor(() => expect(memo).not.toHaveAttribute('readonly'))
+    expect(memo).toHaveValue('서류 보완 요청')
+    expect(within(await card()).queryByRole('alert')).toBeNull()
+    expect(screen.queryByRole('button', { name: '메모만 저장' })).toBeNull()
+  })
+
+  it('다른 관리자가 먼저 바꿨으면 알리고 목록을 새로 읽는다', async () => {
+    fetchMock
+      .mockResolvedValueOnce(page([application()]))
+      .mockResolvedValueOnce(json({ code: 'APPLICATION_CHANGED' }, 409))
+      .mockResolvedValueOnce(page([]))
+    render(<AdminArtistApplicationsPage />)
+    fireEvent.click(within(await card()).getByRole('button', { name: '심사 시작' }))
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      '다른 관리자가 먼저 이 신청을 바꿨습니다'
+    )
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+  })
+
+  it('저장 요청이 끊기면 알리고 목록을 새로 읽는다', async () => {
+    fetchMock
+      .mockResolvedValueOnce(page([application()]))
+      .mockRejectedValueOnce(new TypeError('Failed to fetch'))
+      .mockResolvedValueOnce(page([]))
+    render(<AdminArtistApplicationsPage />)
+    fireEvent.click(within(await card()).getByRole('button', { name: '심사 시작' }))
+    expect(await screen.findByRole('status')).toHaveTextContent('저장됐는지 확인하지 못했습니다')
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    expect(await screen.findByText('해당하는 신청이 없습니다.')).toBeInTheDocument()
+  })
+
+  it('끝난 탭으로 옮기면 그 탭을 읽고, 끝난 신청은 다시 심사로 되돌릴 수 있다', async () => {
+    fetchMock
+      .mockResolvedValueOnce(page([]))
+      .mockResolvedValueOnce(page([application({ status: 'rejected' })]))
+    render(<AdminArtistApplicationsPage />)
+    await screen.findByText('해당하는 신청이 없습니다.')
+    fireEvent.click(screen.getByRole('tab', { name: '반려' }))
+    const article = await card()
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      '/api/admin/artist-applications?view=rejected&page=1',
+      expect.anything()
+    )
+    expect(within(article).getByRole('button', { name: '다시 심사' })).toBeInTheDocument()
+  })
+
+  it('탭을 옮긴 뒤 늦게 온 옛 탭 응답은 화면을 덮지 않는다', async () => {
+    let resolveOld: (value: unknown) => void = () => {}
+    fetchMock
+      .mockReturnValueOnce(new Promise(resolve => (resolveOld = resolve)))
+      .mockResolvedValueOnce(page([application({ status: 'rejected' })]))
+    render(<AdminArtistApplicationsPage />)
+    fireEvent.click(screen.getByRole('tab', { name: '반려' }))
+    expect(within(await card()).getByRole('button', { name: '다시 심사' })).toBeInTheDocument()
+
+    resolveOld(page([application({ applicant_name: '옛 탭 신청' })]))
+    await waitFor(() => expect(screen.queryByText('옛 탭 신청')).toBeNull())
+    expect(screen.getByRole('button', { name: '다시 심사' })).toBeInTheDocument()
+  })
+
+  it('한 쪽이 넘치면 다음 쪽을 읽는다', async () => {
+    fetchMock
+      .mockResolvedValueOnce(page([application()], { total: 120 }))
+      .mockResolvedValueOnce(page([], { page: 2, total: 120 }))
+    render(<AdminArtistApplicationsPage />)
+    await card()
+    expect(screen.getByText('1 / 3쪽 · 모두 120건')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '이전' })).toBeDisabled()
+    fireEvent.click(screen.getByRole('button', { name: '다음' }))
+    await waitFor(() =>
+      expect(fetchMock).toHaveBeenLastCalledWith(
+        '/api/admin/artist-applications?view=open&page=2',
+        expect.anything()
+      )
+    )
+  })
+
+  it('목록을 못 불러오면 다시 시도를 보인다', async () => {
+    fetchMock.mockResolvedValueOnce(json({}, 500))
+    render(<AdminArtistApplicationsPage />)
+    expect(await screen.findByRole('alert')).toHaveTextContent('신청 목록을 불러오지 못했습니다.')
+  })
+})
