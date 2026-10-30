@@ -152,12 +152,7 @@ function Letter({ text, lang }: { text: string; lang: GreetingLang }) {
 
 export function GreetingsTabs() {
   return (
-    <AboutChapter
-      id='greeting'
-      tc='書境'
-      eyebrow='2027 · 제23회 대전'
-      title='이사장 인사말씀'
-    >
+    <AboutChapter id='greeting' tc='書境' eyebrow='2027 · 제23회 대전' title='이사장 인사말씀'>
       <TabsPrimitive.Root defaultValue='ko'>
         <TabsPrimitive.List className='ab-langs'>
           {GREETINGS.map(({ lang, label }) => (
