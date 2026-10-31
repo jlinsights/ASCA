@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { ContestIntro } from '@/components/contests/contest-intro'
 import {
@@ -23,7 +24,12 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: '공모전 | 동양서예협회',
   description: DESCRIPTION,
-  openGraph: { title: '공모전 | 동양서예협회', description: DESCRIPTION },
+  // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다
+  openGraph: {
+    title: '공모전 | 동양서예협회',
+    description: DESCRIPTION,
+    images: [defaultSEO.image],
+  },
 }
 
 const TOC = [

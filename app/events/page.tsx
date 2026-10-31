@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
@@ -26,7 +27,8 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: '행사 | 동양서예협회',
   description: DESCRIPTION,
-  openGraph: { title: '행사 | 동양서예협회', description: DESCRIPTION },
+  // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다
+  openGraph: { title: '행사 | 동양서예협회', description: DESCRIPTION, images: [defaultSEO.image] },
 }
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> }

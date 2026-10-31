@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { getLocalPost, localPostSlugs, localPosts } from '../local-posts'
+import { articleBodyHtml, getLocalPost, localPostSlugs, localPosts } from '../local-posts'
 
 describe('local blog posts (lib/data/blog-posts.json)', () => {
   test('slug 로 글을 찾고, 없는 slug 는 null', () => {
@@ -34,4 +34,26 @@ describe('local blog posts (lib/data/blog-posts.json)', () => {
       }
     }
   )
+
+  // 글 제목이 페이지의 h1 이다. 옛 Webflow 본문의 h1 이 그대로 나가면 한 페이지에 h1 이 여럿 생긴다
+  test('본문의 h1 은 h2 로 낮춰 내보낸다 (속성은 그대로)', () => {
+    const html = articleBodyHtml({
+      id: 'x',
+      title: 't',
+      summary: 's',
+      publishedAt: '2026-01-01',
+      content: '<h1 class="a">하나</h1><p>본문</p><H1>둘</H1><h10>그대로</h10>',
+    })
+    expect(html).toBe('<h2 class="a">하나</h2><p>본문</p><h2>둘</h2><h10>그대로</h10>')
+  })
+
+  test.each(localPosts.map(p => [p.id, p] as const))('%s 본문에 h1 이 남지 않는다', (_id, post) => {
+    expect(articleBodyHtml(post)).not.toMatch(/<h1[\s>]/i)
+  })
+
+  test('본문이 없으면 요약을 내보낸다', () => {
+    expect(
+      articleBodyHtml({ id: 'x', title: 't', summary: '요약', publishedAt: '2026-01-01' })
+    ).toBe('요약')
+  })
 })

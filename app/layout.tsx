@@ -54,9 +54,18 @@ import { SiteWidgets } from '@/components/third-party/site-widgets'
 // google-adsense-account 는 Google 이 <head> 에서만 읽는다 — metadata.other 로 <head> 에 넣는다.
 const ADSENSE_ACCOUNT = 'ca-pub-3536211002609340'
 
+// Google Search Console·네이버 서치어드바이저 소유 확인(HTML 태그 방식) 코드. Vercel 환경 변수에 넣고
+// 다시 배포하면 <head> 에 붙는다. 값이 없으면 태그를 달지 않는다
+const GOOGLE_SITE_VERIFICATION = process.env.GOOGLE_SITE_VERIFICATION
+const NAVER_SITE_VERIFICATION = process.env.NAVER_SITE_VERIFICATION
+
 export const metadata: Metadata = {
   ...constructMetadata(),
-  other: { 'google-adsense-account': ADSENSE_ACCOUNT },
+  ...(GOOGLE_SITE_VERIFICATION ? { verification: { google: GOOGLE_SITE_VERIFICATION } } : {}),
+  other: {
+    'google-adsense-account': ADSENSE_ACCOUNT,
+    ...(NAVER_SITE_VERIFICATION ? { 'naver-site-verification': NAVER_SITE_VERIFICATION } : {}),
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

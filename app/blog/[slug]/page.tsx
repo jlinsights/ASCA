@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, Calendar, User } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { constructMetadata } from '@/lib/seo'
-import { getLocalPost, localPostSlugs } from '@/lib/blog/local-posts'
+import { articleBodyHtml, getLocalPost, localPostSlugs } from '@/lib/blog/local-posts'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -74,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div
             lang='ko'
             className={ARTICLE_BODY_CLASS}
-            dangerouslySetInnerHTML={{ __html: post.content || post.summary }}
+            dangerouslySetInnerHTML={{ __html: articleBodyHtml(post) }}
           />
         </div>
       </article>

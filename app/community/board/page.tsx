@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { defaultSEO } from '@/lib/seo-constants'
 import { redirect } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { getAccount } from '@/lib/auth/server'
@@ -17,6 +18,12 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: '회원 게시판 | 동양서예협회',
   description: '협회 회원들이 작업과 전시 소식을 나누고 함께할 작가를 찾는 게시판입니다.',
+  // openGraph 가 없으면 레이아웃의 기본 제목(ASCA | 사단법인 동양서예협회)으로 공유된다
+  openGraph: {
+    title: '회원 게시판 | 동양서예협회',
+    description: '협회 회원들이 작업과 전시 소식을 나누고 함께할 작가를 찾는 게시판입니다.',
+    images: [defaultSEO.image],
+  },
 }
 
 type Props = {

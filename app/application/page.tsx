@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { defaultSEO } from '@/lib/seo-constants'
 import { BookOpen, PenLine } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
@@ -41,7 +42,12 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: '출품원서 | 동양서예협회',
   description: DESCRIPTION,
-  openGraph: { title: '출품원서 | 동양서예협회', description: DESCRIPTION },
+  // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다
+  openGraph: {
+    title: '출품원서 | 동양서예협회',
+    description: DESCRIPTION,
+    images: [defaultSEO.image],
+  },
 }
 
 const TOC = [
