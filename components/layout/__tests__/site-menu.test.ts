@@ -24,15 +24,15 @@ function pageExists(href: string) {
 }
 
 describe('site-menu — 헤더·푸터 메뉴', () => {
-  // 2026-10-25 요청 순서, 2026-10-26 전시·공모와 작가·작품을 각각 한 메뉴로 묶음
+  // 2026-10-25 요청 순서, 2026-10-26 전시·공모와 작가·작품을 각각 한 메뉴로 묶음, 2026-10-31 소식을 문의 바로 앞으로
   it('헤더 메뉴는 정해진 순서로 놓인다', () => {
     expect(headerMenu.map(group => translations.ko?.[group.labelKey])).toStrictEqual([
       '소개',
       '전시·공모',
       '작가·작품',
-      '소식',
       '정관·규정',
       '회원·후원',
+      '소식',
       '문의',
     ])
   })
