@@ -128,7 +128,8 @@ export const headerMenu: MenuGroup[] = [
   {
     key: 'exhibitions',
     labelKey: 'siteNavExhibitionsContests',
-    href: '/exhibitions',
+    // 메뉴 머리는 공모전으로 — 대전 출품 안내를 먼저 보인다 (2026-10-31)
+    href: '/contests',
     columns: exhibitionsAndContests,
     items: exhibitionsAndContests.flatMap(column => column.items),
   },
