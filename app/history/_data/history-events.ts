@@ -13,6 +13,8 @@ export interface HistoryEvent {
   type: HistoryEventType
   /** 온라인으로 열린 회차 (/exhibitions/online 에 나온다) */
   online?: boolean
+  /** 자세한 안내 페이지 — 예정 전시에서 제목을 링크로 단다 */
+  href?: string
 }
 
 // 2005~2018년 대전은 기간이 모두 '7월 20일 ~ 7월 26일' 로 적혀 있던 자리표시값이라 지우고 연도만 둔다.

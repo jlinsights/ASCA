@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Calendar, MapPin } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -33,7 +34,15 @@ export function HistoryTimelineCard({ event: source }: HistoryTimelineCardProps)
             </Badge>
           </div>
 
-          <h3 className='text-base font-semibold mb-1'>{event.title}</h3>
+          <h3 className='text-base font-semibold mb-1'>
+            {event.href ? (
+              <Link href={event.href} className='underline-offset-4 hover:underline'>
+                {event.title}
+              </Link>
+            ) : (
+              event.title
+            )}
+          </h3>
           {event.subtitle && <p className='text-sm text-muted-foreground mb-2'>{event.subtitle}</p>}
 
           <div className='flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground'>
