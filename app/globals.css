@@ -2281,13 +2281,16 @@
 }
 
 /* Accessibility Enhancements */
+/* 움직임(이동·확대·회전)은 멈추되, 상태가 바뀌었다는 신호는 짧은 색·투명도 변화로 남긴다.
+   transition 을 0 으로 지우면 메뉴 열림·포커스·선택 같은 피드백까지 사라진다. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property: color, background-color, border-color, outline-color, opacity, box-shadow !important;
+    transition-duration: 120ms !important;
     scroll-behavior: auto !important;
   }
 

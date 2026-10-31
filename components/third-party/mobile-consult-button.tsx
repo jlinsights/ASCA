@@ -35,7 +35,7 @@ export function MobileConsultButton() {
       type='button'
       onClick={handleClick}
       aria-label='상담 예약'
-      className='fixed right-4 z-40 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#8a661c] text-white shadow-lg shadow-black/20 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8a661c] md:hidden print:hidden bottom-[calc(1rem+env(safe-area-inset-bottom))]'
+      className='fixed right-4 z-40 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gold-800 text-white shadow-lg shadow-black/20 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gold-800 md:hidden print:hidden bottom-[calc(1rem+env(safe-area-inset-bottom))]'
     >
       <CalendarDays className='h-6 w-6' aria-hidden='true' />
     </button>

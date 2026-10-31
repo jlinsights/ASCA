@@ -44,7 +44,6 @@ const NOTO_SERIF_TC_CSS =
 import { constructMetadata } from '@/lib/seo'
 import { JsonLd } from '@/components/json-ld'
 import { KakaoScript } from '@/components/seo/kakao-script'
-import { VideoBackground } from '@/components/layout/video-background'
 import { Header } from '@/components/header/header'
 import { SkipLink } from '@/components/layout/skip-link'
 import { SiteWidgets } from '@/components/third-party/site-widgets'
@@ -86,7 +85,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <ClientProviders>
           <SkipLink />
-          <VideoBackground />
           <div className='min-h-screen flex flex-col relative'>
             <Header transparentOnTop={true} />
 
