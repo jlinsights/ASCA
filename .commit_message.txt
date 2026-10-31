@@ -1,1 +1,1 @@
-📝 docs/CLAUDE.md 운영 도메인 최신화 — 루트 orientalcalligraphy.org 가 정본, www·asca-main.vercel.app 은 308
+🌐 공모전 페이지(/contests·/contests/23) 4개 언어 번역 — 본문을 클라이언트 화면으로 옮기고 날짜·금액은 원본에서 읽음, 메타데이터·구조화 데이터는 한국어 유지

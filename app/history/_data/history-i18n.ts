@@ -183,6 +183,11 @@ const TITLES: Record<string, { title?: Phrase; subtitle?: Phrase }> = {
   },
 }
 
+/** 장소 하나만 옮길 때 — 공모전 역대 대전 표처럼 연혁 행사 전체가 아닌 값을 쓰는 곳 */
+export function localizeHistoryVenue(venue: string, lang: Language): string {
+  return lang === 'ko' ? venue : (VENUES[venue]?.[lang] ?? venue)
+}
+
 export function localizeHistoryEvent(event: HistoryEvent, lang: Language): HistoryEvent {
   if (lang === 'ko') return event
   const titles = TITLES[event.id]

@@ -4,6 +4,9 @@ import { CONTEST_23, SCHEDULE, koDate } from '../../_components/contest-23-data'
 import { ENTRY_PATHS, HUB_PATH, buildEventJsonLd } from '../_components/daejeon-23-hub-data'
 
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
+jest.mock('@/contexts/language-context', () => ({
+  useLanguage: () => ({ t: (key: string) => key, language: 'ko' }),
+}))
 
 describe('제23회 대전 허브 — 구조화 데이터', () => {
   const event = buildEventJsonLd()

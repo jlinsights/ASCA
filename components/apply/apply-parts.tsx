@@ -57,9 +57,15 @@ export interface TocItem {
   label: string
 }
 
-export function ApplyToc({ items }: { items: readonly TocItem[] }) {
+interface ApplyTocProps {
+  items: readonly TocItem[]
+  /** 번역 화면에서만 넘긴다 — 기본은 한국어 */
+  label?: string
+}
+
+export function ApplyToc({ items, label = '이 페이지 바로가기' }: ApplyTocProps) {
   return (
-    <nav className='asca-apply__toc' aria-label='이 페이지 바로가기'>
+    <nav className='asca-apply__toc' aria-label={label}>
       {items.map(item => (
         <a key={item.href} href={item.href}>
           {item.label}
@@ -102,35 +108,43 @@ export function DownloadList({ items }: { items: readonly DownloadItem[] }) {
   )
 }
 
-const CONTACTS = [
-  {
-    icon: Phone,
-    title: '전화 상담',
-    body: PHONE.display,
-    href: PHONE.href,
-    external: false,
-  },
-  {
-    icon: Headphones,
-    title: '실시간 온라인 상담',
-    body: '1년 365일 언제든 문의 가능',
-    href: CHAT_URL,
-    external: true,
-  },
-  {
-    icon: CalendarClock,
-    title: '상담 예약',
-    body: OFFICE_HOURS,
-    href: BOOKING_URL,
-    external: true,
-  },
-] as const
+/** 상담 창구 문구 — 번역 화면은 언어별 문구를 넘기고, 넘기지 않으면 한국어 */
+export interface ContactLabels {
+  phone: string
+  chat: string
+  chatBody: string
+  booking: string
+  bookingBody: string
+  newWindow: string
+}
 
-export function ContactList() {
+export const CONTACT_LABELS_KO: ContactLabels = {
+  phone: '전화 상담',
+  chat: '실시간 온라인 상담',
+  chatBody: '1년 365일 언제든 문의 가능',
+  booking: '상담 예약',
+  bookingBody: OFFICE_HOURS,
+  newWindow: ' (새 창)',
+}
+
+const contactsFor = (labels: ContactLabels) =>
+  [
+    { icon: Phone, title: labels.phone, body: PHONE.display, href: PHONE.href, external: false },
+    { icon: Headphones, title: labels.chat, body: labels.chatBody, href: CHAT_URL, external: true },
+    {
+      icon: CalendarClock,
+      title: labels.booking,
+      body: labels.bookingBody,
+      href: BOOKING_URL,
+      external: true,
+    },
+  ] as const
+
+export function ContactList({ labels = CONTACT_LABELS_KO }: { labels?: ContactLabels }) {
   return (
     <ul className='asca-apply__contacts'>
-      {CONTACTS.map(contact => (
-        <li key={contact.title}>
+      {contactsFor(labels).map(contact => (
+        <li key={contact.href}>
           <a
             href={contact.href}
             className='asca-apply__contact'
@@ -140,7 +154,7 @@ export function ContactList() {
             <span className='asca-apply__contact-title'>{contact.title}</span>
             <span className='asca-apply__contact-body'>
               {contact.body}
-              {contact.external && <span className='sr-only'> (새 창)</span>}
+              {contact.external && <span className='sr-only'>{labels.newWindow}</span>}
             </span>
           </a>
         </li>

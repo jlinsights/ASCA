@@ -3,6 +3,9 @@ import ContestsPage from '../page'
 import { CONTEST_23, SCHEDULE, koDate } from '../_components/contest-23-data'
 
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
+jest.mock('@/contexts/language-context', () => ({
+  useLanguage: () => ({ t: (key: string) => key, language: 'ko' }),
+}))
 jest.mock('@/components/contests/contest-flipbook', () => ({ ContestFlipbook: () => null }))
 
 describe('koDate', () => {
