@@ -6,6 +6,7 @@ import * as Accordion from '@radix-ui/react-accordion'
 import { useLanguage } from '@/contexts/language-context'
 import { EMAIL, OFFICE_HOURS, PHONE } from '@/lib/content/contact-info'
 import { faqGroups } from '@/lib/content/site-faq'
+import { localizeFaqItem } from '@/lib/content/site-faq-locale'
 import './faq.css'
 
 const GROUPS = faqGroups()
@@ -44,7 +45,6 @@ export function FaqView() {
               </span>
             </h1>
             <p className='fq-side__intro'>{t('faqIntro')}</p>
-            {language !== 'ko' && <p className='fq-side__note'>{t('faqAnswerLanguage')}</p>}
           </div>
           <section className='fq-contact' aria-labelledby='fq-contact-title'>
             <h2 id='fq-contact-title' className='fq-contact__title'>
@@ -79,58 +79,61 @@ export function FaqView() {
                 key={target ?? 'none'}
                 defaultValue={target && group.ids.includes(target) ? [target] : []}
               >
-                {group.items.map((item, index) => (
-                  <Accordion.Item
-                    key={item.id}
-                    value={item.id ?? item.q}
-                    id={item.id}
-                    className='fq-item'
-                  >
-                    <Accordion.Header asChild>
-                      <h3 className='m-0'>
-                        <Accordion.Trigger className='fq-q'>
-                          <span className='fq-q__num'>{String(index + 1).padStart(2, '0')}</span>
-                          <span className='fq-q__text'>{item.q}</span>
-                          <svg
-                            className='fq-q__icon'
-                            viewBox='0 0 22 22'
-                            fill='none'
-                            aria-hidden='true'
-                          >
-                            <circle
-                              cx='11'
-                              cy='11'
-                              r='10.25'
-                              stroke='currentColor'
-                              strokeWidth='1.2'
-                            />
-                            <path
-                              d='M11 6.5v9M7 11.5l4 4 4-4'
-                              stroke='currentColor'
-                              strokeWidth='1.2'
-                            />
-                          </svg>
-                        </Accordion.Trigger>
-                      </h3>
-                    </Accordion.Header>
-                    <Accordion.Content className='fq-a'>
-                      <div className='fq-a__body'>
-                        {item.a}
-                        {item.sources && item.sources.length > 0 && (
-                          <p className='fq-a__sources'>
-                            <span className='fq-a__sources-label'>{t('faqSources')}</span>
-                            {item.sources.map((source, i) => (
-                              <span key={source.href}>
-                                {i > 0 && <span aria-hidden='true'>· </span>}
-                                <Link href={source.href}>{source.label}</Link>
-                              </span>
-                            ))}
-                          </p>
-                        )}
-                      </div>
-                    </Accordion.Content>
-                  </Accordion.Item>
-                ))}
+                {group.items
+                  .map(source => localizeFaqItem(source, language))
+                  .map((item, index) => (
+                    <Accordion.Item
+                      key={item.id}
+                      lang={item.translated ? undefined : 'ko'}
+                      value={item.id ?? item.q}
+                      id={item.id}
+                      className='fq-item'
+                    >
+                      <Accordion.Header asChild>
+                        <h3 className='m-0'>
+                          <Accordion.Trigger className='fq-q'>
+                            <span className='fq-q__num'>{String(index + 1).padStart(2, '0')}</span>
+                            <span className='fq-q__text'>{item.q}</span>
+                            <svg
+                              className='fq-q__icon'
+                              viewBox='0 0 22 22'
+                              fill='none'
+                              aria-hidden='true'
+                            >
+                              <circle
+                                cx='11'
+                                cy='11'
+                                r='10.25'
+                                stroke='currentColor'
+                                strokeWidth='1.2'
+                              />
+                              <path
+                                d='M11 6.5v9M7 11.5l4 4 4-4'
+                                stroke='currentColor'
+                                strokeWidth='1.2'
+                              />
+                            </svg>
+                          </Accordion.Trigger>
+                        </h3>
+                      </Accordion.Header>
+                      <Accordion.Content className='fq-a'>
+                        <div className='fq-a__body'>
+                          {item.a}
+                          {item.sources && item.sources.length > 0 && (
+                            <p className='fq-a__sources'>
+                              <span className='fq-a__sources-label'>{t('faqSources')}</span>
+                              {item.sources.map((source, i) => (
+                                <span key={source.href}>
+                                  {i > 0 && <span aria-hidden='true'>· </span>}
+                                  <Link href={source.href}>{source.label}</Link>
+                                </span>
+                              ))}
+                            </p>
+                          )}
+                        </div>
+                      </Accordion.Content>
+                    </Accordion.Item>
+                  ))}
               </Accordion.Root>
             </section>
           ))}
