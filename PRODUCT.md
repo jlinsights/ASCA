@@ -17,6 +17,11 @@ web
 
 - **공모전 응모자·협회 회원** — `app/contests`, `app/application*`,
   `app/membership`, `app/forms`. 서류 제출과 자격 확인이 목적.
+- **작가** (2026-10-31 확인) — 자기 작가 페이지 연결(claim)·프로필 수정, 공모전
+  출품, 그리고 사무국이 구축·운영하는 개인·단체 홈페이지(성곡 seonggok.com, 아남
+  anam.orientalcalligraphy.org, 희랑 heelang.orientalcalligraphy.org,
+  브러시웨이즈 brushways.org). `/artists` 맨 위에 이 홈페이지들과 홈페이지 구축
+  안내가 있다. 주 사용자는 여전히 관람객이며, 작가는 자기 표면에서만 우선한다.
 - **협회 사무국 운영자** — `app/admin`. 작가·작품·전시·공지 등록과 관리.
 
 ## Product Purpose
@@ -24,6 +29,12 @@ web
 사단법인 동양서예협회(ASCA)의 공식 웹사이트. 전통 동아시아 서예 작품과 협회
 활동(전시·공모전·수상·연혁·공지)을 온라인에 공개하고 탐색 가능하게 만든다.
 성공은 관람객이 작품을 실제로 들여다보는 것 — 목록을 스쳐 지나가지 않는 것.
+
+**중장기 방향 (2026-10-25 확인):** 전통서예·캘리그라피에서 현대서예·현대미술·
+현대 한국화·문자예술 등으로 넓어지는 미술 플랫폼이 된다. 그래서 장르·분야·공모
+부문은 데이터(DB·설정)로 두고 서예로 하드코딩하지 않는다. 석문·원문·서체 같은
+서예 전용 필드는 선택이며 서예 작품에만 나온다. 문구는 "서예 작품"이 아니라
+"작품"·"작가"처럼 중립적으로 쓴다.
 
 ## Positioning
 
@@ -36,7 +47,8 @@ web
 
 - Next.js 16 App Router + TypeScript, Tailwind + shadcn, Drizzle ORM +
   PostgreSQL(Supabase).
-- Vercel 배포, 현재 도메인 `asca-gallery.vercel.app`.
+- Vercel 배포. 운영 도메인 `www.orientalcalligraphy.org` (2026-10-25 Webflow
+  에서 전환). `asca-main.vercel.app` 은 옛 배포다.
 - 콘텐츠는 사무국이 `app/admin` CMS로 등록한다.
 - 갤러리 목록은 정적 메타데이터(`lib/data/gallery-data.json`)를 서버에서 읽고,
   항목 배열은 클라이언트로 넘기지 않는다.
@@ -50,9 +62,12 @@ web
 
 제약과 미결 사항:
 
-- 데이터 레이어에 `titleEn` / `titleCn` / `titleJp` 다국어 필드가 존재한다. 다만
-  이번 조사에서 로케일 라우팅이나 메시지 카탈로그는 확인되지 않았다. **다국어가
-  현재 노출되는 범위는 미확인 — 후속 작업에서 확정할 것.**
+- **4개 언어**: `ko`(기본)·`en`·`ja`·`zh`(번체 `zh-TW` 로 통일). 클라이언트
+  번역표 (`lib/i18n/translations/*`, `useLanguage()`)로 바꾸며 선택은
+  `localStorage` `asca-language` 에 남는다. 로케일 라우팅은 없어 서버
+  렌더·메타데이터는 한국어다. 한국어로만 있는 본문은 `lang='ko'` 를 단다. 규칙은
+  `AGENTS.md`. 공모전 페이지(`/contests`·`/contests/23`)처럼 아직 한국어만 있는
+  화면이 있다.
 - 갤러리 규모(`totalImages`)는 데이터 파일이 결정하며 코드에 하드코딩돼 있지
   않다.
 
