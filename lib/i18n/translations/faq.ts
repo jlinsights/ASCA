@@ -1,12 +1,12 @@
 import type { TranslationData } from '../types'
 
-// /faq 화면 문구. 질문·답 본문은 lib/content/site-faq.ts(한국어, 규정 근거 포함)가 단일 출처다.
+// /faq 화면 문구. 질문·답 본문은 lib/content/site-faq.ts(한국어, 규정 근거 포함)가 단일 출처이고,
+// 영어·일본어·중국어 번역은 site-faq-en·ja·zh.ts 에 id 로 붙는다(site-faq-locale.ts).
 export const faqTranslations: TranslationData = {
   ko: {
     faqEyebrow: '도움말',
     faqTitle: '자주 묻는 질문',
     faqIntro: '회원 가입과 회비, 공모전 출품, 작가 승급까지 자주 받는 질문을 모았습니다.',
-    faqAnswerLanguage: '',
     faqGroupMembership: '회원·회비',
     faqGroupContests: '공모전·작가 승급',
     faqGroupArtists: '강좌·작가 홈페이지',
@@ -22,7 +22,6 @@ export const faqTranslations: TranslationData = {
     faqEyebrow: 'Help',
     faqTitle: 'FAQ',
     faqIntro: 'Common questions on membership and dues, contest entries and artist promotion.',
-    faqAnswerLanguage: 'Answers are provided in Korean.',
     faqGroupMembership: 'Membership & dues',
     faqGroupContests: 'Contests & artist promotion',
     faqGroupArtists: 'Classes & artist websites',
@@ -38,7 +37,6 @@ export const faqTranslations: TranslationData = {
     faqEyebrow: 'ヘルプ',
     faqTitle: 'よくある質問',
     faqIntro: '入会と会費、公募展への出品、作家の昇格など、よくいただく質問をまとめました。',
-    faqAnswerLanguage: '回答は韓国語で掲載しています。',
     faqGroupMembership: '会員・会費',
     faqGroupContests: '公募展・作家の昇格',
     faqGroupArtists: '講座・作家ホームページ',
@@ -54,7 +52,6 @@ export const faqTranslations: TranslationData = {
     faqEyebrow: '說明',
     faqTitle: '常見問題',
     faqIntro: '整理了入會與會費、公募展參展、作家晉升等常見問題。',
-    faqAnswerLanguage: '回答以韓文提供。',
     faqGroupMembership: '會員・會費',
     faqGroupContests: '公募展・作家晉升',
     faqGroupArtists: '課程・作家網站',

@@ -26,7 +26,7 @@ export interface HubCopy {
   hallsNote: ReactNode
   paths: { eyebrow: string; title: string; lede: string; items: readonly EntryPath[] }
   dates: { eyebrow: string; title: string; lede: string }
-  faq: { eyebrow: string; title: string; note?: string }
+  faq: { eyebrow: string; title: string }
   contact: { eyebrow: string; title: string; lede: ReactNode }
 }
 
@@ -188,7 +188,6 @@ const EN: HubCopy = {
   faq: {
     eyebrow: 'FAQ',
     title: 'Check before entering',
-    note: 'The answers below are in Korean.',
   },
   contact: {
     eyebrow: 'Contact',
@@ -276,7 +275,6 @@ const JA: HubCopy = {
   faq: {
     eyebrow: 'よくある質問',
     title: '出品前にご確認ください',
-    note: '以下の回答は韓国語です。',
   },
   contact: {
     eyebrow: 'お問い合わせ',
@@ -361,7 +359,7 @@ const ZH: HubCopy = {
     title: '從收件到頒獎',
     lede: `收件至${d(CONTEST_23.deadline, 'zh')} ${DEADLINE_TIME}為止，以寄達日而非寄出日為準。`,
   },
-  faq: { eyebrow: '常見問題', title: '出品前請先確認', note: '以下回答為韓文。' },
+  faq: { eyebrow: '常見問題', title: '出品前請先確認' },
   contact: {
     eyebrow: '聯絡我們',
     title: '事務局',
