@@ -312,7 +312,7 @@ export function ArtworksClient() {
                     >
                       <div className={`relative ${getImageAspectRatio(artwork)} overflow-hidden`}>
                         <Image
-                          src={artwork.image_url || '/images/artworks/calligraphy-scene-1.jpg'}
+                          src={artwork.image_url || '/images/programs/calligraphy-scene-1.jpg'}
                           alt={artwork.title}
                           fill
                           sizes='(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'

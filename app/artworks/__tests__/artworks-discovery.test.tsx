@@ -31,7 +31,7 @@ const artworks = [
     availability: 'available',
     orientation: 'landscape',
     year: 2025,
-    image_url: '/images/artworks/calligraphy-scene-1.jpg',
+    image_url: '/images/programs/calligraphy-scene-1.jpg',
   },
   {
     id: '2',
@@ -44,7 +44,7 @@ const artworks = [
     availability: 'sold',
     orientation: 'portrait',
     year: 2024,
-    image_url: '/images/artworks/calligraphy-scene-2.jpg',
+    image_url: '/images/programs/calligraphy-scene-2.jpg',
   },
 ]
 
