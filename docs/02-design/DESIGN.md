@@ -362,9 +362,10 @@ PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 
 
 ### 3.1 폰트 선택 규칙
 
-1. **본문(UI)**: `{typography.family.sans}` — Pretendard + Noto Sans KR(폴백) +
-   CJK
+1. **본문(UI)**: `{typography.family.sans}` — Pretendard + OS 기본 한글
+   글꼴(폴백, 웹 글꼴을 받지 않는다) + CJK
 2. **헤딩·인용**: `{typography.family.serif}` — Playfair Display + Noto Serif KR
+   (next/font 가변 글꼴, 유니코드 구간 조각만 받는다)
 3. **서예 인용(원문)**: `{typography.family.calligraphy}` — Source Han Serif +
    KaiTi
 4. **장식 히어로**: `{typography.family.brush}` — Ma Shan Zheng, **영웅 영역 외

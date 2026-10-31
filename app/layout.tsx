@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Noto_Serif_KR, Noto_Serif_TC } from 'next/font/google'
 import './globals.css'
 import { ClientProviders } from '@/components/client-providers'
 
@@ -27,24 +28,34 @@ const playfair = localFont({
   variable: '--font-display',
 })
 
+// 한국어·한자 글꼴 - next/font/google 이 빌드 때 받아 자체 호스팅한다(외부 요청·렌더 차단 CSS 없음).
+// Google 이 유니코드 구간별로 잘라 둔 조각을 그대로 쓰므로 페이지에 나온 글자의 조각만 받는다.
+// subsets 는 미리 받을(preload) 조각을 고르는 값이라, 한글 조각은 preload: false 로 두고 필요할 때 받는다.
+// 가변 글꼴(weight 생략)로 받는다 — 굵기마다 조각 묶음을 따로 받지 않고 한 묶음으로 모든 굵기를 낸다.
+// variable 클래스는 <html> 에 단다 — globals.css 의 :root 글꼴 스택이 이 변수를 읽는다.
+
 // 번체 한자 - Noto Serif TC (협회명·슬로건 등 [lang=zh-Hant] / .cjk-tc-strict 전용, BRAND.md §3)
-// unicode-range 조각이라 실제로 쓰인 글자만 받는다. CSS 변수는 globals.css :root 에서 정의한다.
-const NOTO_SERIF_TC_CSS =
-  'https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&display=swap'
+const notoSerifTc = Noto_Serif_TC({
+  subsets: ['latin'],
+  preload: false,
+  display: 'swap',
+  variable: '--font-noto-serif-tc',
+})
 
-// 한국어 산세리프 폴백 - Noto Sans KR (Pretendard 가 못 실렸을 때만 쓰인다)
-// woff2 로컬 파일 — public/fonts/noto-sans-kr/ (OFL)
-// @font-face + unicode-range 는 globals.css 에서 정의하고, CSS 변수도 :root 에서 직접 잡는다.
-// (next/font/local 은 같은 weight 에 unicode-range 분리를 지원하지 않아 수동 선언)
+// 한국어 산세리프 폴백은 웹 글꼴을 받지 않는다 — Pretendard 에 없는 글자(주로 한자)는 OS 기본 한글
+// 글꼴이 메운다. 스택은 globals.css :root 의 --font-noto-sans-kr.
 
-// 한국어 세리프 - Noto Serif KR (서예 작품 제목용)
-// woff2 로컬 파일 — public/fonts/noto-serif-kr/ (OFL)
-// Noto Sans KR 과 같은 이유로 globals.css @font-face + :root 변수 선언
+// 한국어 세리프 - Noto Serif KR (서예 작품 제목·제목 글꼴)
+const notoSerifKr = Noto_Serif_KR({
+  subsets: ['latin'],
+  preload: false,
+  display: 'swap',
+  variable: '--font-noto-serif-kr',
+})
 
 import { constructMetadata } from '@/lib/seo'
 import { JsonLd } from '@/components/json-ld'
 import { KakaoScript } from '@/components/seo/kakao-script'
-import { VideoBackground } from '@/components/layout/video-background'
 import { Header } from '@/components/header/header'
 import { SkipLink } from '@/components/layout/skip-link'
 import { SiteWidgets } from '@/components/third-party/site-widgets'
@@ -70,12 +81,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='ko' suppressHydrationWarning>
+    <html
+      lang='ko'
+      className={`${notoSerifKr.variable} ${notoSerifTc.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <link rel='preconnect' href='https://cdn.jsdelivr.net' crossOrigin='anonymous' />
         <link rel='stylesheet' href={PRETENDARD_CSS} crossOrigin='anonymous' />
-        <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
-        <link rel='stylesheet' href={NOTO_SERIF_TC_CSS} />
         <KakaoScript />
         {/* Global JSON-LD for AEO */}
         <JsonLd />
@@ -86,7 +99,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <ClientProviders>
           <SkipLink />
-          <VideoBackground />
           <div className='min-h-screen flex flex-col relative'>
             <Header transparentOnTop={true} />
 
