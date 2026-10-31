@@ -8,9 +8,9 @@ import { PAGE_HERO_MARKS, type PageHeroKey } from '@/components/layout/page-hero
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
 import { useLanguage } from '@/contexts/language-context'
-import { historyEvents } from '@/app/history/_data/history-events'
 import { HistoryTimelineCard } from '@/app/history/_components/history-timeline-card'
 import { getExhibitionRecords, type ExhibitionRecords } from '../_data/exhibition-records'
+import { exhibitionEvents } from '../_data/planned-exhibitions'
 
 type Variant = keyof ExhibitionRecords
 
@@ -59,7 +59,7 @@ const VARIANTS: Record<
 export function ExhibitionRecordsPage({ variant }: { variant: Variant }) {
   const { t } = useLanguage()
   const config = VARIANTS[variant]
-  const records = getExhibitionRecords(historyEvents)[variant]
+  const records = getExhibitionRecords(exhibitionEvents())[variant]
 
   const years = records.map(record => record.year)
   const ledger: PageHeroStat[] = [{ label: t('exLedgerCount'), value: records.length }]
