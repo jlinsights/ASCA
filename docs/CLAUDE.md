@@ -374,8 +374,8 @@ and refactor using this standardized process:
 - 브랜드·스타일 가이드는 `/brand`(`app/brand/`) 페이지다 — 로고·색 사다리·글꼴·
   말투·사진 처리 규칙의 견본. 토큰을 바꾸면 이 페이지의 `brand-data.ts` 도 같이
   고친다
-- 버튼 변형 `celadon`·`sage`·`terra`·`traditional` 은 옛 이름이다. 새 코드는
-  `default`·`secondary`·`outline`·`ghost` 를 쓴다
+- 버튼 변형은 `default`·`secondary`·`outline`·`ghost`·`destructive`·`link` 다.
+  옛 변형 `celadon`·`sage`·`terra`·`traditional`·`rice` 는 2026-10-31 에 지웠다
 - ⚠️ 2026-10-10 부터 색은 **ASCA Ink System(Navy & Gold)** 이다.
   `celadon-green`·`scholar-red` 같은 이름은 기존 클래스를 살리려 남긴 것이고
   **값은 금색·남색**이다(DESIGN.md §2.0 대조표). 새 코드는 시맨틱
