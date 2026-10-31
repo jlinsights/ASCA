@@ -186,7 +186,8 @@ function HomepageInvite() {
       </div>
       <details className='relative mt-10 rounded-sm bg-background text-foreground'>
         <summary className='cursor-pointer px-5 py-4 text-sm font-medium'>{copy.faqToggle}</summary>
-        <div className='px-3 pb-4 md:px-5'>
+        {/* 비용 FAQ 는 한국어 원문만 있다 — 다른 언어 화면에서도 한국어로 읽히게 표시 */}
+        <div lang='ko' className='px-3 pb-4 md:px-5'>
           <SiteFaqList ids={INVITE_FAQ_IDS} />
         </div>
       </details>
