@@ -57,6 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/academy',
     '/contact',
     '/contests',
+    '/contests/23',
     '/awards',
     '/application',
     '/application-for-recommended-invited-calligrapher',
