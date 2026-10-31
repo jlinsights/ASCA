@@ -122,7 +122,7 @@ const exhibitionsAndContests: MenuColumn[] = [
 ]
 
 export const headerMenu: MenuGroup[] = [
-  // 순서: 소개 · 전시·공모 · 작가·작품 · 소식 · 정관·규정 · 회원·후원 · 문의 (2026-10-31)
+  // 순서: 소개 · 전시·공모 · 작가·작품 · 정관·규정 · 회원·후원 · 소식 · 문의 (2026-10-31, 소식을 문의 바로 앞으로)
   // 소개·정관·규정 라벨은 헤더·푸터 제목·규정 페이지 경로 표시가 같은 키를 쓴다 (2026-10-26)
   { key: 'about', labelKey: 'siteNavAboutShort', href: '/introductions', items: about },
   {
@@ -146,8 +146,6 @@ export const headerMenu: MenuGroup[] = [
       { labelKey: 'siteNavArtworks', href: '/artworks' },
     ],
   },
-  // 메뉴 머리는 회원 게시판으로 — 공지사항·행사는 옛 CMS 데이터가 없어 비어 있다 (2026-10-31)
-  { key: 'news', labelKey: 'siteFtNews', href: '/community/board', items: news },
   {
     key: 'regulations',
     labelKey: 'siteNavRegulations',
@@ -156,6 +154,8 @@ export const headerMenu: MenuGroup[] = [
     items: regulationColumns.flatMap(column => column.items),
   },
   { key: 'membership', labelKey: 'siteNavMembership', href: '/membership', items: membership },
+  // 메뉴 머리는 회원 게시판으로 — 공지사항·행사는 옛 CMS 데이터가 없어 비어 있다 (2026-10-31)
+  { key: 'news', labelKey: 'siteFtNews', href: '/community/board', items: news },
   { key: 'contact', labelKey: 'siteNavContact', href: '/contact', items: contact },
 ]
 
