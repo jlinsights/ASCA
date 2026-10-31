@@ -20,6 +20,7 @@ export interface FeaturedArtist {
   sites: readonly FeaturedSite[]
   role: Record<Language, string> | null
   note: 'renewed' | null
+  story: Record<Language, string> | null
 }
 
 interface FeaturedHomepagesSectionProps {
@@ -101,6 +102,11 @@ function FeaturedCard({ artist }: { artist: FeaturedArtist }) {
         {artistDisplayName(displayName, artist.deathYear)}
       </h3>
       {artist.role && <p className='mt-1 text-sm text-foreground'>{artist.role[language]}</p>}
+      {artist.story && (
+        <p className='mt-3 border-l-2 border-scholar-red pl-3 text-sm leading-relaxed text-muted-foreground'>
+          {artist.story[language]}
+        </p>
+      )}
       <ul className='mt-3 space-y-1 text-sm text-muted-foreground'>
         {artist.sites.map(site => (
           <li key={site.url}>

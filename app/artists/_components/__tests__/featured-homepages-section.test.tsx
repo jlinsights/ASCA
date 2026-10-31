@@ -25,6 +25,7 @@ const ARTISTS: FeaturedArtist[] = [
     sites: [{ url: 'https://seonggok.com', kind: 'personal' }],
     role: { ko: '협회 창립자 · 명예회장', en: 'Founder', ja: '創立者', zh: '創會者' },
     note: 'renewed',
+    story: null,
   },
   {
     slug: 'heelang',
@@ -43,6 +44,7 @@ const ARTISTS: FeaturedArtist[] = [
     ],
     role: null,
     note: null,
+    story: null,
   },
 ]
 
@@ -96,6 +98,18 @@ describe('홈페이지 작가 목록', () => {
     expect(founder.getByText('협회 창립자 · 명예회장')).toBeInTheDocument()
     expect(founder.getByText(featuredHomepagesCopy.ko.renewed)).toBeInTheDocument()
     expect(cards()[1]!.queryByText(featuredHomepagesCopy.ko.renewed)).not.toBeInTheDocument()
+  })
+
+  it('아남은 심사위원장이고, 書境 개인전과 홈페이지가 이어진 사례를 보여 준다', () => {
+    const anam = FEATURED_HOMEPAGES.find(entry => entry.slug === 'anam')
+    expect(anam?.role?.ko).toBe('협회 심사위원장')
+    expect(anam?.story?.ko).toContain('書境 새로운 지평')
+    render(
+      <FeaturedHomepagesSection
+        artists={[{ ...ARTISTS[1]!, role: anam!.role!, story: anam!.story! }]}
+      />
+    )
+    expect(screen.getByText(/개인전으로 참여하며 홈페이지를 열었습니다/)).toBeInTheDocument()
   })
 
   it('사진이 없으면 호를 크게 보여 준다', () => {

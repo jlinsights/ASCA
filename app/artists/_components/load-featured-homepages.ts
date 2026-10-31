@@ -32,6 +32,7 @@ export async function loadFeaturedHomepages(): Promise<FeaturedArtist[]> {
             sites: row.entry.sites,
             role: row.entry.role ?? null,
             note: row.entry.note ?? null,
+            story: row.entry.story ?? null,
           },
         ]
       : []

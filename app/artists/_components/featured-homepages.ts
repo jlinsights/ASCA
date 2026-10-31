@@ -22,6 +22,8 @@ export interface FeaturedHomepage {
   role?: Record<Language, string>
   /** 홈페이지를 새로 단장했으면 'renewed' */
   note?: 'renewed'
+  /** 홈페이지가 생긴 계기 — 전시와 홈페이지가 이어진 실제 사례 */
+  story?: Record<Language, string>
 }
 
 export const FEATURED_HOMEPAGES: readonly FeaturedHomepage[] = [
@@ -37,7 +39,23 @@ export const FEATURED_HOMEPAGES: readonly FeaturedHomepage[] = [
     },
     note: 'renewed',
   },
-  { slug: 'anam', sites: [{ url: 'https://anam.orientalcalligraphy.org', kind: 'personal' }] },
+  // 협회 심사위원장. 2026 書境 특별기획전에 개인전으로 참여하며 홈페이지 제작 (사용자 확인 2026-10-31)
+  {
+    slug: 'anam',
+    sites: [{ url: 'https://anam.orientalcalligraphy.org', kind: 'personal' }],
+    role: {
+      ko: '협회 심사위원장',
+      en: 'Chair of the Society’s Judging Committee',
+      ja: '協会審査委員長',
+      zh: '協會評審委員長',
+    },
+    story: {
+      ko: '2026년 예술의전당 서울서예박물관, 협회 특별기획전 「書境 새로운 지평 — 동양서예의 현재와 미래」에 개인전으로 참여하며 홈페이지를 열었습니다.',
+      en: 'Opened this website with her solo exhibition in the Society’s 2026 special exhibition “書境 New Horizons — The Present and Future of Oriental Calligraphy” at the Seoul Calligraphy Art Museum, Seoul Arts Center.',
+      ja: '2026年、芸術の殿堂ソウル書芸博物館で開かれた協会特別企画展「書境 新たな地平 — 東洋書道の現在と未来」に個展で参加し、ホームページを開設しました。',
+      zh: '2026年於藝術殿堂首爾書藝博物館，以個展參與協會特別企劃展「書境 新的地平 — 東洋書藝的現在與未來」，並開設了網站。',
+    },
+  },
   {
     slug: 'heelang',
     sites: [
