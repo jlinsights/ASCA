@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { ContestIntro } from '@/components/contests/contest-intro'
@@ -62,6 +63,11 @@ export default function ContestsPage() {
 
       <div className='asca-apply__body'>
         <ApplyToc items={TOC} />
+
+        <p className='asca-apply__note'>
+          두 전시실 구성과 출품 경로를 한 화면에 모았습니다 ·{' '}
+          <Link href='/contests/23'>제{CONTEST_23.edition}회 대전 한눈에 보기 →</Link>
+        </p>
 
         <ContestGuidelines />
 
