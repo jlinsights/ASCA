@@ -3,7 +3,7 @@
  */
 import { renderToStaticMarkup } from 'react-dom/server'
 import BlogPostPage, { generateMetadata, generateStaticParams } from '../page'
-import { localPosts } from '@/lib/blog/local-posts'
+import { articleBodyHtml, localPosts } from '@/lib/blog/local-posts'
 
 jest.mock('next/navigation', () => ({
   notFound: () => {
@@ -32,7 +32,14 @@ describe('/blog/[slug]', () => {
     const html = renderToStaticMarkup(await BlogPostPage(params(post.id)))
     expect(html).toContain(post.title)
     expect(html).toContain('href="/blog"')
-    expect(html).toContain((post.content ?? '').slice(0, 40))
+    expect(html).toContain(articleBodyHtml(post).slice(0, 40))
+  })
+
+  test('페이지의 h1 은 글 제목 하나다 (본문 h1 은 h2 로 낮춘다)', async () => {
+    for (const p of localPosts) {
+      const html = renderToStaticMarkup(await BlogPostPage(params(p.id)))
+      expect(html.match(/<h1[\s>]/g)).toHaveLength(1)
+    }
   })
 
   test('없는 글은 404', async () => {

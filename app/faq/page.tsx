@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { SITE_FAQ } from '@/lib/content/site-faq'
 import { FaqView } from './_components/faq-view'
@@ -13,6 +14,12 @@ export const metadata: Metadata = {
   description:
     '회원 가입과 연회비, 대한민국 동양서예대전 출품과 시상, 추천·초대작가 선정 기준 등 자주 묻는 질문을 모았습니다.',
   alternates: { canonical: '/faq' },
+  // openGraph 가 없으면 레이아웃의 기본 제목(ASCA | 사단법인 동양서예협회)으로 공유된다
+  openGraph: {
+    title: '자주 묻는 질문 | 동양서예협회',
+    description: '회원 가입·연회비, 대전 출품과 시상, 추천·초대작가 선정 기준을 묻고 답합니다.',
+    images: [defaultSEO.image],
+  },
 }
 
 /** 검색 결과의 FAQ 표시용 — 답은 평문 그대로 */

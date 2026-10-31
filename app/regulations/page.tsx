@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import {
   RegulationsIndex,
@@ -18,6 +19,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: '정관 및 규정 | 동양서예협회',
     description: '동양서예협회의 정관과 세부 규정 8종을 조문 단위로 안내합니다.',
+    // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다
+    images: [defaultSEO.image],
   },
 }
 

@@ -47,11 +47,15 @@ describe('sitemap', () => {
   test('공개 작가 상세를 anon 클라이언트로 읽어 싣고, 1,000행씩 끝까지 넘긴다', async () => {
     const first = Array.from({ length: 1000 }, (_, i) => ({
       id: `00000000-0000-4000-8000-${String(i).padStart(12, '0')}`,
+      slug: null,
       updated_at: '2026-10-01T00:00:00Z',
     }))
     pages = [
       { data: first, error: null },
-      { data: [{ id: 'aaaaaaaa-0000-4000-8000-000000000001', updated_at: null }], error: null },
+      {
+        data: [{ id: 'aaaaaaaa-0000-4000-8000-000000000001', slug: null, updated_at: null }],
+        error: null,
+      },
     ]
     const entries = await sitemap()
     expect(anonClient.from).toHaveBeenCalledWith('artists')
@@ -64,6 +68,24 @@ describe('sitemap', () => {
     expect(urls(entries)).toContain(`${BASE}/artists/aaaaaaaa-0000-4000-8000-000000000001`)
     const artist = entries.find(e => e.url === `${BASE}/artists/${first[0]!.id}`)
     expect(artist?.lastModified).toEqual(new Date('2026-10-01T00:00:00Z'))
+  })
+
+  test('작가 주소는 상세 페이지 canonical 과 같은 slug 로 싣는다 (slug 가 없으면 uuid)', async () => {
+    pages = [
+      {
+        data: [
+          {
+            id: 'bbbbbbbb-0000-4000-8000-000000000001',
+            slug: 'liu-zhen-jiang',
+            updated_at: null,
+          },
+        ],
+        error: null,
+      },
+    ]
+    const entries = await sitemap()
+    expect(urls(entries)).toContain(`${BASE}/artists/liu-zhen-jiang`)
+    expect(urls(entries)).not.toContain(`${BASE}/artists/bbbbbbbb-0000-4000-8000-000000000001`)
   })
 
   test('DB 오류면 작가 없이 고정 페이지·블로그만 낸다 (빌드를 죽이지 않는다)', async () => {
