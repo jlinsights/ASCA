@@ -47,8 +47,9 @@ web
 
 - Next.js 16 App Router + TypeScript, Tailwind + shadcn, Drizzle ORM +
   PostgreSQL(Supabase).
-- Vercel 배포. 운영 도메인 `www.orientalcalligraphy.org` (2026-10-25 Webflow
-  에서 전환). `asca-main.vercel.app` 은 옛 배포다.
+- Vercel 배포. 운영 도메인은 `orientalcalligraphy.org`(루트, 2026-10-25 Webflow
+  에서 전환). `www.orientalcalligraphy.org`·`asca-main.vercel.app` 은 루트로 308
+  리다이렉트한다.
 - 콘텐츠는 사무국이 `app/admin` CMS로 등록한다.
 - 갤러리 목록은 정적 메타데이터(`lib/data/gallery-data.json`)를 서버에서 읽고,
   항목 배열은 클라이언트로 넘기지 않는다.
