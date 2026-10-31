@@ -161,6 +161,23 @@ describe('필터 막대 — 건수와 펼쳐 보기', () => {
     )
     expect(screen.queryByRole('button', { name: /비슷한 사진/ })).not.toBeInTheDocument()
   })
+
+  it('검색 입력란은 자리표시자가 아니라 이름표로 이름을 갖는다', async () => {
+    const user = userEvent.setup()
+    render(
+      <FilterBar
+        {...base}
+        totalCount={12}
+        photoCount={12}
+        showAllSimilar={false}
+        onChange={jest.fn()}
+      />
+    )
+    const input = screen.getByRole('searchbox', { name: '사진 검색' })
+    // 입력해 자리표시자가 사라진 뒤에도 이름이 남는다
+    await user.type(input, '개막식')
+    expect(screen.getByRole('searchbox', { name: '사진 검색' })).toHaveValue('개막식')
+  })
 })
 
 describe('사진 표시 도우미', () => {

@@ -76,9 +76,10 @@ export default function BlogPage() {
   const getSourceBadge = (source: BlogPost['source']) => {
     switch (source) {
       case 'tistory':
-        return <Badge className='bg-orange-100 text-orange-800 border-orange-200'>Tistory</Badge>
+        // 출처는 글자로 구분한다 — 서비스 고유색(주황·노랑)은 Ink System 밖이다
+        return <Badge variant='outline'>Tistory</Badge>
       case 'kakao':
-        return <Badge className='bg-yellow-100 text-yellow-800 border-yellow-200'>Kakao</Badge>
+        return <Badge variant='outline'>Kakao</Badge>
       default:
         return <Badge variant='secondary'>Local</Badge>
     }
