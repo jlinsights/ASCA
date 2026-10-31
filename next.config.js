@@ -63,13 +63,6 @@ const THIRD_PARTY = {
   },
   // 신청 폼 임베드 — app/application*, app/commissioning-application, app/forms
   tally: { script: ['https://tally.so'], frame: ['https://tally.so'] },
-  // 배경 영상 — app/application
-  vimeo: {
-    frame: ['https://player.vimeo.com'],
-    img: ['https://i.vimeocdn.com'],
-    script: ['https://f.vimeocdn.com'],
-    connect: ['https://*.vimeocdn.com'],
-  },
   // 강의 영상 임베드(쿠키 없는 도메인) — app/academy/_components/instructor-anam.tsx
   youtube: { frame: ['https://www.youtube-nocookie.com'] },
   // 카카오 SDK(공유·지도) — components/seo/kakao-script.tsx, lib/kakao.ts

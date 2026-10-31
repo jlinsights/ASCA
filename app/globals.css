@@ -1,94 +1,11 @@
-/* 폰트: next/font/local(Playfair) + @font-face(Noto KR) + CDN(Pretendard·Noto Serif TC) — app/layout.tsx */
+/* 폰트: next/font(Playfair·Noto Serif KR·Noto Serif TC) + CDN(Pretendard) — app/layout.tsx */
+/* Noto 계열은 next/font/google 이 빌드 때 받아 자체 호스팅한다. 유니코드 구간별로 잘린 조각이라
+   그 페이지에 실제로 쓰인 글자의 조각만 받는다(예전엔 한글 전체 파일 1MB 를 통째로 받았다).
+   --font-noto-serif-* 변수는 <html> 에 붙는 next/font 클래스가 정의한다 — :root 에서 읽힌다. */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* ── Noto Sans KR  ─  로컬 woff2 (OFL) ── */
-/* 한국어 산세리프 폴백: Pretendard 가 못 실렸을 때만 쓰인다 */
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/noto-sans-kr/noto-sans-kr-latin-400-normal.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/noto-sans-kr/noto-sans-kr-korean-400-normal.woff2') format('woff2');
-  unicode-range:
-    U+1100-11FF, U+3000-303F, U+3130-318F, U+3200-32FF, U+A960-A97F, U+AC00-D7AF, U+D7B0-D7FF,
-    U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF;
-}
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/noto-sans-kr/noto-sans-kr-latin-700-normal.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/noto-sans-kr/noto-sans-kr-korean-700-normal.woff2') format('woff2');
-  unicode-range:
-    U+1100-11FF, U+3000-303F, U+3130-318F, U+3200-32FF, U+A960-A97F, U+AC00-D7AF, U+D7B0-D7FF,
-    U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF;
-}
-
-/* ── Noto Serif KR  ─  로컬 woff2 (OFL) ── */
-/* 한국어 세리프: 서예 작품 제목 등 전용 */
-@font-face {
-  font-family: 'Noto Serif KR';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/noto-serif-kr/noto-serif-kr-latin-400-normal.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Noto Serif KR';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/noto-serif-kr/noto-serif-kr-korean-400-normal.woff2') format('woff2');
-  unicode-range:
-    U+1100-11FF, U+3000-303F, U+3130-318F, U+3200-32FF, U+A960-A97F, U+AC00-D7AF, U+D7B0-D7FF,
-    U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF;
-}
-@font-face {
-  font-family: 'Noto Serif KR';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/noto-serif-kr/noto-serif-kr-latin-700-normal.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Noto Serif KR';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/noto-serif-kr/noto-serif-kr-korean-700-normal.woff2') format('woff2');
-  unicode-range:
-    U+1100-11FF, U+3000-303F, U+3130-318F, U+3200-32FF, U+A960-A97F, U+AC00-D7AF, U+D7B0-D7FF,
-    U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF;
-}
 
 /* Animation & Transition Design Tokens */
 :root {
@@ -97,11 +14,8 @@
   --duration-slow: 400ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
-  /* 한국어 폰트 CSS 변수 — @font-face 가 위에서 정의한 font-family 를 가리킨다 */
-  --font-noto-sans-kr: 'Noto Sans KR';
-  --font-noto-serif-kr: 'Noto Serif KR';
-  /* 번체 한자 — app/layout.tsx NOTO_SERIF_TC_CSS 가 싣는다(next/font 아님) */
-  --font-noto-serif-tc: 'Noto Serif TC';
+  /* 한국어 산세리프 폴백 — 웹 글꼴을 받지 않고 OS 기본 한글 글꼴을 쓴다(Pretendard 에 없는 한자 등) */
+  --font-noto-sans-kr: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR';
 
   /* 페이지 틀 — 헤더·히어로·본문·푸터가 같은 좌우 선에 선다 (2026-10-25)
      본문 1200px(8px 격자 150칸), 좌우 여백은 화면에 비례해 넓어진다:
