@@ -45,13 +45,16 @@ describe('/faq 화면', () => {
     expect(Element.prototype.scrollIntoView).toHaveBeenCalled()
   })
 
-  it('한국어가 아니면 답이 한국어라는 안내를 붙인다', () => {
-    const { unmount } = render(<FaqView />)
-    expect(screen.queryByText('faqAnswerLanguage')).not.toBeInTheDocument()
-    unmount()
+  it('다른 언어에서는 질문·답·근거 이름을 번역으로 보이고, 근거 주소는 원문 그대로다', () => {
     language = 'en'
     render(<FaqView />)
-    expect(screen.getByText('faqAnswerLanguage')).toBeInTheDocument()
+    const trigger = screen.getByRole('button', { name: /What are the awards and prize money/ })
+    fireEvent.click(trigger)
+    expect(screen.getByText(/Three-Script Prize: 4 winners/)).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Regulations on Operation and Judging, Art. 7' })
+    ).toHaveAttribute('href', '/regulations/operation-judging#a7')
+    expect(screen.queryByText('faqAnswerLanguage')).not.toBeInTheDocument()
   })
 
   it('사무국 메일과 문의 페이지로 가는 길을 둔다', () => {

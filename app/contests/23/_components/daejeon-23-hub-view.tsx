@@ -178,16 +178,8 @@ export function Daejeon23HubView({ calendarOpen }: Daejeon23HubViewProps) {
         </section>
 
         <section id='faq' aria-labelledby='faq-title' className='asca-apply__anchor'>
-          <ApplySectionHead
-            id='faq-title'
-            eyebrow={copy.faq.eyebrow}
-            title={copy.faq.title}
-            lede={copy.faq.note}
-          />
-          {/* 사이트 FAQ 는 아직 한국어로만 있다 */}
-          <div lang='ko'>
-            <SiteFaqList ids={HUB_FAQ_IDS} />
-          </div>
+          <ApplySectionHead id='faq-title' eyebrow={copy.faq.eyebrow} title={copy.faq.title} />
+          <SiteFaqList ids={HUB_FAQ_IDS} />
         </section>
 
         <section id='contact' aria-labelledby='contact-title' className='asca-apply__anchor'>
