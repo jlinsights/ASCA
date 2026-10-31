@@ -1,22 +1,13 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { ContestIntro } from '@/components/contests/contest-intro'
-import {
-  ApplySectionHead,
-  ApplyToc,
-  ContactList,
-  LedgerTable,
-} from '@/components/apply/apply-parts'
-import { CONTEST_EDITIONS } from '@/app/awards/_components/awards-data'
-import { ContestGuidelines } from './_components/contest-guidelines'
-import { CONTEST_23, koDate } from './_components/contest-23-data'
+import { ContestsView } from './_components/contests-view'
 import '@/components/apply/apply.css'
 
 /**
  * 공모전 — 협회가 여는 공모전은 대한민국 동양서예대전 하나다. 회차 기록은 /awards 와 같은 연혁 데이터를 쓴다.
  * 예전엔 존재하지 않는 contests 테이블을 읽어 "전체 공모전 0 · 접수중 0"만 보였다.
+ * 본문은 언어 선택을 따르는 ContestsView(클라이언트)가 그리고, 메타데이터는 여기서 한국어로 둔다.
  */
 
 const DESCRIPTION =
@@ -33,82 +24,10 @@ export const metadata: Metadata = {
   },
 }
 
-const TOC = [
-  { href: '#next', label: '일정' },
-  { href: '#entry', label: '자격·부문' },
-  { href: '#specs', label: '규격·표장' },
-  { href: '#fees', label: '출품료' },
-  { href: '#how', label: '출품 방법' },
-  { href: '#prizes', label: '시상' },
-  { href: '#notice', label: '유의사항' },
-  { href: '#editions', label: '역대 대전' },
-  { href: '#contact', label: '문의' },
-] as const
-
 export default function ContestsPage() {
-  const latest = CONTEST_EDITIONS[0]
   return (
     <div className='asca-apply min-h-screen'>
-      <ContestIntro
-        facts={[
-          { label: '역대 대전', value: `${CONTEST_EDITIONS.length}회` },
-          { label: '다음 대전', value: `제${CONTEST_23.edition}회` },
-          { label: '접수 마감', value: koDate(CONTEST_23.deadline) },
-          {
-            label: '전시',
-            value: `${koDate(CONTEST_23.exhibitionStart, false)} ~ ${koDate(CONTEST_23.exhibitionEnd, false)}`,
-          },
-        ]}
-      />
-
-      <div className='asca-apply__body'>
-        <ApplyToc items={TOC} />
-
-        <p className='asca-apply__note'>
-          두 전시실 구성과 출품 경로를 한 화면에 모았습니다 ·{' '}
-          <Link href='/contests/23'>제{CONTEST_23.edition}회 대전 한눈에 보기 →</Link>
-        </p>
-
-        <ContestGuidelines />
-
-        <section id='editions' aria-labelledby='editions-title' className='asca-apply__anchor'>
-          <ApplySectionHead
-            id='editions-title'
-            eyebrow='역대 대전'
-            title={`제1회부터 제${latest?.edition ?? ''}회까지`}
-            lede='개최 기간과 장소는 협회 연혁의 기록입니다.'
-          />
-          <LedgerTable
-            caption='역대 대한민국 동양서예대전'
-            columns={[
-              { label: '회차' },
-              { label: '연도', numeric: true },
-              { label: '기간' },
-              { label: '장소' },
-            ]}
-            rows={CONTEST_EDITIONS.map((edition, index) => ({
-              cells: [
-                `제${edition.edition}회`,
-                String(edition.year),
-                edition.date ?? '—',
-                edition.online ? `${edition.venue ?? ''} (온라인)`.trim() : (edition.venue ?? '—'),
-              ],
-              lead: index === 0,
-            }))}
-          />
-        </section>
-
-        <section id='contact' aria-labelledby='contact-title' className='asca-apply__anchor'>
-          <ApplySectionHead
-            id='contact-title'
-            eyebrow='문의·상담'
-            title='출품이 궁금하면'
-            lede='출품 자격과 부문, 접수 방법은 사무국으로 문의해 주세요.'
-          />
-          <ContactList />
-        </section>
-      </div>
-
+      <ContestsView />
       <LayoutFooter />
     </div>
   )
