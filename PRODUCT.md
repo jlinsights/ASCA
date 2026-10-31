@@ -19,9 +19,9 @@ web
   `app/membership`, `app/forms`. 서류 제출과 자격 확인이 목적.
 - **작가** (2026-10-31 확인) — 자기 작가 페이지 연결(claim)·프로필 수정, 공모전
   출품, 그리고 사무국이 구축·운영하는 개인·단체 홈페이지(성곡 seonggok.com, 아남
-  anam.orientalcalligraphy.org, 희랑 heelang.orientalcalligraphy.org, 브러시웨이즈
-  brushways.org). `/artists` 맨 위에 이 홈페이지들과 홈페이지 구축 안내가 있다.
-  주 사용자는 여전히 관람객이며, 작가는 자기 표면에서만 우선한다.
+  anam.orientalcalligraphy.org, 희랑 heelang.orientalcalligraphy.org,
+  브러시웨이즈 brushways.org). `/artists` 맨 위에 이 홈페이지들과 홈페이지 구축
+  안내가 있다. 주 사용자는 여전히 관람객이며, 작가는 자기 표면에서만 우선한다.
 - **협회 사무국 운영자** — `app/admin`. 작가·작품·전시·공지 등록과 관리.
 
 ## Product Purpose
@@ -47,8 +47,8 @@ web
 
 - Next.js 16 App Router + TypeScript, Tailwind + shadcn, Drizzle ORM +
   PostgreSQL(Supabase).
-- Vercel 배포. 운영 도메인 `www.orientalcalligraphy.org` (2026-10-25 Webflow 에서
-  전환). `asca-main.vercel.app` 은 옛 배포다.
+- Vercel 배포. 운영 도메인 `www.orientalcalligraphy.org` (2026-10-25 Webflow
+  에서 전환). `asca-main.vercel.app` 은 옛 배포다.
 - 콘텐츠는 사무국이 `app/admin` CMS로 등록한다.
 - 갤러리 목록은 정적 메타데이터(`lib/data/gallery-data.json`)를 서버에서 읽고,
   항목 배열은 클라이언트로 넘기지 않는다.
@@ -62,11 +62,12 @@ web
 
 제약과 미결 사항:
 
-- **4개 언어**: `ko`(기본)·`en`·`ja`·`zh`(번체 `zh-TW` 로 통일). 클라이언트 번역표
-  (`lib/i18n/translations/*`, `useLanguage()`)로 바꾸며 선택은 `localStorage`
-  `asca-language` 에 남는다. 로케일 라우팅은 없어 서버 렌더·메타데이터는
-  한국어다. 한국어로만 있는 본문은 `lang='ko'` 를 단다. 규칙은 `AGENTS.md`.
-  공모전 페이지(`/contests`·`/contests/23`)처럼 아직 한국어만 있는 화면이 있다.
+- **4개 언어**: `ko`(기본)·`en`·`ja`·`zh`(번체 `zh-TW` 로 통일). 클라이언트
+  번역표 (`lib/i18n/translations/*`, `useLanguage()`)로 바꾸며 선택은
+  `localStorage` `asca-language` 에 남는다. 로케일 라우팅은 없어 서버
+  렌더·메타데이터는 한국어다. 한국어로만 있는 본문은 `lang='ko'` 를 단다. 규칙은
+  `AGENTS.md`. 공모전 페이지(`/contests`·`/contests/23`)처럼 아직 한국어만 있는
+  화면이 있다.
 - 갤러리 규모(`totalImages`)는 데이터 파일이 결정하며 코드에 하드코딩돼 있지
   않다.
 
