@@ -66,6 +66,10 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(headerMenu.some(g => g.key === 'contests')).toBe(false)
   })
 
+  it('전시·공모 메뉴 머리를 누르면 공모전 페이지로 간다', () => {
+    expect(headerMenu.find(g => g.key === 'exhibitions')?.href).toBe('/contests')
+  })
+
   it('정관·규정 메뉴는 왼쪽 전체·정관·자격 요건, 오른쪽 나머지 규정 두 칸으로 나눈다', () => {
     const group = headerMenu.find(g => g.key === 'regulations')
     expect(group?.columns?.map(c => translations.ko?.[c.titleKey])).toStrictEqual([
