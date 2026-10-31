@@ -1,1 +1,1 @@
-🧭 전시·공모 메뉴 머리를 누르면 공모전(/contests) 페이지가 먼저 보이도록
+📐 DESIGN.md 를 코드에 맞춤 — 모션 값·PageHero·LedgerTable 문서화·미구현 관리 UI 표시·옛 버튼 변형 삭제·impeccable 사이드카

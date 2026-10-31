@@ -185,7 +185,7 @@ elevation:
 # MOTION — 먹의 번짐에서 영감
 # ─────────────────────────────────────────────
 motion:
-  duration: { fast: '150ms', normal: '260ms', slow: '420ms', brush: '720ms' }
+  duration: { fast: '150ms', normal: '250ms', slow: '400ms', brush: '720ms' } # = globals.css --duration-*; brush 는 artist-hero.css --ah-brush
   ease:
     out: 'cubic-bezier(0.16, 1, 0.3, 1)' # 붓을 들어올리는 느낌
     in-out: 'cubic-bezier(0.45, 0, 0.55, 1)' # 필압의 자연스러운 흐름
@@ -585,7 +585,41 @@ PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 
 배경 위에 떠 있는 오버레이에만. **배경이 단색이면 사용하지 않는다** (블러 효과가
 무의미). 히어로 비디오, 그라디언트 배경 위에서만 가치가 있다.
 
-### 8.4 Enterprise Administrative UI — `admin-*`
+> 2026-10-31 기준 이 클래스를 쓰는 화면이 없다. 새 화면에 넣기 전에 정말
+> 필요한지 먼저 따진다.
+
+### 8.4 Page Hero — `PageHero` (`components/layout/page-hero.tsx`)
+
+공개 페이지 대부분이 이 머리로 시작한다. 세로쓰기 번체 한자 표지(`tc`, Noto
+Serif TC, `lang='zh-Hant'`)와 朱印 낙관(`seal`), 경로(`crumbs`), 세리프 제목,
+요약 (`lede`)을 페이지 틀(`--shell-frame`·`--shell-gutter`) 위에 놓는다.
+
+- 화면별 표지·단계는
+  `PAGE_HERO_MARKS`(`components/layout/page-hero-marks.ts`)에서 가져온다 —
+  `{...PAGE_HERO_MARKS.contests}`. 표지 한자를 화면에서 새로 짓지 않는다.
+- `tier`: `feature`(작가·작품·전시처럼 둘러보는 화면 — 사진·숫자를 단다) ·
+  `band` (안내·문서 화면).
+- 숫자는 `ledger`/`HeroFacts`, 사진은 `media`(`HeroScrolls`)로 단다. 페이지에 h1
+  은 이 제목 하나다.
+- 스타일 정본은 `components/layout/page-hero.css`(`.asca-ph*`). 제목은 굵기 600,
+  행간 1.05, `word-break: keep-all`.
+
+### 8.5 Ledger Table — `LedgerTable` (`components/apply/apply-parts.tsx`)
+
+일정·출품료·역대 기록처럼 **사실을 줄 맞춰 보이는 표**. 캡션(`caption`)을 반드시
+달고, 첫째 칸이 행의 이름이다. 강조할 행은 `lead`(`.is-lead`)로 표시한다.
+
+- 같은 파일의 `ApplySectionHead`(눈썹·제목·요약), `ApplyToc`(목차),
+  `ContactList` (사무국 연락처)와 함께 안내
+  화면(`/contests`·`/application`·`/membership` 등)의 본문을 이룬다. 스타일
+  정본은 `components/apply/apply.css`(`.asca-apply*`).
+- 값은 화면에서 새로 쓰지 않고 데이터 파일(예:
+  `app/contests/_components/contest-23-data.ts`)에서 읽는다.
+
+### 8.6 Enterprise Administrative UI — `admin-*` (계획)
+
+> 2026-10-31 기준 아래 클래스는 코드에 없다. 관리 화면은 `/admin/artists`(회비
+> 관리)만 동작한다. 만들 때 이 명세를 따르되, 있다고 가정하지 않는다.
 
 - **Audit Log Viewer**:
   - `admin-log-row`: 타임스탬프, 주체, 행위, 리스크 점수(`risk-score`) 포함
@@ -599,21 +633,21 @@ PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 
   - `permission-denied-view`: 접근 권한 없음 안내 및 요청 버튼
   - `risk-validation-overlay`: 고위험 작업 전 2단계 인증/확인 팝업
 
-### 8.5 Monitoring Visuals
+### 8.7 Monitoring Visuals
 
 - **Data Charts**:
-  - 선형 차트(`stroke`): `celadon-green` (기본), `scholar-red` (임계치 초과)
-  - 영역 채우기(`fill`): `celadon-green/10`
+  - 선형 차트(`stroke`): `primary` (기본), `destructive` (임계치 초과)
+  - 영역 채우기(`fill`): `primary/10`
   - 격자선(`grid`): `border` (var(--border))
 
-### 8.6 미구현 컴포넌트 작성 시
+### 8.8 미구현 컴포넌트 작성 시
 
 1. 기존 토큰만으로 우선 구현
 2. 토큰이 부족하면 이 문서를 먼저 수정 후 구현
 3. `@layer components`에 추가, `app/globals.css` 맨 아래
    `/* ADDED: YYYY-MM-DD */` 주석
 
-### 8.5 Component Tokens (이전 front-matter `components:` 블록)
+### 8.9 Component Tokens (이전 front-matter `components:` 블록)
 
 > 비-canonical 구조(`tokens:` nested)로 Google CLI 파서가 실패해 2026-04-25
 > prose로 이전. Tailwind/CSS 클래스 정의의 정본은 `app/globals.css`의

@@ -15,14 +15,6 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        celadon:
-          'bg-celadon-green text-ink-black border border-celadon-green hover:bg-sage-green hover:border-sage-green hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5',
-        sage: 'bg-sage-green text-ink-black border border-sage-green hover:bg-celadon-green hover:border-celadon-green transition-all duration-300 hover:-translate-y-0.5',
-        terra:
-          'bg-terra-red text-rice-paper border border-terra-red hover:bg-terra-red/90 hover:border-terra-red/90 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5',
-        traditional:
-          'bg-ink-black text-rice-paper border border-stone-gray hover:bg-ink-black/90 hover:border-celadon-green transition-all duration-300',
-        rice: 'bg-rice-paper text-ink-black border border-rice-paper hover:bg-sage-green hover:text-ink-black transition-all duration-300',
       },
       size: {
         default: 'h-10 px-4 py-2',
