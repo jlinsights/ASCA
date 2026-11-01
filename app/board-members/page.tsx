@@ -17,7 +17,10 @@ export const metadata: Metadata = {
 
 type BoardMember = {
   name: string
+  /** 큰 글자로 보이는 호 — 한자로 쓴다(2026-11-01). 한자가 없는 순우리말 호는 한글 그대로 */
   artName?: string
+  /** 호의 한글 읽기 — 화면 읽기 프로그램용. 한자를 글자마다 읽지 않게 한다. artName 이 한글이면 생략 */
+  artNameReading?: string
   position: string
 }
 
@@ -28,63 +31,58 @@ type BoardSection = {
 }
 
 // 작고하신 분은 임원 조직도에 싣지 않는다 (명예이사장 성곡 임현기, 2026-08 별세)
+// 호 한자는 artists.art_name_hanja 에서 옮겼다(2026-11-01, 모두 CJK 호환문자 아님 확인).
+// 이사장 宇晨 은 DB 에 없어 요청 값을, 윤경희 '한솔' 은 순우리말이라 한글 그대로 둔다
+// (DB 에는 松園 으로 들어 있다 — 페이지 표기 한솔이 맞다고 2026-11-01 확인).
 const boardSections: BoardSection[] = [
   {
     id: 'senior-advisor',
     title: '고문',
     members: [
-      { name: '강대희', artName: '토우', position: '고문' },
-      { name: '박영순', artName: '지용', position: '고문' },
-      { name: '황재국', artName: '중관', position: '고문' },
-      { name: '임국환', artName: '호암', position: '상임고문' },
+      { name: '강대희', artName: '土偶', artNameReading: '토우', position: '고문' },
+      { name: '박영순', artName: '知庸', artNameReading: '지용', position: '고문' },
+      { name: '황재국', artName: '中觀', artNameReading: '중관', position: '고문' },
+      { name: '임국환', artName: '虎岩', artNameReading: '호암', position: '상임고문' },
     ],
   },
   {
     id: 'chairperson',
     title: '이사장 | 운영위원장',
-    members: [
-      // 호 宇晨(우신) — 2026-11-01 요청으로 추가
-      { name: '임재홍', artName: '우신', position: '이사장' },
-    ],
+    members: [{ name: '임재홍', artName: '宇晨', artNameReading: '우신', position: '이사장' }],
   },
   {
     id: 'panel-chair',
     title: '심사위원장',
-    members: [
-      {
-        name: '배옥영',
-        artName: '아남',
-        position: '심사위원장',
-      },
-    ],
+    members: [{ name: '배옥영', artName: '芽南', artNameReading: '아남', position: '심사위원장' }],
   },
   {
     id: 'auditor',
     title: '감사',
     members: [
-      { name: '이권재', artName: '문원', position: '감사' },
-      { name: '박성호', artName: '옥채', position: '감사' },
+      { name: '이권재', artName: '文園', artNameReading: '문원', position: '감사' },
+      { name: '박성호', artName: '玉彩', artNameReading: '옥채', position: '감사' },
     ],
   },
   {
     id: 'executive-director',
     title: '상임이사',
     members: [
-      { name: '김정례', artName: '혜전', position: '상임이사' },
-      { name: '소정아', artName: '진호', position: '상임이사' },
-      { name: '김형석', artName: '정암', position: '상임이사' },
-      { name: '최은주', artName: '은혜', position: '상임이사' },
-      { name: '공경순', artName: '희랑', position: '상임이사' },
-      { name: '민경배', artName: '향촌', position: '상임이사' },
+      { name: '김정례', artName: '惠田', artNameReading: '혜전', position: '상임이사' },
+      { name: '소정아', artName: '珍湖', artNameReading: '진호', position: '상임이사' },
+      { name: '김형석', artName: '井巖', artNameReading: '정암', position: '상임이사' },
+      { name: '최은주', artName: '恩惠', artNameReading: '은혜', position: '상임이사' },
+      { name: '공경순', artName: '熙勆', artNameReading: '희랑', position: '상임이사' },
+      { name: '민경배', artName: '香村', artNameReading: '향촌', position: '상임이사' },
     ],
   },
   {
     id: 'branch-director',
     title: '지부장',
     members: [
-      { name: '김정희', artName: '서천', position: '청주 지부장' },
+      // 2026-11-01 청주 지부장 교체 — 현 지부장 등곡 김진헌(초대작가), 서천 김정희는 전임
+      { name: '김진헌', artName: '登谷', artNameReading: '등곡', position: '청주 지부장' },
       { name: '윤경희', artName: '한솔', position: '태안 지부장' },
-      { name: '소정아', artName: '진호', position: '춘천 지부장' },
+      { name: '소정아', artName: '珍湖', artNameReading: '진호', position: '춘천 지부장' },
     ],
   },
 ]
@@ -102,7 +100,9 @@ function Person({ member }: { member: BoardMember }) {
       </span>
       <p className='ab-person__name'>
         {member.name}
-        {member.artName && <span className='sr-only'> (호 {member.artName})</span>}
+        {member.artName && (
+          <span className='sr-only'> (호 {member.artNameReading ?? member.artName})</span>
+        )}
       </p>
       <p className='ab-person__role'>{member.position}</p>
     </li>
