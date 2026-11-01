@@ -240,7 +240,7 @@ export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
               ))}
             </div>
 
-            <div className='lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6'>
+            <div className='lg:hidden grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-6'>
               {filteredArtists.map(artist => (
                 <ArtistCard key={artist.id} artist={artist} variant='mobile' />
               ))}

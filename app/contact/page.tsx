@@ -8,6 +8,7 @@ import { SiteFaqList } from '@/components/faq/site-faq-list'
 import { ApplySectionHead, ApplyToc, LedgerTable, RegCite } from '@/components/apply/apply-parts'
 import { KAKAO_CHAT_URL, EMAIL, HEADQUARTERS, OFFICE, PHONE } from '@/lib/content/contact-info'
 import { EventCalendar } from './_components/event-calendar'
+import { InquiryComposer } from './_components/inquiry-composer'
 import {
   CHANNELS,
   OBJECTION_DEADLINES,
@@ -38,6 +39,7 @@ export const metadata: Metadata = {
 }
 
 const TOC = [
+  { href: '#inquiry', label: '문의서 쓰기' },
   { href: '#topics', label: '용건별 안내' },
   { href: '#channels', label: '연락 창구' },
   { href: '#objection', label: '이의제기' },
@@ -86,6 +88,16 @@ export default function ContactPage() {
 
       <div className='asca-apply__body'>
         <ApplyToc items={TOC} />
+
+        <section id='inquiry' aria-labelledby='inquiry-title' className='asca-apply__anchor'>
+          <ApplySectionHead
+            id='inquiry-title'
+            eyebrow='문의서'
+            title='작품·의뢰·전시 문의'
+            lede='작품 구입, 휘호 의뢰, 전시 협업처럼 견적이 필요한 일은 여기서 바로 시작하세요.'
+          />
+          <InquiryComposer />
+        </section>
 
         <section id='topics' aria-labelledby='topics-title' className='asca-apply__anchor'>
           <ApplySectionHead

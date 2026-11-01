@@ -1,13 +1,12 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { PageHero, HeroScrolls, type PageHeroStat } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Search } from 'lucide-react'
 import { DiscoveryToolbar } from '@/components/gallery/discovery-toolbar'
 import { discoveryCopy, formatDiscoveryCount } from '@/components/gallery/discovery-copy'
@@ -17,6 +16,10 @@ import { useLanguage } from '@/contexts/language-context'
 
 // 작품 데이터 타입을 실제 데이터베이스 타입으로 변경
 type Artwork = ArtworkWithArtist
+
+// 한 번에 그리는 작품 수 — 500점을 한꺼번에 그리면 모바일에서 25만 px 가 넘었다(2026-11-01).
+// 검색·필터·정렬은 불러온 전체 목록에서 하고, 그리는 수만 나눈다
+export const ARTWORK_PAGE_SIZE = 24
 
 export function ArtworksClient() {
   const { language, t } = useLanguage()
@@ -30,6 +33,10 @@ export function ArtworksClient() {
   const [sortBy, setSortBy] = useState<string>('sortFeatured')
   const [showAvailableOnly, setShowAvailableOnly] = useState(false)
   const [retryKey, setRetryKey] = useState(0)
+  // 보이는 수는 조회 조건(key)에 묶는다 — 조건이 바뀌면 처음 24점으로 돌아간다
+  const [pager, setPager] = useState({ key: '', count: ARTWORK_PAGE_SIZE })
+  const gridRef = useRef<HTMLDivElement>(null)
+  const focusFrom = useRef<number | null>(null)
   const resetFilters = () => {
     setSearchTerm('')
     setSelectedCategory('all')
@@ -140,6 +147,29 @@ export function ArtworksClient() {
         return copy.public
     }
   }
+  const queryKey = [
+    searchTerm.trim(),
+    selectedCategory,
+    selectedStyle,
+    sortBy,
+    showAvailableOnly,
+  ].join('|')
+  const visibleCount = pager.key === queryKey ? pager.count : ARTWORK_PAGE_SIZE
+  const visibleArtworks = filteredArtworks.slice(0, visibleCount)
+  const hasMore = visibleArtworks.length < filteredArtworks.length
+  const showMore = () => {
+    focusFrom.current = visibleArtworks.length
+    setPager({ key: queryKey, count: visibleCount + ARTWORK_PAGE_SIZE })
+  }
+
+  // 더 보기 뒤에는 새로 나온 첫 작품으로 초점을 옮긴다 — 키보드 사용자가 처음부터 다시 훑지 않게
+  useEffect(() => {
+    const from = focusFrom.current
+    if (from === null) return
+    focusFrom.current = null
+    gridRef.current?.querySelectorAll<HTMLAnchorElement>('a[data-artwork-card]')[from]?.focus()
+  }, [visibleCount])
+
   // 히어로 — 이미지가 실제로 있는 작품만 걸고(추천작 먼저), 숫자는 불러온 목록에서 센다
   const heroImages = useMemo(
     () =>
@@ -300,50 +330,62 @@ export function ArtworksClient() {
             </div>
           ) : (
             <>
-              {/* 작품 그리드 */}
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-                {filteredArtworks.map(artwork => {
+              {/* 작품 그리드 — 모바일 2열, 태블릿 3열, 데스크톱 4열 */}
+              <div
+                ref={gridRef}
+                className='grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 md:gap-x-6 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-12'
+              >
+                {visibleArtworks.map(artwork => {
                   return (
                     <Link
                       key={artwork.id}
                       href={`/artworks/${artwork.id}`}
+                      data-artwork-card
                       aria-label={`${copy.details}: ${artwork.title}`}
-                      className='gallery-card interactive group block bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 motion-reduce:!transform-none motion-reduce:transition-none'
+                      className='group block rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4'
                     >
-                      <div className={`relative ${getImageAspectRatio(artwork)} overflow-hidden`}>
+                      <div
+                        className={`relative ${getImageAspectRatio(artwork)} overflow-hidden bg-muted`}
+                      >
                         <Image
                           src={artwork.image_url || '/images/programs/calligraphy-scene-1.jpg'}
                           alt={artwork.title}
                           fill
-                          sizes='(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'
-                          className='object-contain bg-muted'
+                          sizes='(max-width: 767px) 50vw, (max-width: 1023px) 33vw, 25vw'
+                          className='object-contain p-2 transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100'
                         />
-                        <Badge variant='secondary' className='absolute top-4 right-4'>
-                          {collectionLabel(artwork)}
-                        </Badge>
                       </div>
-                      <div className='space-y-4 p-4'>
-                        <div>
-                          <h2 className='font-serif text-xl leading-snug text-foreground line-clamp-2'>
-                            {artwork.title}
-                          </h2>
-                          <p className='mt-2 text-base leading-relaxed text-muted-foreground'>
-                            {artwork.artist?.name}
-                          </p>
-                        </div>
-                        <p className='text-sm leading-relaxed text-muted-foreground'>
-                          {[artwork.year, artwork.materials?.join(', ')]
-                            .filter(Boolean)
-                            .join(' · ')}
+                      <div className='mt-3 space-y-1'>
+                        <h2 className='font-serif text-base leading-snug text-foreground line-clamp-2 underline-offset-4 group-hover:underline group-focus-visible:underline md:text-lg'>
+                          {artwork.title}
+                        </h2>
+                        <p className='text-sm text-muted-foreground'>{artwork.artist?.name}</p>
+                        <p className='text-xs text-muted-foreground'>
+                          {[artwork.year, collectionLabel(artwork)].filter(Boolean).join(' · ')}
                         </p>
-                        <span className='inline-flex min-h-12 items-center text-sm font-medium text-foreground underline-offset-4 group-hover:underline group-focus-visible:underline'>
-                          {copy.details} →
-                        </span>
                       </div>
                     </Link>
                   )
                 })}
               </div>
+
+              {filteredArtworks.length > 0 && (
+                <div className='mt-12 flex flex-col items-center gap-4'>
+                  <p className='text-sm text-muted-foreground' aria-live='polite'>
+                    {formatDiscoveryCount(
+                      copy.artworkShown,
+                      visibleArtworks.length,
+                      language,
+                      filteredArtworks.length
+                    )}
+                  </p>
+                  {hasMore && (
+                    <Button variant='outline' onClick={showMore} className='h-12 min-w-48'>
+                      {copy.loadMoreArtworks}
+                    </Button>
+                  )}
+                </div>
+              )}
 
               {filteredArtworks.length === 0 && (
                 <div className='text-center py-12'>

@@ -592,12 +592,15 @@
     gap: 40px;
     padding: 104px var(--shell-gutter) 48px;
   }
+  /* 좁은 화면은 협회 소개(제목·한 줄·두 행동)를 먼저, 주요 소식을 그 바로 아래 둔다 (2026-11-01).
+     소식이 먼저 오면 첫 방문자가 여기가 어디인지 알기 전에 행사 카드부터 읽었다 */
   .asca-hero__feature {
-    order: 1;
+    order: 2;
   }
   .asca-hero__copy {
-    order: 2;
+    order: 1;
     position: static;
+    padding-bottom: 0;
   }
   .asca-hero__feature-img {
     aspect-ratio: 16 / 10;

@@ -36,19 +36,26 @@ describe('ArtistCard 작가 등급', () => {
   })
 
   // 회귀(Bugbot #116): 등급도 직위도 없는 준회원 카드에 빈 구분선 띠가 남았다
-  it.each(['pc', 'mobile'] as const)(
-    '%s: 등급·직위가 없으면 구분선 블록을 그리지 않는다',
-    variant => {
-      const dividers = (membershipType: string) =>
-        render(
-          <ArtistCard artist={artist({ membershipType })} variant={variant} />
-        ).container.querySelectorAll('.border-t').length
-      const graded = dividers('초대작가')
-      const ungraded = dividers('준회원')
-      expect(ungraded).toBe(graded - 1)
-      expect(screen.queryByText('준회원')).not.toBeInTheDocument()
-    }
-  )
+  it('pc: 등급·직위가 없으면 구분선 블록을 그리지 않는다', () => {
+    const dividers = (membershipType: string) =>
+      render(
+        <ArtistCard artist={artist({ membershipType })} variant='pc' />
+      ).container.querySelectorAll('.border-t').length
+    const graded = dividers('초대작가')
+    const ungraded = dividers('준회원')
+    expect(ungraded).toBe(graded - 1)
+    expect(screen.queryByText('준회원')).not.toBeInTheDocument()
+  })
+
+  // 모바일 카드(2026-11-01)는 구분선 없이 등급 한 줄만 둔다 — 등급이 없으면 그 줄도 없다
+  it('mobile: 등급·직위가 없으면 등급 줄을 그리지 않는다', () => {
+    const { container } = render(
+      <ArtistCard artist={artist({ membershipType: '준회원' })} variant='mobile' />
+    )
+    expect(container.querySelectorAll('.border-t')).toHaveLength(0)
+    expect(screen.queryByText('준회원')).not.toBeInTheDocument()
+    expect(screen.getByRole('link')).toHaveAttribute('href', expect.stringMatching(/^\/artists\//))
+  })
 })
 
 describe('ArtistCard 아호', () => {
