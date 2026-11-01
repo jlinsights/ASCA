@@ -84,15 +84,6 @@ const THIRD_PARTY = {
     frame: ['https://app.cal.com', 'https://cal.com'],
     connect: ['https://app.cal.com'],
   },
-  // 채널톡 상담 위젯 — components/third-party/site-widgets.tsx (전 페이지)
-  channelTalk: {
-    script: ['https://cdn.channel.io'],
-    connect: ['https://api.channel.io', 'wss://*.channel.io'],
-    // 알림음(mp3) — media-src 가 없으면 default-src 'self' 로 떨어져 막힌다
-    media: ['https://cdn.channel.io'],
-    frame: ['https://*.channel.io'],
-    img: ['https://*.channel.io'],
-  },
   // 뉴스레터 구독 — components/layout/layout-footer.tsx
   // form: 유일하게 실제로 폼을 외부로 POST하는 벤더다.
   stibee: {

@@ -33,7 +33,7 @@ async function productionCsp(): Promise<Record<string, string[]>> {
 
 const widgetSource = fs.readFileSync(path.join(__dirname, '..', 'site-widgets.tsx'), 'utf8')
 
-describe('전역 위젯(Cal.com·채널톡) CSP', () => {
+describe('전역 위젯(Cal.com) CSP', () => {
   it('완화된 개발용 정책이 아니라 프로덕션 정책을 검사한다', async () => {
     const csp = await productionCsp()
     expect(csp['default-src']).toEqual(["'self'"])
@@ -44,9 +44,7 @@ describe('전역 위젯(Cal.com·채널톡) CSP', () => {
     const scriptOrigins = [
       ...widgetSource.matchAll(/https:\/\/[a-z0-9.-]+(?=\/[^"'\s]*\.js)/g),
     ].map(m => m[0])
-    expect(scriptOrigins).toEqual(
-      expect.arrayContaining(['https://app.cal.com', 'https://cdn.channel.io'])
-    )
+    expect(scriptOrigins).toEqual(expect.arrayContaining(['https://app.cal.com']))
     for (const origin of scriptOrigins) expect(csp['script-src']).toContain(origin)
   })
 
@@ -56,12 +54,11 @@ describe('전역 위젯(Cal.com·채널톡) CSP', () => {
     expect(csp['connect-src']).toContain('https://app.cal.com')
   })
 
-  it('채널톡 API·소켓·알림음을 허용한다', async () => {
+  // 2026-11-01 채널톡 위젯을 빼고 카카오톡 채널 링크(KakaoChatButton)로 바꿨다.
+  // 스크립트가 다시 들어오면 CSP 예외도 같이 되살려야 하므로 둘 다 없는 상태를 묶어 둔다.
+  it('채널톡 스크립트를 싣지 않고, CSP 에도 channel.io 예외가 없다', async () => {
+    expect(widgetSource).not.toMatch(/channel\.io|ChannelIO/)
     const csp = await productionCsp()
-    expect(csp['connect-src']).toEqual(
-      expect.arrayContaining(['https://api.channel.io', 'wss://*.channel.io'])
-    )
-    // media-src 가 없으면 default-src 'self' 로 떨어져 알림음 mp3 가 막힌다
-    expect(csp['media-src']).toContain('https://cdn.channel.io')
+    expect(Object.values(csp).flat().join(' ')).not.toContain('channel.io')
   })
 })
