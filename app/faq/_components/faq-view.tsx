@@ -7,6 +7,8 @@ import { useLanguage } from '@/contexts/language-context'
 import { EMAIL, OFFICE_HOURS, PHONE } from '@/lib/content/contact-info'
 import { faqGroups } from '@/lib/content/site-faq'
 import { localizeFaqItem } from '@/lib/content/site-faq-locale'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import './faq.css'
 
 const GROUPS = faqGroups()
@@ -34,18 +36,9 @@ export function FaqView() {
 
   return (
     <div className='fq'>
+      <PageHero {...PAGE_HERO_MARKS.faq} title={t('faqTitle')} lede={t('faqIntro')} />
       <div className='fq__frame'>
-        <header className='fq-side'>
-          <div>
-            <p className='fq-side__eyebrow'>{t('faqEyebrow')}</p>
-            <h1 className='fq-side__title'>
-              {t('faqTitle')}
-              <span className='fq-side__mark' aria-hidden='true'>
-                問答
-              </span>
-            </h1>
-            <p className='fq-side__intro'>{t('faqIntro')}</p>
-          </div>
+        <aside className='fq-side'>
           <section className='fq-contact' aria-labelledby='fq-contact-title'>
             <h2 id='fq-contact-title' className='fq-contact__title'>
               {t('faqContactTitle')}
@@ -61,7 +54,7 @@ export function FaqView() {
               <Link href='/contact'>{t('faqContactPage')} →</Link>
             </p>
           </section>
-        </header>
+        </aside>
 
         <div className='fq-groups' aria-label={t('faqCount').replace('{n}', String(total))}>
           {GROUPS.map(group => (

@@ -9,6 +9,8 @@ jest.mock('next/navigation', () => ({
   notFound: () => {
     throw new Error('NEXT_NOT_FOUND')
   },
+  // 머리 눈썹·목차(PageHero)가 지금 주소를 읽는다
+  usePathname: () => '/events/1',
 }))
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
 jest.mock('@/lib/utils/logger', () => ({ log: { error: jest.fn() } }))

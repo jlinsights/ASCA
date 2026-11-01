@@ -1,298 +1,93 @@
 /* =====================================================================
-   ASCA 페이지 히어로 — 題簽(제첨) 체계
-   홈 히어로(.asca-hero)와 같은 Ink System 어휘를 쓴다. 모든 공개 페이지가
-   "한글 제목 + 그 페이지의 漢字 이름 + 낙관" 으로 열리고, 둘러보기 페이지는
-   그 아래에 실제 작품 이미지나 실제 숫자를 단다.
-   - feature: 둘러보기 페이지(작가·작품·전시·갤러리·수상·연혁)
-   - band:    읽기·신청 페이지(규정·공지·약관·신청서) — 본문이 곧바로 시작되게 낮게
-   고정 헤더(h-14 / md:h-16)가 투명하게 겹치므로 위 여백에 헤더 높이를 더한다.
+   ASCA 페이지 머리 — 소개 묶음(AboutHero)과 같은 틀 (2026-11-01)
+   틀·글자·목차는 components/about/about.css 의 .ab-hero·.ab-nav 를 그대로 쓰고,
+   여기에는 PageHero 에만 있는 것 — 족자 벽, 사실 한 줄, 경로, 글자 수에 맞춘 큰 漢字 — 만 둔다.
+   - feature: 둘러보기 페이지(작가·작품·전시·갤러리·수상) — 머리 아래 실제 사진 한 줄
+   - band:    읽기·신청 페이지(규정·공지·약관·신청서)
    ===================================================================== */
 
-.asca-ph {
-  --ph-header: 64px;
-  --ph-gutter: var(--shell-gutter);
-  --ph-max: var(--shell-frame);
-
-  --ph-bg: var(--paper);
-  --ph-fg: var(--navy-900);
-  --ph-muted: var(--stone-700); /* paper 위 8.9:1 */
-  --ph-rule: var(--border); /* 라이트·다크를 globals.css 가 바꾼다 */
-  --ph-rule-strong: var(--navy-900);
-  --ph-accent-text: var(--gold-800); /* paper 위 작은 금색 글자 4.9:1 */
-  --ph-mark: var(--navy-900);
-  --ph-ring: var(--gold-600);
-
-  --ph-font-display:
-    var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
-  --ph-font-tc: var(--font-noto-serif-tc), 'Noto Serif TC', var(--font-noto-serif-kr), serif;
-  --ph-font-sans: 'Pretendard', var(--font-noto-sans-kr), system-ui, sans-serif;
-  --ph-ease: cubic-bezier(0.16, 1, 0.3, 1);
-
-  position: relative;
-  z-index: 10;
-  overflow: hidden;
-  background: var(--ph-bg);
-  color: var(--ph-fg);
-  border-bottom: 1px solid var(--ph-rule);
-  font-family: var(--ph-font-sans);
+/* 큰 漢字 — 글자 수(--ab-mark-len)로 나눠 3·4자 이름도 오른쪽 칸 한 줄에 든다 */
+.ab-ph .ab-hero__mark {
+  font-size: min(clamp(112px, 19vw, 300px), calc(40vw / var(--ab-mark-len, 2)));
 }
 
-.dark .asca-ph {
-  --ph-bg: var(--navy-950);
-  --ph-fg: var(--paper);
-  --ph-muted: var(--navy-300);
-  --ph-rule-strong: var(--gold-500);
-  --ph-accent-text: var(--gold-400);
-  --ph-mark: var(--gold-400);
-  --ph-ring: var(--gold-400);
+/* 漢字 이름이 없는 페이지 — 한 칸으로 */
+.ab-ph--no-mark .ab-hero__frame {
+  grid-template-columns: minmax(0, 1fr);
 }
 
-.asca-ph :focus-visible {
-  outline: 2px solid var(--ph-ring);
-  outline-offset: 3px;
-}
-
-.asca-ph__frame {
-  position: relative;
-  max-width: var(--ph-max);
-  margin: 0 auto;
-  display: grid;
-  gap: clamp(24px, 4vw, 64px);
-  align-items: end;
-}
-
-/* ---------- 題簽 — 세로 漢字 이름과 낙관 ---------- */
-.asca-ph__mark {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  align-self: stretch;
-}
-.asca-ph__tc {
-  margin: 0;
-  writing-mode: vertical-rl;
-  font-family: var(--ph-font-tc);
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0.18em;
-  color: var(--ph-mark);
-  padding: 18px 0;
-  border-left: 1px solid var(--ph-rule-strong);
-  border-right: 1px solid var(--ph-rule-strong);
-}
-.asca-ph__seal {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 2px;
-  background: var(--seal-red);
-  color: var(--paper);
-  font-family: var(--ph-font-tc);
-  font-size: 13px;
-  line-height: 1.05;
-  writing-mode: vertical-rl;
-  letter-spacing: 0.04em;
-  transform: rotate(-3deg);
-}
-
-/* 붓을 내리긋듯 위에서 아래로 한 번 드러난다 — 이 페이지에서 움직이는 유일한 것 */
-@media (prefers-reduced-motion: no-preference) {
-  .asca-ph__tc {
-    animation: asca-ph-stroke 900ms var(--ph-ease) both;
-  }
-  .asca-ph__seal {
-    animation: asca-ph-seal 420ms var(--ph-ease) 640ms both;
-  }
-}
-@keyframes asca-ph-stroke {
-  from {
-    clip-path: inset(0 0 100% 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-@keyframes asca-ph-seal {
-  from {
-    opacity: 0;
-    transform: rotate(-3deg) scale(1.25);
-  }
-  to {
-    opacity: 1;
-    transform: rotate(-3deg) scale(1);
-  }
-}
-
-/* ---------- 제목·설명 ---------- */
-.asca-ph__copy {
-  min-width: 0;
-}
-.asca-ph__crumbs {
+/* 경로 — 상세 페이지의 눈썹 자리 */
+.ab-ph__crumbs {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 0 0 20px;
   padding: 0;
   list-style: none;
-  font-size: 13px;
-  color: var(--ph-muted);
 }
-.asca-ph__crumbs li + li::before {
+.ab-ph__crumbs li + li::before {
   content: '/';
   margin-right: 8px;
   opacity: 0.5;
 }
-.asca-ph__crumbs a {
+.ab-ph__crumbs a {
   color: inherit;
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition:
-    border-color 200ms var(--ph-ease),
-    color 200ms var(--ph-ease);
+  transition: border-color 200ms var(--ab-ease);
 }
-.asca-ph__crumbs a:hover {
-  color: var(--ph-fg);
+.ab-ph__crumbs a:hover {
   border-bottom-color: currentColor;
 }
-.asca-ph__title {
-  margin: 0;
-  font-family: var(--ph-font-display);
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  word-break: keep-all;
-  text-wrap: balance;
+
+/* 배지·날짜·사실 한 줄 */
+.ab-ph__extra {
+  display: grid;
+  gap: 8px;
+  color: var(--ab-muted);
+  font-size: 14px;
 }
-.asca-ph__tc-inline {
-  display: none;
-  margin: 12px 0 0;
-  font-family: var(--ph-font-tc);
-  font-size: 15px;
-  letter-spacing: 0.3em;
-  color: var(--ph-accent-text);
+.ab-ph .ab-hero__facts dd {
+  white-space: nowrap;
 }
-.asca-ph__lede {
-  margin: 20px 0 0;
-  max-width: 38rem;
-  font-size: clamp(16px, 1.25vw, 18px);
-  line-height: 1.75;
-  color: var(--ph-muted);
-  word-break: keep-all;
-  text-wrap: pretty;
-}
-.asca-ph__extra {
-  margin-top: 20px;
-}
-.asca-ph__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 24px;
-  align-items: center;
-  margin-top: 28px;
+.ab-hero__facts dd em {
+  margin-left: 4px;
+  font-style: normal;
+  font-size: 14px;
+  color: var(--ab-muted);
 }
 
-/* ---------- 사실 한 줄 — band 페이지가 가진 실제 정보 ---------- */
+/* ---------- 사실 한 줄 — HeroFacts (band 페이지가 가진 실제 정보) ---------- */
 .asca-ph__facts {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 28px;
   margin: 0;
   font-size: 14px;
-  color: var(--ph-muted);
+  color: var(--ab-muted);
 }
 .asca-ph__facts div {
   display: flex;
   gap: 8px;
   align-items: baseline;
 }
-.asca-ph__facts dt::after {
-  content: '';
-}
 .asca-ph__facts dd {
   margin: 0;
-  color: var(--ph-fg);
+  color: var(--ab-fg);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- feature ---------- */
-.asca-ph--feature .asca-ph__frame {
-  padding: calc(var(--ph-header) + clamp(40px, 6vw, 88px)) var(--ph-gutter) clamp(40px, 5vw, 64px);
-  grid-template-columns: auto minmax(0, 1fr);
-}
-.asca-ph--feature.asca-ph--has-media .asca-ph__frame {
-  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.05fr);
-}
-.asca-ph--feature .asca-ph__tc {
-  font-size: clamp(44px, 5.6vw, 80px);
-}
-.asca-ph--feature .asca-ph__title {
-  font-size: clamp(40px, 6vw, 88px);
-}
-
-/* ---------- band ---------- */
-.asca-ph--band .asca-ph__frame {
-  padding: calc(var(--ph-header) + clamp(32px, 4.5vw, 64px)) var(--ph-gutter)
-    clamp(28px, 3.5vw, 44px);
-  grid-template-columns: minmax(0, 1fr) auto;
-}
-.asca-ph--band .asca-ph__mark {
-  order: 2;
-  flex-direction: row;
-  align-items: flex-end;
-}
-.asca-ph--band .asca-ph__tc {
-  font-size: clamp(28px, 3vw, 44px);
-  padding: 12px 0;
-}
-.asca-ph--band .asca-ph__title {
-  font-size: clamp(32px, 4.2vw, 56px);
-}
-
-/* ---------- 원장(ledger) — 실제 숫자만 ---------- */
-.asca-ph__ledger {
-  max-width: var(--ph-max);
+/* ---------- 족자 벽 — 실제 작품·사진. 머리 아래 한 줄 ---------- */
+.ab-ph__media {
+  max-width: var(--ab-max);
   margin: 0 auto;
-  padding: 0 var(--ph-gutter);
+  padding: 0 var(--ab-gutter) clamp(32px, 4vw, 56px);
 }
-.asca-ph__ledger dl {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  margin: 0;
-  border-top: 1px solid var(--ph-rule);
-}
-.asca-ph__stat {
-  padding: 20px 24px 24px 0;
-}
-.asca-ph__stat + .asca-ph__stat {
-  padding-left: 24px;
-  border-left: 1px solid var(--ph-rule);
-}
-.asca-ph__stat dt {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--ph-muted);
-}
-.asca-ph__stat dd {
-  margin: 8px 0 0;
-  font-family: var(--ph-font-display);
-  font-size: clamp(28px, 3vw, 40px);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.asca-ph__stat dd em {
-  margin-left: 4px;
-  font-style: normal;
-  font-family: var(--ph-font-sans);
-  font-size: 14px;
-  color: var(--ph-muted);
-}
-
-/* ---------- 족자 벽 — 실제 작품·사진 ---------- */
-.asca-ph__media {
-  align-self: stretch;
+.ab-ph__media .asca-scrolls {
+  /* 족자 비율 — 폭을 정해 두고 왼쪽부터 건다. 사진이 적어도 넓적한 상자가 되지 않게 */
+  grid-auto-columns: clamp(112px, 11vw, 168px);
+  justify-content: start;
+  height: clamp(220px, 22vw, 300px);
   min-height: 0;
 }
 .asca-scrolls {
@@ -326,11 +121,11 @@
   height: 100%;
   padding: 8px;
   background: var(--paper-2);
-  border: 1px solid var(--ph-rule);
+  border: 1px solid var(--ab-rule);
   box-shadow: 0 14px 28px -18px rgb(11 23 51 / 0.45);
   transition:
-    transform 260ms var(--ph-ease),
-    box-shadow 260ms var(--ph-ease);
+    transform 260ms var(--ab-ease),
+    box-shadow 260ms var(--ab-ease);
 }
 .dark .asca-scrolls__link {
   background: var(--navy-800);
@@ -364,41 +159,27 @@ a.asca-scrolls__link:hover {
   object-fit: contain;
 }
 
-/* ---------- 반응형 ---------- */
-@media (max-width: 1024px) {
-  .asca-ph--feature.asca-ph--has-media .asca-ph__frame {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-  .asca-ph--feature.asca-ph--has-media .asca-ph__media {
-    grid-column: 1 / -1;
-  }
-  .asca-scrolls {
-    min-height: 240px;
+/* ---------- 좁은 화면 ---------- */
+@media (max-width: 899px) {
+  .ab-ph .ab-hero__mark {
+    font-size: min(
+      clamp(96px, 30vw, 180px),
+      calc((100vw - 2 * var(--ab-gutter)) / var(--ab-mark-len, 2) * 0.92)
+    );
   }
 }
 @media (max-width: 767px) {
-  .asca-ph {
-    --ph-header: 56px;
-  }
-  .asca-ph--feature .asca-ph__frame,
-  .asca-ph--band .asca-ph__frame {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .asca-ph__mark {
-    display: none;
-  }
-  .asca-ph__tc-inline {
-    display: block;
-  }
-  .asca-ph--feature.asca-ph--has-media .asca-ph__frame {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .asca-scrolls {
     grid-auto-flow: row;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-auto-columns: auto;
     min-height: 0;
     height: auto;
+  }
+  /* 데스크톱의 고정 높이를 풀어 3:5 사진이 아래 목차를 덮지 않게 한다 */
+  .ab-ph__media .asca-scrolls {
+    height: auto;
+    min-height: 0;
   }
   .asca-scrolls__item,
   .asca-scrolls__item:nth-child(n) {
@@ -408,20 +189,11 @@ a.asca-scrolls__link:hover {
   .asca-scrolls__item:nth-child(n + 4) {
     display: none;
   }
-  .asca-ph__stat:nth-child(odd) {
-    padding-left: 0;
-    border-left: 0;
-  }
-  .asca-ph__ledger dl {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media print {
-  .asca-ph {
-    border-bottom: 1px solid #999;
-  }
-  .asca-ph__media {
+  .ab-ph__media,
+  .ab-ph .ab-nav {
     display: none;
   }
 }

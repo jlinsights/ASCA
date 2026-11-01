@@ -17,7 +17,11 @@ jest.mock('@/lib/community/photo-upload', () => ({
 
 const push = jest.fn()
 const refresh = jest.fn()
-jest.mock('next/navigation', () => ({ useRouter: () => ({ push, refresh }) }))
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push, refresh }),
+  // 목록 머리(PageHero)의 눈썹·목차가 지금 주소를 읽는다
+  usePathname: () => '/community/board',
+}))
 
 const fetchMock = jest.fn()
 const originalFetch = global.fetch
