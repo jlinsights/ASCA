@@ -25,9 +25,7 @@ export async function GET(request: NextRequest) {
   try {
     const { status, page } = query.data
     const from = (page - 1) * ADMIN_INQUIRY_PAGE_SIZE
-    let rows = archiveWriter()
-      .from('inquiries')
-      .select(ADMIN_INQUIRY_COLUMNS, { count: 'exact' })
+    let rows = archiveWriter().from('inquiries').select(ADMIN_INQUIRY_COLUMNS, { count: 'exact' })
     if (status !== 'all') rows = rows.eq('status', status)
     const { data, error, count } = await rows
       .order('created_at', { ascending: false })
