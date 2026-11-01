@@ -51,6 +51,11 @@ describe('/artists/homepages — 작가의 홈페이지', () => {
     ).toBeInTheDocument()
   })
 
+  it('요청마다 그린다 — 배포 뒤 숨긴 작가가 정적 결과에 남지 않게', () => {
+    const source = fs.readFileSync(path.join(__dirname, '..', 'page.tsx'), 'utf8')
+    expect(source).toMatch(/export const dynamic = 'force-dynamic'/)
+  })
+
   it('/artists 목록 페이지에는 더 이상 홈페이지 칸을 싣지 않는다', () => {
     const source = fs.readFileSync(path.join(__dirname, '..', '..', 'page.tsx'), 'utf8')
     expect(source).not.toMatch(/FeaturedHomepagesSection|loadFeaturedHomepages/)
