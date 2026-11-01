@@ -1,9 +1,19 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { InquiryComposer } from '../_components/inquiry-composer'
+import { inquiryTranslations } from '@/lib/i18n/translations/inquiry'
+
+let language: 'ko' | 'en' | 'ja' | 'zh' = 'ko'
+jest.mock('@/contexts/language-context', () => ({
+  useLanguage: () => ({
+    language,
+    t: (key: string) => inquiryTranslations[language]?.[key] ?? key,
+  }),
+}))
 
 describe('InquiryComposer', () => {
   afterEach(() => {
+    language = 'ko'
     window.history.replaceState(null, '', '/')
     jest.restoreAllMocks()
   })
@@ -84,5 +94,32 @@ describe('InquiryComposer', () => {
     const channel = screen.getByRole('link', { name: /카카오톡 채널 열기/ })
     expect(channel).toHaveAttribute('href', expect.stringContaining('pf.kakao.com'))
     expect(channel).toHaveFocus()
+  })
+
+  it('선택한 언어로 보이되, 사무국에 보내는 글은 한국어로 남긴다', async () => {
+    language = 'en'
+    const user = userEvent.setup()
+    const writeText = jest.fn().mockResolvedValue(undefined)
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } })
+    render(<InquiryComposer />)
+
+    await user.click(screen.getByRole('button', { name: 'Send by email' }))
+    expect(screen.getByText('Please choose a topic.')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('radio', { name: /Commission a work/ }))
+    await user.type(screen.getByLabelText(/^Name/), 'Lee')
+    await user.type(screen.getByLabelText('Email'), 'lee@example.com')
+    await user.type(screen.getByLabelText(/^Message/), 'Hello')
+    await user.click(screen.getByRole('button', { name: /Send via KakaoTalk/ }))
+
+    expect(await screen.findByRole('link', { name: /Open KakaoTalk channel/ })).toHaveFocus()
+    expect(writeText.mock.calls[0][0]).toContain('[문의] 휘호·작품 의뢰')
+  })
+
+  it('4개 언어의 문의서 키가 빠짐없이 같다', () => {
+    const keys = Object.keys(inquiryTranslations.ko).sort()
+    for (const lang of ['en', 'ja', 'zh'] as const) {
+      expect(Object.keys(inquiryTranslations[lang]).sort()).toEqual(keys)
+    }
   })
 })

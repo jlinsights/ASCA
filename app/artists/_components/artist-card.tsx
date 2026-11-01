@@ -61,10 +61,15 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   // 공유 단추만 사진 귀퉁이에 따로 둔다. 소개글·상세보기 단추는 상세 페이지가 보여 준다
   if (!isPc) {
     return (
-      <Card key={artist.id} className='group relative overflow-hidden border-0 shadow-sm'>
+      // 초점 링은 카드 자신에 그린다 — 링크에 그리면 카드의 overflow-hidden 에 잘린다 (Codex #214)
+      <Card
+        key={artist.id}
+        className='group relative overflow-hidden border-0 shadow-sm has-[a[data-card-link]:focus-visible]:ring-2 has-[a[data-card-link]:focus-visible]:ring-ring has-[a[data-card-link]:focus-visible]:ring-offset-2'
+      >
         <Link
           href={`/artists/${artist.id}`}
-          className='block rounded-[inherit] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+          data-card-link=''
+          className='block rounded-[inherit] focus-visible:outline-none'
         >
           <ArtistPhoto
             artist={artist}

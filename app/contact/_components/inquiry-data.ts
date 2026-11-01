@@ -11,46 +11,21 @@ export type InquiryTopicId =
 
 export interface InquiryTopic {
   id: InquiryTopicId
+  /** 사무국에 보내는 글의 용건 이름 — 한국어로 고정. 화면 이름은 번역표 inqTopic_{id} */
   label: string
-  hint: string
-  /** 이미 답이 정리된 안내 페이지 — 문의 전에 먼저 권한다 */
-  guide?: { label: string; href: string }
+  /** 이미 답이 정리된 안내 페이지 — 문의 전에 먼저 권한다 (화면 문구는 inqGuide_{id}) */
+  guideHref?: string
   /** 예산·일정 칸을 보일 용건 — 견적이 필요한 일 */
   asksPlan?: boolean
 }
 
 export const INQUIRY_TOPICS: readonly InquiryTopic[] = [
-  {
-    id: 'artwork',
-    label: '작품 구입·소장',
-    hint: '보신 작품의 소장 가능 여부와 가격',
-    asksPlan: true,
-  },
-  {
-    id: 'commission',
-    label: '휘호·작품 의뢰',
-    hint: '현판·글씨·선물용 작품 제작 견적',
-    asksPlan: true,
-  },
-  {
-    id: 'exhibition',
-    label: '전시·대관·협업',
-    hint: '기획전, 브랜드·기관 협업 제안',
-    asksPlan: true,
-  },
-  {
-    id: 'academy',
-    label: '강좌·교육',
-    hint: '수강, 단체 강의, 출강 요청',
-    guide: { label: '강좌 안내', href: '/academy' },
-  },
-  {
-    id: 'membership',
-    label: '회원·공모전',
-    hint: '입회, 출품, 승급',
-    guide: { label: '회원 안내', href: '/membership' },
-  },
-  { id: 'other', label: '그 밖의 문의', hint: '위에 없는 용건' },
+  { id: 'artwork', label: '작품 구입·소장', asksPlan: true },
+  { id: 'commission', label: '휘호·작품 의뢰', asksPlan: true },
+  { id: 'exhibition', label: '전시·대관·협업', asksPlan: true },
+  { id: 'academy', label: '강좌·교육', guideHref: '/academy' },
+  { id: 'membership', label: '회원·공모전', guideHref: '/membership' },
+  { id: 'other', label: '그 밖의 문의' },
 ]
 
 export function findInquiryTopic(id: string | null | undefined): InquiryTopic | undefined {
@@ -82,18 +57,25 @@ export const EMPTY_INQUIRY: InquiryDraft = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+/** 화면에서 inqErr_{code} 로 번역한다 */
+export type InquiryErrorCode =
+  | 'topicMissing'
+  | 'nameMissing'
+  | 'contactMissing'
+  | 'emailInvalid'
+  | 'messageMissing'
+
+export type InquiryErrors = Partial<Record<InquiryField, InquiryErrorCode>>
+
 /** 빠진 칸과 그 이유. 비어 있으면 보낼 수 있다 */
-export function validateInquiry(draft: InquiryDraft): Partial<Record<InquiryField, string>> {
-  const errors: Partial<Record<InquiryField, string>> = {}
-  if (!draft.topic) errors.topic = '용건을 골라 주세요.'
-  if (!draft.name.trim()) errors.name = '이름을 적어 주세요.'
+export function validateInquiry(draft: InquiryDraft): InquiryErrors {
+  const errors: InquiryErrors = {}
+  if (!draft.topic) errors.topic = 'topicMissing'
+  if (!draft.name.trim()) errors.name = 'nameMissing'
   const email = draft.email.trim()
-  if (!email && !draft.phone.trim()) {
-    errors.contact = '답을 받으실 이메일이나 전화번호 중 하나를 적어 주세요.'
-  } else if (email && !EMAIL_PATTERN.test(email)) {
-    errors.contact = '이메일 주소 형식을 확인해 주세요.'
-  }
-  if (!draft.message.trim()) errors.message = '문의 내용을 적어 주세요.'
+  if (!email && !draft.phone.trim()) errors.contact = 'contactMissing'
+  else if (email && !EMAIL_PATTERN.test(email)) errors.contact = 'emailInvalid'
+  if (!draft.message.trim()) errors.message = 'messageMissing'
   return errors
 }
 

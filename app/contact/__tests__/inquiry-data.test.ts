@@ -30,7 +30,7 @@ describe('validateInquiry', () => {
   })
 
   it('이메일 형식이 틀리면 알린다', () => {
-    expect(validateInquiry({ ...filled, email: 'hong@' }).contact).toMatch('형식')
+    expect(validateInquiry({ ...filled, email: 'hong@' }).contact).toBe('emailInvalid')
   })
 })
 

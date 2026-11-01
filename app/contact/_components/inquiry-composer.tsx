@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState, type ChangeEvent } from 'react'
+import { Fragment, useEffect, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
 import { EMAIL, KAKAO_CHAT_URL, mailto } from '@/lib/content/contact-info'
+import { useLanguage } from '@/contexts/language-context'
 import {
   EMPTY_INQUIRY,
   INQUIRY_TOPICS,
@@ -14,6 +15,7 @@ import {
   mailtoBody,
   validateInquiry,
   type InquiryDraft,
+  type InquiryErrors,
   type InquiryField,
 } from './inquiry-data'
 
@@ -28,13 +30,26 @@ const FIELD_ORDER: InquiryField[] = ['topic', 'name', 'contact', 'message']
 const inputClass =
   'block w-full min-h-12 rounded-md border border-input bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 aria-[invalid=true]:border-destructive'
 
+/** 번역 문구의 {token} 자리에 링크 등 요소를 끼운다 — 언어마다 어순이 달라서 */
+function fillSlot(template: string, token: string, node: ReactNode): ReactNode {
+  const [before, after = ''] = template.split(`{${token}}`)
+  return (
+    <Fragment>
+      {before}
+      {node}
+      {after}
+    </Fragment>
+  )
+}
+
 /**
  * 문의서 — 용건을 먼저 고르면(Teachable·Klook 의 '무엇을 도와드릴까요' 흐름),
  * 답이 정리된 안내가 있는 용건은 그 안내를 먼저 권하고, 나머지는 메일·카카오톡으로 보낼 글을 만든다.
  */
 export function InquiryComposer() {
   const [draft, setDraft] = useState<InquiryDraft>(EMPTY_INQUIRY)
-  const [errors, setErrors] = useState<Partial<Record<InquiryField, string>>>({})
+  const { t } = useLanguage()
+  const [errors, setErrors] = useState<InquiryErrors>({})
   const [sent, setSent] = useState<SendState>({ kind: 'idle' })
   const formRef = useRef<HTMLFormElement>(null)
   const kakaoLinkRef = useRef<HTMLAnchorElement>(null)
@@ -106,14 +121,13 @@ export function InquiryComposer() {
       aria-describedby='inquiry-how'
     >
       <p id='inquiry-how' className='max-w-2xl text-base leading-relaxed text-muted-foreground'>
-        용건과 연락처를 적으면 보낼 글을 만들어 드립니다. 메일 앱이나 카카오톡 채널로 보내시면
-        사무국이 적어 주신 연락처로 답을 드립니다.
+        {t('inqHow')}
       </p>
 
       <fieldset aria-describedby={describedBy('topic')}>
         <legend className='mb-3 text-sm font-medium text-foreground'>
-          용건 <span aria-hidden='true'>*</span>
-          <span className='sr-only'>(필수)</span>
+          {t('inqTopic')} <span aria-hidden='true'>*</span>
+          <span className='sr-only'>{t('inqRequired')}</span>
         </legend>
         <div className='grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3'>
           {INQUIRY_TOPICS.map(option => (
@@ -131,27 +145,27 @@ export function InquiryComposer() {
                 className='peer sr-only'
               />
               <span className='flex h-full min-h-16 flex-col justify-center gap-1 rounded-md border border-border px-3 py-3 sm:px-4 transition-colors hover:border-foreground peer-checked:border-foreground peer-checked:bg-foreground peer-checked:text-background peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2'>
-                <span className='text-base font-medium'>{option.label}</span>
-                <span className='text-sm opacity-75'>{option.hint}</span>
+                <span className='text-base font-medium'>{t(`inqTopic_${option.id}`)}</span>
+                <span className='text-sm opacity-75'>{t(`inqTopicHint_${option.id}`)}</span>
               </span>
             </label>
           ))}
         </div>
         {errors.topic && (
           <p id='inquiry-topic-error' className='mt-2 text-sm text-destructive'>
-            {errors.topic}
+            {t(`inqErr_${errors.topic}`)}
           </p>
         )}
       </fieldset>
 
-      {topic?.guide && (
+      {topic?.guideHref && (
         <p className='flex flex-wrap items-center gap-x-3 gap-y-1 border-l-2 border-foreground pl-4 text-base'>
-          <span className='text-muted-foreground'>자주 묻는 내용은 안내에 정리돼 있습니다.</span>
+          <span className='text-muted-foreground'>{t('inqGuideNote')}</span>
           <Link
-            href={topic.guide.href}
+            href={topic.guideHref}
             className='inline-flex min-h-11 items-center gap-1 font-medium underline underline-offset-4'
           >
-            {topic.guide.label} 먼저 보기
+            {t(`inqGuide_${topic.id}`)}
             <ArrowRight className='h-4 w-4' aria-hidden='true' />
           </Link>
         </p>
@@ -160,7 +174,7 @@ export function InquiryComposer() {
       <div className='grid gap-6 md:grid-cols-2'>
         <div className='grid gap-2'>
           <label htmlFor='inquiry-name' className='text-sm font-medium'>
-            이름 <span aria-hidden='true'>*</span>
+            {t('inqName')} <span aria-hidden='true'>*</span>
           </label>
           <input
             id='inquiry-name'
@@ -175,14 +189,14 @@ export function InquiryComposer() {
           />
           {errors.name && (
             <p id='inquiry-name-error' className='text-sm text-destructive'>
-              {errors.name}
+              {t(`inqErr_${errors.name}`)}
             </p>
           )}
         </div>
 
         <div className='grid gap-2'>
           <label htmlFor='inquiry-email' className='text-sm font-medium'>
-            이메일
+            {t('inqEmail')}
           </label>
           <input
             id='inquiry-email'
@@ -200,7 +214,7 @@ export function InquiryComposer() {
 
         <div className='grid gap-2'>
           <label htmlFor='inquiry-phone' className='text-sm font-medium'>
-            전화번호
+            {t('inqPhone')}
           </label>
           <input
             id='inquiry-phone'
@@ -217,7 +231,8 @@ export function InquiryComposer() {
 
         <div className='grid gap-2'>
           <label htmlFor='inquiry-subject' className='text-sm font-medium'>
-            관련 작품·작가 <span className='font-normal text-muted-foreground'>(선택)</span>
+            {t('inqSubject')}{' '}
+            <span className='font-normal text-muted-foreground'>{t('inqOptional')}</span>
           </label>
           <input
             id='inquiry-subject'
@@ -228,24 +243,25 @@ export function InquiryComposer() {
         </div>
 
         <p id='inquiry-contact-hint' className='-mt-3 text-sm text-muted-foreground md:col-span-2'>
-          이메일과 전화번호 중 하나는 꼭 적어 주세요.
+          {t('inqContactHint')}
         </p>
         {errors.contact && (
           <p id='inquiry-contact-error' className='-mt-4 text-sm text-destructive md:col-span-2'>
-            {errors.contact}
+            {t(`inqErr_${errors.contact}`)}
           </p>
         )}
 
         {topic?.asksPlan && (
           <div className='grid gap-2 md:col-span-2'>
             <label htmlFor='inquiry-plan' className='text-sm font-medium'>
-              예산·희망 일정 <span className='font-normal text-muted-foreground'>(선택)</span>
+              {t('inqPlan')}{' '}
+              <span className='font-normal text-muted-foreground'>{t('inqOptional')}</span>
             </label>
             <input
               id='inquiry-plan'
               value={draft.plan}
               onChange={update('plan')}
-              placeholder='예: 2027년 3월까지, 100만 원 안팎'
+              placeholder={t('inqPlanPlaceholder')}
               className={inputClass}
             />
           </div>
@@ -253,7 +269,7 @@ export function InquiryComposer() {
 
         <div className='grid gap-2 md:col-span-2'>
           <label htmlFor='inquiry-message' className='text-sm font-medium'>
-            문의 내용 <span aria-hidden='true'>*</span>
+            {t('inqMessage')} <span aria-hidden='true'>*</span>
           </label>
           <textarea
             id='inquiry-message'
@@ -268,7 +284,7 @@ export function InquiryComposer() {
           />
           {errors.message && (
             <p id='inquiry-message-error' className='text-sm text-destructive'>
-              {errors.message}
+              {t(`inqErr_${errors.message}`)}
             </p>
           )}
         </div>
@@ -280,7 +296,7 @@ export function InquiryComposer() {
           className='inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
         >
           <Mail className='h-4 w-4' aria-hidden='true' />
-          메일로 보내기
+          {t('inqSendMail')}
         </button>
         <button
           type='button'
@@ -288,24 +304,26 @@ export function InquiryComposer() {
           className='inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-foreground px-6 text-base font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
         >
           <MessageCircle className='h-4 w-4' aria-hidden='true' />
-          카카오톡으로 보내기
-          <span className='sr-only'> (내용을 복사합니다)</span>
+          {t('inqSendKakao')}
+          <span className='sr-only'> {t('inqSendKakaoSr')}</span>
         </button>
       </div>
 
       <div role='status' aria-live='polite' className='text-sm leading-relaxed'>
         {sent.kind === 'mail' && (
           <p>
-            메일 앱에서 글을 확인하고 보내기를 눌러 주세요. 메일 앱이 열리지 않으면{' '}
-            <a href={`mailto:${EMAIL}`} className='underline underline-offset-4'>
-              {EMAIL}
-            </a>
-            로 직접 보내 주세요.
+            {fillSlot(
+              t('inqMailSent'),
+              'email',
+              <a href={`mailto:${EMAIL}`} className='underline underline-offset-4'>
+                {EMAIL}
+              </a>
+            )}
           </p>
         )}
         {sent.kind === 'kakao-copied' && (
           <div className='grid gap-3'>
-            <p>문의 내용을 복사했습니다. 카카오톡 채널을 열어 채팅창에 붙여 넣어 보내 주세요.</p>
+            <p>{t('inqKakaoCopied')}</p>
             <a
               ref={kakaoLinkRef}
               href={KAKAO_CHAT_URL}
@@ -314,29 +332,31 @@ export function InquiryComposer() {
               className='inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:w-auto sm:justify-self-start'
             >
               <MessageCircle className='h-4 w-4' aria-hidden='true' />
-              카카오톡 채널 열기
-              <span className='sr-only'> (새 창)</span>
+              {t('inqKakaoOpen')}
+              <span className='sr-only'> {t('inqNewWindow')}</span>
             </a>
           </div>
         )}
         {sent.kind === 'kakao-manual' && (
           <div className='grid gap-2'>
             <p>
-              이 브라우저에서는 자동 복사가 되지 않았습니다. 아래 글을 복사해{' '}
-              <a
-                href={KAKAO_CHAT_URL}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='underline underline-offset-4'
-              >
-                카카오톡 채널
-                <span className='sr-only'> (새 창)</span>
-              </a>
-              에 붙여 넣어 주세요.
+              {fillSlot(
+                t('inqKakaoManual'),
+                'link',
+                <a
+                  href={KAKAO_CHAT_URL}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='underline underline-offset-4'
+                >
+                  {t('inqKakaoChannel')}
+                  <span className='sr-only'> {t('inqNewWindow')}</span>
+                </a>
+              )}
             </p>
             <textarea
               readOnly
-              aria-label='보낼 문의 내용'
+              aria-label={t('inqCopyLabel')}
               value={`${inquirySubject(draft)}\n${inquiryBody(draft)}`}
               rows={8}
               className={inputClass}

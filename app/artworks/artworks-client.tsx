@@ -154,6 +154,9 @@ export function ArtworksClient() {
     sortBy,
     showAvailableOnly,
   ].join('|')
+  // 조회 조건이 바뀌면 저장된 개수도 버린다. 표시만 줄이면, 조건을 되돌릴 때 예전 키의
+  // 큰 개수가 되살아난다 (Codex #214). 렌더 중 상태 조정 — effect 보다 한 번 덜 그린다.
+  if (pager.key !== queryKey) setPager({ key: queryKey, count: ARTWORK_PAGE_SIZE })
   const visibleCount = pager.key === queryKey ? pager.count : ARTWORK_PAGE_SIZE
   const visibleArtworks = filteredArtworks.slice(0, visibleCount)
   const hasMore = visibleArtworks.length < filteredArtworks.length

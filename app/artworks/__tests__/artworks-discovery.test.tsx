@@ -119,6 +119,11 @@ describe('Artworks discovery states', () => {
     await user.click(screen.getByRole('checkbox', { name: '구매 가능한 작품만' }))
     expect(cards()).toHaveLength(24)
     expect(screen.getByText('250점 중 24점을 보고 있습니다')).toBeInTheDocument()
+
+    // 조건을 되돌려도 예전 48점이 되살아나지 않는다 (Codex #214)
+    await user.click(screen.getByRole('checkbox', { name: '구매 가능한 작품만' }))
+    expect(cards()).toHaveLength(24)
+    expect(screen.getByText('500점 중 24점을 보고 있습니다')).toBeInTheDocument()
   })
 
   it('남은 작품이 없으면 더 보기를 감춘다', async () => {
