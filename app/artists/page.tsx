@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo-constants'
 import { ArtistsPage, type ArtistInitialFilters } from './artists-client'
-import { FeaturedHomepagesSection } from './_components/featured-homepages-section'
-import { loadFeaturedHomepages } from './_components/load-featured-homepages'
 
 const DESCRIPTION =
   '동양서예협회의 한국·중국·일본 서예가를 만나 보세요. 이름과 회원 구분, 국적으로 작가를 찾고 작가별 소개와 작품을 볼 수 있습니다.'
@@ -31,16 +29,7 @@ function readFilters(params: SearchParams): ArtistInitialFilters {
 }
 
 export default async function Page({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const [initialFilters, featuredArtists] = await Promise.all([
-    searchParams.then(readFilters),
-    loadFeaturedHomepages(),
-  ])
+  const initialFilters = readFilters(await searchParams)
   // 같은 /artists 안에서 메뉴로 조건만 바꿔 이동해도 필터가 따라가도록 조건별로 다시 그린다
-  return (
-    <ArtistsPage
-      key={JSON.stringify(initialFilters)}
-      initialFilters={initialFilters}
-      featured={<FeaturedHomepagesSection artists={featuredArtists} />}
-    />
-  )
+  return <ArtistsPage key={JSON.stringify(initialFilters)} initialFilters={initialFilters} />
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, lazy, Suspense, type ReactNode } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LayoutFooter } from '@/components/layout/layout-footer'
@@ -38,11 +38,10 @@ function buildArtistsUrl(query: ArtistQuery, page: number): string {
 
 interface ArtistsPageProps {
   initialFilters?: ArtistInitialFilters
-  /** 목록 위에 먼저 보일 칸(홈페이지 작가·書境 안내). 검색·필터 중에는 내린다 */
-  featured?: ReactNode
 }
 
-export function ArtistsPage({ initialFilters = {}, featured }: ArtistsPageProps) {
+// 홈페이지 작가·書境 안내 칸은 2026-11-01 에 /artists/homepages 로 옮겼다(작가·작품 메뉴의 "작가의 홈페이지")
+export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
   const { language, t } = useLanguage()
   const copy = discoveryCopy[language]
   const [filteredArtists, setFilteredArtists] = useState<Artist[]>([])
@@ -179,8 +178,6 @@ export function ArtistsPage({ initialFilters = {}, featured }: ArtistsPageProps)
           ) : undefined
         }
       />
-
-      {!hasConditions && featured}
 
       <div className='gallery-container pt-10 md:pt-16'>
         <ArtistFilters

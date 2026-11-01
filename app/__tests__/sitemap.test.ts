@@ -92,7 +92,12 @@ describe('sitemap', () => {
     pages = [{ data: null, error: { message: 'boom' } }]
     const entries = await sitemap()
     expect(urls(entries)).toContain(BASE)
-    expect(urls(entries).some(u => u.startsWith(`${BASE}/artists/`))).toBe(false)
+    // 작가 상세(/artists/<slug>)만 빠져야 한다. /artists/homepages 는 DB 와 무관한 고정 페이지다
+    const artistDetails = urls(entries).filter(
+      u => u.startsWith(`${BASE}/artists/`) && u !== `${BASE}/artists/homepages`
+    )
+    expect(artistDetails).toEqual([])
+    expect(urls(entries)).toContain(`${BASE}/artists/homepages`)
     expect(urls(entries)).toContain(`${BASE}/blog/${localPosts[0]!.id}`)
   })
 })

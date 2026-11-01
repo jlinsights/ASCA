@@ -68,6 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/exhibitions/past',
     '/exhibitions/online',
     '/artists',
+    '/artists/homepages',
     '/artworks',
     '/gallery',
     '/blog',

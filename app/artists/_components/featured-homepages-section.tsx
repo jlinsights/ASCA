@@ -25,6 +25,11 @@ export interface FeaturedArtist {
 
 interface FeaturedHomepagesSectionProps {
   artists: readonly FeaturedArtist[]
+  /**
+   * 눈썹 글·소개 문단을 보일지. /artists/homepages 는 같은 문구를 PageHero 제목·소개로 쓰므로 끈다.
+   * 제목(h2)은 늘 남겨 카드(h3)의 머리가 되게 한다.
+   */
+  withIntro?: boolean
 }
 
 const INVITE_FAQ_IDS = ['artist-website', 'entry-fees'] as const
@@ -195,7 +200,10 @@ function HomepageInvite() {
 }
 
 /** /artists 맨 위 — 홈페이지를 가진 작가를 먼저, 이어서 書境 개인전·부스전·홈페이지 안내 */
-export function FeaturedHomepagesSection({ artists }: FeaturedHomepagesSectionProps) {
+export function FeaturedHomepagesSection({
+  artists,
+  withIntro = true,
+}: FeaturedHomepagesSectionProps) {
   const { language } = useLanguage()
   const copy = featuredHomepagesCopy[language]
   return (
@@ -203,14 +211,18 @@ export function FeaturedHomepagesSection({ artists }: FeaturedHomepagesSectionPr
       aria-labelledby='featured-homepages-title'
       className='gallery-container pt-12 md:pt-20'
     >
-      <p className='text-sm tracking-widest text-scholar-red'>{copy.eyebrow}</p>
+      {withIntro && <p className='text-sm tracking-widest text-scholar-red'>{copy.eyebrow}</p>}
       <h2
         id='featured-homepages-title'
-        className='mt-3 max-w-3xl font-serif text-3xl leading-tight text-foreground md:text-5xl'
+        className={`max-w-3xl font-serif text-3xl leading-tight text-foreground md:text-5xl ${withIntro ? 'mt-3' : ''}`}
       >
         {copy.title}
       </h2>
-      <p className='mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground'>{copy.lede}</p>
+      {withIntro && (
+        <p className='mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground'>
+          {copy.lede}
+        </p>
+      )}
       {artists.length > 0 && (
         <ul className='mt-10 grid gap-10 md:grid-cols-2 lg:grid-cols-3'>
           {artists.map(artist => (

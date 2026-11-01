@@ -43,6 +43,25 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(headerMenu.some(group => group.href === '/artworks')).toBe(false)
   })
 
+  // 2026-11-01 요청: 왼쪽 작가 소개·작가의 홈페이지·작품, 오른쪽 고문·자문위원·초대·추천·일반작가
+  it('작가·작품 메뉴는 왼쪽 둘러보기, 오른쪽 직함·등급 두 칸으로 하위 메뉴를 나눈다', () => {
+    const artists = headerMenu.find(group => group.key === 'artists')
+    const ko = (key: string) => translations.ko?.[key]
+    expect(
+      artists?.columns?.map(column => [ko(column.titleKey), column.items.map(i => ko(i.labelKey))])
+    ).toStrictEqual([
+      ['둘러보기', ['작가 소개', '작가의 홈페이지', '작품']],
+      ['직함·등급', ['고문', '자문위원', '초대작가', '추천작가', '일반작가']],
+    ])
+    expect(artists?.columns?.[0]?.items.map(link => link.href)).toEqual([
+      '/artists',
+      '/artists/homepages',
+      '/artworks',
+    ])
+    // 모바일 목록은 두 칸을 순서대로 이은 것
+    expect(artists?.items).toEqual(artists?.columns?.flatMap(column => column.items))
+  })
+
   it('전시·공모 메뉴는 왼쪽 전시, 오른쪽 공모 두 칸으로 하위 메뉴를 나눈다', () => {
     const group = headerMenu.find(g => g.key === 'exhibitions')
     expect(group?.columns?.map(c => translations.ko?.[c.titleKey])).toStrictEqual(['전시', '공모'])
