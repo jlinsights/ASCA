@@ -51,7 +51,8 @@
   gap: clamp(32px, 6vw, 112px);
   max-width: var(--fq-max);
   margin: 0 auto;
-  padding: calc(var(--fq-header) + clamp(32px, 5vw, 72px)) var(--fq-gutter) clamp(64px, 8vw, 120px);
+  /* 머리는 PageHero 가 그린다(2026-11-01) — 헤더 높이는 거기서 비운다 */
+  padding: clamp(32px, 4vw, 56px) var(--fq-gutter) clamp(64px, 8vw, 120px);
 }
 
 /* ---------- 왼쪽 — 큰 제목, 맨 아래 문의 ---------- */

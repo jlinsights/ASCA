@@ -71,94 +71,13 @@
 /* =====================================================================
    1. 목록 (/regulations)
    ===================================================================== */
-.asca-regs-hero {
-  position: relative;
-  max-width: var(--regs-max);
-  margin: 0 auto;
-  padding: calc(var(--regs-header-offset) + clamp(40px, 7vw, 96px)) var(--regs-gutter)
-    clamp(40px, 6vw, 72px);
-  overflow: hidden;
-}
-/* 낙관처럼 세로로 찍힌 定款 規程 — 화면 오른쪽 위, 본문 뒤 */
-.asca-regs-hero__seal {
-  position: absolute;
-  top: calc(var(--regs-header-offset) + 24px);
-  right: var(--regs-gutter);
-  writing-mode: vertical-rl;
-  font-size: clamp(64px, 11vw, 168px);
-  line-height: 1;
-  letter-spacing: 0.08em;
-  color: var(--navy-900);
-  opacity: 0.06;
-  pointer-events: none;
-  user-select: none;
-}
-@media (max-width: 639px) {
-  .asca-regs-hero__seal {
-    display: none;
-  }
-}
-.dark .asca-regs-hero__seal {
-  color: var(--gold-400);
-  opacity: 0.09;
-}
-.asca-regs-hero__title {
-  margin: 20px 0 0;
-  max-width: 14ch;
-  font-family: var(--font-h-kr-serif);
-  font-size: clamp(40px, 6.4vw, 88px);
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  word-break: keep-all;
-}
-.asca-regs-hero__lede {
-  margin: 28px 0 0;
-  max-width: 34rem;
-  font-size: clamp(16px, 1.3vw, 18px);
-  line-height: 1.75;
-  color: var(--fg-muted);
-  word-break: keep-all;
-}
-.asca-regs-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  margin: clamp(40px, 5vw, 64px) 0 0;
-  border-top: 1px solid var(--border-strong);
-}
-.asca-regs-stats > div {
-  min-width: 9rem;
-  padding: 18px 40px 0 0;
-}
-.asca-regs-stats dt {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-}
-.asca-regs-stats dd {
-  margin: 8px 0 0;
-  font-family: var(--font-h-display);
-  font-size: clamp(32px, 3.4vw, 44px);
-  font-weight: 500;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.asca-regs-stats dd.is-date {
-  font-size: clamp(22px, 2.2vw, 28px);
-  line-height: 1.6;
-}
-.asca-regs-hero .asca-regs-lang-note {
-  margin-top: 24px;
-}
+/* 머리는 PageHero(소개 묶음과 같은 틀)가 그린다 — 2026-11-01 */
 
 /* 목록: 번호 · 이름 · 조문 수 · 한자 — 카드 격자가 아니라 법전 목차처럼 줄로 */
 .asca-regs-index {
   max-width: var(--regs-max);
   margin: 0 auto;
-  padding: 0 var(--regs-gutter) clamp(56px, 8vw, 112px);
+  padding: clamp(32px, 4vw, 56px) var(--regs-gutter) clamp(56px, 8vw, 112px);
 }
 .asca-regs-index__list {
   margin: 0;

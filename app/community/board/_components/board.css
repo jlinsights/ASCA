@@ -50,6 +50,10 @@
   margin: 0 auto;
   padding: calc(var(--cb-header) + clamp(32px, 5vw, 72px)) var(--cb-gutter) clamp(64px, 8vw, 120px);
 }
+/* 목록은 PageHero 아래에 온다 — 헤더 높이는 머리가 비운다 (2026-11-01) */
+.cb__frame--after-hero {
+  padding-top: clamp(32px, 4vw, 56px);
+}
 
 /* ---------- 머리 — 큰 제목과 글 수 ---------- */
 .cb-head {

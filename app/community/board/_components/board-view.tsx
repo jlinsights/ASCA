@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { useLanguage } from '@/contexts/language-context'
 import { excerpt, type ThreadView } from '@/lib/community/threads'
 import { SEARCH_MAX } from '@/lib/community/search'
@@ -46,16 +48,10 @@ export function BoardView({
 
   return (
     <div className='cb'>
-      <div className='cb__frame'>
-        <header className='cb-head'>
-          <p className='cb-head__eyebrow'>{t('boardEyebrow')}</p>
-          <div className='cb-head__row'>
-            <h1 className='cb-head__title'>{t('boardTitle')}</h1>
-            <p className='cb-head__count'>{t(countKey).replace('{n}', String(total))}</p>
-          </div>
-          <p className='cb-head__intro'>{t('boardIntro')}</p>
-        </header>
-
+      <PageHero {...PAGE_HERO_MARKS.board} title={t('boardTitle')} lede={t('boardIntro')}>
+        <p className='cb-head__count'>{t(countKey).replace('{n}', String(total))}</p>
+      </PageHero>
+      <div className='cb__frame cb__frame--after-hero'>
         <div className='cb-layout'>
           <aside className='cb-aside' aria-label={t('boardWrite')}>
             <Link href={composeHref} className='cb-write'>

@@ -590,19 +590,61 @@ PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 
 
 ### 8.4 Page Hero — `PageHero` (`components/layout/page-hero.tsx`)
 
-공개 페이지 대부분이 이 머리로 시작한다. 세로쓰기 번체 한자 표지(`tc`, Noto
-Serif TC, `lang='zh-Hant'`)와 朱印 낙관(`seal`), 경로(`crumbs`), 세리프 제목,
-요약 (`lede`)을 페이지 틀(`--shell-frame`·`--shell-gutter`) 위에 놓는다.
+공개 페이지 대부분이 이 머리로 시작한다. 2026-11-01 부터 **소개 묶음과 같은
+틀**이다(§8.4.1) — 왼쪽 눈썹·세리프 제목(h1)·요약(`lede`)·숫자, 오른쪽 큰 정체자
+漢字(`tc`)와 東洋 낙관(`ASCA_SEAL`), 그 아래 같은 메뉴의 01–0N 목차.
 
-- 화면별 표지·단계는
+- 화면별 漢字·단계는
   `PAGE_HERO_MARKS`(`components/layout/page-hero-marks.ts`)에서 가져온다 —
-  `{...PAGE_HERO_MARKS.contests}`. 표지 한자를 화면에서 새로 짓지 않는다.
-- `tier`: `feature`(작가·작품·전시처럼 둘러보는 화면 — 사진·숫자를 단다) ·
-  `band` (안내·문서 화면).
-- 숫자는 `ledger`/`HeroFacts`, 사진은 `media`(`HeroScrolls`)로 단다. 페이지에 h1
-  은 이 제목 하나다.
-- 스타일 정본은 `components/layout/page-hero.css`(`.asca-ph*`). 제목은 굵기 600,
-  행간 1.05, `word-break: keep-all`.
+  `{...PAGE_HERO_MARKS.contests}`. 漢字를 화면에서 새로 짓지 않는다. 3·4자
+  이름(`線上展`·`個人情報`)은 글자 수로 크기를 나눠 한 줄에 들어간다.
+- 눈썹은 `PageHeroEyebrow` 가 정한다: `crumbs` 가 있으면 경로, 없으면
+  `ASCA · {메뉴 이름}`(헤더 메뉴 묶음 — 상세 페이지는 가장 가까운 항목의 묶음),
+  메뉴 밖(약관·검색)은 `ASCA`.
+- 목차는 `SectionNav`(`components/layout/section-nav.tsx`)가 그린다. 지금 경로가
+  헤더 메뉴 항목과 같을 때만 보이고, 상세·약관 페이지에는 없다. 작가 등급처럼
+  쿼리로 나뉜 항목은 `useSearchParams` 로 고르며, 그 묶음만 `Suspense` 로 감싼다
+  (정적 페이지 빌드가 깨지지 않게).
+- `tier`: `feature`(작가·작품·전시·갤러리 — 사진·숫자를 단다) ·
+  `band`(안내·문서). 사진은 `media`(`HeroScrolls`)로 달면 머리 아래 족자 폭으로
+  한 줄 걸린다.
+- 숫자는 `ledger`(큰 숫자) 또는 `children` 안의 `HeroFacts`(작은 한 줄).
+  페이지에 h1 은 이 제목 하나다.
+- 스타일 정본은 `components/about/about.css`(`.ab-hero*`·`.ab-nav*`)이고,
+  `components/layout/page-hero.css`(`.ab-ph*`·`.asca-scrolls*`)는 PageHero 에만
+  있는 것만 둔다.
+- 자체 머리를 쓰던 메뉴 첫 화면 — `/regulations`·`/faq`·`/community/board`·
+  `/profile/applications` — 도 PageHero 로 옮겼다. 문서 머리인
+  `/regulations/[slug]` 와 게시글·글쓰기 화면은 그대로다.
+
+### 8.4.1 소개 묶음 틀 — `AboutPage`·`AboutHero`·`AboutNav`·`AboutChapter` (2026-11-01)
+
+헤더 '소개' 메뉴의 8개 페이지 — 소개·인사말씀·사명·연혁·임원·사업계획·유관단체·
+브랜드 — 는 이 틀 하나로 그린다. 다른 메뉴의 `PageHero` 도 같은 머리·목차를
+쓴다(§8.4). 한 페이지만 다른 머리를 쓰면 묶음이 흩어져 보인다. 2026-11-01 에
+연혁(`/history`)과 브랜드(`/brand`)도 옮겨 여덟 개가 모두 같다.
+
+- 코드:
+  `components/about/about-layout.tsx`(`AboutPage`·`AboutHero`·`AboutChapter`·
+  `AboutRows`), `about-nav.tsx`, `about-motion.tsx`. 스타일 정본은
+  `components/about/about.css`(`.ab*`).
+- 페이지 모양:
+  `<AboutPage><AboutHero/><AboutNav/>{AboutChapter…}<AboutMotion/></AboutPage><LayoutFooter/>`.
+- `AboutHero`: 왼쪽 눈썹(기본 `ASCA · 소개`. 번역되는 페이지는
+  `` `ASCA · ${t('siteNavAboutShort')}` `` 를
+  넘긴다)·제목(h1)·요약·숫자(`facts`), 오른쪽 큰 정체자 漢字(`tc`)와 東洋 낙관.
+  큰 글자는 `PAGE_HERO_MARKS` 에서 가져오고 화면에서 새로 짓지 않는다 (예: 연혁
+  `沿革`, 브랜드 `標識`). 덧붙일 것(브랜드 슬로건 등)은 `children` 으로 넣는다 —
+  별도 히어로를 만들지 않는다.
+- `AboutNav`: 01–08 번호 목차. 목록은 `site-menu.ts` 의 '소개' 항목을 그대로
+  읽으므로 순서·라벨은 메뉴에서만 고친다.
+- `AboutChapter`: 왼쪽에 세로 漢字 표제(`tc`)·영문 눈썹·제목(h2), 오른쪽 본문.
+  톤은 `paper`·`gold`·`navy` 중 하나.
+- 페이지 고유 본문은 장 안에 그대로 둔다 — 연혁의 연도별 카드는 `年表` 장 안에,
+  브랜드 가이드(가이드 목차 + 9개 구획, `app/brand/brand.css`)는 목차 아래에.
+- 나타남 효과 `data-reveal` 은 **작은 단위**(행·카드)에 단다. `AboutMotion` 은
+  화면에 5% 이상 들어와야 보이게 하므로, 화면 높이의 20배가 넘는 묶음에 달면
+  끝내 나타나지 않는다. 움직임 줄이기·스크립트 없음에서는 처음부터 보인다.
 
 ### 8.5 Ledger Table — `LedgerTable` (`components/apply/apply-parts.tsx`)
 
@@ -752,12 +794,17 @@ Serif TC, `lang='zh-Hant'`)와 朱印 낙관(`seal`), 경로(`crumbs`), 세리�
 
 - **오너**: @jhlim725
 - **변경 주기**: 토큰 변경 시 `.commit_message.txt` + Git 커밋 필수
-- **Breaking Change**: `version` 메이저 증가 (현재 1.2.1-alpha)
+- **Breaking Change**: `version` 메이저 증가 (현재 2.0.0-alpha)
 - **검증**: 토큰 추가/변경 시 `npm run build` + `npm run type-check` +
   `npm run design:wcag` + `npm run design:diff` 통과 권장
 
 ### Changelog
 
+- **2.0.0-alpha 보강** (2026-11-01) — §8.4 `PageHero` 를 소개 묶음과 같은 틀(큰
+  漢字·東洋 낙관·01–0N 목차)로 바꿈. 규정·자주 묻는 질문·회원 게시판·내 신청
+  현황 첫 화면도 PageHero 로. §8.4.1 소개 묶음 틀 추가. 연혁·브랜드를
+  `AboutHero`·`AboutNav` 로 옮겨 소개 8개 페이지가 같은 머리를 쓴다. 브랜드의 먹
+  바탕 자체 히어로(`.brand-hero*`)는 지웠다. §11 현재 버전 표기 정정.
 - **1.3.0-alpha** (2026-05-10) — **Enterprise Phase 확장**: 관리자 대시보드,
   감사 로그, 에이전트 모니터링 UI 패턴 추가 (§8.4, §8.5). 리스크 점수 기반 시각
   지표 정의.

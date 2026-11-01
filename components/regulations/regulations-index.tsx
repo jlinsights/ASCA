@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 import { regulationHref } from '@/lib/regulations/catalog'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { RegulationsContact } from './regulations-contact'
 
 export interface RegulationSummary {
@@ -33,33 +35,18 @@ export function RegulationsIndex({
 
   return (
     <div className='asca-regs'>
-      <header className='asca-regs-hero'>
-        <span className='asca-regs-hero__seal tc' aria-hidden='true'>
-          定款
-          <br />
-          規程
-        </span>
-        <p className='asca-eyebrow'>{t('regsEyebrow')}</p>
-        <h1 className='asca-regs-hero__title'>{t('regsHeroTitle')}</h1>
-        <p className='asca-regs-hero__lede'>{t('regsHeroLede')}</p>
-        <dl className='asca-regs-stats'>
-          <div>
-            <dt>{t('regsStatRegulations')}</dt>
-            <dd>{regulations.length}</dd>
-          </div>
-          <div>
-            <dt>{t('regsStatArticles')}</dt>
-            <dd>{totalArticles}</dd>
-          </div>
-          <div>
-            <dt>{t('regsStatLatest')}</dt>
-            <dd className='is-date' lang='ko'>
-              {latestEffective}
-            </dd>
-          </div>
-        </dl>
+      <PageHero
+        {...PAGE_HERO_MARKS.regulations}
+        title={t('regsHeroTitle')}
+        lede={t('regsHeroLede')}
+        ledger={[
+          { label: t('regsStatRegulations'), value: regulations.length },
+          { label: t('regsStatArticles'), value: totalArticles },
+          { label: t('regsStatLatest'), value: <span lang='ko'>{latestEffective}</span> },
+        ]}
+      >
         {language !== 'ko' && <p className='asca-regs-lang-note'>{t('regsTranslationNote')}</p>}
-      </header>
+      </PageHero>
 
       <section className='asca-regs-index' aria-labelledby='regs-index-title'>
         <h2 id='regs-index-title' className='sr-only'>

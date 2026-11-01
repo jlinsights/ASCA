@@ -101,7 +101,9 @@
   align-items: end;
   max-width: var(--ab-max);
   margin: 0 auto;
-  padding: clamp(40px, 6vw, 96px) var(--ab-gutter) clamp(32px, 4vw, 64px);
+  /* 고정 헤더(투명)가 겹치므로 헤더 높이보다 덜 내려가지 않게 한다 — 좁은 화면에서 눈썹이 가려졌다 */
+  padding: max(clamp(40px, 6vw, 96px), calc(var(--ab-header) + 28px)) var(--ab-gutter)
+    clamp(32px, 4vw, 64px);
 }
 .ab-hero__meta {
   display: grid;
@@ -831,6 +833,11 @@ a.ab-year__poster:hover img {
 }
 
 /* ---------- 좁은 화면 ---------- */
+@media (max-width: 767px) {
+  .ab {
+    --ab-header: 56px; /* 헤더 h-14 */
+  }
+}
 @media (max-width: 899px) {
   .ab-hero__frame {
     grid-template-columns: minmax(0, 1fr);
