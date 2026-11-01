@@ -92,8 +92,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </main>
           </div>
+          {/* 언어 컨텍스트가 필요하다(카카오톡 버튼의 접근 이름) — ClientProviders 안에 둔다 */}
+          <SiteWidgets />
         </ClientProviders>
-        <SiteWidgets />
       </body>
     </html>
   )
