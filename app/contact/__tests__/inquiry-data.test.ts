@@ -1,5 +1,6 @@
 import {
   EMPTY_INQUIRY,
+  clipText,
   MAILTO_BODY_LIMIT,
   draftFromSearch,
   inquiryBody,
@@ -59,11 +60,27 @@ describe('보낼 글', () => {
   })
 })
 
+describe('clipText', () => {
+  it('서로게이트 쌍 가운데에서 끊지 않는다', () => {
+    expect(clipText('가😀', 2)).toBe('가')
+    expect(clipText('가😀', 3)).toBe('가😀')
+    expect(() => encodeURIComponent(clipText('가😀', 2))).not.toThrow()
+  })
+})
+
 describe('주소로 채우기', () => {
   it('inquiryHref 로 만든 주소를 다시 읽는다', () => {
     const href = inquiryHref('artwork', '난초 — 김작가')
     const search = href.slice(href.indexOf('?'), href.indexOf('#'))
     expect(draftFromSearch(search)).toEqual({ topic: 'artwork', subject: '난초 — 김작가' })
+  })
+
+  it('이모지·확장 한자를 반으로 자르지 않아 주소로 인코딩할 수 있다', () => {
+    // '가' 1799개 뒤에 서로게이트 쌍 — UTF-16 1800번째 단위가 쌍의 가운데
+    const body = mailtoBody({ ...filled, message: `${'가'.repeat(1799)}😀𠀀끝` })
+    expect(() => encodeURIComponent(body)).not.toThrow()
+    const about = draftFromSearch(`?about=${encodeURIComponent(`${'가'.repeat(119)}😀`)}`)
+    expect(about.subject).toBe('가'.repeat(119))
   })
 
   it('모르는 용건은 버리고 관련 작품은 120자로 자른다', () => {

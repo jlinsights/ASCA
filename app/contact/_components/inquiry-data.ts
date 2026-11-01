@@ -126,11 +126,24 @@ export function inquiryBody(draft: InquiryDraft): string {
   ].join('\n')
 }
 
+/**
+ * 글자 단위로 자른다. slice() 는 이모지·확장 한자(서로게이트 쌍) 가운데를 끊을 수 있고,
+ * 끊긴 문자열은 encodeURIComponent 에서 URIError 를 낸다 (Codex #214).
+ */
+export function clipText(text: string, maxUnits: number): string {
+  let out = ''
+  for (const char of text) {
+    if (out.length + char.length > maxUnits) break
+    out += char
+  }
+  return out
+}
+
 /** 메일 앱에 넘길 본문 — 길면 끊고 끊었다고 적는다 */
 export function mailtoBody(draft: InquiryDraft): string {
   const body = inquiryBody(draft)
   if (body.length <= MAILTO_BODY_LIMIT) return body
-  return `${body.slice(0, MAILTO_BODY_LIMIT)}\n…(내용이 길어 일부가 잘렸습니다. 나머지는 이어서 적어 주세요.)`
+  return `${clipText(body, MAILTO_BODY_LIMIT)}\n…(내용이 길어 일부가 잘렸습니다. 나머지는 이어서 적어 주세요.)`
 }
 
 /** 작품·작가 상세에서 문의서를 채워 여는 주소 */
@@ -144,7 +157,7 @@ export function inquiryHref(topic: InquiryTopicId, subject?: string): string {
 export function draftFromSearch(search: string): Partial<InquiryDraft> {
   const params = new URLSearchParams(search)
   const topic = findInquiryTopic(params.get('topic'))?.id
-  const about = (params.get('about') ?? '').trim().slice(0, 120)
+  const about = clipText((params.get('about') ?? '').trim(), 120)
   return {
     ...(topic ? { topic } : {}),
     ...(about ? { subject: about } : {}),

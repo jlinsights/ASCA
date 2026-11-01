@@ -64,7 +64,7 @@ describe('InquiryComposer', () => {
     expect(open).not.toHaveBeenCalled()
   })
 
-  it('카카오톡: 복사되면 채팅창을 새 창으로 연다', async () => {
+  it('카카오톡: 복사되면 팝업을 띄우지 않고 채널 열기 링크로 초점을 옮긴다', async () => {
     const user = userEvent.setup()
     const writeText = jest.fn().mockResolvedValue(undefined)
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } })
@@ -79,10 +79,10 @@ describe('InquiryComposer', () => {
 
     expect(await screen.findByText(/문의 내용을 복사했습니다/)).toBeInTheDocument()
     expect(writeText.mock.calls[0][0]).toContain('[문의] 그 밖의 문의')
-    expect(open).toHaveBeenCalledWith(
-      expect.stringContaining('pf.kakao.com'),
-      '_blank',
-      'noopener,noreferrer'
-    )
+    // 비동기 복사 뒤의 window.open 은 팝업 차단될 수 있어 쓰지 않는다
+    expect(open).not.toHaveBeenCalled()
+    const channel = screen.getByRole('link', { name: /카카오톡 채널 열기/ })
+    expect(channel).toHaveAttribute('href', expect.stringContaining('pf.kakao.com'))
+    expect(channel).toHaveFocus()
   })
 })

@@ -37,6 +37,12 @@ export function InquiryComposer() {
   const [errors, setErrors] = useState<Partial<Record<InquiryField, string>>>({})
   const [sent, setSent] = useState<SendState>({ kind: 'idle' })
   const formRef = useRef<HTMLFormElement>(null)
+  const kakaoLinkRef = useRef<HTMLAnchorElement>(null)
+
+  // 복사가 끝나면 채널 열기 링크로 초점을 옮겨 다음 동작을 바로 하게 한다
+  useEffect(() => {
+    if (sent.kind === 'kakao-copied') kakaoLinkRef.current?.focus()
+  }, [sent.kind])
 
   // 작품 상세의 '이 작품 문의하기'가 ?topic=&about= 로 채워 연다
   useEffect(() => {
@@ -76,8 +82,9 @@ export function InquiryComposer() {
     if (!check()) return
     try {
       await navigator.clipboard.writeText(`${inquirySubject(draft)}\n${inquiryBody(draft)}`)
+      // 복사가 끝난 뒤의 window.open 은 사용자 클릭이 만료돼 팝업 차단될 수 있다 (Codex #214).
+      // 그래서 창을 자동으로 열지 않고, 채널 열기 링크를 보여 주고 초점을 옮긴다.
       setSent({ kind: 'kakao-copied' })
-      window.open(KAKAO_CHAT_URL, '_blank', 'noopener,noreferrer')
     } catch {
       // 복사가 막힌 브라우저 — 글을 보여 주고 직접 복사하게 한다
       setSent({ kind: 'kakao-manual' })
@@ -282,7 +289,7 @@ export function InquiryComposer() {
         >
           <MessageCircle className='h-4 w-4' aria-hidden='true' />
           카카오톡으로 보내기
-          <span className='sr-only'> (내용을 복사하고 새 창에서 엽니다)</span>
+          <span className='sr-only'> (내용을 복사합니다)</span>
         </button>
       </div>
 
@@ -297,19 +304,20 @@ export function InquiryComposer() {
           </p>
         )}
         {sent.kind === 'kakao-copied' && (
-          <p>
-            문의 내용을 복사했습니다. 열린 카카오톡 채팅창에 붙여 넣어 보내 주세요. 창이 열리지
-            않았다면{' '}
+          <div className='grid gap-3'>
+            <p>문의 내용을 복사했습니다. 카카오톡 채널을 열어 채팅창에 붙여 넣어 보내 주세요.</p>
             <a
+              ref={kakaoLinkRef}
               href={KAKAO_CHAT_URL}
               target='_blank'
               rel='noopener noreferrer'
-              className='underline underline-offset-4'
+              className='inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:w-auto sm:justify-self-start'
             >
+              <MessageCircle className='h-4 w-4' aria-hidden='true' />
               카카오톡 채널 열기
               <span className='sr-only'> (새 창)</span>
             </a>
-          </p>
+          </div>
         )}
         {sent.kind === 'kakao-manual' && (
           <div className='grid gap-2'>
