@@ -117,6 +117,7 @@ export const siteChromeTranslations: TranslationData = {
     siteFtSecJoin: '참여 · 소식',
     siteKakaoChat: '카카오톡 상담',
     siteKakaoChatNewTab: '카카오톡 상담 (새 탭)',
+    siteConsultBook: '상담 예약',
   },
   en: {
     siteNavArtists: 'Artists & Artworks',
@@ -231,6 +232,7 @@ export const siteChromeTranslations: TranslationData = {
     siteFtSecJoin: 'Get Involved',
     siteKakaoChat: 'Chat on KakaoTalk',
     siteKakaoChatNewTab: 'Chat on KakaoTalk (opens in a new tab)',
+    siteConsultBook: 'Book a consultation',
   },
   ja: {
     siteNavArtists: '作家・作品',
@@ -345,6 +347,7 @@ export const siteChromeTranslations: TranslationData = {
     siteFtSecJoin: '参加・お知らせ',
     siteKakaoChat: 'カカオトークで相談',
     siteKakaoChatNewTab: 'カカオトークで相談（新しいタブで開く）',
+    siteConsultBook: '相談を予約',
   },
   zh: {
     siteNavArtists: '藝術家・作品',
@@ -459,5 +462,6 @@ export const siteChromeTranslations: TranslationData = {
     siteFtSecJoin: '參與・資訊',
     siteKakaoChat: 'KakaoTalk 諮詢',
     siteKakaoChatNewTab: 'KakaoTalk 諮詢（在新分頁開啟）',
+    siteConsultBook: '預約諮詢',
   },
 }
