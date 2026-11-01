@@ -143,7 +143,12 @@ npm run lint             # ESLint checking
 npm run lint:fix         # Auto-fix linting issues
 npm run test             # Run Jest tests
 npm run test:coverage    # Generate test coverage report
+npm run format:check     # Prettier check (CI "Code Quality" runs this)
 ```
+
+CI 의 Code Quality 잡은 저장소 전체에 `format:check` 를 돌린다. 손으로 고친
+CSS·마크다운이 Prettier 모양이 아니면 PR 이 빨갛게 된다(#204 가 그랬다). 푸시
+전에 바꾼 파일만 `npx prettier --write <파일>` 로 맞춘다.
 
 ## Core Architecture
 
@@ -324,6 +329,23 @@ Use the established pattern for all content:
 - UI components in `components/ui/` with brand variants
 - Page components follow Next.js App Router structure
 - Admin components separated in `app/admin/`
+
+### 사이트 공통 화면
+
+- 헤더·푸터 메뉴는 `components/layout/site-menu.ts` 한 곳에서 정한다. 순서는
+  `components/layout/__tests__/site-menu.test.ts` 가 고정하므로 순서를 바꾸면
+  테스트도 같이 고친다(소개 → 전시·공모 → 작가·작품 → 정관·규정 → 회원·후원 →
+  소식 → 문의, #203).
+- 🔴 **전 페이지 배경 영상을 다시 넣지 말 것.** `app/layout.tsx` 의
+  `VideoBackground`(Vimeo)는 모든 페이지 바탕색 밑에 깔려 보이지 않으면서 매
+  페이지마다 Vimeo 를 불러왔다. 2026-11-01 에 지웠다(#204). 영상이 필요하면 그
+  영상을 실제로 보여 주는 섹션 안에 둔다.
+- `app/globals.css` 의 `prefers-reduced-motion` 규칙은 이동·확대 애니메이션만
+  멈추고 색·투명도·테두리·그림자 전환은 120ms 로 남긴다. transition 을 0 으로
+  지우면 메뉴 열림·포커스·선택 피드백까지 사라진다.
+- `public/images/artworks/` 에는 **실제 작품 이미지만** 둔다. 프로그램용 서예
+  장면(작품 이미지가 없을 때의 대체 사진 포함)은 `public/images/programs/` 에
+  둔다(#202).
 
 ### Design System (DESIGN.md)
 
