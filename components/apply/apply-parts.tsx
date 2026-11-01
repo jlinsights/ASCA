@@ -37,11 +37,18 @@ export function ApplySectionHead({ id, title, eyebrow, lede }: ApplySectionHeadP
 }
 
 /** 근거 조문 — 페이지에 옮긴 숫자·문구의 원문을 /regulations 해당 조에서 바로 확인하게 잇는다 */
-export function RegCite({ sources }: { sources: readonly RegSource[] }) {
+export function RegCite({
+  sources,
+  label = '근거',
+}: {
+  sources: readonly RegSource[]
+  /** 다른 언어 화면에서 바꿔 쓴다 */
+  label?: string
+}) {
   if (sources.length === 0) return null
   return (
     <p className='asca-apply__cite'>
-      <span className='asca-apply__cite-label'>근거</span>
+      <span className='asca-apply__cite-label'>{label}</span>
       {sources.map((source, index) => (
         <span key={source.href}>
           {index > 0 && <span aria-hidden='true'> · </span>}
