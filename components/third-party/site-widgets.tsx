@@ -3,10 +3,12 @@
 import Script from 'next/script'
 import { usePathname } from 'next/navigation'
 import { MobileConsultButton } from './mobile-consult-button'
+import { KakaoChatButton } from './kakao-chat-button'
 
 // 전 페이지 공통 위젯 — 루트 레이아웃 <body> 끝에서 렌더링한다.
-// 오리진은 next.config.js CSP 의 THIRD_PARTY(cal, channelTalk)에 등록돼 있어야 한다.
-// 둘 다 페이지 로드가 끝난 뒤(lazyOnload) 실행해 첫 화면 렌더링을 막지 않는다.
+// Cal 스크립트 오리진은 next.config.js CSP 의 THIRD_PARTY.cal 에 등록돼 있어야 하고,
+// 페이지 로드가 끝난 뒤(lazyOnload) 실행해 첫 화면 렌더링을 막지 않는다.
+// 상담 채팅은 카카오톡 채널 링크(KakaoChatButton)라 스크립트가 없다 — 채널톡 위젯은 2026-11-01 에 뺐다.
 
 /**
  * Cal.com 플로팅 예약 버튼 — 공식 임베드 코드에 세 가지를 바꿨다.
@@ -34,14 +36,6 @@ Cal.ns.meeting("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
 const CAL_HIDE_ON_MOBILE =
   '@media (max-width: 767.98px) { cal-floating-button { display: none !important; } }'
 
-/** 채널톡 상담 위젯 — 공식 설치 코드 그대로 (pluginKey 는 공개 키) */
-const CHANNEL_TALK = `
-(function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
-ChannelIO('boot', {
-  "pluginKey": "c5a02de1-1bef-4577-9bf4-8f3e9d113058"
-});
-`
-
 export function SiteWidgets() {
   const pathname = usePathname()
   // Authentication forms must remain unobstructed, including after client navigation.
@@ -59,9 +53,7 @@ export function SiteWidgets() {
       </Script>
       <style>{CAL_HIDE_ON_MOBILE}</style>
       <MobileConsultButton />
-      <Script id='channel-talk' strategy='lazyOnload'>
-        {CHANNEL_TALK}
-      </Script>
+      <KakaoChatButton />
     </>
   )
 }
