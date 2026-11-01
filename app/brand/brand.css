@@ -17,14 +17,6 @@
   --brand-ease: cubic-bezier(0.16, 1, 0.3, 1);
   background: var(--background);
   color: var(--foreground);
-  /* 사이트 헤더(components/header/header.tsx)는 맨 위에서 투명한 fixed 다. 남색 글자 헤더가
-     먹 바탕 히어로 위에 얹히면 보이지 않으므로, 헤더 높이(h-14 / md:h-16)만큼 선지 띠를 둔다. */
-  padding-top: 3.5rem;
-}
-@media (min-width: 768px) {
-  .asca-brand {
-    padding-top: 4rem;
-  }
 }
 
 /* 한국어는 낱말 중간에서 줄을 바꾸지 않는다(‘가이/드’ 방지) */
@@ -44,97 +36,21 @@
   box-shadow: var(--shadow-gold-glow);
 }
 
-/* ── Hero — 먹 바탕, 금색 헤어라인, 낙관 ─────────────────────────────── */
-.brand-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background:
-    radial-gradient(60% 80% at 92% 0%, rgb(212 168 74 / 0.16), transparent 60%),
-    radial-gradient(50% 70% at 0% 100%, rgb(29 46 92 / 0.9), transparent 70%), var(--navy-900);
-  color: var(--paper);
-  padding: clamp(4.5rem, 3rem + 6vw, 8rem) var(--brand-gutter) clamp(4rem, 3rem + 4vw, 6.5rem);
-}
-.dark .brand-hero {
-  background:
-    radial-gradient(60% 80% at 92% 0%, rgb(226 192 116 / 0.14), transparent 60%),
-    radial-gradient(50% 70% at 0% 100%, rgb(29 46 92 / 0.7), transparent 70%), var(--navy-950);
-  border-bottom: 1px solid var(--border);
-}
-.brand-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: url('/images/hero_bg_calligraphy.png') right center / cover no-repeat;
-  mix-blend-mode: screen;
-  filter: grayscale(1) contrast(1.05);
-  opacity: 0.14;
-}
-.brand-hero__inner {
-  max-width: var(--shell-max);
-  margin: 0 auto;
-}
-.brand-hero__eyebrow {
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--gold-400);
-}
-.brand-hero__title {
-  margin-top: 1.25rem;
-  font-family: var(--brand-kr-serif);
-  font-weight: 500;
-  font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-}
-.brand-hero__slogan {
-  margin-top: clamp(2rem, 1.5rem + 2vw, 3rem);
-  font-family: var(--brand-tc);
+/* ── 머리 — 소개 묶음 AboutHero 안의 슬로건(about.css 의 .ab 톤을 따른다) ── */
+.ab-hero .brand-slogan {
+  margin: 0;
+  font-family: var(--ab-font-tc);
   font-weight: 700;
-  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
   letter-spacing: 0.08em;
   line-height: 1.2;
-  color: var(--gold-300);
+  color: var(--ab-accent);
 }
-.brand-hero__gloss {
-  margin-top: 0.75rem;
-  font-family: var(--brand-kr-serif);
-  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
-  color: var(--navy-300);
-}
-.brand-hero__rule {
-  height: 1px;
-  max-width: 36rem;
-  margin: clamp(2rem, 1.5rem + 2vw, 2.75rem) 0;
-  background: var(--brand-hairline);
-}
-.brand-hero__lede {
-  max-width: 44rem;
-  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
-  line-height: 1.8;
-  color: rgb(251 248 239 / 0.82);
-}
-.brand-hero__seal {
-  position: absolute;
-  right: var(--brand-gutter);
-  bottom: clamp(1.5rem, 1rem + 2vw, 3rem);
-  display: grid;
-  place-items: center;
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 4px;
-  background: var(--seal-red);
-  color: var(--paper);
-  font-family: var(--brand-tc);
-  font-weight: 700;
-  font-size: 2rem;
-  transform: rotate(-4deg);
-  box-shadow:
-    0 0 0 2px rgb(168 32 26 / 0.35),
-    0 10px 24px -8px rgb(168 32 26 / 0.55);
+.ab-hero .brand-slogan__gloss {
+  margin: 0.5rem 0 0;
+  font-size: 15px;
+  color: var(--ab-muted);
+  word-break: keep-all;
 }
 
 /* ── 본문 레이아웃 — 목차 + 섹션 ────────────────────────────────────── */
@@ -1016,18 +932,5 @@
 @media (min-width: 768px) and (max-width: 1023px) {
   .brand-toc {
     top: 4rem;
-  }
-}
-
-/* 폰 — 낙관을 줄이고 히어로 아래 여백을 늘려 설명 글과 겹치지 않게 한다 */
-@media (max-width: 640px) {
-  .brand-hero {
-    padding-bottom: 6rem;
-  }
-  .brand-hero__seal {
-    bottom: 1.5rem;
-    width: 3.25rem;
-    height: 3.25rem;
-    font-size: 1.5rem;
   }
 }
