@@ -147,7 +147,7 @@ function vendorOrigins(directive) {
 
 /** null을 걸러내고 공백으로 잇는다. */
 function sources(...parts) {
-  return parts.flat().filter(Boolean).join(' ')
+  return [...new Set(parts.flat().filter(Boolean))].join(' ')
 }
 
 const productionCsp = [
@@ -156,7 +156,8 @@ const productionCsp = [
   // 제거하려면 nonce 도입이 선행돼야 한다(별도 과제).
   `script-src ${sources(`'self'`, `'unsafe-inline'`, `'unsafe-eval'`, clerkOrigin, 'https://*.clerk.accounts.dev', vendorOrigins('script'))}`,
   `style-src ${sources(`'self'`, `'unsafe-inline'`, vendorOrigins('style'))}`,
-  `img-src ${sources(`'self'`, 'data:', 'blob:', clerkOrigin, 'https://img.clerk.com', supabaseOrigin, vendorOrigins('img'))}`,
+  // 이미지 최적화를 끈 뒤로 브라우저가 원격 이미지를 직접 받는다 — next/image 허용 호스트도 그대로 연다
+  `img-src ${sources(`'self'`, 'data:', 'blob:', clerkOrigin, 'https://img.clerk.com', supabaseOrigin, ...IMAGE_REMOTE_HOSTS.map(host => `https://${host}`), vendorOrigins('img'))}`,
   `font-src ${sources(`'self'`, 'data:', vendorOrigins('font'))}`,
   `connect-src ${sources(`'self'`, clerkOrigin, clerkAccountPortalOrigin, 'https://*.clerk.accounts.dev', 'https://clerk-telemetry.com', supabaseOrigin, supabaseSocketOrigin, vendorOrigins('connect'))}`,
   // Clerk은 봇 차단에 Cloudflare Turnstile을 프레임으로 띄운다.
@@ -212,7 +213,11 @@ const nextConfig = {
     loader: 'default',
     path: '/_next/image',
     domains: [],
-    unoptimized: false,
+    // 최적화 끔 (2026-11-01) — Vercel 이미지 최적화 한도가 다 차서 /_next/image 가 402
+    // (OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED)를 냈다. 캐시에 없는 크기·새 사진(창립자 사진 등)이
+    // 모두 깨졌다. 올리는 사진은 이미 줄여 둔 webp 라(작품 ≤2400px·작가 ≤1200px) 원본을 그대로 쓴다.
+    // 다시 켜려면 한도(요금제)를 먼저 확인할 것. 위 localPatterns·remotePatterns 는 켤 때를 위해 둔다.
+    unoptimized: true,
   },
 
   // Webpack configuration to fix RSC issues
