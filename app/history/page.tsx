@@ -1,5 +1,8 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
 import { HistoryHero } from './_components/history-hero'
 import { HistoryTimeline } from './_components/history-timeline'
 
@@ -15,12 +18,14 @@ export const metadata: Metadata = {
 
 export default function HistoryPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
-      <HistoryHero />
-
-      <HistoryTimeline />
-
+    <>
+      <AboutPage>
+        <HistoryHero />
+        <AboutNav />
+        <HistoryTimeline />
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }

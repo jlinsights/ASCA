@@ -22,7 +22,7 @@ export function HistoryTimelineCard({ event: source }: HistoryTimelineCardProps)
   const Icon = config.icon
 
   return (
-    <div className='relative'>
+    <div className='relative' data-reveal>
       <div className='absolute -left-[calc(2rem+5px)] top-4 w-3 h-3 rounded-full bg-scholar-red border-2 border-background' />
 
       <Card className='transition-shadow hover:shadow-md'>

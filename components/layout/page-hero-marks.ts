@@ -31,6 +31,7 @@ export const PAGE_HERO_MARKS = {
   boardMembers: { tier: 'band', tc: '任員' },
   partners: { tier: 'band', tc: '協力' },
   businessPlan: { tier: 'band', tc: '事業' },
+  brand: { tier: 'band', tc: '標識' },
   fairness: { tier: 'band', tc: '公正' },
   bylaws: { tier: 'band', tc: '定款' },
 
