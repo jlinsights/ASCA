@@ -5,7 +5,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
 
 // 시안의 JoinForm 은 전송 대상이 없어 옮기지 않았다.
-// 입회는 /membership, 문의는 /contact(채널톡)로 보낸다.
+// 입회는 /membership, 문의는 /contact(카카오톡 상담)로 보낸다.
 export function HomeJoin() {
   const { t } = useLanguage()
 

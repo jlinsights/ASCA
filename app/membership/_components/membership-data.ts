@@ -1,4 +1,4 @@
-import { BOOKING_URL, CHAT_URL, PHONE } from '@/lib/content/contact-info'
+import { BOOKING_URL, KAKAO_CHAT_URL, PHONE } from '@/lib/content/contact-info'
 
 /**
  * 회원 안내 페이지의 사실 데이터.
@@ -451,12 +451,12 @@ export const JOIN_CHANNELS: readonly JoinChannel[] = [
   {
     title: '실시간 온라인 상담',
     detail: '1년 365일 언제든 문의 가능',
-    href: CHAT_URL,
+    href: KAKAO_CHAT_URL,
     external: true,
   },
 ]
 
 export const CONSULT_LINKS = {
-  chat: CHAT_URL,
+  chat: KAKAO_CHAT_URL,
   booking: BOOKING_URL,
 } as const

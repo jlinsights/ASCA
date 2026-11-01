@@ -16,7 +16,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { CHAT_URL, EMAIL, PHONE } from '@/lib/content/contact-info'
+import { KAKAO_CHAT_URL, EMAIL, PHONE } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
   title: '공정·투명성 허브 | 동양서예협회',
@@ -190,7 +190,7 @@ export default function FairnessTransparencyHubPage() {
                   {PHONE.display}
                 </Link>
                 <Link
-                  href={CHAT_URL}
+                  href={KAKAO_CHAT_URL}
                   target='_blank'
                   className='flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground'
                 >

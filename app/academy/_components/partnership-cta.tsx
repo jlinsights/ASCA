@@ -42,7 +42,7 @@ export function PartnershipCta() {
             className='asca-ac__channel'
           >
             <span className='asca-ac__channel-title'>실시간 상담</span>
-            <span className='asca-ac__channel-detail'>채널톡으로 사무국에 바로 문의</span>
+            <span className='asca-ac__channel-detail'>카카오톡으로 사무국에 바로 문의</span>
             <ArrowUpRight className='asca-ac__channel-icon' aria-hidden='true' />
           </a>
         </li>
