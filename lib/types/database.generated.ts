@@ -1329,6 +1329,65 @@ export type Database = {
         }
         Relationships: []
       }
+      inquiries: {
+        Row: {
+          created_at: string
+          email: string | null
+          handled_at: string | null
+          handled_by: string | null
+          id: string
+          language: string
+          message: string
+          name: string
+          phone: string | null
+          plan: string | null
+          staff_note: string | null
+          status: string
+          subject: string | null
+          topic: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          language?: string
+          message: string
+          name: string
+          phone?: string | null
+          plan?: string | null
+          staff_note?: string | null
+          status?: string
+          subject?: string | null
+          topic: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          language?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          plan?: string | null
+          staff_note?: string | null
+          status?: string
+          subject?: string | null
+          topic?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'inquiries_handled_by_fkey'
+            columns: ['handled_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       notice_comments: {
         Row: {
           author_name: string | null

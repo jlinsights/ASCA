@@ -130,4 +130,90 @@ describe('InquiryComposer', () => {
       screen.getByRole('region', { name: '作品・ご依頼・展覧会のお問い合わせ' })
     ).toHaveAttribute('id', 'inquiry')
   })
+
+  describe('사이트로 보내기', () => {
+    const fill = async (user: ReturnType<typeof userEvent.setup>) => {
+      await user.click(screen.getByRole('radio', { name: /휘호·작품 의뢰/ }))
+      await user.type(screen.getByLabelText(/^이름/), '홍길동')
+      await user.type(screen.getByLabelText('이메일'), 'hong@example.com')
+      await user.type(screen.getByLabelText(/예산·희망 일정/), '내년 봄')
+      await user.type(screen.getByLabelText(/문의 내용/), '현판을 부탁드립니다')
+    }
+    // jsdom 에는 fetch·Response 가 없다 — 쓰는 만큼만 흉내 낸다
+    const respond = (status: number, body: unknown) => {
+      const fetchMock = jest.fn().mockResolvedValue({ status, json: async () => body })
+      Object.defineProperty(global, 'fetch', {
+        configurable: true,
+        writable: true,
+        value: fetchMock,
+      })
+      return fetchMock
+    }
+
+    it('동의하지 않으면 보내지 않고 동의 칸으로 초점을 옮긴다', async () => {
+      const user = userEvent.setup()
+      const fetchMock = respond(201, { ok: true, id: 'x' })
+      render(<InquiryComposer />)
+      await fill(user)
+      await user.click(screen.getByRole('button', { name: '문의 보내기' }))
+
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(screen.getByRole('checkbox', { name: /개인정보 수집·이용에 동의/ })).toHaveFocus()
+      expect(screen.getByText(/동의해 주세요/)).toBeInTheDocument()
+    })
+
+    it('201 이면 접수 완료를 알리고 문의서를 비운다', async () => {
+      const user = userEvent.setup()
+      const fetchMock = respond(201, { ok: true, id: 'abc' })
+      render(<InquiryComposer />)
+      await fill(user)
+      await user.click(screen.getByRole('checkbox', { name: /개인정보 수집·이용에 동의/ }))
+      await user.click(screen.getByRole('button', { name: '문의 보내기' }))
+
+      expect(await screen.findByText('문의를 접수했습니다.')).toBeInTheDocument()
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit]
+      expect(url).toBe('/api/inquiries')
+      expect(JSON.parse(String(init.body))).toMatchObject({
+        topic: 'commission',
+        name: '홍길동',
+        plan: '내년 봄',
+        language: 'ko',
+        consent: true,
+        website: '',
+      })
+      expect(screen.getByLabelText(/^이름/)).toHaveValue('')
+      expect(screen.getByRole('status')).toHaveFocus()
+    })
+
+    it('실패하면 접수됐다고 하지 않고, 글을 그대로 둔 채 메일·카카오톡을 권한다', async () => {
+      const user = userEvent.setup()
+      respond(503, { code: 'UNAVAILABLE' })
+      render(<InquiryComposer />)
+      await fill(user)
+      await user.click(screen.getByRole('checkbox', { name: /개인정보 수집·이용에 동의/ }))
+      await user.click(screen.getByRole('button', { name: '문의 보내기' }))
+
+      expect(await screen.findByText(/사이트로 보내지 못했습니다/)).toBeInTheDocument()
+      expect(screen.queryByText('문의를 접수했습니다.')).not.toBeInTheDocument()
+      expect(screen.getByLabelText(/^이름/)).toHaveValue('홍길동')
+      expect(screen.getByRole('button', { name: '메일로 보내기' })).toBeInTheDocument()
+    })
+
+    it('201 이어도 ok 가 없으면 실패로 본다', async () => {
+      const user = userEvent.setup()
+      respond(201, {})
+      render(<InquiryComposer />)
+      await fill(user)
+      await user.click(screen.getByRole('checkbox', { name: /개인정보 수집·이용에 동의/ }))
+      await user.click(screen.getByRole('button', { name: '문의 보내기' }))
+      expect(await screen.findByText(/사이트로 보내지 못했습니다/)).toBeInTheDocument()
+    })
+
+    it('덫 칸은 화면 읽기 도구와 키보드에서 숨어 있다', () => {
+      render(<InquiryComposer />)
+      const trap = document.getElementById('inquiry-website')
+      expect(trap).toHaveAttribute('tabindex', '-1')
+      expect(trap?.closest('[aria-hidden="true"]')).not.toBeNull()
+    })
+  })
 })

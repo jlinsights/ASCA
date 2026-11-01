@@ -1,9 +1,9 @@
 'use client'
 
-import { Fragment, useEffect, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
-import { EMAIL, KAKAO_CHAT_URL, mailto } from '@/lib/content/contact-info'
+import { ArrowRight, Mail, MessageCircle, Send } from 'lucide-react'
+import { mailto } from '@/lib/content/contact-info'
 import { useLanguage } from '@/contexts/language-context'
 import { ApplySectionHead } from '@/components/apply/apply-parts'
 import {
@@ -19,29 +19,10 @@ import {
   type InquiryErrors,
   type InquiryField,
 } from './inquiry-data'
-
-type SendState =
-  | { kind: 'idle' }
-  | { kind: 'mail' }
-  | { kind: 'kakao-copied' }
-  | { kind: 'kakao-manual' }
+import { InquirySendStatus, inputClass, type SendState } from './inquiry-send-status'
+import { postInquiry } from './inquiry-site-send'
 
 const FIELD_ORDER: InquiryField[] = ['topic', 'name', 'contact', 'message']
-
-const inputClass =
-  'block w-full min-h-12 rounded-md border border-input bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 aria-[invalid=true]:border-destructive'
-
-/** 번역 문구의 {token} 자리에 링크 등 요소를 끼운다 — 언어마다 어순이 달라서 */
-function fillSlot(template: string, token: string, node: ReactNode): ReactNode {
-  const [before, after = ''] = template.split(`{${token}}`)
-  return (
-    <Fragment>
-      {before}
-      {node}
-      {after}
-    </Fragment>
-  )
-}
 
 /**
  * 문의서 — 용건을 먼저 고르면(Teachable·Klook 의 '무엇을 도와드릴까요' 흐름),
@@ -49,7 +30,11 @@ function fillSlot(template: string, token: string, node: ReactNode): ReactNode {
  */
 export function InquiryComposer() {
   const [draft, setDraft] = useState<InquiryDraft>(EMPTY_INQUIRY)
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+  const [consent, setConsent] = useState(false)
+  const [consentError, setConsentError] = useState(false)
+  const [website, setWebsite] = useState('')
+  const statusRef = useRef<HTMLDivElement>(null)
   const [errors, setErrors] = useState<InquiryErrors>({})
   const [sent, setSent] = useState<SendState>({ kind: 'idle' })
   const formRef = useRef<HTMLFormElement>(null)
@@ -88,6 +73,26 @@ export function InquiryComposer() {
     return false
   }
 
+  /** 사이트 접수함에 보낸다 — 실패하면 글을 그대로 두고 메일·카카오톡을 권한다 */
+  const sendSite = async () => {
+    if (sent.kind === 'sending' || !check()) return
+    if (!consent) {
+      setConsentError(true)
+      formRef.current?.querySelector<HTMLInputElement>('#inquiry-consent')?.focus()
+      return
+    }
+    setSent({ kind: 'sending' })
+    const result = await postInquiry(draft, language, website)
+    if (result === 'sent') {
+      setDraft(EMPTY_INQUIRY)
+      setConsent(false)
+      setSent({ kind: 'site-sent' })
+    } else {
+      setSent({ kind: 'site-failed' })
+    }
+    statusRef.current?.focus()
+  }
+
   const sendMail = () => {
     if (!check()) return
     setSent({ kind: 'mail' })
@@ -116,9 +121,9 @@ export function InquiryComposer() {
       noValidate
       onSubmit={event => {
         event.preventDefault()
-        sendMail()
+        void sendSite()
       }}
-      className='grid gap-8'
+      className='relative grid gap-8'
       aria-describedby='inquiry-how'
     >
       <p id='inquiry-how' className='max-w-2xl text-base leading-relaxed text-muted-foreground'>
@@ -291,80 +296,92 @@ export function InquiryComposer() {
         </div>
       </div>
 
-      <div className='grid gap-3 sm:flex sm:flex-wrap sm:items-center'>
-        <button
-          type='submit'
-          className='inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
-        >
-          <Mail className='h-4 w-4' aria-hidden='true' />
-          {t('inqSendMail')}
-        </button>
-        <button
-          type='button'
-          onClick={sendKakao}
-          className='inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-foreground px-6 text-base font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
-        >
-          <MessageCircle className='h-4 w-4' aria-hidden='true' />
-          {t('inqSendKakao')}
-          <span className='sr-only'> {t('inqSendKakaoSr')}</span>
-        </button>
-      </div>
-
-      <div role='status' aria-live='polite' className='text-sm leading-relaxed'>
-        {sent.kind === 'mail' && (
-          <p>
-            {fillSlot(
-              t('inqMailSent'),
-              'email',
-              <a href={`mailto:${EMAIL}`} className='underline underline-offset-4'>
-                {EMAIL}
-              </a>
-            )}
+      <div className='grid gap-2'>
+        <label className='flex cursor-pointer items-start gap-3 text-sm leading-relaxed'>
+          <input
+            id='inquiry-consent'
+            type='checkbox'
+            checked={consent}
+            onChange={event => {
+              setConsent(event.target.checked)
+              setConsentError(false)
+            }}
+            aria-invalid={consentError}
+            aria-describedby={
+              consentError
+                ? 'inquiry-consent-detail inquiry-consent-error'
+                : 'inquiry-consent-detail'
+            }
+            className='mt-0.5 h-5 w-5 shrink-0 accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+          />
+          <span>
+            {t('inqConsentLabel')} <span aria-hidden='true'>*</span>
+          </span>
+        </label>
+        <p id='inquiry-consent-detail' className='pl-8 text-sm text-muted-foreground'>
+          {t('inqConsentDetail')}{' '}
+          <Link href='/privacy-policy' className='underline underline-offset-4'>
+            {t('inqPrivacyLink')}
+          </Link>
+        </p>
+        {consentError && (
+          <p id='inquiry-consent-error' className='pl-8 text-sm text-destructive'>
+            {t('inqErr_consentMissing')}
           </p>
         )}
-        {sent.kind === 'kakao-copied' && (
-          <div className='grid gap-3'>
-            <p>{t('inqKakaoCopied')}</p>
-            <a
-              ref={kakaoLinkRef}
-              href={KAKAO_CHAT_URL}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:w-auto sm:justify-self-start'
-            >
-              <MessageCircle className='h-4 w-4' aria-hidden='true' />
-              {t('inqKakaoOpen')}
-              <span className='sr-only'> {t('inqNewWindow')}</span>
-            </a>
-          </div>
-        )}
-        {sent.kind === 'kakao-manual' && (
-          <div className='grid gap-2'>
-            <p>
-              {fillSlot(
-                t('inqKakaoManual'),
-                'link',
-                <a
-                  href={KAKAO_CHAT_URL}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='underline underline-offset-4'
-                >
-                  {t('inqKakaoChannel')}
-                  <span className='sr-only'> {t('inqNewWindow')}</span>
-                </a>
-              )}
-            </p>
-            <textarea
-              readOnly
-              aria-label={t('inqCopyLabel')}
-              value={`${inquirySubject(draft)}\n${inquiryBody(draft)}`}
-              rows={8}
-              className={inputClass}
-            />
-          </div>
-        )}
       </div>
+
+      {/* 덫 칸 — 사람에게는 보이지 않고 키보드로도 닿지 않는다. 채워져 오면 서버가 저장하지 않는다 */}
+      <div aria-hidden='true' className='absolute -left-[9999px] h-px w-px overflow-hidden'>
+        <label htmlFor='inquiry-website'>Website</label>
+        <input
+          id='inquiry-website'
+          name='website'
+          tabIndex={-1}
+          autoComplete='off'
+          value={website}
+          onChange={event => setWebsite(event.target.value)}
+        />
+      </div>
+
+      <div className='grid gap-4'>
+        <button
+          type='submit'
+          disabled={sent.kind === 'sending'}
+          className='inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-foreground px-8 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 sm:justify-self-start'
+        >
+          <Send className='h-4 w-4' aria-hidden='true' />
+          {sent.kind === 'sending' ? t('inqSending') : t('inqSendSite')}
+        </button>
+        <div className='grid gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3'>
+          <span className='text-sm text-muted-foreground'>{t('inqOtherWays')}</span>
+          <button
+            type='button'
+            onClick={sendMail}
+            className='inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+          >
+            <Mail className='h-4 w-4' aria-hidden='true' />
+            {t('inqSendMail')}
+          </button>
+          <button
+            type='button'
+            onClick={sendKakao}
+            className='inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+          >
+            <MessageCircle className='h-4 w-4' aria-hidden='true' />
+            {t('inqSendKakao')}
+            <span className='sr-only'> {t('inqSendKakaoSr')}</span>
+          </button>
+        </div>
+      </div>
+
+      <InquirySendStatus
+        sent={sent}
+        draft={draft}
+        kakaoLinkRef={kakaoLinkRef}
+        statusRef={statusRef}
+        t={t}
+      />
     </form>
   )
 }

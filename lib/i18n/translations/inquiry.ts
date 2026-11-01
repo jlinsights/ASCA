@@ -5,12 +5,24 @@ import type { TranslationData } from '../types'
 // {email}·{link} 는 화면에서 링크로 바뀌는 자리다.
 export const inquiryTranslations: TranslationData = {
   ko: {
+    inqHow:
+      '용건과 연락처를 적어 보내 주시면 사무국이 적어 주신 연락처로 답을 드립니다. 메일이나 카카오톡으로 보내셔도 됩니다.',
+    inqSendSite: '문의 보내기',
+    inqSending: '보내는 중…',
+    inqSent: '문의를 접수했습니다.',
+    inqSentBody: '사무국이 확인한 뒤 적어 주신 연락처로 답을 드립니다.',
+    inqSendFailed:
+      '지금은 사이트로 보내지 못했습니다. 적으신 내용은 그대로 있으니 아래 메일이나 카카오톡으로 보내 주세요.',
+    inqOtherWays: '다른 방법으로 보내기',
+    inqConsentLabel: '개인정보 수집·이용에 동의합니다',
+    inqConsentDetail:
+      '수집 항목: 이름, 이메일·전화번호, 문의 내용 · 목적: 문의 답변 · 보유 기간: 문의 처리 후 1년. 동의하지 않으셔도 메일이나 카카오톡으로 문의하실 수 있습니다.',
+    inqPrivacyLink: '개인정보처리방침',
+    inqErr_consentMissing: '사이트로 보내려면 개인정보 수집·이용에 동의해 주세요.',
     inqSectionEyebrow: '문의서',
     inqSectionTitle: '작품·의뢰·전시 문의',
     inqSectionLede:
       '작품 구입, 휘호 의뢰, 전시 협업처럼 견적이 필요한 일은 여기서 바로 시작하세요.',
-    inqHow:
-      '용건과 연락처를 적으면 보낼 글을 만들어 드립니다. 메일 앱이나 카카오톡 채널로 보내시면 사무국이 적어 주신 연락처로 답을 드립니다.',
     inqTopic: '용건',
     inqRequired: '(필수)',
     inqOptional: '(선택)',
@@ -57,12 +69,25 @@ export const inquiryTranslations: TranslationData = {
     inqCopyLabel: '보낼 문의 내용',
   },
   en: {
+    inqHow:
+      'Tell us what it is about and how to reach you, and the office will reply to the contact you give. You can also send it by email or KakaoTalk.',
+    inqSendSite: 'Send inquiry',
+    inqSending: 'Sending…',
+    inqSent: 'Your inquiry has been received.',
+    inqSentBody: 'The office will review it and reply to the contact you gave.',
+    inqSendFailed:
+      'We could not send it through the site just now. Your text is still here, so please send it by email or KakaoTalk below.',
+    inqOtherWays: 'Other ways to send',
+    inqConsentLabel: 'I agree to the collection and use of my personal information',
+    inqConsentDetail:
+      'Collected: name, email or phone, and your message · Purpose: replying to your inquiry · Kept for: 1 year after the inquiry is handled. If you do not agree, you can still contact us by email or KakaoTalk.',
+    inqPrivacyLink: 'Privacy policy',
+    inqErr_consentMissing:
+      'To send through the site, please agree to the collection and use of your personal information.',
     inqSectionEyebrow: 'Inquiry',
     inqSectionTitle: 'Artworks, commissions & exhibitions',
     inqSectionLede:
       'Start here for anything that needs a quote, from buying a work to commissioning calligraphy or proposing an exhibition.',
-    inqHow:
-      'Tell us what it is about and how to reach you, and we will draft the message. Send it from your mail app or our KakaoTalk channel and the office will reply to the contact you give.',
     inqTopic: 'Topic',
     inqRequired: '(required)',
     inqOptional: '(optional)',
@@ -109,12 +134,24 @@ export const inquiryTranslations: TranslationData = {
     inqCopyLabel: 'Message to send',
   },
   ja: {
+    inqHow:
+      'ご用件と連絡先をご記入のうえお送りいただければ、事務局よりご記入の連絡先へご返信します。メールやカカオトークでもお送りいただけます。',
+    inqSendSite: 'お問い合わせを送信',
+    inqSending: '送信中…',
+    inqSent: 'お問い合わせを受け付けました。',
+    inqSentBody: '事務局で確認のうえ、ご記入の連絡先へご返信します。',
+    inqSendFailed:
+      'ただいまサイトから送信できませんでした。ご記入の内容はそのまま残っていますので、下のメールまたはカカオトークでお送りください。',
+    inqOtherWays: 'ほかの方法で送る',
+    inqConsentLabel: '個人情報の収集・利用に同意します',
+    inqConsentDetail:
+      '収集項目:お名前、メールアドレスまたは電話番号、お問い合わせ内容 · 目的:お問い合わせへの回答 · 保有期間:対応完了後1年。同意されない場合も、メールやカカオトークでお問い合わせいただけます。',
+    inqPrivacyLink: '個人情報処理方針',
+    inqErr_consentMissing: 'サイトから送信するには、個人情報の収集・利用に同意してください。',
     inqSectionEyebrow: 'お問い合わせ',
     inqSectionTitle: '作品・ご依頼・展覧会のお問い合わせ',
     inqSectionLede:
       '作品のご購入、揮毫のご依頼、展覧会での協業など、お見積もりが必要なご用件はこちらからどうぞ。',
-    inqHow:
-      'ご用件と連絡先をご記入いただくと、送信用の文面をお作りします。メールアプリまたはカカオトークのチャンネルからお送りいただければ、事務局よりご記入の連絡先へご返信します。',
     inqTopic: 'ご用件',
     inqRequired: '(必須)',
     inqOptional: '(任意)',
@@ -161,11 +198,23 @@ export const inquiryTranslations: TranslationData = {
     inqCopyLabel: '送信するお問い合わせ内容',
   },
   zh: {
+    inqHow:
+      '填寫事由與聯絡方式後送出，事務局將回覆至您留下的聯絡方式。也可以透過電子郵件或 KakaoTalk 寄出。',
+    inqSendSite: '送出詢問',
+    inqSending: '送出中…',
+    inqSent: '已收到您的詢問。',
+    inqSentBody: '事務局確認後，將回覆至您留下的聯絡方式。',
+    inqSendFailed:
+      '目前無法透過網站送出。您填寫的內容仍保留著，請改用下方的電子郵件或 KakaoTalk 寄出。',
+    inqOtherWays: '其他寄送方式',
+    inqConsentLabel: '我同意蒐集與利用個人資料',
+    inqConsentDetail:
+      '蒐集項目：姓名、電子郵件或電話、詢問內容 · 目的：回覆詢問 · 保存期間：處理完畢後 1 年。若不同意，仍可透過電子郵件或 KakaoTalk 詢問。',
+    inqPrivacyLink: '個人資料處理方針',
+    inqErr_consentMissing: '若要透過網站送出，請同意蒐集與利用個人資料。',
     inqSectionEyebrow: '詢問表',
     inqSectionTitle: '作品・委託・展覽詢問',
     inqSectionLede: '作品購藏、揮毫委託、展覽合作等需要報價的事項，請從這裡開始。',
-    inqHow:
-      '填寫事由與聯絡方式後，我們會為您擬好要寄出的內容。透過郵件程式或 KakaoTalk 頻道寄出，事務局將回覆至您留下的聯絡方式。',
     inqTopic: '事由',
     inqRequired: '(必填)',
     inqOptional: '(選填)',
