@@ -36,11 +36,12 @@ export function HomeHero({ stats }: HomeHeroProps) {
           </p>
           <p className='asca-hero__lede'>{t('homeHeroLede')}</p>
           <div className='asca-hero__cta'>
-            <Link href='/history' className='asca-btn asca-btn--primary'>
-              {t('homeHeroCta')} <ArrowUpRight aria-hidden='true' />
+            {/* 첫 방문자의 두 행동 — 문의를 시작하거나, 작품부터 둘러본다 (2026-11-01) */}
+            <Link href='/contact#inquiry' className='asca-btn asca-btn--primary'>
+              {t('homeHeroInquiry')} <ArrowUpRight aria-hidden='true' />
             </Link>
-            <Link href='/introductions' className='asca-btn asca-btn--link'>
-              {t('homeHeroLink')}
+            <Link href='/artworks' className='asca-btn asca-btn--link'>
+              {t('homeHeroBrowse')}
             </Link>
           </div>
         </div>

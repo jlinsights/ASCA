@@ -169,6 +169,12 @@ a.asca-scrolls__link:hover {
   }
 }
 @media (max-width: 767px) {
+  .ab-ph .ab-hero__mark {
+    font-size: min(
+      clamp(64px, 20vw, 96px),
+      calc((100vw - 2 * var(--ab-gutter)) / var(--ab-mark-len, 2) * 0.92)
+    );
+  }
   .asca-scrolls {
     grid-auto-flow: row;
     grid-template-columns: repeat(3, minmax(0, 1fr));

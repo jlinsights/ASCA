@@ -10,8 +10,8 @@ export const homeTranslations: TranslationData = {
     homeHeroGloss: '옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어집니다',
     homeHeroLede:
       '동양 서예의 전통을 잇고, 전시·공모전·교육·국제 교류로 오늘의 필묵을 새롭게 엽니다.',
-    homeHeroCta: '전시 연혁 보기',
-    homeHeroLink: '협회 소개',
+    homeHeroInquiry: '문의하기',
+    homeHeroBrowse: '작품 둘러보기',
     homeHeroImgAlt: '수묵 산수',
     homeStatSince: '한·중·일 교류전의 시작',
     homeStatEdition: '대한민국 동양서예대전',
@@ -38,8 +38,8 @@ export const homeTranslations: TranslationData = {
       'Creating anew through tradition, where calligraphy and character mature together.',
     homeHeroLede:
       'Carrying East Asian calligraphy forward through exhibitions, competitions, education and international exchange.',
-    homeHeroCta: 'Exhibition History',
-    homeHeroLink: 'About the Society',
+    homeHeroInquiry: 'Make an Inquiry',
+    homeHeroBrowse: 'Browse Artworks',
     homeHeroImgAlt: 'Ink-wash mountain landscape',
     homeStatSince: 'Start of the Korea–China–Japan exchange',
     // 영어는 단위(homeStatEditionUnit) 없이 라벨로 푼다 — home-hero.tsx 참조
@@ -66,8 +66,8 @@ export const homeTranslations: TranslationData = {
     homeHeroGloss: '古法に学び新しきを拓き、書と人はともに深まる',
     homeHeroLede:
       '東洋書芸の伝統を受け継ぎ、展覧会・公募展・教育・国際交流を通じて、今日の筆墨に新たな章をひらきます。',
-    homeHeroCta: '展示の沿革',
-    homeHeroLink: '協会について',
+    homeHeroInquiry: 'お問い合わせ',
+    homeHeroBrowse: '作品を見る',
     homeHeroImgAlt: '水墨山水',
     homeStatSince: '日韓中交流展の始まり',
     homeStatEdition: '大韓民国 東洋書芸大展',
@@ -92,8 +92,8 @@ export const homeTranslations: TranslationData = {
     homeHeroTitle: '東洋書藝',
     // homeHeroGloss 없음 — 번체에서는 슬로건이 이미 원문이라 풀이를 숨긴다(home-hero.tsx)
     homeHeroLede: '承古開新，以展覽、公募、教育與國際交流，開創當代筆墨的新篇章。',
-    homeHeroCta: '展覽沿革',
-    homeHeroLink: '協會簡介',
+    homeHeroInquiry: '聯絡我們',
+    homeHeroBrowse: '瀏覽作品',
     homeHeroImgAlt: '水墨山水',
     homeStatSince: '韓中日交流展之始',
     homeStatEdition: '大韓民國 東洋書藝大展',

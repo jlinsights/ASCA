@@ -13,6 +13,8 @@ const ko = {
   artistIntro: '이름과 전문분야로 동양서예협회의 작가를 만나보세요.',
   artistResults: '작가 {count}명',
   artworkResults: '작품 {count}점',
+  artworkShown: '{total}점 중 {count}점을 보고 있습니다',
+  loadMoreArtworks: '작품 더 보기',
   updating: '결과를 불러오는 중…',
   loadMore: '작가 더 보기',
   emptyTitle: '조건에 맞는 결과가 없습니다',
@@ -58,6 +60,8 @@ export const discoveryCopy: Record<Language, typeof ko> = {
     artistIntro: 'Meet ASCA artists by name and specialty.',
     artistResults: '{count} artists',
     artworkResults: '{count} artworks',
+    artworkShown: 'Showing {count} of {total} artworks',
+    loadMoreArtworks: 'Load more artworks',
     updating: 'Loading results…',
     loadMore: 'Load more artists',
     emptyTitle: 'No matching results',
@@ -100,6 +104,8 @@ export const discoveryCopy: Record<Language, typeof ko> = {
     artistIntro: '名前と専門分野から東洋書道協会の作家をご紹介します。',
     artistResults: '作家 {count}名',
     artworkResults: '作品 {count}点',
+    artworkShown: '{total}点中 {count}点を表示',
+    loadMoreArtworks: '作品をさらに表示',
     updating: '結果を読み込み中…',
     loadMore: '作家をさらに表示',
     emptyTitle: '条件に合う結果がありません',
@@ -142,6 +148,8 @@ export const discoveryCopy: Record<Language, typeof ko> = {
     artistIntro: '透過姓名與專業領域認識東洋書藝協會的作家。',
     artistResults: '作家 {count}位',
     artworkResults: '作品 {count}件',
+    artworkShown: '共 {total} 件，已顯示 {count} 件',
+    loadMoreArtworks: '顯示更多作品',
     updating: '正在載入結果…',
     loadMore: '載入更多作家',
     emptyTitle: '沒有符合條件的結果',
@@ -173,6 +181,12 @@ export const discoveryCopy: Record<Language, typeof ko> = {
   },
 }
 
-export function formatDiscoveryCount(template: string, count: number, language: Language) {
-  return template.replace('{count}', count.toLocaleString(language))
+export function formatDiscoveryCount(
+  template: string,
+  count: number,
+  language: Language,
+  total?: number
+) {
+  const filled = template.replace('{count}', count.toLocaleString(language))
+  return total === undefined ? filled : filled.replace('{total}', total.toLocaleString(language))
 }

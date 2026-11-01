@@ -31,11 +31,12 @@ test.describe('home / ink-system — 4언어 구조 회귀', () => {
         await expect(stats.first().locator('dd')).toHaveText('1997')
       })
 
-      test('Hero CTA 가 연혁·소개로 연결된다', async ({ page }) => {
+      // 첫 방문자의 핵심 행동 — 문의 시작·작품 보기 (#214, 이전: 연혁·소개)
+      test('Hero CTA 가 문의서·작품 목록으로 연결된다', async ({ page }) => {
         await gotoHomeWithLanguage(page, lang)
         const hero = page.locator('.asca-hero')
-        await expect(hero.locator('a[href="/history"]')).toBeVisible()
-        await expect(hero.locator('a[href="/introductions"]')).toBeVisible()
+        await expect(hero.locator('a[href="/contact#inquiry"]')).toBeVisible()
+        await expect(hero.locator('a[href="/artworks"]')).toBeVisible()
       })
 
       test('전시·학술·입회 섹션이 모두 보인다', async ({ page }) => {
