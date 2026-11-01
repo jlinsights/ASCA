@@ -6,7 +6,7 @@ import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { SiteFaqList } from '@/components/faq/site-faq-list'
 import { ApplySectionHead, ApplyToc, LedgerTable, RegCite } from '@/components/apply/apply-parts'
-import { CHAT_URL, EMAIL, HEADQUARTERS, OFFICE, PHONE } from '@/lib/content/contact-info'
+import { KAKAO_CHAT_URL, EMAIL, HEADQUARTERS, OFFICE, PHONE } from '@/lib/content/contact-info'
 import { EventCalendar } from './_components/event-calendar'
 import {
   CHANNELS,
@@ -59,7 +59,7 @@ export default function ContactPage() {
         actions={
           <>
             <a
-              href={CHAT_URL}
+              href={KAKAO_CHAT_URL}
               target='_blank'
               rel='noopener noreferrer'
               className={`${heroAction} bg-foreground text-background hover:opacity-90`}

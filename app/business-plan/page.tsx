@@ -15,7 +15,7 @@ import { PLAN_YEAR } from './_components/plan-2027-data'
 import { YearSection } from './_components/year-section'
 import Link from 'next/link'
 import { EXHIBITION_YEARS, QUICK_LINKS } from './_components/business-plan-data'
-import { BOOKING_URL, CHAT_URL } from '@/lib/content/contact-info'
+import { BOOKING_URL, KAKAO_CHAT_URL } from '@/lib/content/contact-info'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
@@ -54,7 +54,7 @@ export default function BusinessPlanPage() {
           actions={
             <>
               <a
-                href={CHAT_URL}
+                href={KAKAO_CHAT_URL}
                 target='_blank'
                 rel='noopener noreferrer'
                 className='ab-button ab-button--solid'

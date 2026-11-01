@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { BOOKING_URL, CHAT_URL, OFFICE, formatAddress } from '@/lib/content/contact-info'
+import { BOOKING_URL, KAKAO_CHAT_URL, OFFICE, formatAddress } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
   title: '문서·서식 | 동양서예협회',
@@ -273,7 +273,7 @@ export default function FormsPage() {
         actions={
           <>
             <Link
-              href={CHAT_URL}
+              href={KAKAO_CHAT_URL}
               target='_blank'
               className='inline-flex items-center gap-2 rounded-lg bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity'
             >

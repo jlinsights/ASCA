@@ -47,7 +47,7 @@ export const FAX = '0504-256-6600'
 export const EMAIL = 'info@orientalcalligraphy.org'
 export const OFFICE_HOURS = '월–금 오전 10시 – 오후 5시'
 
-export const CHAT_URL = 'https://orientalcalligraphy.channel.io'
+/** 실시간 상담 — 카카오톡 채널 1:1 채팅 (채널톡 웹 상담 페이지는 2026-11-01 에 뺐다) */
 export const KAKAO_CHAT_URL = 'https://pf.kakao.com/_xkchGj/chat'
 export const BOOKING_URL = 'https://cal.com/orientalcalligraphy'
 

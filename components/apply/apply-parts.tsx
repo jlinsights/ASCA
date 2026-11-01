@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { ArrowDown, CalendarClock, Headphones, Phone } from 'lucide-react'
-import { BOOKING_URL, CHAT_URL, OFFICE_HOURS, PHONE } from '@/lib/content/contact-info'
+import { BOOKING_URL, KAKAO_CHAT_URL, OFFICE_HOURS, PHONE } from '@/lib/content/contact-info'
 
 /** 규정 조문 링크 — /regulations/<slug>#a<조> */
 export interface RegSource {
@@ -130,7 +130,13 @@ export const CONTACT_LABELS_KO: ContactLabels = {
 const contactsFor = (labels: ContactLabels) =>
   [
     { icon: Phone, title: labels.phone, body: PHONE.display, href: PHONE.href, external: false },
-    { icon: Headphones, title: labels.chat, body: labels.chatBody, href: CHAT_URL, external: true },
+    {
+      icon: Headphones,
+      title: labels.chat,
+      body: labels.chatBody,
+      href: KAKAO_CHAT_URL,
+      external: true,
+    },
     {
       icon: CalendarClock,
       title: labels.booking,
