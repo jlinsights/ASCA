@@ -215,3 +215,41 @@ describe('작가 상세', () => {
     expect(String(meta.title)).toContain('김형석')
   })
 })
+
+describe('창립자 성곡 임현기', () => {
+  const founderRow = {
+    ...artistRow,
+    name: '임현기',
+    name_zh: '林炫圻',
+    slug: 'lim-hyun-ki',
+    art_name_hanja: '惺谷',
+    death_year: 2026,
+    membership_type: '초대작가',
+    title: null,
+  }
+
+  it('창립자 띠(작업실 사진·협회에서의 자리·홈페이지)와 직위를 보여 준다', async () => {
+    getArtist.mockResolvedValue(founderRow)
+    await renderPage()
+    const band = screen.getByRole('region', { name: '협회를 세운 분' })
+    expect(within(band).getByRole('img', { name: /성곡 임현기/ })).toHaveAttribute(
+      'src',
+      '/images/artists/lim-hyun-ki/studio.jpg'
+    )
+    expect(within(band).getByRole('link', { name: /성곡 홈페이지 보기/ })).toHaveAttribute(
+      'href',
+      'https://seonggok.com'
+    )
+    // DB 직위가 비어 있어도 히어로에 협회에서의 자리를 등급보다 앞에 둔다
+    expect(document.querySelector('.ap-roles')?.textContent).toBe(
+      '동양서예협회 창립자 · 명예이사장 · 초대작가'
+    )
+  })
+
+  it('다른 작가에게는 창립자 띠가 없다 — slug 로만 가른다', async () => {
+    getArtist.mockResolvedValue({ ...founderRow, slug: 'lim-hyun-ki-2' })
+    await renderPage()
+    expect(screen.queryByRole('region', { name: '협회를 세운 분' })).not.toBeInTheDocument()
+    expect(document.querySelector('.ap-roles')?.textContent).toBe('초대작가')
+  })
+})

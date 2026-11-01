@@ -11,6 +11,8 @@ import { artistNativeName } from '@/lib/api/artist-name'
 import { parseArtistCareer } from './artist-career'
 import { ArtistHero, type ArtistHeroFact } from './artist-hero'
 import { workYearSpan, type ArtistWork } from './artist-works'
+import { FounderBand } from './founder-band'
+import { FOUNDER, isFounder } from '@/lib/content/founder'
 import './artist-profile.css'
 
 type Language = 'ko' | 'en' | 'ja' | 'zh'
@@ -79,7 +81,9 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
     zh: artist.bio_zh,
   })
   const career = parseArtistCareer(bio, { awards: artist.awards, exhibitions: artist.exhibitions })
-  const roles = artistRoles(artist)
+  const founder = isFounder(artist.slug)
+  // 창립자는 DB 직위(title)가 비어 있다 — 협회에서의 자리를 등급보다 앞에 둔다
+  const roles = founder ? [FOUNDER.role[language], ...artistRoles(artist)] : artistRoles(artist)
   const pictured = works.filter(work => work.imageUrl)
 
   const ledger: ArtistHeroFact[] = [
@@ -145,6 +149,8 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
         ledger={ledger}
         media={media}
       />
+
+      {founder && <FounderBand language={language} />}
 
       {works.length > 0 && (
         <section className='ap-section ap-works' aria-labelledby='ap-works-title'>

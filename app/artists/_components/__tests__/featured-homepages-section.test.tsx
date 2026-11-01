@@ -23,7 +23,7 @@ const ARTISTS: FeaturedArtist[] = [
     profileImage: null,
     deathYear: 2026,
     sites: [{ url: 'https://seonggok.com', kind: 'personal' }],
-    role: { ko: '협회 창립자 · 명예회장', en: 'Founder', ja: '創立者', zh: '創會者' },
+    role: { ko: '협회 창립자 · 명예이사장', en: 'Founder', ja: '創立者', zh: '創會者' },
     note: 'renewed',
     story: null,
   },
@@ -95,7 +95,7 @@ describe('홈페이지 작가 목록', () => {
     render(<FeaturedHomepagesSection artists={ARTISTS} />)
     const founder = cards()[0]!
     expect(founder.getByRole('heading', { level: 3 })).toHaveTextContent('故 임현기')
-    expect(founder.getByText('협회 창립자 · 명예회장')).toBeInTheDocument()
+    expect(founder.getByText('협회 창립자 · 명예이사장')).toBeInTheDocument()
     expect(founder.getByText(featuredHomepagesCopy.ko.renewed)).toBeInTheDocument()
     expect(cards()[1]!.queryByText(featuredHomepagesCopy.ko.renewed)).not.toBeInTheDocument()
   })
