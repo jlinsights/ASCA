@@ -27,15 +27,15 @@ export interface FeaturedHomepage {
 }
 
 export const FEATURED_HOMEPAGES: readonly FeaturedHomepage[] = [
-  // 협회 창립자·명예회장, 2026년 8월 별세. 2026-10 홈페이지 새 단장 (사용자 확인 2026-10-31)
+  // 협회 창립자·명예이사장(名譽理事長 — 2026-11-01 사용자 확인), 2026년 8월 별세. 2026-10 홈페이지 새 단장
   {
     slug: 'lim-hyun-ki',
     sites: [{ url: 'https://seonggok.com', kind: 'personal' }],
     role: {
-      ko: '협회 창립자 · 명예회장',
+      ko: '협회 창립자 · 명예이사장',
       en: 'Founder and Honorary Chairman of the Society',
-      ja: '協会創立者・名誉会長',
-      zh: '協會創會者・名譽會長',
+      ja: '協会創立者・名誉理事長',
+      zh: '協會創會者・名譽理事長',
     },
     note: 'renewed',
   },
