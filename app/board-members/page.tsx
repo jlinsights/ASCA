@@ -43,10 +43,8 @@ const boardSections: BoardSection[] = [
     id: 'chairperson',
     title: '이사장 | 운영위원장',
     members: [
-      {
-        name: '임재홍',
-        position: '이사장',
-      },
+      // 호 宇晨(우신) — 2026-11-01 요청으로 추가
+      { name: '임재홍', artName: '우신', position: '이사장' },
     ],
   },
   {
