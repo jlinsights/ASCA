@@ -1,1 +1,1 @@
-🌐 /contact 전체 4개 언어 번역·Fragment ref 콘솔 경고 제거
+🐛 문의 처리 행별 잠금·감사 로그를 운영에서도 출력되는 logger.warn 으로 (Codex #216)

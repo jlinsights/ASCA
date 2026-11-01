@@ -1,4 +1,4 @@
-import { EyeOff, FileCheck2, History, Link2, Users, type LucideIcon } from 'lucide-react'
+import { EyeOff, FileCheck2, History, Inbox, Link2, Users, type LucideIcon } from 'lucide-react'
 
 export interface AdminNavItem {
   key: string
@@ -12,6 +12,12 @@ export interface AdminNavItem {
 // 공모전(/admin/contests)은 관리자 확인이 DB 에 없는 user_profiles 를 봐서 항상 튕기고,
 // 회원(/admin/membership)은 예시 데이터라 고칠 때까지 싣지 않는다.
 export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
+  {
+    key: 'inquiries',
+    href: '/admin/inquiries',
+    icon: Inbox,
+    label: { ko: '문의 접수함', en: 'Inquiries' },
+  },
   {
     key: 'artists',
     href: '/admin/artists',

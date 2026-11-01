@@ -95,6 +95,9 @@ export default function PrivacyPolicyPage() {
                   <p>1. 홈페이지 회원 가입 및 관리</p>
                   <p>2. 재화 또는 서비스 제공</p>
                   <p>3. 마케팅 및 광고에의 활용</p>
+                  <p>
+                    4. 문의 답변 (문의서로 받은 문의에 답하기 위한 이름·이메일·전화번호·문의 내용)
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -152,6 +155,10 @@ export default function PrivacyPolicyPage() {
                   <p>
                     <strong>재화 또는 서비스 제공:</strong> 재화·서비스 공급완료 및 요금결제·정산
                     완료시까지
+                  </p>
+                  <p>
+                    <strong>문의 답변:</strong> 문의 처리 완료 후 1년 (기간이 지나거나 본인이 삭제를
+                    요청하면 지체 없이 파기)
                   </p>
                 </div>
               </div>
