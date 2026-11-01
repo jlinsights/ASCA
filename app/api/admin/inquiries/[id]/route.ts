@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { archiveIdentity, archiveWriter } from '@/lib/archive/writer'
+import { auditTrail } from '@/lib/audit/audit-trail'
 import { inquiryDecisionSchema } from '@/lib/inquiries/schema'
 import { checkOrigin } from '@/lib/security/origin-check'
 import { rateLimit } from '@/lib/security/rate-limit'
@@ -45,7 +46,17 @@ export async function POST(request: NextRequest, { params }: Context) {
   const handled = status === 'new' ? null : new Date().toISOString()
 
   try {
-    const { data, error } = await archiveWriter()
+    const db = archiveWriter()
+    // 감사 기록용 이전 값 — 문의자 개인정보·본문은 기록에 넣지 않는다
+    const before = await db
+      .from('inquiries')
+      .select('status,handled_by,handled_at')
+      .eq('id', checked.id)
+      .maybeSingle()
+    if (before.error) throw before.error
+    if (!before.data) return json({ error: 'Inquiry not found', code: 'INQUIRY_NOT_FOUND' }, 404)
+
+    const { data, error } = await db
       .from('inquiries')
       .update({
         status,
@@ -57,6 +68,19 @@ export async function POST(request: NextRequest, { params }: Context) {
       .select('id')
     if (error) throw error
     if (!data?.length) return json({ error: 'Inquiry not found', code: 'INQUIRY_NOT_FOUND' }, 404)
+    await auditTrail.trackDataChange(checked.userId, 'update', 'inquiry', checked.id, before.data, {
+      status,
+      handled_by: handled ? checked.userId : null,
+      handled_at: handled,
+      noteChanged: note !== undefined,
+    })
+    // auditTrail 은 메모리 기록이라 운영 로그(warn 이상만 출력)에도 식별자만 남긴다
+    log.warn('inquiry status changed', {
+      id: checked.id,
+      by: checked.userId,
+      from: before.data.status,
+      to: status,
+    })
     return json({ ok: true })
   } catch (error) {
     log.error('admin inquiry update failed', error)
@@ -73,10 +97,13 @@ export async function DELETE(request: NextRequest, { params }: Context) {
       .from('inquiries')
       .delete()
       .eq('id', checked.id)
-      .select('id')
+      .select('id,topic,status,handled_by,created_at')
     if (error) throw error
-    if (!data?.length) return json({ error: 'Inquiry not found', code: 'INQUIRY_NOT_FOUND' }, 404)
-    log.info('inquiry deleted', { id: checked.id, by: checked.userId })
+    const removed = data?.[0]
+    if (!removed) return json({ error: 'Inquiry not found', code: 'INQUIRY_NOT_FOUND' }, 404)
+    // 지운 문의의 개인정보는 남기지 않고, 누가 언제 어떤 문의를 지웠는지만 남긴다
+    await auditTrail.trackDataChange(checked.userId, 'delete', 'inquiry', checked.id, removed, null)
+    log.warn('inquiry deleted', { id: checked.id, by: checked.userId, status: removed.status })
     return json({ ok: true })
   } catch (error) {
     log.error('admin inquiry delete failed', error)

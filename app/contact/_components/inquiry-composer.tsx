@@ -37,6 +37,8 @@ export function InquiryComposer() {
   const statusRef = useRef<HTMLDivElement>(null)
   const [errors, setErrors] = useState<InquiryErrors>({})
   const [sent, setSent] = useState<SendState>({ kind: 'idle' })
+  const [sending, setSending] = useState(false)
+  const sendingRef = useRef(false)
   const formRef = useRef<HTMLFormElement>(null)
   const kakaoLinkRef = useRef<HTMLAnchorElement>(null)
 
@@ -73,22 +75,33 @@ export function InquiryComposer() {
     return false
   }
 
-  /** 사이트 접수함에 보낸다 — 실패하면 글을 그대로 두고 메일·카카오톡을 권한다 */
+  /**
+   * 사이트 접수함에 보낸다 — 실패하면 글을 그대로 두고 메일·카카오톡을 권한다.
+   * 보내는 동안은 입력 전체를 잠근다(Codex #216): 고친 내용이 성공 응답에 지워지거나
+   * 같은 문의가 두 번 가는 일을 막는다. 진행 여부는 sent 와 따로 둬 입력 핸들러가 풀지 못한다.
+   */
   const sendSite = async () => {
-    if (sent.kind === 'sending' || !check()) return
+    if (sendingRef.current || !check()) return
     if (!consent) {
       setConsentError(true)
       formRef.current?.querySelector<HTMLInputElement>('#inquiry-consent')?.focus()
       return
     }
+    sendingRef.current = true
+    setSending(true)
     setSent({ kind: 'sending' })
-    const result = await postInquiry(draft, language, website)
-    if (result === 'sent') {
-      setDraft(EMPTY_INQUIRY)
-      setConsent(false)
-      setSent({ kind: 'site-sent' })
-    } else {
-      setSent({ kind: 'site-failed' })
+    try {
+      const result = await postInquiry(draft, language, website)
+      if (result === 'sent') {
+        setDraft(EMPTY_INQUIRY)
+        setConsent(false)
+        setSent({ kind: 'site-sent' })
+      } else {
+        setSent({ kind: 'site-failed' })
+      }
+    } finally {
+      sendingRef.current = false
+      setSending(false)
     }
     statusRef.current?.focus()
   }
@@ -130,250 +143,256 @@ export function InquiryComposer() {
         {t('inqHow')}
       </p>
 
-      <fieldset aria-describedby={describedBy('topic')}>
-        <legend className='mb-3 text-sm font-medium text-foreground'>
-          {t('inqTopic')} <span aria-hidden='true'>*</span>
-          <span className='sr-only'>{t('inqRequired')}</span>
-        </legend>
-        <div className='grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3'>
-          {INQUIRY_TOPICS.map(option => (
-            <label key={option.id} className='block cursor-pointer'>
-              <input
-                type='radio'
-                name='inquiry-topic'
-                value={option.id}
-                checked={draft.topic === option.id}
-                onChange={() => {
-                  setDraft(current => ({ ...current, topic: option.id }))
-                  setErrors(current => ({ ...current, topic: undefined }))
-                  setSent({ kind: 'idle' })
-                }}
-                className='peer sr-only'
-              />
-              <span className='flex h-full min-h-16 flex-col justify-center gap-1 rounded-md border border-border px-3 py-3 sm:px-4 transition-colors hover:border-foreground peer-checked:border-foreground peer-checked:bg-foreground peer-checked:text-background peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2'>
-                <span className='text-base font-medium'>{t(`inqTopic_${option.id}`)}</span>
-                <span className='text-sm opacity-75'>{t(`inqTopicHint_${option.id}`)}</span>
-              </span>
-            </label>
-          ))}
-        </div>
-        {errors.topic && (
-          <p id='inquiry-topic-error' className='mt-2 text-sm text-destructive'>
-            {t(`inqErr_${errors.topic}`)}
-          </p>
-        )}
-      </fieldset>
-
-      {topic?.guideHref && (
-        <p className='flex flex-wrap items-center gap-x-3 gap-y-1 border-l-2 border-foreground pl-4 text-base'>
-          <span className='text-muted-foreground'>{t('inqGuideNote')}</span>
-          <Link
-            href={topic.guideHref}
-            className='inline-flex min-h-11 items-center gap-1 font-medium underline underline-offset-4'
-          >
-            {t(`inqGuide_${topic.id}`)}
-            <ArrowRight className='h-4 w-4' aria-hidden='true' />
-          </Link>
-        </p>
-      )}
-
-      <div className='grid gap-6 md:grid-cols-2'>
-        <div className='grid gap-2'>
-          <label htmlFor='inquiry-name' className='text-sm font-medium'>
-            {t('inqName')} <span aria-hidden='true'>*</span>
-          </label>
-          <input
-            id='inquiry-name'
-            data-field='name'
-            autoComplete='name'
-            required
-            value={draft.name}
-            onChange={update('name')}
-            aria-invalid={Boolean(errors.name)}
-            aria-describedby={describedBy('name')}
-            className={inputClass}
-          />
-          {errors.name && (
-            <p id='inquiry-name-error' className='text-sm text-destructive'>
-              {t(`inqErr_${errors.name}`)}
+      {/* 보내는 동안 모든 칸·버튼을 잠근다 */}
+      <fieldset disabled={sending} className='m-0 grid min-w-0 gap-8 border-0 p-0'>
+        <fieldset aria-describedby={describedBy('topic')}>
+          <legend className='mb-3 text-sm font-medium text-foreground'>
+            {t('inqTopic')} <span aria-hidden='true'>*</span>
+            <span className='sr-only'>{t('inqRequired')}</span>
+          </legend>
+          <div className='grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3'>
+            {INQUIRY_TOPICS.map(option => (
+              <label key={option.id} className='block cursor-pointer'>
+                <input
+                  type='radio'
+                  name='inquiry-topic'
+                  value={option.id}
+                  checked={draft.topic === option.id}
+                  onChange={() => {
+                    setDraft(current => ({ ...current, topic: option.id }))
+                    setErrors(current => ({ ...current, topic: undefined }))
+                    setSent({ kind: 'idle' })
+                  }}
+                  className='peer sr-only'
+                />
+                <span className='flex h-full min-h-16 flex-col justify-center gap-1 rounded-md border border-border px-3 py-3 sm:px-4 transition-colors hover:border-foreground peer-checked:border-foreground peer-checked:bg-foreground peer-checked:text-background peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2'>
+                  <span className='text-base font-medium'>{t(`inqTopic_${option.id}`)}</span>
+                  <span className='text-sm opacity-75'>{t(`inqTopicHint_${option.id}`)}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+          {errors.topic && (
+            <p id='inquiry-topic-error' className='mt-2 text-sm text-destructive'>
+              {t(`inqErr_${errors.topic}`)}
             </p>
           )}
-        </div>
+        </fieldset>
 
-        <div className='grid gap-2'>
-          <label htmlFor='inquiry-email' className='text-sm font-medium'>
-            {t('inqEmail')}
-          </label>
-          <input
-            id='inquiry-email'
-            data-field='contact'
-            type='email'
-            inputMode='email'
-            autoComplete='email'
-            value={draft.email}
-            onChange={update('email')}
-            aria-invalid={Boolean(errors.contact)}
-            aria-describedby={describedBy('contact', 'inquiry-contact-hint')}
-            className={inputClass}
-          />
-        </div>
-
-        <div className='grid gap-2'>
-          <label htmlFor='inquiry-phone' className='text-sm font-medium'>
-            {t('inqPhone')}
-          </label>
-          <input
-            id='inquiry-phone'
-            type='tel'
-            inputMode='tel'
-            autoComplete='tel'
-            value={draft.phone}
-            onChange={update('phone')}
-            aria-invalid={Boolean(errors.contact)}
-            aria-describedby={describedBy('contact', 'inquiry-contact-hint')}
-            className={inputClass}
-          />
-        </div>
-
-        <div className='grid gap-2'>
-          <label htmlFor='inquiry-subject' className='text-sm font-medium'>
-            {t('inqSubject')}{' '}
-            <span className='font-normal text-muted-foreground'>{t('inqOptional')}</span>
-          </label>
-          <input
-            id='inquiry-subject'
-            value={draft.subject}
-            onChange={update('subject')}
-            className={inputClass}
-          />
-        </div>
-
-        <p id='inquiry-contact-hint' className='-mt-3 text-sm text-muted-foreground md:col-span-2'>
-          {t('inqContactHint')}
-        </p>
-        {errors.contact && (
-          <p id='inquiry-contact-error' className='-mt-4 text-sm text-destructive md:col-span-2'>
-            {t(`inqErr_${errors.contact}`)}
+        {topic?.guideHref && (
+          <p className='flex flex-wrap items-center gap-x-3 gap-y-1 border-l-2 border-foreground pl-4 text-base'>
+            <span className='text-muted-foreground'>{t('inqGuideNote')}</span>
+            <Link
+              href={topic.guideHref}
+              className='inline-flex min-h-11 items-center gap-1 font-medium underline underline-offset-4'
+            >
+              {t(`inqGuide_${topic.id}`)}
+              <ArrowRight className='h-4 w-4' aria-hidden='true' />
+            </Link>
           </p>
         )}
 
-        {topic?.asksPlan && (
-          <div className='grid gap-2 md:col-span-2'>
-            <label htmlFor='inquiry-plan' className='text-sm font-medium'>
-              {t('inqPlan')}{' '}
-              <span className='font-normal text-muted-foreground'>{t('inqOptional')}</span>
+        <div className='grid gap-6 md:grid-cols-2'>
+          <div className='grid gap-2'>
+            <label htmlFor='inquiry-name' className='text-sm font-medium'>
+              {t('inqName')} <span aria-hidden='true'>*</span>
             </label>
             <input
-              id='inquiry-plan'
-              value={draft.plan}
-              onChange={update('plan')}
-              placeholder={t('inqPlanPlaceholder')}
+              id='inquiry-name'
+              data-field='name'
+              autoComplete='name'
+              required
+              value={draft.name}
+              onChange={update('name')}
+              aria-invalid={Boolean(errors.name)}
+              aria-describedby={describedBy('name')}
+              className={inputClass}
+            />
+            {errors.name && (
+              <p id='inquiry-name-error' className='text-sm text-destructive'>
+                {t(`inqErr_${errors.name}`)}
+              </p>
+            )}
+          </div>
+
+          <div className='grid gap-2'>
+            <label htmlFor='inquiry-email' className='text-sm font-medium'>
+              {t('inqEmail')}
+            </label>
+            <input
+              id='inquiry-email'
+              data-field='contact'
+              type='email'
+              inputMode='email'
+              autoComplete='email'
+              value={draft.email}
+              onChange={update('email')}
+              aria-invalid={Boolean(errors.contact)}
+              aria-describedby={describedBy('contact', 'inquiry-contact-hint')}
               className={inputClass}
             />
           </div>
-        )}
 
-        <div className='grid gap-2 md:col-span-2'>
-          <label htmlFor='inquiry-message' className='text-sm font-medium'>
-            {t('inqMessage')} <span aria-hidden='true'>*</span>
+          <div className='grid gap-2'>
+            <label htmlFor='inquiry-phone' className='text-sm font-medium'>
+              {t('inqPhone')}
+            </label>
+            <input
+              id='inquiry-phone'
+              type='tel'
+              inputMode='tel'
+              autoComplete='tel'
+              value={draft.phone}
+              onChange={update('phone')}
+              aria-invalid={Boolean(errors.contact)}
+              aria-describedby={describedBy('contact', 'inquiry-contact-hint')}
+              className={inputClass}
+            />
+          </div>
+
+          <div className='grid gap-2'>
+            <label htmlFor='inquiry-subject' className='text-sm font-medium'>
+              {t('inqSubject')}{' '}
+              <span className='font-normal text-muted-foreground'>{t('inqOptional')}</span>
+            </label>
+            <input
+              id='inquiry-subject'
+              value={draft.subject}
+              onChange={update('subject')}
+              className={inputClass}
+            />
+          </div>
+
+          <p
+            id='inquiry-contact-hint'
+            className='-mt-3 text-sm text-muted-foreground md:col-span-2'
+          >
+            {t('inqContactHint')}
+          </p>
+          {errors.contact && (
+            <p id='inquiry-contact-error' className='-mt-4 text-sm text-destructive md:col-span-2'>
+              {t(`inqErr_${errors.contact}`)}
+            </p>
+          )}
+
+          {topic?.asksPlan && (
+            <div className='grid gap-2 md:col-span-2'>
+              <label htmlFor='inquiry-plan' className='text-sm font-medium'>
+                {t('inqPlan')}{' '}
+                <span className='font-normal text-muted-foreground'>{t('inqOptional')}</span>
+              </label>
+              <input
+                id='inquiry-plan'
+                value={draft.plan}
+                onChange={update('plan')}
+                placeholder={t('inqPlanPlaceholder')}
+                className={inputClass}
+              />
+            </div>
+          )}
+
+          <div className='grid gap-2 md:col-span-2'>
+            <label htmlFor='inquiry-message' className='text-sm font-medium'>
+              {t('inqMessage')} <span aria-hidden='true'>*</span>
+            </label>
+            <textarea
+              id='inquiry-message'
+              data-field='message'
+              required
+              rows={6}
+              value={draft.message}
+              onChange={update('message')}
+              aria-invalid={Boolean(errors.message)}
+              aria-describedby={describedBy('message')}
+              className={`${inputClass} min-h-40 leading-relaxed`}
+            />
+            {errors.message && (
+              <p id='inquiry-message-error' className='text-sm text-destructive'>
+                {t(`inqErr_${errors.message}`)}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className='grid gap-2'>
+          <label className='flex cursor-pointer items-start gap-3 text-sm leading-relaxed'>
+            <input
+              id='inquiry-consent'
+              type='checkbox'
+              checked={consent}
+              onChange={event => {
+                setConsent(event.target.checked)
+                setConsentError(false)
+              }}
+              aria-invalid={consentError}
+              aria-describedby={
+                consentError
+                  ? 'inquiry-consent-detail inquiry-consent-error'
+                  : 'inquiry-consent-detail'
+              }
+              className='mt-0.5 h-5 w-5 shrink-0 accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+            />
+            <span>
+              {t('inqConsentLabel')} <span aria-hidden='true'>*</span>
+            </span>
           </label>
-          <textarea
-            id='inquiry-message'
-            data-field='message'
-            required
-            rows={6}
-            value={draft.message}
-            onChange={update('message')}
-            aria-invalid={Boolean(errors.message)}
-            aria-describedby={describedBy('message')}
-            className={`${inputClass} min-h-40 leading-relaxed`}
-          />
-          {errors.message && (
-            <p id='inquiry-message-error' className='text-sm text-destructive'>
-              {t(`inqErr_${errors.message}`)}
+          <p id='inquiry-consent-detail' className='pl-8 text-sm text-muted-foreground'>
+            {t('inqConsentDetail')}{' '}
+            <Link href='/privacy-policy' className='underline underline-offset-4'>
+              {t('inqPrivacyLink')}
+            </Link>
+          </p>
+          {consentError && (
+            <p id='inquiry-consent-error' className='pl-8 text-sm text-destructive'>
+              {t('inqErr_consentMissing')}
             </p>
           )}
         </div>
-      </div>
 
-      <div className='grid gap-2'>
-        <label className='flex cursor-pointer items-start gap-3 text-sm leading-relaxed'>
+        {/* 덫 칸 — 사람에게는 보이지 않고 키보드로도 닿지 않는다. 채워져 오면 서버가 저장하지 않는다 */}
+        <div aria-hidden='true' className='absolute -left-[9999px] h-px w-px overflow-hidden'>
+          <label htmlFor='inquiry-website'>Website</label>
           <input
-            id='inquiry-consent'
-            type='checkbox'
-            checked={consent}
-            onChange={event => {
-              setConsent(event.target.checked)
-              setConsentError(false)
-            }}
-            aria-invalid={consentError}
-            aria-describedby={
-              consentError
-                ? 'inquiry-consent-detail inquiry-consent-error'
-                : 'inquiry-consent-detail'
-            }
-            className='mt-0.5 h-5 w-5 shrink-0 accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+            id='inquiry-website'
+            name='website'
+            tabIndex={-1}
+            autoComplete='off'
+            value={website}
+            onChange={event => setWebsite(event.target.value)}
           />
-          <span>
-            {t('inqConsentLabel')} <span aria-hidden='true'>*</span>
-          </span>
-        </label>
-        <p id='inquiry-consent-detail' className='pl-8 text-sm text-muted-foreground'>
-          {t('inqConsentDetail')}{' '}
-          <Link href='/privacy-policy' className='underline underline-offset-4'>
-            {t('inqPrivacyLink')}
-          </Link>
-        </p>
-        {consentError && (
-          <p id='inquiry-consent-error' className='pl-8 text-sm text-destructive'>
-            {t('inqErr_consentMissing')}
-          </p>
-        )}
-      </div>
-
-      {/* 덫 칸 — 사람에게는 보이지 않고 키보드로도 닿지 않는다. 채워져 오면 서버가 저장하지 않는다 */}
-      <div aria-hidden='true' className='absolute -left-[9999px] h-px w-px overflow-hidden'>
-        <label htmlFor='inquiry-website'>Website</label>
-        <input
-          id='inquiry-website'
-          name='website'
-          tabIndex={-1}
-          autoComplete='off'
-          value={website}
-          onChange={event => setWebsite(event.target.value)}
-        />
-      </div>
-
-      <div className='grid gap-4'>
-        <button
-          type='submit'
-          disabled={sent.kind === 'sending'}
-          className='inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-foreground px-8 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 sm:justify-self-start'
-        >
-          <Send className='h-4 w-4' aria-hidden='true' />
-          {sent.kind === 'sending' ? t('inqSending') : t('inqSendSite')}
-        </button>
-        <div className='grid gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3'>
-          <span className='text-sm text-muted-foreground'>{t('inqOtherWays')}</span>
-          <button
-            type='button'
-            onClick={sendMail}
-            className='inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
-          >
-            <Mail className='h-4 w-4' aria-hidden='true' />
-            {t('inqSendMail')}
-          </button>
-          <button
-            type='button'
-            onClick={sendKakao}
-            className='inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
-          >
-            <MessageCircle className='h-4 w-4' aria-hidden='true' />
-            {t('inqSendKakao')}
-            <span className='sr-only'> {t('inqSendKakaoSr')}</span>
-          </button>
         </div>
-      </div>
+
+        <div className='grid gap-4'>
+          <button
+            type='submit'
+            disabled={sending}
+            className='inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-foreground px-8 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 sm:justify-self-start'
+          >
+            <Send className='h-4 w-4' aria-hidden='true' />
+            {sent.kind === 'sending' ? t('inqSending') : t('inqSendSite')}
+          </button>
+          <div className='grid gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3'>
+            <span className='text-sm text-muted-foreground'>{t('inqOtherWays')}</span>
+            <button
+              type='button'
+              onClick={sendMail}
+              className='inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+            >
+              <Mail className='h-4 w-4' aria-hidden='true' />
+              {t('inqSendMail')}
+            </button>
+            <button
+              type='button'
+              onClick={sendKakao}
+              className='inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+            >
+              <MessageCircle className='h-4 w-4' aria-hidden='true' />
+              {t('inqSendKakao')}
+              <span className='sr-only'> {t('inqSendKakaoSr')}</span>
+            </button>
+          </div>
+        </div>
+      </fieldset>
 
       <InquirySendStatus
         sent={sent}

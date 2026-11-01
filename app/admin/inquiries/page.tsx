@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import type { AdminInquiry, InquiryStatus } from '@/lib/inquiries/schema'
 import { InquiryCard, type InquiryAction } from './_components/inquiry-card'
@@ -27,7 +27,10 @@ export default function AdminInquiriesPage() {
   const [notice, setNotice] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
 
+  // 탭을 빨리 바꾸면 이전 탭의 늦은 응답이 현재 목록을 덮는다 — 가장 최근 요청만 반영한다
+  const latest = useRef(0)
   const load = useCallback(async () => {
+    const ticket = ++latest.current
     setError(null)
     try {
       const response = await fetch(`/api/admin/inquiries?status=${filter}`, {
@@ -35,9 +38,11 @@ export default function AdminInquiriesPage() {
       })
       if (!response.ok) throw new Error()
       const body = (await response.json()) as { data: AdminInquiry[]; limit: number }
+      if (ticket !== latest.current) return
       setItems(body.data)
       setLimit(body.limit)
     } catch {
+      if (ticket !== latest.current) return
       setItems(null)
       setError('문의 목록을 불러오지 못했습니다.')
     }

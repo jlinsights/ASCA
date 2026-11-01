@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { InquiryComposer, InquirySection } from '../_components/inquiry-composer'
 import { inquiryTranslations } from '@/lib/i18n/translations/inquiry'
@@ -207,6 +207,32 @@ describe('InquiryComposer', () => {
       await user.click(screen.getByRole('checkbox', { name: /개인정보 수집·이용에 동의/ }))
       await user.click(screen.getByRole('button', { name: '문의 보내기' }))
       expect(await screen.findByText(/사이트로 보내지 못했습니다/)).toBeInTheDocument()
+    })
+
+    it('응답을 기다리는 동안 입력을 잠그고 다시 보내지 않는다 (Codex #216)', async () => {
+      const user = userEvent.setup()
+      let finish: (value: { status: number; json: () => Promise<unknown> }) => void = () => {}
+      const fetchMock = jest.fn(() => new Promise(resolve => (finish = resolve)))
+      Object.defineProperty(global, 'fetch', {
+        configurable: true,
+        writable: true,
+        value: fetchMock,
+      })
+      render(<InquiryComposer />)
+      await fill(user)
+      await user.click(screen.getByRole('checkbox', { name: /개인정보 수집·이용에 동의/ }))
+      await user.click(screen.getByRole('button', { name: '문의 보내기' }))
+
+      const message = screen.getByLabelText(/문의 내용/)
+      expect(message).toBeDisabled()
+      expect(screen.getByRole('button', { name: '보내는 중…' })).toBeDisabled()
+      expect(screen.getByRole('button', { name: '메일로 보내기' })).toBeDisabled()
+      fireEvent.submit(message.closest('form') as HTMLFormElement)
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+
+      await act(async () => finish({ status: 201, json: async () => ({ ok: true, id: 'abc' }) }))
+      expect(await screen.findByText('문의를 접수했습니다.')).toBeInTheDocument()
+      expect(screen.getByLabelText(/문의 내용/)).not.toBeDisabled()
     })
 
     it('덫 칸은 화면 읽기 도구와 키보드에서 숨어 있다', () => {
