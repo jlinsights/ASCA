@@ -13,6 +13,7 @@ export interface PageHeroMark {
 export const PAGE_HERO_MARKS = {
   // 둘러보기 — 실제 작품·사진·숫자를 단다
   artists: { tier: 'feature', tc: '作家' },
+  artistHomepages: { tier: 'band', tc: '網站' },
   artworks: { tier: 'feature', tc: '作品' },
   exhibitions: { tier: 'feature', tc: '展覽' },
   exhibitionsCurrent: { tier: 'feature', tc: '現展' },

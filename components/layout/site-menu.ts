@@ -47,6 +47,28 @@ const artistGrades: MenuLink[] = [
   { labelKey: 'siteArtistMember', href: artistsBy({ membershipType: '회원작가' }) },
 ]
 
+// 작가·작품 — 왼쪽 둘러보기(작가 소개·작가의 홈페이지·작품), 오른쪽 직함·등급 (2026-11-01, 전시·공모처럼 두 칸)
+// 작가의 홈페이지는 /artists 맨 위에 있던 홈페이지 작가·書境 안내를 떼어 낸 페이지다
+// 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
+const artistColumns: MenuColumn[] = [
+  {
+    titleKey: 'siteNavColArtistsBrowse',
+    items: [
+      { labelKey: 'siteNavArtistsIntro', href: '/artists' },
+      { labelKey: 'siteNavArtistHomepages', href: '/artists/homepages' },
+      { labelKey: 'siteNavArtworks', href: '/artworks' },
+    ],
+  },
+  {
+    titleKey: 'siteNavColArtistsRanks',
+    items: [
+      { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
+      { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
+      ...artistGrades,
+    ],
+  },
+]
+
 const exhibitions: MenuLink[] = [
   { labelKey: 'siteExCurrent', href: '/exhibitions/current' },
   { labelKey: 'siteExUpcoming', href: '/exhibitions/upcoming' },
@@ -137,14 +159,8 @@ export const headerMenu: MenuGroup[] = [
     key: 'artists',
     labelKey: 'siteNavArtists',
     href: '/artists',
-    items: [
-      { labelKey: 'siteNavArtistsIntro', href: '/artists' },
-      { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
-      { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
-      ...artistGrades,
-      // 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
-      { labelKey: 'siteNavArtworks', href: '/artworks' },
-    ],
+    columns: artistColumns,
+    items: artistColumns.flatMap(column => column.items),
   },
   {
     key: 'regulations',
