@@ -16,7 +16,7 @@ export const inquiryTranslations: TranslationData = {
     inqOtherWays: '다른 방법으로 보내기',
     inqConsentLabel: '개인정보 수집·이용에 동의합니다',
     inqConsentDetail:
-      '수집 항목: 이름, 이메일·전화번호, 문의 내용 · 목적: 문의 답변 · 보유 기간: 문의 처리 후 1년. 동의하지 않으셔도 메일이나 카카오톡으로 문의하실 수 있습니다.',
+      '수집 항목: 이름, 이메일·전화번호, 문의 내용 · 목적: 문의 답변 · 보유 기간: 문의 처리 완료 후 1년. 동의하지 않으셔도 메일이나 카카오톡으로 문의하실 수 있습니다.',
     inqPrivacyLink: '개인정보처리방침',
     inqErr_consentMissing: '사이트로 보내려면 개인정보 수집·이용에 동의해 주세요.',
     inqSectionEyebrow: '문의서',
