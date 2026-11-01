@@ -235,9 +235,14 @@ const nextConfig = {
     return config
   },
 
+  // Next 16.3 의 새 스크롤 처리기(appNewScrollHandler, 기본 켜짐)는 Fragment 에 ref 를 단다.
+  // 이건 Next 내장 canary React 에서만 되는데, 위 webpack alias 가 클라이언트를 안정판 react-dom 으로
+  // 묶어서 'Invalid prop `ref` supplied to React.Fragment' 경고가 모든 페이지에 뜬다.
+  // alias 는 Clerk 단일 React 때문에 필요하므로, 스크롤 처리기를 예전 것으로 둔다 (2026-11-01).
   // 실험적 기능으로 성능 향상
   experimental: lowMemoryBuild
     ? {
+        appNewScrollHandler: false,
         cpus: 1,
         memoryBasedWorkersCount: false,
         webpackBuildWorker: false,
@@ -247,6 +252,7 @@ const nextConfig = {
         gzipSize: false,
       }
     : {
+        appNewScrollHandler: false,
         optimizePackageImports: [
           'lucide-react',
           '@radix-ui/react-icons',
