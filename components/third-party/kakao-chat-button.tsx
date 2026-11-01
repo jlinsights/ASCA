@@ -9,8 +9,8 @@ import { useLanguage } from '@/contexts/language-context'
  * SDK(Kakao.Channel.chat)는 앱 키·도메인 등록이 필요해 쓰지 않고 링크로 둔다.
  *
  * 위치는 예약 버튼 바로 위다(오른쪽 끝을 맞추고 12px 띄움).
- * - 768px 미만: MobileConsultButton(52px 원형, right 16px·bottom 16px) 위 → bottom 16+52+12 = 80px
- * - 768px 이상: Cal 플로팅 버튼(64px 높이 알약, right 40px·bottom 24px, 2026-11-01 운영 측정) 위 → bottom 24+64+12 = 100px
+ * - 768px 미만: ConsultButton(52px 원형, right 16px·bottom 16px) 위 → bottom 16+52+12 = 80px
+ * - 768px 이상: ConsultButton(64px 높이 알약, right 40px·bottom 24px — 예전 Cal 플로팅 버튼 자리) 위 → bottom 24+64+12 = 100px
  * 색은 카카오 디자인 가이드 고정값(배경 #FEE500, 기호 rgba(0,0,0,0.85)) — components/kakao/kakao-brand.ts 와 같다.
  * 접근 이름·툴팁은 선택한 언어를 따른다 — LanguageProvider(ClientProviders) 안에서 렌더링해야 한다.
  */
