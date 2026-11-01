@@ -28,16 +28,30 @@ export interface MenuGroup {
 const artistsBy = (params: Record<string, string>) =>
   `/artists?${new URLSearchParams(params).toString()}`
 
-const about: MenuLink[] = [
-  { labelKey: 'siteNavIntro', href: '/introductions' },
-  { labelKey: 'siteNavGreetings', href: '/greetings' },
-  { labelKey: 'siteNavMission', href: '/mission' },
-  { labelKey: 'siteAboutHistory', href: '/history' },
-  { labelKey: 'siteNavBoard', href: '/board-members' },
-  { labelKey: 'siteNavBusinessPlan', href: '/business-plan' },
-  { labelKey: 'siteNavPartners', href: '/partners' },
-  { labelKey: 'siteAboutBrand', href: '/brand' },
+// 소개 — 왼쪽 협회(누구이고 어떤 길을 걸어왔나), 오른쪽 조직·활동(어떻게 꾸리고 무엇을 하나), 네 개씩 두 칸 (2026-11-01)
+// 푸터는 두 칸을 순서대로 이은 같은 목록을 쓴다
+const aboutColumns: MenuColumn[] = [
+  {
+    titleKey: 'siteNavColAboutSociety',
+    items: [
+      { labelKey: 'siteNavIntro', href: '/introductions' },
+      { labelKey: 'siteNavGreetings', href: '/greetings' },
+      { labelKey: 'siteNavMission', href: '/mission' },
+      { labelKey: 'siteAboutHistory', href: '/history' },
+    ],
+  },
+  {
+    titleKey: 'siteNavColAboutOrganization',
+    items: [
+      { labelKey: 'siteNavBoard', href: '/board-members' },
+      { labelKey: 'siteNavBusinessPlan', href: '/business-plan' },
+      { labelKey: 'siteNavPartners', href: '/partners' },
+      { labelKey: 'siteAboutBrand', href: '/brand' },
+    ],
+  },
 ]
+
+const about: MenuLink[] = aboutColumns.flatMap(column => column.items)
 
 // 규정 등급만 싣는다 — 공모작가는 등급이 아니다(2026-10-24). 일반작가는 DB 에 '회원작가' 로 들어 있다.
 // 청년작가는 등록자가 없어 싣지 않는다 (2026-10-22). 등록이 시작되면 membershipType=청년작가 로 되살린다
@@ -146,7 +160,13 @@ const exhibitionsAndContests: MenuColumn[] = [
 export const headerMenu: MenuGroup[] = [
   // 순서: 소개 · 전시·공모 · 작가·작품 · 정관·규정 · 회원·후원 · 소식 · 문의 (2026-10-31, 소식을 문의 바로 앞으로)
   // 소개·정관·규정 라벨은 헤더·푸터 제목·규정 페이지 경로 표시가 같은 키를 쓴다 (2026-10-26)
-  { key: 'about', labelKey: 'siteNavAboutShort', href: '/introductions', items: about },
+  {
+    key: 'about',
+    labelKey: 'siteNavAboutShort',
+    href: '/introductions',
+    columns: aboutColumns,
+    items: about,
+  },
   {
     key: 'exhibitions',
     labelKey: 'siteNavExhibitionsContests',

@@ -43,6 +43,21 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(headerMenu.some(group => group.href === '/artworks')).toBe(false)
   })
 
+  // 2026-11-01 요청: 소개 8개를 네 개씩 두 칸으로
+  it('소개 메뉴는 왼쪽 협회, 오른쪽 조직·활동 네 개씩 두 칸이고 푸터는 같은 순서다', () => {
+    const about = headerMenu.find(group => group.key === 'about')
+    const ko = (key: string) => translations.ko?.[key]
+    expect(
+      about?.columns?.map(column => [ko(column.titleKey), column.items.map(i => ko(i.labelKey))])
+    ).toStrictEqual([
+      ['협회', ['소개', '인사말씀', '사명', '연혁']],
+      ['조직·활동', ['임원', '사업계획', '유관단체', '브랜드']],
+    ])
+    expect(about?.items).toEqual(about?.columns?.flatMap(column => column.items))
+    const footerAbout = footerMenu.find(section => section.titleKey === 'siteNavAboutShort')
+    expect(footerAbout?.items).toEqual(about?.items)
+  })
+
   // 2026-11-01 요청: 왼쪽 작가 소개·작가의 홈페이지·작품, 오른쪽 고문·자문위원·초대·추천·일반작가
   it('작가·작품 메뉴는 왼쪽 둘러보기, 오른쪽 직함·등급 두 칸으로 하위 메뉴를 나눈다', () => {
     const artists = headerMenu.find(group => group.key === 'artists')
