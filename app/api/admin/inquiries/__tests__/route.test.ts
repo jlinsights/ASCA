@@ -4,6 +4,7 @@ import { archiveIdentity, archiveWriter } from '@/lib/archive/writer'
 import { checkOrigin } from '@/lib/security/origin-check'
 import { ADMIN_INQUIRY_COLUMNS } from '@/lib/inquiries/schema'
 import { auditTrail } from '@/lib/audit/audit-trail'
+import { logger } from '@/lib/utils/logger'
 import { GET } from '../route'
 import { DELETE, POST } from '../[id]/route'
 
@@ -11,7 +12,10 @@ jest.mock('@/lib/archive/writer', () => ({ archiveIdentity: jest.fn(), archiveWr
 jest.mock('@/lib/security/origin-check', () => ({ checkOrigin: jest.fn() }))
 jest.mock('@/lib/security/rate-limit', () => ({ rateLimit: () => ({ check: async () => null }) }))
 jest.mock('@/lib/audit/audit-trail', () => ({ auditTrail: { trackDataChange: jest.fn() } }))
-jest.mock('@/lib/utils/logger', () => ({ log: { warn: jest.fn(), error: jest.fn() } }))
+jest.mock('@/lib/utils/logger', () => ({
+  log: { warn: jest.fn(), error: jest.fn() },
+  logger: { warn: jest.fn() },
+}))
 
 const identity = jest.mocked(archiveIdentity)
 const id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'
@@ -115,6 +119,11 @@ describe('POST /api/admin/inquiries/[id]', () => {
       before.data,
       expect.objectContaining({ status: 'answered', noteChanged: true })
     )
+    // 운영에서도 출력되는 로거로 남긴다 (log.warn 은 개발 전용)
+    expect(logger.warn).toHaveBeenCalledWith(
+      'inquiry status changed',
+      expect.objectContaining({ id, by: admin.userId, from: 'new', to: 'answered' })
+    )
   })
 
   it('새 문의로 되돌리면 처리 기록을 지우고, 메모를 안 보내면 메모는 그대로 둔다', async () => {
@@ -146,6 +155,10 @@ describe('DELETE /api/admin/inquiries/[id]', () => {
       null
     )
     expect(auditTrail.trackDataChange).toHaveBeenCalledTimes(1)
+    expect(logger.warn).toHaveBeenCalledWith(
+      'inquiry deleted',
+      expect.objectContaining({ id, by: admin.userId })
+    )
     identity.mockResolvedValueOnce({ ...admin, admin: false })
     expect((await remove()).status).toBe(403)
   })

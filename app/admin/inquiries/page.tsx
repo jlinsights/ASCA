@@ -31,7 +31,16 @@ export default function AdminInquiriesPage() {
   const [paging, setPaging] = useState<Paging>({ pageSize: 50, total: 0 })
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
-  const [busyId, setBusyId] = useState<string | null>(null)
+  // 처리 중인 문의는 행마다 잠근다 — 다른 문의를 처리해도 앞선 문의의 잠금이 풀리지 않는다 (Codex #216)
+  const [busyIds, setBusyIds] = useState<ReadonlySet<string>>(() => new Set())
+  const busyRef = useRef<ReadonlySet<string>>(busyIds)
+  const markBusy = (id: string, on: boolean) => {
+    const next = new Set(busyRef.current)
+    if (on) next.add(id)
+    else next.delete(id)
+    busyRef.current = next
+    setBusyIds(next)
+  }
 
   // 처리 뒤 다시 불러올 때도 '지금' 보고 있는 탭·쪽을 쓴다 — 처리를 시작한 때의 탭이 아니다 (Codex #216)
   const view = useRef({ filter, page })
@@ -70,7 +79,8 @@ export default function AdminInquiriesPage() {
   const first = (page - 1) * paging.pageSize + 1
 
   const act = async (inquiry: AdminInquiry, action: InquiryAction) => {
-    setBusyId(inquiry.id)
+    if (busyRef.current.has(inquiry.id)) return
+    markBusy(inquiry.id, true)
     setNotice(null)
     try {
       const response = await fetch(`/api/admin/inquiries/${inquiry.id}`, {
@@ -90,7 +100,7 @@ export default function AdminInquiriesPage() {
       }
       await load()
     } finally {
-      setBusyId(null)
+      markBusy(inquiry.id, false)
     }
   }
 
@@ -149,7 +159,7 @@ export default function AdminInquiriesPage() {
             <InquiryCard
               key={item.id}
               inquiry={item}
-              busy={busyId === item.id}
+              busy={busyIds.has(item.id)}
               onAction={action => void act(item, action)}
             />
           ))}

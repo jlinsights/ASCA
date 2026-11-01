@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import AdminInquiriesPage from '../page'
 
@@ -83,4 +83,20 @@ it('한 쪽을 넘는 문의는 쪽을 넘겨 오래된 것까지 본다', async
   expect(screen.getByRole('button', { name: '이전 쪽' })).toBeDisabled()
   await user.click(screen.getByRole('button', { name: '다음 쪽' }))
   expect(calls.at(-1)).toBe(list('new', 2))
+})
+
+it('다른 문의를 처리해도 처리 중인 문의의 잠금이 풀리지 않는다 (Codex #216)', async () => {
+  const user = userEvent.setup()
+  render(<AdminInquiriesPage />)
+  await reply(list('new'), [inquiry('가', 'new'), inquiry('나', 'new')])
+
+  const card = (name: string) => screen.getByRole('article', { name: new RegExp(`· ${name}$`) })
+  const close = (name: string) => within(card(name)).getByRole('button', { name: '종결으로' })
+
+  await user.click(close('가'))
+  await user.click(close('나'))
+
+  expect(close('가')).toBeDisabled()
+  expect(close('나')).toBeDisabled()
+  expect(calls.filter(url => url === '/api/admin/inquiries/가-id')).toHaveLength(1)
 })
