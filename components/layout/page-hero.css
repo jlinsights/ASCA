@@ -176,7 +176,9 @@ a.asca-scrolls__link:hover {
     min-height: 0;
     height: auto;
   }
+  /* 데스크톱의 고정 높이를 풀어 3:5 사진이 아래 목차를 덮지 않게 한다 */
   .ab-ph__media .asca-scrolls {
+    height: auto;
     min-height: 0;
   }
   .asca-scrolls__item,
