@@ -93,7 +93,8 @@ export function inquiryBody(draft: InquiryDraft): string {
     ['이메일', draft.email],
     ['전화', draft.phone],
     ['관련 작품·작가', draft.subject],
-    ['예산·일정', draft.plan],
+    // 예산·일정은 그 칸을 보이는 용건일 때만 — 용건을 바꿔 숨겨진 옛 값이 새지 않게 (Codex #214)
+    ['예산·일정', findInquiryTopic(draft.topic)?.asksPlan ? draft.plan : ''],
   ]
   return [
     `용건: ${findInquiryTopic(draft.topic)?.label ?? ''}`,

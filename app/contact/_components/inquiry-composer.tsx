@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
 import { EMAIL, KAKAO_CHAT_URL, mailto } from '@/lib/content/contact-info'
 import { useLanguage } from '@/contexts/language-context'
+import { ApplySectionHead } from '@/components/apply/apply-parts'
 import {
   EMPTY_INQUIRY,
   INQUIRY_TOPICS,
@@ -365,5 +366,21 @@ export function InquiryComposer() {
         )}
       </div>
     </form>
+  )
+}
+
+/** /contact 의 문의서 영역 — 제목·안내도 선택한 언어로 (페이지는 서버 컴포넌트라 여기서 번역) */
+export function InquirySection() {
+  const { t } = useLanguage()
+  return (
+    <section id='inquiry' aria-labelledby='inquiry-title' className='asca-apply__anchor'>
+      <ApplySectionHead
+        id='inquiry-title'
+        eyebrow={t('inqSectionEyebrow')}
+        title={t('inqSectionTitle')}
+        lede={t('inqSectionLede')}
+      />
+      <InquiryComposer />
+    </section>
   )
 }

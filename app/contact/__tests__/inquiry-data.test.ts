@@ -53,6 +53,12 @@ describe('보낼 글', () => {
     ])
   })
 
+  it('예산·일정 칸이 없는 용건으로 바꾸면 남은 값을 보내지 않는다', () => {
+    const plan = '2027년 3월, 100만 원'
+    expect(inquiryBody({ ...filled, topic: 'commission', plan })).toContain(`예산·일정: ${plan}`)
+    expect(inquiryBody({ ...filled, topic: 'academy', plan })).not.toContain('예산·일정')
+  })
+
   it('긴 본문은 잘랐다고 적는다', () => {
     const body = mailtoBody({ ...filled, message: '가'.repeat(MAILTO_BODY_LIMIT * 2) })
     expect(body).toContain('일부가 잘렸습니다')

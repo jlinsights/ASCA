@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { InquiryComposer } from '../_components/inquiry-composer'
+import { InquiryComposer, InquirySection } from '../_components/inquiry-composer'
 import { inquiryTranslations } from '@/lib/i18n/translations/inquiry'
 
 let language: 'ko' | 'en' | 'ja' | 'zh' = 'ko'
@@ -121,5 +121,13 @@ describe('InquiryComposer', () => {
     for (const lang of ['en', 'ja', 'zh'] as const) {
       expect(Object.keys(inquiryTranslations[lang]).sort()).toEqual(keys)
     }
+  })
+
+  it('문의서 영역 제목도 선택한 언어로 보인다', () => {
+    language = 'ja'
+    render(<InquirySection />)
+    expect(
+      screen.getByRole('region', { name: '作品・ご依頼・展覧会のお問い合わせ' })
+    ).toHaveAttribute('id', 'inquiry')
   })
 })

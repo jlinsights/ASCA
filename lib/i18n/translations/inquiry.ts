@@ -5,6 +5,10 @@ import type { TranslationData } from '../types'
 // {email}·{link} 는 화면에서 링크로 바뀌는 자리다.
 export const inquiryTranslations: TranslationData = {
   ko: {
+    inqSectionEyebrow: '문의서',
+    inqSectionTitle: '작품·의뢰·전시 문의',
+    inqSectionLede:
+      '작품 구입, 휘호 의뢰, 전시 협업처럼 견적이 필요한 일은 여기서 바로 시작하세요.',
     inqHow:
       '용건과 연락처를 적으면 보낼 글을 만들어 드립니다. 메일 앱이나 카카오톡 채널로 보내시면 사무국이 적어 주신 연락처로 답을 드립니다.',
     inqTopic: '용건',
@@ -53,6 +57,10 @@ export const inquiryTranslations: TranslationData = {
     inqCopyLabel: '보낼 문의 내용',
   },
   en: {
+    inqSectionEyebrow: 'Inquiry',
+    inqSectionTitle: 'Artworks, commissions & exhibitions',
+    inqSectionLede:
+      'Start here for anything that needs a quote, from buying a work to commissioning calligraphy or proposing an exhibition.',
     inqHow:
       'Tell us what it is about and how to reach you, and we will draft the message. Send it from your mail app or our KakaoTalk channel and the office will reply to the contact you give.',
     inqTopic: 'Topic',
@@ -101,6 +109,10 @@ export const inquiryTranslations: TranslationData = {
     inqCopyLabel: 'Message to send',
   },
   ja: {
+    inqSectionEyebrow: 'お問い合わせ',
+    inqSectionTitle: '作品・ご依頼・展覧会のお問い合わせ',
+    inqSectionLede:
+      '作品のご購入、揮毫のご依頼、展覧会での協業など、お見積もりが必要なご用件はこちらからどうぞ。',
     inqHow:
       'ご用件と連絡先をご記入いただくと、送信用の文面をお作りします。メールアプリまたはカカオトークのチャンネルからお送りいただければ、事務局よりご記入の連絡先へご返信します。',
     inqTopic: 'ご用件',
@@ -149,6 +161,9 @@ export const inquiryTranslations: TranslationData = {
     inqCopyLabel: '送信するお問い合わせ内容',
   },
   zh: {
+    inqSectionEyebrow: '詢問表',
+    inqSectionTitle: '作品・委託・展覽詢問',
+    inqSectionLede: '作品購藏、揮毫委託、展覽合作等需要報價的事項，請從這裡開始。',
     inqHow:
       '填寫事由與聯絡方式後，我們會為您擬好要寄出的內容。透過郵件程式或 KakaoTalk 頻道寄出，事務局將回覆至您留下的聯絡方式。',
     inqTopic: '事由',
