@@ -26,7 +26,7 @@ function fakeDb() {
     from(table: string) {
       expect(table).toBe('inquiries')
       const builder: Record<string, unknown> = {}
-      for (const op of ['select', 'eq', 'order', 'limit', 'update', 'delete'])
+      for (const op of ['select', 'eq', 'order', 'range', 'update', 'delete'])
         builder[op] = (...args: unknown[]) => {
           ops.push([op, args])
           return builder
@@ -69,9 +69,18 @@ describe('GET /api/admin/inquiries', () => {
     const response = await GET(new NextRequest(url()))
     expect(response.status).toBe(200)
     expect(response.headers.get('cache-control')).toContain('no-store')
-    expect(op('select')).toEqual([ADMIN_INQUIRY_COLUMNS])
+    expect(op('select')).toEqual([ADMIN_INQUIRY_COLUMNS, { count: 'exact' }])
     expect(op('eq')).toEqual(['status', 'new'])
     expect(op('order')).toEqual(['created_at', { ascending: false }])
+    expect(op('range')).toEqual([0, 49])
+  })
+
+  it('쪽 번호로 오래된 문의도 가져오고 전체 건수를 알려 준다', async () => {
+    result = { data: [{ id }], error: null, count: 120 } as Result
+    const response = await GET(new NextRequest(url('?page=3')))
+    expect(op('range')).toEqual([100, 149])
+    expect(await response.json()).toMatchObject({ page: 3, pageSize: 50, total: 120 })
+    expect((await GET(new NextRequest(url('?page=0')))).status).toBe(400)
   })
 
   it('전체를 고르면 상태로 거르지 않는다', async () => {

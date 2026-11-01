@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { InquiryComposer, InquirySection } from '../_components/inquiry-composer'
 import { inquiryTranslations } from '@/lib/i18n/translations/inquiry'
+import { INQUIRY_LIMITS } from '@/lib/inquiries/schema'
 
 let language: 'ko' | 'en' | 'ja' | 'zh' = 'ko'
 jest.mock('@/contexts/language-context', () => ({
@@ -233,6 +234,22 @@ describe('InquiryComposer', () => {
       await act(async () => finish({ status: 201, json: async () => ({ ok: true, id: 'abc' }) }))
       expect(await screen.findByText('문의를 접수했습니다.')).toBeInTheDocument()
       expect(screen.getByLabelText(/문의 내용/)).not.toBeDisabled()
+    })
+
+    it('칸마다 서버와 같은 길이 제한을 건다 (Codex #216)', async () => {
+      const user = userEvent.setup()
+      render(<InquiryComposer />)
+      await user.click(screen.getByRole('radio', { name: /휘호·작품 의뢰/ }))
+      const limits: [RegExp | string, number][] = [
+        [/^이름/, INQUIRY_LIMITS.name],
+        ['이메일', INQUIRY_LIMITS.email],
+        ['전화번호', INQUIRY_LIMITS.phone],
+        [/관련 작품/, INQUIRY_LIMITS.subject],
+        [/예산·희망 일정/, INQUIRY_LIMITS.plan],
+        [/문의 내용/, INQUIRY_LIMITS.message],
+      ]
+      for (const [label, max] of limits)
+        expect(screen.getByLabelText(label)).toHaveAttribute('maxlength', String(max))
     })
 
     it('덫 칸은 화면 읽기 도구와 키보드에서 숨어 있다', () => {

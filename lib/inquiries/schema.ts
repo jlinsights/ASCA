@@ -97,9 +97,11 @@ export const inquiryDecisionSchema = z
 
 export const adminInquiryQuerySchema = z.object({
   status: z.enum([...INQUIRY_STATUSES, 'all']).default('new'),
+  page: z.coerce.number().int().min(1).max(10_000).default(1),
 })
 
-export const ADMIN_INQUIRY_LIMIT = 200
+/** 접수함 한 쪽의 건수 — 오래된 문의도 쪽을 넘겨 찾는다(PostgREST 1,000행 상한 아래) */
+export const ADMIN_INQUIRY_PAGE_SIZE = 50
 export const ADMIN_INQUIRY_COLUMNS =
   'id,topic,name,email,phone,subject,plan,message,language,status,staff_note,handled_at,created_at'
 

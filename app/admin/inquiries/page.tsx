@@ -13,6 +13,11 @@ const STATUSES = [
 ] as const
 type Filter = (typeof STATUSES)[number]['value']
 
+interface Paging {
+  pageSize: number
+  total: number
+}
+
 const DONE: Record<InquiryStatus, string> = {
   new: '새 문의로 되돌렸습니다',
   answered: '답함으로 옮겼습니다',
@@ -21,37 +26,48 @@ const DONE: Record<InquiryStatus, string> = {
 
 export default function AdminInquiriesPage() {
   const [filter, setFilter] = useState<Filter>('new')
+  const [page, setPage] = useState(1)
   const [items, setItems] = useState<AdminInquiry[] | null>(null)
-  const [limit, setLimit] = useState(200)
+  const [paging, setPaging] = useState<Paging>({ pageSize: 50, total: 0 })
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
 
-  // 탭을 빨리 바꾸면 이전 탭의 늦은 응답이 현재 목록을 덮는다 — 가장 최근 요청만 반영한다
+  // 처리 뒤 다시 불러올 때도 '지금' 보고 있는 탭·쪽을 쓴다 — 처리를 시작한 때의 탭이 아니다 (Codex #216)
+  const view = useRef({ filter, page })
+  view.current = { filter, page }
+  // 탭·쪽을 빨리 바꾸면 이전 요청의 늦은 응답이 현재 목록을 덮는다 — 가장 최근 요청만 반영한다
   const latest = useRef(0)
   const load = useCallback(async () => {
     const ticket = ++latest.current
+    const { filter: status, page: current } = view.current
     setError(null)
     try {
-      const response = await fetch(`/api/admin/inquiries?status=${filter}`, {
+      const response = await fetch(`/api/admin/inquiries?status=${status}&page=${current}`, {
         credentials: 'include',
       })
       if (!response.ok) throw new Error()
-      const body = (await response.json()) as { data: AdminInquiry[]; limit: number }
+      const body = (await response.json()) as { data: AdminInquiry[] } & Paging
       if (ticket !== latest.current) return
+      const lastPage = Math.max(1, Math.ceil(body.total / body.pageSize))
+      // 마지막 쪽의 문의를 모두 처리하면 그 쪽이 비므로 마지막 쪽으로 물러난다
+      if (current > lastPage) return setPage(lastPage)
       setItems(body.data)
-      setLimit(body.limit)
+      setPaging({ pageSize: body.pageSize, total: body.total })
     } catch {
       if (ticket !== latest.current) return
       setItems(null)
       setError('문의 목록을 불러오지 못했습니다.')
     }
-  }, [filter])
+  }, [])
 
   useEffect(() => {
     setItems(null)
     void load()
-  }, [load])
+  }, [filter, page, load])
+
+  const lastPage = Math.max(1, Math.ceil(paging.total / paging.pageSize))
+  const first = (page - 1) * paging.pageSize + 1
 
   const act = async (inquiry: AdminInquiry, action: InquiryAction) => {
     setBusyId(inquiry.id)
@@ -97,7 +113,10 @@ export default function AdminInquiriesPage() {
             aria-selected={filter === item.value}
             variant={filter === item.value ? 'default' : 'outline'}
             size='sm'
-            onClick={() => setFilter(item.value)}
+            onClick={() => {
+              setFilter(item.value)
+              setPage(1)
+            }}
           >
             {item.label}
           </Button>
@@ -123,11 +142,9 @@ export default function AdminInquiriesPage() {
         <p className='text-sm text-muted-foreground'>해당하는 문의가 없습니다.</p>
       ) : (
         <div className='space-y-4'>
-          {items.length >= limit && (
-            <p className='text-sm text-muted-foreground'>
-              최근 {limit}건만 보입니다. 처리한 문의를 정리하면 나머지가 보입니다.
-            </p>
-          )}
+          <p className='text-sm text-muted-foreground'>
+            전체 {paging.total}건 중 {first}–{first + items.length - 1}번째 (최신 순)
+          </p>
           {items.map(item => (
             <InquiryCard
               key={item.id}
@@ -136,6 +153,29 @@ export default function AdminInquiriesPage() {
               onAction={action => void act(item, action)}
             />
           ))}
+          {lastPage > 1 && (
+            <nav aria-label='문의 목록 쪽' className='flex items-center gap-3'>
+              <Button
+                variant='outline'
+                size='sm'
+                disabled={page <= 1}
+                onClick={() => setPage(current => current - 1)}
+              >
+                이전 쪽
+              </Button>
+              <span className='text-sm text-muted-foreground' aria-current='page'>
+                {page} / {lastPage}쪽
+              </span>
+              <Button
+                variant='outline'
+                size='sm'
+                disabled={page >= lastPage}
+                onClick={() => setPage(current => current + 1)}
+              >
+                다음 쪽
+              </Button>
+            </nav>
+          )}
         </div>
       )}
     </div>

@@ -21,6 +21,7 @@ import {
 } from './inquiry-data'
 import { InquirySendStatus, inputClass, type SendState } from './inquiry-send-status'
 import { postInquiry } from './inquiry-site-send'
+import { INQUIRY_LIMITS } from '@/lib/inquiries/schema'
 
 const FIELD_ORDER: InquiryField[] = ['topic', 'name', 'contact', 'message']
 
@@ -203,6 +204,7 @@ export function InquiryComposer() {
               autoComplete='name'
               required
               value={draft.name}
+              maxLength={INQUIRY_LIMITS.name}
               onChange={update('name')}
               aria-invalid={Boolean(errors.name)}
               aria-describedby={describedBy('name')}
@@ -226,6 +228,7 @@ export function InquiryComposer() {
               inputMode='email'
               autoComplete='email'
               value={draft.email}
+              maxLength={INQUIRY_LIMITS.email}
               onChange={update('email')}
               aria-invalid={Boolean(errors.contact)}
               aria-describedby={describedBy('contact', 'inquiry-contact-hint')}
@@ -243,6 +246,7 @@ export function InquiryComposer() {
               inputMode='tel'
               autoComplete='tel'
               value={draft.phone}
+              maxLength={INQUIRY_LIMITS.phone}
               onChange={update('phone')}
               aria-invalid={Boolean(errors.contact)}
               aria-describedby={describedBy('contact', 'inquiry-contact-hint')}
@@ -258,6 +262,7 @@ export function InquiryComposer() {
             <input
               id='inquiry-subject'
               value={draft.subject}
+              maxLength={INQUIRY_LIMITS.subject}
               onChange={update('subject')}
               className={inputClass}
             />
@@ -284,6 +289,7 @@ export function InquiryComposer() {
               <input
                 id='inquiry-plan'
                 value={draft.plan}
+                maxLength={INQUIRY_LIMITS.plan}
                 onChange={update('plan')}
                 placeholder={t('inqPlanPlaceholder')}
                 className={inputClass}
@@ -301,6 +307,7 @@ export function InquiryComposer() {
               required
               rows={6}
               value={draft.message}
+              maxLength={INQUIRY_LIMITS.message}
               onChange={update('message')}
               aria-invalid={Boolean(errors.message)}
               aria-describedby={describedBy('message')}
