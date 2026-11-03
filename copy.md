@@ -1,6 +1,23 @@
 # ASCA Copy Guide
 
-> 사단법인 동양서예협회 — 브랜드 카피, ICP, SEO 키워드 통합 가이드
+> 사단법인 동양서예협회 — 브랜드 표현과 UI 카피 작성 기준
+
+## 사용 기준
+
+- 공개 사이트 카피는 협회의 작가·작품·전시·행사 활동을 중심으로 작성한다.
+- 현재 노출 문구는 아래 참조 파일이 기준이다. 이 문서의 후보 문구가 자동으로
+  UI에 반영되지는 않는다.
+- 홈 문구는 `lib/i18n/translations/home.ts`, 공통 탐색 문구는
+  `components/gallery/discovery-copy.ts`를 먼저 확인한다. 컴포넌트의 사용 키와
+  `lib/i18n/translations.ts`의 통합표까지 대조한다.
+- Part B~D의 ICP·자동화 서비스·SEO 제안은 내부 기획 가설이다. 실제 제공 서비스나
+  검증된 고객 성과로 인용하지 않는다. 예산·인력·성과 수치는 조사 근거를 확인한
+  뒤 사용한다.
+- 구현된 서버 모듈을 근거로 AI 응대·보안 관제·데이터 분석 상품을 제공한다고 쓰지
+  않는다.
+- 연락처·계좌·행사 일정·가격은 담당자가 확인한 원본을 기준으로 게시한다.
+- 시각 표현은 `docs/02-design/DESIGN.md`를 따른다. 문서 변경만으로 커밋하지
+  않는다.
 
 ---
 
@@ -25,14 +42,29 @@
 
 ### 2. 핵심 메시지 체계
 
-#### 메인 슬로건
+#### 브랜드 선언
+
+> **法古創新 · 人書俱老**
+
+브랜드 소개문은 `.agents/brand-guidelines.md`, 현재 홈 노출 문구는
+`lib/i18n/translations/home.ts`를 따른다. 아래 기존 슬로건은 소개·SEO·푸터 등
+사용 중인 위치를 확인해 인용하며, 홈의 제목·설명과 혼동하지 않는다.
+
+#### 기존 슬로건
 
 > **正法의 계승, 創新의 조화**
 
-#### 히어로 카피
+#### 홈 히어로 — 현재 한국어 문구
 
-> 전통 서예의 정법을 계승하고 현대적 창신을 통해 동양서예의 새로운 미래를
-> 열어갑니다
+| 항목        | 번역 키         | 문구                                                                               |
+| ----------- | --------------- | ---------------------------------------------------------------------------------- |
+| 제목        | `homeHeroTitle` | 동양서예                                                                           |
+| 슬로건 풀이 | `homeHeroGloss` | 옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어집니다                          |
+| 설명        | `homeHeroLede`  | 동양 서예의 전통을 잇고, 전시·공모전·교육·국제 교류로 오늘의 필묵을 새롭게 엽니다. |
+
+홈 통계는 `components/home/home-data.ts`와 연혁 원본에서 확인한다.
+`한·중·일 교류전의 시작`을 협회 창립 연도로 바꾸거나, `기록된 전시`를 전체 활동
+실적으로 확대 해석하지 않는다. 동적으로 계산하는 수치는 문서에 복제하지 않는다.
 
 #### 풋터 태그라인
 
@@ -45,34 +77,39 @@
 #### 엘리베이터 피치 (30초)
 
 > 동양서예협회는 한국 전통서예와 현대서예, 캘리그라피의 전시 기획, 신진 작가
-> 발굴, 온라인 커뮤니티 운영을 통해 동양 서예 문화를 보존하고 확산합니다. 기업급
-> 아키텍처와 AI 에이전트를 활용하여 문화예술 단체의 디지털 전환과 데이터 기반
-> 의사결정을 지원합니다.
+> 발굴, 교육과 국제 교류를 통해 동양 서예 문화를 계승하고 새로운 표현의 가능성을
+> 넓혀 갑니다.
 
 ### 3. 브랜드 비주얼
 
-#### 컬러 토큰
+#### 컬러와 서체
 
-| 토큰            | 용도                    | 의미                 |
-| --------------- | ----------------------- | -------------------- |
-| `celadon-green` | Primary CTA             | 청자 — 전통의 고귀함 |
-| `scholar-red`   | Secondary CTA           | 주사 — 문인의 열정   |
-| `temple-gold`   | 장식, 그라데이션        | 금박 — 격조와 품위   |
-| `rice-paper`    | 배경, 텍스트 on primary | 한지 — 여백의 미     |
-| `ink-black`     | 본문 텍스트             | 먹 — 서예의 근본     |
+- 주요 CTA: `bg-primary text-primary-foreground` — 라이트 남색, 다크 금색.
+- 보조 액션: `secondary`·`outline` 등 기존 컴포넌트 variant를 사용한다.
+- 수상·기념 강조: `highlight`·`highlight-foreground`를 사용한다.
+- 밝은 바탕에 gold-500 본문 글자나 금색 면에 흰 글자를 쓰지 않는다.
+- `celadon-green`·`scholar-red`는 과거 이름이다. 녹색·홍색으로 해석하지 않는다.
+- 본문은 Pretendard / Noto Sans KR, 헤딩은 Playfair Display / Noto Serif KR
+  스택을 따른다.
+- 정확한 폰트 변수·색상·대비 규칙은 `docs/02-design/DESIGN.md`를 참조한다.
 
 #### 폰트
 
-| 폰트             | CSS 변수            | 용도           |
-| ---------------- | ------------------- | -------------- |
-| Inter            | `--font-inter`      | 영문 본문      |
-| Playfair Display | `--font-playfair`   | 장식 헤딩      |
-| Noto Sans KR     | `--font-noto-sans`  | 한국어 본문    |
-| Noto Serif KR    | `--font-noto-serif` | 서예 관련 제목 |
+| 폰트             | CSS 변수·클래스                   | 용도                       |
+| ---------------- | --------------------------------- | -------------------------- |
+| Pretendard       | `font-sans`의 첫 폰트             | 한글·영문 UI 본문          |
+| Playfair Display | `--font-display`                  | 영문 디스플레이·헤딩       |
+| Noto Sans KR     | `--font-noto-sans-kr`             | 한국어 본문 폴백           |
+| Noto Serif KR    | `--font-noto-serif-kr`            | 한국어 세리프 제목         |
+| Noto Serif TC    | `--font-noto-serif-tc`, `font-tc` | 협회명·슬로건 등 번체 한자 |
+
+브랜드 한자는 `lang='zh-Hant'` 또는 `lang='zh-TW'`로 표시한다. 한국어 문장
+안에서 언어 속성을 나누기 어려우면 `.cjk-tc-strict`를 사용한다. 폰트 이름이 폴백
+스택에 있다고 실제로 로딩된 것은 아니므로 로딩 경로는 DESIGN.md §3.1을 확인한다.
 
 ---
 
-## Part B. 이상 고객 프로필 (ICP)
+## Part B. 내부 기획 가설 — 이상 고객 프로필 (ICP)
 
 ### 4. ICP 요약
 
@@ -147,7 +184,7 @@
 
 ---
 
-## Part C. 엔터프라이즈 기능 카피
+## Part C. 내부 검토용 기능·서비스 카피 후보
 
 ### 9. 관리 시스템 및 보안
 
@@ -190,7 +227,7 @@
 - VIP 컬렉터 전시 초대 자동화
 - 행사 후 만족도 조사 자동 발송
 
-### 10. 데이터 파이프라인
+### 데이터 파이프라인 후보
 
 **대상**: ICP-1(Primary), ICP-4(Primary), ICP-2
 
@@ -228,7 +265,7 @@
 
 ---
 
-## Part D. SEO 키워드 전략
+## Part D. 내부 기획용 SEO 키워드 후보
 
 ### 12. 검색 퍼널별 키워드
 
@@ -315,6 +352,9 @@
 
 ## Part E. 사이트 카피 레퍼런스
 
+문구·경로는 아래 소스와 대조한다. 샘플 전시·강좌 문구는 실제 모집·운영 중인
+프로그램이라는 뜻이 아니며, 날짜·신청 가능 여부를 확인한 뒤 노출한다.
+
 ### 15. SEO 메타데이터
 
 **글로벌 기본값** (`lib/seo-constants.ts`):
@@ -339,13 +379,13 @@
 
 | 키         | ko   | en         | ja       | zh     |
 | ---------- | ---- | ---------- | -------- | ------ |
-| exhibition | 전시 | Exhibition | 展示     | 展览   |
+| exhibition | 전시 | Exhibition | 展示     | 展覽   |
 | artworks   | 작품 | Artworks   | 作品     | 作品   |
-| artists    | 작가 | Artists    | 作家     | 艺术家 |
-| events     | 행사 | Events     | イベント | 活动   |
-| catalog    | 도록 | Catalog    | カタログ | 图录   |
-| about      | 소개 | About      | 紹介     | 关于   |
-| news       | 소식 | News       | ニュース | 新闻   |
+| artists    | 작가 | Artists    | 作家     | 藝術家 |
+| events     | 행사 | Events     | イベント | 活動   |
+| catalog    | 도록 | Catalog    | カタログ | 圖錄   |
+| about      | 소개 | About      | 紹介     | 關於   |
+| news       | 소식 | News       | ニュース | 新聞   |
 
 참조: `lib/i18n/translations/navigation.ts`
 
@@ -354,7 +394,8 @@
 정본은 `components/layout/site-menu.ts`(`headerMenu`·`footerMenu`)다. 라벨은
 `lib/i18n/translations/site-chrome.ts` 의 번역 키이고, 아래는 한국어 화면
 기준이다. 칸이 둘인 메뉴는 데스크톱 드롭다운에서 왼쪽·오른쪽으로 나뉘고,
-모바일·푸터에서는 왼쪽 칸 다음에 오른쪽 칸을 이어 붙인다 (2026-11-01).
+모바일·푸터에서는 왼쪽 칸 다음에 오른쪽 칸을 이어 붙인다 (2026-11-01). 번역한
+라벨로 쿼리 문자열의 카테고리·작가 유형 값을 바꾸지 않는다.
 
 | 메뉴 (머리 링크)               | 왼쪽 칸                                                | 오른쪽 칸                                                                                      |
 | ------------------------------ | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
@@ -417,10 +458,15 @@
 
 ### 18. 히어로 CTA
 
-| 버튼      | 텍스트          | 링크           | 스타일               |
-| --------- | --------------- | -------------- | -------------------- |
-| Primary   | 전시회 둘러보기 | `/exhibitions` | celadon-green 배경   |
-| Secondary | 작품 감상하기   | `/artworks`    | scholar-red 아웃라인 |
+| 버튼         | 텍스트        | 링크               | 스타일              |
+| ------------ | ------------- | ------------------ | ------------------- |
+| 홈 주요 링크 | 문의하기      | `/contact#inquiry` | `asca-btn--primary` |
+| 홈 보조 링크 | 작품 둘러보기 | `/artworks`        | `asca-btn--link`    |
+| 입회 안내    | 입회 안내     | `/membership`      | `asca-btn--gold`    |
+| 문의         | 문의하기      | `/contact`         | `asca-btn--on-ink`  |
+
+참조: `components/home/home-hero.tsx`, `components/home/home-join.tsx`.
+`asca-btn--*`는 홈 전용 변형이며, 공통 Button variant와 구분한다.
 
 ### 19. 작품 카테고리
 
@@ -436,7 +482,10 @@
 | seal_carving        | 전각       | Seal Carving             |
 | wood_carving        | 서각       | Wood Carving Calligraphy |
 
-### 20. 전시/공모전 샘플 카피
+### 20. 전시/공모전 샘플 카피 — 게시용 원본 아님
+
+아래 문구는 작성 형식 예시다. 실제 전시명·개최 여부는 연혁 원본이나 담당자가
+확인한 행사 자료와 대조하고, 예시 날짜·회차를 운영 화면에 복사하지 않는다.
 
 **전시회**:
 
@@ -452,7 +501,11 @@
 > 전통과 현대가 만나는 서예의 축제 Korea Oriental Calligraphy Competition A
 > Festival of Calligraphy Where Tradition Meets Modernity
 
-### 21. 강좌
+### 21. 강좌 — 문구 예시
+
+교육 정보의 원본은 `app/academy/_components/`의 강좌 데이터와 해당 기관의 확인
+자료다. 아래 제목만으로 모집 중임을 뜻하지 않는다. 수강료·일정·신청 링크는 게시
+전에 원본을 확인한다.
 
 | 강좌명                           | 설명                   |
 | -------------------------------- | ---------------------- |
@@ -488,24 +541,71 @@
 
 ---
 
+## 탐색·상태 메시지
+
+정본은 `components/gallery/discovery-copy.ts`이며, `ko`·`en`·`ja`·`zh` 키를
+사용한다. 중국어 탐색 카피는 현재 번체다. 신규 번역도 기존 언어별 표기와 맞춘다.
+
+| 상황                  | 한국어 문구                                     |
+| --------------------- | ----------------------------------------------- |
+| 작가 검색             | 작가명 또는 전문분야로 검색                     |
+| 작품 검색             | 작품명, 작가명, 재료로 검색                     |
+| 상세 조건             | 상세 필터 / 선택한 조건 / 조건 해제             |
+| 검색어 제거           | 검색어 지우기                                   |
+| 전체 해제             | 전체 초기화                                     |
+| 결과 수               | 작가 {count}명 / 작품 {count}점                 |
+| 로딩                  | 결과를 불러오는 중…                             |
+| 조건에 맞는 결과 없음 | 조건에 맞는 결과가 없습니다                     |
+| 다음 행동             | 검색어를 바꾸거나 선택한 조건을 해제해 보세요.  |
+| 데이터 미등록         | 등록된 작가가 없습니다 / 등록된 작품이 없습니다 |
+| 조회 실패             | 목록을 불러오지 못했습니다                      |
+| 재시도 안내           | 잠시 후 다시 시도해 주세요. / 다시 시도         |
+
+결과 수는 `formatDiscoveryCount`로 해당 언어의 숫자 형식을 사용한다. 필터 변경
+중에는 확정되지 않은 결과 수 대신 로딩 상태를 알린다. 검색 결과 없음과 API
+오류를 같은 문구로 처리하지 않는다.
+
+## 문체와 게시 기준
+
+- 설명은 짧은 존댓말로, 버튼은 `작품 보기`·`다시 시도`처럼 행동 중심으로 쓴다.
+- placeholder만으로 입력 목적을 설명하지 않는다. 보이는 label과 접근성 이름을
+  함께 제공한다.
+- 원인 불명의 실패는 원인을 추정하지 않고 다음 행동을 안내한다.
+- 성공·저장·알림 전송 문구는 해당 동작이 확인된 뒤에만 표시한다.
+- `80% 자동 응대`, `매출 2배`, `24시간 응대` 등 성과·운영 보장은 검증 근거 없이
+  게시하지 않는다.
+- 네비게이션 번역은 `lib/i18n/translations/navigation.ts`를 기준으로 한다. 해당
+  번역표를 수정할 때도 중국어는 번체(`zh-TW`)를 유지한다.
+- 새 번역표는 `lib/i18n/translations.ts`의 해당 언어 블록에 연결한다. 모든
+  화면이 소비하는 키를 확인하되, 영어 회차 단위·중국어 슬로건 풀이처럼
+  컴포넌트가 의도적으로 숨기는 언어별 예외는 보존한다. 빈 문자열이 `t()`에서 키
+  이름으로 돌아올 수 있으므로 숨김은 컴포넌트 조건으로 처리한다.
+
 ## Part F. 파일 참조 맵
 
-| 카피 유형         | 소스 파일                                   |
-| ----------------- | ------------------------------------------- |
-| SEO 기본값        | `lib/seo-constants.ts`                      |
-| SEO 함수/JSON-LD  | `lib/seo.ts`                                |
-| 다국어 네비게이션 | `lib/i18n/translations/navigation.ts`       |
-| 히어로 섹션       | `components/sections/hero-section.tsx`      |
-| 헤더·푸터 메뉴    | `components/layout/site-menu.ts`            |
-| 소개 머리 큰 글자 | `components/layout/page-hero-marks.ts`      |
-| 카카오톡 상담     | `lib/content/contact-info.ts`               |
-| 풋터              | `components/layout/layout-footer.tsx`       |
-| 홈 메타           | `app/page.tsx`                              |
-| 갤러리 메타       | `app/gallery/page.tsx`                      |
-| 저작권 정책       | `app/copyright-policy/content.tsx`          |
-| 이용약관          | `app/terms-of-service/page.tsx`             |
-| 강좌              | `app/academy/page.tsx`                      |
-| 공모전            | `app/awards/page.tsx`                       |
-| 전시회 샘플       | `app/exhibitions/current/page.tsx` 등       |
-| 작품 카테고리     | `app/artworks/category/[category]/page.tsx` |
-| ICP 분석 원본     | `docs/icp-analysis.json`                    |
+| 카피 유형         | 소스 파일                                          |
+| ----------------- | -------------------------------------------------- |
+| SEO 기본값        | `lib/seo-constants.ts`                             |
+| SEO 함수/JSON-LD  | `lib/seo.ts`                                       |
+| 다국어 네비게이션 | `lib/i18n/translations/navigation.ts`              |
+| 홈 번역표         | `lib/i18n/translations/home.ts`                    |
+| 홈 히어로         | `components/home/home-hero.tsx`                    |
+| 홈 입회·문의      | `components/home/home-join.tsx`                    |
+| 홈 통계·전시 기록 | `components/home/home-data.ts`                     |
+| 헤더·푸터 메뉴    | `components/layout/site-menu.ts`                   |
+| 소개 머리 큰 글자 | `components/layout/page-hero-marks.ts`             |
+| 카카오톡 상담     | `lib/content/contact-info.ts`                      |
+| 풋터              | `components/layout/layout-footer.tsx`              |
+| 홈 메타           | `app/page.tsx`                                     |
+| 갤러리 메타       | `app/gallery/page.tsx`                             |
+| 저작권 정책       | `app/copyright-policy/content.tsx`                 |
+| 이용약관          | `app/terms-of-service/page.tsx`                    |
+| 강좌              | `app/academy/page.tsx`, `app/academy/_components/` |
+| 공모전            | `app/awards/page.tsx`                              |
+| 전시회 샘플       | `app/exhibitions/current/page.tsx` 등              |
+| 연혁 원본         | `app/history/_data/history-events.ts`              |
+| 탐색 UI 카피      | `components/gallery/discovery-copy.ts`             |
+| 공통 탐색 UI      | `components/gallery/discovery-toolbar.tsx`         |
+| 디자인 기준       | `docs/02-design/DESIGN.md`                         |
+| 브랜드 소개문     | `.agents/brand-guidelines.md`                      |
+| ICP 분석 원본     | `docs/icp-analysis.json`                           |

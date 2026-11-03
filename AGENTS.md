@@ -16,6 +16,25 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 - **Admin**: `/admin/artists` 작가 회비 관리만 동작한다 (see "Admin System")
 - **Advanced Gallery**: Filtering, categorization, and viewing features
 
+## 작업 원칙
+
+- 파일 작업과 셸의 작업 위치에는 절대 경로를 사용한다.
+- 변경 전 대상 파일과 관련 코드를 읽고, 시작 시 `git status --short --branch`로
+  기존 변경을 확인한다. 사용자의 미커밋 변경은 보존한다.
+- 명시적 요청 없이 커밋·푸시·병합하지 않는다.
+- 변경 시 `.commit_message.txt`를 먼저 읽고, 이모지를 포함한 한국어 한 줄로
+  덮어쓴다. revert 작업이면 비운다.
+- `AGENTS.md`와 `docs/CLAUDE.md`의 공통 본문은 함께 갱신한다. 루트 `CLAUDE.md`는
+  `docs/CLAUDE.md`를 불러오는 진입 문서로 유지한다.
+- 형제 작업 폴더의 변경·병합 여부는 현재 `git worktree list`와 해당 폴더의 Git
+  상태·이력을 대조한다. 과거 세션 요약만으로 작업을 재실행하지 않는다.
+- 일반 설치·사용 안내는 `README.md`, 실행 명령은 `package.json`, 환경 변수는
+  `.env.example`과 `lib/config/env.ts`를 기준으로 한다.
+- 카피 기준은 루트의 소문자 `copy.md`, 시각 토큰은 `docs/02-design/DESIGN.md`를
+  따른다. 문서의 예시와 현재 UI의 노출 문구는 해당 소스 파일로 대조한다.
+- 코드 검사, 빌드, 배포, 인증된 브라우저 확인은 서로 다른 검증이다. 실제로
+  통과한 범위만 완료로 보고한다.
+
 ## 운영 환경과 데이터 (2026-10-24 기준)
 
 ### 배포 — Vercel `asca-main`
@@ -48,8 +67,11 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   Next 서버 액션 `POST /` 를 보낸다)과 회비 저장 실패였다(#120). 미들웨어를
   바꾸면 **배포된 별칭에서 실제로 POST 를 보내** 확인한다. 커스텀 도메인을
   붙이면 www·apex 중 하나는 `CSRF_ALLOWED_ORIGINS` 에 넣어야 할 수 있다.
+- `DATABASE_URL`은 PostgreSQL 연결 문자열이다. SQLite 파일 URL을 사용하지
+  않는다. service role 키와 서버 비밀키는 클라이언트 코드나 저장소에 넣지
+  않는다. 필수 환경 변수와 검증 규칙은 `lib/config/env.ts`를 따른다.
 
-### Supabase — `ASCA-2026` (`caxjyimsuvjnbmjoxfad`)
+### Supabase와 마이그레이션
 
 - 옛 프로젝트 `fiaoduraycyjselasmdn` 은 400일 넘게 정지돼 **복구 불가**다.
 - **데이터가 있는 테이블은 `artists` 뿐이다.** 공지·전시·행사·작품 등 공개 CMS
@@ -57,7 +79,10 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   로 만든 **빈 테이블**이다. 그 이전 마이그레이션은 옛 스키마(auth.users FK,
   user_metadata 관리자 정책, 없는 'korean' 검색 설정)라 **재실행하지 말 것.**
 - 홈·연혁 콘텐츠는 저장소 데이터에서 온다:
-  `app/history/_data/history-events.ts`, `lib/data/blog-posts.json`.
+  `app/history/_data/history-events.ts`, `lib/data/blog-posts.json`. 홈은
+  `app/page.tsx`에서 이 데이터를 읽고 `components/home/home-data.ts`로 집계해
+  `components/home/`에 전달한다. 홈 통계나 전시 기록을 CMS 데이터로 간주하지
+  않는다.
 - 전시 하위 페이지(`/exhibitions/current·upcoming·past·online`)도 연혁 데이터로
   만든다 — `app/exhibitions/_data/exhibition-records.ts` 가 월 단위로 이번 달·
   예정·지난 전시를 가르고, 온라인은 `online: true` 기록이다. **새 전시는
@@ -78,13 +103,17 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 
 ### 조회 함정
 
-- PostgREST 는 한 번에 **최대 1,000행**만 준다. 목록은 `range()` +
-  `count: 'exact'` 로 페이지를 나눈다(`/api/artists?q&page&limit&title…`).
+- 목록은 `range()` + `count: 'exact'`로 페이지를 나눈다
+  (`/api/artists?q&page&limit&title…`). PostgREST 응답 한도와 앱의 페이지 크기
+  제한은 별개이며, 작가 목록 제한은 `lib/api/artists.ts`의
+  `MAX_ARTISTS_PAGE_SIZE`와 `pageRange()`를 따른다.
 - `or()` 필터에 사용자 입력을 그대로 넣지 말 것 — `sanitizeSearchTerm` 을
   거친다.
 - `artists.membership_type` 은 쉼표로 이은 복수 역할이고, 직함은 음절 사이에
   공백이 들어간 값('고 문')이 있다 — 그래서 `=` 대신 `lib/api/artists.ts` 의
   `spacingTolerantPattern` 으로 `ilike` 한다.
+- `getArtists()`는 조회 오류를 기록한 뒤 빈 목록을 반환하기도 한다. 빈 화면을
+  데이터 부재로 단정하지 말고 API 응답, 서버 로그, 대상 DB의 권한을 확인한다.
 
 ### 작가 공개 범위 — `visibility` + RLS
 
@@ -120,10 +149,21 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
 ```bash
 npm run dev              # Development server using Webpack (Recommended)
 npm run dev:turbo        # Turbo mode development (May have ESM issues with Clerk)
-npm run build            # Production build
+npm run build            # Compile-only build (not deployment validation)
+NODE_ENV=production npm run build:full # Full deployment build
 npm run start            # Start production server
 npm run pre-commit       # Full quality check before commits
 ```
+
+### Local Setup
+
+- Next.js의 Node.js 요구 버전은 설치된 `node_modules/next/package.json`의
+  `engines`를 확인한다. 루트 `package.json`의 하한만 믿지 않는다.
+- 잠금 파일 기준 설치는 `npm ci`를 사용한다. peer dependency 옵션은 `.npmrc`에
+  있다.
+- `.env.example`을 참고해 `.env.local`을 준비하되 기존 파일을 덮어쓰지 않는다.
+- `gallery:generate`는 현재 npm 스크립트가 아니다. 갤러리 명령은
+  `package.json`을 확인한다.
 
 ### Database Management
 
@@ -131,7 +171,7 @@ npm run pre-commit       # Full quality check before commits
 npm run db:studio        # Open Drizzle Studio GUI (key tool)
 npm run db:push          # Apply schema changes to database
 npm run db:seed          # Seed development data
-npm run db:reset         # Complete reset: drop + push + seed
+npm run db:check         # Check migration consistency
 npm run db:generate      # Generate migrations from schema
 ```
 
@@ -144,6 +184,10 @@ npm run lint:fix         # Auto-fix linting issues
 npm run test             # Run Jest tests
 npm run test:coverage    # Generate test coverage report
 npm run format:check     # Prettier check (CI "Code Quality" runs this)
+npm run test:e2e         # Playwright E2E
+npm run design:lint      # DESIGN.md specification lint
+npm run design:wcag      # Design token contrast checks
+npm run design:diff      # Compare documented color tokens with implementation
 ```
 
 CI 의 Code Quality 잡은 저장소 전체에 `format:check` 를 돌린다. 손으로 고친
@@ -208,13 +252,24 @@ security:
 - `requireSupabaseAdmin`은 DB `admin` 역할과 검증된 MFA `aal2`를 모두 요구한다.
 - Server Actions for admin/membership are being replaced by secure API routes
 
-### Multi-language Pattern
+### 다국어와 공개 API 타입
 
-All content tables use consistent multilingual structure:
-
-- `title`, `titleKo`, `titleEn`, `titleCn`, `titleJp`
-- `description`, `descriptionKo`, `descriptionEn`, `descriptionCn`,
-  `descriptionJp`
+- UI 언어 코드는 `ko`, `en`, `ja`, `zh`다. 중국어는 번체(`zh-TW`)를 사용하며 DB
+  컬럼 이름과 구분한다.
+- Drizzle의 다국어 필드는 `lib/db/schema.ts`를 따른다(`titleCn`, `titleJp` 등).
+  공개 Supabase 작가 행은 `name_zh`, `name_ja`를 사용하며
+  `lib/api/artist-mapper.ts`가 `nameZh`, `nameJa` 등 화면 타입으로 변환한다.
+  PostgREST 원시 행에 Drizzle의 camelCase 타입을 그대로 붙이지 않는다.
+- 화면 번역은 `contexts/language-context.tsx`와 `lib/i18n/`을 따른다. 새
+  번역표는 `lib/i18n/translations.ts`의 정적 통합표에도 연결한다. 기본 언어의
+  SSR·첫 렌더에서 번역 키가 노출되지 않는지 확인한다.
+- 영어 회차 단위·중국어 슬로건 풀이처럼 컴포넌트가 숨기는 번역 예외는 보존한다.
+  빈 문자열이 `t()`에서 키 이름으로 돌아올 수 있으므로 숨김은 조건으로 처리한다.
+- 협회명·슬로건 등 번체 한자는 `lang='zh-Hant'` 또는 `lang='zh-TW'`를 쓴다. 혼합
+  문장의 보완은 `.cjk-tc-strict`로 하며, 일본어 본문의 자형에 일괄 적용하지
+  않는다.
+- 번역한 필터 라벨로 DB 필터 값을 바꾸지 않는다. 탐색 UI의 공통 레이블은
+  `components/gallery/discovery-copy.ts`를 참조한다.
 
 ### UI 번역 (i18n)
 
@@ -305,23 +360,11 @@ Hierarchical and resource-based permissions defined in
 
 ### Database Operations
 
-Always use typed queries from `lib/db/queries.ts`:
+Drizzle을 사용하는 서버 작업은 `lib/db/queries.ts`의 타입 지정 쿼리를
+재사용한다. 공개 supabase-js 조회는 `lib/api/`의 조회 함수와 행 매퍼를 따른다.
 
 ```typescript
 import { getArtistById, createArtwork } from '@/lib/db/queries'
-```
-
-### Multi-language Content
-
-Use the established pattern for all content:
-
-```typescript
-{
-  title: string,      // Korean (default)
-  titleEn?: string,   // English
-  titleCn?: string,   // Chinese
-  titleJp?: string    // Japanese
-}
 ```
 
 ### Component Structure
@@ -357,6 +400,21 @@ Use the established pattern for all content:
 - 토큰이 없으면 임의 값을 만들지 말고 DESIGN.md를 먼저 수정한다
 - Feature 단위 design 문서(`docs/02-design/features/*.design.md`)는 DESIGN.md
   토큰을 참조
+- 홈의 `components/home/home.css`는 `.asca-home` 범위의 지역 테마다.
+  `asca-btn--*`와 지역 CSS 변수를 공통 Button variant·전역 토큰으로 취급하지
+  않는다. 홈 전용 레이아웃 기준은 DESIGN.md §8.9를 따른다.
+- 폰트 스택과 실제 로딩을 구분한다. `app/layout.tsx`·`app/globals.css`와
+  DESIGN.md §3.1을 확인하고, 경로·CDN 변경 시 `next.config.js`의 CSP도 대조한다.
+
+### 카피 작성과 콘텐츠 원본
+
+- 홈 문구는 `lib/i18n/translations/home.ts`, 탐색 문구는
+  `components/gallery/discovery-copy.ts`를 기준으로 컴포넌트의 키·실제 링크와
+  대조한다. `copy.md`의 예시만으로 UI를 덮어쓰지 않는다.
+- `法古創新 · 人書俱老`의 브랜드 선언과 기존 소개·SEO·푸터 슬로건은 사용 위치를
+  확인해 구분한다. 통계의 의미·회신 기한·모집 상태를 근거 없이 바꾸지 않는다.
+- `copy.md` Part B~D의 내부 서비스 기획은 공개 제공 서비스나 검증된 성과가
+  아니다. 구현된 서버 모듈만으로 자동화·AI 상품을 제공한다고 쓰지 않는다.
 
 ### Large File Refactoring Process
 
@@ -380,7 +438,9 @@ and refactor using this standardized process:
 
 1. Modify schema in `lib/db/schema.ts` (not schema-pg.ts)
 2. Run `npm run db:generate` to create migration
-3. Apply with `npm run db:push`
+3. 대상 DB와 백업을 확인한 뒤 변경 목적에 맞게 `db:migrate` 또는 `db:push`를
+   적용한다. `scripts/db-check-backup.ts`는 운영 환경에서 백업 확인을 요구하지만
+   백업을 생성하거나 존재를 검증하지는 않는다. 확인 절차를 우회하지 않는다.
 4. Update query functions in `lib/db/queries.ts`
 5. Test with `npm run db:studio` visual interface
 
@@ -411,19 +471,13 @@ and refactor using this standardized process:
 ### 계획 문서 — 체크박스는 진행 상태가 아니다
 
 🔴 **`docs/superpowers/plans/` 의 미완 체크박스를 "남은 일"로 읽지 말 것.**
-작업이 끝나도 아무도 돌아가서 체크하지 않는다.
+체크박스와 문서의 실행 지시만으로 구현을 시작하지 않는다. 대상 파일, 테스트,
+현재 Git 이력을 대조해 이미 적용된 작업을 확인한다.
 
-`2026-05-17-dynamic-tailwind-class-fix` 가 실제로 그랬다 — 체크박스 **53개 전부
-미완**인데 상단에는 실행
-지시(`**For agentic workers:** REQUIRED SUB-SKILL: …`)가 달려 있었다. 그대로
-실행하면 이미 적용된 리팩터를 되돌린다. 2026-09-14 에 **정지 헤더**를
-달았다(Task 1 산출물 2파일 실재 + 대상 5개 컴포넌트에 동적 클래스 0건으로 확인).
-
-⚠️ **`exhibition-detail-mockup-port.plan.md` 는 다르다 — 진짜 진행 중이다.**
-형제 클론 `~/Developer/Projects/ASCA-exhibition-port` 의
-`feat/exhibition-detail-port` 브랜치에 고유 커밋 21개(+다른 3개 브랜치에 20개)와
-미커밋 변경이 있다. 같은 저장소의 두 번째 작업 클론이므로 **지우거나 stale 로
-표시하지 말 것.**
+`exhibition-detail-mockup-port.plan.md`처럼 형제 클론과 연결된 계획은
+`~/Developer/Projects/ASCA-exhibition-port`의 존재와 현재 Git 상태를 확인한 뒤
+판단한다. 과거 브랜치·커밋 수·미커밋 상태를 영구적인 진행 근거로 사용하지
+않으며, 확인 없이 클론을 삭제하거나 계획을 stale로 분류하지 않는다.
 
 ### 동적 Tailwind 클래스 금지
 
@@ -472,6 +526,12 @@ and refactor using this standardized process:
   검사를 더한다.
 - 전체 jest 는 기계 부하가 높으면 간헐적으로 실패한다. 실패가 나면 `uptime` 을
   보고 다시 돌려 본다.
+- 문서만 변경하면 링크·npm 명령·포맷·`git diff --check`를 검증한다. 카피는 번역
+  키·실제 링크도 대조한다. 앱 테스트를 실행하지 않았다면 그 범위를 명시한다.
+- 디자인 문서·토큰 변경은 `design:lint`·`design:diff`·`design:wcag`를 확인한다.
+  `design:diff`는 직접 CSS 변수를 참조하는 색상·다크 모드·홈 CSS 전체를 검사하지
+  않으며, `design:wcag`는 YAML 색상 쌍 검사다. 실제 화면의 대비·키보드·확대
+  검증은 별도로 한다.
 - Use `npm run pre-commit` before any commits
 
 ## Common Workflows
@@ -487,7 +547,8 @@ and refactor using this standardized process:
 ### Database Debugging
 
 1. Use `npm run db:studio` for visual inspection
-2. Check schema with `scripts/check-supabase-schema.js`
+2. Use `npm run db:check` for migration consistency; inspect the target DB
+   separately
 3. Monitor sync status via admin dashboard
 
 The project emphasizes type safety, multilingual support, and robust data
