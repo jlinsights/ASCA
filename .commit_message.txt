@@ -1,1 +1,1 @@
-📝 docs: 에이전트 지침·카피·디자인 정비 브랜치를 main 기준으로 옮김 (main 의 Supabase Auth·도메인·디자인 토큰 사실 우선)
+📝 docs: copy.md 홈 히어로 CTA·설명·풀이 문구를 현재 구현(home-hero.tsx·home.ts)과 맞춤 (Codex 리뷰 반영)
