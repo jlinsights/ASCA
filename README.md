@@ -9,7 +9,8 @@
 
 > 에이전트·개발자용 상세 지침은 [`AGENTS.md`](AGENTS.md)(Codex)와
 > [`docs/CLAUDE.md`](docs/CLAUDE.md)(Claude Code)에 있다. 두 파일은 같은 내용을
-> 유지한다.
+> 유지한다. 루트 [`CLAUDE.md`](CLAUDE.md)는 `docs/CLAUDE.md` 를 불러오는 진입
+> 문서다.
 
 ## 🌟 주요 기능
 
