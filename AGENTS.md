@@ -261,8 +261,8 @@ security:
   `lib/api/artist-mapper.ts`가 `nameZh`, `nameJa` 등 화면 타입으로 변환한다.
   PostgREST 원시 행에 Drizzle의 camelCase 타입을 그대로 붙이지 않는다.
 - 화면 번역은 `contexts/language-context.tsx`와 `lib/i18n/`을 따른다. 새
-  번역표는 `lib/i18n/translations.ts`의 정적 통합표에도 연결한다. 기본 언어의
-  SSR·첫 렌더에서 번역 키가 노출되지 않는지 확인한다.
+  번역표는 언어별 정적 표(`lib/i18n/locales/<언어>/static.ts`)에 연결한다. 기본
+  언어의 SSR·첫 렌더에서 번역 키가 노출되지 않는지 확인한다.
 - 영어 회차 단위·중국어 슬로건 풀이처럼 컴포넌트가 숨기는 번역 예외는 보존한다.
   빈 문자열이 `t()`에서 키 이름으로 돌아올 수 있으므로 숨김은 조건으로 처리한다.
 - 협회명·슬로건 등 번체 한자는 `lang='zh-Hant'` 또는 `lang='zh-TW'`를 쓴다. 혼합
@@ -282,10 +282,16 @@ security:
   `language` 를 쓴다. 날짜·숫자는 `metadata.locale` 로 포맷한다.
 - 선택한 언어는 `localStorage` 의 `asca-language` 에 저장된다. URL 에 언어가
   없으므로(로케일 라우팅 없음) 서버 렌더·메타데이터는 한국어다.
-- 번역표는 `lib/i18n/translations/*.ts` 에 화면 단위로 둔다(`site-chrome`·
-  `about`·`exhibitions`·`home` 등). **새 파일은 `lib/i18n/translations.ts` 의
-  4개 언어 블록 모두에 펼쳐 넣어야** `t()` 가 찾는다. 키 접두사로 화면을
-  구분한다 (`site*`·`intro*`·`history*`·`ex*`).
+- 번역 문구는 **언어별 파일**에 화면 단위로 둔다:
+  `lib/i18n/locales/<ko|en|ja|zh>/<화면>.ts`(`site-chrome`·`about`·`exhibitions`·
+  `home` 등). 클라이언트는 한국어 표만 처음 번들에 싣고, 다른 언어 표는 고를 때
+  받는다(`lib/i18n/locales/index.ts`의 `loadLocale`). 그래서 **네 언어를 한
+  파일에 다시 모아 클라이언트에서 불러오지 말 것** — 모든 페이지 첫 번들에 네
+  언어가 실린다(`lib/i18n/__tests__/locales.test.ts`가 막는다).
+- 새 화면 표를 만들면 ① 네 언어 파일을 만들고 ② 네 언어의 `static.ts` 에 모두
+  펼쳐 넣고 ③ 네 언어를 묶는 `lib/i18n/translations/<화면>.ts` 를 둔다(테스트·
+  서버용, `lib/i18n/translations.ts` 도 서버·테스트 전용이다). 키 접두사로
+  화면을 구분한다 (`site*`·`intro*`·`history*`·`ex*`).
 - 4개 언어 키가 빠짐없이 같아야 한다. 빠진 키는 화면에 키 이름이 그대로 나온다.
 - 연혁 기록은 `app/history/_data/history-i18n.ts` 가 바꾼다. 날짜는 규칙으로,
   제목·장소는 표로 바꾸고, 한자로 된 공식 전시명은 그대로 둔다.

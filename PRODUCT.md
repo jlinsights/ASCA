@@ -64,11 +64,11 @@ web
 제약과 미결 사항:
 
 - **4개 언어**: `ko`(기본)·`en`·`ja`·`zh`(번체 `zh-TW` 로 통일). 클라이언트
-  번역표 (`lib/i18n/translations/*`, `useLanguage()`)로 바꾸며 선택은
-  `localStorage` `asca-language` 에 남는다. 로케일 라우팅은 없어 서버
-  렌더·메타데이터는 한국어다. 한국어로만 있는 본문은 `lang='ko'` 를 단다. 규칙은
-  `AGENTS.md`. 공모전 페이지(`/contests`·`/contests/23`)와 자주 묻는 질문 답변도
-  네 언어로 옮겼다(2026-10-31). 우편 주소·예금주처럼 공문 표기는 한국어로 둔다.
+  번역표 (`lib/i18n/locales/*`, `useLanguage()`)로 바꾸며 선택은 `localStorage`
+  `asca-language` 에 남는다. 로케일 라우팅은 없어 서버 렌더·메타데이터는
+  한국어다. 한국어로만 있는 본문은 `lang='ko'` 를 단다. 규칙은 `AGENTS.md`.
+  공모전 페이지(`/contests`·`/contests/23`)와 자주 묻는 질문 답변도 네 언어로
+  옮겼다(2026-10-31). 우편 주소·예금주처럼 공문 표기는 한국어로 둔다.
 - 갤러리 규모(`totalImages`)는 데이터 파일이 결정하며 코드에 하드코딩돼 있지
   않다.
 

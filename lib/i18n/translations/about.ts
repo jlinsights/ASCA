@@ -1,91 +1,10 @@
 import type { TranslationData } from '../types'
+import ko from '../locales/ko/about'
+import en from '../locales/en/about'
+import ja from '../locales/ja/about'
+import zh from '../locales/zh/about'
 
 // 소개(/introductions)·연혁(/history) 페이지 문구. 'intro'·'history' 접두어로 다른 표와 키가 겹치지 않게 한다.
 // 협회 소개 본문은 길어서 app/introductions/_components/association-intro.ts 에 따로 둔다.
 // 중국어는 번체(사이트 표기 통일, 2026-10-11 결정).
-export const aboutTranslations: TranslationData = {
-  ko: {
-    introEyebrow: 'Introduction',
-    introTitle: '소개',
-    introLede: '사단법인 동양서예협회의 비전과 활동을 소개합니다',
-    introMotto: '法古創新 · 人書俱老 — 옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어집니다',
-    introDownloadTitle: '소개 자료 다운로드',
-    introBrochureKo: '협회 소개 브로셔 (한국어)',
-    introBrochureMulti: '소개 브로셔 (한·영·중·일)',
-    historyEyebrow: 'History',
-    historyTitle: '연혁',
-    historyLede:
-      '1997년 韓·中·日 書藝文化交流聯合會展을 시작으로, 동양서예의 전통을 계승하고 발전시켜 온 협회의 발자취를 소개합니다.',
-    historyClosing: '1997년부터 이어온 동양서예의 전통과 역사',
-    historyLedgerSince: '시작 연도',
-    historyLedgerEvents: '연혁 기록',
-    historyChapterTitle: '해마다의 기록',
-    historyTypeExhibition: '전시',
-    historyTypeEvent: '행사',
-    historyTypeMilestone: '이정표',
-    historyTypeAppointment: '취임',
-  },
-  en: {
-    introEyebrow: 'Introduction',
-    introTitle: 'About',
-    introLede: 'The vision and work of the Asian Society of Calligraphic Arts',
-    introMotto:
-      '法古創新 · 人書俱老 — Creating anew through tradition, where calligraphy and character mature together',
-    introDownloadTitle: 'Download Brochures',
-    introBrochureKo: 'ASCA Brochure (Korean)',
-    introBrochureMulti: 'Brochure (Korean · English · Chinese · Japanese)',
-    historyEyebrow: 'History',
-    historyTitle: 'History',
-    historyLede:
-      'Since the 1997 Korea–China–Japan Calligraphy Culture Exchange Exhibition (韓·中·日 書藝文化交流聯合會展), the record of how the Society has carried East Asian calligraphy forward.',
-    historyClosing: 'The tradition and history of East Asian calligraphy since 1997',
-    historyLedgerSince: 'Since',
-    historyLedgerEvents: 'Records',
-    historyChapterTitle: 'Year by Year',
-    historyTypeExhibition: 'Exhibition',
-    historyTypeEvent: 'Event',
-    historyTypeMilestone: 'Milestone',
-    historyTypeAppointment: 'Appointment',
-  },
-  ja: {
-    introEyebrow: 'Introduction',
-    introTitle: '協会紹介',
-    introLede: '社団法人東洋書芸協会のビジョンと活動をご紹介します',
-    introMotto: '法古創新 · 人書俱老 — 古法に学び新しきを拓き、書と人がともに深まる',
-    introDownloadTitle: '紹介資料ダウンロード',
-    introBrochureKo: '協会紹介パンフレット(韓国語)',
-    introBrochureMulti: '紹介パンフレット(韓・英・中・日)',
-    historyEyebrow: 'History',
-    historyTitle: '沿革',
-    historyLede:
-      '1997年の韓・中・日 書藝文化交流聯合會展に始まり、東洋書芸の伝統を受け継ぎ発展させてきた協会の歩みをご紹介します。',
-    historyClosing: '1997年から続く東洋書芸の伝統と歴史',
-    historyLedgerSince: '開始年',
-    historyLedgerEvents: '沿革記録',
-    historyChapterTitle: '年ごとの記録',
-    historyTypeExhibition: '展示',
-    historyTypeEvent: '行事',
-    historyTypeMilestone: '節目',
-    historyTypeAppointment: '就任',
-  },
-  zh: {
-    introEyebrow: 'Introduction',
-    introTitle: '協會簡介',
-    introLede: '介紹社團法人東洋書藝協會的願景與活動',
-    introMotto: '法古創新 · 人書俱老 — 師法古人以開新境，人與書藝一同深化',
-    introDownloadTitle: '簡介資料下載',
-    introBrochureKo: '協會簡介手冊(韓文)',
-    introBrochureMulti: '簡介手冊(韓·英·中·日)',
-    historyEyebrow: 'History',
-    historyTitle: '沿革',
-    historyLede: '自1997年韓·中·日書藝文化交流聯合會展起，介紹本會傳承並發展東洋書藝傳統的歷程。',
-    historyClosing: '自1997年延續至今的東洋書藝傳統與歷史',
-    historyLedgerSince: '起始年',
-    historyLedgerEvents: '沿革紀錄',
-    historyChapterTitle: '逐年紀錄',
-    historyTypeExhibition: '展覽',
-    historyTypeEvent: '活動',
-    historyTypeMilestone: '里程碑',
-    historyTypeAppointment: '就任',
-  },
-}
+export const aboutTranslations: TranslationData = { ko, en, ja, zh }
