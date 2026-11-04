@@ -2,13 +2,65 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { culturalExchangeParticipants, culturalExchangePrograms, members } from '@/lib/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
-import { requireAdminAuth } from '@/lib/auth/middleware'
+import { getAuthUser, requireAdminAuth } from '@/lib/auth/middleware'
 import type {
   CulturalExchangeParticipantInfo,
   ParticipantApplicationData,
   ParticipantStatus,
   PaymentStatus,
 } from '@/lib/types/membership'
+
+/** 응답에 담는 회원 열. 신청 내역에는 이름과 회원번호만 필요하다. */
+const APPLICANT_COLUMNS = {
+  id: members.id,
+  fullName: members.fullName,
+  fullNameKo: members.fullNameKo,
+  fullNameEn: members.fullNameEn,
+  membershipNumber: members.membershipNumber,
+}
+
+/** Drizzle timestamp 는 이미 Date 다. 문자열(PostgREST 경로)도 받아 준다. */
+function toDate(value: Date | string | null | undefined): Date | undefined {
+  if (value == null) return undefined
+  const date = value instanceof Date ? value : new Date(value)
+  return Number.isNaN(date.getTime()) ? undefined : date
+}
+
+/** jsonb 열은 이미 객체로 온다. 예전 데이터가 문자열이면 그때만 파싱한다. */
+function fromJson<T>(value: unknown, fallback: T): T {
+  if (value == null) return fallback
+  if (typeof value !== 'string') return value as T
+  try {
+    return JSON.parse(value) as T
+  } catch {
+    return fallback
+  }
+}
+
+/**
+ * 관리자(aal2)는 전체를, 일반 회원은 자기 memberId 의 신청만 볼 수 있다.
+ * 허용되면 null, 아니면 거절 응답을 돌려준다.
+ */
+async function authorizeApplicationsRead(memberId: string | null): Promise<NextResponse | null> {
+  const user = await getAuthUser()
+  if (!user) {
+    return NextResponse.json({ success: false, error: '로그인이 필요합니다' }, { status: 401 })
+  }
+  if (user.role === 'admin' && user.assuranceLevel === 'aal2') return null
+
+  if (!memberId) {
+    return NextResponse.json({ success: false, error: '관리자 인증이 필요합니다' }, { status: 403 })
+  }
+  const [own] = await db
+    .select({ id: members.id })
+    .from(members)
+    .where(and(eq(members.id, memberId), eq(members.userId, user.id)))
+    .limit(1)
+  if (!own) {
+    return NextResponse.json({ success: false, error: '권한이 없습니다' }, { status: 403 })
+  }
+  return null
+}
 
 // GET - 신청 내역 조회 (본인 또는 관리자)
 export async function GET(request: NextRequest) {
@@ -18,16 +70,8 @@ export async function GET(request: NextRequest) {
     const programId = searchParams.get('programId')
     const status = searchParams.get('status') as ParticipantStatus | null
 
-    // memberId 없이 전체 조회 시 관리자 인증 필요
-    if (!memberId) {
-      const user = await requireAdminAuth(request)
-      if (!user) {
-        return NextResponse.json(
-          { success: false, error: '관리자 인증이 필요합니다' },
-          { status: 401 }
-        )
-      }
-    }
+    const denied = await authorizeApplicationsRead(memberId)
+    if (denied) return denied
 
     // 조건 구성
     const conditions = []
@@ -49,7 +93,7 @@ export async function GET(request: NextRequest) {
       .select({
         participant: culturalExchangeParticipants,
         program: culturalExchangePrograms,
-        member: members,
+        member: APPLICANT_COLUMNS,
       })
       .from(culturalExchangeParticipants)
       .leftJoin(
@@ -60,37 +104,20 @@ export async function GET(request: NextRequest) {
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(desc(culturalExchangeParticipants.appliedAt))
 
-    // 데이터 변환 (안전한 null 처리 추가)
-    const formattedApplications = applications.map((app: any) => ({
+    const formattedApplications = applications.map(app => ({
       ...app.participant,
-      appliedAt: app.participant?.appliedAt
-        ? new Date(Number(app.participant.appliedAt) * 1000)
-        : new Date(),
-      approvedAt: app.participant?.approvedAt
-        ? new Date(Number(app.participant.approvedAt) * 1000)
-        : undefined,
-      completedAt: app.participant?.completedAt
-        ? new Date(Number(app.participant.completedAt) * 1000)
-        : undefined,
-      applicationData: app.participant?.applicationData
-        ? JSON.parse(app.participant.applicationData)
-        : {},
-      emergencyContact: app.participant?.emergencyContact
-        ? JSON.parse(app.participant.emergencyContact)
-        : {},
-      feedback: app.participant?.feedback ? JSON.parse(app.participant.feedback) : undefined,
+      appliedAt: toDate(app.participant.appliedAt),
+      approvedAt: toDate(app.participant.approvedAt),
+      completedAt: toDate(app.participant.completedAt),
+      applicationData: fromJson(app.participant.applicationData, {}),
+      emergencyContact: fromJson(app.participant.emergencyContact, {}),
+      feedback: fromJson(app.participant.feedback, undefined),
       program: app.program
         ? {
             ...app.program,
-            startDate: app.program.startDate
-              ? new Date(Number(app.program.startDate) * 1000)
-              : new Date(),
-            endDate: app.program.endDate
-              ? new Date(Number(app.program.endDate) * 1000)
-              : new Date(),
-            applicationDeadline: app.program.applicationDeadline
-              ? new Date(Number(app.program.applicationDeadline) * 1000)
-              : undefined,
+            startDate: toDate(app.program.startDate),
+            endDate: toDate(app.program.endDate),
+            applicationDeadline: toDate(app.program.applicationDeadline),
           }
         : undefined,
       member: app.member
