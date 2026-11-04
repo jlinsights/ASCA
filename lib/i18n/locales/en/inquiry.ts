@@ -1,0 +1,67 @@
+// inquiry 화면 번역 (en). 네 언어를 모으는 곳은 lib/i18n/translations/inquiry.ts 다.
+const inquiry: Record<string, string> = {
+  inqHow:
+    'Tell us what it is about and how to reach you, and the office will reply to the contact you give. You can also send it by email or KakaoTalk.',
+  inqSendSite: 'Send inquiry',
+  inqSending: 'Sending…',
+  inqSent: 'Your inquiry has been received.',
+  inqSentBody: 'The office will review it and reply to the contact you gave.',
+  inqSendFailed:
+    'We could not send it through the site just now. Your text is still here, so please send it by email or KakaoTalk below.',
+  inqOtherWays: 'Other ways to send',
+  inqConsentLabel: 'I agree to the collection and use of my personal information',
+  inqConsentDetail:
+    'Collected: name, email or phone, and your message · Purpose: replying to your inquiry · Kept for: 1 year after the inquiry is handled. If you do not agree, you can still contact us by email or KakaoTalk.',
+  inqPrivacyLink: 'Privacy policy',
+  inqErr_consentMissing:
+    'To send through the site, please agree to the collection and use of your personal information.',
+  inqSectionEyebrow: 'Inquiry',
+  inqSectionTitle: 'Artworks, commissions & exhibitions',
+  inqSectionLede:
+    'Start here for anything that needs a quote, from buying a work to commissioning calligraphy or proposing an exhibition.',
+  inqTopic: 'Topic',
+  inqRequired: '(required)',
+  inqOptional: '(optional)',
+  inqTopic_artwork: 'Buying an artwork',
+  inqTopicHint_artwork: 'Availability and price of a work you saw',
+  inqTopic_commission: 'Commission a work',
+  inqTopicHint_commission: 'Quotes for signboards, calligraphy or gift pieces',
+  inqTopic_exhibition: 'Exhibitions & partnerships',
+  inqTopicHint_exhibition: 'Curated shows, brand or institutional projects',
+  inqTopic_academy: 'Classes & teaching',
+  inqTopicHint_academy: 'Enrolment, group classes, guest teaching',
+  inqTopic_membership: 'Membership & contests',
+  inqTopicHint_membership: 'Joining, entries, promotion',
+  inqTopic_other: 'Something else',
+  inqTopicHint_other: 'Anything not listed above',
+  inqGuideNote: 'Common questions are answered in our guide.',
+  inqGuide_academy: 'Read the class guide first',
+  inqGuide_membership: 'Read the membership guide first',
+  inqName: 'Name',
+  inqEmail: 'Email',
+  inqPhone: 'Phone',
+  inqSubject: 'Related artwork or artist',
+  inqContactHint: 'Please give at least an email address or a phone number.',
+  inqPlan: 'Budget & timing',
+  inqPlanPlaceholder: 'e.g. by March 2027, around KRW 1,000,000',
+  inqMessage: 'Message',
+  inqErr_topicMissing: 'Please choose a topic.',
+  inqErr_nameMissing: 'Please enter your name.',
+  inqErr_contactMissing: 'Please enter an email address or a phone number for our reply.',
+  inqErr_emailInvalid: 'Please check the email address.',
+  inqErr_messageMissing: 'Please write your message.',
+  inqSendMail: 'Send by email',
+  inqSendKakao: 'Send via KakaoTalk',
+  inqSendKakaoSr: '(copies your message)',
+  inqNewWindow: '(opens in a new window)',
+  inqMailSent:
+    'Check the message in your mail app and press send. If no mail app opened, write to {email} directly.',
+  inqKakaoCopied: 'Your message is copied. Open our KakaoTalk channel and paste it into the chat.',
+  inqKakaoOpen: 'Open KakaoTalk channel',
+  inqKakaoManual:
+    'This browser blocked automatic copying. Copy the text below and paste it into our {link}.',
+  inqKakaoChannel: 'KakaoTalk channel',
+  inqCopyLabel: 'Message to send',
+}
+
+export default inquiry
