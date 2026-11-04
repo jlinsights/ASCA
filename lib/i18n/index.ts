@@ -6,8 +6,7 @@ import type {
   TranslationNamespaces,
 } from './types'
 import { log } from '@/lib/utils/logger'
-import { navigationTranslations } from './translations/navigation'
-import { artworksTranslations } from './translations/artworks'
+import { loadLocale } from './locales'
 
 // 언어 메타데이터
 export const LANGUAGE_METADATA: Record<Language, LanguageMetadata> = {
@@ -79,27 +78,12 @@ export const translationLoader: TranslationLoader = {
     let translations: Record<string, string> = {}
 
     try {
-      switch (namespace) {
-        case 'navigation':
-          translations = navigationTranslations[language] || {}
-          break
-        case 'artworks':
-          translations = artworksTranslations[language] || {}
-          break
-        case 'common':
-          // 공통 번역은 예전 방식으로 로드
-          const { translations: commonTranslations } = await import('./translations')
-          translations = commonTranslations[language] || {}
-          break
-        case 'pages':
-        case 'forms':
-        case 'errors':
-          // 향후 확장을 위한 네임스페이스
-          translations = {}
-          break
-        default:
-          translations = {}
-      }
+      // 표가 언어 단위로 하나다. 예전 네임스페이스(navigation·artworks·common)는 모두 그 표를 돌려준다.
+      // 네 언어를 한꺼번에 싣던 예전 방식(정적 import·통합표 동적 import)은 쓰지 않는다.
+      translations =
+        namespace === 'pages' || namespace === 'forms' || namespace === 'errors'
+          ? {}
+          : { ...(await loadLocale(language)) }
 
       // 캐시에 저장
       if (!this.cache[namespace]) {
