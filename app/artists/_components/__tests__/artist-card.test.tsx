@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react'
 import type { PublicArtist } from '@/lib/api/artist-mapper'
 import { ArtistCard, photoPlaceholderName } from '../artist-card'
 
+let mockLanguage = 'ko'
+jest.mock('@/contexts/language-context', () => ({
+  useLanguage: () => ({ language: mockLanguage, t: (key: string) => key }),
+}))
 jest.mock('@/components/kakao/kakao-share-button', () => ({
   ArtistShareButton: ({ title }: { title: string }) => <button aria-label={title}>공유</button>,
 }))
@@ -156,5 +160,45 @@ describe('ArtistCard 국적별 이름', () => {
     )
     expect(screen.getByRole('heading', { name: '故 書家二' })).toBeVisible()
     expect(container.querySelector('[aria-hidden="true"][lang="zh"]')).toHaveTextContent('書家二')
+  })
+})
+
+describe('ArtistCard 라벨 번역', () => {
+  afterEach(() => {
+    mockLanguage = 'ko'
+  })
+  const full = artist({
+    membershipType: '초대작가',
+    title: '이사',
+    artNameKo: '청암',
+    awards: ['대상'],
+  })
+
+  // 라이브 확인(#225 이후): 영어로 바꿔도 카드 라벨 '작가 등급'·'직위'·'아호'가 한국어로 남았다
+  it.each([
+    ['en', ['Artist grade', 'Position', 'Pen name', 'Awards', 'View artist']],
+    ['ja', ['作家等級', '役職', '雅号', '受賞歴', '作家詳細']],
+    ['zh', ['作家等級', '職位', '雅號', '獲獎經歷', '作家詳情']],
+  ] as const)('pc %s: 라벨을 그 언어로 쓴다', (language, labels) => {
+    mockLanguage = language
+    const { container } = render(<ArtistCard artist={full} variant='pc' />)
+    for (const label of labels) expect(container).toHaveTextContent(label)
+    for (const ko of ['작가 등급', '직위', '아호', '수상 경력', '상세보기']) {
+      expect(container).not.toHaveTextContent(ko)
+    }
+  })
+
+  it('mobile en: 아호 낭독 라벨도 번역한다', () => {
+    mockLanguage = 'en'
+    const { container } = render(<ArtistCard artist={full} variant='mobile' />)
+    expect(container).toHaveTextContent('Pen name')
+    expect(container).not.toHaveTextContent('아호')
+  })
+
+  it('ko: 기존 한국어 라벨을 그대로 쓴다', () => {
+    const { container } = render(<ArtistCard artist={full} variant='pc' />)
+    for (const label of ['작가 등급', '직위', '아호', '수상 경력', '1개', '작가 상세보기']) {
+      expect(container).toHaveTextContent(label)
+    }
   })
 })
