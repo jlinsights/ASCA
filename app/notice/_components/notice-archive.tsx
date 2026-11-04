@@ -4,7 +4,12 @@ import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { useLanguage } from '@/contexts/language-context'
-import { NOTICE_CATEGORIES, type NoticeCategory, type NoticeRow } from '@/lib/notices/notice-view'
+import {
+  NOTICE_CATEGORIES,
+  noticeHref,
+  type NoticeCategory,
+  type NoticeRow,
+} from '@/lib/notices/notice-view'
 import { NOTICE_COPY } from './notice-copy'
 import { matchesQuery, noticePeriodLabel } from './notice-format'
 
@@ -149,7 +154,7 @@ export function NoticeArchive({ rows, initialCategory, initialQuery = '' }: Noti
                 .filter(row => row.year === year)
                 .map(row => (
                   <li key={row.id}>
-                    <Link href={`/notice/${row.id}`} className='asca-events__row'>
+                    <Link href={noticeHref(row)} className='asca-events__row'>
                       <time className='asca-events__row-date' dateTime={row.published}>
                         {row.monthDay}
                       </time>
