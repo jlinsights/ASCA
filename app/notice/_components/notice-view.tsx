@@ -5,7 +5,7 @@ import { ApplySectionHead } from '@/components/apply/apply-parts'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { useLanguage } from '@/contexts/language-context'
-import type { NoticeRow } from '@/lib/notices/notice-view'
+import { noticeHref, type NoticeRow } from '@/lib/notices/notice-view'
 import { NoticeArchive } from './notice-archive'
 import { NOTICE_COPY } from './notice-copy'
 import { noticeDate, noticePeriodLabel } from './notice-format'
@@ -65,7 +65,7 @@ export function NoticeView({ rows, initialCategory, initialQuery }: NoticeViewPr
                     <time dateTime={row.published}>{noticeDate(row.published, language)}</time>
                   </p>
                   <h3 className='asca-notice__pin-title' lang='ko'>
-                    <Link href={`/notice/${row.id}`}>{row.title}</Link>
+                    <Link href={noticeHref(row)}>{row.title}</Link>
                   </h3>
                   {row.summary && (
                     <p className='asca-notice__pin-summary' lang='ko'>

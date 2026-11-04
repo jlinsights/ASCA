@@ -4,6 +4,7 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { listPublishedNotices } from '@/lib/notices/notices-data'
 import { toNoticeRow } from '@/lib/notices/notice-view'
 import { todayKst } from '@/lib/events/event-view'
+import { withCodeNotices } from './_components/code-notices'
 import { NoticeView } from './_components/notice-view'
 import '@/components/apply/apply.css'
 import '@/app/events/_components/events.css'
@@ -38,7 +39,10 @@ const firstParam = (value: string | string[] | undefined): string | undefined =>
 export default async function NoticePage({ searchParams }: PageProps) {
   const params = await searchParams
   const today = todayKst()
-  const rows = (await listPublishedNotices()).map(notice => toNoticeRow(notice, today))
+  const rows = withCodeNotices(
+    (await listPublishedNotices()).map(notice => toNoticeRow(notice, today)),
+    today
+  )
 
   return (
     <div className='asca-apply min-h-screen'>
