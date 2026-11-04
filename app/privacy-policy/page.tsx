@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
       <section className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 목적 */}
-          <Card className='border-l-4 border-l-info'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <FileText className='h-5 w-5 text-info dark:text-navy-300' />
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 개인정보 처리의 원칙 */}
-          <Card className='border-l-4 border-l-success'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <Lock className='h-5 w-5 text-success dark:text-foreground' />
@@ -57,7 +57,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 본 방침의 공개 */}
-          <Card className='border-l-4 border-l-warning'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <Eye className='h-5 w-5 text-warning dark:text-gold-400' />
@@ -178,7 +178,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 정보주체의 권리·의무 및 행사방법 */}
-          <Card className='border-l-4 border-l-success'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <User className='h-5 w-5 text-success dark:text-foreground' />
@@ -236,7 +236,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 개인정보의 안전성 확보조치 */}
-          <Card className='border-l-4 border-l-destructive'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <Shield className='h-5 w-5 text-destructive' />
@@ -313,7 +313,7 @@ export default function PrivacyPolicyPage() {
           <Separator />
 
           {/* 개인정보 보호 책임자 */}
-          <Card className='border-l-4 border-l-scholar-red'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <User className='h-5 w-5 text-scholar-red' />
@@ -370,7 +370,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 권익침해에 대한 구제방법 */}
-          <Card className='border-l-4 border-l-highlight'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <AlertTriangle className='h-5 w-5 text-gold-700 dark:text-gold-400' />
