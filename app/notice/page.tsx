@@ -1,447 +1,52 @@
-'use client'
-
-import { useState, useEffect, useCallback } from 'react'
+import type { Metadata } from 'next'
+import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { useLanguage } from '@/contexts/language-context'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Calendar,
-  Pin,
-  Eye,
-  MessageCircle,
-  Search,
-  Filter,
-  ChevronLeft,
-  ChevronRight,
-  User,
-  Clock,
-} from 'lucide-react'
-import { getNotices } from '@/lib/supabase/cms'
-import { HeroFacts, PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { searchNotices, AdvancedSearchFilters } from '@/lib/supabase/search'
-import SimpleSearch from '@/components/search/SimpleSearch'
-import type { Notice, SearchFilters, PaginationParams } from '@/lib/types/cms-legacy'
-import Link from 'next/link'
-import { PHONE } from '@/lib/content/contact-info'
+import { listPublishedNotices } from '@/lib/notices/notices-data'
+import { toNoticeRow } from '@/lib/notices/notice-view'
+import { todayKst } from '@/lib/events/event-view'
+import { NoticeView } from './_components/notice-view'
+import '@/components/apply/apply.css'
+import '@/app/events/_components/events.css'
+import './_components/notice.css'
 
-const categoryColors = {
-  general: 'bg-info/10 text-foreground',
-  event: 'bg-success/10 text-foreground',
-  announcement: 'bg-highlight/10 text-foreground',
-  urgent: 'bg-seal/10 text-foreground',
-}
-const categoryLabels = {
-  general: '일반',
-  event: '행사',
-  announcement: '공지',
-  urgent: '긴급',
+/**
+ * 공지사항 — 게시일 순 장부. 고정 공지는 맨 위 띠에, 나머지는 해마다 묶어 분류·검색으로 거른다.
+ * 예전엔 브라우저에서 10건씩 읽어 그 안에서 고정 공지를 골라 2쪽부터 고정 공지가 사라졌고,
+ * 조회수(늘 0)·작성자·댓글 수를 카드마다 달았다(2026-11-03).
+ * 본문은 언어 선택을 따르는 NoticeView(클라이언트)가 그리고, 메타데이터는 여기서 한국어로 둔다.
+ */
+
+const DESCRIPTION =
+  '동양서예협회 공지사항 — 협회 소식과 행사 안내, 공모·전시 일정을 게시일 순으로 알립니다.'
+
+export const metadata: Metadata = {
+  title: '공지사항 | 동양서예협회',
+  description: DESCRIPTION,
+  // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다
+  openGraph: {
+    title: '공지사항 | 동양서예협회',
+    description: DESCRIPTION,
+    images: [defaultSEO.image],
+  },
 }
 
-export default function NoticePage() {
-  const { t } = useLanguage()
-  const [notices, setNotices] = useState<Notice[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [showFilters, setShowFilters] = useState(false)
+type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> }
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  }
+const firstParam = (value: string | string[] | undefined): string | undefined =>
+  typeof value === 'string' ? value : value?.[0]
 
-  const formatRelativeTime = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
-
-    if (diffInHours < 1) return '방금 전'
-    if (diffInHours < 24) return `${diffInHours}시간 전`
-    if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}일 전`
-    return formatDate(dateString)
-  }
-
-  const fetchNotices = useCallback(async () => {
-    try {
-      setLoading(true)
-
-      if (searchQuery.trim()) {
-        // 검색어가 있는 경우
-        const searchFilters: SearchFilters = {}
-        if (selectedCategory !== 'all') searchFilters.category = selectedCategory
-        searchFilters.status = 'published'
-
-        const response = await searchNotices(searchQuery.trim(), searchFilters, {
-          page: currentPage,
-          limit: 10,
-        })
-        setNotices(response.data)
-        setTotalPages(Math.ceil(response.total / 10))
-      } else {
-        // 일반 목록 조회
-        const filters: SearchFilters = {}
-        if (selectedCategory !== 'all') filters.category = selectedCategory
-
-        const pagination: PaginationParams = {
-          page: currentPage,
-          limit: 10,
-          sortBy: 'published_at',
-          sortOrder: 'desc',
-        }
-
-        const response = await getNotices(filters, pagination)
-        setNotices(response.data)
-        setTotalPages(response.totalPages)
-      }
-    } catch (err) {
-      setError('공지사항을 불러오는데 실패했습니다.')
-    } finally {
-      setLoading(false)
-    }
-  }, [searchQuery, selectedCategory, currentPage])
-
-  useEffect(() => {
-    fetchNotices()
-  }, [fetchNotices])
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const pinnedNotices = notices.filter(notice => notice.is_pinned)
-  const regularNotices = notices.filter(notice => !notice.is_pinned)
-  const latestPublishedAt = notices.reduce<string | null>(
-    (latest, notice) => (!latest || notice.published_at > latest ? notice.published_at : latest),
-    null
-  )
-  const hero = (
-    <PageHero {...PAGE_HERO_MARKS.notice} title={t('notice')} lede='사단법인 동양서예협회 공지사항'>
-      <HeroFacts
-        facts={[
-          { label: '불러온 공지', value: loading ? '—' : notices.length },
-          {
-            label: '최근 게시',
-            value: loading || !latestPublishedAt ? '—' : formatDate(latestPublishedAt),
-          },
-        ]}
-      />
-    </PageHero>
-  )
-
-  if (loading) {
-    return (
-      <div className='min-h-screen bg-transparent'>
-        {hero}
-        <section className='container py-16'>
-          <div className='max-w-4xl mx-auto text-center'>
-            <div className='animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto'></div>
-            <p className='mt-4 text-muted-foreground font-medium'>공지사항을 불러오는 중...</p>
-          </div>
-        </section>
-        <LayoutFooter />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className='min-h-screen bg-transparent'>
-        {hero}
-        <section className='container py-16'>
-          <div className='max-w-4xl mx-auto text-center'>
-            <div className='bg-seal/5 border border-seal/30 rounded-lg p-6'>
-              <p className='text-muted-foreground font-medium'>{error}</p>
-              <Button onClick={fetchNotices} className='mt-4' variant='outline'>
-                다시 시도
-              </Button>
-            </div>
-          </div>
-        </section>
-        <LayoutFooter />
-      </div>
-    )
-  }
+export default async function NoticePage({ searchParams }: PageProps) {
+  const params = await searchParams
+  const today = todayKst()
+  const rows = (await listPublishedNotices()).map(notice => toNoticeRow(notice, today))
 
   return (
-    <div className='min-h-screen bg-transparent'>
-      {hero}
-      <section className='container py-10 md:py-16'>
-        <div className='max-w-4xl mx-auto'>
-          {/* 검색 및 필터 */}
-          <Card className='mb-8 border-border/50 shadow-sm'>
-            <CardContent className='p-6'>
-              <div className='flex flex-col md:flex-row gap-4 mb-4'>
-                <div className='flex-1'>
-                  <SimpleSearch
-                    onSearch={query => {
-                      setSearchQuery(query)
-                      setCurrentPage(1)
-                    }}
-                    placeholder='공지사항 검색...'
-                  />
-                </div>
-                <Button
-                  variant='outline'
-                  onClick={() => setShowFilters(!showFilters)}
-                  className='md:w-auto border-border/50'
-                >
-                  <Filter className='h-4 w-4 mr-2' />
-                  필터
-                </Button>
-              </div>
-
-              {showFilters && (
-                <div className='border-t border-border/30 pt-4'>
-                  <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-                    <div>
-                      <label className='text-sm font-medium mb-2 block text-foreground'>
-                        카테고리
-                      </label>
-                      <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                        <SelectTrigger className='border-border/50'>
-                          <SelectValue placeholder='카테고리 선택' />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value='all'>전체</SelectItem>
-                          {Object.entries(categoryLabels).map(([value, label]) => (
-                            <SelectItem key={value} value={value}>
-                              {label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* 중요 공지 (고정) */}
-          {pinnedNotices.length > 0 && (
-            <div className='mb-8'>
-              <div className='flex items-center gap-2 mb-6'>
-                <Pin className='h-5 w-5 text-destructive' />
-                <h2 className='text-xl font-bold text-foreground'>{t('importantNotice')}</h2>
-              </div>
-              <div className='space-y-4'>
-                {pinnedNotices.map(notice => (
-                  <Link key={notice.id} href={`/notice/${notice.id}`} className='block'>
-                    <Card className='border-seal/30 bg-seal/5 shadow-sm hover:shadow-md transition-all duration-200'>
-                      <CardContent className='p-6'>
-                        <div className='flex items-start justify-between mb-4'>
-                          <div className='flex items-center gap-3'>
-                            <Badge
-                              className={
-                                categoryColors[notice.category as keyof typeof categoryColors]
-                              }
-                            >
-                              {categoryLabels[notice.category as keyof typeof categoryLabels]}
-                            </Badge>
-                            {notice.is_pinned && (
-                              <Badge variant='secondary' className='flex items-center gap-1'>
-                                <Pin className='h-3 w-3' />
-                                고정
-                              </Badge>
-                            )}
-                          </div>
-                          <div className='flex items-center gap-4 text-sm text-muted-foreground'>
-                            <div className='flex items-center gap-1'>
-                              <Eye className='h-4 w-4' />
-                              <span className='font-medium'>{notice.views}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <h3 className='text-lg font-bold mb-3 text-foreground group-hover:text-primary cursor-pointer transition-colors'>
-                          {notice.title}
-                        </h3>
-                        <div className='prose prose-slate dark:prose-invert max-w-none mb-4'>
-                          <div className='whitespace-pre-wrap text-foreground leading-relaxed'>
-                            {notice.excerpt || notice.content.substring(0, 200) + '...'}
-                          </div>
-                        </div>
-                        <div className='flex items-center justify-between text-sm'>
-                          <div className='flex items-center gap-4 text-muted-foreground'>
-                            <div className='flex items-center gap-1'>
-                              <Calendar className='h-4 w-4' />
-                              <span>{formatDate(notice.published_at)}</span>
-                            </div>
-                            <div className='flex items-center gap-1'>
-                              <User className='h-4 w-4' />
-                              <span>{notice.author_name || '관리자'}</span>
-                            </div>
-                          </div>
-                          <div className='flex items-center gap-1 text-muted-foreground'>
-                            <Clock className='h-4 w-4' />
-                            <span>{formatRelativeTime(notice.published_at)}</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 일반 공지 */}
-          <div>
-            <h2 className='text-xl font-bold mb-6 text-foreground'>{t('generalNotice')}</h2>
-            <div className='space-y-4'>
-              {regularNotices.length === 0 ? (
-                <Card className='border-border/50 shadow-sm'>
-                  <CardContent className='p-6 text-center text-muted-foreground'>
-                    등록된 공지사항이 없습니다.
-                  </CardContent>
-                </Card>
-              ) : (
-                regularNotices.map(notice => (
-                  <Link key={notice.id} href={`/notice/${notice.id}`} className='block'>
-                    <Card className='border-border/50 shadow-sm hover:shadow-md hover:border-border transition-all duration-200'>
-                      <CardContent className='p-6'>
-                        <div className='flex items-start justify-between mb-4'>
-                          <div className='flex items-center gap-3'>
-                            <Badge
-                              className={
-                                categoryColors[notice.category as keyof typeof categoryColors]
-                              }
-                            >
-                              {categoryLabels[notice.category as keyof typeof categoryLabels]}
-                            </Badge>
-                            {notice.is_pinned && (
-                              <Badge variant='secondary' className='flex items-center gap-1'>
-                                <Pin className='h-3 w-3' />
-                                고정
-                              </Badge>
-                            )}
-                          </div>
-                          <div className='flex items-center gap-4 text-sm text-muted-foreground'>
-                            <div className='flex items-center gap-1'>
-                              <Eye className='h-4 w-4' />
-                              <span className='font-medium'>{notice.views}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <h3 className='text-lg font-bold mb-3 text-foreground group-hover:text-primary cursor-pointer transition-colors'>
-                          {notice.title}
-                        </h3>
-                        <div className='prose prose-slate dark:prose-invert max-w-none mb-4'>
-                          <div className='whitespace-pre-wrap text-foreground leading-relaxed'>
-                            {notice.excerpt || notice.content.substring(0, 200) + '...'}
-                          </div>
-                        </div>
-                        <div className='flex items-center justify-between text-sm'>
-                          <div className='flex items-center gap-4 text-muted-foreground'>
-                            <div className='flex items-center gap-1'>
-                              <Calendar className='h-4 w-4' />
-                              <span>{formatDate(notice.published_at)}</span>
-                            </div>
-                            <div className='flex items-center gap-1'>
-                              <User className='h-4 w-4' />
-                              <span>{notice.author_name || '관리자'}</span>
-                            </div>
-                          </div>
-                          <div className='flex items-center gap-1 text-muted-foreground'>
-                            <Clock className='h-4 w-4' />
-                            <span>{formatRelativeTime(notice.published_at)}</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))
-              )}
-            </div>
-          </div>
-
-          {/* 페이지네이션 */}
-          {totalPages > 1 && (
-            <div className='mt-12 flex justify-center'>
-              <div className='flex items-center gap-1.5 sm:gap-2'>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className='border-border/50'
-                  aria-label={t('previous')}
-                >
-                  <ChevronLeft className='h-4 w-4' />
-                  <span className='hidden sm:inline'>{t('previous')}</span>
-                </Button>
-
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  const page = currentPage <= 3 ? i + 1 : currentPage - 2 + i
-                  if (page > totalPages) return null
-                  return (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? 'default' : 'outline'}
-                      size='sm'
-                      onClick={() => handlePageChange(page)}
-                      className={currentPage === page ? '' : 'border-border/50'}
-                    >
-                      {page}
-                    </Button>
-                  )
-                })}
-
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className='border-border/50'
-                  aria-label={t('next')}
-                >
-                  <span className='hidden sm:inline'>{t('next')}</span>
-                  <ChevronRight className='h-4 w-4' />
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* 문의 정보 */}
-          <div className='mt-12'>
-            <Card className='border-primary/20 bg-primary/5 dark:bg-primary/10 shadow-sm'>
-              <CardContent className='p-6 text-center'>
-                <h3 className='text-lg font-bold mb-2 text-foreground'>{t('noticeInquiry')}</h3>
-                <p className='text-muted-foreground mb-2'>{t('noticeInquiryText')}</p>
-                {/* 연락처는 하단 푸터(layout-footer)의 협회 공식 정보와 같아야 한다 */}
-                <p className='text-muted-foreground font-medium'>
-                  <a href={PHONE.href} className='hover:text-foreground'>
-                    ☎︎ {PHONE.display}
-                  </a>
-                  {' | '}
-                  <a href='mailto:info@orientalcalligraphy.org' className='hover:text-foreground'>
-                    info@orientalcalligraphy.org
-                  </a>
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
+    <div className='asca-apply min-h-screen'>
+      <NoticeView
+        rows={rows}
+        initialCategory={firstParam(params.category)}
+        initialQuery={firstParam(params.q)?.slice(0, 50)}
+      />
       <LayoutFooter />
     </div>
   )
