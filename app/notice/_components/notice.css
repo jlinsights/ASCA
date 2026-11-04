@@ -1,0 +1,139 @@
+/* =====================================================================
+   공지사항 — 행사 장부(events.css)의 도구·연도 묶음·상세 틀을 그대로 쓰고, 공지에만 있는 것만 여기 둔다.
+   색·글꼴은 .asca-apply 토큰(--ap-*)만 쓴다.
+   - 고정 공지: 장부 위의 띠. 왼쪽 낙관색 세로줄로 '먼저 볼 것'을 표시한다
+   - 장부 한 줄: 제목 아래 요약 한 줄 + 기간·장소
+   ===================================================================== */
+
+/* ---------- 고정 공지 ---------- */
+.asca-notice__pinned {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--ap-rule-strong);
+}
+@media (min-width: 900px) {
+  .asca-notice__pinned {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    column-gap: clamp(28px, 4vw, 56px);
+  }
+}
+.asca-notice__pin {
+  position: relative;
+  padding: clamp(22px, 3vw, 32px) 0 clamp(22px, 3vw, 32px) 20px;
+  border-bottom: 1px solid var(--ap-rule);
+}
+.asca-notice__pin::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: clamp(22px, 3vw, 32px);
+  bottom: clamp(22px, 3vw, 32px);
+  width: 3px;
+  background: var(--ap-seal);
+}
+.dark .asca-notice__pin::before {
+  background: var(--ap-accent);
+}
+.asca-notice__pin .asca-events__kicker {
+  flex-wrap: wrap;
+}
+.asca-notice__pin time {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.asca-notice__pin-title {
+  margin: 0;
+  font-family: var(--ap-font-display);
+  font-size: clamp(1.3rem, 1rem + 1.1vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  font-variant-numeric: lining-nums;
+  text-wrap: balance;
+}
+.asca-notice__pin-title a {
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(var(--ap-seal), var(--ap-seal));
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 320ms var(--ap-ease);
+}
+.asca-notice__pin-title a:hover {
+  background-size: 100% 1px;
+}
+.asca-notice__pin-summary {
+  margin: 12px 0 0;
+  max-width: 60ch;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--ap-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.asca-notice__pin-period {
+  margin: 12px 0 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ap-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 장부 한 줄 ---------- */
+.asca-notice__row-summary {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ap-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.asca-notice__row-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 0.8125rem;
+  color: var(--ap-muted);
+  font-variant-numeric: tabular-nums;
+}
+.asca-events__row-type[data-category='urgent'] {
+  color: var(--ap-seal);
+}
+
+/* ---------- 상세: 공유 ---------- */
+.asca-notice__share {
+  margin: clamp(28px, 4vw, 40px) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.asca-notice__share-status {
+  flex-basis: 100%;
+  min-height: 1.5em;
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--ap-muted);
+}
+
+/* 이 페이지의 링크·버튼 — 키보드로 올 때만 테두리를 그린다 */
+.asca-notice__pin-title a:focus-visible,
+.asca-notice__archive .asca-events__row:focus-visible,
+.asca-notice__share button:focus-visible {
+  outline: 2px solid var(--ap-ring);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asca-notice__pin-title a {
+    transition: none;
+  }
+}
