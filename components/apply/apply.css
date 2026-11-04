@@ -241,6 +241,22 @@
   color: var(--ap-muted);
   font-size: 0.875rem;
 }
+/* 경로별 바로가기 — 본문 끝에 붙이면 줄 높이(약 17px)만큼만 눌려 손가락으로 누르기 어렵다.
+   따로 줄을 세우고 링크마다 44px 높이를 준다 (WCAG 2.5.8 은 24px 이상) */
+.asca-apply__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.asca-apply__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.875rem;
+}
 
 /* ---------- 장부 표 ---------- */
 .asca-apply__table-wrap {

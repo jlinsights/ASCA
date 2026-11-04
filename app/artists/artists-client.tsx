@@ -234,6 +234,8 @@ export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
           </div>
         ) : (
           <>
+            {/* 제목으로 훑는 사용자에게 h1 과 카드의 h3 사이 구획을 알린다 */}
+            <h2 className='sr-only'>{copy.artistListHeading}</h2>
             <div className='hidden lg:grid grid-cols-3 xl:grid-cols-4 gap-8'>
               {filteredArtists.map(artist => (
                 <ArtistCard key={artist.id} artist={artist} variant='pc' />

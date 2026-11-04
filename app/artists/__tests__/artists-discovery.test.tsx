@@ -106,3 +106,13 @@ describe('Artists discovery states', () => {
     expect(screen.queryByText('작가2')).not.toBeInTheDocument()
   })
 })
+
+describe('Artists heading outline', () => {
+  // 감사(P2): h1 다음이 곧장 작가 카드의 h3 라 제목으로 훑을 때 목록 구획이 없었다
+  it('작가 카드 목록 앞에 h2 구획 제목을 둔다', async () => {
+    fetchMock.mockResolvedValue(response([{ id: '1', name: '김작가' }]))
+    render(<ArtistsPage />)
+    await screen.findAllByText('김작가')
+    expect(screen.getByRole('heading', { level: 2, name: '작가 목록' })).toBeInTheDocument()
+  })
+})
