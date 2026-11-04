@@ -148,14 +148,15 @@ export function Daejeon23HubView({ calendarOpen }: Daejeon23HubViewProps) {
                   <span>
                     {path.who}
                     <br />
-                    {path.body}{' '}
-                    {path.links.map((link, index) => (
-                      <span key={link.href}>
-                        {index > 0 && ' · '}
-                        <Link href={link.href}>{link.label} →</Link>
-                      </span>
-                    ))}
+                    {path.body}
                   </span>
+                  <ul className='asca-apply__links'>
+                    {path.links.map(link => (
+                      <li key={link.href}>
+                        <Link href={link.href}>{link.label} →</Link>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </li>
             ))}
