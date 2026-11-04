@@ -100,6 +100,14 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(headerMenu.some(g => g.key === 'contests')).toBe(false)
   })
 
+  // 2026-11-03 요청: 작가·작품 메뉴를 누르면 작가의 홈페이지가 먼저 보인다 (하위 메뉴 순서는 그대로)
+  it('작가·작품 메뉴 머리를 누르면 작가의 홈페이지로 간다', () => {
+    const artists = headerMenu.find(g => g.key === 'artists')
+    expect(artists?.href).toBe('/artists/homepages')
+    // 머리 링크는 하위 메뉴에 있는 페이지여야 한다 — 그래야 그 페이지에서 목차·눈썹이 이 메뉴로 잡힌다
+    expect(artists?.items?.some(link => link.href === artists?.href)).toBe(true)
+  })
+
   it('전시·공모 메뉴 머리를 누르면 공모전 페이지로 간다', () => {
     expect(headerMenu.find(g => g.key === 'exhibitions')?.href).toBe('/contests')
   })

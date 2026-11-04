@@ -178,7 +178,8 @@ export const headerMenu: MenuGroup[] = [
   {
     key: 'artists',
     labelKey: 'siteNavArtists',
-    href: '/artists',
+    // 메뉴 머리는 작가의 홈페이지로 — 작가들의 홈페이지·書境 안내를 먼저 보인다 (2026-11-03)
+    href: '/artists/homepages',
     columns: artistColumns,
     items: artistColumns.flatMap(column => column.items),
   },
