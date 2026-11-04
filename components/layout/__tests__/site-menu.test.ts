@@ -65,13 +65,13 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     expect(
       artists?.columns?.map(column => [ko(column.titleKey), column.items.map(i => ko(i.labelKey))])
     ).toStrictEqual([
-      ['둘러보기', ['작가 소개', '작가의 홈페이지', '작품']],
+      ['둘러보기', ['작가의 홈페이지', '작품', '작가 소개']],
       ['직함·등급', ['고문', '자문위원', '초대작가', '추천작가', '일반작가']],
     ])
     expect(artists?.columns?.[0]?.items.map(link => link.href)).toEqual([
-      '/artists',
       '/artists/homepages',
       '/artworks',
+      '/artists',
     ])
     // 모바일 목록은 두 칸을 순서대로 이은 것
     expect(artists?.items).toEqual(artists?.columns?.flatMap(column => column.items))
