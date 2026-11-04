@@ -4,7 +4,7 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 export default function NotFound() {
   return (
     <>
-      <div className='min-h-[70vh] flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='min-h-[70vh] flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 pt-28 pb-16 px-4 sm:px-6 lg:px-8'>
         <div className='w-full max-w-md text-center space-y-6'>
           <div className='space-y-4'>
             <h1 className='text-6xl font-bold text-muted-foreground'>404</h1>
