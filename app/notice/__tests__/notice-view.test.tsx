@@ -127,6 +127,26 @@ describe('공지 장부', () => {
 })
 
 describe('공지 화면', () => {
+  it('자기 페이지가 있는 안내는 띠와 장부 모두 그 페이지로 잇는다', () => {
+    const calendar = row({
+      id: 'calendar-2027',
+      title: '캘린더 증정',
+      pinned: true,
+      href: '/events/calendar-2027',
+    })
+    render(<NoticeView rows={[calendar, ...ROWS]} />)
+    const pinned = screen.getByRole('region', { name: '고정 공지' })
+    expect(within(pinned).getByRole('link', { name: '캘린더 증정' })).toHaveAttribute(
+      'href',
+      '/events/calendar-2027'
+    )
+    const archiveLinks = screen
+      .getAllByRole('link')
+      .filter(link => link.classList.contains('asca-events__row'))
+    expect(archiveLinks[0]).toHaveAttribute('href', '/events/calendar-2027')
+    expect(archiveLinks[1]).toHaveAttribute('href', '/notice/tour')
+  })
+
   it('고정 공지를 맨 위 띠에 따로 세운다', () => {
     render(<NoticeView rows={ROWS} />)
     const pinned = screen.getByRole('region', { name: '고정 공지' })

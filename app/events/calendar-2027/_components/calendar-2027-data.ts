@@ -4,6 +4,7 @@
  */
 
 import { DONUS_PAYMENT_URL } from '@/app/fundraising/_components/fundraising-data'
+import { noticePhase, type NoticeRow } from '@/lib/notices/notice-view'
 import { koDate } from '@/lib/utils/ko-date'
 import type { EventRow } from '../../_components/event-rows'
 
@@ -131,4 +132,30 @@ export const CALENDAR_EVENT_ROW: EventRow = {
   place: `우편 발송 · ${koDate(CALENDAR_2027.shipFrom, false)}부터`,
   organizer: '사단법인 동양서예협회',
   link: null,
+}
+
+/**
+ * 공지사항 고정 띠·장부에 신청 기간 동안 두는 줄 — 공지 표(notices)에 따로 쓰지 않고 이 값에서 만든다.
+ * 날짜·문구가 행사 페이지와 한 곳에서 나오고, 마감이 지나면 저절로 빠진다. 누르면 행사 페이지로 간다.
+ */
+export function calendarNoticeRow(today: string): NoticeRow {
+  const period = { start: CALENDAR_2027.opens, end: CALENDAR_2027.closes }
+  const [year, month, day] = CALENDAR_2027.opens.split('-')
+  return {
+    id: 'calendar-2027',
+    href: CALENDAR_2027.path,
+    title: CALENDAR_EVENT_ROW.title,
+    summary: CALENDAR_EVENT_ROW.summary,
+    category: 'event',
+    pinned: true,
+    published: CALENDAR_2027.opens,
+    year: Number(year),
+    monthDay: `${month}.${day}`,
+    period,
+    phase: noticePhase(period, today),
+    place: CALENDAR_EVENT_ROW.place,
+    searchText: [CALENDAR_EVENT_ROW.title, CALENDAR_EVENT_ROW.summary, '캘린더', '증정']
+      .join('\n')
+      .toLowerCase(),
+  }
 }

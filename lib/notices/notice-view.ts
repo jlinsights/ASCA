@@ -52,6 +52,13 @@ export interface NoticeRow {
   place: string
   /** 검색용 글 — 제목·발췌·본문 전체(주최·후원 줄 포함). 화면에는 쓰지 않는다 */
   searchText: string
+  /** 코드로 둔 안내(캘린더 증정 등)가 상세 대신 열 자기 페이지. 없으면 /notice/[id] */
+  href?: string
+}
+
+/** 목록·고정 띠에서 누르면 갈 주소 */
+export function noticeHref(row: Pick<NoticeRow, 'id' | 'href'>): string {
+  return row.href ?? `/notice/${row.id}`
 }
 
 const FIELD_LINE = /^([가-힣]{2,4})\s*:\s*(.+)$/
