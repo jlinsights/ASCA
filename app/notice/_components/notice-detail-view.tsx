@@ -6,7 +6,12 @@ import { ApplySectionHead, ContactList, LedgerTable } from '@/components/apply/a
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { useLanguage } from '@/contexts/language-context'
-import { noticePeriod, type NoticeFact, type NoticeRow } from '@/lib/notices/notice-view'
+import {
+  isPlainPeriod,
+  noticePeriod,
+  type NoticeFact,
+  type NoticeRow,
+} from '@/lib/notices/notice-view'
 import { NOTICE_COPY } from './notice-copy'
 import { noticeDate, noticePeriodLabel } from './notice-format'
 import { NoticeShare } from './notice-share'
@@ -18,7 +23,7 @@ import { NoticeShare } from './notice-share'
 
 interface NoticeDetailViewProps {
   notice: NoticeRow
-  /** 설명 문단 — 빈 줄로 문단을 나눈다 */
+  /** 설명 문단 — 빈 줄로 문단을 나누고, 한 줄 바꿈은 문단 안에 남긴다 */
   lead: string
   facts: readonly NoticeFact[]
   related: readonly NoticeRow[]
@@ -30,9 +35,10 @@ export function NoticeDetailView({ notice, lead, facts, related }: NoticeDetailV
   const { detail } = copy
   const category = copy.categories[notice.category]
   const isAhead = notice.phase === 'upcoming' || notice.phase === 'ongoing'
-  // 기간 줄은 'YYYY-MM-DD ~ YYYY-MM-DD' 원문 대신 언어별 날짜로 — 날짜를 못 읽으면 원문 그대로
+  // 기간 줄은 날짜만 있을 때만 언어별 날짜로 — 시각·안내가 붙었거나 날짜를 못 읽으면 원문 그대로
   const factValue = (fact: NoticeFact): string => {
-    const period = fact.key === '기간' || fact.key === '장례기간' ? noticePeriod(fact.value) : null
+    const isPeriod = fact.key === '기간' || fact.key === '장례기간'
+    const period = isPeriod && isPlainPeriod(fact.value) ? noticePeriod(fact.value) : null
     return period ? noticePeriodLabel(period, language) : fact.value
   }
   const paragraphs = lead.split(/\n{2,}/).filter(paragraph => paragraph.trim())

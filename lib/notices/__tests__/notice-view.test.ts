@@ -3,6 +3,7 @@ import {
   NOTICE_CATEGORIES,
   noticeCategory,
   noticeFacts,
+  isPlainPeriod,
   noticePeriod,
   noticePhase,
   toNoticeRow,
@@ -59,6 +60,20 @@ describe('noticePeriod', () => {
       end: '2027-04-11',
     })
     expect(noticePeriod('2026-03-14')).toEqual({ start: '2026-03-14', end: '2026-03-14' })
+  })
+
+  it('날짜 뒤에 시각이 붙어도 끝 날짜까지 읽는다', () => {
+    expect(noticePeriod('2027-04-07 10:00 ~ 2027-04-11 18:00')).toEqual({
+      start: '2027-04-07',
+      end: '2027-04-11',
+    })
+  })
+
+  it('날짜만 있는 값인지 가린다 — 시각·안내가 붙으면 원문을 보여야 한다', () => {
+    expect(isPlainPeriod('2027-04-07 ~ 2027-04-11')).toBe(true)
+    expect(isPlainPeriod(' 2026-03-14 ')).toBe(true)
+    expect(isPlainPeriod('2027-04-07 10:00 ~ 2027-04-11 18:00')).toBe(false)
+    expect(isPlainPeriod('2027-04-07 ~ 2027-04-11 (접수 마감 3월 31일)')).toBe(false)
   })
 
   it('날짜가 없거나 끝이 시작보다 앞서면 믿지 않는다', () => {

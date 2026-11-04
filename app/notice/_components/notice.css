@@ -108,6 +108,12 @@
   color: var(--ap-seal);
 }
 
+/* ---------- 상세: 본문 ---------- */
+/* 신청 절차·연락처를 한 줄씩 바꿔 쓴 공지가 많다 — 문단 안의 줄바꿈을 살린다 */
+.asca-notice__article .asca-events__lead p {
+  white-space: pre-line;
+}
+
 /* ---------- 상세: 공유 ---------- */
 .asca-notice__share {
   margin: clamp(28px, 4vw, 40px) 0 0;

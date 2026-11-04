@@ -56,7 +56,10 @@ export interface NoticeRow {
 
 const FIELD_LINE = /^([가-힣]{2,4})\s*:\s*(.+)$/
 const DROPPED_FIELDS = new Set(['원문'])
-const ISO_DAY = /(\d{4}-\d{2}-\d{2})(?:\s*~\s*(\d{4}-\d{2}-\d{2}))?/
+// 날짜 뒤의 시각('10:00')은 건너뛰고 끝 날짜까지 읽는다
+const ISO_DAY = /(\d{4}-\d{2}-\d{2})(?:\s+\d{1,2}:\d{2})?(?:\s*~\s*(\d{4}-\d{2}-\d{2}))?/
+/** 날짜만 있는 기간 — 시각·안내 문구가 붙지 않은 값 */
+const PLAIN_PERIOD = /^\s*\d{4}-\d{2}-\d{2}(?:\s*~\s*\d{4}-\d{2}-\d{2})?\s*$/
 
 const isFieldKey = (key: string): key is NoticeFieldKey =>
   (NOTICE_FIELD_KEYS as readonly string[]).includes(key)
@@ -89,6 +92,11 @@ export function noticeFacts(content: string | undefined): NoticeFact[] {
     const value = fields[key]
     return value ? [{ key, value }] : []
   })
+}
+
+/** 날짜로 바꿔 보여도 잃는 게 없는 값인가 — 시각이나 마감 안내가 붙으면 원문을 그대로 보여야 한다 */
+export function isPlainPeriod(text: string): boolean {
+  return PLAIN_PERIOD.test(text)
 }
 
 /** '2027-04-07 ~ 2027-04-11' · '2026-03-14' → 기간. 날짜가 없으면 null */

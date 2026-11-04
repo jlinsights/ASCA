@@ -3,6 +3,7 @@ import type { NoticeRow } from '@/lib/notices/notice-view'
 import { NoticeArchive } from '../_components/notice-archive'
 import { NOTICE_COPY } from '../_components/notice-copy'
 import { NoticeShare } from '../_components/notice-share'
+import { NoticeDetailView } from '../_components/notice-detail-view'
 import { NoticeView } from '../_components/notice-view'
 
 let language = 'ko'
@@ -140,6 +141,28 @@ describe('공지 화면', () => {
     expect(screen.getByRole('button', { name: /Event/ })).toBeInTheDocument()
     expect(screen.getAllByText('Upcoming').length).toBeGreaterThan(0)
     expect(screen.getAllByText('대만 서예 문화 기행').length).toBeGreaterThan(0)
+  })
+})
+
+describe('공지 상세', () => {
+  const detail = (facts: { key: '기간'; value: string }[], lead = '') =>
+    render(<NoticeDetailView notice={ROWS[1]!} lead={lead} facts={facts} related={[]} />)
+
+  it('날짜만 있는 기간은 날짜로 바꾸고, 시각·안내가 붙은 기간은 원문 그대로 둔다', () => {
+    const { unmount } = detail([{ key: '기간', value: '2027-04-07 ~ 2027-04-11' }])
+    expect(screen.getByRole('table')).toHaveTextContent('2027년 4월 7일(수) – 4월 11일(일)')
+    unmount()
+    detail([{ key: '기간', value: '2027-04-07 10:00 ~ 2027-04-11 18:00 (접수 마감 3월 31일)' }])
+    expect(screen.getByRole('table')).toHaveTextContent(
+      '2027-04-07 10:00 ~ 2027-04-11 18:00 (접수 마감 3월 31일)'
+    )
+  })
+
+  it('본문의 한 줄 바꿈은 문단 안에 남긴다(빈 줄만 문단을 나눈다)', () => {
+    detail([], '신청 방법\n1. 신청서 작성\n2. 이메일 제출\n\n문의는 사무국으로')
+    const first = screen.getByText(/신청 방법/)
+    expect(first.textContent).toBe('신청 방법\n1. 신청서 작성\n2. 이메일 제출')
+    expect(screen.getByText('문의는 사무국으로')).toBeInTheDocument()
   })
 })
 
