@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { useLanguage } from '@/contexts/language-context'
 import { NOTICE_CATEGORIES, type NoticeCategory, type NoticeRow } from '@/lib/notices/notice-view'
@@ -25,17 +25,32 @@ interface NoticeArchiveProps {
 const isCategory = (value: string | undefined): value is NoticeCategory =>
   (NOTICE_CATEGORIES as readonly string[]).includes(value ?? '')
 
+const MAX_QUERY = 50
+
+/** 주소의 분류 값 — 모르는 분류나 공지가 없는 분류는 '전체' */
+const toFilter = (rows: readonly NoticeRow[], value: string | undefined): CategoryFilter =>
+  isCategory(value) && rows.some(row => row.category === value) ? value : ALL
+
 export function NoticeArchive({ rows, initialCategory, initialQuery = '' }: NoticeArchiveProps) {
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const { language } = useLanguage()
   const copy = NOTICE_COPY[language]
-  const [category, setCategory] = useState<CategoryFilter>(
-    isCategory(initialCategory) && rows.some(row => row.category === initialCategory)
-      ? initialCategory
-      : ALL
-  )
+  const [category, setCategory] = useState<CategoryFilter>(toFilter(rows, initialCategory))
   const [query, setQuery] = useState(initialQuery)
+
+  // 같은 경로에서 주소만 바뀌면(목차의 /notice 링크, 뒤로 가기) 화면이 다시 마운트되지 않는다 —
+  // 주소가 바뀐 그 순간에만 거르는 상태를 주소에 맞춘다(입력 중인 검색어는 건드리지 않는다)
+  const urlCategory = searchParams?.get('category') ?? undefined
+  const urlQuery = (searchParams?.get('q') ?? '').slice(0, MAX_QUERY)
+  const urlKey = `${urlCategory ?? ''}\u0000${urlQuery}`
+  const [syncedKey, setSyncedKey] = useState(urlKey)
+  if (syncedKey !== urlKey) {
+    setSyncedKey(urlKey)
+    setCategory(toFilter(rows, urlCategory))
+    setQuery(urlQuery)
+  }
 
   // 공지가 있는 분류만 칩으로 — 정한 순서(공지·행사·일반·긴급)대로
   const chips = useMemo(
@@ -96,7 +111,7 @@ export function NoticeArchive({ rows, initialCategory, initialQuery = '' }: Noti
             id='notice-search'
             type='search'
             value={query}
-            maxLength={50}
+            maxLength={MAX_QUERY}
             placeholder={copy.search.placeholder}
             onChange={event => setQuery(event.target.value)}
           />

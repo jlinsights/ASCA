@@ -50,6 +50,8 @@ export interface NoticeRow {
   period: NoticePeriod | null
   phase: NoticePhase | null
   place: string
+  /** 검색용 글 — 제목·발췌·본문 전체(주최·후원 줄 포함). 화면에는 쓰지 않는다 */
+  searchText: string
 }
 
 const FIELD_LINE = /^([가-힣]{2,4})\s*:\s*(.+)$/
@@ -121,5 +123,6 @@ export function toNoticeRow(notice: Notice, today: string = todayKst()): NoticeR
     period,
     phase: noticePhase(period, today),
     place: fields.장소 ?? '',
+    searchText: [notice.title, notice.excerpt ?? '', notice.content ?? ''].join('\n').toLowerCase(),
   }
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { todayKst } from '@/lib/events/event-view'
 import { getPublishedNotice, listPublishedNotices } from '@/lib/notices/notices-data'
@@ -56,7 +57,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: { canonical: `/notice/${notice.id}` },
-    openGraph: { title, description },
+    // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다
+    openGraph: { title, description, images: [defaultSEO.image] },
   }
 }
 

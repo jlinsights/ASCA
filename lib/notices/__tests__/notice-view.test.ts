@@ -128,4 +128,9 @@ describe('toNoticeRow', () => {
     expect(row.phase).toBeNull()
     expect(row.place).toBe('')
   })
+
+  it('검색용 글에는 요약에 없는 본문 항목(주최·후원)까지 담는다', () => {
+    const row = toNoticeRow(notice({ content: '안내문\n주최: 동양서예협회\n후원: 문화체육관광부' }))
+    expect(row.searchText).toContain('문화체육관광부')
+  })
 })

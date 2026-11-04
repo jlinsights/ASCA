@@ -10,13 +10,16 @@ jest.mock('@/contexts/language-context', () => ({
   useLanguage: () => ({ language, t: (key: string) => key }),
 }))
 const replace = jest.fn()
+let search = ''
 jest.mock('next/navigation', () => ({
   usePathname: () => '/notice',
   useRouter: () => ({ replace }),
+  useSearchParams: () => new URLSearchParams(search),
 }))
 
 afterEach(() => {
   language = 'ko'
+  search = ''
   replace.mockClear()
 })
 
@@ -34,6 +37,7 @@ function row(overrides: Partial<NoticeRow>): NoticeRow {
     phase: null,
     place: '',
     ...overrides,
+    searchText: [overrides.title ?? '공지', overrides.summary ?? ''].join('\n').toLowerCase(),
   }
 }
 
@@ -90,6 +94,16 @@ describe('공지 장부', () => {
     expect(screen.queryByText('대만 서예 문화 기행')).not.toBeInTheDocument()
     unmount()
     render(<NoticeArchive rows={ROWS} initialCategory='exhibition' />)
+    expect(screen.getByText('3건')).toBeInTheDocument()
+  })
+
+  it('같은 경로에서 주소의 분류·검색어가 바뀌면 거르는 상태도 따라간다', () => {
+    search = 'category=event'
+    const { rerender } = render(<NoticeArchive rows={ROWS} initialCategory='event' />)
+    expect(screen.queryByText('사무국 휴무 안내')).not.toBeInTheDocument()
+    search = '' // 목차의 /notice 링크를 누른 것과 같다
+    rerender(<NoticeArchive rows={ROWS} initialCategory='event' />)
+    expect(screen.getByText('사무국 휴무 안내')).toBeInTheDocument()
     expect(screen.getByText('3건')).toBeInTheDocument()
   })
 
