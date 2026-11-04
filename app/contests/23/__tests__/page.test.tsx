@@ -85,3 +85,18 @@ describe('제23회 대전 허브 — 메타데이터', () => {
     expect(JSON.stringify(metadata.openGraph)).toContain('og-default.jpg')
   })
 })
+
+describe('제23회 대전 허브 — 출품 경로 링크', () => {
+  // 감사(P2): 본문 끝에 붙은 링크가 17px 높이라 손가락으로 누르기 어려웠다.
+  // 링크를 본문과 떼어 따로 목록으로 두고, 누를 영역은 apply.css 의 .asca-apply__links 가 준다
+  it('경로마다 링크를 본문 밖 별도 목록에 담는다', () => {
+    const { container } = render(<Daejeon23HubPage />)
+    const lists = container.querySelectorAll('ul.asca-apply__links')
+    expect(lists).toHaveLength(ENTRY_PATHS.length)
+    lists.forEach((list, index) => {
+      expect(within(list as HTMLElement).getAllByRole('link')).toHaveLength(
+        ENTRY_PATHS[index].links.length
+      )
+    })
+  })
+})
