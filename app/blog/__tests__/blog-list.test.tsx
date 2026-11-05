@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { render, screen } from '@testing-library/react'
 import { blogListItems, localPosts } from '@/lib/blog/local-posts'
-import { BlogListClient } from '../_components/blog-list-client'
+import { BlogListClient, formatBlogDate } from '../_components/blog-list-client'
 
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
 jest.mock('@/components/layout/page-hero', () => ({
@@ -67,5 +67,16 @@ describe('/blog 번들 경계', () => {
 
   it('페이지는 서버 컴포넌트다', () => {
     expect(read('page.tsx')).not.toMatch(/^'use client'/m)
+  })
+})
+
+// Bugbot(#230): 목록이 서버에서 그려지면서 날짜도 서버(UTC)에서 먼저 찍힌다. 시간대를 정하지
+// 않으면 15:00Z 로 저장된 글이 HTML 에서는 전날, 서울 브라우저에서는 다음 날로 바뀐다
+describe('formatBlogDate', () => {
+  it.each([
+    ['ko', '2026년 1월 21일'],
+    ['en', 'January 21, 2026'],
+  ] as const)('%s: 서울 날짜로 찍는다 (실행 시간대와 무관)', (language, expected) => {
+    expect(formatBlogDate('2026-01-20T15:00:00.000Z', language)).toBe(expected)
   })
 })

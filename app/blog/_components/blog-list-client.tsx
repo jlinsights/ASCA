@@ -24,6 +24,20 @@ import type { BlogListItem } from '@/lib/blog/local-posts'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
+/**
+ * 글 날짜. 목록이 서버(UTC)에서 먼저 그려지므로 서울 시간대로 고정한다 — 정하지 않으면
+ * 15:00Z 로 저장된 글이 HTML 과 서울 브라우저에서 하루 어긋나 hydration 이 깨진다.
+ * 한국어가 아니면 지금처럼 영어 날짜를 쓴다.
+ */
+export function formatBlogDate(iso: string, language: string): string {
+  return new Date(iso).toLocaleDateString(language === 'ko' ? 'ko-KR' : 'en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'Asia/Seoul',
+  })
+}
+
 interface BlogListClientProps {
   /** 서버(app/blog/page.tsx)가 만든 목록 — 본문은 담지 않는다 */
   posts: readonly BlogListItem[]
@@ -60,12 +74,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return language === 'ko'
-      ? date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
-      : date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  }
+  const formatDate = (dateString: string) => formatBlogDate(dateString, language)
 
   const getSourceBadge = (source: BlogListItem['source']) => {
     switch (source) {
