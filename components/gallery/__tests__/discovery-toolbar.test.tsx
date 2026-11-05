@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { axe } from 'jest-axe'
 import { DiscoveryToolbar } from '../discovery-toolbar'
 import { useLanguage } from '@/contexts/language-context'
-import { discoveryCopy } from '../discovery-copy'
+import { translations } from '@/lib/i18n/translations'
 import { getArtistFilterOptions } from '@/app/artists/_components/artist-filter-options'
 import type { Language } from '@/lib/i18n/types'
 
@@ -48,7 +48,10 @@ function Toolbar({ busy = false }: { busy?: boolean }) {
 }
 
 beforeEach(() => {
-  jest.mocked(useLanguage).mockReturnValue({ language: 'ko' } as ReturnType<typeof useLanguage>)
+  jest.mocked(useLanguage).mockReturnValue({
+    language: 'ko',
+    t: (key: string) => translations.ko?.[key] || key,
+  } as ReturnType<typeof useLanguage>)
 })
 
 describe('DiscoveryToolbar', () => {
@@ -116,10 +119,13 @@ describe('DiscoveryToolbar', () => {
   it.each<Language>(['ko', 'en', 'ja', 'zh'])(
     '%s에서 필터 라벨을 번역해도 API 값은 보존한다',
     language => {
-      jest.mocked(useLanguage).mockReturnValue({ language } as ReturnType<typeof useLanguage>)
+      jest.mocked(useLanguage).mockReturnValue({
+        language,
+        t: (key: string) => translations[language]?.[key] || key,
+      } as ReturnType<typeof useLanguage>)
       render(<Toolbar />)
       expect(
-        screen.getByRole('button', { name: discoveryCopy[language].clearSearch })
+        screen.getByRole('button', { name: translations[language]?.discoveryClearSearch })
       ).toBeInTheDocument()
       expect(getArtistFilterOptions('membership', language).map(option => option.value)).toEqual(
         getArtistFilterOptions('membership', 'ko').map(option => option.value)

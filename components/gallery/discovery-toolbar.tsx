@@ -11,8 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useLanguage } from '@/contexts/language-context'
-import { discoveryCopy } from './discovery-copy'
+import { useDiscoveryCopy } from './discovery-copy'
 
 export interface DiscoveryFilter {
   id: string
@@ -73,8 +72,7 @@ export function DiscoveryToolbar({
   const prefix = useId()
   const searchRef = useRef<HTMLInputElement>(null)
   const [expanded, setExpanded] = useState(false)
-  const { language } = useLanguage()
-  const copy = discoveryCopy[language]
+  const copy = useDiscoveryCopy()
   const selected = filters.filter(filter => filter.value !== 'all')
   const conditions = [
     ...selected.map(filter => ({

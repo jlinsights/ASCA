@@ -19,6 +19,7 @@ import flipbooks from './flipbooks'
 import regulations from './regulations'
 import kakaoShare from './kakao-share'
 import notFound from './not-found'
+import discovery from './discovery'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -41,6 +42,7 @@ const staticTable: Record<string, string> = {
   ...regulations,
   ...kakaoShare,
   ...notFound,
+  ...discovery,
 
   // 공통 UI 요소
   loading: '加載中...',
