@@ -197,43 +197,9 @@ export const headerMenu: MenuGroup[] = [
   { key: 'contact', labelKey: 'siteNavContact', href: '/contact', items: contact },
 ]
 
-export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
-  { titleKey: 'siteNavAboutShort', items: about },
-  {
-    titleKey: 'siteFtSecArtists',
-    items: [
-      {
-        labelKey: 'siteArtistInvitedKorea',
-        href: artistsBy({ membershipType: '초대작가', nationality: '韓國' }),
-      },
-      {
-        labelKey: 'siteArtistInvitedChina',
-        href: artistsBy({ membershipType: '초대작가', nationality: '中國' }),
-      },
-      {
-        labelKey: 'siteArtistInvitedJapan',
-        href: artistsBy({ membershipType: '초대작가', nationality: '日本' }),
-      },
-      ...artistGrades.slice(1),
-      { labelKey: 'siteExPast', href: '/exhibitions/past' },
-      { labelKey: 'siteNavArtworks', href: '/artworks' },
-    ],
-  },
-  { titleKey: 'siteNavRegulations', items: regulations },
-  {
-    titleKey: 'siteFtSecJoin',
-    items: [
-      ...membership.slice(0, 3),
-      ...contestApplications,
-      { labelKey: 'siteNavForms', href: '/forms' },
-      ...news,
-      {
-        labelKey: 'siteNavNewsletters',
-        href: 'https://orientalcalligraphy.stibee.com/',
-        external: true,
-      },
-      { labelKey: 'siteNavFaq', href: '/faq' },
-      { labelKey: 'siteNavContact', href: '/contact' },
-    ],
-  },
-]
+// 푸터는 헤더와 같은 묶음·순서·링크를 그대로 펼친다 — 한 곳만 고치면 둘 다 바뀐다 (2026-11-05)
+// 예전 푸터의 '작가 · 전시'·'참여 · 소식' 묶음은 헤더와 어긋났고, 국적별 초대작가 링크는 헤더에 없어 함께 정리했다
+export const footerMenu: { titleKey: string; items: MenuLink[] }[] = headerMenu.map(group => ({
+  titleKey: group.labelKey,
+  items: group.items ?? [],
+}))
