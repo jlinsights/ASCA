@@ -1,0 +1,291 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { LayoutFooter } from '@/components/layout/layout-footer'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Search,
+  Calendar,
+  Eye,
+  User,
+  Tag,
+  ArrowRight,
+  ExternalLink,
+  MessageCircle,
+  BookOpen,
+} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useLanguage } from '@/contexts/language-context'
+import type { BlogListItem } from '@/lib/blog/local-posts'
+import { HeroFacts, PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+
+interface BlogListClientProps {
+  /** 서버(app/blog/page.tsx)가 만든 목록 — 본문은 담지 않는다 */
+  posts: readonly BlogListItem[]
+}
+
+export function BlogListClient({ posts }: BlogListClientProps) {
+  const { language } = useLanguage()
+  const [searchTerm, setSearchTerm] = useState('')
+  const ITEMS_PER_PAGE = 9
+  const [currentPage, setCurrentPage] = useState(1)
+
+  // Reset page when search term changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm])
+
+  const filteredPosts = posts.filter(post => {
+    return (
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+  })
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredPosts.length / ITEMS_PER_PAGE)
+  const paginatedPosts = filteredPosts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return language === 'ko'
+      ? date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+      : date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  }
+
+  const getSourceBadge = (source: BlogListItem['source']) => {
+    switch (source) {
+      case 'tistory':
+        // 출처는 글자로 구분한다 — 서비스 고유색(주황·노랑)은 Ink System 밖이다
+        return <Badge variant='outline'>Tistory</Badge>
+      case 'kakao':
+        return <Badge variant='outline'>Kakao</Badge>
+      default:
+        return <Badge variant='secondary'>Local</Badge>
+    }
+  }
+
+  return (
+    <div className='min-h-screen bg-transparent'>
+      <PageHero
+        {...PAGE_HERO_MARKS.blog}
+        title={language === 'ko' ? '동양서예 블로그' : 'Oriental Calligraphy Blog'}
+        lede={
+          language === 'ko'
+            ? '동양서예협회의 다양한 소식과 이야기를 만나보세요'
+            : 'Discover various news and stories from ASCA'
+        }
+      >
+        <HeroFacts
+          facts={[
+            {
+              label: language === 'ko' ? '게시물' : 'Posts',
+              value: posts.length,
+            },
+          ]}
+        />
+      </PageHero>
+
+      {/* External Channels Grid */}
+      <section className='container py-10 md:py-16'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 max-w-4xl mx-auto'>
+          {/* Kakao Channel Card - Static Link */}
+          <a
+            href='http://pf.kakao.com/_xkchGj'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='group block'
+          >
+            <div className='bg-[#FAE100] hover:bg-[#F2D700] text-[#3C1E1E] rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 shadow-sm'>
+              <div className='flex items-center justify-between mb-4'>
+                <MessageCircle className='w-8 h-8 opacity-80' />
+                <ExternalLink className='w-5 h-5 opacity-60 group-hover:opacity-100' />
+              </div>
+              <h3 className='text-xl font-bold mb-2'>카카오톡 채널</h3>
+              <p className='text-sm opacity-80 leading-relaxed'>
+                동양서예협회 카카오톡 채널에서
+                <br />
+                가장 빠른 소식을 받아보세요.
+              </p>
+            </div>
+          </a>
+
+          {/* Tistory Card - Information */}
+          <a
+            href='https://orientalcalligraphy.tistory.com/'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='group block'
+          >
+            <div className='bg-[#EB531F] hover:bg-[#D94919] text-white rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 shadow-sm'>
+              <div className='flex items-center justify-between mb-4'>
+                <BookOpen className='w-8 h-8 opacity-80' />
+                <ExternalLink className='w-5 h-5 opacity-60 group-hover:opacity-100' />
+              </div>
+              <h3 className='text-xl font-bold mb-2'>티스토리 블로그</h3>
+              <p className='text-sm opacity-90 leading-relaxed'>
+                공식 블로그에서 더 깊이 있는
+                <br />
+                서예 이야기를 확인하세요.
+              </p>
+            </div>
+          </a>
+        </div>
+
+        {/* Search */}
+        <div className='max-w-xl mx-auto mb-12 relative'>
+          <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
+          <Input
+            placeholder={language === 'ko' ? '제목, 내용으로 검색...' : 'Search...'}
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className='pl-10 h-12'
+          />
+        </div>
+
+        {/* Posts Grid */}
+        {/* 목록은 서버에서 받아 오므로 불러오는 중 상태가 없다 */}
+        <>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12'>
+            {paginatedPosts.length > 0 ? (
+              paginatedPosts.map(post => (
+                <Card
+                  key={post.id}
+                  className='group overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full border-border/60'
+                >
+                  {/* Thumbnail */}
+                  <div className='relative aspect-[16/9] bg-muted overflow-hidden'>
+                    {post.thumbnail ? (
+                      <Image
+                        src={post.thumbnail}
+                        alt={post.title}
+                        fill
+                        className='object-cover group-hover:scale-105 transition-transform duration-500'
+                        unoptimized={post.thumbnail?.startsWith('http')}
+                      />
+                    ) : (
+                      <div className='absolute inset-0 flex items-center justify-center bg-secondary/30'>
+                        <BookOpen className='w-12 h-12 text-muted-foreground/30' />
+                      </div>
+                    )}
+                    <div className='absolute top-3 left-3'>{getSourceBadge(post.source)}</div>
+                  </div>
+
+                  <CardContent className='flex flex-col flex-1 p-4 md:p-6'>
+                    <div className='text-xs text-muted-foreground mb-3 flex items-center gap-2'>
+                      <Calendar className='w-3 h-3' />
+                      {formatDate(post.publishedAt)}
+                      <span className='mx-1'>•</span>
+                      <User className='w-3 h-3' />
+                      {post.author}
+                    </div>
+
+                    <h3 className='text-xl font-bold mb-3 line-clamp-2 group-hover:text-primary transition-colors'>
+                      {post.title}
+                    </h3>
+
+                    <p className='text-muted-foreground text-sm line-clamp-3 mb-4 flex-1'>
+                      {post.summary}
+                    </p>
+
+                    <div className='mt-auto pt-4 border-t border-border/50 flex justify-between items-center'>
+                      {post.tags && post.tags.length > 0 && (
+                        <div className='flex gap-2 overflow-hidden'>
+                          {post.tags.slice(0, 2).map((tag, i) => (
+                            <span
+                              key={i}
+                              className='text-xs px-2 py-1 bg-secondary rounded-full text-secondary-foreground truncate max-w-[80px]'
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {post.source === 'local' ? (
+                        // 글마다 주소(/blog/<slug>)가 있어야 검색엔진이 찾고, 옛 /post/<slug> 가 이어진다
+                        <Button
+                          asChild
+                          variant='ghost'
+                          size='sm'
+                          className='ml-auto hover:bg-primary/10 hover:text-primary'
+                        >
+                          <Link href={`/blog/${post.id}`}>
+                            읽기 <ArrowRight className='w-4 h-4 ml-1' />
+                          </Link>
+                        </Button>
+                      ) : (
+                        <Button
+                          asChild
+                          variant='ghost'
+                          size='sm'
+                          className='ml-auto hover:bg-primary/10 hover:text-primary'
+                        >
+                          <a href={post.link} target='_blank' rel='noopener noreferrer'>
+                            이동 <ExternalLink className='w-4 h-4 ml-1' />
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className='col-span-full text-center py-12 text-muted-foreground'>
+                검색 결과가 없습니다.
+              </div>
+            )}
+          </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className='flex justify-center gap-2 mb-20'>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                이전
+              </Button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <Button
+                  key={page}
+                  variant={currentPage === page ? 'default' : 'outline'}
+                  size='sm'
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </Button>
+              ))}
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                다음
+              </Button>
+            </div>
+          )}
+        </>
+      </section>
+
+      <LayoutFooter />
+    </div>
+  )
+}

@@ -1,5 +1,5 @@
 // 옛 Webflow 블로그에서 옮긴 글 — lib/data/blog-posts.json. id 가 옛 /post/<slug> 와 같다.
-// 서버에서 읽는다. lib/services/blog-service.ts 는 rss-parser·Tistory 요청을 끌고 오므로 쓰지 않는다.
+// 서버에서 읽는다. /blog 목록(blogListItems)과 글 상세가 모두 여기서 읽는다.
 import migratedPosts from '@/lib/data/blog-posts.json'
 
 export interface LocalPost {
@@ -29,4 +29,34 @@ export function localPostSlugs(): string[] {
  */
 export function articleBodyHtml(post: LocalPost): string {
   return (post.content || post.summary).replace(/<(\/?)h1(?=[\s>])/gi, '<$1h2')
+}
+
+/** /blog 목록 카드에 쓰는 칸만 — 본문(content)은 상세 페이지가 서버에서 읽는다 */
+export interface BlogListItem {
+  id: string
+  title: string
+  summary: string
+  publishedAt: string
+  thumbnail?: string
+  author?: string
+  tags?: string[]
+  source: 'local' | 'tistory' | 'kakao'
+  link: string
+}
+
+/** 서버에서 만든 목록. 최신 글부터 놓는다 */
+export function blogListItems(): BlogListItem[] {
+  return localPosts
+    .map(({ id, title, summary, publishedAt, thumbnail, author, tags }) => ({
+      id,
+      title,
+      summary,
+      publishedAt,
+      thumbnail,
+      author,
+      tags,
+      source: 'local' as const,
+      link: `/blog/${id}`,
+    }))
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 }
