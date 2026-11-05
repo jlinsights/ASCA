@@ -7,7 +7,11 @@ jest.mock('@/contexts/language-context', () => ({
   useLanguage: () => ({ language: mockLanguage, t: (key: string) => key }),
 }))
 jest.mock('@/components/kakao/kakao-share-button', () => ({
-  ArtistShareButton: ({ title }: { title: string }) => <button aria-label={title}>공유</button>,
+  ArtistShareButton: ({ title, description }: { title: string; description: string }) => (
+    <button aria-label={title} data-description={description}>
+      공유
+    </button>
+  ),
 }))
 
 const artist = (overrides: Partial<PublicArtist>): PublicArtist => ({
@@ -200,5 +204,28 @@ describe('ArtistCard 라벨 번역', () => {
     for (const label of ['작가 등급', '직위', '아호', '수상 경력', '1개', '작가 상세보기']) {
       expect(container).toHaveTextContent(label)
     }
+  })
+})
+
+describe('ArtistCard 카카오 공유 문구', () => {
+  afterEach(() => {
+    mockLanguage = 'ko'
+  })
+  const bare = artist({ name: '김작가' })
+
+  it.each([
+    ['ko', '김작가 작가', '서예 작가 - 동양서예협회 소속 작가입니다.'],
+    [
+      'en',
+      '김작가 · ASCA artist',
+      'Calligrapher - An artist of the Asian Society of Calligraphic Arts.',
+    ],
+    ['ja', '김작가 作家', '書道作家 - 東洋書道協会所属の作家です。'],
+    ['zh', '김작가 作家', '書法作家 - 東洋書藝協會所屬作家。'],
+  ] as const)('%s: 공유 제목과 대체 설명을 그 언어로 만든다', (language, title, description) => {
+    mockLanguage = language
+    render(<ArtistCard artist={bare} variant='pc' />)
+    const button = screen.getByRole('button', { name: title })
+    expect(button).toHaveAttribute('data-description', description)
   })
 })

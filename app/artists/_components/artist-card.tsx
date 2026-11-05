@@ -14,6 +14,7 @@ import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 import { regulationGrade } from './artist-filter-options'
 import { useLanguage } from '@/contexts/language-context'
 import { discoveryCopy, formatDiscoveryCount } from '@/components/gallery/discovery-copy'
+import { kakaoShareCopy } from '@/components/kakao/kakao-share-copy'
 
 interface ArtistCardProps {
   artist: Artist
@@ -43,6 +44,9 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const { language } = useLanguage()
   const copy = discoveryCopy[language]
   const awardCount = formatDiscoveryCount(copy.awardCount, artist.awards?.length ?? 0, language)
+  const shareCopy = kakaoShareCopy[language]
+  const shareTitle = shareCopy.artistTitle.replace('{name}', displayName)
+  const shareDescription = `${artist.specialties?.join(', ') || shareCopy.artistFallbackSpecialty} - ${artist.bio || shareCopy.artistFallbackBio}`
 
   const nameClass = isPc
     ? 'font-bold text-xl text-foreground group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0'
@@ -104,8 +108,8 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           </div>
         </Link>
         <ArtistShareButton
-          title={`${displayName} 작가`}
-          description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
+          title={shareTitle}
+          description={shareDescription}
           imageUrl={artist.profileImage ?? undefined}
           webUrl={`/artists/${artist.id}`}
           variant='outline'
@@ -239,8 +243,8 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
               </Button>
             </Link>
             <ArtistShareButton
-              title={`${displayName} 작가`}
-              description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
+              title={shareTitle}
+              description={shareDescription}
               imageUrl={artist.profileImage ?? undefined}
               webUrl={`/artists/${artist.id}`}
               variant='outline'
