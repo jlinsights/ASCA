@@ -12,6 +12,8 @@ import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
 import { artistNativeHanName, artistNativeName } from '@/lib/api/artist-name'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 import { regulationGrade } from './artist-filter-options'
+import { useLanguage } from '@/contexts/language-context'
+import { discoveryCopy, formatDiscoveryCount } from '@/components/gallery/discovery-copy'
 
 interface ArtistCardProps {
   artist: Artist
@@ -38,6 +40,9 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const displayName = artistDisplayName(nativeName, artist.deathYear)
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
   const artName = artNameLabel(artist.artNameKo, artist.artNameHanja)
+  const { language } = useLanguage()
+  const copy = discoveryCopy[language]
+  const awardCount = formatDiscoveryCount(copy.awardCount, artist.awards?.length ?? 0, language)
 
   const nameClass = isPc
     ? 'font-bold text-xl text-foreground group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0'
@@ -81,7 +86,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
             <h3 className={nameClass}>{displayName}</h3>
             {artName && (
               <p className='text-xs text-muted-foreground'>
-                <span className='sr-only'>아호 </span>
+                <span className='sr-only'>{copy.penName} </span>
                 {artName}
               </p>
             )}
@@ -134,7 +139,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           </div>
           {artName && (
             <p className={isPc ? 'text-sm text-muted-foreground' : 'text-xs text-muted-foreground'}>
-              <span className='sr-only'>아호 </span>
+              <span className='sr-only'>{copy.penName} </span>
               {artName}
             </p>
           )}
@@ -145,13 +150,13 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           <div className='flex flex-col gap-2 pt-2 border-t border-border/30 dark:border-border/20'>
             {grade && (
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-muted-foreground'>작가 등급</span>
+                <span className='text-muted-foreground'>{copy.membership}</span>
                 <span className='font-medium text-foreground'>{grade}</span>
               </div>
             )}
             {artist.title && (
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-muted-foreground'>직위</span>
+                <span className='text-muted-foreground'>{copy.title}</span>
                 <span className='font-medium text-foreground'>{artist.title}</span>
               </div>
             )}
@@ -192,11 +197,9 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center gap-1'>
                     <Award className='h-3 w-3' />
-                    <span className='text-xs'>수상 경력</span>
+                    <span className='text-xs'>{copy.awards}</span>
                   </div>
-                  <span className='text-xs font-medium text-foreground'>
-                    {artist.awards.length}개
-                  </span>
+                  <span className='text-xs font-medium text-foreground'>{awardCount}</span>
                 </div>
               </div>
             )
@@ -206,8 +209,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
                 <div className='flex items-center gap-1'>
                   <Award className='h-3 w-3' />
                   <span>
-                    수상 <span className='font-medium text-foreground'>{artist.awards.length}</span>
-                    개
+                    {copy.awards} <span className='font-medium text-foreground'>{awardCount}</span>
                   </span>
                 </div>
               </div>
@@ -233,7 +235,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
                     : 'w-full text-xs h-8 hover:bg-scholar-red hover:text-white hover:border-scholar-red dark:hover:bg-scholar-red dark:hover:text-white dark:hover:border-scholar-red transition-all duration-200'
                 }
               >
-                {isPc ? '작가 상세보기' : '상세보기'}
+                {isPc ? copy.viewArtist : copy.viewArtistShort}
               </Button>
             </Link>
             <ArtistShareButton
