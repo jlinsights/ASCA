@@ -17,6 +17,7 @@ import contestEntries from './contest-entries'
 import profileEditor from './profile-editor'
 import flipbooks from './flipbooks'
 import regulations from './regulations'
+import kakaoShare from './kakao-share'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -37,6 +38,7 @@ const staticTable: Record<string, string> = {
   ...profileEditor,
   ...flipbooks,
   ...regulations,
+  ...kakaoShare,
 
   // 공통 UI 요소
   loading: '加載中...',

@@ -14,7 +14,6 @@ import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 import { regulationGrade } from './artist-filter-options'
 import { useLanguage } from '@/contexts/language-context'
 import { discoveryCopy, formatDiscoveryCount } from '@/components/gallery/discovery-copy'
-import { kakaoShareCopy } from '@/components/kakao/kakao-share-copy'
 
 interface ArtistCardProps {
   artist: Artist
@@ -41,12 +40,11 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const displayName = artistDisplayName(nativeName, artist.deathYear)
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
   const artName = artNameLabel(artist.artNameKo, artist.artNameHanja)
-  const { language } = useLanguage()
+  const { language, t } = useLanguage()
   const copy = discoveryCopy[language]
   const awardCount = formatDiscoveryCount(copy.awardCount, artist.awards?.length ?? 0, language)
-  const shareCopy = kakaoShareCopy[language]
-  const shareTitle = shareCopy.artistTitle.replace('{name}', displayName)
-  const shareDescription = `${artist.specialties?.join(', ') || shareCopy.artistFallbackSpecialty} - ${artist.bio || shareCopy.artistFallbackBio}`
+  const shareTitle = t('kakaoShareArtistTitle').replace('{name}', displayName)
+  const shareDescription = `${artist.specialties?.join(', ') || t('kakaoShareArtistFallbackSpecialty')} - ${artist.bio || t('kakaoShareArtistFallbackBio')}`
 
   const nameClass = isPc
     ? 'font-bold text-xl text-foreground group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0'

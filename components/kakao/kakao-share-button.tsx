@@ -6,8 +6,19 @@ import { toast } from 'sonner'
 import { Share2, MessageCircle } from 'lucide-react'
 import { shareToKakaoTalk, KakaoShareTemplate } from '@/lib/kakao'
 import { KAKAO_BUTTON_CLASSES } from './kakao-brand'
-import { kakaoShareCopy, type KakaoShareType } from './kakao-share-copy'
 import { useLanguage } from '@/contexts/language-context'
+
+/** 공유 대상. 대상마다 메시지 단추 문구와 설명 대체 문구가 다르다 */
+type KakaoShareType = 'artist' | 'contest' | 'exhibition' | 'artwork' | 'general'
+
+/** 번역 키 접두사 — lib/i18n/locales/<언어>/kakao-share.ts */
+const SHARE_KEY: Record<KakaoShareType, string> = {
+  artist: 'kakaoShareArtist',
+  contest: 'kakaoShareContest',
+  exhibition: 'kakaoShareExhibition',
+  artwork: 'kakaoShareArtwork',
+  general: 'kakaoShareGeneral',
+}
 
 interface KakaoShareButtonProps {
   // 공유할 콘텐츠 정보
@@ -52,8 +63,7 @@ export function KakaoShareButton({
   onShareError,
 }: KakaoShareButtonProps) {
   const [isSharing, setIsSharing] = useState(false)
-  const { language } = useLanguage()
-  const copy = kakaoShareCopy[language]
+  const { t } = useLanguage()
 
   // 공유 타입별 기본 설정
   const getShareConfig = () => {
@@ -69,11 +79,11 @@ export function KakaoShareButton({
       mobileWebUrl: mobileWebUrl || webUrl,
     }
 
-    const target = copy.targets[shareType]
+    const key = SHARE_KEY[shareType]
     return {
       ...baseConfig,
-      buttonText: buttonText || target.button,
-      defaultDescription: target.description,
+      buttonText: buttonText || t(`${key}Button`),
+      defaultDescription: t(`${key}Description`),
     }
   }
 
@@ -109,13 +119,13 @@ export function KakaoShareButton({
       const success = await shareToKakaoTalk(shareTemplate)
 
       if (success) {
-        toast.success(copy.shared)
+        toast.success(t('kakaoShareShared'))
         onShareSuccess?.()
       } else {
         throw new Error('Kakao share returned false')
       }
     } catch (error) {
-      toast.error(copy.failed)
+      toast.error(t('kakaoShareFailed'))
       onShareError?.(error)
     } finally {
       setIsSharing(false)
@@ -123,11 +133,11 @@ export function KakaoShareButton({
   }
 
   const getButtonText = () => {
-    if (isSharing) return copy.sharing
+    if (isSharing) return t('kakaoShareSharing')
     if (buttonText) return buttonText
 
     if (isIconOnly) return ''
-    return copy.share
+    return t('kakaoShareButton')
   }
 
   const getButtonSize = () => {
@@ -153,7 +163,7 @@ export function KakaoShareButton({
         ${isIconOnly ? 'p-0 rounded-full' : ''}
         ${className}
       `}
-      title={isIconOnly ? copy.iconTitle : undefined}
+      title={isIconOnly ? t('kakaoShareIconTitle') : undefined}
     >
       {showIcon && (
         <MessageCircle

@@ -4,9 +4,16 @@ import { shareToKakaoTalk } from '@/lib/kakao'
 import { toast } from 'sonner'
 
 let mockLanguage = 'ko'
-jest.mock('@/contexts/language-context', () => ({
-  useLanguage: () => ({ language: mockLanguage, t: (key: string) => key }),
-}))
+jest.mock('@/contexts/language-context', () => {
+  // 실제 언어별 표로 찾는다 — 키가 빠지면 키 이름이 그대로 나와 테스트가 잡는다
+  const { translations } = jest.requireActual('@/lib/i18n/translations')
+  return {
+    useLanguage: () => ({
+      language: mockLanguage,
+      t: (key: string) => translations[mockLanguage][key] || key,
+    }),
+  }
+})
 jest.mock('@/lib/kakao', () => ({ shareToKakaoTalk: jest.fn() }))
 jest.mock('sonner', () => ({ toast: { success: jest.fn(), error: jest.fn() } }))
 
