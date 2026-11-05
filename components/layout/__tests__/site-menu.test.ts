@@ -142,6 +142,12 @@ describe('site-menu — 헤더·푸터 메뉴', () => {
     }
   })
 
+  // 푸터는 헤더와 같은 묶음·순서·링크를 쓴다 — 따로 엮은 '작가 · 전시'·'참여 · 소식' 묶음은 헤더와 어긋났다 (2026-11-05)
+  it('푸터 섹션은 헤더 메뉴 묶음과 제목·순서·링크가 같다', () => {
+    expect(footerMenu.map(s => s.titleKey)).toStrictEqual(headerMenu.map(g => g.labelKey))
+    expect(footerMenu.map(s => s.items)).toStrictEqual(headerMenu.map(g => g.items ?? []))
+  })
+
   it('푸터 제목도 헤더와 같은 소개·정관·규정 라벨을 쓴다', () => {
     expect(footerMenu.map(s => translations.ko?.[s.titleKey])).toEqual(
       expect.arrayContaining(['소개', '정관·규정'])
