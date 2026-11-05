@@ -83,14 +83,6 @@ const staticTable: Record<string, string> = {
   homeBrandMessageTitle: '한글의 리듬, 한문의 깊이, 서예의 정신',
   homeBrandMessageBody:
     '한글은 소리의 질서를 통해 삶의 감각과 정서를 섬세하게 드러내고, 한문은 뜻과 형상을 응축하여 오랜 사유와 철학을 품습니다. 서예는 이 두 문자 세계를 붓끝에서 만나게 하며, 선과 먹, 여백과 기운을 통해 문자를 예술의 경지로 이끕니다.',
-  // brand-rollout D5 Closing CTA (brand-guidelines §2 Section 5 SSOT)
-  homeClosingCtaTitle: '오늘의 서예, 함께 새롭게 써 내려갑니다',
-  homeClosingCtaBody:
-    '동양서예협회는 서예가 과거의 유산에 머무르지 않고, 오늘의 삶과 다음 세대의 감각 속에서 다시 살아나는 예술이 되기를 바랍니다.',
-  homeClosingCtaButtonAbout: '협회 철학 보기',
-  homeClosingCtaButtonExhibitions: '전시·공모전 둘러보기',
-  homeClosingCtaButtonCommunity: '함께하는 서예 문화',
-  homeClosingCtaButtonEducation: '서예 배우기',
   // brand-rollout community-page D2 Hero (community-marketing-playbook §1.1 SSOT)
   communityHeroL1: '한 획을 함께 긋는 사람들',
   communityHeroBody:

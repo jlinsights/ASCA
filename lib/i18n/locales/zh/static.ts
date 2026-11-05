@@ -82,14 +82,6 @@ const staticTable: Record<string, string> = {
   homeBrandMessageTitle: '韓文之律，漢文之深，書藝之神',
   homeBrandMessageBody:
     '韓文以聲音之序，細膩呈現生命的感性與情感；漢文以意與象之凝，承載悠遠之思辨與哲學。書藝令此二文字世界於筆端相遇，以線、墨、空白與氣韻，將文字引向藝術之境。',
-  // brand-rollout D5 Closing CTA (brand-guidelines §2 Section 5 SSOT)
-  homeClosingCtaTitle: '今日之書藝，與您共筆新章',
-  homeClosingCtaBody:
-    '東洋書藝協會願使書藝不止於過往遺產，而在當下生活與下一世代的感覺中，重新煥發為當代藝術。',
-  homeClosingCtaButtonAbout: '協會理念',
-  homeClosingCtaButtonExhibitions: '展覽與公募',
-  homeClosingCtaButtonCommunity: '共承書藝文化',
-  homeClosingCtaButtonEducation: '書藝學習',
   // brand-rollout community-page D2 Hero (community-marketing-playbook §1.1 SSOT)
   communityHeroL1: '共執一筆者',
   communityHeroBody: '東洋書藝協會開啟同道之聚 — 法古而開新，書與人共同深熟。',

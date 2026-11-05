@@ -88,14 +88,6 @@ const staticTable: Record<string, string> = {
   homeBrandMessageTitle: 'The Rhythm of Hangeul, the Depth of Hanja, the Spirit of Calligraphy',
   homeBrandMessageBody:
     'Hangeul reveals the senses and emotions of daily life through the order of sound; Hanja distills meaning and form to hold long-standing thought and philosophy. Calligraphy brings these two writing worlds together at the tip of the brush — through line, ink, empty space, and breath — and lifts the letter to the realm of art.',
-  // brand-rollout D5 Closing CTA (brand-guidelines §2 Section 5 SSOT)
-  homeClosingCtaTitle: 'Writing Today’s Calligraphy, Together',
-  homeClosingCtaBody:
-    'The Asian Society of Calligraphic Arts hopes that calligraphy does not remain a relic of the past, but lives anew in the rhythms of today and the sensibilities of generations to come.',
-  homeClosingCtaButtonAbout: 'Our Philosophy',
-  homeClosingCtaButtonExhibitions: 'Exhibitions',
-  homeClosingCtaButtonCommunity: 'Join Our Calligraphy Community',
-  homeClosingCtaButtonEducation: 'Learn Calligraphy',
   // brand-rollout community-page D2 Hero (community-marketing-playbook §1.1 SSOT)
   communityHeroL1: 'One Stroke, Together',
   communityHeroBody:

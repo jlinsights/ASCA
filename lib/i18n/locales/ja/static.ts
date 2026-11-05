@@ -83,14 +83,6 @@ const staticTable: Record<string, string> = {
   homeBrandMessageTitle: 'ハングルのリズム、漢文の深み、書の精神',
   homeBrandMessageBody:
     'ハングルは音の秩序を通して、生の感性と情感を繊細に映し出し、漢文は意と形を凝縮させ、長きにわたる思索と哲学を内に湛えています。書はこの二つの文字世界を筆先で出会わせ、線と墨、余白と気韻を通して、文字を芸術の境地へと導きます。',
-  // brand-rollout D5 Closing CTA (brand-guidelines §2 Section 5 SSOT)
-  homeClosingCtaTitle: '今日の書を、ともに新たに書き進めます',
-  homeClosingCtaBody:
-    '東洋書芸協会は、書が過去の遺産にとどまらず、今日の暮らしと次世代の感性の中で再び息づく芸術となることを願っています。',
-  homeClosingCtaButtonAbout: '協会の理念',
-  homeClosingCtaButtonExhibitions: '展覧会・公募展',
-  homeClosingCtaButtonCommunity: '書芸文化を共に',
-  homeClosingCtaButtonEducation: '書を学ぶ',
   // brand-rollout community-page D2 Hero (community-marketing-playbook §1.1 SSOT)
   communityHeroL1: '一筆を共にひく人々',
   communityHeroBody:
