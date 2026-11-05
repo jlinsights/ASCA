@@ -155,6 +155,13 @@
   color: var(--ap-muted);
   max-width: 64ch;
 }
+/* 안내 문장 끝 링크 — 글자는 작아도 누르는 영역은 44px 을 채운다 (감사 2차 P3) */
+.asca-apply__note-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  vertical-align: middle;
+}
 
 /* ---------- 근거 조문 ---------- */
 .asca-apply__cite {
