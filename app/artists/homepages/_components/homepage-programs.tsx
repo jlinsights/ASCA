@@ -59,28 +59,30 @@ const FOCUS = 'focus-visible:outline focus-visible:outline-2 focus-visible:outli
 function CiteLinks({ cites, light }: { cites: Cite[]; light: boolean }) {
   const { t } = useLanguage()
   return (
-    <p
+    // 근거 조문은 한 줄에 하나 — 이어 쓰면 구분 점이 줄 끝에 매달린다
+    <div
       className={`mt-6 text-xs leading-relaxed ${light ? 'text-white/70' : 'text-muted-foreground'}`}
     >
-      <span className={`mr-2 font-medium ${light ? 'text-white' : 'text-scholar-red'}`}>
+      <p className={`font-medium ${light ? 'text-white' : 'text-scholar-red'}`}>
         {t('hpProgCiteLabel')}
-      </span>
-      {cites.map((cite, index) => (
-        <span key={cite.key}>
-          {index > 0 && <span aria-hidden='true'> · </span>}
-          <Link
-            href={cite.href}
-            className={`inline-flex min-h-11 items-center underline decoration-1 underline-offset-4 transition-colors ${FOCUS} ${
-              light
-                ? 'hover:text-white focus-visible:outline-white'
-                : 'hover:text-foreground focus-visible:outline-scholar-red'
-            }`}
-          >
-            {t(cite.key)}
-          </Link>
-        </span>
-      ))}
-    </p>
+      </p>
+      <ul>
+        {cites.map(cite => (
+          <li key={cite.key}>
+            <Link
+              href={cite.href}
+              className={`inline-flex min-h-11 items-center underline decoration-1 underline-offset-4 transition-colors ${FOCUS} ${
+                light
+                  ? 'hover:text-white focus-visible:outline-white'
+                  : 'hover:text-foreground focus-visible:outline-scholar-red'
+              }`}
+            >
+              {t(cite.key)}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -104,7 +106,7 @@ function StepItem({ step }: { step: Step }) {
           {step.numeral}
         </span>
         <span
-          className={`text-xs font-medium uppercase tracking-[0.25em] ${dark ? 'text-white/70' : 'text-muted-foreground'}`}
+          className={`text-sm font-medium tracking-wide ${dark ? 'text-white/70' : 'text-muted-foreground'}`}
         >
           {t(`${step.prefix}Label`)}
         </span>
@@ -148,7 +150,10 @@ function StepItem({ step }: { step: Step }) {
 export function HomepagePrograms() {
   const { t } = useLanguage()
   return (
-    <section aria-labelledby='homepage-programs-title' className='gallery-container pt-12 md:pt-20'>
+    <section
+      aria-labelledby='homepage-programs-title'
+      className='gallery-container break-keep pt-12 md:pt-20'
+    >
       <div className='grid gap-6 lg:grid-cols-[1fr_1.1fr] lg:items-end lg:gap-16'>
         <div>
           <p className='text-sm tracking-widest text-scholar-red'>{t('hpProgEyebrow')}</p>
