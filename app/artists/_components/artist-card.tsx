@@ -40,9 +40,11 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const displayName = artistDisplayName(nativeName, artist.deathYear)
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
   const artName = artNameLabel(artist.artNameKo, artist.artNameHanja)
-  const { language } = useLanguage()
+  const { language, t } = useLanguage()
   const copy = discoveryCopy[language]
   const awardCount = formatDiscoveryCount(copy.awardCount, artist.awards?.length ?? 0, language)
+  const shareTitle = t('kakaoShareArtistTitle').replace('{name}', displayName)
+  const shareDescription = `${artist.specialties?.join(', ') || t('kakaoShareArtistFallbackSpecialty')} - ${artist.bio || t('kakaoShareArtistFallbackBio')}`
 
   const nameClass = isPc
     ? 'font-bold text-xl text-foreground group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0'
@@ -104,8 +106,8 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           </div>
         </Link>
         <ArtistShareButton
-          title={`${displayName} 작가`}
-          description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
+          title={shareTitle}
+          description={shareDescription}
           imageUrl={artist.profileImage ?? undefined}
           webUrl={`/artists/${artist.id}`}
           variant='outline'
@@ -239,8 +241,8 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
               </Button>
             </Link>
             <ArtistShareButton
-              title={`${displayName} 작가`}
-              description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
+              title={shareTitle}
+              description={shareDescription}
               imageUrl={artist.profileImage ?? undefined}
               webUrl={`/artists/${artist.id}`}
               variant='outline'
