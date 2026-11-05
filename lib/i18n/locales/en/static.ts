@@ -18,6 +18,7 @@ import profileEditor from './profile-editor'
 import flipbooks from './flipbooks'
 import regulations from './regulations'
 import kakaoShare from './kakao-share'
+import notFound from './not-found'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -39,6 +40,7 @@ const staticTable: Record<string, string> = {
   ...flipbooks,
   ...regulations,
   ...kakaoShare,
+  ...notFound,
 
   // 공통 UI 요소
   loading: 'Loading...',
