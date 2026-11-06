@@ -1,1 +1,1 @@
-🌐 강좌 영어 화면의 수강 기간 표기를 Course dates 로 바로잡음
+🐛 유관단체 화면의 겹치는 id(partners·partners-title) 정리 — 파트너 분류 id 를 collaborators 로

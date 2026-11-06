@@ -18,7 +18,7 @@ const partners: Record<string, string> = {
   partnersCat_museums: '미술관 및 박물관',
   partnersCat_publications: '서예 및 미술 전문지',
   partnersCat_galleries: '화랑 및 갤러리',
-  partnersCat_partners: '파트너',
+  partnersCat_collaborators: '파트너',
 }
 
 export default partners

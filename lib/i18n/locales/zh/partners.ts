@@ -17,7 +17,7 @@ const partners: Record<string, string> = {
   partnersCat_museums: '美術館及博物館',
   partnersCat_publications: '書法及美術專業期刊',
   partnersCat_galleries: '畫廊',
-  partnersCat_partners: '夥伴',
+  partnersCat_collaborators: '夥伴',
 }
 
 export default partners

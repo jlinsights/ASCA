@@ -19,7 +19,7 @@ const partners: Record<string, string> = {
   partnersCat_museums: 'Art museums and museums',
   partnersCat_publications: 'Calligraphy and art journals',
   partnersCat_galleries: 'Galleries',
-  partnersCat_partners: 'Partners',
+  partnersCat_collaborators: 'Partners',
 }
 
 export default partners
