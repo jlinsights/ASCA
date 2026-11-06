@@ -1,7 +1,9 @@
 'use client'
 
 import * as TabsPrimitive from '@radix-ui/react-tabs'
+import { useEffect, useState } from 'react'
 import { AboutChapter } from '@/components/about/about-layout'
+import { useLanguage } from '@/contexts/language-context'
 
 const koreanGreeting = `존경하는 사단법인 동양서예협회 회원 여러분, 그리고 묵향을 사랑하시는 모든 작가 여러분,
 
@@ -151,10 +153,20 @@ function Letter({ text, lang }: { text: string; lang: GreetingLang }) {
 }
 
 export function GreetingsTabs() {
+  const { language, t } = useLanguage()
+  // 편지는 고른 언어로 먼저 연다. 언어는 첫 그림 뒤에 저장값으로 바뀌므로 따라 바꾼다 — 그 뒤엔 탭으로 고를 수 있다
+  const [shown, setShown] = useState<string>(language)
+  useEffect(() => setShown(language), [language])
+
   return (
-    <AboutChapter id='greeting' tc='書境' eyebrow='2027 · 제23회 대전' title='이사장 인사말씀'>
-      <TabsPrimitive.Root defaultValue='ko'>
-        <TabsPrimitive.List className='ab-langs'>
+    <AboutChapter
+      id='greeting'
+      tc='書境'
+      eyebrow={t('greetChapterEyebrow')}
+      title={t('greetChapterTitle')}
+    >
+      <TabsPrimitive.Root value={shown} onValueChange={setShown}>
+        <TabsPrimitive.List className='ab-langs' aria-label={t('greetTabsLabel')}>
           {GREETINGS.map(({ lang, label }) => (
             <TabsPrimitive.Trigger key={lang} value={lang} lang={lang} className='ab-lang'>
               {label}

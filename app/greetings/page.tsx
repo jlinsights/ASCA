@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { AboutHero, AboutPage } from '@/components/about/about-layout'
+import { AboutPage } from '@/components/about/about-layout'
 import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
+import { GreetingsHero } from './_components/greetings-hero'
 import { GreetingsTabs } from './_components/greetings-tabs'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
   title: '인사말씀 | 동양서예협회',
@@ -26,11 +26,7 @@ export default function GreetingsPage() {
   return (
     <>
       <AboutPage>
-        <AboutHero
-          tc={PAGE_HERO_MARKS.greetings.tc}
-          title='인사말씀'
-          lede='제23회 대한민국 동양서예대전을 앞두고 이사장이 인사말씀을 전합니다'
-        />
+        <GreetingsHero />
         <AboutNav />
         <GreetingsTabs />
         <AboutMotion />

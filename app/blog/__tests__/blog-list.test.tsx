@@ -23,9 +23,17 @@ jest.mock('@/components/layout/page-hero', () => ({
     </dl>
   ),
 }))
-jest.mock('@/contexts/language-context', () => ({
-  useLanguage: () => ({ language: 'ko', t: (key: string) => key }),
-}))
+let mockLanguage: 'ko' | 'en' | 'ja' | 'zh' = 'ko'
+jest.mock('@/contexts/language-context', () => {
+  // 실제 언어별 표로 찾는다 — 키가 빠지면 키 이름이 그대로 나와 테스트가 잡는다
+  const { translations } = jest.requireActual('@/lib/i18n/translations')
+  return {
+    useLanguage: () => ({
+      language: mockLanguage,
+      t: (key: string) => translations[mockLanguage][key] || key,
+    }),
+  }
+})
 
 // 감사(P1): /blog 가 클라이언트에서 blog-service 를 불러 rss-parser 와 글 본문 14편(344KB)을
 // 첫 번들에 실었다. 목록은 서버에서 만들고, 목록에 필요한 칸만 넘긴다.
@@ -76,7 +84,66 @@ describe('formatBlogDate', () => {
   it.each([
     ['ko', '2026년 1월 21일'],
     ['en', 'January 21, 2026'],
+    ['ja', '2026年1月21日'],
+    ['zh', '2026年1月21日'],
   ] as const)('%s: 서울 날짜로 찍는다 (실행 시간대와 무관)', (language, expected) => {
     expect(formatBlogDate('2026-01-20T15:00:00.000Z', language)).toBe(expected)
+  })
+})
+
+// 회귀: 목록 화면 틀이 ko 가 아니면 모두 영어였고(ja·zh 도 영어), 채널 카드·읽기·이전/다음은 늘 한국어였다
+describe('BlogListClient 화면 틀 번역', () => {
+  const HANGUL = /[가-힣]/
+  afterEach(() => {
+    mockLanguage = 'ko'
+  })
+
+  it.each([
+    ['en', 'Oriental Calligraphy Blog', 'KakaoTalk channel', 'Read', 'Next'],
+    ['ja', '東洋書芸ブログ', 'カカオトーク チャンネル', '読む', '次へ'],
+    ['zh', '東洋書藝部落格', 'KakaoTalk 頻道', '閱讀', '下一頁'],
+  ])('%s: 제목·채널 카드·읽기·쪽 넘김', (lang, title, kakao, read, next) => {
+    mockLanguage = lang as typeof mockLanguage
+    render(<BlogListClient posts={blogListItems()} />)
+    expect(screen.getByRole('heading', { level: 1, name: title })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: kakao })).toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: new RegExp(`^${read}`) }).length).toBeGreaterThan(0)
+    expect(screen.getByRole('button', { name: next })).toBeInTheDocument()
+  })
+
+  it.each(['en', 'ja', 'zh'] as const)('%s: 글 제목·요약·작성자·태그 말고는 한글이 없다', lang => {
+    mockLanguage = lang
+    const items = blogListItems()
+    const { container } = render(<BlogListClient posts={items} />)
+    let text = container.textContent ?? ''
+    const data = items.flatMap(item => [
+      item.title,
+      item.summary,
+      item.author,
+      ...(item.tags ?? []),
+    ])
+    for (const value of data.filter(Boolean).sort((a, b) => b.length - a.length)) {
+      text = text.replaceAll(value, '')
+    }
+    expect(text).not.toMatch(HANGUL)
+    const { blogTranslations } = jest.requireActual('@/lib/i18n/translations/blog')
+    // 글자 조각마다 본다 — textContent 를 이어 붙이면 'Tistory blog' + 'Read' 가 키 이름처럼 보인다
+    const keys = new Set(Object.keys(blogTranslations.ko))
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT)
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      expect(keys.has((node.nodeValue ?? '').trim())).toBe(false)
+    }
+  })
+
+  it('네 언어 표가 같은 키를 갖고 빈 값이 없다', () => {
+    const { blogTranslations } = jest.requireActual('@/lib/i18n/translations/blog')
+    const { greetingsTranslations } = jest.requireActual('@/lib/i18n/translations/greetings')
+    for (const tables of [blogTranslations, greetingsTranslations]) {
+      const keys = Object.keys(tables.ko).sort()
+      for (const lang of ['en', 'ja', 'zh']) expect(Object.keys(tables[lang]).sort()).toEqual(keys)
+      for (const table of Object.values(tables) as Record<string, string>[]) {
+        for (const value of Object.values(table)) expect(value.trim()).not.toBe('')
+      }
+    }
   })
 })
