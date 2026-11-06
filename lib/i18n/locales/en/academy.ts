@@ -52,7 +52,7 @@ const academy: Record<string, string> = {
   'ac.ui.sacLede':
     'From Hangeul and Hanja calligraphy to literati painting, contemporary calligraphy, folk painting and seal carving: {classes} regular courses taught by {instructors} instructors. You learn in the Society’s flagship exhibition space.',
   'ac.ui.termName': 'Term',
-  'ac.ui.termPeriod': 'Enrolment period',
+  'ac.ui.termPeriod': 'Course dates',
   'ac.ui.termLength': 'Lessons',
   'ac.ui.termRecess': 'Recess',
   'ac.ui.benefitEyebrow': 'Benefits for Society students',
