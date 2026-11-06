@@ -64,6 +64,15 @@ describe('/faq 화면', () => {
     expect(screen.queryByText(/오전 10시/)).not.toBeInTheDocument()
   })
 
+  // 회귀: FAQ 상담 시간(10 am – 5 pm)과 연락처 카드(10 AM – 5 PM (KST))가 언어마다 달랐다
+  it('상담 시간 번역은 연락처 카드와 같은 글자다', () => {
+    const { translations } = jest.requireActual('@/lib/i18n/translations')
+    const { CONTACT_LABELS } = jest.requireActual('@/app/contests/_components/contest-i18n')
+    for (const lang of ['ko', 'en', 'ja', 'zh']) {
+      expect(translations[lang].contactOfficeHours).toBe(CONTACT_LABELS[lang].bookingBody)
+    }
+  })
+
   it('사무국 메일과 문의 페이지로 가는 길을 둔다', () => {
     render(<FaqView />)
     expect(screen.getByRole('link', { name: 'info@orientalcalligraphy.org' })).toHaveAttribute(

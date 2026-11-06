@@ -43,7 +43,6 @@ const events: Record<string, string> = {
   evReset: '条件をクリア',
   evCalendarKicker: 'プレゼント行事 · 申込締切日',
   evLinkTaiwanTrip: '紀行の日程と参加案内',
-  contactOfficeHours: '月〜金 午前10時〜午後5時',
   // 행사 상세(/events/[id])
   evDetailType: '種類',
   evDetailPeriod: '期間',

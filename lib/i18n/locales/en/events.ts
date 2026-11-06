@@ -44,7 +44,6 @@ const events: Record<string, string> = {
   evReset: 'Clear filters',
   evCalendarKicker: 'Giveaway · application deadline',
   evLinkTaiwanTrip: 'Trip itinerary and how to join',
-  contactOfficeHours: 'Mon–Fri, 10 am – 5 pm',
   // 행사 상세(/events/[id])
   evDetailType: 'Type',
   evDetailPeriod: 'Period',
