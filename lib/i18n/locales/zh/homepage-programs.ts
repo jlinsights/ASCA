@@ -48,8 +48,8 @@ const homepagePrograms: Record<string, string> = {
   hpProgWhoTitle: '誰可以申請',
   hpProgWhoMember: '正會員 — 參與協會主辦的展覽與活動，即可依上述階段延續。',
   hpProgWhoSpecial:
-    '非會員作家 — 經特別選任獲認可為推薦作家或招待作家後，可申請個人網站或團體網站。',
-  hpProgWhoCite: '推薦・招待作家規程 第11條（特別選任）',
+    '非會員作家 — 經特別選任獲認可為推薦作家或特邀作家後，可申請個人網站或團體網站。',
+  hpProgWhoCite: '推薦·特邀作家選任規定 第11條（特別選任）',
   hpProgCta: '洽詢網站建置',
   hpProgCtaMembership: '入會說明',
 }
