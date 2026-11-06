@@ -79,6 +79,18 @@ describe('작가의 홈페이지 — 참여하면 열리는 온라인 공간', (
     expect(container.textContent).not.toMatch(/hpProg/)
   })
 
+  // keep-all 은 한글을 단어 단위로 끊지만, 띄어쓰기가 거의 없는 일본어·중국어는 줄을 못 바꿔 넘친다
+  it.each([
+    ['ko', true],
+    ['en', false],
+    ['ja', false],
+    ['zh', false],
+  ])('%s: 단어 단위 줄바꿈(break-keep)은 한국어에만 = %s', (lang, keep) => {
+    mockLanguage = lang as string
+    const { container } = render(<HomepagePrograms />)
+    expect(container.querySelector('section')?.classList.contains('break-keep')).toBe(keep)
+  })
+
   // 금액은 규정·자주 묻는 질문 한 곳에만 둔다 (featured-homepages-copy 와 같은 원칙)
   it('네 언어 모두 금액을 쓰지 않고, 키가 같다', () => {
     const keys = Object.keys(ko).sort()

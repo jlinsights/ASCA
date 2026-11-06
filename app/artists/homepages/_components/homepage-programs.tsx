@@ -148,11 +148,13 @@ function StepItem({ step }: { step: Step }) {
 }
 
 export function HomepagePrograms() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+  // 한글만 단어 단위로 끊는다 — keep-all 은 띄어쓰기가 거의 없는 일본어·중국어의 줄바꿈을 막아 넘친다
+  const wrap = language === 'ko' ? 'break-keep' : ''
   return (
     <section
       aria-labelledby='homepage-programs-title'
-      className='gallery-container break-keep pt-12 md:pt-20'
+      className={`gallery-container pt-12 md:pt-20 ${wrap}`}
     >
       <div className='grid gap-6 lg:grid-cols-[1fr_1.1fr] lg:items-end lg:gap-16'>
         <div>
