@@ -28,6 +28,7 @@ import blog from './blog'
 import membership from './membership'
 import fundraising from './fundraising'
 import partners from './partners'
+import academy from './academy'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -59,6 +60,7 @@ const staticTable: Record<string, string> = {
   ...membership,
   ...fundraising,
   ...partners,
+  ...academy,
 
   // 공통 UI 요소
   loading: '로딩 중...',
