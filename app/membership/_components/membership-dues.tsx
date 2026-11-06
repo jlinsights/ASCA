@@ -1,23 +1,24 @@
+'use client'
+
 import Link from 'next/link'
-import { ARREARS_STEPS, DUES_FACTS, PAYMENT_LINKS, SRC } from './membership-data'
+import { PAYMENT_LINKS } from './membership-data'
 import { MembershipSectionHead } from './membership-section-head'
 import { RegCite } from './reg-cite'
+import { useMembershipText } from './use-membership-copy'
 
 /** 회비 납부와 자격 관리 — 미납 단계는 세 칸 눈금, 나머지 사실은 장부 행으로 */
 export function MembershipDues() {
+  const { copy, ui } = useMembershipText()
+  const { src } = copy
   return (
     <section className='asca-mb__section' aria-labelledby='mb-dues'>
-      <MembershipSectionHead
-        id='mb-dues'
-        title='회비 납부와 자격 관리'
-        lede='연회비는 온라인 모금함에서 납부하고, 마이페이지에서 납부내역을 확인합니다.'
-      />
+      <MembershipSectionHead id='mb-dues' title={ui('duesTitle')} lede={ui('duesLede')} />
 
       <div className='asca-mb__dues'>
         <div>
-          <h3 className='asca-mb__subhead'>연회비를 내지 않으면</h3>
+          <h3 className='asca-mb__subhead'>{ui('arrears')}</h3>
           <ol className='asca-mb__arrears'>
-            {ARREARS_STEPS.map((step, index) => (
+            {copy.arrears.map((step, index) => (
               <li key={step.when} className='asca-mb__arrear'>
                 <span className='asca-mb__arrear-step' aria-hidden='true'>
                   {index + 1}
@@ -30,7 +31,7 @@ export function MembershipDues() {
         </div>
 
         <dl className='asca-mb__facts'>
-          {DUES_FACTS.map(fact => (
+          {copy.duesFacts.map(fact => (
             <div key={fact.label} className='asca-mb__fact'>
               <dt>{fact.label}</dt>
               <dd>{fact.body}</dd>
@@ -41,15 +42,15 @@ export function MembershipDues() {
 
       <div className='asca-mb__pay'>
         <Link href={PAYMENT_LINKS.pay} target='_blank' rel='noopener noreferrer'>
-          온라인 모금함에서 납부
+          {ui('pay')}
         </Link>
         <Link href={PAYMENT_LINKS.mypage} target='_blank' rel='noopener noreferrer'>
-          마이페이지에서 납부내역 확인
+          {ui('mypage')}
         </Link>
       </div>
 
       <RegCite
-        sources={[SRC.dues5, SRC.dues11, SRC.articles8, SRC.qualifications]}
+        sources={[src.dues5, src.dues11, src.articles8, src.qualifications]}
         className='asca-mb__cite--section'
       />
     </section>
