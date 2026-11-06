@@ -67,7 +67,9 @@ export function useDiscoveryCopy(): DiscoveryCopy {
   const { t } = useLanguage()
   return useMemo(
     () =>
-      Object.fromEntries(DISCOVERY_FIELDS.map(field => [field, t(discoveryKey(field))])) as DiscoveryCopy,
+      Object.fromEntries(
+        DISCOVERY_FIELDS.map(field => [field, t(discoveryKey(field))])
+      ) as DiscoveryCopy,
     [t]
   )
 }

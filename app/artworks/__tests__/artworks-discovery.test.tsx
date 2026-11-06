@@ -16,7 +16,9 @@ jest.mock('@/components/ui/toaster', () => ({ Toaster: () => null }))
 jest.mock('@/contexts/language-context', () => {
   // 실제 번역 표로 찾는다 — 둘러보기 문구는 언어별 표(discovery*)에 있다
   const { translations } = jest.requireActual('@/lib/i18n/translations')
-  return { useLanguage: () => ({ language: 'ko', t: (key: string) => translations.ko[key] || key }) }
+  return {
+    useLanguage: () => ({ language: 'ko', t: (key: string) => translations.ko[key] || key }),
+  }
 })
 
 const fetchMock = jest.fn()
