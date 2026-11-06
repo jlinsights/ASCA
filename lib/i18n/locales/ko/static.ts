@@ -23,6 +23,8 @@ import discovery from './discovery'
 import homepagePrograms from './homepage-programs'
 import events from './events'
 import artistDetail from './artist-detail'
+import greetings from './greetings'
+import blog from './blog'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -49,6 +51,8 @@ const staticTable: Record<string, string> = {
   ...homepagePrograms,
   ...events,
   ...artistDetail,
+  ...greetings,
+  ...blog,
 
   // 공통 UI 요소
   loading: '로딩 중...',

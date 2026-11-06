@@ -27,10 +27,12 @@ import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 /**
  * 글 날짜. 목록이 서버(UTC)에서 먼저 그려지므로 서울 시간대로 고정한다 — 정하지 않으면
  * 15:00Z 로 저장된 글이 HTML 과 서울 브라우저에서 하루 어긋나 hydration 이 깨진다.
- * 한국어가 아니면 지금처럼 영어 날짜를 쓴다.
+ * 날짜 표기는 고른 언어를 따른다(중국어는 번체 — zh-TW).
  */
+const DATE_LOCALE: Record<string, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', zh: 'zh-TW' }
+
 export function formatBlogDate(iso: string, language: string): string {
-  return new Date(iso).toLocaleDateString(language === 'ko' ? 'ko-KR' : 'en-US', {
+  return new Date(iso).toLocaleDateString(DATE_LOCALE[language] ?? 'en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -44,7 +46,7 @@ interface BlogListClientProps {
 }
 
 export function BlogListClient({ posts }: BlogListClientProps) {
-  const { language } = useLanguage()
+  const { language, t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const ITEMS_PER_PAGE = 9
   const [currentPage, setCurrentPage] = useState(1)
@@ -90,19 +92,11 @@ export function BlogListClient({ posts }: BlogListClientProps) {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <PageHero
-        {...PAGE_HERO_MARKS.blog}
-        title={language === 'ko' ? '동양서예 블로그' : 'Oriental Calligraphy Blog'}
-        lede={
-          language === 'ko'
-            ? '동양서예협회의 다양한 소식과 이야기를 만나보세요'
-            : 'Discover various news and stories from ASCA'
-        }
-      >
+      <PageHero {...PAGE_HERO_MARKS.blog} title={t('blogHeroTitle')} lede={t('blogHeroLede')}>
         <HeroFacts
           facts={[
             {
-              label: language === 'ko' ? '게시물' : 'Posts',
+              label: t('blogFactPosts'),
               value: posts.length,
             },
           ]}
@@ -124,11 +118,11 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                 <MessageCircle className='w-8 h-8 opacity-80' />
                 <ExternalLink className='w-5 h-5 opacity-60 group-hover:opacity-100' />
               </div>
-              <h3 className='text-xl font-bold mb-2'>카카오톡 채널</h3>
+              <h3 className='text-xl font-bold mb-2'>{t('blogKakaoTitle')}</h3>
               <p className='text-sm opacity-80 leading-relaxed'>
-                동양서예협회 카카오톡 채널에서
+                {t('blogKakaoLine1')}
                 <br />
-                가장 빠른 소식을 받아보세요.
+                {t('blogKakaoLine2')}
               </p>
             </div>
           </a>
@@ -145,11 +139,11 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                 <BookOpen className='w-8 h-8 opacity-80' />
                 <ExternalLink className='w-5 h-5 opacity-60 group-hover:opacity-100' />
               </div>
-              <h3 className='text-xl font-bold mb-2'>티스토리 블로그</h3>
+              <h3 className='text-xl font-bold mb-2'>{t('blogTistoryTitle')}</h3>
               <p className='text-sm opacity-90 leading-relaxed'>
-                공식 블로그에서 더 깊이 있는
+                {t('blogTistoryLine1')}
                 <br />
-                서예 이야기를 확인하세요.
+                {t('blogTistoryLine2')}
               </p>
             </div>
           </a>
@@ -159,7 +153,8 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         <div className='max-w-xl mx-auto mb-12 relative'>
           <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
           <Input
-            placeholder={language === 'ko' ? '제목, 내용으로 검색...' : 'Search...'}
+            placeholder={t('blogSearchPlaceholder')}
+            aria-label={t('blogSearchPlaceholder')}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             className='pl-10 h-12'
@@ -234,7 +229,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                           className='ml-auto hover:bg-primary/10 hover:text-primary'
                         >
                           <Link href={`/blog/${post.id}`}>
-                            읽기 <ArrowRight className='w-4 h-4 ml-1' />
+                            {t('blogRead')} <ArrowRight className='w-4 h-4 ml-1' />
                           </Link>
                         </Button>
                       ) : (
@@ -245,7 +240,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                           className='ml-auto hover:bg-primary/10 hover:text-primary'
                         >
                           <a href={post.link} target='_blank' rel='noopener noreferrer'>
-                            이동 <ExternalLink className='w-4 h-4 ml-1' />
+                            {t('blogVisit')} <ExternalLink className='w-4 h-4 ml-1' />
                           </a>
                         </Button>
                       )}
@@ -255,7 +250,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               ))
             ) : (
               <div className='col-span-full text-center py-12 text-muted-foreground'>
-                검색 결과가 없습니다.
+                {t('blogNoResults')}
               </div>
             )}
           </div>
@@ -269,7 +264,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
-                이전
+                {t('blogPrev')}
               </Button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                 <Button
@@ -287,7 +282,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
-                다음
+                {t('blogNext')}
               </Button>
             </div>
           )}
