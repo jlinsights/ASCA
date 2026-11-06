@@ -1,15 +1,10 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { HeroFacts, PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { ApplySectionHead, ContactList, LedgerTable } from '@/components/apply/apply-parts'
 import { EVENT_LINKS } from '@/lib/events/event-links'
 import { getPublishedEvent, listPublishedEvents } from '@/lib/events/events-data'
 import {
   EVENT_TYPE_LABELS,
-  PHASE_LABELS,
   eventFacts,
   eventPeriod,
   eventPhase,
@@ -19,6 +14,7 @@ import {
 import type { Event } from '@/lib/types/cms-legacy'
 import { log } from '@/lib/utils/logger'
 import { toEventRow, type EventRow } from '../_components/event-rows'
+import { EventDetailView } from './_components/event-detail-view'
 import { EventViewBeacon } from './_components/event-view-beacon'
 import '@/components/apply/apply.css'
 import '../_components/events.css'
@@ -26,6 +22,7 @@ import '../_components/events.css'
 /**
  * 행사 상세 — 서버에서 그린다. 예전엔 브라우저에서 읽었고, 관련 행사 쿼리 400 하나에 모든 상세가 오류 화면이었다(2026-10-25).
  * 본문의 '구분: …' 항목 줄은 표로 옮기고, 옛 사이트 원문 링크는 버린다.
+ * 화면 틀은 언어 선택을 따르는 EventDetailView(클라이언트)가 그리고, 메타데이터는 여기서 한국어로 둔다.
  */
 
 type PageProps = { params: Promise<{ id: string }> }
@@ -83,94 +80,22 @@ export default async function EventDetailPage({ params }: PageProps) {
 
   return (
     <div className='asca-apply min-h-screen'>
-      <PageHero
-        {...PAGE_HERO_MARKS.events}
-        tier='band'
-        title={event.title}
-        crumbs={[{ label: '행사', href: '/events' }, { label: event.title }]}
-      >
-        <HeroFacts
-          facts={[
-            { label: '일정', value: eventPeriod(event) },
-            { label: '장소', value: event.location || event.venue || null },
-            { label: '구분', value: typeLabel },
-          ]}
-        />
-      </PageHero>
-
-      <div className='asca-apply__body'>
-        <div className='asca-events__detail'>
-          <article className='asca-events__article' aria-labelledby='about-title'>
-            <p className='asca-events__kicker'>
-              <span className='asca-events__phase' data-phase={phase}>
-                {PHASE_LABELS[phase]}
-              </span>
-              {typeLabel}
-            </p>
-            <h2 id='about-title' className='sr-only'>
-              행사 소개
-            </h2>
-            <div className='asca-events__lead'>
-              {parsed.lead.split(/\n{2,}/).map(paragraph => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-
-            {link && (
-              <p className='asca-events__cta'>
-                <Link href={link.href} className='asca-events__more is-primary'>
-                  {link.label} →
-                </Link>
-              </p>
-            )}
-
-            <section aria-labelledby='facts-title' className='asca-events__facts'>
-              <ApplySectionHead id='facts-title' eyebrow='행사 정보' title='언제, 어디서' />
-              <LedgerTable
-                caption={`${event.title} 행사 정보`}
-                columns={[{ label: '항목' }, { label: '내용' }]}
-                rows={facts.map(fact => ({ cells: [fact.label, fact.value] }))}
-              />
-            </section>
-
-            {isAhead && (
-              <section aria-labelledby='ask-title' className='asca-events__facts'>
-                <ApplySectionHead
-                  id='ask-title'
-                  eyebrow='문의'
-                  title='참가·일정 문의'
-                  lede='세부 일정과 참가 방법은 사무국에서 안내합니다.'
-                />
-                <ContactList />
-              </section>
-            )}
-          </article>
-
-          <aside className='asca-events__aside' aria-labelledby='related-title'>
-            <h2 id='related-title' className='asca-events__aside-title'>
-              {related.length > 0 ? `다른 ${typeLabel} 행사` : '행사 기록'}
-            </h2>
-            {related.length > 0 && (
-              <ol className='asca-events__related'>
-                {related.map(row => (
-                  <li key={row.id}>
-                    <Link href={`/events/${row.id}`}>
-                      <span className='asca-events__related-date'>
-                        {row.year}.{row.monthDay}
-                      </span>
-                      <span className='asca-events__related-title'>{row.title}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            )}
-            <Link href='/events#archive' className='asca-events__more'>
-              ← 행사 목록으로
-            </Link>
-          </aside>
-        </div>
-      </div>
-
+      <EventDetailView
+        event={{
+          id: event.id,
+          title: event.title,
+          type: event.event_type,
+          typeLabel,
+          phase,
+          period: eventPeriod(event),
+          place: event.location || event.venue || null,
+          lead: parsed.lead,
+          facts,
+          link: link ?? null,
+          isAhead,
+        }}
+        related={related}
+      />
       <EventViewBeacon eventId={event.id} />
       <LayoutFooter />
     </div>

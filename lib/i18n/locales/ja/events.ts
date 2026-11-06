@@ -44,6 +44,24 @@ const events: Record<string, string> = {
   evCalendarKicker: 'プレゼント行事 · 申込締切日',
   evLinkTaiwanTrip: '紀行の日程と参加案内',
   contactOfficeHours: '月〜金 午前10時〜午後5時',
+  // 행사 상세(/events/[id])
+  evDetailType: '種類',
+  evDetailPeriod: '期間',
+  evDetailOrganizer: '主催',
+  evDetailHost: '主管',
+  evDetailSponsor: '後援',
+  evDetailCosponsor: '協賛',
+  evDetailAbout: '行事の紹介',
+  evDetailFactsEyebrow: '行事情報',
+  evDetailFactsTitle: 'いつ、どこで',
+  evDetailFactsCaption: '{title} 行事情報',
+  evDetailColItem: '項目',
+  evDetailColValue: '内容',
+  evDetailAskEyebrow: 'お問い合わせ',
+  evDetailAskTitle: '参加・日程のお問い合わせ',
+  evDetailAskLede: '詳しい日程と参加方法は事務局がご案内します。',
+  evDetailRelated: 'その他の{type}',
+  evDetailBack: '← 行事一覧へ',
 }
 
 export default events
