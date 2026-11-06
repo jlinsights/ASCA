@@ -46,6 +46,24 @@ const events: Record<string, string> = {
   evCalendarKicker: '증정 행사 · 신청 마감일',
   evLinkTaiwanTrip: '기행 일정과 참가 안내 보기',
   contactOfficeHours: '월–금 오전 10시 – 오후 5시',
+  // 행사 상세(/events/[id])
+  evDetailType: '구분',
+  evDetailPeriod: '기간',
+  evDetailOrganizer: '주최',
+  evDetailHost: '주관',
+  evDetailSponsor: '후원',
+  evDetailCosponsor: '협찬',
+  evDetailAbout: '행사 소개',
+  evDetailFactsEyebrow: '행사 정보',
+  evDetailFactsTitle: '언제, 어디서',
+  evDetailFactsCaption: '{title} 행사 정보',
+  evDetailColItem: '항목',
+  evDetailColValue: '내용',
+  evDetailAskEyebrow: '문의',
+  evDetailAskTitle: '참가·일정 문의',
+  evDetailAskLede: '세부 일정과 참가 방법은 사무국에서 안내합니다.',
+  evDetailRelated: '다른 {type} 행사',
+  evDetailBack: '← 행사 목록으로',
 }
 
 export default events

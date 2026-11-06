@@ -45,6 +45,24 @@ const events: Record<string, string> = {
   evCalendarKicker: 'Giveaway · application deadline',
   evLinkTaiwanTrip: 'Trip itinerary and how to join',
   contactOfficeHours: 'Mon–Fri, 10 am – 5 pm',
+  // 행사 상세(/events/[id])
+  evDetailType: 'Type',
+  evDetailPeriod: 'Period',
+  evDetailOrganizer: 'Organiser',
+  evDetailHost: 'Host',
+  evDetailSponsor: 'Support',
+  evDetailCosponsor: 'Sponsor',
+  evDetailAbout: 'About this event',
+  evDetailFactsEyebrow: 'Event information',
+  evDetailFactsTitle: 'When and where',
+  evDetailFactsCaption: 'Event information: {title}',
+  evDetailColItem: 'Item',
+  evDetailColValue: 'Details',
+  evDetailAskEyebrow: 'Contact',
+  evDetailAskTitle: 'Questions about joining or dates',
+  evDetailAskLede: 'The secretariat can tell you the full schedule and how to take part.',
+  evDetailRelated: 'More in {type}',
+  evDetailBack: '← Back to events',
 }
 
 export default events

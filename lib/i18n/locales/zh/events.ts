@@ -44,6 +44,24 @@ const events: Record<string, string> = {
   evCalendarKicker: '贈送活動 · 申請截止日',
   evLinkTaiwanTrip: '參訪行程與參加說明',
   contactOfficeHours: '週一至週五 上午10時至下午5時',
+  // 행사 상세(/events/[id])
+  evDetailType: '類別',
+  evDetailPeriod: '期間',
+  evDetailOrganizer: '主辦',
+  evDetailHost: '承辦',
+  evDetailSponsor: '贊助',
+  evDetailCosponsor: '協贊',
+  evDetailAbout: '活動介紹',
+  evDetailFactsEyebrow: '活動資訊',
+  evDetailFactsTitle: '時間與地點',
+  evDetailFactsCaption: '{title} 活動資訊',
+  evDetailColItem: '項目',
+  evDetailColValue: '內容',
+  evDetailAskEyebrow: '聯絡',
+  evDetailAskTitle: '參加與日程諮詢',
+  evDetailAskLede: '詳細日程與參加方式由秘書處說明。',
+  evDetailRelated: '其他{type}',
+  evDetailBack: '← 返回活動列表',
 }
 
 export default events
