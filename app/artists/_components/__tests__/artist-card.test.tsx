@@ -236,3 +236,41 @@ describe('ArtistCard 카카오 공유 문구', () => {
     expect(button).toHaveAttribute('data-description', description)
   })
 })
+
+// 라이브 확인(#235 이후): 영어·일본어·중국어 카드에 등급·직위 값이 DB 의 한국어('초대작가'·'고 문')로 남았다
+describe('ArtistCard 등급·직위 값 번역', () => {
+  afterEach(() => {
+    mockLanguage = 'ko'
+  })
+  const graded = artist({ membershipType: '초대작가, 운영위원', title: '고 문' })
+
+  it.each([
+    ['en', 'Invited artist', 'Advisor'],
+    ['ja', '招待作家', '顧問'],
+    ['zh', '特邀作家', '顧問'],
+  ] as const)('%s: 등급과 직위 값을 그 언어로 쓴다', (language, grade, title) => {
+    mockLanguage = language
+    for (const variant of ['pc', 'mobile'] as const) {
+      const { container, unmount } = render(<ArtistCard artist={graded} variant={variant} />)
+      expect(container).toHaveTextContent(grade)
+      expect(container).toHaveTextContent(title)
+      expect(container.textContent).not.toMatch(/초대작가|고\s?문/)
+      unmount()
+    }
+  })
+
+  it('ko: 등급은 그대로, 직위는 DB 의 음절 사이 공백을 지운다', () => {
+    const { container } = render(<ArtistCard artist={graded} variant='pc' />)
+    expect(container).toHaveTextContent('초대작가')
+    expect(container).toHaveTextContent('고문')
+  })
+
+  it('en: 표에 없는 직위는 DB 값을 그대로 둔다', () => {
+    mockLanguage = 'en'
+    const { container } = render(
+      <ArtistCard artist={artist({ membershipType: '추천작가', title: '명예회장' })} variant='pc' />
+    )
+    expect(container).toHaveTextContent('Recommended artist')
+    expect(container).toHaveTextContent('명예회장')
+  })
+})
