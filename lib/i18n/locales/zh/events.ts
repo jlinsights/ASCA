@@ -59,7 +59,7 @@ const events: Record<string, string> = {
   evDetailColValue: '內容',
   evDetailAskEyebrow: '聯絡',
   evDetailAskTitle: '參加與日程諮詢',
-  evDetailAskLede: '詳細日程與參加方式由秘書處說明。',
+  evDetailAskLede: '詳細日程與參加方式由祕書處說明。',
   evDetailRelated: '其他{type}',
   evDetailBack: '← 返回活動列表',
 }
