@@ -1,7 +1,11 @@
-import { ANAM } from './academy-data'
+'use client'
+
+import { useAcademyText } from './use-academy-copy'
 
 /** 지도 교수 — 초상과 직함을 세우고, 약력·전시·활동을 세 칸 장부로. 아래에 작품 띠와 강의 영상 */
 export function InstructorAnam() {
+  const { copy, ui } = useAcademyText()
+  const ANAM = copy.anam
   return (
     <article className='asca-ac__teacher' aria-labelledby='ac-teacher'>
       <header className='asca-ac__teacher-head'>
@@ -16,7 +20,7 @@ export function InstructorAnam() {
           decoding='async'
         />
         <div>
-          <p className='asca-ac__eyebrow'>지도 교수</p>
+          <p className='asca-ac__eyebrow'>{ui('teacherEyebrow')}</p>
           <h3 id='ac-teacher' className='asca-ac__teacher-name'>
             {ANAM.name}
           </h3>
@@ -30,7 +34,7 @@ export function InstructorAnam() {
 
       <div className='asca-ac__teacher-grid'>
         <div>
-          <h4 className='asca-ac__subhead'>약력</h4>
+          <h4 className='asca-ac__subhead'>{ui('teacherCareer')}</h4>
           <ul className='asca-ac__dash-list'>
             {ANAM.career.map(item => (
               <li key={item}>{item}</li>
@@ -38,7 +42,7 @@ export function InstructorAnam() {
           </ul>
         </div>
         <div>
-          <h4 className='asca-ac__subhead'>전시</h4>
+          <h4 className='asca-ac__subhead'>{ui('teacherExhibitions')}</h4>
           <ul className='asca-ac__dash-list'>
             {ANAM.exhibitions.map(item => (
               <li key={item}>{item}</li>
@@ -46,7 +50,7 @@ export function InstructorAnam() {
           </ul>
         </div>
         <div>
-          <h4 className='asca-ac__subhead'>활동</h4>
+          <h4 className='asca-ac__subhead'>{ui('teacherActivities')}</h4>
           <ul className='asca-ac__tags'>
             {ANAM.activities.map(item => (
               <li key={item}>{item}</li>
@@ -55,7 +59,7 @@ export function InstructorAnam() {
         </div>
       </div>
 
-      <ul className='asca-ac__works' aria-label={`${ANAM.name} 작품`}>
+      <ul className='asca-ac__works' aria-label={ui('teacherWorks').replace('{name}', ANAM.name)}>
         {ANAM.artworks.map(work => (
           <li key={work.src}>
             <figure className='asca-ac__work'>
