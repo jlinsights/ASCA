@@ -21,6 +21,7 @@ import kakaoShare from './kakao-share'
 import notFound from './not-found'
 import discovery from './discovery'
 import homepagePrograms from './homepage-programs'
+import artistDetail from './artist-detail'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -45,6 +46,7 @@ const staticTable: Record<string, string> = {
   ...notFound,
   ...discovery,
   ...homepagePrograms,
+  ...artistDetail,
 
   // 공통 UI 요소
   loading: '読み込み中...',

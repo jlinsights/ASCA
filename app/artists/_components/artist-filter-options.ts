@@ -115,3 +115,9 @@ export function artistRoleLabel(role: string, language: Language): string {
     optionLabel('membership', grade, language) ?? optionLabel('title', value, language) ?? value
   )
 }
+
+/** DB nationality(韓國·中國·日本 같은 한자 표기) → 화면 라벨. 표에 없으면 그대로 */
+export function artistNationalityLabel(nationality: string, language: Language): string {
+  const value = nationality.trim()
+  return optionLabel('nationality', value, language) ?? value
+}
