@@ -45,7 +45,6 @@ const events: Record<string, string> = {
   evReset: '조건 지우기',
   evCalendarKicker: '증정 행사 · 신청 마감일',
   evLinkTaiwanTrip: '기행 일정과 참가 안내 보기',
-  contactOfficeHours: '월–금 오전 10시 – 오후 5시',
   // 행사 상세(/events/[id])
   evDetailType: '구분',
   evDetailPeriod: '기간',

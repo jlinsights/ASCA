@@ -43,7 +43,6 @@ const events: Record<string, string> = {
   evReset: '清除條件',
   evCalendarKicker: '贈送活動 · 申請截止日',
   evLinkTaiwanTrip: '參訪行程與參加說明',
-  contactOfficeHours: '週一至週五 上午10時至下午5時',
   // 행사 상세(/events/[id])
   evDetailType: '類別',
   evDetailPeriod: '期間',

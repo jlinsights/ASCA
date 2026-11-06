@@ -12,6 +12,8 @@ const faq: Record<string, string> = {
   faqContactTitle: '沒有找到答案嗎？',
   faqContactBody: '請直接詢問辦公室。',
   faqContactHours: '電話諮詢',
+  // 상담 시간 — 연락처 카드(CONTACT_LABELS.bookingBody)와 같은 글자
+  contactOfficeHours: '週一至週五 上午10時至下午5時(韓國時間)',
   faqContactPage: '聯絡頁面',
 }
 
