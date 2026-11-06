@@ -123,6 +123,7 @@ export const CALENDAR_EVENT_ROW: EventRow = {
   summary: `${CALENDAR_2027.artist}의 2027 캘린더를 드립니다. 연회비·후원·대전 조기 출품·대만 기행 가운데 하나 이상 참여하면 신청할 수 있습니다.`,
   type: 'other',
   typeLabel: '증정 행사 · 신청 마감일',
+  typeLabelKey: 'evCalendarKicker',
   phase: 'ongoing',
   year: 2026,
   monthDay: '12.15',

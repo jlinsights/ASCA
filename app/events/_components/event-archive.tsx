@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
-import type { EventRow } from './event-rows'
+import { useLanguage } from '@/contexts/language-context'
+import { eventTypeText, type EventRow } from './event-rows'
 
 /**
  * 지난 행사 기록 — 해마다 묶은 장부. 유형 칩과 검색으로 거르고, 거른 상태는 주소(?type=&q=)에 남겨 공유할 수 있게 한다.
@@ -32,6 +33,7 @@ function matches(row: EventRow, type: string, query: string): boolean {
 export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: EventArchiveProps) {
   const router = useRouter()
   const pathname = usePathname()
+  const { t } = useLanguage()
   const [type, setType] = useState(rows.some(row => row.type === initialType) ? initialType : ALL)
   const [query, setQuery] = useState(initialQuery)
 
@@ -39,10 +41,10 @@ export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: Eve
     const counts = new Map<string, { label: string; count: number }>()
     for (const row of rows) {
       const entry = counts.get(row.type)
-      counts.set(row.type, { label: row.typeLabel, count: (entry?.count ?? 0) + 1 })
+      counts.set(row.type, { label: eventTypeText(row, t), count: (entry?.count ?? 0) + 1 })
     }
     return [...counts.entries()].sort(([, a], [, b]) => b.count - a.count)
-  }, [rows])
+  }, [rows, t])
 
   const trimmed = query.trim()
   const visible = rows.filter(row => matches(row, type, trimmed))
@@ -64,8 +66,8 @@ export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: Eve
   return (
     <div className='asca-events__archive'>
       <div className='asca-events__tools'>
-        <div className='asca-events__chips' role='group' aria-label='행사 유형'>
-          {[[ALL, { label: '전체', count: rows.length }] as const, ...types].map(
+        <div className='asca-events__chips' role='group' aria-label={t('evTypeGroup')}>
+          {[[ALL, { label: t('evAll'), count: rows.length }] as const, ...types].map(
             ([value, { label, count }]) => (
               <button
                 key={value}
@@ -89,13 +91,13 @@ export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: Eve
           }}
         >
           <label htmlFor='event-search' className='sr-only'>
-            행사 검색
+            {t('evSearchLabel')}
           </label>
           <input
             id='event-search'
             type='search'
             value={query}
-            placeholder='행사명·장소·작가로 찾기'
+            placeholder={t('evSearchPlaceholder')}
             onChange={event => setQuery(event.target.value)}
           />
         </form>
@@ -103,13 +105,15 @@ export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: Eve
 
       <p className='asca-events__count' aria-live='polite'>
         {visible.length === rows.length
-          ? `${rows.length}건`
-          : `${rows.length}건 가운데 ${visible.length}건`}
+          ? t('evCount').replace('{n}', String(rows.length))
+          : t('evFiltered')
+              .replace('{total}', String(rows.length))
+              .replace('{shown}', String(visible.length))}
       </p>
 
       {visible.length === 0 ? (
         <div className='asca-events__empty'>
-          <p>조건에 맞는 행사가 없습니다.</p>
+          <p>{t('evEmpty')}</p>
           <button
             type='button'
             className='asca-events__reset'
@@ -118,7 +122,7 @@ export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: Eve
               updateUrl({ type: ALL, q: '' })
             }}
           >
-            조건 지우기
+            {t('evReset')}
           </button>
         </div>
       ) : (
@@ -140,7 +144,7 @@ export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: Eve
                           {[row.place, row.organizer].filter(Boolean).join(' · ')}
                         </span>
                       </span>
-                      <span className='asca-events__row-type'>{row.typeLabel}</span>
+                      <span className='asca-events__row-type'>{eventTypeText(row, t)}</span>
                     </Link>
                   </li>
                 ))}
