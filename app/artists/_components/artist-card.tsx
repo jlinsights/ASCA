@@ -13,7 +13,7 @@ import { artistNativeHanName, artistNativeName } from '@/lib/api/artist-name'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
 import { regulationGrade } from './artist-filter-options'
 import { useLanguage } from '@/contexts/language-context'
-import { discoveryCopy, formatDiscoveryCount } from '@/components/gallery/discovery-copy'
+import { formatDiscoveryCount, useDiscoveryCopy } from '@/components/gallery/discovery-copy'
 
 interface ArtistCardProps {
   artist: Artist
@@ -41,7 +41,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
   const artName = artNameLabel(artist.artNameKo, artist.artNameHanja)
   const { language, t } = useLanguage()
-  const copy = discoveryCopy[language]
+  const copy = useDiscoveryCopy()
   const awardCount = formatDiscoveryCount(copy.awardCount, artist.awards?.length ?? 0, language)
   const shareTitle = t('kakaoShareArtistTitle').replace('{name}', displayName)
   const shareDescription = `${artist.specialties?.join(', ') || t('kakaoShareArtistFallbackSpecialty')} - ${artist.bio || t('kakaoShareArtistFallbackBio')}`
