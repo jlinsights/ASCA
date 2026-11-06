@@ -9,6 +9,8 @@ const partners: Record<string, string> = {
   partnersFactListed: '掲載機関・団体',
   partnersOrgCount: '{n}か所',
   partnersMarqueeLabel: '名称の帯',
+  partnersMarqueePause: '名称の帯を止める',
+  partnersMarqueePlay: '名称の帯を再び流す',
   partnersChapterTitle: 'ともに歩む機関',
   partnersChapterNote:
     '名称を押すと、その機関のウェブサイトが新しいウィンドウで開きます。名称は原語のまま表示しています。',

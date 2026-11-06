@@ -9,6 +9,8 @@ const partners: Record<string, string> = {
   partnersFactListed: '등재 기관·단체',
   partnersOrgCount: '{n}곳',
   partnersMarqueeLabel: '이름 띠',
+  partnersMarqueePause: '이름 띠 멈추기',
+  partnersMarqueePlay: '이름 띠 다시 흐르기',
   partnersChapterTitle: '함께하는 기관',
   partnersChapterNote: '이름을 누르면 해당 기관 누리집이 새 창으로 열립니다.',
   partnersNewWindow: '(새 창)',

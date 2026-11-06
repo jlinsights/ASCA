@@ -9,6 +9,8 @@ const partners: Record<string, string> = {
   partnersFactListed: 'Listed organisations',
   partnersOrgCount: '{n}',
   partnersMarqueeLabel: 'Names',
+  partnersMarqueePause: 'Pause the names',
+  partnersMarqueePlay: 'Play the names',
   partnersChapterTitle: 'Organisations we work with',
   partnersChapterNote:
     "Select a name to open that organisation's website in a new window. Names are shown in their original language.",

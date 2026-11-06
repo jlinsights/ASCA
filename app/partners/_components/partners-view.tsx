@@ -29,7 +29,12 @@ export function PartnersView() {
         ]}
       />
       <AboutNav />
-      <AboutMarquee names={MARQUEE_NAMES} label={t('partnersMarqueeLabel')} />
+      <AboutMarquee
+        names={MARQUEE_NAMES}
+        label={t('partnersMarqueeLabel')}
+        pauseLabel={t('partnersMarqueePause')}
+        playLabel={t('partnersMarqueePlay')}
+      />
       <AboutChapter
         id='partners'
         tone='gold'

@@ -8,6 +8,8 @@ const partners: Record<string, string> = {
   partnersFactListed: '收錄機關・團體',
   partnersOrgCount: '{n}處',
   partnersMarqueeLabel: '名稱橫幅',
+  partnersMarqueePause: '暫停名稱橫幅',
+  partnersMarqueePlay: '繼續播放名稱橫幅',
   partnersChapterTitle: '攜手同行的機關',
   partnersChapterNote: '點選名稱即以新視窗開啟該機關網站。名稱維持原文。',
   partnersNewWindow: '(新視窗)',

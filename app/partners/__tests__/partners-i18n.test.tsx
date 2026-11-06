@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import PartnersPage from '../page'
 import { PARTNER_CATEGORIES, PARTNER_COUNT } from '../_components/partners-data'
 import { partnersTranslations } from '@/lib/i18n/translations/partners'
@@ -78,5 +78,18 @@ describe('/partners 화면', () => {
     expect(chrome).not.toMatch(/[가-힣]/)
     expect(document.body.textContent).not.toMatch(/partners[A-Z]/)
     expect(document.body.textContent).toContain('문화체육관광부')
+  })
+
+  // 회귀(Codex #246): 이름 띠 단추가 "Names 멈추기" 처럼 한국어 동작 문구를 붙였다
+  it.each(LANGS)('%s: 이름 띠 멈춤·재생 단추 문구를 두 상태 모두 고른 언어로', lang => {
+    mockLanguage = lang
+    render(<PartnersPage />)
+    const t = tables[lang]
+    const button = screen.getByRole('button', { name: t.partnersMarqueePause })
+    expect(button.textContent).not.toMatch(/[가-힣]/)
+    fireEvent.click(button)
+    expect(screen.getByRole('button', { name: t.partnersMarqueePlay }).textContent).not.toMatch(
+      /[가-힣]/
+    )
   })
 })
