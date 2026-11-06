@@ -63,6 +63,11 @@ function lifeFact(artist: ArtistDbRow, t: Translate): string | null {
   return artist.birth_year ? t('adBorn').replace('{year}', String(artist.birth_year)) : null
 }
 
+/** 숫자 뒤 단위 — 영어는 띄어 쓰고(6 works), 한·중·일은 붙여 쓴다(6점·6点·6件) */
+function unitAfterNumber(unit: string, language: Language): string {
+  return language === 'en' ? ` ${unit}` : unit
+}
+
 /** 구역 제목 곁 漢字(作品·作家) — 제목이 이미 한자인 일본어·중국어에서는 같은 글자가 겹쳐 빼다 */
 function showsHanjaMark(language: Language): boolean {
   return language === 'ko' || language === 'en'
@@ -98,9 +103,17 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
   const pictured = works.filter(work => work.imageUrl)
 
   const ledger: ArtistHeroFact[] = [
-    { label: t('adLedgerWorks'), value: works.length, unit: t('adUnitWorks') },
+    {
+      label: t('adLedgerWorks'),
+      value: works.length,
+      unit: unitAfterNumber(t('adUnitWorks'), language),
+    },
     { label: t('adLedgerYears'), value: workYearSpan(works) },
-    { label: t('adLedgerCareer'), value: career.entries.length, unit: t('adUnitCareer') },
+    {
+      label: t('adLedgerCareer'),
+      value: career.entries.length,
+      unit: unitAfterNumber(t('adUnitCareer'), language),
+    },
   ]
 
   const media = artist.profile_image ? (

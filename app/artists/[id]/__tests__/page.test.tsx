@@ -322,6 +322,20 @@ describe('작가 상세 화면 글자 번역', () => {
     expect(screen.getByText(died)).toBeInTheDocument()
   })
 
+  // 회귀: 단위 앞 여백이 CSS 2px 뿐이라 영어가 '6works' 로 읽혔다(화면 읽기 프로그램도 한 낱말로)
+  it.each([
+    ['en', 'Published', '2 works'],
+    ['ko', '공개 작품', '2점'],
+    ['ja', '公開作品', '2点'],
+  ])('%s: 숫자와 단위 띄어쓰기', async (lang, label, value) => {
+    mockLanguage = lang as typeof mockLanguage
+    await renderPage()
+    const fact = [...document.querySelectorAll('.ah__fact')].find(
+      el => el.querySelector('dt')?.textContent === label
+    )
+    expect(fact?.querySelector('dd')?.textContent).toBe(value)
+  })
+
   it('en: 비어 있을 때 안내와 다른 작가 링크도 번역한다', async () => {
     mockLanguage = 'en'
     getArtist.mockResolvedValue({ ...artistRow, bio: null, profile_image: null })
