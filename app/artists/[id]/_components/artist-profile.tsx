@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroScrolls } from '@/components/layout/page-hero'
 import { useLanguage } from '@/contexts/language-context'
-import { artistRoleLabel } from '../../_components/artist-filter-options'
+import { artistNationalityLabel, artistRoleLabel } from '../../_components/artist-filter-options'
 import { artNameLabel, type ArtistDbRow } from '@/lib/api/artist-mapper'
 import { artistDisplayName } from '@/lib/api/artist-life'
 import { artistNativeName } from '@/lib/api/artist-name'
@@ -52,17 +52,24 @@ function workTitle(work: ArtistWork, language: Language): string {
   return language === 'en' && work.titleEn ? work.titleEn : work.title
 }
 
-function lifeFact(artist: ArtistDbRow): string | null {
+type Translate = (key: string) => string
+
+function lifeFact(artist: ArtistDbRow, t: Translate): string | null {
   if (artist.death_year) {
     return artist.birth_year
       ? `${artist.birth_year}–${artist.death_year}`
-      : `${artist.death_year}년 별세`
+      : t('adDied').replace('{year}', String(artist.death_year))
   }
-  return artist.birth_year ? `${artist.birth_year}년생` : null
+  return artist.birth_year ? t('adBorn').replace('{year}', String(artist.birth_year)) : null
+}
+
+/** 구역 제목 곁 漢字(作品·作家) — 제목이 이미 한자인 일본어·중국어에서는 같은 글자가 겹쳐 빼다 */
+function showsHanjaMark(language: Language): boolean {
+  return language === 'ko' || language === 'en'
 }
 
 export function ArtistProfile({ artist, works }: ArtistProfileProps) {
-  const { language } = useLanguage() as { language: Language }
+  const { language, t } = useLanguage() as { language: Language; t: Translate }
 
   const baseName = localized(language, {
     ko: artistNativeName({
@@ -91,9 +98,9 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
   const pictured = works.filter(work => work.imageUrl)
 
   const ledger: ArtistHeroFact[] = [
-    { label: '공개 작품', value: works.length, unit: '점' },
-    { label: '작품 연도', value: workYearSpan(works) },
-    { label: '경력', value: career.entries.length, unit: '건' },
+    { label: t('adLedgerWorks'), value: works.length, unit: t('adUnitWorks') },
+    { label: t('adLedgerYears'), value: workYearSpan(works) },
+    { label: t('adLedgerCareer'), value: career.entries.length, unit: t('adUnitCareer') },
   ]
 
   const media = artist.profile_image ? (
@@ -147,11 +154,17 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
         hanja={hanjaName(artist)}
         lede={lede}
         facts={[
-          { label: '생몰', value: lifeFact(artist) },
-          { label: '국적', value: artist.nationality?.trim() || null },
+          { label: t('adFactLife'), value: lifeFact(artist, t) },
+          {
+            label: t('adFactNationality'),
+            value: artist.nationality?.trim()
+              ? artistNationalityLabel(artist.nationality, language)
+              : null,
+          },
         ]}
         ledger={ledger}
         media={media}
+        crumbLabel={t('adCrumbList')}
       />
 
       {founder && <FounderBand language={language} />}
@@ -160,12 +173,16 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
         <section className='ap-section ap-works' aria-labelledby='ap-works-title'>
           <header className='ap-head'>
             <h2 id='ap-works-title' className='ap-head__title'>
-              작품
-              <span className='ap-head__tc' lang='zh-Hant' aria-hidden='true'>
-                作品
-              </span>
+              {t('adWorksTitle')}
+              {showsHanjaMark(language) && (
+                <span className='ap-head__tc' lang='zh-Hant' aria-hidden='true'>
+                  作品
+                </span>
+              )}
             </h2>
-            <p className='ap-head__note'>{works.length}점 · 최근 작품부터</p>
+            <p className='ap-head__note'>
+              {t('adWorksNote').replace('{count}', String(works.length))}
+            </p>
           </header>
           <ul className='ap-works__grid'>
             {works.map(work => (
@@ -181,10 +198,12 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
         <section className='ap-section ap-about' aria-labelledby='ap-about-title'>
           <div className='ap-about__layout'>
             <h2 id='ap-about-title' className='ap-head__title ap-about__title'>
-              작가 소개
-              <span className='ap-head__tc' lang='zh-Hant' aria-hidden='true'>
-                作家
-              </span>
+              {t('adAboutTitle')}
+              {showsHanjaMark(language) && (
+                <span className='ap-head__tc' lang='zh-Hant' aria-hidden='true'>
+                  作家
+                </span>
+              )}
             </h2>
             <div className='ap-about__body'>
               {career.paragraphs.map((paragraph, index) => (
@@ -194,7 +213,7 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
               ))}
               {career.entries.length > 0 && (
                 <>
-                  <h3 className='ap-career__title'>경력</h3>
+                  <h3 className='ap-career__title'>{t('adCareerTitle')}</h3>
                   <ol className='ap-career'>
                     {career.entries.map((entry, index) => (
                       <li key={index} className='ap-career__item'>
@@ -211,12 +230,10 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
       )}
 
       {works.length === 0 && (
-        <section className='ap-section ap-empty' aria-label='안내'>
-          <p className='ap-empty__text'>
-            {hasAbout ? '공개된 작품이 아직 없습니다.' : '작가 소개와 작품을 준비하고 있습니다.'}
-          </p>
+        <section className='ap-section ap-empty' aria-label={t('adEmptyLabel')}>
+          <p className='ap-empty__text'>{hasAbout ? t('adEmptyNoWorks') : t('adEmptyPreparing')}</p>
           <Link href='/artists' className='ap-empty__link'>
-            다른 작가 보기
+            {t('adOtherArtists')}
           </Link>
         </section>
       )}
