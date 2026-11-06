@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { HeroScrolls } from '@/components/layout/page-hero'
 import { useLanguage } from '@/contexts/language-context'
+import { artistRoleLabel } from '../../_components/artist-filter-options'
 import { artNameLabel, type ArtistDbRow } from '@/lib/api/artist-mapper'
 import { artistDisplayName } from '@/lib/api/artist-life'
 import { artistNativeName } from '@/lib/api/artist-name'
@@ -30,12 +31,13 @@ function hanjaName(artist: ArtistDbRow): string | null {
   return zh && zh !== artist.name && HAN.test(zh) ? zh : null
 }
 
-/** membership_type('초대작가, 심사위원')·title 을 겹치지 않게 한 줄로 */
-function artistRoles(artist: ArtistDbRow): string[] {
+/** membership_type('초대작가, 심사위원')·title 을 겹치지 않게 한 줄로 — 값은 DB 의 한국어, 화면에는 고른 언어로 */
+function artistRoles(artist: ArtistDbRow, language: Language): string[] {
   const roles = [artist.membership_type, artist.title]
     .flatMap(value => (value ?? '').split(','))
     .map(role => role.trim())
     .filter(Boolean)
+    .map(role => artistRoleLabel(role, language))
   return [...new Set(roles)]
 }
 
@@ -83,7 +85,9 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
   const career = parseArtistCareer(bio, { awards: artist.awards, exhibitions: artist.exhibitions })
   const founder = isFounder(artist.slug)
   // 창립자는 DB 직위(title)가 비어 있다 — 협회에서의 자리를 등급보다 앞에 둔다
-  const roles = founder ? [FOUNDER.role[language], ...artistRoles(artist)] : artistRoles(artist)
+  const roles = founder
+    ? [FOUNDER.role[language], ...artistRoles(artist, language)]
+    : artistRoles(artist, language)
   const pictured = works.filter(work => work.imageUrl)
 
   const ledger: ArtistHeroFact[] = [

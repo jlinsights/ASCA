@@ -11,7 +11,7 @@ import { artNameLabel, type PublicArtist as Artist } from '@/lib/api/artist-mapp
 import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
 import { artistNativeHanName, artistNativeName } from '@/lib/api/artist-name'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
-import { regulationGrade } from './artist-filter-options'
+import { artistGradeLabel, artistTitleLabel, regulationGrade } from './artist-filter-options'
 import { useLanguage } from '@/contexts/language-context'
 import { formatDiscoveryCount, useDiscoveryCopy } from '@/components/gallery/discovery-copy'
 
@@ -41,6 +41,9 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
   const artName = artNameLabel(artist.artNameKo, artist.artNameHanja)
   const { language, t } = useLanguage()
+  // 등급·직위 값은 DB 의 한국어 — 화면에는 고른 언어의 라벨로 보인다
+  const gradeLabel = grade ? artistGradeLabel(grade, language) : null
+  const titleLabel = artist.title ? artistTitleLabel(artist.title, language) : null
   const copy = useDiscoveryCopy()
   const awardCount = formatDiscoveryCount(copy.awardCount, artist.awards?.length ?? 0, language)
   const shareTitle = t('kakaoShareArtistTitle').replace('{name}', displayName)
@@ -94,7 +97,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
             )}
             {(grade || artist.title) && (
               <p className='text-xs text-foreground'>
-                {[grade, artist.title].filter(Boolean).join(' · ')}
+                {[gradeLabel, titleLabel].filter(Boolean).join(' · ')}
               </p>
             )}
             {lifeYears && <p className='font-mono text-xs text-muted-foreground'>{lifeYears}</p>}
@@ -153,13 +156,13 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
             {grade && (
               <div className='flex items-center justify-between text-sm'>
                 <span className='text-muted-foreground'>{copy.membership}</span>
-                <span className='font-medium text-foreground'>{grade}</span>
+                <span className='font-medium text-foreground'>{gradeLabel}</span>
               </div>
             )}
             {artist.title && (
               <div className='flex items-center justify-between text-sm'>
                 <span className='text-muted-foreground'>{copy.title}</span>
-                <span className='font-medium text-foreground'>{artist.title}</span>
+                <span className='font-medium text-foreground'>{titleLabel}</span>
               </div>
             )}
           </div>
@@ -167,12 +170,12 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           <div className='text-xs text-muted-foreground space-y-1 pt-2 border-t border-border/30 dark:border-border/20'>
             {grade && (
               <div className='text-center'>
-                <span className='text-foreground font-medium'>{grade}</span>
+                <span className='text-foreground font-medium'>{gradeLabel}</span>
               </div>
             )}
             {artist.title && (
               <div className='text-center'>
-                <span className='text-foreground font-medium'>{artist.title}</span>
+                <span className='text-foreground font-medium'>{titleLabel}</span>
               </div>
             )}
           </div>
