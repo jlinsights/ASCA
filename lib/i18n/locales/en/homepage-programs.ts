@@ -31,7 +31,7 @@ const homepagePrograms: Record<string, string> = {
   hpProgStep3Label: 'Home',
   hpProgStep3Title: 'A website of your own',
   hpProgStep3Body:
-    'The cost of building a personal website is reduced or waived according to how many works you exhibit. Full members with a website maintenance contract pay no annual dues that year. Exhibitions by two or more artists open a shared group website.',
+    'The cost of building a personal website is reduced or waived according to how many works you exhibit. Full members who sign a website maintenance contract and pay the annual maintenance fee pay no annual dues that year. Exhibitions by two or more artists open a shared group website.',
   hpProgStep3Point1: '20 or more works — 50% off the build cost',
   hpProgStep3Point2: '30 or more works — build cost waived',
   hpProgStep3Point3: '40 or more works — build cost and first year of maintenance waived',

@@ -29,7 +29,7 @@ const homepagePrograms: Record<string, string> = {
   hpProgStep3Label: '家',
   hpProgStep3Title: '作家自己的網站',
   hpProgStep3Body:
-    '依參展作品數量，減免個人網站的建置費。簽訂網站維護合約的正會員，當年度免繳年費。兩人以上共同舉辦的展覽，則以團體網站呈現。',
+    '依參展作品數量，減免個人網站的建置費。簽訂網站維護合約並繳納年度維護費的正會員，當年度免繳年費。兩人以上共同舉辦的展覽，則以團體網站呈現。',
   hpProgStep3Point1: '參展20件以上 — 建置費五折',
   hpProgStep3Point2: '參展30件以上 — 免建置費',
   hpProgStep3Point3: '參展40件以上 — 免建置費與第一年維護費',

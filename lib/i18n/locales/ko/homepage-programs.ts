@@ -32,7 +32,7 @@ const homepagePrograms: Record<string, string> = {
   hpProgStep3Label: '집',
   hpProgStep3Title: '작가 자신의 홈페이지',
   hpProgStep3Body:
-    '전시에 출품한 작품 수에 따라 개인 홈페이지 구축비를 줄이거나 면제합니다. 홈페이지 유지보수 계약을 맺은 정회원은 그해 연회비가 면제됩니다. 두 명 이상이 함께 여는 전시는 단체 홈페이지로 엽니다.',
+    '전시에 출품한 작품 수에 따라 개인 홈페이지 구축비를 줄이거나 면제합니다. 홈페이지 유지보수 계약을 맺고 연간 유지보수비를 낸 정회원은 그해 연회비가 면제됩니다. 두 명 이상이 함께 여는 전시는 단체 홈페이지로 엽니다.',
   hpProgStep3Point1: '20점 이상 출품 — 구축비 50% 할인',
   hpProgStep3Point2: '30점 이상 출품 — 구축비 면제',
   hpProgStep3Point3: '40점 이상 출품 — 구축비와 첫해 유지보수비 면제',

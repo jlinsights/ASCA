@@ -79,6 +79,17 @@ describe('작가의 홈페이지 — 참여하면 열리는 온라인 공간', (
     expect(container.textContent).not.toMatch(/hpProg/)
   })
 
+  // 제10조 ①: 연회비 면제는 유지보수 계약 '과' 연간 유지보수비 납부가 모두 있어야 한다
+  it.each([
+    ['ko', /유지보수비를 낸/],
+    ['en', /pay the annual maintenance fee/],
+    ['ja', /年間保守費を納めた/],
+    ['zh', /繳納年度維護費/],
+  ])('%s: 연회비 면제 조건에 유지보수비 납부를 쓴다', (lang, pattern) => {
+    const table = homepageProgramsTranslations[lang as keyof typeof homepageProgramsTranslations]
+    expect(table.hpProgStep3Body).toMatch(pattern)
+  })
+
   // keep-all 은 한글을 단어 단위로 끊지만, 띄어쓰기가 거의 없는 일본어·중국어는 줄을 못 바꿔 넘친다
   it.each([
     ['ko', true],
