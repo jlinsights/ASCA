@@ -57,6 +57,13 @@ describe('/faq 화면', () => {
     expect(screen.queryByText('faqAnswerLanguage')).not.toBeInTheDocument()
   })
 
+  // 회귀: 상담 시간이 한국어 상수(월–금 오전 10시 – 오후 5시)로 고정돼 모든 언어에 찍혔다
+  it('상담 시간은 고른 언어의 번역으로 보인다', () => {
+    render(<FaqView />)
+    expect(screen.getByText(/contactOfficeHours/)).toBeInTheDocument()
+    expect(screen.queryByText(/오전 10시/)).not.toBeInTheDocument()
+  })
+
   it('사무국 메일과 문의 페이지로 가는 길을 둔다', () => {
     render(<FaqView />)
     expect(screen.getByRole('link', { name: 'info@orientalcalligraphy.org' })).toHaveAttribute(

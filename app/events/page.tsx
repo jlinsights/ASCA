@@ -1,14 +1,10 @@
 import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { HeroFacts, PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { ApplySectionHead } from '@/components/apply/apply-parts'
 import { listPublishedEvents } from '@/lib/events/events-data'
 import { todayKst } from '@/lib/events/event-view'
-import { EventArchive } from './_components/event-archive'
 import { toEventRow } from './_components/event-rows'
-import { UpcomingEvents } from './_components/upcoming-events'
+import { EventsView } from './_components/events-view'
 import {
   CALENDAR_EVENT_ROW,
   isCalendarEventOpen,
@@ -19,6 +15,7 @@ import './_components/events.css'
 /**
  * 행사 — 다가오는 행사를 크게, 지난 행사는 해마다 묶은 기록으로.
  * 예전엔 브라우저에서 9건씩 읽어 같은 자리표시 사진을 붙인 카드로 보였고, 상세는 모두 오류였다(2026-10-25).
+ * 화면 틀은 언어 선택을 따르는 EventsView(클라이언트)가 그리고, 메타데이터는 여기서 한국어로 둔다.
  */
 
 const DESCRIPTION =
@@ -53,41 +50,14 @@ export default async function EventsPage({ searchParams }: PageProps) {
 
   return (
     <div className='asca-apply min-h-screen'>
-      <PageHero
-        {...PAGE_HERO_MARKS.events}
-        title='행사'
-        lede='협회가 열고 후원한 전시·대회·총회·문화 기행의 기록입니다.'
-      >
-        <HeroFacts
-          facts={[
-            { label: '다가오는 행사', value: `${upcoming.length}건` },
-            { label: '기록된 행사', value: `${rows.length}건` },
-            ...(firstYear ? [{ label: '기록 시작', value: `${firstYear}년` }] : []),
-          ]}
-        />
-      </PageHero>
-
-      <div className='asca-apply__body'>
-        <section id='upcoming' aria-labelledby='upcoming-title' className='asca-apply__anchor'>
-          <ApplySectionHead
-            id='upcoming-title'
-            eyebrow='다가오는 행사'
-            title={upcoming.length > 0 ? '곧 열리는 행사' : '예정된 행사'}
-          />
-          <UpcomingEvents rows={upcoming} />
-        </section>
-
-        <section id='archive' aria-labelledby='archive-title' className='asca-apply__anchor'>
-          <ApplySectionHead
-            id='archive-title'
-            eyebrow='지난 행사'
-            title={firstYear ? `${firstYear}년부터의 기록` : '행사 기록'}
-            lede='행사명을 누르면 기간·장소·주최와 소개를 볼 수 있습니다.'
-          />
-          <EventArchive rows={past} initialType={type} initialQuery={q?.slice(0, 50)} />
-        </section>
-      </div>
-
+      <EventsView
+        upcoming={upcoming}
+        past={past}
+        total={rows.length}
+        firstYear={firstYear}
+        initialType={type}
+        initialQuery={q?.slice(0, 50)}
+      />
       <LayoutFooter />
     </div>
   )
