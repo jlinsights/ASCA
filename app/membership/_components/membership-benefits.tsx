@@ -1,19 +1,22 @@
-import { MEMBER_BENEFITS } from './membership-data'
+'use client'
+
 import { MembershipSectionHead } from './membership-section-head'
 import { RegCite } from './reg-cite'
+import { useMembershipText } from './use-membership-copy'
 
 /** 회원 혜택 — 회원 및 회비 규정 제12조의 등급별 혜택. 위 등급일수록 아래 칸 혜택이 더해진다 */
 export function MembershipBenefits() {
+  const { copy, ui } = useMembershipText()
   return (
     <section className='asca-mb__section' aria-labelledby='mb-benefits'>
       <MembershipSectionHead
         id='mb-benefits'
-        title='회원 혜택'
-        lede='정회원 공통 혜택에 등급이 오를수록 혜택이 더해집니다.'
+        title={ui('benefitsTitle')}
+        lede={ui('benefitsLede')}
       />
 
       <div className='asca-mb__benefits'>
-        {MEMBER_BENEFITS.map((group, index) => (
+        {copy.benefits.map((group, index) => (
           <article key={group.title} className='asca-mb__benefit'>
             <h3 className='asca-mb__benefit-title'>
               <span className='asca-mb__index' aria-hidden='true'>
