@@ -76,8 +76,6 @@
     "db:push": "tsx scripts/db-check-backup.ts && drizzle-kit push",
     "db:migrate": "tsx scripts/db-check-backup.ts && drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "ws:server": "tsx watch scripts/websocket-server.ts",
-    "ws:server:prod": "tsx scripts/websocket-server.ts",
     "db:drop": "tsx scripts/db-check-backup.ts && drizzle-kit drop",
     "db:check": "drizzle-kit check",
     "db:seed": "tsx lib/db/seed.ts",
