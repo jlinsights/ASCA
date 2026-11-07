@@ -50,7 +50,7 @@ const commissioning: Record<string, string> = {
     'Where a relationship could compromise the fairness of judging, the juror withdraws from judging that work.',
   'cm.ui.recusalTitle': 'When a juror is excluded from judging a work',
   'cm.ui.recusalNote':
-    'If any of the above applies, or the juror judges that a fair review is difficult, they may recuse themselves with the permission of the Chair of Judging. An entrant may file a written challenge before judging begins.',
+    'If any of the above applies, or the juror judges that a fair review is difficult, they may recuse themselves with the permission of the Chair of the Jury. An entrant may file a written challenge before judging begins.',
   'cm.ui.dualTitle': 'When a juror also recruits',
   'cm.ui.dualBody':
     'If an entrant you recruited is included in that exhibition’s judging, you are either excluded from recruitment incentive payments or must be excluded from judging that entry.',
