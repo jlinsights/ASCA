@@ -1,1 +1,1 @@
-🧹 쓰지 않는 독립 WebSocket 서버(토큰 검사 없음)와 ws:server 스크립트 삭제
+🧹 DB·캐시를 확인하지 않고 늘 정상이라 답하던 관리자 system-health API 삭제 (호출처 없음)
