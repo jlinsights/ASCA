@@ -7,6 +7,8 @@ import { historyEvents } from '@/app/history/_data/history-events'
  */
 
 export interface ContestEdition {
+  /** 연혁(history-events.ts)의 id — 화면에서 기간·장소를 언어별로 바꿀 때 원본을 찾는다 */
+  eventId: string
   edition: number
   year: number
   date?: string
@@ -32,6 +34,7 @@ export const CONTEST_EDITIONS: readonly ContestEdition[] = historyEvents
     if (!match) return []
     return [
       {
+        eventId: event.id,
         edition: Number(match[1]),
         year: event.year,
         date: event.date,

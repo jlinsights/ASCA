@@ -29,6 +29,7 @@ import membership from './membership'
 import fundraising from './fundraising'
 import partners from './partners'
 import academy from './academy'
+import awards from './awards'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -61,6 +62,7 @@ const staticTable: Record<string, string> = {
   ...fundraising,
   ...partners,
   ...academy,
+  ...awards,
 
   // 공통 UI 요소
   loading: 'Loading...',
