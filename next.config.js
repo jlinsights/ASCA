@@ -323,6 +323,9 @@ const nextConfig = {
       },
       // 분류 체계 페이지는 위 분류별 페이지로 가는 카드에 지어낸 작품 수를 단 목록이었다
       { source: '/taxonomy', destination: '/artworks', permanent: false },
+      // 유관단체 상세 /partners/<id> 는 어디서도 링크하지 않는 페이지였고, 확인하지 않은 주소·전화·설립 연도를
+      // 손으로 적어 두고 있어 내렸다(2026-11-08 사용자 결정). 공유된 주소는 유관단체 목록으로 보낸다
+      { source: '/partners/:id', destination: '/partners', permanent: true },
       // 옛 Webflow 회차별 전시 주소(/exhibition/21-oriental-calligraphy-exhibition-2024 등)
       {
         source: '/exhibition/:slug*',
