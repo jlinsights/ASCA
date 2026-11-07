@@ -1,0 +1,62 @@
+// recommended 화면 번역 (en) — /application-for-recommended-invited-calligrapher 화면 틀. 데이터는 membership 표(mb.*)를 같이 쓴다.
+
+const recommended: Record<string, string> = {
+  'rc.ui.heroTitle': 'Apply as a Recommended or Invited Artist',
+  'rc.ui.heroLede':
+    'Full Members with the required award points from the Korea Oriental Calligraphy Grand Exhibition and the essential requirements may apply for the Recommended Artist or Invited Artist qualification review. Those with contributions or a relevant career may apply for special appointment even if they are not Full Members.',
+  'rc.ui.heroOnline': 'Fill in the online application',
+  'rc.ui.heroCriteria': 'See the selection criteria',
+  'rc.ui.factRecommended': 'Recommended Artist',
+  'rc.ui.factRecommendedValue': '10 points or more',
+  'rc.ui.factInvited': 'Invited Artist',
+  'rc.ui.factInvitedValue': '15 points or more',
+  'rc.ui.factReview': 'Qualification review',
+  'rc.ui.factReviewValue': 'Twice a year',
+  'rc.ui.factSpecial': 'Special appointment',
+  'rc.ui.factSpecialValue': 'Open to non-members',
+  'rc.ui.tocLabel': 'Jump to a section on this page',
+  'rc.ui.tocApply': 'Application form',
+  'rc.ui.tocCriteria': 'Selection criteria',
+  'rc.ui.tocReview': 'Review process',
+  'rc.ui.tocSpecial': 'Special appointment',
+  'rc.ui.tocFaq': 'FAQ',
+  'rc.ui.tocContact': 'Contact',
+  'rc.ui.cite': 'Basis',
+  'rc.ui.newWindow': ' (new window)',
+  'rc.ui.applyEyebrow': 'Online application',
+  'rc.ui.applyTitle': 'Fill in the application',
+  'rc.ui.applyLede':
+    'Answer the questions step by step and press the submit button at the end to send your application. Paper forms can be downloaded from the Forms page.',
+  'rc.ui.formTitle': 'Online application for Recommended and Invited Artists',
+  'rc.ui.formFrameTitle':
+    'Asian Society of Calligraphic Arts — application for Recommended and Invited Artists',
+  'rc.ui.formFallback': 'If the form does not appear',
+  'rc.ui.formOpenNew': 'Open in a new window',
+  'rc.ui.criteriaEyebrow': 'Selection criteria',
+  'rc.ui.criteriaTitle': 'Points and essential requirements',
+  'rc.ui.scoringCaption': 'Points by award grade, Korea Oriental Calligraphy Grand Exhibition',
+  'rc.ui.colAward': 'Award grade',
+  'rc.ui.colPoints': 'Points',
+  'rc.ui.pointsValue': '{n}',
+  'rc.ui.bandsCaption': 'Total points',
+  'rc.ui.colTotal': 'Total points',
+  'rc.ui.colLevel': 'Category',
+  'rc.ui.requiredTitle': 'Requirements to meet in full, separately from points',
+  'rc.ui.requiredNote':
+    'A Recommended Artist must have been active as a Full Member for at least 3 years and have an award record at a nationwide competition recognised by the Society; an Invited Artist must have been active as a Recommended Artist for at least 5 years.',
+  'rc.ui.reviewEyebrow': 'Review process',
+  'rc.ui.reviewTitle': 'Review by the Qualification Review Committee',
+  'rc.ui.specialEyebrow': 'Special appointment',
+  'rc.ui.specialTitle': 'Through contribution and career instead of points',
+  'rc.ui.specialEligible': 'Who may apply',
+  'rc.ui.specialSteps': 'From application to appointment',
+  'rc.ui.specialCaption': 'Fees for special appointment of non-members',
+  'rc.ui.faqEyebrow': 'FAQ',
+  'rc.ui.faqTitle': 'Questions often asked before applying',
+  'rc.ui.contactEyebrow': 'Enquiries',
+  'rc.ui.contactTitle': 'Unsure whether you qualify?',
+  'rc.ui.contactLede':
+    'If you are unsure about your points or whether you meet the requirements, please check with the Secretariat first.',
+}
+
+export default recommended
