@@ -1,1 +1,1 @@
-🐛 유관단체 화면의 겹치는 id(partners·partners-title) 정리 — 파트너 분류 id 를 collaborators 로
+🌐 수상(/awards) 화면을 영어·일본어·중국어로 번역 — 상금·인원은 원문과 같게, 시상 내역은 출품원서와 같은 키로
