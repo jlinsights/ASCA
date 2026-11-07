@@ -73,7 +73,7 @@ export const PARTNER_CATEGORIES: readonly PartnerCategory[] = [
     ],
   },
   {
-    id: 'partners',
+    id: 'collaborators',
     title: '파트너',
     partners: [
       {

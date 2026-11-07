@@ -63,7 +63,7 @@ describe('/partners 화면', () => {
     render(<PartnersPage />)
     const t = tables[lang]
     expect(screen.getByRole('heading', { level: 1, name: t.partnersTitle })).toBeInTheDocument()
-    // 분류 머리는 클래스로 찾는다 — 'partners' 분류의 id 가 장(chapter) 머리 id 와 겹친다(기존 마크업)
+    // 분류 머리는 화면 순서대로 클래스로 찾는다
     const headings = [...document.querySelectorAll('.ab-links__title')].map(
       h => h.textContent ?? ''
     )
@@ -78,6 +78,18 @@ describe('/partners 화면', () => {
     expect(chrome).not.toMatch(/[가-힣]/)
     expect(document.body.textContent).not.toMatch(/partners[A-Z]/)
     expect(document.body.textContent).toContain('문화체육관광부')
+  })
+
+  // 회귀: 'partners' 분류의 id·머리 id 가 장(chapter)의 id(partners·partners-title)와 겹쳐 aria-labelledby 가 엉뚱한 머리를 가리켰다
+  it('id 가 화면 안에서 겹치지 않고, 분류마다 자기 머리를 가리킨다', () => {
+    render(<PartnersPage />)
+    const ids = [...document.querySelectorAll('[id]')].map(el => el.id)
+    expect(ids.filter((id, index) => ids.indexOf(id) !== index)).toEqual([])
+    for (const category of PARTNER_CATEGORIES) {
+      const section = document.getElementById(category.id)
+      const heading = document.getElementById(section?.getAttribute('aria-labelledby') ?? '')
+      expect(heading?.className).toBe('ab-links__title')
+    }
   })
 
   // 회귀(Codex #246): 이름 띠 단추가 "Names 멈추기" 처럼 한국어 동작 문구를 붙였다
