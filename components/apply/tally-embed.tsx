@@ -31,13 +31,32 @@ interface TallyEmbedProps {
   title: string
   /** 스크립트가 높이를 맞추기 전·차단됐을 때의 높이 */
   initialHeight: number
+  /** 번역 화면에서만 넘긴다 — 기본은 한국어 */
+  labels?: TallyEmbedLabels
+}
+
+export interface TallyEmbedLabels {
+  fallback: string
+  openNew: string
+  newWindow: string
+}
+
+const TALLY_LABELS_KO: TallyEmbedLabels = {
+  fallback: '양식이 보이지 않으면',
+  openNew: '새 창에서 열기',
+  newWindow: ' (새 창)',
 }
 
 /**
  * 온라인 신청서 — next/script 의 onReady 는 첫 로드뿐 아니라 클라이언트 이동으로 다시 마운트될
  * 때마다 불려서, 다른 페이지를 거쳐 돌아와도 iframe 이 빈 채로 남지 않는다(onLoad 는 1회뿐).
  */
-export function TallyEmbed({ formId, title, initialHeight }: TallyEmbedProps) {
+export function TallyEmbed({
+  formId,
+  title,
+  initialHeight,
+  labels = TALLY_LABELS_KO,
+}: TallyEmbedProps) {
   const embedSrc = `https://tally.so/embed/${formId}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`
   const directHref = `https://tally.so/r/${formId}`
 
@@ -53,11 +72,11 @@ export function TallyEmbed({ formId, title, initialHeight }: TallyEmbedProps) {
       />
       <Script src={TALLY_SCRIPT} strategy='lazyOnload' onReady={loadEmbeds} onError={loadEmbeds} />
       <p className='asca-apply__form-alt'>
-        양식이 보이지 않으면{' '}
+        {labels.fallback}{' '}
         <a href={directHref} target='_blank' rel='noopener noreferrer'>
-          새 창에서 열기
+          {labels.openNew}
           <ExternalLink className='h-3.5 w-3.5' aria-hidden='true' />
-          <span className='sr-only'> (새 창)</span>
+          <span className='sr-only'>{labels.newWindow}</span>
         </a>
       </p>
     </>
