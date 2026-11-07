@@ -32,6 +32,7 @@ import academy from './academy'
 import awards from './awards'
 import application from './application'
 import recommended from './recommended'
+import commissioning from './commissioning'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -67,6 +68,7 @@ const staticTable: Record<string, string> = {
   ...awards,
   ...application,
   ...recommended,
+  ...commissioning,
 
   // 공통 UI 요소
   loading: '로딩 중...',
