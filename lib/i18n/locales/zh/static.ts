@@ -31,6 +31,7 @@ import partners from './partners'
 import academy from './academy'
 import awards from './awards'
 import application from './application'
+import commissioning from './commissioning'
 
 const staticTable: Record<string, string> = {
   ...navigation,
@@ -65,6 +66,7 @@ const staticTable: Record<string, string> = {
   ...academy,
   ...awards,
   ...application,
+  ...commissioning,
 
   // 공통 UI 요소
   loading: '加載中...',
