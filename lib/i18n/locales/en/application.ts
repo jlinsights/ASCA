@@ -72,13 +72,13 @@ const application: Record<string, string> = {
     'Each work received is given a judging number, and the artist’s information is sealed.',
   'ap.ui.step2Title': 'Scoring in 5-pt units',
   'ap.ui.step2Body':
-    'Each judge scores the four items and records the basis for the evaluation of each item.',
+    'Each juror scores the four items and records the basis for the evaluation of each item.',
   'ap.ui.step3Title': 'Average excluding the highest and lowest scores',
   'ap.ui.step3Body':
-    'The final score is the average of each judge’s total score after the highest and lowest totals are removed.',
-  'ap.ui.step4Title': 'Judge challenge request',
+    'The final score is the average of each juror’s total score after the highest and lowest totals are removed.',
+  'ap.ui.step4Title': 'Challenging a juror',
   'ap.ui.step4Body':
-    'If a judge has grounds for exclusion, such as being the spouse, or a lineal ascendant or descendant, of an entrant, or a teacher or student of an entrant, a challenge may be filed in writing before judging begins.',
+    'If a juror has grounds for exclusion, such as being the spouse, or a lineal ascendant or descendant, of an entrant, or a teacher or student of an entrant, a challenge may be filed in writing before judging begins.',
   'ap.ui.thresholdCaption': 'Grade criteria',
   'ap.ui.colScore': 'Final score',
   'ap.ui.colCandidate': 'Grade candidacy',

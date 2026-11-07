@@ -177,7 +177,7 @@ const academy: Record<string, string> = {
     'Certificates of completion awarded (enrolment starts from the lower courses)',
   'ac.munwonFeature.3': 'Practical instruction by script',
   'ac.munwonFeature.4': 'Instruction in planning a work',
-  'ac.anam.title': 'Chair of Judges, Korea Oriental Calligraphy Grand Exhibition',
+  'ac.anam.title': 'Chair of the Jury, Korea Oriental Calligraphy Grand Exhibition',
   'ac.anam.role': 'Full-time professor, Hanja Hanmun Gyosa Jungang Yeonsuwon, Daehan Geomjeonghoe',
   'ac.anam.career.1': 'Ph.D. in Eastern philosophy',
   'ac.anam.career.2':
