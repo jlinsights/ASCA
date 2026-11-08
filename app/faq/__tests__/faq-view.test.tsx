@@ -81,4 +81,39 @@ describe('/faq 화면', () => {
     )
     expect(screen.getByRole('link', { name: /faqContactPage/ })).toHaveAttribute('href', '/contact')
   })
+
+  it('답변의 내용도 공백에 관계없이 검색하고, 검색을 비우면 전체 질문을 복원한다', () => {
+    render(<FaqView />)
+    const input = screen.getByRole('searchbox', { name: 'faqSearchLabel' })
+    fireEvent.change(input, { target: { value: '구매확정' } })
+    const sales = SITE_FAQ.find(item => item.id === 'exhibition-sales')!
+    expect(screen.getByRole('button', { name: new RegExp(sales.q) })).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /협회 정회원은 어떻게 가입/ })
+    ).not.toBeInTheDocument()
+
+    fireEvent.change(input, { target: { value: 'no-matching-faq-xyz' } })
+    expect(screen.getByText('faqNoResults')).toBeInTheDocument()
+    expect(screen.queryAllByRole('button')).toHaveLength(0)
+
+    fireEvent.change(input, { target: { value: '' } })
+    expect(screen.getAllByRole('button')).toHaveLength(SITE_FAQ.length)
+  })
+
+  it('선택한 언어의 번역으로 검색하고 주제 바로가기로 전체 질문을 다시 탐색한다', () => {
+    language = 'en'
+    render(<FaqView />)
+    const input = screen.getByRole('searchbox', { name: 'faqSearchLabel' })
+    fireEvent.change(input, { target: { value: 'CONFIRMATION EMAIL' } })
+    expect(
+      screen.getByRole('button', { name: /My confirmation email is missing/ })
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /How do I join the association/ })
+    ).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('link', { name: 'faqGroupMembership' }))
+    expect(input).toHaveValue('')
+    expect(screen.getAllByRole('button')).toHaveLength(SITE_FAQ.length)
+  })
 })

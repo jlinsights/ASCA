@@ -12,12 +12,13 @@ import { FaqView } from './_components/faq-view'
 export const metadata: Metadata = {
   title: '자주 묻는 질문 | 동양서예협회',
   description:
-    '회원 가입과 연회비, 대한민국 동양서예대전 출품과 시상, 추천·초대작가 선정 기준 등 자주 묻는 질문을 모았습니다.',
+    '회원 가입·회비, 공모전 출품·심사, 개인전·부스전·도록, 작가 홈페이지, 강좌, 계정·후원을 질문과 답변으로 안내합니다.',
   alternates: { canonical: '/faq' },
   // openGraph 가 없으면 레이아웃의 기본 제목(ASCA | 사단법인 동양서예협회)으로 공유된다
   openGraph: {
     title: '자주 묻는 질문 | 동양서예협회',
-    description: '회원 가입·연회비, 대전 출품과 시상, 추천·초대작가 선정 기준을 묻고 답합니다.',
+    description:
+      '회비·출품·전시·도록·작가 홈페이지·강좌·계정 이용의 궁금한 점을 검색하고 확인하세요.',
     images: [defaultSEO.image],
   },
 }
