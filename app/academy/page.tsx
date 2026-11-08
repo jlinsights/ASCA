@@ -9,6 +9,7 @@ import { PartnershipCta } from './_components/partnership-cta'
 import './_components/academy.css'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/academy' },
   title: '강좌 | 동양서예협회',
   description:
     '동양서예협회가 연결하는 서예 강좌 안내. 문원한문서예학원 토요 정규 과정과 예술의전당 서화아카데미 2026 가을정규 시간표, 수강료, 협회 수강생 출품료 할인을 확인하세요.',

@@ -6,6 +6,7 @@ import { AboutNav } from '@/components/about/about-nav'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/board-members' },
   title: '임원 조직도 | 동양서예협회',
   description:
     '사단법인 동양서예협회의 임원 조직도를 소개합니다. 고문, 이사장, 감사, 상임이사, 심사위원장, 지부장 등 현재 임원진 구성을 확인하실 수 있습니다.',

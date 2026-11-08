@@ -4,6 +4,7 @@ import { BrandGuide } from './_components/brand-guide'
 import './brand.css'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/brand' },
   title: '브랜드 · 스타일 가이드 | 동양서예협회',
   description:
     '사단법인 동양서예협회(東洋書藝協會)의 시각 언어 ASCA Ink System — 공식 명칭, 로고, 남색·금색 팔레트, 글꼴, 말투, 형태 요소, 컴포넌트, 사진 처리 규칙을 안내합니다.',

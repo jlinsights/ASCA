@@ -7,6 +7,7 @@ import { GreetingsHero } from './_components/greetings-hero'
 import { GreetingsTabs } from './_components/greetings-tabs'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/greetings' },
   title: '인사말씀 | 동양서예협회',
   description:
     '사단법인 동양서예협회 이사장 임재홍의 인사말씀입니다. 서울서예박물관 제1·2전시실 전관에서 열리는 제23회 대한민국 동양서예대전과 書境(서경) 초대작가전을 안내합니다.',
