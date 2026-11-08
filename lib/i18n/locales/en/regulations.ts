@@ -1,0 +1,43 @@
+// regulations 화면 번역 (en). 네 언어를 모으는 곳은 lib/i18n/translations/regulations.ts 다.
+const regulations: Record<string, string> = {
+  regsAll: 'All regulations',
+  regsEyebrow: 'Articles & Bylaws',
+  regsHeroTitle: 'Articles of Incorporation & Bylaws',
+  regsHeroLede:
+    'The rules the Asian Society of Calligraphic Arts holds itself to. The articles and every operating regulation, in their original text, arranged so you can find and read each article.',
+  regsStatRegulations: 'Regulations',
+  regsStatArticles: 'Articles',
+  regsStatLatest: 'Latest in force',
+  regsArticlesUnit: ' articles',
+  regsNoArticles: 'Guidance, no articles',
+  regsEffective: 'Effective',
+  regsNoEffective: 'No effective date stated',
+  regsStatusActive: 'In force',
+  regsIndexTitle: 'Regulations',
+  regsToc: 'Contents',
+  regsTocOpen: 'Show contents',
+  regsBackToAll: 'All regulations',
+  regsPrev: 'Previous',
+  regsNext: 'Next',
+  regsKoreanOnly: 'The regulation text is published in Korean only.',
+  regsTranslationNote:
+    'This translation is for reference only. The Korean original prevails in case of any discrepancy.',
+  regsTableLabel: 'Table — scroll sideways on small screens',
+  regsCopyLink: 'Copy link to this article',
+  regsCopied: 'Link copied',
+  regsPrint: 'Print',
+  regsContactTitle: 'Questions about a regulation?',
+  regsContactBody: 'The secretariat answers questions on how an article is read or applied.',
+  regsContactCta: 'Contact us',
+  regsNameArticles: 'Articles of Incorporation',
+  regsNameMembership: 'Membership & Dues',
+  regsNameOperation: 'Operation & Judging',
+  regsNameExhibition: 'Exhibition Management',
+  regsNameArtistSelection: 'Recommended & Invited Artists',
+  regsNameAppraisal: 'Appraisal & Certificates',
+  regsNameBranches: 'Branches & Chapters',
+  regsNameObjections: 'Handling of Objections',
+  regsNameQualifications: 'Qualifications for Artists, Members and Officers',
+}
+
+export default regulations

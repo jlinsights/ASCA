@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { useLanguage } from '@/contexts/language-context'
-import { EMAIL, OFFICE_HOURS, PHONE } from '@/lib/content/contact-info'
+import { EMAIL, PHONE } from '@/lib/content/contact-info'
 import { faqGroups } from '@/lib/content/site-faq'
 import { localizeFaqItem } from '@/lib/content/site-faq-locale'
 import { PageHero } from '@/components/layout/page-hero'
@@ -49,7 +49,8 @@ export function FaqView() {
             </a>
             <p className='fq-contact__meta'>
               <span>
-                {t('faqContactHours')} <a href={PHONE.href}>{PHONE.display}</a> · {OFFICE_HOURS}
+                {t('faqContactHours')} <a href={PHONE.href}>{PHONE.display}</a> ·{' '}
+                {t('contactOfficeHours')}
               </span>
               <Link href='/contact'>{t('faqContactPage')} →</Link>
             </p>

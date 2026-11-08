@@ -6,6 +6,19 @@ import { toast } from 'sonner'
 import { Share2, MessageCircle } from 'lucide-react'
 import { shareToKakaoTalk, KakaoShareTemplate } from '@/lib/kakao'
 import { KAKAO_BUTTON_CLASSES } from './kakao-brand'
+import { useLanguage } from '@/contexts/language-context'
+
+/** 공유 대상. 대상마다 메시지 단추 문구와 설명 대체 문구가 다르다 */
+type KakaoShareType = 'artist' | 'contest' | 'exhibition' | 'artwork' | 'general'
+
+/** 번역 키 접두사 — lib/i18n/locales/<언어>/kakao-share.ts */
+const SHARE_KEY: Record<KakaoShareType, string> = {
+  artist: 'kakaoShareArtist',
+  contest: 'kakaoShareContest',
+  exhibition: 'kakaoShareExhibition',
+  artwork: 'kakaoShareArtwork',
+  general: 'kakaoShareGeneral',
+}
 
 interface KakaoShareButtonProps {
   // 공유할 콘텐츠 정보
@@ -21,7 +34,7 @@ interface KakaoShareButtonProps {
   className?: string
 
   // 공유 타입별 설정
-  shareType?: 'artist' | 'contest' | 'exhibition' | 'artwork' | 'general'
+  shareType?: KakaoShareType
 
   // 추가 버튼 설정
   buttonText?: string
@@ -50,6 +63,7 @@ export function KakaoShareButton({
   onShareError,
 }: KakaoShareButtonProps) {
   const [isSharing, setIsSharing] = useState(false)
+  const { t } = useLanguage()
 
   // 공유 타입별 기본 설정
   const getShareConfig = () => {
@@ -65,37 +79,11 @@ export function KakaoShareButton({
       mobileWebUrl: mobileWebUrl || webUrl,
     }
 
-    switch (shareType) {
-      case 'artist':
-        return {
-          ...baseConfig,
-          buttonText: buttonText || '작가 프로필 보기',
-          defaultDescription: '동양서예협회의 뛰어난 작가를 만나보세요',
-        }
-      case 'contest':
-        return {
-          ...baseConfig,
-          buttonText: buttonText || '공모전 참가하기',
-          defaultDescription: '지금 바로 공모전에 참가해보세요',
-        }
-      case 'exhibition':
-        return {
-          ...baseConfig,
-          buttonText: buttonText || '전시회 정보 보기',
-          defaultDescription: '특별한 전시회를 확인해보세요',
-        }
-      case 'artwork':
-        return {
-          ...baseConfig,
-          buttonText: buttonText || '작품 자세히 보기',
-          defaultDescription: '아름다운 작품을 감상해보세요',
-        }
-      default:
-        return {
-          ...baseConfig,
-          buttonText: buttonText || '자세히 보기',
-          defaultDescription: 'ASCA 동양서예협회에서 확인해보세요',
-        }
+    const key = SHARE_KEY[shareType]
+    return {
+      ...baseConfig,
+      buttonText: buttonText || t(`${key}Button`),
+      defaultDescription: t(`${key}Description`),
     }
   }
 
@@ -131,13 +119,13 @@ export function KakaoShareButton({
       const success = await shareToKakaoTalk(shareTemplate)
 
       if (success) {
-        toast.success('카카오톡으로 공유되었습니다! 📤')
+        toast.success(t('kakaoShareShared'))
         onShareSuccess?.()
       } else {
-        throw new Error('공유에 실패했습니다')
+        throw new Error('Kakao share returned false')
       }
     } catch (error) {
-      toast.error('공유 중 오류가 발생했습니다. 다시 시도해주세요.')
+      toast.error(t('kakaoShareFailed'))
       onShareError?.(error)
     } finally {
       setIsSharing(false)
@@ -145,11 +133,11 @@ export function KakaoShareButton({
   }
 
   const getButtonText = () => {
-    if (isSharing) return '공유 중...'
+    if (isSharing) return t('kakaoShareSharing')
     if (buttonText) return buttonText
 
     if (isIconOnly) return ''
-    return '카카오톡 공유'
+    return t('kakaoShareButton')
   }
 
   const getButtonSize = () => {
@@ -175,7 +163,7 @@ export function KakaoShareButton({
         ${isIconOnly ? 'p-0 rounded-full' : ''}
         ${className}
       `}
-      title={isIconOnly ? '카카오톡으로 공유하기' : undefined}
+      title={isIconOnly ? t('kakaoShareIconTitle') : undefined}
     >
       {showIcon && (
         <MessageCircle

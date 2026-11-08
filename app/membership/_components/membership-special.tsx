@@ -1,38 +1,34 @@
+'use client'
+
 import Link from 'next/link'
-import {
-  SPECIAL_CASES,
-  SPECIAL_ELIGIBLE,
-  SPECIAL_FEE_COLUMNS,
-  SPECIAL_FEES,
-  SPECIAL_LEDE,
-  SPECIAL_STEPS,
-  SRC,
-} from './membership-data'
 import { MembershipSectionHead } from './membership-section-head'
 import { RegCite } from './reg-cite'
+import { useMembershipText } from './use-membership-copy'
 
 /**
  * 특별선임 — 점수 승급(위 섹션)과 다른 두 번째 길. 대상·절차를 위에, 비회원 비용표와
  * 회원 상태별 처리를 아래에 둔다. 금액은 회원 및 회비 규정 제3조 ④ 표와 같아야 한다(테스트가 잡는다).
  */
 export function MembershipSpecial() {
+  const { copy, ui } = useMembershipText()
+  const { src } = copy
   return (
     <section className='asca-mb__section' aria-labelledby='mb-special'>
-      <MembershipSectionHead id='mb-special' title='추천·초대작가 특별선임' lede={SPECIAL_LEDE} />
+      <MembershipSectionHead id='mb-special' title={ui('specialTitle')} lede={copy.specialLede} />
 
       <div className='asca-mb__checks'>
         <div>
-          <h3 className='asca-mb__subhead'>신청할 수 있는 분</h3>
+          <h3 className='asca-mb__subhead'>{ui('specialEligible')}</h3>
           <ol className='asca-mb__numbered'>
-            {SPECIAL_ELIGIBLE.map(item => (
+            {copy.specialEligible.map(item => (
               <li key={item}>{item}</li>
             ))}
           </ol>
         </div>
         <div>
-          <h3 className='asca-mb__subhead'>신청부터 선임까지</h3>
+          <h3 className='asca-mb__subhead'>{ui('specialSteps')}</h3>
           <ol className='asca-mb__numbered'>
-            {SPECIAL_STEPS.map(item => (
+            {copy.specialSteps.map(item => (
               <li key={item}>{item}</li>
             ))}
           </ol>
@@ -41,13 +37,13 @@ export function MembershipSpecial() {
 
       <div className='asca-mb__dues asca-mb__special'>
         <div>
-          <h3 className='asca-mb__subhead'>비회원 특별선임 비용</h3>
+          <h3 className='asca-mb__subhead'>{ui('specialFees')}</h3>
           <div className='asca-mb__table-scroll'>
             <table className='asca-mb__scores'>
-              <caption className='sr-only'>비회원 특별선임 등록비</caption>
+              <caption className='sr-only'>{ui('specialCaption')}</caption>
               <thead>
                 <tr>
-                  {SPECIAL_FEE_COLUMNS.map(label => (
+                  {copy.specialColumns.map(label => (
                     <th key={label} scope='col'>
                       {label}
                     </th>
@@ -55,11 +51,11 @@ export function MembershipSpecial() {
                 </tr>
               </thead>
               <tbody>
-                {SPECIAL_FEES.map(({ cells: [name, ...amounts] }) => (
+                {copy.specialFees.map(({ cells: [name, ...amounts] }) => (
                   <tr key={name}>
                     <th scope='row'>{name}</th>
                     {amounts.map((amount, index) => (
-                      <td key={SPECIAL_FEE_COLUMNS[index + 1]}>{amount}</td>
+                      <td key={copy.specialColumns[index + 1]}>{amount}</td>
                     ))}
                   </tr>
                 ))}
@@ -67,16 +63,15 @@ export function MembershipSpecial() {
             </table>
           </div>
           <p className='asca-mb__note'>
-            이사회가 의결한 자격을 기준으로 냅니다. 등록비는 정회원이 같은 자격에 이르기까지 내는
-            가입·승급 등록비의 합입니다.{' '}
+            {ui('specialNote')}{' '}
             <Link href='/application-for-recommended-invited-calligrapher#special'>
-              특별선임 신청 안내
+              {ui('specialLink')}
             </Link>
           </p>
         </div>
 
         <dl className='asca-mb__facts'>
-          {SPECIAL_CASES.map(fact => (
+          {copy.specialCases.map(fact => (
             <div key={fact.label} className='asca-mb__fact'>
               <dt>{fact.label}</dt>
               <dd>{fact.body}</dd>
@@ -86,7 +81,7 @@ export function MembershipSpecial() {
       </div>
 
       <RegCite
-        sources={[SRC.select11, SRC.dues3, SRC.articles5]}
+        sources={[src.select11, src.dues3, src.articles5]}
         className='asca-mb__cite--section'
       />
     </section>

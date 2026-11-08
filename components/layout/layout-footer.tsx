@@ -7,6 +7,7 @@ import { useLanguage } from '@/contexts/language-context'
 import { SOCIAL_LINKS, type SocialNetwork } from '@/lib/social-links'
 import { footerLinks, footerSections } from './footer-data'
 import { footerCopy } from './footer-copy'
+import { FooterMenuSection } from './footer-menu-section'
 import { PHONE } from '@/lib/content/contact-info'
 
 const SOCIAL_ICONS: Record<SocialNetwork, LucideIcon> = {
@@ -125,28 +126,16 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
           {variant === 'default' && (
             <nav
               aria-label={copy.navigation}
-              className='grid content-start gap-x-12 gap-y-12 sm:grid-cols-2 lg:col-span-2 lg:gap-y-16'
+              className='grid content-start border-b border-rice-paper/20 sm:grid-cols-2 sm:gap-x-12 sm:gap-y-12 sm:border-b-0 lg:col-span-2 lg:gap-y-16'
             >
               {footerSections.map(section => (
-                <section key={section.titleKey}>
-                  <h2 className='mb-5 font-serif text-2xl font-normal leading-snug'>
-                    {label(section.titleKey)}
-                  </h2>
-                  <ul className='grid grid-cols-2 gap-x-4 gap-y-2'>
-                    {section.items.map(item => (
-                      <li key={item.href} className='min-w-0'>
-                        <Link
-                          href={item.href}
-                          target={item.external ? '_blank' : undefined}
-                          rel={item.external ? 'noopener noreferrer' : undefined}
-                          className={linkStyle}
-                        >
-                          {label(item.labelKey)}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+                <FooterMenuSection
+                  key={section.titleKey}
+                  title={label(section.titleKey)}
+                  items={section.items}
+                  label={label}
+                  linkClassName={linkStyle}
+                />
               ))}
             </nav>
           )}

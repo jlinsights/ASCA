@@ -73,3 +73,51 @@ export function getArtistFilterOptions(group: keyof typeof options, language: La
     label: option[index],
   }))
 }
+
+const LANGUAGE_INDEX = { ko: 0, en: 1, ja: 2, zh: 3 } as const
+
+/** 한 그룹의 DB 값(한국어) → 화면 라벨. 표에 없으면 null */
+function optionLabel(
+  group: keyof typeof options,
+  value: string,
+  language: Language
+): string | null {
+  const row = options[group].find(option => option[0] === value)
+  return row ? row[LANGUAGE_INDEX[language]] : null
+}
+
+/** regulationGrade() 가 돌려준 등급 → 화면 라벨. 표에 없는 등급(청년작가 등)은 그대로 */
+export function artistGradeLabel(grade: string, language: Language): string {
+  return optionLabel('membership', grade, language) ?? grade
+}
+
+/**
+ * DB 직위(title) → 화면 라벨. 직위는 음절 사이에 공백이 든 값('고 문')이 있고 쉼표로 이어지기도 한다.
+ * 공백을 지운 뒤 표에서 찾고, 표에 없는 직위는 공백만 지운 원래 값을 쓴다.
+ */
+export function artistTitleLabel(title: string, language: Language): string {
+  return title
+    .split(',')
+    .map(part => part.replace(/\s/g, ''))
+    .filter(Boolean)
+    .map(part => optionLabel('title', part, language) ?? part)
+    .join(', ')
+}
+
+/**
+ * membership_type·title 에 들어 있는 역할 하나 → 화면 라벨.
+ * 등급 표를 먼저 보고(DB '회원작가' 는 규정 등급 '일반작가'), 없으면 직위 표, 그래도 없으면 공백만 지운 값.
+ */
+export function artistRoleLabel(role: string, language: Language): string {
+  const value = role.replace(/\s/g, '')
+  const grade = value === '회원작가' ? '일반작가' : value
+  return (
+    optionLabel('membership', grade, language) ?? optionLabel('title', value, language) ?? value
+  )
+}
+
+/** DB nationality(韓國·中國·日本 같은 한자 표기) → 화면 라벨. 표에 없으면 그대로 */
+export function artistNationalityLabel(nationality: string, language: Language): string {
+  const value = nationality.trim()
+  return optionLabel('nationality', value, language) ?? value
+}

@@ -9,7 +9,7 @@ import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
 import { DiscoveryToolbar } from '@/components/gallery/discovery-toolbar'
-import { discoveryCopy, formatDiscoveryCount } from '@/components/gallery/discovery-copy'
+import { formatDiscoveryCount, useDiscoveryCopy } from '@/components/gallery/discovery-copy'
 import { Toaster } from '@/components/ui/toaster'
 import type { ArtworkWithArtist } from '@/lib/api/artworks'
 import { useLanguage } from '@/contexts/language-context'
@@ -23,7 +23,7 @@ export const ARTWORK_PAGE_SIZE = 24
 
 export function ArtworksClient() {
   const { language, t } = useLanguage()
-  const copy = discoveryCopy[language]
+  const copy = useDiscoveryCopy()
   const [artworks, setArtworks] = useState<ArtworkWithArtist[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

@@ -38,7 +38,7 @@ export default function CopyrightPolicyContent() {
       <section className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 기본 원칙 */}
-          <Card className='border-l-4 border-l-info'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-6'>
                 <Shield className='h-6 w-6 text-info dark:text-navy-300' />

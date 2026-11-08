@@ -11,6 +11,12 @@ jest.mock('next/navigation', () => ({
   },
 }))
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
+jest.mock('@/contexts/language-context', () => {
+  const { translations } = jest.requireActual('@/lib/i18n/translations')
+  return {
+    useLanguage: () => ({ language: 'en', t: (key: string) => translations.en[key] || key }),
+  }
+})
 
 const post = localPosts[0]!
 const params = (slug: string) => ({ params: Promise.resolve({ slug }) })
@@ -45,5 +51,11 @@ describe('/blog/[slug]', () => {
   test('없는 글은 404', async () => {
     await expect(BlogPostPage(params('no-such-post'))).rejects.toThrow('NEXT_NOT_FOUND')
     await expect(generateMetadata(params('no-such-post'))).resolves.toEqual({})
+  })
+
+  // 회귀: 글 위 돌아가기 링크가 언어와 상관없이 '블로그' 로 찍혔다
+  test('돌아가기 링크는 고른 언어로', async () => {
+    const html = renderToStaticMarkup(await BlogPostPage(params(post.id)))
+    expect(html).toMatch(/href="\/blog"[^>]*>.*Blog<\/a>/)
   })
 })

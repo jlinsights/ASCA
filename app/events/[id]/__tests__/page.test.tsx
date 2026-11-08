@@ -13,6 +13,17 @@ jest.mock('next/navigation', () => ({
   usePathname: () => '/events/1',
 }))
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
+let mockLanguage: 'ko' | 'en' | 'ja' | 'zh' = 'ko'
+jest.mock('@/contexts/language-context', () => {
+  // 실제 언어별 표로 찾는다 — 키가 빠지면 키 이름이 그대로 나와 테스트가 잡는다
+  const { translations } = jest.requireActual('@/lib/i18n/translations')
+  return {
+    useLanguage: () => ({
+      language: mockLanguage,
+      t: (key: string) => translations[mockLanguage][key] || key,
+    }),
+  }
+})
 jest.mock('@/lib/utils/logger', () => ({ log: { error: jest.fn() } }))
 jest.mock('@/lib/supabase/cms', () => ({
   incrementEventViews: jest.fn().mockResolvedValue(undefined),
@@ -61,6 +72,7 @@ const render$ = async (id = ID) =>
 
 describe('행사 상세 페이지', () => {
   beforeEach(() => {
+    mockLanguage = 'ko'
     getPublishedEvent.mockResolvedValue(makeEvent())
     listPublishedEvents.mockResolvedValue([])
   })
@@ -140,5 +152,89 @@ describe('관련 행사 순서', () => {
       .filter(text => text.includes('가상') && text.includes('전시') && !text.includes('개인전'))
     expect(titles[0]).toContain('가상 새 전시')
     expect(titles[1]).toContain('가상 옛 전시')
+  })
+})
+
+// 회귀: 언어를 바꿔도 행사 상세의 화면 틀(빵부스러기·사실 줄·표·문의·관련 행사)이 한국어로 찍혔다
+describe('행사 상세 화면 틀 번역', () => {
+  const HANGUL = /[가-힣]/
+  // 행사 원문 — 번역본이 없어 그대로 둔다
+  const DATA = [
+    '가상 서예 개인전',
+    '가상 작가의 서예 개인전입니다. 협회가 후원했습니다.',
+    '가상 전시실 · 가상시 가상로 1',
+    '가상 전시실',
+    '가상 작가',
+    '가상 주관',
+    '사단법인 동양서예협회',
+    '다른 가상 전시',
+    '2025년 10월 3일(금) – 10월 10일(금)',
+  ]
+
+  beforeEach(() => {
+    getPublishedEvent.mockResolvedValue(makeEvent())
+    listPublishedEvents.mockResolvedValue([
+      makeEvent({
+        id: 'other-1',
+        title: '다른 가상 전시',
+        event_date: '2024-05-01T00:00:00+09:00',
+      }),
+    ])
+  })
+  afterEach(() => jest.useRealTimers())
+
+  it.each([
+    [
+      'en',
+      'Events',
+      'Event information: 가상 서예 개인전',
+      'Organiser',
+      'More in Exhibition',
+      '← Back to events',
+    ],
+    ['ja', '行事', '가상 서예 개인전 行事情報', '主催', 'その他の展示', '← 行事一覧へ'],
+    ['zh', '活動', '가상 서예 개인전 活動資訊', '主辦', '其他展覽', '← 返回活動列表'],
+  ])(
+    '%s: 빵부스러기·표·관련 행사·돌아가기',
+    async (lang, crumb, caption, organizer, related, back) => {
+      mockLanguage = lang as typeof mockLanguage
+      await render$()
+      expect(screen.getByRole('link', { name: crumb })).toHaveAttribute('href', '/events')
+      const table = screen.getByRole('table', { name: caption })
+      expect(within(table).getByText(organizer)).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: related })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: back })).toHaveAttribute('href', '/events#archive')
+    }
+  )
+
+  it.each(['en', 'ja', 'zh'] as const)('%s: 행사 원문 말고는 한글이 남지 않는다', async lang => {
+    mockLanguage = lang
+    await render$()
+    let text = document.body.textContent ?? ''
+    for (const value of [...DATA].sort((a, b) => b.length - a.length)) {
+      text = text.replaceAll(value, '')
+    }
+    expect(text).not.toMatch(HANGUL)
+    expect(text).not.toMatch(/\bev[A-Z][A-Za-z_]+/)
+  })
+
+  it('en: 구분 칸은 유형 이름을 고른 언어로', async () => {
+    mockLanguage = 'en'
+    await render$()
+    const table = screen.getByRole('table', { name: /Event information/ })
+    expect(within(table).getByText('Type')).toBeInTheDocument()
+    expect(within(table).getAllByText('Exhibition').length).toBeGreaterThan(0)
+    expect(within(table).queryByText('전시')).not.toBeInTheDocument()
+  })
+
+  it('en: 다가오는 행사에는 번역된 문의 구역과 연락처', async () => {
+    jest.useFakeTimers({ now: new Date('2025-09-01T12:00:00+09:00') })
+    mockLanguage = 'en'
+    await render$()
+    expect(
+      screen.getByRole('region', { name: 'Questions about joining or dates' })
+    ).toBeInTheDocument()
+    expect(screen.getByText('Book a consultation')).toBeInTheDocument()
+    expect(screen.getAllByText('Upcoming').length).toBeGreaterThan(0)
   })
 })

@@ -7,9 +7,13 @@ jest.mock('@/components/translated-content', () => ({ TranslatedContent: () => <
 jest.mock('../_components/artist-card', () => ({
   ArtistCard: ({ artist }: { artist: { name: string } }) => <article>{artist.name}</article>,
 }))
-jest.mock('@/contexts/language-context', () => ({
-  useLanguage: () => ({ language: 'ko', t: (key: string) => key }),
-}))
+jest.mock('@/contexts/language-context', () => {
+  // 실제 번역 표로 찾는다 — 둘러보기 문구는 언어별 표(discovery*)에 있다
+  const { translations } = jest.requireActual('@/lib/i18n/translations')
+  return {
+    useLanguage: () => ({ language: 'ko', t: (key: string) => translations.ko[key] || key }),
+  }
+})
 
 const fetchMock = jest.fn()
 const originalFetch = global.fetch
@@ -104,5 +108,15 @@ describe('Artists discovery states', () => {
     expect(fetchMock.mock.calls.at(-1)![0]).toContain('page=1')
     expect(screen.queryByText('다른작가')).not.toBeInTheDocument()
     expect(screen.queryByText('작가2')).not.toBeInTheDocument()
+  })
+})
+
+describe('Artists heading outline', () => {
+  // 감사(P2): h1 다음이 곧장 작가 카드의 h3 라 제목으로 훑을 때 목록 구획이 없었다
+  it('작가 카드 목록 앞에 h2 구획 제목을 둔다', async () => {
+    fetchMock.mockResolvedValue(response([{ id: '1', name: '김작가' }]))
+    render(<ArtistsPage />)
+    await screen.findAllByText('김작가')
+    expect(screen.getByRole('heading', { level: 2, name: '작가 목록' })).toBeInTheDocument()
   })
 })

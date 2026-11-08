@@ -1,6 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import ApplicationPage from '../page'
 
+jest.mock('@/contexts/language-context', () => {
+  const { translations } = jest.requireActual('@/lib/i18n/translations')
+  return {
+    useLanguage: () => ({ language: 'ko', t: (key: string) => translations.ko[key] || key }),
+  }
+})
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
 jest.mock('@/components/apply/tally-embed', () => ({ TallyEmbed: () => null }))
 jest.mock('@/components/contests/contest-flipbook', () => ({

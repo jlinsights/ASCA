@@ -90,7 +90,14 @@ export interface DownloadItem {
 }
 
 /** 내려받는 양식 — 온라인 접수(주) 아래에 놓이는 보조 경로 */
-export function DownloadList({ items }: { items: readonly DownloadItem[] }) {
+export function DownloadList({
+  items,
+  newWindow = ' (새 창)',
+}: {
+  items: readonly DownloadItem[]
+  /** 번역 화면에서만 넘긴다 — 화면 읽기용 새 창 알림 */
+  newWindow?: string
+}) {
   return (
     <ul className='asca-apply__downloads'>
       {items.map(item => (
@@ -105,7 +112,7 @@ export function DownloadList({ items }: { items: readonly DownloadItem[] }) {
             <span className='asca-apply__download-title'>{item.title}</span>
             <span className='asca-apply__download-note'>
               {item.note}
-              <span className='sr-only'> (새 창)</span>
+              <span className='sr-only'>{newWindow}</span>
             </span>
             <ArrowDown className='asca-apply__download-icon' aria-hidden='true' />
           </a>

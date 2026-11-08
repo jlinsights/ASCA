@@ -11,7 +11,7 @@ import { ArtistFilters } from './_components/artist-filters'
 import { ArtistCard } from './_components/artist-card'
 import { formatPrice } from './_components/artists-meta'
 import { useLanguage } from '@/contexts/language-context'
-import { discoveryCopy, formatDiscoveryCount } from '@/components/gallery/discovery-copy'
+import { formatDiscoveryCount, useDiscoveryCopy } from '@/components/gallery/discovery-copy'
 
 const ArtistDetailModal = lazy(() => import('@/components/artists/ArtistDetailModal'))
 
@@ -43,7 +43,7 @@ interface ArtistsPageProps {
 // 홈페이지 작가·書境 안내 칸은 2026-11-01 에 /artists/homepages 로 옮겼다(작가·작품 메뉴의 "작가의 홈페이지")
 export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
   const { language, t } = useLanguage()
-  const copy = discoveryCopy[language]
+  const copy = useDiscoveryCopy()
   const [filteredArtists, setFilteredArtists] = useState<Artist[]>([])
   const [total, setTotal] = useState(0)
   // 페이지 번호는 조회 조건(key)에 묶는다 — 조건이 바뀌면 별도 리셋 없이 1페이지가 된다
@@ -234,6 +234,8 @@ export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
           </div>
         ) : (
           <>
+            {/* 제목으로 훑는 사용자에게 h1 과 카드의 h3 사이 구획을 알린다 */}
+            <h2 className='sr-only'>{copy.artistListHeading}</h2>
             <div className='hidden lg:grid grid-cols-3 xl:grid-cols-4 gap-8'>
               {filteredArtists.map(artist => (
                 <ArtistCard key={artist.id} artist={artist} variant='pc' />
