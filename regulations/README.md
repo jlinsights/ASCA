@@ -18,6 +18,16 @@
 | [이의제기 처리 규정](./07-objections.md)                         | [시행 2026. 2. 13.] [제1호 시행령, 2026. 2. 13., 신규 개정] | 8       | 시행 중 |
 | [작가·회원·임원 자격 및 요건](./08-membership-qualifications.md) | -                                                           | 0       | 시행 중 |
 
+## 개정 검토 자료
+
+[2026년 11월 규정별 통합 개정안](./proposals/2026-11-consolidated/README.md)은
+사용자 확인을 받은 정비 방향을 묶은 이사회 검토용 초안입니다.
+[신구조문 대비표](./proposals/2026-11-consolidated/COMPARISON.md),
+[미확정·전문가 확인 사항](./proposals/2026-11-consolidated/REVIEW-NOTES.md),
+[경과조치 정리안](./proposals/2026-11-consolidated/TRANSITION.md)을 함께
+확인합니다. 의결·공포·시행 전이며 위 현행 원문과 참고 번역을 변경한 것은
+아닙니다.
+
 ## 번역본 (영어·일본어·중국어)
 
 `i18n/en`, `i18n/ja`, `i18n/zh`(번체)에 9개 문서의 참고용 번역이 있습니다.

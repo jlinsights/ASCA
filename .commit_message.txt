@@ -1,1 +1,1 @@
-🧹 GraphQL 엔드포인트를 지운 뒤 남은 의존성(@apollo/server·graphql 등 5개) 정리
+📝 규정 통합 개정안 브랜치에 최신 main 변경 병합
