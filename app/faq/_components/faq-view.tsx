@@ -12,6 +12,7 @@ import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import './faq.css'
 
 const GROUPS = faqGroups()
+const normalizeSearch = (value: string) => value.normalize('NFKC').toLowerCase().replace(/\s+/g, '')
 
 /** 주소의 #id 가 가리키는 질문 — 그 질문만 펼쳐 둔다 */
 function useHashTarget(): string | null {
@@ -28,17 +29,52 @@ function useHashTarget(): string | null {
 export function FaqView() {
   const { t, language } = useLanguage()
   const target = useHashTarget()
-  const total = GROUPS.reduce((sum, group) => sum + group.items.length, 0)
+  const [query, setQuery] = useState('')
+  const search = normalizeSearch(query)
+  const groups = GROUPS.map(group => ({
+    ...group,
+    items: group.items
+      .map(item => localizeFaqItem(item, language))
+      .filter(item => !search || normalizeSearch(`${item.q} ${item.a}`).includes(search)),
+  })).filter(group => group.items.length > 0)
+  const total = groups.reduce((sum, group) => sum + group.items.length, 0)
 
   useEffect(() => {
-    if (target) document.getElementById(target)?.scrollIntoView({ block: 'start' })
+    if (target) setQuery('')
   }, [target])
+
+  useEffect(() => {
+    if (target && !query) document.getElementById(target)?.scrollIntoView({ block: 'start' })
+  }, [target, query])
 
   return (
     <div className='fq'>
       <PageHero {...PAGE_HERO_MARKS.faq} title={t('faqTitle')} lede={t('faqIntro')} />
       <div className='fq__frame'>
         <aside className='fq-side'>
+          <div className='fq-tools'>
+            <div className='fq-search'>
+              <label htmlFor='faq-search'>{t('faqSearchLabel')}</label>
+              <input
+                id='faq-search'
+                type='search'
+                value={query}
+                onChange={event => setQuery(event.target.value)}
+                placeholder={t('faqSearchPlaceholder')}
+                aria-describedby='faq-results'
+              />
+              <p id='faq-results' aria-live='polite' aria-atomic='true'>
+                {t(search ? 'faqSearchResults' : 'faqCount').replace('{n}', String(total))}
+              </p>
+            </div>
+            <nav className='fq-topics' aria-label={t('faqTopics')}>
+              {GROUPS.map(group => (
+                <a key={group.key} href={`#fq-${group.key}`} onClick={() => setQuery('')}>
+                  {t(group.titleKey)} <span aria-hidden='true'>↗</span>
+                </a>
+              ))}
+            </nav>
+          </div>
           <section className='fq-contact' aria-labelledby='fq-contact-title'>
             <h2 id='fq-contact-title' className='fq-contact__title'>
               {t('faqContactTitle')}
@@ -58,7 +94,8 @@ export function FaqView() {
         </aside>
 
         <div className='fq-groups' aria-label={t('faqCount').replace('{n}', String(total))}>
-          {GROUPS.map(group => (
+          {groups.length === 0 && <p className='fq-empty'>{t('faqNoResults')}</p>}
+          {groups.map(group => (
             <section key={group.key} className='fq-group' aria-labelledby={`fq-${group.key}`}>
               <div className='fq-group__head'>
                 <h2 id={`fq-${group.key}`} className='fq-group__title'>
@@ -73,61 +110,59 @@ export function FaqView() {
                 key={target ?? 'none'}
                 defaultValue={target && group.ids.includes(target) ? [target] : []}
               >
-                {group.items
-                  .map(source => localizeFaqItem(source, language))
-                  .map((item, index) => (
-                    <Accordion.Item
-                      key={item.id}
-                      lang={item.translated ? undefined : 'ko'}
-                      value={item.id ?? item.q}
-                      id={item.id}
-                      className='fq-item'
-                    >
-                      <Accordion.Header asChild>
-                        <h3 className='m-0'>
-                          <Accordion.Trigger className='fq-q'>
-                            <span className='fq-q__num'>{String(index + 1).padStart(2, '0')}</span>
-                            <span className='fq-q__text'>{item.q}</span>
-                            <svg
-                              className='fq-q__icon'
-                              viewBox='0 0 22 22'
-                              fill='none'
-                              aria-hidden='true'
-                            >
-                              <circle
-                                cx='11'
-                                cy='11'
-                                r='10.25'
-                                stroke='currentColor'
-                                strokeWidth='1.2'
-                              />
-                              <path
-                                d='M11 6.5v9M7 11.5l4 4 4-4'
-                                stroke='currentColor'
-                                strokeWidth='1.2'
-                              />
-                            </svg>
-                          </Accordion.Trigger>
-                        </h3>
-                      </Accordion.Header>
-                      <Accordion.Content className='fq-a'>
-                        <div className='fq-a__body'>
-                          {item.a}
-                          {item.sources && item.sources.length > 0 && (
-                            <p className='fq-a__sources'>
-                              <span className='fq-a__sources-label'>{t('faqSources')}</span>
-                              {item.sources.map((source, i) => (
-                                <span key={source.href}>
-                                  {i > 0 && <span aria-hidden='true'>· </span>}
-                                  <Link href={source.href}>{source.label}</Link>
-                                </span>
-                              ))}
-                            </p>
-                          )}
-                        </div>
-                      </Accordion.Content>
-                    </Accordion.Item>
-                  ))}
+                {group.items.map((item, index) => (
+                  <Accordion.Item
+                    key={item.id}
+                    lang={item.translated ? undefined : 'ko'}
+                    value={item.id ?? item.q}
+                    id={item.id}
+                    className='fq-item'
+                  >
+                    <Accordion.Header asChild>
+                      <h3 className='m-0'>
+                        <Accordion.Trigger className='fq-q'>
+                          <span className='fq-q__num'>{String(index + 1).padStart(2, '0')}</span>
+                          <span className='fq-q__text'>{item.q}</span>
+                          <svg
+                            className='fq-q__icon'
+                            viewBox='0 0 22 22'
+                            fill='none'
+                            aria-hidden='true'
+                          >
+                            <circle
+                              cx='11'
+                              cy='11'
+                              r='10.25'
+                              stroke='currentColor'
+                              strokeWidth='1.2'
+                            />
+                            <path
+                              d='M11 6.5v9M7 11.5l4 4 4-4'
+                              stroke='currentColor'
+                              strokeWidth='1.2'
+                            />
+                          </svg>
+                        </Accordion.Trigger>
+                      </h3>
+                    </Accordion.Header>
+                    <Accordion.Content className='fq-a'>
+                      <div className='fq-a__body'>
+                        {item.a}
+                        {item.sources && item.sources.length > 0 && (
+                          <p className='fq-a__sources'>
+                            <span className='fq-a__sources-label'>{t('faqSources')}</span>
+                            {item.sources.map((source, i) => (
+                              <span key={source.href}>
+                                {i > 0 && <span aria-hidden='true'>· </span>}
+                                <Link href={source.href}>{source.label}</Link>
+                              </span>
+                            ))}
+                          </p>
+                        )}
+                      </div>
+                    </Accordion.Content>
+                  </Accordion.Item>
+                ))}
               </Accordion.Root>
             </section>
           ))}

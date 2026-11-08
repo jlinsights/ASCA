@@ -1,5 +1,13 @@
+import { MEMBERSHIP_FAQ } from './faq/membership'
+import { CONTESTS_FAQ } from './faq/contests'
+import { EXHIBITIONS_FAQ } from './faq/exhibitions'
+import { ARTISTS_FAQ } from './faq/artists'
+import { LEARNING_FAQ } from './faq/learning'
+import { ACCOUNT_FAQ } from './faq/account'
+
 /**
- * 자주 묻는 질문 — /contact 와 /fundraising 이 함께 쓰는 단일 출처.
+ * 자주 묻는 질문의 공통 진입점 — /faq·/contact·/fundraising·출품 안내가 공유한다.
+ * 한국어 본문은 faq/의 주제별 파일에서 관리한다.
  * 두 페이지가 각자 사본을 들고 있다가 삼체상 상금·평생회원 요건 등이 서로, 그리고 규정과 어긋났다.
  * 규정에 근거가 있는 답은 sources 에 조문을 달아 /regulations 원문으로 잇는다. 규정이 바뀌면 여기를 같이 고친다.
  */
@@ -17,253 +25,13 @@ export interface FaqItem {
   sources?: readonly FaqSource[]
 }
 
-const reg = (slug: string, article: string, label: string): FaqSource => ({
-  label,
-  href: `/regulations/${slug}#a${article}`,
-})
-
-const page = (href: string, label: string): FaqSource => ({ label, href })
-
 export const SITE_FAQ: readonly FaqItem[] = [
-  {
-    id: 'artist-selection',
-    q: '추천작가와 초대작가 선정 기준이 궁금합니다.',
-    a: `대한민국 동양서예대전 입상작 배점:
-- 입선 1점 / 특선 3점 / 삼체상 5점 / 오체상 7점
-- 우수상 7점 / 최우수상 8점 / 대상 9점
-같은 해 입상점수는 가장 높은 점수 하나만 인정합니다.
-
-배점을 합산해 추천작가는 10점 이상, 초대작가는 15점 이상인 분 가운데서 선정합니다. 추천작가는 정회원으로 3년 이상, 초대작가는 추천작가로 5년 이상 활동한 경력이 필요합니다.
-
-점수만으로 승급되지는 않습니다. 최근 3년 이내 연속 출품, 대표작 포트폴리오 심사 통과, 협회 기여 활동 3회 이상, 최근 5년 이내 징계 없음을 모두 갖추고, 자격심사위원회 심사위원 전원의 3분의 2 이상 찬성을 얻으면 이사장이 최종 선임합니다.
-
-입상 점수가 없어도 공헌·경력이 있으면 특별선임을 신청할 수 있습니다. 대상과 비용은 「협회 정회원이 아니어도 추천작가나 초대작가가 될 수 있나요?」에서 안내합니다.`,
-    sources: [
-      reg('artist-selection', '2', '추천·초대작가 선임 규정 제2조'),
-      reg('artist-selection', '3', '제3조'),
-      reg('artist-selection', '4', '제4조'),
-      reg('artist-selection', '8', '제8조'),
-      reg('artist-selection', '9', '제9조'),
-    ],
-  },
-  {
-    id: 'special-appointment',
-    q: '협회 정회원이 아니어도 추천작가나 초대작가가 될 수 있나요?',
-    a: `네, 특별선임을 신청할 수 있습니다. 다음 중 하나에 해당하면 됩니다.
-- 서예문화 발전에 특별한 공헌이 있는 분
-- 국내외 서예교육에 20년 이상 종사한 분
-- 문화체육관광부에 등록된 타 서예단체 초대작가
-
-본인이 신청서에 자격(추천·초대)과 부문(전통·현대)을 적어 신청하면, 정기 심사 때 자격심사위원회가 서류와 작품을 심사합니다. 심사를 통과하면 이사회가 3분의 2 이상 찬성으로 의결하고 이사장이 선임합니다. 이사회는 신청한 것보다 낮은 자격으로 의결할 수도 있습니다.
-
-비회원 특별선임 비용(심사료 + 등록비 + 첫해 연회비):
-- 추천작가: 5만원 + 5만원 + 8만원 = 18만원
-- 초대작가: 5만원 + 10만원 + 10만원 = 25만원
-심사료는 신청할 때 내며 돌려드리지 않습니다. 등록비와 첫해 연회비는 선임이 의결된 뒤 의결된 자격 기준으로 내고, 모두 낸 날 정회원이 되면서 선임됩니다. 신청서는 입회원서를 겸합니다.
-
-이미 정회원이라면 현재 등급에서 의결된 등급까지의 승급 등록비만 더해 냅니다(예: 일반작가 → 초대작가 8만원). 연회비가 밀려 권한이 제한·정지된 분은 먼저 완납해 자격을 복원한 뒤 신청합니다.`,
-    sources: [
-      reg('artist-selection', '11', '추천·초대작가 선임 규정 제11조'),
-      reg('membership-dues', '3', '회원 및 회비 규정 제3조'),
-      page('/application-for-recommended-invited-calligrapher#special', '특별선임 신청 안내'),
-    ],
-  },
-  {
-    id: 'dues-usage',
-    q: '연회비의 사용처는 어떻게 되나요?',
-    a: `연회비는 정관이 정한 협회 사업과 운영에 쓰입니다.
-
-1. 협회 사업: 한·중·일 연합전과 전국 단위 공모전을 통한 신진작가 발굴, 국내외 교류전시와 학술발표, 한국적 서체개발 육성, 해외 서예문헌 연구
-2. 협회 운영: 사무국 운영, 행사와 전시회 운영
-
-예산과 결산은 총회의 승인을 받고, 감사가 연 2회 이상 회계감사를 실시합니다.`,
-    sources: [
-      reg('articles', '4', '정관 제4조'),
-      reg('articles', '22', '제22조'),
-      reg('articles', '36', '제36조'),
-    ],
-  },
-  {
-    id: 'dues',
-    q: '연회비가 별도로 있나요?',
-    a: `회원 등급별 연회비와 등록비:
-- 청년작가(1월 1일 기준 만 40세 이하): 연회비 3만원 + 가입 등록비 1만원
-- 일반작가(만 41세 이상): 연회비 5만원 + 가입 등록비 2만원
-- 추천작가: 연회비 8만원 + 승급 등록비 3만원
-- 초대작가: 연회비 10만원 + 승급 등록비 5만원
-- 임원: 연회비 20만원 + 취임 시 발전기금 200만원
-
-정회원이 아닌 분이 추천·초대작가로 특별선임되면 가입·승급 등록비 대신 특별선임 등록비(추천작가 5만원, 초대작가 10만원)와 심사료 5만원을 냅니다.
-
-연회비는 매년 1월 31일까지 납부합니다. 당해 연도 미납 시 회원 권한이 제한되고, 2년 연속 미납 시 자격이 정지되며, 3년 연속 미납 시 이사회 의결로 제명될 수 있습니다. 제한·정지된 자격은 미납 연회비를 완납하면 복원됩니다.`,
-    sources: [
-      reg('membership-dues', '2', '회원 및 회비 규정 제2조'),
-      reg('membership-dues', '3', '제3조'),
-      reg('membership-dues', '5', '제5조'),
-    ],
-  },
-  {
-    id: 'lifetime',
-    q: "'평생회원'이 연회비 납부 면제되던데 어떤 요건을 충족해야 하나요?",
-    a: `평생회원은 평생회비를 일시(또는 분할) 납부해 연회비 납부 의무를 영구히 면제받은 회원입니다.
-
-- 초대작가 이상의 정회원은 누구나 평생회비(연회비의 10배)를 납부하고 평생회원 자격을 신청할 수 있습니다. 초대작가는 100만원입니다.
-- 임원으로 취임하며 발전기금 200만원을 완납하면 평생회원 자격을 자동으로 취득합니다. 발전기금은 최대 20개월까지 CMS로 분할 납부할 수 있습니다.
-- 이미 평생회원인 분이 임원으로 위촉되면 발전기금에서 이미 낸 평생회비를 뺀 차액만 납부합니다.`,
-    sources: [
-      reg('membership-dues', '3', '회원 및 회비 규정 제3조'),
-      reg('membership-dues', '4', '제4조'),
-    ],
-  },
-  {
-    id: 'benefits',
-    q: '동양서예협회 정회원 가입 시 어떤 혜택이 있나요?',
-    a: `[정회원 공통]
-- 전시 참가 시 도록 1권 무료
-- 출품비·표구비·도록비 회원가 적용
-- 작가 개인 홈페이지를 구축하면 연회비 면제
-
-[추천작가 이상]
-- 초대작가 후보 등록 기회
-- 특별 전시회와 해외 교류전 참가 우선권
-- 요건 충족 시 개인 홈페이지 초기 구축비 선별 지원
-
-[초대작가 이상]
-- 임원 후보 추천 자격, 운영위원·심사위원 자격
-
-[임원]
-- 운영위원·심사위원 위촉 우선권
-- 개인 홈페이지 초기 구축비와 1년 유지보수비 면제
-- 초대작가전 출품비 5% 할인
-
-등급별 혜택은 회원 안내 페이지에서 한눈에 볼 수 있습니다.`,
-    sources: [
-      reg('membership-dues', '12', '회원 및 회비 규정 제12조'),
-      page('/membership#mb-benefits', '회원 안내 · 회원 특전'),
-    ],
-  },
-  {
-    id: 'entry-fees',
-    q: '대한민국 동양서예대전 출품 가능한 작품 수량과 출품료는 어떻게 되나요?',
-    a: `출품비(표구비 별도):
-- 청년작가: 1점 5만원 (2~9번째 작품 4만원)
-- 일반작가: 1점 6만원 (2~9번째 작품 5만원)
-- 추천작가: 1점 10만원 (2~9번째 작품 9만원)
-- 초대작가: 1점 20만원 (2~9번째 작품 19만원)
-비회원 출품비와 10번째 이후 작품의 출품비는 해당 공모의 공모요강으로 정합니다.
-
-개인전·서예단체 부스전(10점 이상) 출품비, 작품당 표준가(정회원가):
-- 10~19점: 18만원 (16만원)
-- 20~29점: 16만원 (14만원)
-- 30~39점: 14만원 (12만원)
-- 40점 이상: 12만원 (10만원)
-
-표구비(입선 이상, 손배접): 반절지 8만원(회원 6만원), 전지 10만원(회원 8만원), 국전지 12만원(회원 10만원)`,
-    sources: [
-      reg('membership-dues', '6', '회원 및 회비 규정 제6조'),
-      reg('membership-dues', '7', '제7조'),
-      reg('membership-dues', '8', '제8조'),
-    ],
-  },
-  {
-    id: 'awards',
-    q: '대한민국 동양서예대전 시상내역과 상금은 어떻게 되나요?',
-    a: `[본상]
-- 대상: 1명, 상장 및 상금 200만원
-- 최우수상: 1명, 상장 및 상금 100만원
-- 우수상: 2명, 상장 및 상금 30만원
-
-[특별상]
-- 오체상: 3명, 상장 및 상금 20만원
-- 삼체상: 4명, 상장 및 상금 15만원
-
-[기타 입상] 특선 30명, 입선 50명 (상장)
-
-시상 인원은 출품작 수와 수준에 따라 이사회 의결로 조정할 수 있고, 재정 상황이나 특별 후원이 있으면 이사회 의결로 후원사상·이사장상 같은 특별상을 신설할 수 있습니다. 상금의 제세공과금은 수상자 본인이 부담합니다.`,
-    sources: [reg('operation-judging', '7', '운영 및 심사 규정 제7조')],
-  },
-  {
-    id: 'classes',
-    q: '서예 강좌를 운영하고 있나요?',
-    a: `협회 상임이사진이 공식 승인한 교육기관에 한해 서예 강좌를 연결해 드립니다.
-
-- 문원한문서예학원: 사단법인 대한민국한자교육연구회 대한검정회의 후원 아래 협회가 서예와 동양화 교육을 위탁 운영합니다. 매주 토요일 09:30–12:30, 1학기 16주 과정, 수강료 30만원입니다.
-- 예술의전당 서화아카데미: 수강생 중 협회 공모전·초대작가전·기획전 출품 예정자에게 수강료의 5% 상당을 출품료에서 할인하고, 협회 정회원은 5%를 더 할인합니다. 동양서예협회 사무국에 수강증을 제시해 신청합니다.
-
-과정, 시간표, 수강료는 강좌 페이지에서 확인하세요.`,
-    sources: [page('/academy', '강좌 안내')],
-  },
-  {
-    id: 'english-name',
-    q: '영문이름을 요청하는 사유가 무엇인가요?',
-    a: `정회원 모든 분께 작품과 경력을 소개하는 작가 페이지를 만들어 드리는데, 영문 이름이 그 페이지 주소가 되기 때문입니다.
-
-주소 형식: https://www.orientalcalligraphy.org/artists/영문이름
-예전 주소(/calligrapher/영문이름)로 들어와도 새 주소로 이어집니다.
-
-원하시는 이름이나 아호를 영문으로 알려 주시면, 연회비 납부와 정회원 여부를 확인한 뒤 작가 페이지를 만들어 드립니다.`,
-    sources: [page('/artists', '작가 목록')],
-  },
-  {
-    id: 'login',
-    q: '로그인을 위해 기존 회원도 다시 회원 가입해야 하나요?',
-    a: `네, 새 홈페이지에서는 기존 회원도 이메일로 계정을 한 번 만들어 주셔야 합니다. 가입 후 받은 확인 메일의 링크를 누르면 로그인할 수 있습니다.
-
-작가로 등록되어 계신 분은 로그인 후 「내 작가 공간」 화면의 「작가 페이지 연결」에서 내 작가 페이지를 찾아 연결을 요청해 주세요. 사무국이 본인 확인 후 승인하면 이 계정으로 작가 정보와 작품을 관리할 수 있습니다.
-
-작가·작품·전시 등 대부분의 콘텐츠는 로그인하지 않아도 볼 수 있습니다.`,
-    sources: [page('/sign-up', '회원 가입'), page('/profile', '내 작가 공간')],
-  },
-  {
-    id: 'committee',
-    q: '심사위원·운영위원 자격과 수당은 어떻게 되나요?',
-    a: `운영위원·심사위원 자격:
-① 본회 초대작가 (자문위원, 고문 포함)
-② 다른 서예 단체 초대작가
-③ 본회 고문이나 자문위원이 추천한 인사
-
-모집위원 자격(하나 이상 해당):
-1. 정회원으로 1년 이상 협회 활동에 적극 참여한 자
-2. 미술·예술 분야 홍보·마케팅·기획 경력 3년 이상
-3. 본회 초대작가 1인 이상의 추천을 받은 자
-4. 본회 주관 공모전·전시 출품 실적 3회 이상
-
-보수는 위촉직 기준으로 수당·여비·실적 인센티브로 나누어 지급합니다. 심사위원은 심사수당 15만원(1일·반일), 심사평 원고료 10만원, 여비 실비, 식대 2만원이며, 운영위원은 회의 참석 수당 10만원(1회), 여비 실비, 식대 2만원입니다. 지원하시려면 "위원 위촉 지원서"를 사무국에 제출해 주세요.`,
-    sources: [
-      reg('operation-judging', '3', '운영 및 심사 규정 제3조'),
-      reg('operation-judging', '3-3', '제3조의3'),
-      reg('operation-judging', '4-2', '제4조의2'),
-    ],
-  },
-  {
-    id: 'donation-receipt',
-    q: '기부금 납입 영수증을 발급받을 수 있나요?',
-    a: `현재 협회는 세제적격단체가 아니므로 기부금영수증 발급이 불가합니다. 증빙이 필요한 경우 기부내역확인서(세제 혜택 없음, 단순 증빙용)를 발급해 드릴 수 있습니다.
-
-향후 문화예술진흥법에 따른 전문예술법인으로 전환한 뒤 공익법인으로 승격하기 위한 절차를 마련 중입니다.`,
-  },
-  {
-    id: 'artist-website',
-    q: '작가들을 위한 홈페이지 제작과 유지보수를 지원해 주나요?',
-    a: `네, 작가 개인 홈페이지 제작과 유지보수 서비스를 제공합니다.
-
-[개인 홈페이지 비용]
-- 초기 구축비: 70만원 (정회원 60만원)
-- 연간 유지보수비: 30만원 (정회원 20만원)
-
-홈페이지 계약을 맺고 연간 유지보수비를 납부한 정회원은 해당 연도 연회비가 면제됩니다.
-
-[전시 출품 수량별 혜택]
-- 40점 이상: 제작비와 1차 연도 유지보수비 전액 면제, 해당 연도 연회비 면제. 2차 연도부터는 유지보수비만 납부하면 연회비 면제
-- 30점 이상: 초기 구축비 면제, 해당 연도 연회비 면제
-- 20점 이상: 초기 구축비 50% 할인
-
-양인전·연합전·단체전 홈페이지는 참여 인원별 요금이 따로 있으며, 출품 수량별 혜택은 개인전 홈페이지에만 적용됩니다.`,
-    sources: [
-      reg('membership-dues', '10', '회원 및 회비 규정 제10조'),
-      reg('membership-dues', '10-2', '제10조의2'),
-    ],
-  },
+  ...MEMBERSHIP_FAQ,
+  ...CONTESTS_FAQ,
+  ...EXHIBITIONS_FAQ,
+  ...ARTISTS_FAQ,
+  ...LEARNING_FAQ,
+  ...ACCOUNT_FAQ,
 ]
 
 export interface FaqGroup {
@@ -278,19 +46,76 @@ export const FAQ_GROUPS: readonly FaqGroup[] = [
   {
     key: 'membership',
     titleKey: 'faqGroupMembership',
-    ids: ['benefits', 'dues', 'dues-usage', 'lifetime'],
+    ids: [
+      'membership-join',
+      'benefits',
+      'dues',
+      'dues-payment',
+      'dues-unpaid',
+      'dues-exemption',
+      'lifetime',
+      'dues-usage',
+      'membership-withdrawal',
+    ],
   },
   {
     key: 'contests',
     titleKey: 'faqGroupContests',
-    ids: ['entry-fees', 'awards', 'artist-selection', 'special-appointment', 'committee'],
+    ids: [
+      'contest-apply',
+      'contest-eligibility',
+      'entry-fees',
+      'contest-sizes',
+      'awards',
+      'artist-selection',
+      'portfolio',
+      'special-appointment',
+      'committee',
+      'objections',
+    ],
+  },
+  {
+    key: 'exhibitions',
+    titleKey: 'faqGroupExhibitions',
+    ids: [
+      'solo-booth',
+      'exhibition-plan',
+      'mounting',
+      'catalogue',
+      'personal-catalogue',
+      'exhibition-sales',
+      'exhibition-proof',
+    ],
   },
   {
     key: 'artists',
     titleKey: 'faqGroupArtists',
-    ids: ['classes', 'artist-website', 'english-name'],
+    ids: [
+      'artist-website',
+      'website-group',
+      'english-name',
+      'artist-link',
+      'artist-profile',
+      'artwork-upload',
+    ],
   },
-  { key: 'account', titleKey: 'faqGroupAccount', ids: ['login', 'donation-receipt'] },
+  {
+    key: 'learning',
+    titleKey: 'faqGroupLearning',
+    ids: ['classes', 'class-discount', 'exchanges'],
+  },
+  {
+    key: 'account',
+    titleKey: 'faqGroupAccount',
+    ids: [
+      'login',
+      'email-verification',
+      'password-reset',
+      'inquiry',
+      'support-method',
+      'donation-receipt',
+    ],
+  },
 ]
 
 export function faqGroups(): (FaqGroup & { items: FaqItem[] })[] {

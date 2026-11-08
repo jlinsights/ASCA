@@ -240,7 +240,7 @@ function AddressSection({
 
 /** /contact 본문 — 선택한 언어로 (페이지는 서버 컴포넌트라 메타데이터만 맡는다) */
 export function ContactView() {
-  const { language } = useLanguage()
+  const { language, t } = useLanguage()
   const copy = CONTACT_COPY[language] ?? CONTACT_COPY.ko
   const toc: { href: `#${string}`; label: string }[] = [
     { href: '#inquiry', label: copy.toc.inquiry },
@@ -267,7 +267,19 @@ export function ContactView() {
         </section>
         <section id='faq' aria-labelledby='faq-title' className='asca-apply__anchor'>
           <ApplySectionHead id='faq-title' {...copy.faq} />
-          <SiteFaqList />
+          <SiteFaqList
+            ids={[
+              'membership-join',
+              'dues-payment',
+              'contest-apply',
+              'artist-link',
+              'login',
+              'inquiry',
+            ]}
+          />
+          <Link href='/faq' className='mt-6 inline-flex min-h-11 items-center gap-2 underline'>
+            {t('faqTitle')} <ArrowRight className='h-4 w-4' aria-hidden='true' />
+          </Link>
         </section>
       </div>
     </>
