@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import type { Exhibition } from '@/lib/types/cms-legacy'
 import CurrentPage from '../current/page'
@@ -10,8 +10,10 @@ import { ExhibitionCard } from '../_components/exhibition-card'
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean }) => {
-    const { fill: _fill, ...rest } = props
+  default: (
+    props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean }
+  ) => {
+    const { fill: _fill, priority: _priority, ...rest } = props
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     return <img {...rest} />
   },
@@ -137,5 +139,48 @@ describe('전시 페이지 — 번역', () => {
     expect(screen.getByText(/October 1, 2026/)).toBeInTheDocument()
     expect(screen.getByText('30 people')).toBeInTheDocument()
     expect(hangulLeft(container)).toStrictEqual([])
+  })
+})
+
+describe('전시 홍보 상담·광고와 전시 탐색', () => {
+  it.each([CurrentPage, UpcomingPage, PastPage])(
+    '실제 광고와 구분한 목업·광고 영역과 전시비 전용 안내가 있다',
+    Page => {
+      renderIn('ko', <Page />)
+      const preview = screen.getByRole('region', { name: '이렇게 전시를 소개합니다' })
+      expect(within(preview).getAllByText('가상 전시 · 홍보 예시')).toHaveLength(3)
+      expect(
+        within(preview).getByText(/현재 의뢰받은 유료 전시 홍보는 없습니다/)
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText(/홍보·광고 수입은 매년 열리는 전시의 운영비로 전액 사용/)
+      ).toBeInTheDocument()
+      expect(screen.getAllByText('광고 게재 예시 · 실제 광고 아님')).toHaveLength(2)
+      const contact = screen.getByRole('link', { name: '사무국에 상담하기' })
+      const target = new URL(contact.getAttribute('href')!, 'https://orientalcalligraphy.org')
+      expect(target.pathname).toBe('/contact')
+      expect(target.hash).toBe('#inquiry')
+      expect(target.searchParams.get('topic')).toBe('exhibition')
+      expect(target.searchParams.get('about')).toContain('홍보')
+      expect(screen.getAllByRole('link', { name: '업체 광고 문의' })[0]).toHaveAttribute(
+        'href',
+        expect.stringContaining('topic=other')
+      )
+    }
+  )
+
+  it('검색·외부 전시 필터와 초기화가 실제 목록에만 적용된다', () => {
+    renderIn('ko', <PastPage />)
+    fireEvent.change(screen.getByRole('searchbox', { name: '전시 검색' }), {
+      target: { value: '존재하지않는검색어' },
+    })
+    expect(screen.getByText('조건에 맞는 전시가 없습니다.')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '검색 조건 초기화' }))
+    expect(screen.getByText('第22回 大韓民國 東洋書藝大展')).toBeInTheDocument()
+    fireEvent.change(screen.getByRole('combobox', { name: '전시 구분' }), {
+      target: { value: 'external' },
+    })
+    expect(screen.getByText('조건에 맞는 전시가 없습니다.')).toBeInTheDocument()
+    expect(screen.getByText('먹의 산책')).toBeInTheDocument()
   })
 })

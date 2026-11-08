@@ -1,6 +1,7 @@
+import { exhibitionToday } from '../_data/exhibition-listings'
 import { ExhibitionRecordsPage } from '../_components/exhibition-records-page'
 
-// 협회 연혁 기록(app/history/_data/history-events.ts)에서 만든 목록 — 예시 전시를 쓰지 않는다
+// 서울 기준 날짜를 서버에서 고정해 분류하고, 홍보 목업은 실제 전시와 구분한다.
 export default function UpcomingExhibitionsPage() {
-  return <ExhibitionRecordsPage variant='upcoming' />
+  return <ExhibitionRecordsPage variant='upcoming' today={exhibitionToday()} />
 }
