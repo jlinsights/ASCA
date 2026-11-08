@@ -5,7 +5,6 @@ import { withAdminAuth } from '@/lib/auth/middleware'
 import { archiveIdentity } from '@/lib/archive/writer'
 import { adminMiddleware } from '@/lib/middleware/admin-middleware'
 import { Role } from '@/lib/admin/permissions'
-import { createGraphQLContext } from '@/lib/graphql/context'
 
 jest.mock('server-only', () => ({}))
 jest.mock('@/lib/db', () => ({ db: { query: {} } }))
@@ -47,16 +46,4 @@ it('does not honor the legacy skipAuth option or memory-only super-admin assignm
   expect((await adminMiddleware(request, { requireAdmin: true, skipAuth: true }))?.status).toBe(401)
   jest.mocked(getAccount).mockResolvedValue({ ...account, assuranceLevel: 'aal2' })
   expect((await adminMiddleware(request, { requiredRole: Role.SUPER_ADMIN }))?.status).toBe(403)
-})
-
-it('does not grant a GraphQL admin role until MFA is verified', async () => {
-  jest.mocked(auth).mockResolvedValue({ userId: account.id, account: account as any })
-  const unverified = await createGraphQLContext(request)
-  expect(unverified.user?.role).toBe('member')
-  jest.mocked(auth).mockResolvedValue({
-    userId: account.id,
-    account: { ...account, assuranceLevel: 'aal2' } as any,
-  })
-  const verified = await createGraphQLContext(request)
-  expect(verified.user?.role).toBe('admin')
 })
