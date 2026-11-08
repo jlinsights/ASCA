@@ -1,1 +1,1 @@
-🔒 로그인 없이 회원 연락처·주소를 내줄 수 있던 GraphQL 엔드포인트 삭제 (호출처 없음, 오류에 SQL 노출)
+🧹 GraphQL 엔드포인트를 지운 뒤 남은 의존성(@apollo/server·graphql 등 5개) 정리
