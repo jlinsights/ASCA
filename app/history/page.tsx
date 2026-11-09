@@ -7,6 +7,7 @@ import { HistoryHero } from './_components/history-hero'
 import { HistoryTimeline } from './_components/history-timeline'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/history' },
   title: '연혁 | 동양서예협회',
   description:
     '사단법인 동양서예협회의 연혁을 소개합니다. 1997년 한·중·일 서예문화교류연합회전을 시작으로 현재까지의 주요 활동과 전시 이력을 확인하실 수 있습니다.',

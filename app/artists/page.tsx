@@ -6,6 +6,7 @@ const DESCRIPTION =
   '동양서예협회의 한국·중국·일본 서예가를 만나 보세요. 이름과 회원 구분, 국적으로 작가를 찾고 작가별 소개와 작품을 볼 수 있습니다.'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/artists' },
   title: '작가 | 동양서예협회',
   description: DESCRIPTION,
   openGraph: { title: '작가 | 동양서예협회', description: DESCRIPTION, images: [defaultSEO.image] },

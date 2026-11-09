@@ -9,6 +9,7 @@ import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { BOOKING_URL, KAKAO_CHAT_URL, OFFICE, formatAddress } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/forms' },
   title: '문서·서식 | 동양서예협회',
   description:
     '동양서예협회의 공식 서식 자료를 다운로드할 수 있습니다. 회원가입 신청서, 작품출품 양식, 심사위원 지원서 등 필요한 모든 양식을 한곳에서 편리하게 이용하세요.',

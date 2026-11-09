@@ -7,6 +7,7 @@ import { IntroductionsHero } from './_components/introductions-hero'
 import { IntroductionsTabs } from './_components/introductions-tabs'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/introductions' },
   title: '소개 | 동양서예협회',
   description:
     '사단법인 동양서예협회(ASCA)는 한국·중국·일본을 잇는 동양 서예의 전통을 이어 오늘의 예술로 펼쳐 가는 전문 예술문화단체입니다. 1997년 한·중·일 교류전에서 시작해 대한민국 동양서예대전을 열고 있습니다.',

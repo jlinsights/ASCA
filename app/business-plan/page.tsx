@@ -19,6 +19,7 @@ import { BOOKING_URL, KAKAO_CHAT_URL } from '@/lib/content/contact-info'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/business-plan' },
   title: '사업계획 | 동양서예협회',
   description:
     '동양서예협회 2027년도 사업계획. 제23회 대한민국 동양서예대전과 書境 초대작가전, 한·중·일 교류, 교육과 차세대, 작가의 온라인 활동, 예술경영 원칙과 역대 전시 아카이브를 안내합니다.',

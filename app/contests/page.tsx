@@ -14,6 +14,7 @@ const DESCRIPTION =
   '제23회 대한민국 동양서예대전 공모요강 — 접수 마감 2027년 1월 31일, 출품 부문·자격·규격·출품료·시상과 역대 대전 기록을 안내합니다.'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/contests' },
   title: '공모전 | 동양서예협회',
   description: DESCRIPTION,
   // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다

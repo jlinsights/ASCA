@@ -11,6 +11,7 @@ import { MembershipJoin } from './_components/membership-join'
 import './_components/membership.css'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/membership' },
   title: '회원 안내 | 동양서예협회',
   description:
     '동양서예협회의 회원 등급별 자격 요건, 연회비, 혜택 안내. 청년작가, 일반작가, 추천작가, 초대작가, 임원 등급별 혜택과 가입 방법을 확인하세요.',

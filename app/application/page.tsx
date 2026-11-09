@@ -8,6 +8,7 @@ const DESCRIPTION =
   '대한민국 동양서예대전 출품원서를 온라인으로 작성하거나 Word·PDF 양식으로 제출하세요. 공모 부문과 작품 규격, 출품비, 심사 방식, 시상 내역을 규정 원문과 함께 안내합니다.'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/application' },
   title: '출품원서 | 동양서예협회',
   description: DESCRIPTION,
   // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다

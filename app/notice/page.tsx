@@ -21,6 +21,7 @@ const DESCRIPTION =
   '동양서예협회 공지사항 — 협회 소식과 행사 안내, 공모·전시 일정을 게시일 순으로 알립니다.'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/notice' },
   title: '공지사항 | 동양서예협회',
   description: DESCRIPTION,
   // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다
