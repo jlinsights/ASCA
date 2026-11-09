@@ -1,12 +1,14 @@
 import type { NextRequest, NextResponse } from 'next/server'
 import {
   isLocalizedPath,
+  languageFromCookie,
   localizePath,
   LOCALE_COOKIE,
   PREFIXED_LANGUAGES,
   splitLocale,
 } from './locale-routing'
 import type { Language } from './types'
+import { firstVisitLanguage } from './first-visit-language'
 
 /** proxy 가 언어 주소를 어떻게 처리할지 */
 export type LocaleDecision =
@@ -32,6 +34,8 @@ function savedLanguage(request: NextRequest): Language | null {
  * - 한국어 주소 + 언어 선택 쿠키(en·ja·zh) + 번역 페이지 → 그 언어 주소로 307.
  *   본문 곳곳의 링크가 아직 한국어 주소라, 영어를 고른 방문자가 링크를 눌러도 영어에 머물게 한다.
  *   검색 로봇은 쿠키가 없어 이 리다이렉트를 받지 않는다.
+ * - 쿠키 없는 첫 방문 `/` → 브라우저 언어·국가가 en·ja·zh 면 그 언어 홈으로 307(lib/i18n/first-visit-language.ts).
+ *   검색 로봇·링크 미리보기는 제외. 이동한 언어 주소에서 rememberLocale 이 쿠키를 남겨 다음부터는 판단하지 않는다.
  * 읽기(GET·HEAD)만 보낸다. 다른 메서드는 주소를 바꾸지 않는다.
  */
 export function decideLocale(request: NextRequest): LocaleDecision {
@@ -49,6 +53,22 @@ export function decideLocale(request: NextRequest): LocaleDecision {
       rewrite: new URL(split.path + search, request.url),
       language: split.language,
       path: split.path,
+    }
+  }
+
+  // 첫 방문 홈 — 언어를 고른 적이 없으면(쿠키 없음, 한국어 선택도 쿠키 'ko' 로 남는다) 브라우저 언어·국가로 정한다
+  if (
+    isRead &&
+    pathname === '/' &&
+    !languageFromCookie(request.cookies.get(LOCALE_COOKIE)?.value)
+  ) {
+    const first = firstVisitLanguage({
+      userAgent: request.headers.get('user-agent'),
+      acceptLanguage: request.headers.get('accept-language'),
+      country: request.headers.get('x-vercel-ip-country'),
+    })
+    if (first && first !== 'ko') {
+      return { kind: 'redirect', location: new URL(localizePath('/', first) + search, request.url) }
     }
   }
 

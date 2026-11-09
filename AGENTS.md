@@ -295,6 +295,12 @@ security:
   `asca-language` 값은 한 번 쿠키로 옮기고 지운다. 언어 주소(/en 등)로 들어오면
   proxy 가 그 언어를 쿠키로 남긴다 — 본문의 한국어 주소 링크를 눌러도 언어를
   잃지 않는다.
+- 쿠키가 없는 첫 방문 `/` 는 브라우저 언어 > 접속 국가(`x-vercel-ip-country`)
+  > 영어 순으로 정해 en·ja·zh 면 그 언어 홈으로 307 한다
+  > (`lib/i18n/first-visit-language.ts`). 검색 로봇·링크 미리보기·헤드리스
+  > 브라우저는 늘 한국어 `/` 를 받는다 — 국가별로 홈 언어를 바꾸면 미국에서
+  > 크롤하는 Google 이 홈을 영어로 색인한다. 다른 주소는 첫 방문이라도 보내지
+  > 않는다.
 - 링크는 `useLocalizedHref()`, 경로 비교는 `useRoutePath()`
   (`lib/i18n/use-locale-path.ts`)를 쓴다. `usePathname()` 을 그대로 비교하면
   `/en/history` 에서 메뉴 활성 표시가 어긋난다.
