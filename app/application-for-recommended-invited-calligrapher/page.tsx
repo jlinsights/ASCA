@@ -13,6 +13,7 @@ const DESCRIPTION =
   '추천작가·초대작가 승급과 특별선임을 온라인으로 신청하세요. 대한민국 동양서예대전 입상 배점, 점수와 별개로 갖춰야 하는 필수 요건, 자격심사위원회 심사 절차, 비회원 특별선임 비용을 규정 원문과 함께 안내합니다.'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/application-for-recommended-invited-calligrapher' },
   title: '추천·초대작가 신청 | 동양서예협회',
   description: DESCRIPTION,
   openGraph: { title: '추천·초대작가 신청 | 동양서예협회', description: DESCRIPTION },

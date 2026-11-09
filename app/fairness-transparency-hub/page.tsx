@@ -19,6 +19,7 @@ import Link from 'next/link'
 import { KAKAO_CHAT_URL, EMAIL, PHONE } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/fairness-transparency-hub' },
   title: '공정·투명성 허브 | 동양서예협회',
   description:
     '(사) 동양서예협회는 공모전·전시 운영의 공정성·투명성 기준을 공개합니다. 운영원칙, 심사단계, 이의제기 절차, 이해상충 확인 등 투명한 운영을 위한 모든 정보를 확인하세요.',

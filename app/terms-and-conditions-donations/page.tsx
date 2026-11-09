@@ -9,6 +9,7 @@ import { PageHero, HeroFacts } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/terms-and-conditions-donations' },
   title: '기부금품 관리 및 이용약관 | 동양서예협회',
   description:
     '사단법인 동양서예협회의 기부금품 관리 시스템 및 홈페이지 이용자에게 제공하는 서비스의 내용과 이용 당사자의 권리, 의무 및 책임사항을 규정합니다.',

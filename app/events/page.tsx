@@ -22,6 +22,7 @@ const DESCRIPTION =
   '동양서예협회가 열고 후원한 전시·대회·총회·문화 기행을 날짜순으로 기록합니다. 다가오는 행사의 일정과 장소를 확인하세요.'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/events' },
   title: '행사 | 동양서예협회',
   description: DESCRIPTION,
   // openGraph 를 쓰면 레이아웃의 openGraph 를 통째로 덮는다 — 이미지도 여기서 다시 단다
