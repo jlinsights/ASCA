@@ -3,7 +3,7 @@
  *
  * 이전: home.brand-rollout.spec.ts (Philosophy·WhatWeDo·BrandMessage·ClosingCTA 섹션 —
  * 홈에서 제거됨). 4언어 × 구조·링크 회귀만 본다. 시각 회귀 baseline 은 별도 과제.
- * LanguageContext SSOT key: 'asca-language' (lib/i18n/index.ts).
+ * 언어는 주소로 고른다(/en 등 — lib/i18n/locale-routing.ts).
  */
 
 import { test, expect, Page } from '@playwright/test'
@@ -12,10 +12,8 @@ const LANGUAGES = ['ko', 'en', 'ja', 'zh'] as const
 type Language = (typeof LANGUAGES)[number]
 
 async function gotoHomeWithLanguage(page: Page, language: Language) {
-  await page.addInitScript(lang => {
-    window.localStorage.setItem('asca-language', lang)
-  }, language)
-  await page.goto('/')
+  // 언어는 주소가 정한다(lib/i18n/locale-routing.ts) — 한국어는 접두사 없이, 나머지는 /en·/ja·/zh
+  await page.goto(language === 'ko' ? '/' : `/${language}`)
 }
 
 test.describe('home / ink-system — 4언어 구조 회귀', () => {
