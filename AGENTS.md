@@ -292,7 +292,9 @@ security:
   번역을 마친 페이지를 이 목록에 넣는다.
 - 고른 언어는 쿠키 `asca-lang` 에 저장된다(proxy 가 읽는다). 쿠키가 en·ja·zh 면
   번역된 한국어 주소에서 그 언어 주소로 307 한다. 옛 `localStorage`
-  `asca-language` 값은 한 번 쿠키로 옮기고 지운다.
+  `asca-language` 값은 한 번 쿠키로 옮기고 지운다. 언어 주소(/en 등)로 들어오면
+  proxy 가 그 언어를 쿠키로 남긴다 — 본문의 한국어 주소 링크를 눌러도 언어를
+  잃지 않는다.
 - 링크는 `useLocalizedHref()`, 경로 비교는 `useRoutePath()`
   (`lib/i18n/use-locale-path.ts`)를 쓴다. `usePathname()` 을 그대로 비교하면
   `/en/history` 에서 메뉴 활성 표시가 어긋난다.

@@ -108,6 +108,24 @@ describe('언어 주소', () => {
     expect(options?.rewrite?.pathname).toBe('/history')
   })
 
+  it('언어 주소로 들어오면 그 언어를 쿠키로 기억한다 — 본문의 한국어 주소 링크를 눌러도 언어를 잃지 않게', async () => {
+    const response = await proxy(new NextRequest('https://asca.example/en'))
+    expect(response.cookies.get('asca-lang')?.value).toBe('en')
+    const other = await proxy(
+      new NextRequest('https://asca.example/ja/history', { headers: { cookie: 'asca-lang=en' } })
+    )
+    expect(other.cookies.get('asca-lang')?.value).toBe('ja')
+  })
+
+  it('이미 같은 언어 쿠키면 다시 쓰지 않고, 한국어 주소는 쿠키를 건드리지 않는다', async () => {
+    const same = await proxy(
+      new NextRequest('https://asca.example/en/history', { headers: { cookie: 'asca-lang=en' } })
+    )
+    expect(same.cookies.get('asca-lang')).toBeUndefined()
+    const korean = await proxy(new NextRequest('https://asca.example/history'))
+    expect(korean.cookies.get('asca-lang')).toBeUndefined()
+  })
+
   it('한국어 주소는 rewrite·언어 없이 넘긴다', async () => {
     jest.mocked(refreshSupabaseSession).mockClear()
     await proxy(new NextRequest('https://asca.example/history'))

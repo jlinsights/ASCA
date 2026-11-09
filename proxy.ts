@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkOrigin } from '@/lib/security/origin-check'
 import { auditLogger } from '@/lib/security/audit-logger'
 import { refreshSupabaseSession } from '@/lib/auth/supabase/session'
-import { decideLocale } from '@/lib/i18n/locale-proxy'
+import { decideLocale, rememberLocale } from '@/lib/i18n/locale-proxy'
 
 const MUTATING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
 const PROTECTED =
@@ -43,7 +43,9 @@ export async function proxy(request: NextRequest) {
       url.searchParams.set('next', request.nextUrl.pathname + request.nextUrl.search)
       return applySession(NextResponse.redirect(url))
     }
-    return applySession()
+    // 언어 주소로 들어온 방문자는 그 언어를 기억한다 — 본문의 한국어 주소 링크를 눌러도 같은 언어에 머문다
+    const response = applySession()
+    return locale.kind === 'rewrite' ? rememberLocale(request, response, locale.language) : response
   } catch {
     return NextResponse.json(
       { error: 'AUTH_UNAVAILABLE' },

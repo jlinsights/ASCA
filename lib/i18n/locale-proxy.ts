@@ -1,4 +1,4 @@
-import type { NextRequest } from 'next/server'
+import type { NextRequest, NextResponse } from 'next/server'
 import {
   isLocalizedPath,
   localizePath,
@@ -60,4 +60,24 @@ export function decideLocale(request: NextRequest): LocaleDecision {
     }
   }
   return { kind: 'pass', path: pathname }
+}
+
+/**
+ * 언어 주소(/en·/ja·/zh)로 그린 응답에 그 언어를 쿠키로 남긴다. 쿠키 없이 /en 에 들어온 방문자가
+ * 본문 링크(아직 한국어 주소)를 누르면 한국어로, 예전 쿠키가 다른 언어면 그 언어로 바뀌던 문제를 막는다.
+ * 검색 로봇은 쿠키를 지니지 않아 한국어 주소가 그대로 색인된다.
+ */
+export function rememberLocale(
+  request: NextRequest,
+  response: NextResponse,
+  language: Language
+): NextResponse {
+  if (request.cookies.get(LOCALE_COOKIE)?.value === language) return response
+  response.cookies.set(LOCALE_COOKIE, language, {
+    path: '/',
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  })
+  return response
 }
