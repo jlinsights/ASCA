@@ -101,6 +101,16 @@ describe('localizeMetadata', () => {
     })
   })
 
+  it('트위터 이미지는 페이지의 Open Graph 이미지를 먼저 쓴다', () => {
+    const meta = localizeMetadata(
+      { title: '홈', openGraph: { images: ['/logo/home.png'] } },
+      '/',
+      'ja'
+    )
+    expect(meta.twitter).toMatchObject({ images: ['/logo/home.png'] })
+    expect(meta.openGraph).toMatchObject({ images: ['/logo/home.png'] })
+  })
+
   it('중국어·일본어는 협회 이름을 그 언어로 붙인다', () => {
     expect(localizeMetadata(BASE, '/history', 'zh').title).toBe('沿革 | 東洋書藝協會')
     expect(localizeMetadata(BASE, '/history', 'ja').title).toBe('沿革 | 東洋書道協会')

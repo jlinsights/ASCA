@@ -89,7 +89,8 @@ export function localizeMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      images: [defaultSEO.image],
+      // 페이지가 Open Graph 이미지만 달았으면 그것을 쓴다(홈의 로고). 둘 다 없을 때만 기본 이미지
+      images: base.openGraph?.images ?? [defaultSEO.image],
       ...base.twitter,
       title,
       description,
