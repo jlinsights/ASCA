@@ -2,12 +2,13 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MfaForm } from '../mfa-form'
 import { LanguageProvider } from '@/contexts/language-context'
 import { createAuthBrowserClient } from '@/lib/auth/supabase/browser'
+import { setTestLanguage } from '@/lib/i18n/testing'
 jest.mock('@/lib/auth/supabase/browser', () => ({ createAuthBrowserClient: jest.fn() }))
 const listFactors = jest.fn()
 const enroll = jest.fn()
 const verify = jest.fn()
 beforeEach(() => {
-  window.localStorage.setItem('asca-language', 'ko')
+  setTestLanguage('ko')
   listFactors.mockReset().mockResolvedValue({
     data: { totp: [{ id: 'verified-factor', status: 'verified' }], all: [] },
     error: null,

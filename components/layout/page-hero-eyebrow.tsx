@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useRoutePath } from '@/lib/i18n/use-locale-path'
 import { useLanguage } from '@/contexts/language-context'
 import { findMenuGroupForEyebrow } from './menu-section'
 
@@ -15,7 +15,7 @@ export interface PageHeroCrumb {
  * 'ASCA · 메뉴 이름' 을 단다. 메뉴에 없는 페이지(약관·검색)는 'ASCA' 만.
  */
 export function PageHeroEyebrow({ crumbs }: { crumbs?: PageHeroCrumb[] }) {
-  const pathname = usePathname()
+  const pathname = useRoutePath()
   const { t } = useLanguage()
 
   if (crumbs && crumbs.length > 0) {

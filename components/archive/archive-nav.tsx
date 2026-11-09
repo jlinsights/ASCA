@@ -1,10 +1,10 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useRoutePath } from '@/lib/i18n/use-locale-path'
 import { useLanguage } from '@/contexts/language-context'
 export function ArchiveNav() {
   const { t } = useLanguage()
-  const path = usePathname()
+  const path = useRoutePath()
   return (
     <nav
       aria-label={t('arNav')}

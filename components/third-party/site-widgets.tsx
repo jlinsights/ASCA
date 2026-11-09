@@ -1,7 +1,7 @@
 'use client'
 
 import Script from 'next/script'
-import { usePathname } from 'next/navigation'
+import { useRoutePath } from '@/lib/i18n/use-locale-path'
 import { ConsultButton } from './consult-button'
 import { KakaoChatButton } from './kakao-chat-button'
 
@@ -28,7 +28,7 @@ Cal.ns.meeting("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
 `
 
 export function SiteWidgets() {
-  const pathname = usePathname()
+  const pathname = useRoutePath()
   // Authentication forms must remain unobstructed, including after client navigation.
   if (
     /^\/(?:sign-in|sign-up|forgot-password|reset-password|auth|profile|admin)(?:\/|$)/.test(

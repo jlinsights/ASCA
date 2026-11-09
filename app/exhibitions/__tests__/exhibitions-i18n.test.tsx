@@ -7,6 +7,7 @@ import PastPage from '../past/page'
 import OnlinePage from '../online/page'
 import ExhibitionsPage from '../page'
 import { ExhibitionCard } from '../_components/exhibition-card'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -31,7 +32,7 @@ function hangulLeft(container: HTMLElement): string[] {
 }
 
 function renderIn(lang: string, ui: React.ReactElement) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(<LanguageProvider>{ui}</LanguageProvider>)
 }
 

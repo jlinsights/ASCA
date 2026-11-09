@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useState } from 'react'
 import Link from 'next/link'
+import { useLocalizedHref } from '@/lib/i18n/use-locale-path'
 import { ChevronDown } from 'lucide-react'
 import type { FooterLink } from './footer-data'
 
@@ -32,6 +33,7 @@ interface FooterMenuSectionProps {
 // 하이드레이션 전에도 sm 이상은 sm:grid 로 목록이 보여 깜빡이지 않는다.
 export function FooterMenuSection({ title, items, label, linkClassName }: FooterMenuSectionProps) {
   const desktop = useIsDesktop()
+  const localized = useLocalizedHref()
   const [open, setOpen] = useState(false)
   const listId = useId()
   const expanded = desktop || open
@@ -65,7 +67,7 @@ export function FooterMenuSection({ title, items, label, linkClassName }: Footer
         {items.map(item => (
           <li key={item.href} className='min-w-0'>
             <Link
-              href={item.href}
+              href={item.external ? item.href : localized(item.href)}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noopener noreferrer' : undefined}
               className={linkClassName}

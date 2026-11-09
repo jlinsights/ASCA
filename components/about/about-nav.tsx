@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { useRoutePath } from '@/lib/i18n/use-locale-path'
 import { headerMenu } from '@/components/layout/site-menu'
 import { currentMenuHref } from '@/components/layout/menu-section'
 import { SectionNavList } from '@/components/layout/section-nav'
@@ -9,7 +9,7 @@ import { SectionNavList } from '@/components/layout/section-nav'
 const ABOUT_GROUP = headerMenu.find(group => group.key === 'about')
 
 export function AboutNav() {
-  const pathname = usePathname()
+  const pathname = useRoutePath()
   if (!ABOUT_GROUP) return null
   return (
     <SectionNavList

@@ -98,3 +98,25 @@ it.each(['asca-main.vercel.app', 'asca-main-git-auth-jlinsights-projects.vercel.
     }
   }
 )
+
+describe('언어 주소', () => {
+  it('/en/history 는 접두사를 뗀 주소와 언어를 세션 갱신에 넘긴다', async () => {
+    jest.mocked(refreshSupabaseSession).mockClear()
+    await proxy(new NextRequest('https://asca.example/en/history'))
+    const [, options] = jest.mocked(refreshSupabaseSession).mock.calls[0]!
+    expect(options?.language).toBe('en')
+    expect(options?.rewrite?.pathname).toBe('/history')
+  })
+
+  it('한국어 주소는 rewrite·언어 없이 넘긴다', async () => {
+    jest.mocked(refreshSupabaseSession).mockClear()
+    await proxy(new NextRequest('https://asca.example/history'))
+    expect(jest.mocked(refreshSupabaseSession).mock.calls[0]![1]).toEqual({})
+  })
+
+  it('/en/profile 은 한국어 주소로 먼저 보낸다 — 접두사로 로그인 검사를 우회하지 못한다', async () => {
+    const response = await proxy(new NextRequest('https://asca.example/en/profile'))
+    expect(response.status).toBe(307)
+    expect(new URL(response.headers.get('location')!).pathname).toBe('/profile')
+  })
+})

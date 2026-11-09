@@ -41,7 +41,10 @@ const NOTO_SERIF_TC_CSS =
 // woff2 로컬 파일 — public/fonts/noto-serif-kr/ (OFL)
 // Noto Sans KR 과 같은 이유로 globals.css @font-face + :root 변수 선언
 
+import { headers } from 'next/headers'
 import { constructMetadata } from '@/lib/seo'
+import { HTML_LANG, languageFromHeader, LOCALE_HEADER } from '@/lib/i18n/locale-routing'
+import { loadLocale } from '@/lib/i18n/locales'
 import { JsonLd } from '@/components/json-ld'
 import { KakaoScript } from '@/components/seo/kakao-script'
 import { Header } from '@/components/header/header'
@@ -67,9 +70,14 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // 언어는 proxy 가 주소(/en·/ja·/zh)를 보고 단 요청 헤더로 받는다(lib/i18n/locale-routing.ts).
+  // 헤더를 읽으므로 모든 페이지가 요청 시점 렌더다 — 2026-11-09 기준 이미 전부 그랬다
+  const language = languageFromHeader((await headers()).get(LOCALE_HEADER))
+  // 한국어 표는 번들에 있다. 다른 언어는 서버에서 표를 읽어 넘겨 첫 HTML 부터 그 언어로 그린다
+  const localeTable = language === 'ko' ? undefined : await loadLocale(language)
   return (
-    <html lang='ko' suppressHydrationWarning>
+    <html lang={HTML_LANG[language]} suppressHydrationWarning>
       <head>
         <link rel='preconnect' href='https://cdn.jsdelivr.net' crossOrigin='anonymous' />
         <link rel='stylesheet' href={PRETENDARD_CSS} crossOrigin='anonymous' />
@@ -83,7 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${playfair.variable} font-sans bg-background transition-colors duration-300`}
         suppressHydrationWarning={true}
       >
-        <ClientProviders>
+        <ClientProviders language={language} localeTable={localeTable}>
           <SkipLink />
           <div className='min-h-screen flex flex-col relative'>
             <Header transparentOnTop={true} />

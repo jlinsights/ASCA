@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { LayoutFooter } from '../layout-footer'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -22,7 +23,7 @@ function setViewport(desktop: boolean) {
 }
 
 function renderFooter() {
-  window.localStorage.setItem('asca-language', 'ko')
+  setTestLanguage('ko')
   return render(
     <LanguageProvider>
       <LayoutFooter />

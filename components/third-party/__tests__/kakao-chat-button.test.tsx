@@ -2,9 +2,10 @@ import { render, screen } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { KakaoChatButton } from '../kakao-chat-button'
 import { KAKAO_CHAT_URL } from '@/lib/content/contact-info'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 function renderIn(lang: string) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <KakaoChatButton />
