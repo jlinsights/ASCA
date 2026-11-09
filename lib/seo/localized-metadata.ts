@@ -9,6 +9,7 @@ import {
   PREFIXED_LANGUAGES,
 } from '@/lib/i18n/locale-routing'
 import type { Language } from '@/lib/i18n/types'
+import { defaultSEO } from '@/lib/seo-constants'
 import { LOCALIZED_PAGE_COPY, type PageCopy } from './localized-page-copy'
 
 /**
@@ -74,14 +75,25 @@ export function localizeMetadata(
     title,
     description,
     alternates,
+    // 메타데이터 필드는 상위(루트 레이아웃)와 얕게 바뀐다 — 새 openGraph·twitter 객체가 루트의 공유 이미지·
+    // 큰 카드를 통째로 지우지 않게 기본값을 먼저 깐다(Codex 리뷰 #264 P2). 페이지가 단 값이 그 위에 온다
     openGraph: {
+      type: 'website',
+      siteName: defaultSEO.siteName,
+      images: [{ url: defaultSEO.image, width: 1200, height: 630, alt: title }],
       ...base.openGraph,
       title,
       description,
       url: canonical,
       locale: OG_LOCALE[language],
     },
-    twitter: { ...base.twitter, title, description },
+    twitter: {
+      card: 'summary_large_image',
+      images: [defaultSEO.image],
+      ...base.twitter,
+      title,
+      description,
+    },
   }
 }
 

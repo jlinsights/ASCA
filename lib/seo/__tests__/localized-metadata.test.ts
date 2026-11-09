@@ -87,6 +87,20 @@ describe('localizeMetadata', () => {
     })
   })
 
+  it('공유 이미지·큰 카드를 잃지 않는다 — 페이지가 openGraph·twitter 를 안 달아도', () => {
+    const meta = localizeMetadata(
+      { title: '연혁 | 동양서예협회', alternates: { canonical: '/history' } },
+      '/history',
+      'en'
+    )
+    expect(meta.openGraph).toMatchObject({ images: [{ url: '/images/og-default.jpg' }] })
+    expect(meta.twitter).toMatchObject({
+      card: 'summary_large_image',
+      images: ['/images/og-default.jpg'],
+      title: 'History | ASCA',
+    })
+  })
+
   it('중국어·일본어는 협회 이름을 그 언어로 붙인다', () => {
     expect(localizeMetadata(BASE, '/history', 'zh').title).toBe('沿革 | 東洋書藝協會')
     expect(localizeMetadata(BASE, '/history', 'ja').title).toBe('沿革 | 東洋書道協会')
