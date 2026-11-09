@@ -137,4 +137,20 @@ describe('언어 주소', () => {
     expect(response.status).toBe(307)
     expect(new URL(response.headers.get('location')!).pathname).toBe('/profile')
   })
+
+  it('첫 방문 홈 자동 이동에만 표시 쿠키를 단다 — 다른 리다이렉트에는 없다', async () => {
+    const first = await proxy(
+      new NextRequest('https://asca.example/', {
+        headers: {
+          'user-agent': 'Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36',
+          'accept-language': 'ja-JP',
+        },
+      })
+    )
+    expect(first.status).toBe(307)
+    expect(new URL(first.headers.get('location')!).pathname).toBe('/ja')
+    expect(first.cookies.get('asca-lang-auto')?.value).toBe('1')
+    const other = await proxy(new NextRequest('https://asca.example/en/profile'))
+    expect(other.cookies.get('asca-lang-auto')).toBeUndefined()
+  })
 })

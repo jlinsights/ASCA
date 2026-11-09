@@ -13,6 +13,7 @@ import {
   getLanguageMetadata,
 } from '@/lib/i18n'
 import {
+  AUTO_LOCALE_COOKIE,
   clientLanguageFor,
   HTML_LANG,
   isLocalizedPath,
@@ -118,8 +119,11 @@ export function LanguageProvider({
    */
   const setLanguage = useCallback(
     async (newLanguage: Language) => {
-      if (!isValidLanguage(newLanguage) || newLanguage === language) return
+      if (!isValidLanguage(newLanguage)) return
+      // 지금 보는 언어를 다시 골라도 선택으로 저장한다 — 안 그러면 첫 방문 홈 자동 판단이 그 선택을 무시한다
+      // (영어 브라우저로 /history 에서 한국어를 눌러도 홈이 /en 으로 갔다, Codex 리뷰 #265 P2)
       saveLanguage(newLanguage)
+      if (newLanguage === language) return
       const { pathname: current, search, hash } = window.location
       const target = localizePath(current + search + hash, newLanguage)
       if (target !== current + search + hash) {
@@ -154,18 +158,31 @@ export function LanguageProvider({
     setIsClient(true)
   }, [])
 
-  // 예전 저장값(localStorage) → 쿠키로 한 번 옮긴다. 영어를 골라 두었던 방문자가 한국어로 떨어지지 않게
+  // 예전 저장값(localStorage) → 쿠키로 한 번 옮긴다. 영어를 골라 두었던 방문자가 한국어로 떨어지지 않게.
+  // 옛 값은 첫 로드에 지워지므로, 옛 값이 남아 있는데 쿠키가 있다면 그 쿠키는 이번 요청에서 서버가 단 것이다
+  // (첫 방문 자동 판단이나 언어 주소 진입). 방문자가 직접 고른 옛 값이 그보다 앞선다(Codex 리뷰 #265 P2)
   useEffect(() => {
+    // 자동 판단 표시는 한 번만 본다 — 읽고 바로 지운다
+    const autoRedirected = /(?:^|;\s*)asca-lang-auto=1/.test(document.cookie)
+    if (autoRedirected) document.cookie = `${AUTO_LOCALE_COOKIE}=; path=/; max-age=0`
     try {
       const legacy = localStorage.getItem(LANGUAGE_STORAGE_KEY)
       if (!legacy) return
       localStorage.removeItem(LANGUAGE_STORAGE_KEY)
-      if (readSavedLanguage() || !(PREFIXED_LANGUAGES as readonly string[]).includes(legacy)) return
-      const saved = legacy as Language
-      saveLanguage(saved)
+      // 한국어 선택(ko)도 옮긴다 — 영어 브라우저로 /en 에 자동으로 온 한국어 선택자를 한국어 홈으로 돌린다
+      const saved = languageFromCookie(legacy)
+      if (!saved) return
       const { pathname: current, search, hash } = window.location
-      if (!splitLocale(current).prefixed && isLocalizedPath(current)) {
-        navigateTo(localizePath(current + search + hash, saved), { replace: true })
+      const split = splitLocale(current)
+      // 직접 연 언어 주소(/en/… — 공유 링크·검색 결과)는 주소의 언어가 이긴다. 쿠키도 그 언어로 둬야
+      // 본문의 한국어 주소 링크를 눌러도 진입 언어가 유지된다(Codex 리뷰 #265 P2). 옛 값은 버린다
+      if (split.prefixed && !autoRedirected) return
+      if (readSavedLanguage() !== saved) saveLanguage(saved)
+      // 한국어 번역 주소, 또는 첫 방문 자동 판단이 보낸 다른 언어의 홈이면 옛 선택 언어로 옮긴다
+      const autoHome = split.prefixed && split.path === '/' && split.language !== saved
+      const koreanPage = !split.prefixed && isLocalizedPath(current) && saved !== 'ko'
+      if (koreanPage || autoHome) {
+        navigateTo(localizePath(split.path + search + hash, saved), { replace: true })
       }
     } catch {
       // 저장소를 못 쓰는 브라우저(사생활 보호 모드 등)는 넘어간다
