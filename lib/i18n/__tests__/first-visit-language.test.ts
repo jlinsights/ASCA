@@ -56,6 +56,13 @@ describe('isNonHumanAgent', () => {
     'kakaotalk-scrap/1.0',
     'Slackbot-LinkExpanding 1.0',
     'Twitterbot/1.0',
+    'Mozilla/5.0 (compatible; Daumoa/4.0)',
+    'Discordbot/2.0',
+    'LinkedInBot/1.0 (compatible; Mozilla/5.0)',
+    'Pinterestbot/1.0',
+    'TelegramBot (like TwitterBot)',
+    'WhatsApp/2.23.20.0',
+    'Slack-ImgProxy (+https://api.slack.com/robots)',
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0',
     '',
   ])('%s 는 사람이 아니다', ua => {
@@ -65,6 +72,12 @@ describe('isNonHumanAgent', () => {
     CHROME,
     'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36',
     'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+    // 인앱 브라우저 — 서비스 이름이 들어 있지만 사람이다
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 DaumApps/6.0.0',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Twitter for iPhone/10.60',
+    'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36 [Pinterest/Android]',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 KAKAOTALK 10.8.0',
+    'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36 Slack/4.41',
   ])('일반 브라우저는 사람이다 — %s', ua => expect(isNonHumanAgent(ua)).toBe(false))
 })
 

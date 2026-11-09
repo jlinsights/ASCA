@@ -118,8 +118,11 @@ export function LanguageProvider({
    */
   const setLanguage = useCallback(
     async (newLanguage: Language) => {
-      if (!isValidLanguage(newLanguage) || newLanguage === language) return
+      if (!isValidLanguage(newLanguage)) return
+      // 지금 보는 언어를 다시 골라도 선택으로 저장한다 — 안 그러면 첫 방문 홈 자동 판단이 그 선택을 무시한다
+      // (영어 브라우저로 /history 에서 한국어를 눌러도 홈이 /en 으로 갔다, Codex 리뷰 #265 P2)
       saveLanguage(newLanguage)
+      if (newLanguage === language) return
       const { pathname: current, search, hash } = window.location
       const target = localizePath(current + search + hash, newLanguage)
       if (target !== current + search + hash) {

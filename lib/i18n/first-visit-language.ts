@@ -10,10 +10,12 @@ import type { Language } from './types'
 /**
  * 검색 로봇·링크 미리보기·자동화 도구. UA 가 없으면 사람이 아닌 것으로 본다.
  * `google` 은 Googlebot 밖의 Google-InspectionTool(Search Console URL 검사)·GoogleOther·AdsBot-Google 등을
- * 잡는다 — 일반 Chrome·안드로이드 UA 에는 이 낱말이 없다
+ * 잡는다 — 일반 Chrome·안드로이드 UA 에는 이 낱말이 없다.
+ * 서비스 이름 전체(daum·twitter·pinterest)가 아니라 로봇 전용 토큰으로 잡는다 — `DaumApps/`·`Twitter for iPhone`
+ * 같은 인앱 브라우저는 사람이다(Codex 리뷰 #265 P2). Twitterbot·Slackbot·Discordbot 등은 `bot` 으로 잡힌다
  */
 const NON_HUMAN_AGENT =
-  /bot\b|bot\/|google|crawl|spider|slurp|yeti|daum|baidu|yandex|bingpreview|facebookexternalhit|facebot|kakaotalk-scrap|kakaostory-og|slack|twitter|whatsapp|telegram|discord|linkedin|pinterest|embedly|preview|lighthouse|pagespeed|headless|curl|wget|python-requests|httpclient/i
+  /bot\b|bot\/|google|crawl|spider|slurp|yeti|daum\/|daumoa|baidu|yandex|bingpreview|facebookexternalhit|facebot|kakaotalk-scrap|kakaostory-og|slack-imgproxy|whatsapp\/|embedly|lighthouse|pagespeed|headless|curl|wget|python-requests|httpclient/i
 
 export function isNonHumanAgent(userAgent: string | null | undefined): boolean {
   return !userAgent || NON_HUMAN_AGENT.test(userAgent)

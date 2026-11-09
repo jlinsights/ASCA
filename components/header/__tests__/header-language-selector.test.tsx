@@ -52,4 +52,17 @@ describe('Header — 데스크톱 언어 선택기', () => {
     expect(document.cookie).toMatch(/(?:^|; )asca-lang=en/)
     expect(navigateTo).toHaveBeenCalledWith('/en')
   })
+
+  // 첫 방문 홈 자동 판단은 쿠키가 없을 때만 돈다 — 지금 언어(한국어)를 눌러도 선택으로 남긴다
+  it('지금 언어를 다시 고르면 이동 없이 저장하고 메뉴를 닫는다', async () => {
+    jest.mocked(navigateTo).mockClear()
+    const user = userEvent.setup()
+    renderHeader()
+    const controls = screen.getByTestId('header-desktop-controls')
+    await user.click(within(controls).getByRole('button', { name: /Current language/ }))
+    await user.click(within(controls).getByRole('button', { name: 'Select 한국어 language' }))
+    expect(document.cookie).toMatch(/(?:^|; )asca-lang=ko/)
+    expect(navigateTo).not.toHaveBeenCalled()
+    expect(within(controls).queryAllByRole('option')).toHaveLength(0)
+  })
 })

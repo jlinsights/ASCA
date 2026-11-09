@@ -160,6 +160,22 @@ describe('LanguageProvider — 언어 선택', () => {
     expect(navigateTo).toHaveBeenCalledWith('/zh/history?tab=1#top')
   })
 
+  // 첫 방문 홈 자동 판단은 쿠키가 없을 때만 돈다 — 지금 언어를 다시 고른 것도 선택으로 남겨야 한다
+  it('지금 보는 언어를 다시 골라도 쿠키에 저장하고 이동하지 않는다', async () => {
+    window.history.replaceState(null, '', '/history')
+    render(
+      <LanguageProvider>
+        <Switcher />
+      </LanguageProvider>
+    )
+    expect(cookieLanguage()).toBeUndefined()
+    await act(async () => {
+      await setLanguageRef!('ko')
+    })
+    expect(cookieLanguage()).toBe('ko')
+    expect(navigateTo).not.toHaveBeenCalled()
+  })
+
   it('/en 주소에서 한국어를 고르면 접두사 없는 주소로 간다', async () => {
     setTestLanguage('en')
     render(
