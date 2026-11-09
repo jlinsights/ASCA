@@ -11,6 +11,7 @@ import { match, compile } from 'next/dist/compiled/path-to-regexp'
 type Redirect = { source: string; destination: string; permanent: boolean }
 
 const { webflowRedirects } = require('../webflow-redirects') as { webflowRedirects: Redirect[] }
+import { isLocalizedPath, splitLocale } from '../../i18n/locale-routing'
 const nextConfig = require('../../../next.config.js') as { redirects: () => Promise<Redirect[]> }
 
 const APP_DIR = path.join(__dirname, '../../../app')
@@ -153,6 +154,14 @@ describe('Webflow 주소 이관', () => {
     let current = start
     let hops = 0
     while (!isPage(current) && hops < 3) {
+      // proxy 단계(lib/i18n/locale-proxy.ts): 번역된 페이지의 언어 주소는 그 페이지, 나머지는 한국어 주소로 한 번
+      const locale = splitLocale(current)
+      if (locale.prefixed) {
+        if (isLocalizedPath(locale.path) && isPage(locale.path)) break
+        current = locale.path
+        hops++
+        continue
+      }
       const next = applyRedirect(redirects, current)
       if (next === null) break
       current = next
@@ -163,13 +172,21 @@ describe('Webflow 주소 이관', () => {
       expect(applyRedirect(redirects, start)).toBeNull()
       return
     }
-    expect({ start, landed: current, isPage: isPage(current) }).toEqual({
+    const landedPage = isPage(splitLocale(current).path)
+    expect({ start, landed: current, isPage: landedPage }).toEqual({
       start,
       landed: current,
       isPage: true,
     })
     expect(hops).toBeLessThanOrEqual(2)
   })
+
+  test.each(['/en', '/ja/history', '/zh/regulations/articles', '/en/privacy-policy'])(
+    'redirects() 가 언어 주소 %s 를 가로채지 않는다 — proxy 가 맡는다',
+    async pathname => {
+      expect(applyRedirect(await allRedirects(), pathname)).toBeNull()
+    }
+  )
 
   // 내린 유관단체 상세(2026-11-08) — 예전 7개 주소가 목록으로 영구 이동한다
   test.each([

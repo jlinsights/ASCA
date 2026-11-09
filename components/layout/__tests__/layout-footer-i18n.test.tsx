@@ -7,6 +7,7 @@ import { footerLinks, footerSections } from '../footer-data'
 import { footerCopy } from '../footer-copy'
 import { translations } from '@/lib/i18n/translations'
 import { findRegulation } from '@/lib/regulations/catalog'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -15,7 +16,7 @@ jest.mock('next/image', () => ({
 }))
 
 function renderFooter(lang: string) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <LayoutFooter />
@@ -52,7 +53,7 @@ describe('LayoutFooter — 번역', () => {
   })
 
   it('간략형에서도 동일한 공식 연락처와 QR을 사용한다', async () => {
-    window.localStorage.setItem('asca-language', 'ko')
+    setTestLanguage('ko')
     render(
       <LanguageProvider>
         <LayoutFooter variant='simple' />

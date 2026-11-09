@@ -3,6 +3,7 @@ import { LanguageProvider } from '@/contexts/language-context'
 import { BrandGuide } from '../_components/brand-guide'
 import { HistoryHero } from '../../history/_components/history-hero'
 import { HistoryTimeline } from '../../history/_components/history-timeline'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('@/components/about/about-motion', () => ({ AboutMotion: () => null }))
 jest.mock('@/components/about/about-nav', () => ({
@@ -20,7 +21,7 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  window.localStorage.setItem('asca-language', 'ko')
+  setTestLanguage('ko')
 })
 
 afterEach(() => {

@@ -4,6 +4,7 @@ import { AuthForm } from '../auth-form'
 import { LanguageProvider } from '@/contexts/language-context'
 import { createAuthBrowserClient } from '@/lib/auth/supabase/browser'
 import { nativeAuthTranslations } from '@/lib/i18n/translations/native-auth'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('@/lib/auth/supabase/browser', () => ({ createAuthBrowserClient: jest.fn() }))
 const signup = jest.fn()
@@ -21,7 +22,7 @@ beforeEach(() => {
 })
 
 function show(mode: 'sign-in' | 'sign-up' | 'forgot' | 'reset', language = 'ko') {
-  window.localStorage.setItem('asca-language', language)
+  setTestLanguage(language)
   return render(
     <LanguageProvider>
       <AuthForm mode={mode} />

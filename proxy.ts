@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkOrigin } from '@/lib/security/origin-check'
 import { auditLogger } from '@/lib/security/audit-logger'
 import { refreshSupabaseSession } from '@/lib/auth/supabase/session'
+import { decideLocale, rememberLocale } from '@/lib/i18n/locale-proxy'
 
 const MUTATING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
 const PROTECTED =
@@ -28,14 +29,23 @@ export async function proxy(request: NextRequest) {
     response.headers.append('Vary', 'Cookie')
     return response
   }
+  // 언어 주소(/en·/ja·/zh) — lib/i18n/locale-routing.ts. 로그인 검사는 접두사를 뗀 경로로 한다
+  const locale = decideLocale(request)
   try {
-    const { user, applySession } = await refreshSupabaseSession(request)
-    if (!user && PROTECTED.test(request.nextUrl.pathname)) {
+    const { user, applySession } = await refreshSupabaseSession(
+      request,
+      locale.kind === 'rewrite' ? { rewrite: locale.rewrite, language: locale.language } : {}
+    )
+    // 쿠키에 따라 갈리는 응답이라 applySession 이 private, no-store + Vary: Cookie 를 단다
+    if (locale.kind === 'redirect') return applySession(NextResponse.redirect(locale.location, 307))
+    if (!user && PROTECTED.test(locale.path)) {
       const url = new URL('/sign-in', request.url)
       url.searchParams.set('next', request.nextUrl.pathname + request.nextUrl.search)
       return applySession(NextResponse.redirect(url))
     }
-    return applySession()
+    // 언어 주소로 들어온 방문자는 그 언어를 기억한다 — 본문의 한국어 주소 링크를 눌러도 같은 언어에 머문다
+    const response = applySession()
+    return locale.kind === 'rewrite' ? rememberLocale(request, response, locale.language) : response
   } catch {
     return NextResponse.json(
       { error: 'AUTH_UNAVAILABLE' },

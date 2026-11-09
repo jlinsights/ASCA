@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Facebook, Instagram, Link2, Linkedin, Youtube, type LucideIcon } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
+import { useLocalizedHref } from '@/lib/i18n/use-locale-path'
 import { SOCIAL_LINKS, type SocialNetwork } from '@/lib/social-links'
 import { footerLinks, footerSections } from './footer-data'
 import { footerCopy } from './footer-copy'
@@ -26,6 +27,7 @@ const linkStyle =
 
 export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
   const { t, language } = useLanguage()
+  const localized = useLocalizedHref()
   const copy = footerCopy[language]
   const label = (key: string) => (key in copy ? copy[key as keyof typeof copy] : t(key))
   return (
@@ -36,7 +38,7 @@ export function LayoutFooter({ variant = 'default' }: LayoutFooterProps) {
         >
           <div className='min-w-0'>
             <Link
-              href='/'
+              href={localized('/')}
               className='inline-block max-w-full rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent'
             >
               <Image

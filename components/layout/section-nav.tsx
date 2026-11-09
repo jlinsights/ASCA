@@ -2,7 +2,8 @@
 
 import { Suspense, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useLocalizedHref, useRoutePath } from '@/lib/i18n/use-locale-path'
 import { useLanguage } from '@/contexts/language-context'
 import type { MenuGroup } from './site-menu'
 import { currentMenuHref, findMenuGroup } from './menu-section'
@@ -15,6 +16,7 @@ interface SectionNavListProps {
 
 /** 01–0N 번호 목차 — 소개 묶음 목차(.ab-nav)와 같은 모양. 헤더 하위 메뉴와 같은 목록을 읽는다 */
 export function SectionNavList({ group, current }: SectionNavListProps) {
+  const localized = useLocalizedHref()
   const { t } = useLanguage()
   const listRef = useRef<HTMLUListElement>(null)
   const items = (group.items ?? []).filter(item => !item.external)
@@ -33,7 +35,7 @@ export function SectionNavList({ group, current }: SectionNavListProps) {
         {items.map((item, index) => (
           <li key={item.href}>
             <Link
-              href={item.href}
+              href={localized(item.href)}
               className='ab-nav__link'
               aria-current={item.href === current ? 'page' : undefined}
             >
@@ -60,7 +62,7 @@ function SectionNavWithSearch({ group, pathname }: { group: MenuGroup; pathname:
  * 정적으로 만드는 페이지에서는 쿼리 없이 먼저 그린다.
  */
 export function SectionNav() {
-  const pathname = usePathname()
+  const pathname = useRoutePath()
   const group = findMenuGroup(pathname)
   if (!group || !pathname) return null
   // 쿼리로 나뉜 항목이 없는 묶음은 주소 쿼리를 읽을 필요가 없다
