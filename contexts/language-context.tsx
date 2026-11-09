@@ -154,18 +154,23 @@ export function LanguageProvider({
     setIsClient(true)
   }, [])
 
-  // 예전 저장값(localStorage) → 쿠키로 한 번 옮긴다. 영어를 골라 두었던 방문자가 한국어로 떨어지지 않게
+  // 예전 저장값(localStorage) → 쿠키로 한 번 옮긴다. 영어를 골라 두었던 방문자가 한국어로 떨어지지 않게.
+  // 옛 값은 첫 로드에 지워지므로, 옛 값이 남아 있는데 쿠키가 있다면 그 쿠키는 이번 요청에서 서버가 단 것이다
+  // (첫 방문 자동 판단이나 언어 주소 진입). 방문자가 직접 고른 옛 값이 그보다 앞선다(Codex 리뷰 #265 P2)
   useEffect(() => {
     try {
       const legacy = localStorage.getItem(LANGUAGE_STORAGE_KEY)
       if (!legacy) return
       localStorage.removeItem(LANGUAGE_STORAGE_KEY)
-      if (readSavedLanguage() || !(PREFIXED_LANGUAGES as readonly string[]).includes(legacy)) return
+      if (!(PREFIXED_LANGUAGES as readonly string[]).includes(legacy)) return
       const saved = legacy as Language
-      saveLanguage(saved)
+      if (readSavedLanguage() !== saved) saveLanguage(saved)
       const { pathname: current, search, hash } = window.location
-      if (!splitLocale(current).prefixed && isLocalizedPath(current)) {
-        navigateTo(localizePath(current + search + hash, saved), { replace: true })
+      const split = splitLocale(current)
+      // 한국어 번역 주소, 또는 자동 판단이 보낸 다른 언어의 홈(/en 등)이면 옛 선택 언어로 옮긴다
+      const autoHome = split.prefixed && split.path === '/' && split.language !== saved
+      if ((!split.prefixed && isLocalizedPath(current)) || autoHome) {
+        navigateTo(localizePath(split.path + search + hash, saved), { replace: true })
       }
     } catch {
       // 저장소를 못 쓰는 브라우저(사생활 보호 모드 등)는 넘어간다
