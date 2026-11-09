@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkOrigin } from '@/lib/security/origin-check'
 import { auditLogger } from '@/lib/security/audit-logger'
 import { refreshSupabaseSession } from '@/lib/auth/supabase/session'
-import { decideLocale, rememberLocale } from '@/lib/i18n/locale-proxy'
+import { decideLocale, markFirstVisit, rememberLocale } from '@/lib/i18n/locale-proxy'
 
 const MUTATING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
 const PROTECTED =
@@ -37,7 +37,10 @@ export async function proxy(request: NextRequest) {
       locale.kind === 'rewrite' ? { rewrite: locale.rewrite, language: locale.language } : {}
     )
     // 쿠키에 따라 갈리는 응답이라 applySession 이 private, no-store + Vary: Cookie 를 단다
-    if (locale.kind === 'redirect') return applySession(NextResponse.redirect(locale.location, 307))
+    if (locale.kind === 'redirect') {
+      const redirect = applySession(NextResponse.redirect(locale.location, 307))
+      return locale.firstVisit ? markFirstVisit(redirect) : redirect
+    }
     if (!user && PROTECTED.test(locale.path)) {
       const url = new URL('/sign-in', request.url)
       url.searchParams.set('next', request.nextUrl.pathname + request.nextUrl.search)

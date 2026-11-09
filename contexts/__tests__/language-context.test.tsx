@@ -95,6 +95,7 @@ describe('LanguageProvider — 주소가 정하는 언어', () => {
   it('자동 판단으로 다른 언어 홈에 왔어도 옛 선택이 앞선다 — 쿠키를 고치고 그 언어 홈으로', () => {
     setTestLanguage('en')
     document.cookie = 'asca-lang=en; path=/'
+    document.cookie = 'asca-lang-auto=1; path=/'
     window.localStorage.setItem('asca-language', 'ja')
     render(
       <LanguageProvider initialLanguage='en'>
@@ -109,6 +110,7 @@ describe('LanguageProvider — 주소가 정하는 언어', () => {
   it('옛 한국어 선택도 옮긴다 — 자동 판단으로 /en 에 왔으면 한국어 홈으로', () => {
     setTestLanguage('en')
     document.cookie = 'asca-lang=en; path=/'
+    document.cookie = 'asca-lang-auto=1; path=/'
     window.localStorage.setItem('asca-language', 'ko')
     render(
       <LanguageProvider initialLanguage='en'>
@@ -117,6 +119,30 @@ describe('LanguageProvider — 주소가 정하는 언어', () => {
     )
     expect(cookieLanguage()).toBe('ko')
     expect(navigateTo).toHaveBeenCalledWith('/', { replace: true })
+  })
+
+  it('공유 링크로 직접 연 /en 은 옛 선택이 있어도 그대로 둔다 — 자동 판단 표시가 없다', () => {
+    setTestLanguage('en')
+    document.cookie = 'asca-lang=en; path=/'
+    window.localStorage.setItem('asca-language', 'ko')
+    render(
+      <LanguageProvider initialLanguage='en'>
+        <Switcher />
+      </LanguageProvider>
+    )
+    expect(navigateTo).not.toHaveBeenCalled()
+    expect(window.localStorage.getItem('asca-language')).toBeNull()
+  })
+
+  it('자동 판단 표시는 한 번 읽고 지운다', () => {
+    setTestLanguage('ja')
+    document.cookie = 'asca-lang-auto=1; path=/'
+    render(
+      <LanguageProvider initialLanguage='ja'>
+        <Switcher />
+      </LanguageProvider>
+    )
+    expect(document.cookie).not.toMatch(/asca-lang-auto=1/)
   })
 
   it('한국어 주소에서 옛 한국어 선택이면 이동하지 않는다', () => {

@@ -78,7 +78,10 @@ describe('decideLocale', () => {
         req('/?utm=x', { headers: visitor({ 'accept-language': 'ja-JP,ja' }) })
       )
       expect(d.kind).toBe('redirect')
-      if (d.kind === 'redirect') expect(d.location.pathname + d.location.search).toBe('/ja?utm=x')
+      if (d.kind === 'redirect') {
+        expect(d.location.pathname + d.location.search).toBe('/ja?utm=x')
+        expect(d.firstVisit).toBe(true)
+      }
     })
 
     it('브라우저 언어가 지원 밖이면 접속 국가로 — 대만은 /zh', () => {

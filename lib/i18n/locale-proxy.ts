@@ -1,5 +1,6 @@
 import type { NextRequest, NextResponse } from 'next/server'
 import {
+  AUTO_LOCALE_COOKIE,
   isLocalizedPath,
   languageFromCookie,
   localizePath,
@@ -13,7 +14,7 @@ import { firstVisitLanguage } from './first-visit-language'
 /** proxy 가 언어 주소를 어떻게 처리할지 */
 export type LocaleDecision =
   /** 다른 주소로 보낸다(307 — 번역 페이지 목록이 늘면 바뀔 수 있어 영구 리다이렉트를 쓰지 않는다) */
-  | { kind: 'redirect'; location: URL }
+  | { kind: 'redirect'; location: URL; firstVisit?: boolean }
   /** /en/history 를 /history 로 내부에서 그리고 언어를 헤더로 넘긴다 */
   | { kind: 'rewrite'; rewrite: URL; language: Language; path: string }
   /** 한국어 주소 그대로 */
@@ -68,7 +69,11 @@ export function decideLocale(request: NextRequest): LocaleDecision {
       country: request.headers.get('x-vercel-ip-country'),
     })
     if (first && first !== 'ko') {
-      return { kind: 'redirect', location: new URL(localizePath('/', first) + search, request.url) }
+      return {
+        kind: 'redirect',
+        location: new URL(localizePath('/', first) + search, request.url),
+        firstVisit: true,
+      }
     }
   }
 
@@ -96,6 +101,17 @@ export function rememberLocale(
   response.cookies.set(LOCALE_COOKIE, language, {
     path: '/',
     maxAge: 60 * 60 * 24 * 365,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  })
+  return response
+}
+
+/** 첫 방문 자동 판단 리다이렉트에 표시 쿠키를 단다(AUTO_LOCALE_COOKIE) */
+export function markFirstVisit(response: NextResponse): NextResponse {
+  response.cookies.set(AUTO_LOCALE_COOKIE, '1', {
+    path: '/',
+    maxAge: 60,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
   })

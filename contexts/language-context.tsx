@@ -13,6 +13,7 @@ import {
   getLanguageMetadata,
 } from '@/lib/i18n'
 import {
+  AUTO_LOCALE_COOKIE,
   clientLanguageFor,
   HTML_LANG,
   isLocalizedPath,
@@ -161,6 +162,9 @@ export function LanguageProvider({
   // 옛 값은 첫 로드에 지워지므로, 옛 값이 남아 있는데 쿠키가 있다면 그 쿠키는 이번 요청에서 서버가 단 것이다
   // (첫 방문 자동 판단이나 언어 주소 진입). 방문자가 직접 고른 옛 값이 그보다 앞선다(Codex 리뷰 #265 P2)
   useEffect(() => {
+    // 자동 판단 표시는 한 번만 본다 — 읽고 바로 지운다
+    const autoRedirected = /(?:^|;\s*)asca-lang-auto=1/.test(document.cookie)
+    if (autoRedirected) document.cookie = `${AUTO_LOCALE_COOKIE}=; path=/; max-age=0`
     try {
       const legacy = localStorage.getItem(LANGUAGE_STORAGE_KEY)
       if (!legacy) return
@@ -171,8 +175,10 @@ export function LanguageProvider({
       if (readSavedLanguage() !== saved) saveLanguage(saved)
       const { pathname: current, search, hash } = window.location
       const split = splitLocale(current)
-      // 한국어 번역 주소, 또는 자동 판단이 보낸 다른 언어의 홈(/en 등)이면 옛 선택 언어로 옮긴다
-      const autoHome = split.prefixed && split.path === '/' && split.language !== saved
+      // 한국어 번역 주소, 또는 첫 방문 자동 판단이 보낸 다른 언어의 홈이면 옛 선택 언어로 옮긴다.
+      // 공유 링크·검색 결과로 직접 연 /en 은 표시 쿠키가 없어 그대로 둔다(Codex 리뷰 #265 P2)
+      const autoHome =
+        autoRedirected && split.prefixed && split.path === '/' && split.language !== saved
       const koreanPage = !split.prefixed && isLocalizedPath(current) && saved !== 'ko'
       if (koreanPage || autoHome) {
         navigateTo(localizePath(split.path + search + hash, saved), { replace: true })

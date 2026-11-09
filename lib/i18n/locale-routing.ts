@@ -20,6 +20,12 @@ export const LOCALE_HEADER = 'x-asca-lang'
 /** 방문자가 언어 선택기에서 고른 언어. proxy 가 읽으므로 localStorage 가 아니라 쿠키다 */
 export const LOCALE_COOKIE = 'asca-lang'
 
+/**
+ * 첫 방문 자동 판단으로 언어 홈(/en 등)에 보냈다는 표시. 60초만 산다. 옛 localStorage 선택을 옮길 때
+ * 자동으로 온 홈만 되돌리고, 방문자가 직접 연 언어 주소는 그대로 둔다(language-context)
+ */
+export const AUTO_LOCALE_COOKIE = 'asca-lang-auto'
+
 /** <html lang> · hreflang 값. 중국어는 번체다(lib/i18n/simplified-only.ts) */
 export const HTML_LANG: Record<Language, string> = {
   ko: 'ko',
