@@ -172,13 +172,14 @@ export function LanguageProvider({
       // 한국어 선택(ko)도 옮긴다 — 영어 브라우저로 /en 에 자동으로 온 한국어 선택자를 한국어 홈으로 돌린다
       const saved = languageFromCookie(legacy)
       if (!saved) return
-      if (readSavedLanguage() !== saved) saveLanguage(saved)
       const { pathname: current, search, hash } = window.location
       const split = splitLocale(current)
-      // 한국어 번역 주소, 또는 첫 방문 자동 판단이 보낸 다른 언어의 홈이면 옛 선택 언어로 옮긴다.
-      // 공유 링크·검색 결과로 직접 연 /en 은 표시 쿠키가 없어 그대로 둔다(Codex 리뷰 #265 P2)
-      const autoHome =
-        autoRedirected && split.prefixed && split.path === '/' && split.language !== saved
+      // 직접 연 언어 주소(/en/… — 공유 링크·검색 결과)는 주소의 언어가 이긴다. 쿠키도 그 언어로 둬야
+      // 본문의 한국어 주소 링크를 눌러도 진입 언어가 유지된다(Codex 리뷰 #265 P2). 옛 값은 버린다
+      if (split.prefixed && !autoRedirected) return
+      if (readSavedLanguage() !== saved) saveLanguage(saved)
+      // 한국어 번역 주소, 또는 첫 방문 자동 판단이 보낸 다른 언어의 홈이면 옛 선택 언어로 옮긴다
+      const autoHome = split.prefixed && split.path === '/' && split.language !== saved
       const koreanPage = !split.prefixed && isLocalizedPath(current) && saved !== 'ko'
       if (koreanPage || autoHome) {
         navigateTo(localizePath(split.path + search + hash, saved), { replace: true })

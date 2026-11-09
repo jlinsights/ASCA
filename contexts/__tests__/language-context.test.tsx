@@ -131,6 +131,7 @@ describe('LanguageProvider — 주소가 정하는 언어', () => {
       </LanguageProvider>
     )
     expect(navigateTo).not.toHaveBeenCalled()
+    expect(cookieLanguage()).toBe('en')
     expect(window.localStorage.getItem('asca-language')).toBeNull()
   })
 
@@ -157,7 +158,7 @@ describe('LanguageProvider — 주소가 정하는 언어', () => {
     expect(navigateTo).not.toHaveBeenCalled()
   })
 
-  it('언어 주소의 본문 페이지는 그대로 두고 쿠키만 옛 선택으로 고친다', () => {
+  it('직접 연 언어 주소의 본문 페이지는 주소 언어가 이긴다 — 쿠키도 그대로', () => {
     window.history.replaceState(null, '', '/en/history')
     document.cookie = 'asca-lang=en; path=/'
     window.localStorage.setItem('asca-language', 'ja')
@@ -166,7 +167,8 @@ describe('LanguageProvider — 주소가 정하는 언어', () => {
         <Switcher />
       </LanguageProvider>
     )
-    expect(cookieLanguage()).toBe('ja')
+    expect(cookieLanguage()).toBe('en')
+    expect(window.localStorage.getItem('asca-language')).toBeNull()
     expect(navigateTo).not.toHaveBeenCalled()
   })
 })
