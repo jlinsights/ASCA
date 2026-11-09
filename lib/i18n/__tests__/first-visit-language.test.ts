@@ -49,6 +49,9 @@ describe('isNonHumanAgent', () => {
     'Mozilla/5.0 (compatible; Daum/4.1; +http://cs.daum.net/faq/15/4118.html)',
     'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
     'Mozilla/5.0 (compatible; Baiduspider/2.0)',
+    'Mozilla/5.0 (compatible; Google-InspectionTool/1.0;)',
+    'Mozilla/5.0 (compatible; GoogleOther)',
+    'AdsBot-Google (+http://www.google.com/adsbot.html)',
     'facebookexternalhit/1.1',
     'kakaotalk-scrap/1.0',
     'Slackbot-LinkExpanding 1.0',
@@ -58,7 +61,11 @@ describe('isNonHumanAgent', () => {
   ])('%s 는 사람이 아니다', ua => {
     expect(isNonHumanAgent(ua)).toBe(true)
   })
-  it('일반 브라우저는 사람이다', () => expect(isNonHumanAgent(CHROME)).toBe(false))
+  it.each([
+    CHROME,
+    'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+  ])('일반 브라우저는 사람이다 — %s', ua => expect(isNonHumanAgent(ua)).toBe(false))
 })
 
 describe('firstVisitLanguage', () => {

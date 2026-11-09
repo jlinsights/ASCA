@@ -162,14 +162,16 @@ export function LanguageProvider({
       const legacy = localStorage.getItem(LANGUAGE_STORAGE_KEY)
       if (!legacy) return
       localStorage.removeItem(LANGUAGE_STORAGE_KEY)
-      if (!(PREFIXED_LANGUAGES as readonly string[]).includes(legacy)) return
-      const saved = legacy as Language
+      // 한국어 선택(ko)도 옮긴다 — 영어 브라우저로 /en 에 자동으로 온 한국어 선택자를 한국어 홈으로 돌린다
+      const saved = languageFromCookie(legacy)
+      if (!saved) return
       if (readSavedLanguage() !== saved) saveLanguage(saved)
       const { pathname: current, search, hash } = window.location
       const split = splitLocale(current)
       // 한국어 번역 주소, 또는 자동 판단이 보낸 다른 언어의 홈(/en 등)이면 옛 선택 언어로 옮긴다
       const autoHome = split.prefixed && split.path === '/' && split.language !== saved
-      if ((!split.prefixed && isLocalizedPath(current)) || autoHome) {
+      const koreanPage = !split.prefixed && isLocalizedPath(current) && saved !== 'ko'
+      if (koreanPage || autoHome) {
         navigateTo(localizePath(split.path + search + hash, saved), { replace: true })
       }
     } catch {

@@ -7,9 +7,13 @@ import type { Language } from './types'
  * Google 이 홈을 영어로 색인한다. 언어별 홈은 /en·/ja·/zh 주소와 hreflang 으로 따로 알린다.
  */
 
-/** 검색 로봇·링크 미리보기·자동화 도구. UA 가 없으면 사람이 아닌 것으로 본다 */
+/**
+ * 검색 로봇·링크 미리보기·자동화 도구. UA 가 없으면 사람이 아닌 것으로 본다.
+ * `google` 은 Googlebot 밖의 Google-InspectionTool(Search Console URL 검사)·GoogleOther·AdsBot-Google 등을
+ * 잡는다 — 일반 Chrome·안드로이드 UA 에는 이 낱말이 없다
+ */
 const NON_HUMAN_AGENT =
-  /bot\b|bot\/|crawl|spider|slurp|yeti|daum|baidu|yandex|bingpreview|facebookexternalhit|facebot|kakaotalk-scrap|kakaostory-og|slack|twitter|whatsapp|telegram|discord|linkedin|pinterest|embedly|preview|lighthouse|pagespeed|headless|curl|wget|python-requests|httpclient/i
+  /bot\b|bot\/|google|crawl|spider|slurp|yeti|daum|baidu|yandex|bingpreview|facebookexternalhit|facebot|kakaotalk-scrap|kakaostory-og|slack|twitter|whatsapp|telegram|discord|linkedin|pinterest|embedly|preview|lighthouse|pagespeed|headless|curl|wget|python-requests|httpclient/i
 
 export function isNonHumanAgent(userAgent: string | null | undefined): boolean {
   return !userAgent || NON_HUMAN_AGENT.test(userAgent)

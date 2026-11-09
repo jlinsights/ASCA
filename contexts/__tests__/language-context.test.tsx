@@ -106,6 +106,31 @@ describe('LanguageProvider — 주소가 정하는 언어', () => {
     expect(navigateTo).toHaveBeenCalledWith('/ja', { replace: true })
   })
 
+  it('옛 한국어 선택도 옮긴다 — 자동 판단으로 /en 에 왔으면 한국어 홈으로', () => {
+    setTestLanguage('en')
+    document.cookie = 'asca-lang=en; path=/'
+    window.localStorage.setItem('asca-language', 'ko')
+    render(
+      <LanguageProvider initialLanguage='en'>
+        <Switcher />
+      </LanguageProvider>
+    )
+    expect(cookieLanguage()).toBe('ko')
+    expect(navigateTo).toHaveBeenCalledWith('/', { replace: true })
+  })
+
+  it('한국어 주소에서 옛 한국어 선택이면 이동하지 않는다', () => {
+    window.history.replaceState(null, '', '/history')
+    window.localStorage.setItem('asca-language', 'ko')
+    render(
+      <LanguageProvider>
+        <Switcher />
+      </LanguageProvider>
+    )
+    expect(cookieLanguage()).toBe('ko')
+    expect(navigateTo).not.toHaveBeenCalled()
+  })
+
   it('언어 주소의 본문 페이지는 그대로 두고 쿠키만 옛 선택으로 고친다', () => {
     window.history.replaceState(null, '', '/en/history')
     document.cookie = 'asca-lang=en; path=/'
