@@ -6,9 +6,10 @@ import { AcademySubjects } from './_components/academy-subjects'
 import { MunwonAcademy } from './_components/munwon-academy'
 import { SacAcademy } from './_components/sac-academy'
 import { PartnershipCta } from './_components/partnership-cta'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import './_components/academy.css'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/academy' },
   title: '강좌 | 동양서예협회',
   description:
@@ -36,3 +37,6 @@ export default function AcademyPage() {
     </div>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/academy', metadata)

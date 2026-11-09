@@ -5,8 +5,9 @@ import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
 import { IntroductionsHero } from './_components/introductions-hero'
 import { IntroductionsTabs } from './_components/introductions-tabs'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/introductions' },
   title: '소개 | 동양서예협회',
   description:
@@ -36,3 +37,6 @@ export default function IntroductionsPage() {
     </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/introductions', metadata)

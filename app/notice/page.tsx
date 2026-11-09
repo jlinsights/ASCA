@@ -6,6 +6,7 @@ import { toNoticeRow } from '@/lib/notices/notice-view'
 import { todayKst } from '@/lib/events/event-view'
 import { withCodeNotices } from './_components/code-notices'
 import { NoticeView } from './_components/notice-view'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import '@/components/apply/apply.css'
 import '@/app/events/_components/events.css'
 import './_components/notice.css'
@@ -20,7 +21,7 @@ import './_components/notice.css'
 const DESCRIPTION =
   '동양서예협회 공지사항 — 협회 소식과 행사 안내, 공모·전시 일정을 게시일 순으로 알립니다.'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/notice' },
   title: '공지사항 | 동양서예협회',
   description: DESCRIPTION,
@@ -56,3 +57,6 @@ export default async function NoticePage({ searchParams }: PageProps) {
     </div>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/notice', metadata)

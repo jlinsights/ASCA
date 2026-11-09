@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo-constants'
 import { ExhibitionRecordsPage } from '../_components/exhibition-records-page'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
 const DESCRIPTION =
   '1997년부터 동양서예협회가 열어 온 전시의 기록입니다. 대한민국 동양서예대전을 비롯한 협회 전시의 기간과 장소를 연혁에서 모아 보여 줍니다.'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: '지난 전시 | 동양서예협회',
   description: DESCRIPTION,
   alternates: { canonical: '/exhibitions/past' },
@@ -20,3 +21,6 @@ export const metadata: Metadata = {
 export default function PastExhibitionsPage() {
   return <ExhibitionRecordsPage variant='past' />
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/exhibitions/past', metadata)

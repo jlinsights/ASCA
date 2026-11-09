@@ -3,8 +3,9 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { AboutPage } from '@/components/about/about-layout'
 import { AboutMotion } from '@/components/about/about-motion'
 import { MissionTabs } from './_components/mission-tabs'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/mission' },
   title: '사명 | 동양서예협회',
   description:
@@ -32,3 +33,6 @@ export default function MissionPage() {
     </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/mission', metadata)

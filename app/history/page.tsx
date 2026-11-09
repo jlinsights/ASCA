@@ -5,8 +5,9 @@ import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
 import { HistoryHero } from './_components/history-hero'
 import { HistoryTimeline } from './_components/history-timeline'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/history' },
   title: '연혁 | 동양서예협회',
   description:
@@ -30,3 +31,6 @@ export default function HistoryPage() {
     </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/history', metadata)
