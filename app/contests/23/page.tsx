@@ -5,6 +5,7 @@ import { defaultSEO } from '@/lib/seo-constants'
 import { CONTEST_23, koDate } from '../_components/contest-23-data'
 import { HUB_PATH, HUB_TITLE, buildEventJsonLd } from './_components/daejeon-23-hub-data'
 import { Daejeon23HubView } from './_components/daejeon-23-hub-view'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import '@/components/apply/apply.css'
 import '@/app/events/_components/events.css'
 
@@ -19,7 +20,7 @@ export const revalidate = 3600
 
 const DESCRIPTION = `예술의전당 서울서예박물관 제1·2전시실에서 공모전과 書境 초대작가전을 함께 엽니다. 출품 마감 ${koDate(CONTEST_23.deadline)}, 전시 ${koDate(CONTEST_23.exhibitionStart, false)} ~ ${koDate(CONTEST_23.exhibitionEnd, false)}.`
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: `${HUB_TITLE} | 동양서예협회`,
   description: DESCRIPTION,
   alternates: { canonical: HUB_PATH },
@@ -46,3 +47,6 @@ export default function Daejeon23HubPage() {
     </div>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/contests/23', metadata)

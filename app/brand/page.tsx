@@ -1,9 +1,10 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { BrandGuide } from './_components/brand-guide'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import './brand.css'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/brand' },
   title: '브랜드 · 스타일 가이드 | 동양서예협회',
   description:
@@ -24,3 +25,6 @@ export default function BrandPage() {
     </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/brand', metadata)

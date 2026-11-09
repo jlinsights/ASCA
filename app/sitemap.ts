@@ -5,6 +5,8 @@ import { localPosts } from '@/lib/blog/local-posts'
 import { getSupabaseClient } from '@/lib/supabase'
 import { listPublishedNotices } from '@/lib/notices/notices-data'
 import { listPublishedEvents } from '@/lib/events/events-data'
+import { isLocalizedPath, localizePath, PREFIXED_LANGUAGES } from '@/lib/i18n/locale-routing'
+import { languageAlternates } from '@/lib/seo/localized-metadata'
 
 // 하루 한 번 다시 만든다 — 작가 공개 여부(등급·회비)가 바뀌면 다음 날 반영된다
 export const revalidate = 86400
@@ -98,12 +100,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...REGULATIONS.map(entry => regulationHref(entry.slug)),
   ]
 
-  const staticEntries: MetadataRoute.Sitemap = routes.map(route => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: route === '' ? 'daily' : 'weekly',
-    priority: route === '' ? 1 : 0.8,
-  }))
+  // 번역된 페이지는 언어 주소(/en·/ja·/zh)도 싣고, 네 주소가 서로를 hreflang 으로 가리킨다
+  const staticEntries: MetadataRoute.Sitemap = routes.flatMap(route => {
+    const path = route === '' ? '/' : route
+    const base = {
+      lastModified: new Date(),
+      changeFrequency: route === '' ? ('daily' as const) : ('weekly' as const),
+      priority: route === '' ? 1 : 0.8,
+    }
+    if (!isLocalizedPath(path)) return [{ url: `${baseUrl}${route}`, ...base }]
+    const languages = Object.fromEntries(
+      Object.entries(languageAlternates(path) ?? {}).map(([lang, href]) => [
+        lang,
+        `${baseUrl}${href === '/' ? '' : href}`,
+      ])
+    )
+    const urls = [route, ...PREFIXED_LANGUAGES.map(lang => localizePath(path, lang))]
+    return urls.map(url => ({ url: `${baseUrl}${url}`, ...base, alternates: { languages } }))
+  })
 
   // 옛 Webflow /post/<slug> 글 — 같은 slug 로 /blog/<slug> 에 있다
   const postEntries: MetadataRoute.Sitemap = localPosts.map(post => ({

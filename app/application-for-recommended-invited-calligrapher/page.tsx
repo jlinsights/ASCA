@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { RecommendedView } from './_components/recommended-view'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import '@/components/apply/apply.css'
 
 /**
@@ -12,7 +13,7 @@ import '@/components/apply/apply.css'
 const DESCRIPTION =
   '추천작가·초대작가 승급과 특별선임을 온라인으로 신청하세요. 대한민국 동양서예대전 입상 배점, 점수와 별개로 갖춰야 하는 필수 요건, 자격심사위원회 심사 절차, 비회원 특별선임 비용을 규정 원문과 함께 안내합니다.'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/application-for-recommended-invited-calligrapher' },
   title: '추천·초대작가 신청 | 동양서예협회',
   description: DESCRIPTION,
@@ -27,3 +28,9 @@ export default function RecommendedInvitedCalligrapherPage() {
     </div>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata(
+  '/application-for-recommended-invited-calligrapher',
+  metadata
+)

@@ -6,6 +6,7 @@ import { ImseoCard } from '@/components/community/imseo-card'
 import { CafeEntry } from '@/components/community/cafe-entry'
 import { BoardEntry } from '@/components/community/board-entry'
 import { MembershipBranch } from '@/components/community/membership-branch'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
 /**
  * /community — 동도(同道)들의 자리
@@ -17,7 +18,7 @@ import { MembershipBranch } from '@/components/community/membership-branch'
  * 본 커밋은 D1 골격 + D2 Hero. 나머지 4영역은 D3~D6 후속.
  */
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: '동도들의 자리 | 동양서예협회',
   description:
     '한 획을 함께 긋는 동도(同道)들의 자리. 동양서예협회는 옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어지는 서예 문화를 엽니다.',
@@ -43,3 +44,6 @@ export default function CommunityPage() {
     </div>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/community', metadata)

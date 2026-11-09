@@ -5,8 +5,9 @@ import { AboutMotion } from '@/components/about/about-motion'
 import { AboutNav } from '@/components/about/about-nav'
 import { GreetingsHero } from './_components/greetings-hero'
 import { GreetingsTabs } from './_components/greetings-tabs'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/greetings' },
   title: '인사말씀 | 동양서예협회',
   description:
@@ -36,3 +37,6 @@ export default function GreetingsPage() {
     </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/greetings', metadata)

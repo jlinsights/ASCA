@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { ContestsView } from './_components/contests-view'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import '@/components/apply/apply.css'
 
 /**
@@ -13,7 +14,7 @@ import '@/components/apply/apply.css'
 const DESCRIPTION =
   '제23회 대한민국 동양서예대전 공모요강 — 접수 마감 2027년 1월 31일, 출품 부문·자격·규격·출품료·시상과 역대 대전 기록을 안내합니다.'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/contests' },
   title: '공모전 | 동양서예협회',
   description: DESCRIPTION,
@@ -33,3 +34,6 @@ export default function ContestsPage() {
     </div>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/contests', metadata)

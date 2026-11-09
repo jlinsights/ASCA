@@ -4,6 +4,8 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { RegulationReader } from '@/components/regulations/regulation-reader'
 import { REGULATIONS, findRegulation, regulationHref } from '@/lib/regulations/catalog'
 import { loadRegulation, loadRegulationTranslations } from '@/lib/regulations/load'
+import { localizeMetadata, requestLanguage } from '@/lib/seo/localized-metadata'
+import { regulationPageCopy } from '@/lib/seo/regulation-page-copy'
 import '@/components/home/home.css'
 import '@/components/regulations/regulations.css'
 
@@ -26,12 +28,19 @@ export async function generateMetadata({ params }: RegulationPageProps): Promise
   const description = `사단법인 동양서예협회 ${doc.title}${
     doc.effectiveNote ? ` ${doc.effectiveNote}` : ''
   } — ${doc.articleCount > 0 ? `${doc.articleCount}개 조문 ` : ''}원문`
-  return {
+  const base: Metadata = {
     title: `${doc.title} | 동양서예협회`,
     description,
     alternates: { canonical: regulationHref(slug) },
     openGraph: { title: `${doc.title} | 동양서예협회`, description },
   }
+  const language = await requestLanguage()
+  return localizeMetadata(
+    base,
+    regulationHref(slug),
+    language,
+    language === 'ko' ? undefined : regulationPageCopy(entry.nameKey, language)
+  )
 }
 
 export default async function RegulationPage({ params }: RegulationPageProps) {

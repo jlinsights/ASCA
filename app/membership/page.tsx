@@ -8,9 +8,10 @@ import { MembershipBenefits } from './_components/membership-benefits'
 import { MembershipDues } from './_components/membership-dues'
 import { MembershipLifetime } from './_components/membership-lifetime'
 import { MembershipJoin } from './_components/membership-join'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import './_components/membership.css'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/membership' },
   title: '회원 안내 | 동양서예협회',
   description:
@@ -41,3 +42,6 @@ export default function MembershipPage() {
     </div>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/membership', metadata)

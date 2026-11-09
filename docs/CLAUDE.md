@@ -298,6 +298,14 @@ security:
 - 링크는 `useLocalizedHref()`, 경로 비교는 `useRoutePath()`
   (`lib/i18n/use-locale-path.ts`)를 쓴다. `usePathname()` 을 그대로 비교하면
   `/en/history` 에서 메뉴 활성 표시가 어긋난다.
+- 언어 주소의 `<title>`·description·canonical·hreflang 은
+  `lib/seo/localized-metadata.ts` 가 만든다. 번역된 페이지는 한국어 `metadata`
+  를 내보내지 않고
+  `export const generateMetadata = localizedPageMetadata('<경로>', metadata)` 로
+  넘긴다. 제목·설명 번역은 `lib/seo/localized-page-copy.ts`(규정 상세는
+  `regsName*` 키)에 두며, `LOCALIZED_PATHS` 에 페이지를 넣으면 여기에도 세
+  언어를 채워야 테스트가 통과한다. 사이트맵은 언어 주소와 hreflang 을 함께
+  싣는다.
 - 테스트는 `setTestLanguage(lang)`(`lib/i18n/testing.ts`)로 jsdom 주소를 바꿔
   언어를 고른다.
 - 번역 문구는 **언어별 파일**에 화면 단위로 둔다:

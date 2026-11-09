@@ -3,13 +3,14 @@ import { defaultSEO } from '@/lib/seo-constants'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { SITE_FAQ } from '@/lib/content/site-faq'
 import { FaqView } from './_components/faq-view'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
 /**
  * /faq — 자주 묻는 질문 전체. 문답은 lib/content/site-faq.ts 단일 출처
  * (/contact·/fundraising·출품원서 페이지가 같은 항목을 일부 골라 쓴다).
  */
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: '자주 묻는 질문 | 동양서예협회',
   description:
     '회원 가입·회비, 공모전 출품·심사, 개인전·부스전·도록, 작가 홈페이지, 강좌, 계정·후원을 질문과 답변으로 안내합니다.',
@@ -49,3 +50,6 @@ export default function FaqPage() {
     </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/faq', metadata)
