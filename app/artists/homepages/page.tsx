@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo-constants'
 import { loadFeaturedHomepages } from '../_components/load-featured-homepages'
 import { ArtistHomepagesPage } from './homepages-client'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
 const TITLE = '작가의 홈페이지 | 동양서예협회'
 const DESCRIPTION =
@@ -11,7 +12,7 @@ const DESCRIPTION =
 // 이름·사진·홈페이지가 다음 배포까지 남는다 — /artists 는 searchParams 를 읽어 원래 요청마다 그렸다.
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   alternates: { canonical: '/artists/homepages' },
   title: TITLE,
   description: DESCRIPTION,
@@ -22,3 +23,6 @@ export default async function Page() {
   const artists = await loadFeaturedHomepages()
   return <ArtistHomepagesPage artists={artists} />
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/artists/homepages', metadata)

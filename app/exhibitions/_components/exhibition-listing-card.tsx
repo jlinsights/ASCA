@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight, CalendarDays, MapPin } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
+import { useLocalizedHref } from '@/lib/i18n/use-locale-path'
 import type { ExhibitionListing } from '../_data/exhibition-listings'
 import styles from './exhibition-records.module.css'
 
@@ -15,6 +16,7 @@ export function ExhibitionListingCard({
   featured?: boolean
 }) {
   const { t } = useLanguage()
+  const localHref = useLocalizedHref()
   const title = (
     <>
       {item.title}
@@ -48,7 +50,7 @@ export function ExhibitionListingCard({
           <span>{t(`exStatus${item.status[0]!.toUpperCase()}${item.status.slice(1)}`)}</span>
           {item.paidPromotion && <span className={styles.paid}>{t('exPaidPromotion')}</span>}
         </div>
-        <h3>{item.href ? <Link href={item.href}>{title}</Link> : title}</h3>
+        <h3>{item.href ? <Link href={localHref(item.href)}>{title}</Link> : title}</h3>
         {item.subtitle && <p className={styles.subtitle}>{item.subtitle}</p>}
         <dl className={styles.details}>
           <div>
@@ -75,7 +77,7 @@ export function ExhibitionListingCard({
           )}
         </dl>
         {item.href && (
-          <Link href={item.href} className={styles.textLink}>
+          <Link href={localHref(item.href)} className={styles.textLink}>
             {t('exVisitDetails')}
             <ArrowUpRight aria-hidden='true' />
             <span className='sr-only'> — {item.title}</span>

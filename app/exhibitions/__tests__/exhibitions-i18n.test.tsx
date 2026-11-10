@@ -7,6 +7,7 @@ import PastPage from '../past/page'
 import OnlinePage from '../online/page'
 import ExhibitionsPage from '../page'
 import { ExhibitionCard } from '../_components/exhibition-card'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -33,7 +34,7 @@ function hangulLeft(container: HTMLElement): string[] {
 }
 
 function renderIn(lang: string, ui: React.ReactElement) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(<LanguageProvider>{ui}</LanguageProvider>)
 }
 
@@ -81,7 +82,7 @@ describe('전시 하위 페이지 — 실제 연혁 기록만 보여 준다', ()
     expect(await screen.findByText('No exhibitions are on right now.')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Past exhibitions' })).toHaveAttribute(
       'href',
-      '/exhibitions/past'
+      '/en/exhibitions/past'
     )
   })
 
@@ -143,6 +144,16 @@ describe('전시 페이지 — 번역', () => {
 })
 
 describe('전시 홍보 상담·광고와 전시 탐색', () => {
+  it('외국어 전시 페이지의 사무국 상담 링크는 같은 언어와 문의 정보를 유지한다', async () => {
+    renderIn('ja', <CurrentPage />)
+    const link = await screen.findByRole('link', { name: '事務局に相談する' })
+    const target = new URL(link.getAttribute('href')!, 'https://orientalcalligraphy.org')
+    expect(target.pathname).toBe('/ja/contact')
+    expect(target.hash).toBe('#inquiry')
+    expect(target.searchParams.get('topic')).toBe('exhibition')
+    expect(target.searchParams.get('about')).toBeTruthy()
+  })
+
   it.each([CurrentPage, UpcomingPage, PastPage])(
     '실제 광고와 구분한 목업·광고 영역과 전시비 전용 안내가 있다',
     Page => {

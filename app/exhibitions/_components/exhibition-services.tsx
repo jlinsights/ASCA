@@ -3,10 +3,12 @@
 import Link from 'next/link'
 import { ArrowUpRight, Camera, BookOpen, PanelsTopLeft, Megaphone } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
+import { useLocalizedHref } from '@/lib/i18n/use-locale-path'
 import styles from './exhibition-records.module.css'
 
 export function ExhibitionServices() {
   const { t } = useLanguage()
+  const localHref = useLocalizedHref()
   const services = [
     { id: 'Listing', icon: Megaphone },
     { id: 'Record', icon: Camera },
@@ -14,7 +16,7 @@ export function ExhibitionServices() {
     { id: 'Page', icon: PanelsTopLeft },
   ] as const
   const consultation = (subject: string) =>
-    `/contact?topic=exhibition&about=${encodeURIComponent(subject)}#inquiry`
+    localHref(`/contact?topic=exhibition&about=${encodeURIComponent(subject)}#inquiry`)
   return (
     <section
       id='exhibition-services'

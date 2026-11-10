@@ -280,8 +280,43 @@ security:
 
 - 컴포넌트에서는 `useLanguage()`(`contexts/language-context.tsx`)의 `t(key)`·
   `language` 를 쓴다. 날짜·숫자는 `metadata.locale` 로 포맷한다.
-- 선택한 언어는 `localStorage` 의 `asca-language` 에 저장된다. URL 에 언어가
-  없으므로(로케일 라우팅 없음) 서버 렌더·메타데이터는 한국어다.
+- **언어는 주소가 정한다** (`lib/i18n/locale-routing.ts`). 한국어는 지금 주소
+  그대로(`/history`), 나머지는 접두사(`/en/history`·`/ja/…`·`/zh/…`)다.
+  `proxy.ts` 가 접두사를 떼어 내부 rewrite 하고 요청 헤더 `x-asca-lang` 에
+  언어를 싣는다(들어온 같은 헤더는 늘 지운다). 루트 레이아웃이 그 헤더로
+  `<html lang>` 과 첫 렌더 언어·표를 정하므로 **서버 HTML 이 그 언어다.** 헤더를
+  읽어 모든 페이지가 요청 시점 렌더(ƒ)다 — 페이지를 정적으로 만들려면
+  `app/[lang]/` 구조로 옮겨야 한다.
+- 언어 주소를 여는 페이지는 `LOCALIZED_PATHS` 의 **번역된 페이지뿐**이다. 나머지
+  (약관·블로그 글·작가 상세 등)는 `/en/…` 으로 오면 한국어 주소로 307 한다.
+  번역을 마친 페이지를 이 목록에 넣는다.
+- 고른 언어는 쿠키 `asca-lang` 에 저장된다(proxy 가 읽는다). 쿠키가 en·ja·zh 면
+  번역된 한국어 주소에서 그 언어 주소로 307 한다. 옛 `localStorage`
+  `asca-language` 값은 한 번 쿠키로 옮기고 지운다 — 첫 로드에 서버가 단 쿠키(첫
+  방문 자동 판단 등)보다 이 옛 선택이 앞선다. 자동 판단으로 온 언어 홈만 옛 선택
+  언어로 되돌리고(60초짜리 표시 쿠키 `asca-lang-auto`), 직접 연 언어 주소는
+  주소의 언어가 이긴다(쿠키도 그 언어로 두고 옛 값은 버린다). 언어 주소(/en
+  등)로 들어오면 proxy 가 그 언어를 쿠키로 남긴다 — 본문의 한국어 주소 링크를
+  눌러도 언어를 잃지 않는다.
+- 쿠키가 없는 첫 방문 `/` 는 브라우저 언어 > 접속 국가(`x-vercel-ip-country`)
+  > 영어 순으로 정해 en·ja·zh 면 그 언어 홈으로 307 한다
+  > (`lib/i18n/first-visit-language.ts`). 검색 로봇·링크 미리보기·헤드리스
+  > 브라우저는 늘 한국어 `/` 를 받는다 — 국가별로 홈 언어를 바꾸면 미국에서
+  > 크롤하는 Google 이 홈을 영어로 색인한다. 다른 주소는 첫 방문이라도 보내지
+  > 않는다.
+- 링크는 `useLocalizedHref()`, 경로 비교는 `useRoutePath()`
+  (`lib/i18n/use-locale-path.ts`)를 쓴다. `usePathname()` 을 그대로 비교하면
+  `/en/history` 에서 메뉴 활성 표시가 어긋난다.
+- 언어 주소의 `<title>`·description·canonical·hreflang 은
+  `lib/seo/localized-metadata.ts` 가 만든다. 번역된 페이지는 한국어 `metadata`
+  를 내보내지 않고
+  `export const generateMetadata = localizedPageMetadata('<경로>', metadata)` 로
+  넘긴다. 제목·설명 번역은 `lib/seo/localized-page-copy.ts`(규정 상세는
+  `regsName*` 키)에 두며, `LOCALIZED_PATHS` 에 페이지를 넣으면 여기에도 세
+  언어를 채워야 테스트가 통과한다. 사이트맵은 언어 주소와 hreflang 을 함께
+  싣는다.
+- 테스트는 `setTestLanguage(lang)`(`lib/i18n/testing.ts`)로 jsdom 주소를 바꿔
+  언어를 고른다.
 - 번역 문구는 **언어별 파일**에 화면 단위로 둔다:
   `lib/i18n/locales/<ko|en|ja|zh>/<화면>.ts`(`site-chrome`·`about`·`exhibitions`·
   `home` 등). 클라이언트는 한국어 표만 처음 번들에 싣고, 다른 언어 표는 고를 때

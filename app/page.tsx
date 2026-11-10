@@ -7,12 +7,13 @@ import { HomeHero } from '@/components/home/home-hero'
 import { HomeExhibitions } from '@/components/home/home-exhibitions'
 import { HomeJournal } from '@/components/home/home-journal'
 import { HomeJoin } from '@/components/home/home-join'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import '@/components/home/home.css'
 
 const HOME_DESCRIPTION =
   '사단법인 동양서예협회(ASCA)는 한국·중국·일본을 잇는 동양 서예의 전통을 이어 가는 예술문화단체입니다. 대한민국 동양서예대전 공모와 전시, 추천·초대작가 선정, 서예 강좌를 안내합니다.'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   // 협회명만 두면 대전 이름으로 찾는 사람에게 홈이 걸리지 않는다
   title: '사단법인 동양서예협회 | 대한민국 동양서예대전',
   // 검색 결과 요약에 쓰인다 — 협회가 무엇이고 무엇을 하는지(대전·작가·강좌)를 한 번에 알 수 있게
@@ -48,3 +49,6 @@ export default function Home() {
     </div>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/', metadata)

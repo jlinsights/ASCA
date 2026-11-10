@@ -8,10 +8,11 @@ import {
 import { REGULATIONS, REGULATIONS_BASE_PATH } from '@/lib/regulations/catalog'
 import { latestEffectiveDate } from '@/lib/regulations/effective-date'
 import { loadRegulation } from '@/lib/regulations/load'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 import '@/components/home/home.css'
 import '@/components/regulations/regulations.css'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: '정관 및 규정 | 동양서예협회',
   description:
     '사단법인 동양서예협회의 정관과 회원·회비, 운영·심사, 전시, 추천·초대작가 선임, 작품 감정, 지부·지회, 이의제기 규정과 작가·회원·임원 자격 및 요건을 원문 그대로 조문 단위로 안내합니다.',
@@ -50,3 +51,6 @@ export default function RegulationsPage() {
     </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/regulations', metadata)

@@ -21,6 +21,14 @@ export function getLoadedLocale(language: Language): LocaleTable | undefined {
   return loaded[language]
 }
 
+/**
+ * 서버가 넘긴 표를 받아 둔다. /en·/ja·/zh 주소는 서버가 그 언어로 그리므로, 브라우저도 첫 렌더 전에
+ * 같은 표를 갖고 있어야 hydration 이 어긋나지 않는다(루트 레이아웃 → ClientProviders → LanguageProvider).
+ */
+export function registerLocale(language: Language, table: LocaleTable): void {
+  if (!loaded[language]) loaded[language] = table
+}
+
 /** 표를 받아 두고 돌려준다. 같은 언어는 한 번만 받는다. */
 export async function loadLocale(language: Language): Promise<LocaleTable> {
   const cached = loaded[language]

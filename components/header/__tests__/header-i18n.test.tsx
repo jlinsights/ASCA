@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { LanguageProvider } from '@/contexts/language-context'
 import { Header } from '../header'
 import { HeaderAuthSection } from '../header-auth-section'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('next/navigation', () => ({ usePathname: () => '/' }))
 jest.mock('../header-mobile-auth', () => ({ HeaderMobileAuth: () => null }))
@@ -20,7 +21,7 @@ jest.mock('@/components/auth/session-provider', () => ({
 }))
 
 function renderWithLanguage(lang: string, ui: React.ReactElement) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(<LanguageProvider>{ui}</LanguageProvider>)
 }
 

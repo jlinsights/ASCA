@@ -2,9 +2,10 @@ import { render, screen } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { IntroductionsHero } from '../_components/introductions-hero'
 import { IntroductionsTabs } from '../_components/introductions-tabs'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 function renderPage(lang: string) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <IntroductionsHero />

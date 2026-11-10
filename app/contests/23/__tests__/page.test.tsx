@@ -1,9 +1,10 @@
 import { render, screen, within } from '@testing-library/react'
-import Daejeon23HubPage, { metadata } from '../page'
+import Daejeon23HubPage, { generateMetadata } from '../page'
 import { CONTEST_23, SCHEDULE, koDate } from '../../_components/contest-23-data'
 import { ENTRY_PATHS, HUB_PATH, buildEventJsonLd } from '../_components/daejeon-23-hub-data'
 
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
+jest.mock('next/headers', () => ({ headers: async () => new Headers() }))
 jest.mock('@/contexts/language-context', () => ({
   useLanguage: () => ({ t: (key: string) => key, language: 'ko' }),
 }))
@@ -80,7 +81,8 @@ describe('제23회 대전 허브 — 화면', () => {
 })
 
 describe('제23회 대전 허브 — 메타데이터', () => {
-  it('고유 canonical 과 공유 이미지를 단다', () => {
+  it('고유 canonical 과 공유 이미지를 단다', async () => {
+    const metadata = await generateMetadata()
     expect(metadata.alternates?.canonical).toBe(HUB_PATH)
     expect(JSON.stringify(metadata.openGraph)).toContain('og-default.jpg')
   })

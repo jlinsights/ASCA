@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo-constants'
 import { exhibitionToday } from '../_data/exhibition-listings'
 import { ExhibitionRecordsPage } from '../_components/exhibition-records-page'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
 const DESCRIPTION =
   '온라인으로 열린 동양서예협회 전시의 기록입니다. 웹에서 열린 전시의 기간과 내용을 확인하고 온라인 도록과 작가·전시 홍보를 사무국에 상담할 수 있습니다.'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: '온라인 전시 | 동양서예협회',
   description: DESCRIPTION,
   alternates: { canonical: '/exhibitions/online' },
@@ -21,3 +22,6 @@ export const metadata: Metadata = {
 export default function OnlineExhibitionsPage() {
   return <ExhibitionRecordsPage variant='online' today={exhibitionToday()} />
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/exhibitions/online', metadata)

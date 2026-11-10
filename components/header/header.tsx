@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useLocalizedHref } from '@/lib/i18n/use-locale-path'
 import { Menu, X, ChevronDown } from 'lucide-react'
 
 import { HeaderAuthSection } from './header-auth-section'
@@ -12,11 +13,11 @@ import { LanguageSelector } from '../language-selector'
 import { Logo } from '../brand/logo'
 import { useLanguage } from '@/contexts/language-context'
 import { headerMenu as menuStructure } from '../layout/site-menu'
-import { usePathname } from 'next/navigation'
+import { useRoutePath } from '@/lib/i18n/use-locale-path'
 
 // 메뉴 구조는 components/layout/site-menu.ts 에서 푸터와 함께 관리한다
 export function Header({ transparentOnTop = false }: { transparentOnTop?: boolean }) {
-  const pathname = usePathname()
+  const pathname = useRoutePath()
   const isHome = pathname === '/'
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -24,6 +25,8 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
   const [mobileDropdowns, setMobileDropdowns] = useState<Record<string, boolean>>({})
   const headerRef = useRef<HTMLElement>(null)
   const { t } = useLanguage()
+  // 메뉴는 모든 페이지에 있다 — /en 방문자가 메뉴로 한국어 주소에 떨어지지 않게 그 언어 주소로 단다
+  const localized = useLocalizedHref()
 
   // Handle scroll effect for transparency
   useEffect(() => {
@@ -142,7 +145,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
       >
         <div className='container'>
           <div className='flex items-center justify-between h-14 md:h-16'>
-            <Link href='/' className='flex shrink-0 items-center'>
+            <Link href={localized('/')} className='flex shrink-0 items-center'>
               <Logo width={150} height={50} className='h-10 md:h-12 lg:h-14 w-auto' />
             </Link>
 
@@ -160,7 +163,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                   onMouseLeave={menu.items?.length ? handleMouseLeave : undefined}
                 >
                   <Link
-                    href={menu.href}
+                    href={localized(menu.href)}
                     className="flex items-center gap-1 whitespace-nowrap text-sm font-medium hover:text-celadon-green transition-colors py-4 px-2 relative after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-0 after:h-0.5 after:bg-celadon-green after:transition-all after:duration-300 hover:after:w-full"
                     aria-haspopup={menu.items?.length ? 'menu' : undefined}
                     aria-expanded={menu.items?.length ? activeDropdown === menu.key : undefined}
@@ -260,7 +263,7 @@ export function Header({ transparentOnTop = false }: { transparentOnTop?: boolea
                 <div key={menu.key} className='space-y-1'>
                   <div className='flex items-center justify-between'>
                     <Link
-                      href={menu.href}
+                      href={localized(menu.href)}
                       className='flex-1 text-sm font-medium py-3 px-2 hover:bg-foreground/5 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-green focus:ring-inset'
                       onClick={() => setIsMenuOpen(false)}
                     >

@@ -4,10 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/contexts/language-context'
+import { useLocalizedHref } from '@/lib/i18n/use-locale-path'
 import styles from './exhibition-records.module.css'
 
 export function ExhibitionPromotionPreview({ hasPaidListings }: { hasPaidListings: boolean }) {
   const { t } = useLanguage()
+  const localHref = useLocalizedHref()
   return (
     <section aria-labelledby='ex-preview-title' className={styles.preview}>
       <div className={styles.sectionHeading}>
@@ -39,7 +41,9 @@ export function ExhibitionPromotionPreview({ hasPaidListings }: { hasPaidListing
             <p>{t(`exMock${kind}Type`)}</p>
             <h3>{t(`exMock${kind}Title`)}</h3>
             <Link
-              href={`/contact?topic=exhibition&about=${encodeURIComponent(t(`exMock${kind}Type`))}#inquiry`}
+              href={localHref(
+                `/contact?topic=exhibition&about=${encodeURIComponent(t(`exMock${kind}Type`))}#inquiry`
+              )}
             >
               {t('exMockCta')}
               <ArrowUpRight aria-hidden='true' />
@@ -53,6 +57,7 @@ export function ExhibitionPromotionPreview({ hasPaidListings }: { hasPaidListing
 
 export function IndustryAdvertisement({ compact = false }: { compact?: boolean }) {
   const { t } = useLanguage()
+  const localHref = useLocalizedHref()
   return (
     <section
       aria-label={t('exAdAreaLabel')}
@@ -64,7 +69,11 @@ export function IndustryAdvertisement({ compact = false }: { compact?: boolean }
         <p className={styles.adBody}>{t(compact ? 'exAdCompactBody' : 'exAdBody')}</p>
       </div>
       <div className={styles.adAction}>
-        <Link href={`/contact?topic=other&about=${encodeURIComponent(t('exAdSubject'))}#inquiry`}>
+        <Link
+          href={localHref(
+            `/contact?topic=other&about=${encodeURIComponent(t('exAdSubject'))}#inquiry`
+          )}
+        >
           {t('exAdCta')}
           <ArrowUpRight aria-hidden='true' />
         </Link>

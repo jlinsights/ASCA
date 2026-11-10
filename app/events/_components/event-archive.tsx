@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useLocalizedHref, useRoutePath } from '@/lib/i18n/use-locale-path'
 import { useMemo, useState } from 'react'
 import { useLanguage } from '@/contexts/language-context'
 import { eventTypeText, type EventRow } from './event-rows'
@@ -32,7 +33,9 @@ function matches(row: EventRow, type: string, query: string): boolean {
 
 export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: EventArchiveProps) {
   const router = useRouter()
-  const pathname = usePathname()
+  // 언어 접두사를 지킨 채 쿼리만 바꾼다(/en/notice?… → /en/notice?…)
+  const routePath = useRoutePath()
+  const localized = useLocalizedHref()
   const { t } = useLanguage()
   const [type, setType] = useState(rows.some(row => row.type === initialType) ? initialType : ALL)
   const [query, setQuery] = useState(initialQuery)
@@ -60,7 +63,7 @@ export function EventArchive({ rows, initialType = ALL, initialQuery = '' }: Eve
     if (nextQuery) search.set('q', nextQuery)
     else search.delete('q')
     const qs = search.toString()
-    router.replace(`${pathname}${qs ? `?${qs}` : ''}#archive`, { scroll: false })
+    router.replace(`${localized(routePath)}${qs ? `?${qs}` : ''}#archive`, { scroll: false })
   }
 
   return (

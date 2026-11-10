@@ -7,6 +7,7 @@ import { LayoutFooter } from '@/components/layout/layout-footer'
 import { PageHero, type PageHeroStat } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS, type PageHeroKey } from '@/components/layout/page-hero-marks'
 import { useLanguage } from '@/contexts/language-context'
+import { useLocalizedHref } from '@/lib/i18n/use-locale-path'
 import type { ExhibitionRecords } from '../_data/exhibition-records'
 import {
   exhibitionToday,
@@ -64,6 +65,7 @@ export function ExhibitionRecordsPage({
   today?: string
 }) {
   const { t, language } = useLanguage()
+  const localHref = useLocalizedHref()
   const [query, setQuery] = useState('')
   const [source, setSource] = useState<'all' | ExhibitionSource>('all')
   const [year, setYear] = useState('all')
@@ -121,7 +123,7 @@ export function ExhibitionRecordsPage({
           {(['current', 'upcoming', 'past'] as const).map(tab => (
             <Link
               key={tab}
-              href={`/exhibitions/${tab}`}
+              href={localHref(`/exhibitions/${tab}`)}
               aria-current={variant === tab ? 'page' : undefined}
             >
               {t(`exTab${tab[0]!.toUpperCase()}${tab.slice(1)}`)}
@@ -221,7 +223,7 @@ export function ExhibitionRecordsPage({
                     {t('exResetFilters')}
                   </button>
                 ) : (
-                  <Link href='/exhibitions/past'>
+                  <Link href={localHref('/exhibitions/past')}>
                     {t('exSeePast')}
                     <ArrowRight aria-hidden='true' />
                   </Link>
@@ -234,7 +236,7 @@ export function ExhibitionRecordsPage({
               />
             )}
             <p className={styles.archiveLink}>
-              <Link href='/history'>
+              <Link href={localHref('/history')}>
                 {t('exSeeHistory')}
                 <ArrowUpRight aria-hidden='true' />
               </Link>

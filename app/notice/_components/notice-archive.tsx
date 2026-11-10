@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useLocalizedHref, useRoutePath } from '@/lib/i18n/use-locale-path'
 import { useMemo, useState } from 'react'
 import { useLanguage } from '@/contexts/language-context'
 import {
@@ -38,7 +39,9 @@ const toFilter = (rows: readonly NoticeRow[], value: string | undefined): Catego
 
 export function NoticeArchive({ rows, initialCategory, initialQuery = '' }: NoticeArchiveProps) {
   const router = useRouter()
-  const pathname = usePathname()
+  // 언어 접두사를 지킨 채 쿼리만 바꾼다(/en/notice?… → /en/notice?…)
+  const routePath = useRoutePath()
+  const localized = useLocalizedHref()
   const searchParams = useSearchParams()
   const { language } = useLanguage()
   const copy = NOTICE_COPY[language]
@@ -81,7 +84,7 @@ export function NoticeArchive({ rows, initialCategory, initialQuery = '' }: Noti
     if (nextCategory !== ALL) search.set('category', nextCategory)
     if (nextQuery) search.set('q', nextQuery)
     const qs = search.toString()
-    router.replace(`${pathname}${qs ? `?${qs}` : ''}#archive`, { scroll: false })
+    router.replace(`${localized(routePath)}${qs ? `?${qs}` : ''}#archive`, { scroll: false })
   }
 
   return (

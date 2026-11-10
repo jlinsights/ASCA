@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import fs from 'fs'
 import path from 'path'
 import { render, screen } from '@testing-library/react'
@@ -6,12 +7,13 @@ import { metadata as searchMetadata } from '../search/layout'
 import { metadata as privacyMetadata } from '../privacy-policy/layout'
 import { metadata as copyrightMetadata } from '../copyright-policy/layout'
 import { metadata as emailRefuseMetadata } from '../email-refuse/layout'
-import { metadata as currentMetadata } from '../exhibitions/current/page'
-import { metadata as upcomingMetadata } from '../exhibitions/upcoming/page'
-import { metadata as pastMetadata } from '../exhibitions/past/page'
-import { metadata as onlineMetadata } from '../exhibitions/online/page'
+import { generateMetadata as currentGenerate } from '../exhibitions/current/page'
+import { generateMetadata as upcomingGenerate } from '../exhibitions/upcoming/page'
+import { generateMetadata as pastGenerate } from '../exhibitions/past/page'
+import { generateMetadata as onlineGenerate } from '../exhibitions/online/page'
 import sitemap from '../sitemap'
 
+jest.mock('next/headers', () => ({ headers: async () => new Headers() }))
 jest.mock('@/lib/supabase', () => ({ getSupabaseClient: () => null }))
 jest.mock('@/lib/notices/notices-data', () => ({ listPublishedNotices: async () => [] }))
 jest.mock('@/lib/events/events-data', () => ({ listPublishedEvents: async () => [] }))
@@ -29,6 +31,16 @@ jest.mock('@/components/layout/page-hero', () => ({
 }))
 
 const BASE = 'https://orientalcalligraphy.org'
+
+let currentMetadata: Metadata
+let upcomingMetadata: Metadata
+let pastMetadata: Metadata
+let onlineMetadata: Metadata
+beforeAll(async () => {
+  ;[currentMetadata, upcomingMetadata, pastMetadata, onlineMetadata] = await Promise.all(
+    [currentGenerate, upcomingGenerate, pastGenerate, onlineGenerate].map(load => load())
+  )
+})
 const APP = path.join(__dirname, '..')
 
 describe('SEO 메타데이터 (2026-11-08 점검)', () => {
@@ -44,14 +56,15 @@ describe('SEO 메타데이터 (2026-11-08 점검)', () => {
   })
 
   it.each([
-    ['/privacy-policy', privacyMetadata],
-    ['/copyright-policy', copyrightMetadata],
-    ['/email-refuse', emailRefuseMetadata],
-    ['/exhibitions/current', currentMetadata],
-    ['/exhibitions/upcoming', upcomingMetadata],
-    ['/exhibitions/past', pastMetadata],
-    ['/exhibitions/online', onlineMetadata],
-  ])('%s 는 기본 제목 대신 자기 제목·설명·canonical 을 단다', (route, meta) => {
+    ['/privacy-policy', () => privacyMetadata],
+    ['/copyright-policy', () => copyrightMetadata],
+    ['/email-refuse', () => emailRefuseMetadata],
+    ['/exhibitions/current', () => currentMetadata],
+    ['/exhibitions/upcoming', () => upcomingMetadata],
+    ['/exhibitions/past', () => pastMetadata],
+    ['/exhibitions/online', () => onlineMetadata],
+  ])('%s 는 기본 제목 대신 자기 제목·설명·canonical 을 단다', (route, read) => {
+    const meta = read()
     expect(meta.title).toMatch(/ \| 동양서예협회$/)
     expect(meta.title).not.toBe('ASCA | 사단법인 동양서예협회')
     expect(String(meta.description).length).toBeGreaterThanOrEqual(50)

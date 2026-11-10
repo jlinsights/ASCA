@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useLocalizedHref } from '@/lib/i18n/use-locale-path'
 import type { MenuGroup, MenuLink } from '../layout/site-menu'
 
 interface SubmenuLinksProps {
@@ -12,6 +13,7 @@ interface SubmenuLinksProps {
 
 /** 하위 메뉴 링크 — 바깥 주소는 새 탭으로 연다 */
 function SubmenuLinks({ items, t, className, onSelect }: SubmenuLinksProps) {
+  const localized = useLocalizedHref()
   return (
     <>
       {items.map(item =>
@@ -30,7 +32,7 @@ function SubmenuLinks({ items, t, className, onSelect }: SubmenuLinksProps) {
         ) : (
           <Link
             key={item.href}
-            href={item.href}
+            href={localized(item.href)}
             role='menuitem'
             className={className}
             onClick={onSelect}

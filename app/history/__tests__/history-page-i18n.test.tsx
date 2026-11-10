@@ -2,11 +2,12 @@ import { render, screen } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { HistoryHero } from '../_components/history-hero'
 import { HistoryTimeline } from '../_components/history-timeline'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 const HANGUL = /[가-힣]/
 
 function renderPage(lang: string) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <HistoryHero />

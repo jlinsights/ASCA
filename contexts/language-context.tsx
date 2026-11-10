@@ -3,19 +3,32 @@ import { log } from '@/lib/utils/logger'
 
 import type React from 'react'
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
+import { usePathname } from 'next/navigation'
 import {
   LANGUAGE_METADATA,
   SUPPORTED_LANGUAGES,
   DEFAULT_LANGUAGE,
   LANGUAGE_STORAGE_KEY,
-  detectBrowserLanguage,
   isValidLanguage,
   getLanguageMetadata,
 } from '@/lib/i18n'
+import {
+  AUTO_LOCALE_COOKIE,
+  clientLanguageFor,
+  HTML_LANG,
+  isLocalizedPath,
+  languageFromCookie,
+  localizePath,
+  LOCALE_COOKIE,
+  PREFIXED_LANGUAGES,
+  splitLocale,
+} from '@/lib/i18n/locale-routing'
 import type { Language, LanguageConfig, TranslationNamespaces } from '@/lib/i18n/types'
 // 기본 언어(ko) 표만 번들에 싣는다 — SSR·첫 렌더가 한국어라 키 이름이 새지 않는다.
 // 다른 언어 표는 setLanguage 에서 받아 둔 뒤에 언어를 바꾼다(lib/i18n/locales).
-import { defaultLocaleTable, getLoadedLocale, loadLocale } from '@/lib/i18n/locales'
+import { defaultLocaleTable, getLoadedLocale, loadLocale, registerLocale } from '@/lib/i18n/locales'
+import type { LocaleTable } from '@/lib/i18n/locales'
+import { navigateTo } from '@/lib/i18n/navigate'
 
 // 기존 호환성을 위한 타입
 type LanguageContextType = {
@@ -44,43 +57,82 @@ const defaultValue: LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType>(defaultValue)
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(DEFAULT_LANGUAGE)
+/** 방문자가 고른 언어(쿠키). proxy 도 이 값을 읽어 번역된 한국어 주소에서 그 언어 주소로 보낸다 */
+function readSavedLanguage(): Language | null {
+  const match = /(?:^|;\s*)asca-lang=([^;]*)/.exec(document.cookie)
+  return languageFromCookie(match ? decodeURIComponent(match[1]!) : null)
+}
+
+function saveLanguage(language: Language) {
+  const secure = window.location.protocol === 'https:' ? '; secure' : ''
+  document.cookie = `${LOCALE_COOKIE}=${language}; path=/; max-age=31536000; samesite=lax${secure}`
+}
+
+interface LanguageProviderProps {
+  children: React.ReactNode
+  /** 서버가 주소(/en·/ja·/zh)로 정한 언어. 첫 렌더가 서버 HTML 과 같아야 한다 */
+  initialLanguage?: Language
+  /** 한국어가 아니면 그 언어 표 — 첫 렌더 전에 받아 둔다 */
+  initialTable?: LocaleTable
+}
+
+/**
+ * 언어는 주소가 정한다(lib/i18n/locale-routing.ts). 예전엔 마운트 뒤 localStorage·브라우저 언어로 바꿔
+ * 서버 HTML 이 늘 한국어였다 — 검색엔진은 한국어만 봤다(2026-11-08 SEO 점검).
+ */
+export function LanguageProvider({
+  children,
+  initialLanguage = DEFAULT_LANGUAGE,
+  initialTable,
+}: LanguageProviderProps) {
+  // 렌더 중에(이펙트 전에) 표를 등록해야 첫 렌더의 t() 가 서버와 같은 문구를 낸다
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (initialTable) registerLocale(initialLanguage, initialTable)
+    return initialLanguage
+  })
   const [isLoading, setIsLoading] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const pathname = usePathname()
 
   // 언어 메타데이터 메모화
   const metadata = useMemo(() => getLanguageMetadata(language), [language])
 
-  // 언어 설정 함수 (최적화됨)
+  /** 표를 받은 뒤 화면 언어를 바꾼다(주소는 그대로) — 받기 전에 바꾸면 키 이름이 보인다 */
+  const applyLanguage = useCallback(async (next: Language) => {
+    setIsLoading(true)
+    try {
+      await loadLocale(next)
+      setLanguageState(next)
+      document.documentElement.lang = HTML_LANG[next]
+      document.documentElement.dir = getLanguageMetadata(next).dir
+    } catch (error) {
+      log.error('Failed to change language:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  /**
+   * 언어 선택 — 쿠키에 저장하고 그 언어의 주소로 간다. 서버가 그 언어로 다시 그리도록 전체 이동한다
+   * (루트 레이아웃의 <html lang> 과 첫 렌더 언어는 클라이언트 이동으로는 바뀌지 않는다).
+   * 번역 안 된 페이지는 주소가 한국어뿐이라, 이동 없이 머리말·꼬리말만 바꾼다.
+   */
   const setLanguage = useCallback(
     async (newLanguage: Language) => {
-      if (!isValidLanguage(newLanguage) || newLanguage === language) {
+      if (!isValidLanguage(newLanguage)) return
+      // 지금 보는 언어를 다시 골라도 선택으로 저장한다 — 안 그러면 첫 방문 홈 자동 판단이 그 선택을 무시한다
+      // (영어 브라우저로 /history 에서 한국어를 눌러도 홈이 /en 으로 갔다, Codex 리뷰 #265 P2)
+      saveLanguage(newLanguage)
+      if (newLanguage === language) return
+      const { pathname: current, search, hash } = window.location
+      const target = localizePath(current + search + hash, newLanguage)
+      if (target !== current + search + hash) {
+        navigateTo(target)
         return
       }
-
-      setIsLoading(true)
-
-      try {
-        // 그 언어의 표를 먼저 받아 둔다 — 받기 전에 언어를 바꾸면 키 이름이 보인다
-        await loadLocale(newLanguage)
-
-        // 언어 상태 업데이트
-        setLanguageState(newLanguage)
-
-        // 로컬 스토리지에 저장
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(LANGUAGE_STORAGE_KEY, newLanguage)
-          document.documentElement.lang = newLanguage
-          document.documentElement.dir = metadata.dir
-        }
-      } catch (error) {
-        log.error('Failed to change language:', error)
-      } finally {
-        setIsLoading(false)
-      }
+      await applyLanguage(newLanguage)
     },
-    [language, metadata.dir]
+    [language, applyLanguage]
   )
 
   // 동기 번역 함수. 언어는 표를 받은 뒤에만 바뀌므로 현재 언어의 표는 늘 있다.
@@ -102,24 +154,48 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [language, t]
   )
 
-  // 초기화
   useEffect(() => {
     setIsClient(true)
+  }, [])
 
-    // 클라이언트에서만 localStorage 접근
-    if (typeof window !== 'undefined') {
-      const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) as Language
-      const detectedLanguage = savedLanguage || detectBrowserLanguage()
-
-      if (isValidLanguage(detectedLanguage) && detectedLanguage !== language) {
-        setLanguage(detectedLanguage)
+  // 예전 저장값(localStorage) → 쿠키로 한 번 옮긴다. 영어를 골라 두었던 방문자가 한국어로 떨어지지 않게.
+  // 옛 값은 첫 로드에 지워지므로, 옛 값이 남아 있는데 쿠키가 있다면 그 쿠키는 이번 요청에서 서버가 단 것이다
+  // (첫 방문 자동 판단이나 언어 주소 진입). 방문자가 직접 고른 옛 값이 그보다 앞선다(Codex 리뷰 #265 P2)
+  useEffect(() => {
+    // 자동 판단 표시는 한 번만 본다 — 읽고 바로 지운다
+    const autoRedirected = /(?:^|;\s*)asca-lang-auto=1/.test(document.cookie)
+    if (autoRedirected) document.cookie = `${AUTO_LOCALE_COOKIE}=; path=/; max-age=0`
+    try {
+      const legacy = localStorage.getItem(LANGUAGE_STORAGE_KEY)
+      if (!legacy) return
+      localStorage.removeItem(LANGUAGE_STORAGE_KEY)
+      // 한국어 선택(ko)도 옮긴다 — 영어 브라우저로 /en 에 자동으로 온 한국어 선택자를 한국어 홈으로 돌린다
+      const saved = languageFromCookie(legacy)
+      if (!saved) return
+      const { pathname: current, search, hash } = window.location
+      const split = splitLocale(current)
+      // 직접 연 언어 주소(/en/… — 공유 링크·검색 결과)는 주소의 언어가 이긴다. 쿠키도 그 언어로 둬야
+      // 본문의 한국어 주소 링크를 눌러도 진입 언어가 유지된다(Codex 리뷰 #265 P2). 옛 값은 버린다
+      if (split.prefixed && !autoRedirected) return
+      if (readSavedLanguage() !== saved) saveLanguage(saved)
+      // 한국어 번역 주소, 또는 첫 방문 자동 판단이 보낸 다른 언어의 홈이면 옛 선택 언어로 옮긴다
+      const autoHome = split.prefixed && split.path === '/' && split.language !== saved
+      const koreanPage = !split.prefixed && isLocalizedPath(current) && saved !== 'ko'
+      if (koreanPage || autoHome) {
+        navigateTo(localizePath(split.path + search + hash, saved), { replace: true })
       }
-
-      // HTML 속성 설정
-      document.documentElement.lang = language
-      document.documentElement.dir = metadata.dir
+    } catch {
+      // 저장소를 못 쓰는 브라우저(사생활 보호 모드 등)는 넘어간다
     }
-  }, [language, metadata.dir, setLanguage])
+  }, [])
+
+  // 클라이언트 이동으로 주소가 바뀌면 화면 언어를 주소에 맞춘다. usePathname 은 rewrite 때 내부 주소를
+  // 줄 수 있어(Next 문서 use-pathname "rewrites"), 브라우저의 실제 주소(window.location)로 판단한다
+  useEffect(() => {
+    const next = clientLanguageFor(window.location.pathname, readSavedLanguage())
+    if (next !== language) void applyLanguage(next)
+    // language 가 바뀌어도 다시 돈다 — 그때는 주소·쿠키가 이미 같은 언어라 아무것도 하지 않는다
+  }, [pathname, language, applyLanguage])
 
   const contextValue = useMemo(
     (): LanguageContextType => ({
