@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo-constants'
+import { exhibitionToday } from '../_data/exhibition-listings'
 import { ExhibitionRecordsPage } from '../_components/exhibition-records-page'
 import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
 const DESCRIPTION =
-  '온라인으로 열린 동양서예협회 전시의 기록입니다. 웹에서 열린 전시의 기간과 내용을 협회 연혁 기록에서 모아 보여 줍니다.'
+  '온라인으로 열린 동양서예협회 전시의 기록입니다. 웹에서 열린 전시의 기간과 내용을 확인하고 온라인 도록과 작가·전시 홍보를 사무국에 상담할 수 있습니다.'
 
 const metadata: Metadata = {
   title: '온라인 전시 | 동양서예협회',
@@ -17,9 +18,9 @@ const metadata: Metadata = {
   },
 }
 
-// 협회 연혁 기록(app/history/_data/history-events.ts)에서 만든 목록 — 예시 전시를 쓰지 않는다
+// 서울 기준 날짜를 고정하고 실제 전시와 홍보 목업을 구분한다.
 export default function OnlineExhibitionsPage() {
-  return <ExhibitionRecordsPage variant='online' />
+  return <ExhibitionRecordsPage variant='online' today={exhibitionToday()} />
 }
 
 // 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
