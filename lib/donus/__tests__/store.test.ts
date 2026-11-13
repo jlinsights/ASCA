@@ -133,4 +133,12 @@ describe('createSupabaseLinkStore', () => {
     expect(updates[0].args[0]).toMatchObject({ lifecycle: 3, dues_paid_year: 2026 })
     expect(updates[0].args[0]).not.toHaveProperty('account_id')
   })
+
+  it('touches only synced_at for failed links', async () => {
+    const { admin, calls } = fakeAdmin([])
+    await createSupabaseLinkStore(admin).touchLinks(['a', 'b'])
+    const update = calls.find(c => c.op === 'update')
+    expect(Object.keys(update?.args[0] as object)).toEqual(['synced_at'])
+    expect(calls).toContainEqual({ op: 'in', args: ['account_id', ['a', 'b']] })
+  })
 })

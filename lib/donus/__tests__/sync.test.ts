@@ -21,6 +21,9 @@ type Row = MemberLink & Partial<Omit<MemberStatus, 'account_id'>> & { synced_at?
 function memoryStore(accounts: AccountEmail[], rows: Row[] = []) {
   const table = new Map(rows.map(r => [r.account_id, { ...r }]))
   const calls: string[] = []
+  // 쓸 때마다 늦어지는 시각 — 실제 저장소처럼 갱신한 행이 줄 뒤로 간다
+  let tick = 0
+  const stamp = () => `2099-01-01T00:00:${String(tick++).padStart(2, '0')}Z`
   const store: LinkStore = {
     listAccounts: async () => accounts,
     listLinks: async () =>
@@ -61,7 +64,14 @@ function memoryStore(accounts: AccountEmail[], rows: Row[] = []) {
       calls.push('status')
       for (const { account_id, ...s } of statuses) {
         const row = table.get(account_id)
-        if (row) table.set(account_id, { ...row, ...s })
+        if (row) table.set(account_id, { ...row, ...s, synced_at: stamp() })
+      }
+    },
+    touchLinks: async ids => {
+      calls.push('touch')
+      for (const id of ids) {
+        const row = table.get(id)
+        if (row) table.set(id, { ...row, synced_at: stamp() })
       }
     },
   }
@@ -339,6 +349,44 @@ describe('runDonusSync — review fixes', () => {
     expect(client.member.mock.calls.map(c => c[0])).toEqual([4, 3])
     expect(table.get('acc-4')).toHaveProperty('lifecycle')
     expect(table.get('acc-1')).not.toHaveProperty('lifecycle')
+  })
+
+  it('moves a member that keeps failing to the back so it cannot block the others', async () => {
+    const accounts = [1, 2, 3, 4].map(n => ({ id: `acc-${n}`, email: `m${n}@x.org` }))
+    const rows = [1, 2, 3, 4].map(n => ({
+      account_id: `acc-${n}`,
+      member_idx: n,
+      member_code: `C${n}`,
+      link_source: 'email' as const,
+      synced_at: `2026-03-0${5 - n}T00:00:00Z`, // acc-4 is the stalest
+    }))
+    const { store, table, calls } = memoryStore(accounts, rows)
+    const run = async () => {
+      const { client } = fakeClient({
+        members: [1, 2, 3, 4].map(email),
+        details: { 4: new Error('Donus member timed out') },
+      })
+      let t = 0
+      const report = await runDonusSync({
+        client,
+        store,
+        since,
+        today,
+        duesCodes: noDues,
+        deadline: 6, // 구성원 조회가 1~4, 상태는 두 명만
+        now: () => ++t,
+      })
+      return { report, order: client.member.mock.calls.map(c => c[0]) }
+    }
+    const first = await run()
+    expect(first.order).toEqual([4, 3])
+    expect(first.report.statusFailures).toBe(1)
+    expect(calls).toContain('touch')
+    // 실패한 회원은 상태 칸이 그대로다
+    expect(table.get('acc-4')).not.toHaveProperty('lifecycle')
+    // 다음 실행은 실패한 acc-4 가 아니라 아직 못 한 회원부터
+    const second = await run()
+    expect(second.order).toEqual([2, 1])
   })
 
   it('saves statuses in batches while it goes', async () => {

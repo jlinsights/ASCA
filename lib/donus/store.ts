@@ -86,5 +86,13 @@ export function createSupabaseLinkStore(admin: Admin = donusAdminClient()): Link
         if (error) throw new Error(`update status failed: ${error.message}`)
       }
     },
+
+    async touchLinks(accountIds: string[]) {
+      const { error } = await admin
+        .from('donus_member_links')
+        .update({ synced_at: new Date().toISOString() })
+        .in('account_id', accountIds)
+      if (error) throw new Error(`touch links failed: ${error.message}`)
+    },
   }
 }

@@ -46,6 +46,8 @@ export interface LinkStore {
   removeLinks(accountIds: string[]): Promise<void>
   upsertLinks(links: MemberLink[]): Promise<void>
   updateStatuses(statuses: MemberStatus[]): Promise<void>
+  /** 상태 칸은 두고 synced_at 만 지금으로 — 조회에 실패한 연결을 줄 맨 뒤로 보낸다 */
+  touchLinks(accountIds: string[]): Promise<void>
 }
 
 export interface SyncOptions {
@@ -202,11 +204,18 @@ export async function runDonusSync({
   let statusesUpdated = 0
   let statusFailures = 0
   let statusesDeferred = 0
+  // 매번 실패하는 회원이 맨 앞에서 예산을 다 쓰고 뒤 회원을 계속 막지 않게 한다
+  let failed: string[] = []
   const flush = async () => {
-    if (!batch.length) return
-    await store.updateStatuses(batch)
-    statusesUpdated += batch.length
-    batch = []
+    if (batch.length) {
+      await store.updateStatuses(batch)
+      statusesUpdated += batch.length
+      batch = []
+    }
+    if (failed.length) {
+      await store.touchLinks(failed)
+      failed = []
+    }
   }
   for (const [accountId, memberIdx] of linked) {
     if (now() > deadline) {
@@ -235,8 +244,9 @@ export async function runDonusSync({
       })
     } catch {
       statusFailures++
+      failed.push(accountId)
     }
-    if (batch.length >= STATUS_BATCH) await flush()
+    if (batch.length + failed.length >= STATUS_BATCH) await flush()
   }
   await flush()
 
