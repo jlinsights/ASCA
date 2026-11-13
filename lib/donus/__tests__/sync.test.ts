@@ -2,6 +2,7 @@
 import {
   DonusApiError,
   READ_BUDGET_USED,
+  TIME_BUDGET_USED,
   type DonusMemberDetail,
   type DonusMemberSummary,
   type DonusPayment,
@@ -387,6 +388,28 @@ describe('runDonusSync — review fixes', () => {
     // 다음 실행은 실패한 acc-4 가 아니라 아직 못 한 회원부터
     const second = await run()
     expect(second.order).toEqual([2, 1])
+  })
+
+  it('counts a member stopped by the time budget as deferred, not failed', async () => {
+    const accounts = [1, 2].map(n => ({ id: `acc-${n}`, email: `m${n}@x.org` }))
+    const rows = [1, 2].map(n => ({
+      account_id: `acc-${n}`,
+      member_idx: n,
+      member_code: `C${n}`,
+      link_source: 'email' as const,
+      synced_at: `2026-03-0${3 - n}T00:00:00Z`, // acc-2 is the stalest
+    }))
+    const { store, table, calls } = memoryStore(accounts, rows)
+    const { client } = fakeClient({
+      members: [1, 2].map(email),
+      details: { 2: new DonusApiError(TIME_BUDGET_USED, 0) },
+    })
+    const before = table.get('acc-2')?.synced_at
+    const report = await runDonusSync({ client, store, since, today, duesCodes: noDues })
+    expect(report.statusFailures).toBe(0)
+    expect(report.statusesDeferred).toBe(1)
+    expect(calls).not.toContain('touch')
+    expect(table.get('acc-2')?.synced_at).toBe(before)
   })
 
   it('saves statuses in batches while it goes', async () => {

@@ -13,6 +13,7 @@
 import {
   DonusApiError,
   READ_BUDGET_USED,
+  TIME_BUDGET_USED,
   type DonusClient,
   type DonusMemberSummary,
   type DonusPayment,
@@ -242,9 +243,14 @@ export async function runDonusSync({
         // 연회비 코드가 있어 실제로 거슬러 본 경우에만 확인 완료로 남긴다
         dues_history_checked: historyChecked.has(accountId) || duesCodes.size > 0,
       })
-    } catch {
-      statusFailures++
-      failed.push(accountId)
+    } catch (err) {
+      // 회원을 읽는 도중 예산이 끝났으면 연기로 센다 — 줄 뒤로 보내지 않고 다음 실행에 먼저 한다
+      if (err instanceof DonusApiError && err.message === TIME_BUDGET_USED) {
+        statusesDeferred++
+      } else {
+        statusFailures++
+        failed.push(accountId)
+      }
     }
     if (batch.length + failed.length >= STATUS_BATCH) await flush()
   }
