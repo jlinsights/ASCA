@@ -86,7 +86,8 @@ describe('indexMembersByEmail', () => {
       member(3, 'same@x.org'),
     ])
     expect(index.has('same@x.org')).toBe(false)
-    expect([...ambiguous]).toEqual(['same@x.org'])
+    expect([...ambiguous.keys()]).toEqual(['same@x.org'])
+    expect([...(ambiguous.get('same@x.org') ?? [])]).toEqual([1, 2, 3])
   })
 
   it('treats the same member seen twice as one', () => {
@@ -108,7 +109,13 @@ describe('planLinks', () => {
       []
     )
     expect(plan.upserts).toEqual([link('acc-a', 10)])
-    expect(plan.stats).toEqual({ matched: 1, unmatched: 1, skippedClaimed: 0, keptUnseen: 0 })
+    expect(plan.stats).toEqual({
+      matched: 1,
+      unmatched: 1,
+      skippedClaimed: 0,
+      keptUnseen: 0,
+      keptAmbiguous: 0,
+    })
   })
 
   it('does not rewrite an unchanged link', () => {
@@ -177,6 +184,42 @@ describe('planLinks — members not read this run', () => {
       new Set([10])
     )
     expect(plan.removals).toEqual(['acc-a'])
+  })
+})
+
+describe('planLinks — shared emails', () => {
+  it('keeps an existing link when a second Donus member starts using the same email', () => {
+    const { index, ambiguous } = indexMembersByEmail([member(10, 'a@x.org'), member(30, 'a@x.org')])
+    const plan = planLinks(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      index,
+      [link('acc-a', 10)],
+      new Set([10, 30]),
+      ambiguous
+    )
+    expect(plan.removals).toEqual([])
+    expect(plan.upserts).toEqual([])
+    expect(plan.stats.keptAmbiguous).toBe(1)
+  })
+
+  it('still refuses a new link, and drops a link to a member outside the shared group', () => {
+    const { index, ambiguous } = indexMembersByEmail([member(10, 'a@x.org'), member(30, 'a@x.org')])
+    const fresh = planLinks(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      index,
+      [],
+      new Set([10, 30]),
+      ambiguous
+    )
+    expect(fresh.upserts).toEqual([])
+    const other = planLinks(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      index,
+      [link('acc-a', 20)],
+      new Set([10, 20, 30]),
+      ambiguous
+    )
+    expect(other.removals).toEqual(['acc-a'])
   })
 })
 

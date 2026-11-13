@@ -68,6 +68,7 @@ export interface SyncReport {
   unmatched: number
   skippedClaimed: number
   keptUnseen: number
+  keptAmbiguous: number
   linksUpserted: number
   linksRemoved: number
   manualLinks: number
@@ -159,7 +160,7 @@ export async function runDonusSync({
 
   // 2. 연결 — 지우고 넣는다
   const seen = new Set(members.map(member => member.memberIdx))
-  const plan = planLinks(accounts, index, existing, seen)
+  const plan = planLinks(accounts, index, existing, seen, ambiguous)
   if (plan.removals.length) await store.removeLinks(plan.removals)
   if (plan.upserts.length) await store.upsertLinks(plan.upserts)
 
@@ -231,6 +232,7 @@ export async function runDonusSync({
     unmatched: plan.stats.unmatched,
     skippedClaimed: plan.stats.skippedClaimed,
     keptUnseen: plan.stats.keptUnseen,
+    keptAmbiguous: plan.stats.keptAmbiguous,
     linksUpserted: plan.upserts.length,
     linksRemoved: plan.removals.length,
     manualLinks: plan.kept.length,

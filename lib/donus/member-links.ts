@@ -25,7 +25,13 @@ export interface LinkPlan {
   upserts: MemberLink[]
   removals: string[]
   kept: MemberLink[]
-  stats: { matched: number; unmatched: number; skippedClaimed: number; keptUnseen: number }
+  stats: {
+    matched: number
+    unmatched: number
+    skippedClaimed: number
+    keptUnseen: number
+    keptAmbiguous: number
+  }
 }
 
 /** 도너스 납입의 수입상태 3 = 수입완료 */
@@ -63,20 +69,28 @@ export function createdWindows(since: string, today: string): { start: string; e
   return windows
 }
 
-/** 이메일 → 구성원. 같은 이메일의 서로 다른 구성원은 ambiguous 로 빼고 잇지 않는다 */
+/**
+ * 이메일 → 구성원. 같은 이메일의 서로 다른 구성원은 ambiguous(이메일 → 그 구성원 인덱스들)로
+ * 빼고 새로 잇지 않는다. 이미 그중 한 구성원과 이어져 있던 연결은 planLinks 가 지키도록 넘긴다.
+ */
 export function indexMembersByEmail(members: readonly DonusMemberSummary[]): {
   index: Map<string, DonusMemberSummary>
-  ambiguous: Set<string>
+  ambiguous: Map<string, Set<number>>
 } {
   const index = new Map<string, DonusMemberSummary>()
-  const ambiguous = new Set<string>()
+  const ambiguous = new Map<string, Set<number>>()
   for (const member of members) {
     const email = normalizeEmail(member.email)
-    if (!email || ambiguous.has(email)) continue
+    if (!email) continue
+    const shared = ambiguous.get(email)
+    if (shared) {
+      shared.add(member.memberIdx)
+      continue
+    }
     const seen = index.get(email)
     if (seen && seen.memberIdx !== member.memberIdx) {
       index.delete(email)
-      ambiguous.add(email)
+      ambiguous.set(email, new Set([seen.memberIdx, member.memberIdx]))
     } else if (!seen) {
       index.set(email, member)
     }
@@ -95,14 +109,16 @@ export function planLinks(
   index: ReadonlyMap<string, DonusMemberSummary>,
   existing: readonly MemberLink[],
   /** 이번에 실제로 읽은 구성원 인덱스. 여기 없는 구성원의 연결은 근거가 없으니 지우지 않는다 */
-  seen: ReadonlySet<number>
+  seen: ReadonlySet<number>,
+  /** 여러 구성원이 함께 쓰는 이메일 → 그 구성원들 */
+  ambiguous: ReadonlyMap<string, ReadonlySet<number>> = new Map()
 ): LinkPlan {
   const current = new Map(existing.map(link => [link.account_id, link]))
   const manual = existing.filter(link => link.link_source === 'manual')
   const manualMembers = new Set(manual.map(link => link.member_idx))
   const upserts: MemberLink[] = []
   const removals: string[] = []
-  const stats = { matched: 0, unmatched: 0, skippedClaimed: 0, keptUnseen: 0 }
+  const stats = { matched: 0, unmatched: 0, skippedClaimed: 0, keptUnseen: 0, keptAmbiguous: 0 }
 
   for (const account of accounts) {
     const before = current.get(account.id)
@@ -113,6 +129,11 @@ export function planLinks(
       // 연결된 구성원을 이번에 읽지 못했으면(DONUS_SYNC_SINCE 이전 등록 등) 끊을 근거가 없다
       if (before && !seen.has(before.member_idx)) {
         stats.keptUnseen++
+        continue
+      }
+      // 이메일이 겹치게 됐어도 이어져 있던 구성원이 그중에 있으면 그대로 둔다(새로 잇지는 않는다)
+      if (before && email && ambiguous.get(email)?.has(before.member_idx)) {
+        stats.keptAmbiguous++
         continue
       }
       stats.unmatched++
