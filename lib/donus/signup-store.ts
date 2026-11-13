@@ -101,18 +101,19 @@ export function createSupabaseSignupStore(admin: Admin = donusAdminClient()): Si
 
     async recordFailures(accountIds: string[]) {
       const now = new Date().toISOString()
-      // 실패는 보내지 않은 계정에서만 생긴다 — 결과 칸은 비운 채 시도 시각만 남긴다
-      const { error } = await admin.from('donus_signup_submissions').upsert(
-        accountIds.map(account_id => ({
-          account_id,
-          member_idx: null,
-          is_new: null,
-          submitted_at: null,
-          last_attempt_at: now,
-        })),
-        { onConflict: 'account_id' }
+      // 보냄 기록은 절대 덮지 않는다(실행이 겹쳐도): 새 계정은 실패 행만 넣고(있으면 건너뜀),
+      // 이미 실패 행인 계정만 시도 시각을 고친다
+      const inserted = await admin.from('donus_signup_submissions').upsert(
+        accountIds.map(account_id => ({ account_id, last_attempt_at: now })),
+        { onConflict: 'account_id', ignoreDuplicates: true }
       )
-      if (error) throw new Error(`record failures failed: ${error.message}`)
+      if (inserted.error) throw new Error(`record failures failed: ${inserted.error.message}`)
+      const touched = await admin
+        .from('donus_signup_submissions')
+        .update({ last_attempt_at: now })
+        .in('account_id', accountIds)
+        .is('submitted_at', null)
+      if (touched.error) throw new Error(`record failures failed: ${touched.error.message}`)
     },
   }
 }

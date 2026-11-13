@@ -10,7 +10,7 @@ function fakeAdmin(tables: Record<string, Record<string, unknown>[]>, users: unk
   const from = (table: string) => {
     const chain: Record<string, unknown> = {}
     let range: [number, number] = [0, Infinity]
-    for (const op of ['select', 'order', 'upsert']) {
+    for (const op of ['select', 'order', 'upsert', 'update', 'in', 'is']) {
       chain[op] = (...args: unknown[]) => {
         calls.push({ table, op, args })
         return chain
@@ -118,16 +118,23 @@ describe('createSupabaseSignupStore', () => {
     ])
   })
 
-  it('records a failure with the result columns empty and only the attempt time', async () => {
+  it('records a failure without ever overwriting a submitted row', async () => {
     const { admin, calls } = fakeAdmin({}, [])
     await createSupabaseSignupStore(admin).recordFailures(['u1'])
     const upsert = calls.find(c => c.op === 'upsert')
-    expect(upsert?.args[1]).toEqual({ onConflict: 'account_id' })
-    expect((upsert?.args[0] as Record<string, unknown>[])[0]).toMatchObject({
-      account_id: 'u1',
-      member_idx: null,
-      is_new: null,
-      submitted_at: null,
+    // 새 계정만 실패 행으로 넣는다 — 이미 있는 행(보냄 포함)은 건드리지 않는다
+    expect(upsert?.args[1]).toEqual({ onConflict: 'account_id', ignoreDuplicates: true })
+    expect(Object.keys((upsert?.args[0] as Record<string, unknown>[])[0]).sort()).toEqual([
+      'account_id',
+      'last_attempt_at',
+    ])
+    // 시도 시각은 아직 보내지 못한 행에서만 고친다
+    const update = calls.find(c => c.op === 'update')
+    expect(Object.keys(update?.args[0] as object)).toEqual(['last_attempt_at'])
+    expect(calls).toContainEqual({
+      table: 'donus_signup_submissions',
+      op: 'is',
+      args: ['submitted_at', null],
     })
   })
 })
