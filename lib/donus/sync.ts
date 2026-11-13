@@ -103,13 +103,22 @@ async function readAllMembers(
   readDeadline: number,
   now: () => number
 ) {
+  const overBudget = () =>
+    new Error('Donus member read exceeded its time budget; set a later DONUS_SYNC_SINCE')
   const members: DonusMemberSummary[] = []
   for (const { start, end } of createdWindows(since, today)) {
     // 플랫폼이 함수를 끊기 전에 이유가 보이게 멈춘다(아무것도 쓰지 않은 상태)
-    if (now() > readDeadline)
-      throw new Error('Donus member read exceeded its time budget; set a later DONUS_SYNC_SINCE')
-    members.push(...(await client.membersCreated(start, end)))
+    if (now() > readDeadline) throw overBudget()
+    try {
+      // 한 구간의 페이지 사이에서도 예산을 본다
+      members.push(...(await client.membersCreated(start, end, readDeadline)))
+    } catch (err) {
+      if (now() > readDeadline) throw overBudget()
+      throw err
+    }
   }
+  // 마지막 구간이 예산 안에서 시작해 넘겨 끝났으면 쓰지 않는다
+  if (now() > readDeadline) throw overBudget()
   return members
 }
 

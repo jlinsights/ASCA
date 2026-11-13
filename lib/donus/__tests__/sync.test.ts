@@ -74,7 +74,7 @@ function fakeClient({
   return {
     windows,
     client: {
-      membersCreated: jest.fn(async (start: string, end: string) => {
+      membersCreated: jest.fn(async (start: string, end: string, _stopAt?: number) => {
         calls++
         windows.push(`${start}..${end}`)
         if (window++ === failWindow) throw new Error('Donus down')
@@ -324,8 +324,8 @@ describe('runDonusSync — review fixes', () => {
       since,
       today,
       duesCodes: noDues,
-      // 구성원 조회 3구간이 시계를 1~3 으로 돌린 뒤, 상태는 4·5 에서 두 명만 한다
-      deadline: 5,
+      // 구성원 조회(3구간 + 끝난 뒤 한 번)가 시계를 1~4 로 돌린 뒤, 상태는 5·6 에서 두 명만 한다
+      deadline: 6,
       now,
     })
     expect(report.statusesUpdated).toBe(2)
@@ -529,6 +529,50 @@ describe('runDonusSync — fourth review fixes', () => {
     const later = await run(new Set(['DUES']))
     expect(years(later)).toEqual([2026, 2025])
     expect(table.get('acc-a')?.dues_paid_year).toBe(2020)
+  })
+})
+
+describe('runDonusSync — member read budget', () => {
+  it('does not write when the last window finishes after the read budget', async () => {
+    let t = 0
+    const { client } = fakeClient({
+      members: [{ memberIdx: 1, memberCode: 'C1', email: 'a@x.org' }],
+    })
+    // 각 구간 조회가 시계를 크게 돌린다 — 마지막 구간은 예산 안에서 시작해 넘겨서 끝난다
+    const slow = client.membersCreated.getMockImplementation()!
+    client.membersCreated.mockImplementation(async (...args: Parameters<typeof slow>) => {
+      t += 10
+      return slow(...args)
+    })
+    const { store, calls } = memoryStore([{ id: 'acc-a', email: 'a@x.org' }])
+    await expect(
+      runDonusSync({
+        client,
+        store,
+        since,
+        today,
+        duesCodes: noDues,
+        readDeadline: 25,
+        now: () => t,
+      })
+    ).rejects.toThrow('DONUS_SYNC_SINCE')
+    expect(client.membersCreated).toHaveBeenCalledTimes(3)
+    expect(calls).toEqual([])
+  })
+
+  it('passes the read deadline to each window so pages stop too', async () => {
+    const { client } = fakeClient()
+    const { store } = memoryStore([])
+    await runDonusSync({
+      client,
+      store,
+      since,
+      today,
+      duesCodes: noDues,
+      readDeadline: 12345,
+      now: () => 0,
+    })
+    expect(client.membersCreated.mock.calls.every(c => c[2] === 12345)).toBe(true)
   })
 })
 

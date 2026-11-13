@@ -96,11 +96,16 @@ export function createDonusClient({
   let lastCall = -Infinity
   let calls = 0
 
-  async function get<T>(path: string, params: Record<string, string | number | undefined>) {
+  async function get<T>(
+    path: string,
+    params: Record<string, string | number | undefined>,
+    stopAt = Infinity
+  ) {
     const wait = lastCall + MIN_INTERVAL_MS - now()
     if (wait > 0) await sleep(wait)
     // 호출 간격을 기다린 뒤에 본다 — 기다리는 사이 예산이 끝났으면 새 요청을 보내지 않는다
     if (now() > deadline) throw new DonusApiError('Donus time budget used', 0)
+    if (now() > stopAt) throw new DonusApiError('Donus member read time budget used', 0)
     lastCall = now()
     calls++
 
@@ -135,16 +140,21 @@ export function createDonusClient({
   }
 
   /** 등록일 기준 구성원 목록 한 구간(최장 30일)을 끝까지 넘긴다 */
-  async function membersCreated(startDate: string, endDate: string) {
+  /** stopAt(epoch ms)을 넘기면 다음 페이지를 요청하지 않고 실패한다 */
+  async function membersCreated(startDate: string, endDate: string, stopAt = Infinity) {
     const members: DonusMemberSummary[] = []
     let offset: number | undefined
     for (let page = 0; page < MAX_PAGES; page++) {
-      const body = await get<MemberPage>('/members/v0/members/recent/created', {
-        startDate,
-        endDate,
-        count: PAGE_SIZE,
-        memberIdxOffset: offset,
-      })
+      const body = await get<MemberPage>(
+        '/members/v0/members/recent/created',
+        {
+          startDate,
+          endDate,
+          count: PAGE_SIZE,
+          memberIdxOffset: offset,
+        },
+        stopAt
+      )
       // 200 이라도 모양이 다르면(오류 본문·형식 변경) 빈 구간으로 치지 않고 멈춘다
       if (!Array.isArray(body?.members) || typeof body.hasMore !== 'boolean')
         throw new DonusApiError('Donus member page has an unexpected shape', 0)

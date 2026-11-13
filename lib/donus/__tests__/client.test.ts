@@ -180,6 +180,21 @@ describe('createDonusClient', () => {
     expect(impl).toHaveBeenCalledTimes(1)
   })
 
+  it('stops paging a window once the read deadline passes', async () => {
+    const { impl } = fakeFetch([
+      { members: [{ memberIdx: 1, memberCode: 'A' }], hasMore: true, memberIdxOffset: 1 },
+    ])
+    const c = clock()
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
+        '2026-01-01',
+        '2026-01-30',
+        100
+      )
+    ).rejects.toThrow('read time budget')
+    expect(impl).toHaveBeenCalledTimes(1)
+  })
+
   it('aborts a slow request and reports it without the URL', async () => {
     const slow = jest.fn(
       (_url: URL | RequestInfo, init?: RequestInit) =>
