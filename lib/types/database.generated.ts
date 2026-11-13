@@ -1070,6 +1070,35 @@ export type Database = {
           },
         ]
       }
+      donus_signup_submissions: {
+        Row: {
+          account_id: string
+          is_new: boolean
+          member_idx: number
+          submitted_at: string
+        }
+        Insert: {
+          account_id: string
+          is_new: boolean
+          member_idx: number
+          submitted_at?: string
+        }
+        Update: {
+          account_id?: string
+          is_new?: boolean
+          member_idx?: number
+          submitted_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'donus_signup_submissions_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: true
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       events: {
         Row: {
           contact_email: string | null

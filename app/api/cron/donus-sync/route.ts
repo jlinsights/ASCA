@@ -1,6 +1,6 @@
-import { timingSafeEqual } from 'node:crypto'
 import { NextResponse, type NextRequest } from 'next/server'
 import { createDonusClient } from '@/lib/donus/client'
+import { isCronAuthorized } from '@/lib/donus/cron-auth'
 import { parseCodeList } from '@/lib/donus/member-links'
 import { createSupabaseLinkStore } from '@/lib/donus/store'
 import { DEFAULT_SINCE, kstToday, runDonusSync } from '@/lib/donus/sync'
@@ -18,17 +18,9 @@ const STATUS_BUDGET_MS = 240_000
 /** 구성원 전체 조회는 이 시간까지 — 넘으면 쓰지 않고 실패(DONUS_SYNC_SINCE 를 늦춘다) */
 const MEMBER_READ_BUDGET_MS = 180_000
 
-function authorized(request: NextRequest): boolean {
-  const secret = process.env.CRON_SECRET
-  // 비밀값이 없으면 "Bearer undefined" 가 통과하지 않도록 늘 거절한다
-  if (!secret) return false
-  const given = Buffer.from(request.headers.get('authorization') ?? '')
-  const expected = Buffer.from(`Bearer ${secret}`)
-  return given.length === expected.length && timingSafeEqual(given, expected)
-}
-
 export async function GET(request: NextRequest) {
-  if (!authorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!isCronAuthorized(request.headers.get('authorization')))
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const apiKey = process.env.DONUS_API_KEY?.trim()
   // 키를 받기 전에는 아무것도 하지 않는다(배포돼 있어도 안전)

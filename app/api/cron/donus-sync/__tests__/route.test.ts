@@ -84,7 +84,7 @@ describe('deployment wiring', () => {
 
   it('documents every env var the route reads in .env.example', () => {
     const example = read('.env.example')
-    const route = read('app/api/cron/donus-sync/route.ts')
+    const route = read('app/api/cron/donus-sync/route.ts') + read('lib/donus/cron-auth.ts')
     const used = [...new Set([...route.matchAll(/process\.env\.([A-Z_]+)/g)].map(m => m[1]))]
     expect(used.sort()).toEqual([
       'CRON_SECRET',
