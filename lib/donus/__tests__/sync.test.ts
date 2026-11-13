@@ -19,12 +19,21 @@ function memoryStore(accounts: AccountEmail[], rows: Row[] = []) {
     listAccounts: async () => accounts,
     listLinks: async () =>
       [...table.values()].map(
-        ({ account_id, member_idx, member_code, link_source, dues_paid_year, synced_at }) => ({
+        ({
+          account_id,
+          member_idx,
+          member_code,
+          link_source,
+          dues_paid_year,
+          dues_history_checked,
+          synced_at,
+        }) => ({
           account_id,
           member_idx,
           member_code,
           link_source,
           dues_paid_year: dues_paid_year ?? null,
+          dues_history_checked: dues_history_checked ?? false,
           synced_at: synced_at ?? '2026-01-01T00:00:00Z',
         })
       ),
@@ -419,7 +428,15 @@ describe('runDonusSync — third review fixes', () => {
         { id: 'acc-new', email: 'new@x.org' },
         { id: 'acc-old', email: 'old@x.org' },
       ],
-      [{ account_id: 'acc-old', member_idx: 2, member_code: 'C2', link_source: 'email' }]
+      [
+        {
+          account_id: 'acc-old',
+          member_idx: 2,
+          member_code: 'C2',
+          link_source: 'email',
+          dues_history_checked: true,
+        },
+      ]
     )
     await runDonusSync({ client, store, since: '2015-01-01', today, duesCodes: new Set(['DUES']) })
     expect(table.get('acc-new')?.dues_paid_year).toBe(2021)
@@ -450,6 +467,68 @@ describe('runDonusSync — third review fixes', () => {
       duesCodes: new Set(['DUES']),
     })
     expect(again.client.payments).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('runDonusSync — fourth review fixes', () => {
+  const paid = (payDate: string) => ({
+    paymentIdx: 1,
+    memberIdx: 1,
+    payDate,
+    productCode: 'DUES',
+    incomeStatus: 3,
+  })
+  const years = (client: ReturnType<typeof fakeClient>['client']) =>
+    client.payments.mock.calls.map(c => Number(String(c[1]).slice(0, 4)))
+
+  it('retries the long dues lookup on the next run when it failed the first time', async () => {
+    const first = fakeClient({
+      members: [{ memberIdx: 1, memberCode: 'C1', email: 'a@x.org' }],
+      details: { 1: new Error('detail down') },
+    })
+    const { store, table } = memoryStore([{ id: 'acc-a', email: 'a@x.org' }])
+    await runDonusSync({
+      client: first.client,
+      store,
+      since: '2015-01-01',
+      today,
+      duesCodes: new Set(['DUES']),
+    })
+    expect(table.get('acc-a')?.dues_history_checked).toBeUndefined()
+
+    const second = fakeClient({
+      members: [{ memberIdx: 1, memberCode: 'C1', email: 'a@x.org' }],
+      payments: { 1: [paid('2021-01-20')] },
+    })
+    await runDonusSync({
+      client: second.client,
+      store,
+      since: '2015-01-01',
+      today,
+      duesCodes: new Set(['DUES']),
+    })
+    expect(table.get('acc-a')).toMatchObject({ dues_paid_year: 2021, dues_history_checked: true })
+    expect(years(second.client)).toEqual([2026, 2025, 2024, 2023, 2022, 2021])
+  })
+
+  it('does the long lookup once dues codes are configured, then only two years', async () => {
+    const run = async (codes: Set<string>) => {
+      const c = fakeClient({
+        members: [{ memberIdx: 1, memberCode: 'C1', email: 'a@x.org' }],
+        payments: { 1: [paid('2020-01-20')] },
+      })
+      await runDonusSync({ client: c.client, store, since: '2015-01-01', today, duesCodes: codes })
+      return c.client
+    }
+    const { store, table } = memoryStore([{ id: 'acc-a', email: 'a@x.org' }])
+    await run(new Set())
+    expect(table.get('acc-a')?.dues_history_checked).toBe(false)
+    const withCodes = await run(new Set(['DUES']))
+    expect(years(withCodes)).toHaveLength(7)
+    expect(table.get('acc-a')).toMatchObject({ dues_paid_year: 2020, dues_history_checked: true })
+    const later = await run(new Set(['DUES']))
+    expect(years(later)).toEqual([2026, 2025])
+    expect(table.get('acc-a')?.dues_paid_year).toBe(2020)
   })
 })
 

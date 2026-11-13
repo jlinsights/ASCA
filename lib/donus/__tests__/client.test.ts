@@ -160,6 +160,49 @@ describe('createDonusClient', () => {
     ).rejects.toThrow('unexpected shape')
   })
 
+  it('sends no request after the deadline', async () => {
+    const { impl } = fakeFetch([{ memberIdx: 1, memberCode: 'A' }])
+    const c = clock()
+    const client = createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c, deadline: 100 })
+    await client.member(1)
+    await c.sleep(200)
+    await expect(client.member(1)).rejects.toThrow('time budget')
+    expect(impl).toHaveBeenCalledTimes(1)
+  })
+
+  it('aborts a slow request and reports it without the URL', async () => {
+    const slow = jest.fn(
+      (_url: URL | RequestInfo, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => reject(init.signal?.reason))
+        })
+    ) as unknown as typeof fetch
+    const c = clock()
+    const error = await createDonusClient({
+      apiKey: KEY,
+      fetchImpl: slow,
+      ...c,
+      requestTimeoutMs: 20,
+    })
+      .member(1)
+      .catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(DonusApiError)
+    expect((error as Error).message).toMatch(/timed out/)
+    expect((error as Error).message).not.toContain(KEY)
+  })
+
+  it('wraps a network error without leaking the key', async () => {
+    const broken = jest.fn(async () => {
+      throw new TypeError(`fetch failed for https://cloud.donus.org/?apikey=${KEY}`)
+    }) as unknown as typeof fetch
+    const c = clock()
+    const error = await createDonusClient({ apiKey: KEY, fetchImpl: broken, ...c })
+      .member(1)
+      .catch((e: unknown) => e)
+    expect((error as Error).message).toMatch(/unreachable/)
+    expect((error as Error).message).not.toContain(KEY)
+  })
+
   it('refuses an empty key', () => {
     expect(() => createDonusClient({ apiKey: '  ' })).toThrow('DONUS_API_KEY is empty')
   })

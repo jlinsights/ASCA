@@ -25,9 +25,14 @@ export interface MemberStatus {
   lifecycle: number | null
   last_pay_date: string | null
   dues_paid_year: number | null
+  dues_history_checked: boolean
 }
 
-export type StoredLink = MemberLink & { dues_paid_year: number | null; synced_at: string }
+export type StoredLink = MemberLink & {
+  dues_paid_year: number | null
+  dues_history_checked: boolean
+  synced_at: string
+}
 
 export interface LinkStore {
   listAccounts(): Promise<AccountEmail[]>
@@ -170,8 +175,11 @@ export async function runDonusSync({
     2,
     Math.min(DUES_LOOKBACK_YEARS, Number(today.slice(0, 4)) - Number(since.slice(0, 4)) + 1)
   )
-  // 이전 연회비 값은 같은 구성원에 그대로 연결된 경우에만 이어 쓴다
+  // 이전 연회비 값과 이력 확인 여부는 같은 구성원에 그대로 연결된 경우에만 이어 쓴다
   const previousDues = new Map(kept.map(link => [link.account_id, link.dues_paid_year]))
+  const historyChecked = new Set(
+    kept.filter(link => link.dues_history_checked).map(link => link.account_id)
+  )
 
   let batch: MemberStatus[] = []
   let statusesUpdated = 0
@@ -190,7 +198,9 @@ export async function runDonusSync({
     }
     try {
       const detail = await client.member(memberIdx)
-      const lookback = fresh.has(accountId) ? freshLookback : 2
+      // 이력을 끝까지 본 적 없는 연결은 길게 찾는다 — 실패·연기되면 다음 실행에서 다시
+      const needsHistory = !historyChecked.has(accountId)
+      const lookback = needsHistory ? freshLookback : 2
       const dues = await readDuesYear(client, memberIdx, today, duesCodes, lookback)
       const lifecycle =
         typeof detail.lifecycle === 'number' && LIFECYCLES.has(detail.lifecycle)
@@ -203,6 +213,8 @@ export async function runDonusSync({
         // 연회비 코드를 아직 모르면 이전 값을 지우지 않는다
         // 올해·작년에 납부가 없으면 저장된 마지막 납부 연도를 지우지 않는다(같은 구성원일 때만 이어 쓴다)
         dues_paid_year: latestYear(dues, previousDues.get(accountId) ?? null),
+        // 연회비 코드가 있어 실제로 거슬러 본 경우에만 확인 완료로 남긴다
+        dues_history_checked: historyChecked.has(accountId) || duesCodes.size > 0,
       })
     } catch {
       statusFailures++

@@ -20,6 +20,9 @@ CREATE TABLE public.donus_member_links (
   lifecycle smallint,
   last_pay_date date,
   dues_paid_year integer,
+  -- 연회비 이력을 거슬러 끝까지 확인했는가. false 면 다음 실행이 다시 길게 찾는다
+  -- (새 연결·조회 실패·연기·연회비 코드 미설정 동안 연결된 경우)
+  dues_history_checked boolean NOT NULL DEFAULT false,
   linked_at timestamptz NOT NULL DEFAULT now(),
   synced_at timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT donus_member_links_member_idx UNIQUE (member_idx),

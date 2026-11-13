@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
   const since = process.env.DONUS_SYNC_SINCE?.trim() || DEFAULT_SINCE
   try {
     const report = await runDonusSync({
-      client: createDonusClient({ apiKey }),
+      client: createDonusClient({ apiKey, deadline: started + STATUS_BUDGET_MS }),
       store: createSupabaseLinkStore(),
       since,
       today: kstToday(),

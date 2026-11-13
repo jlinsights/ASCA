@@ -56,10 +56,15 @@ try {
   const { data: created, error } = await service
     .from('donus_member_links')
     .insert(row(a.id, { member_idx: 101 }))
-    .select('link_source,lifecycle,dues_paid_year')
+    .select('link_source,lifecycle,dues_paid_year,dues_history_checked')
     .single()
   assert.equal(error, null, error?.message)
-  assert.deepEqual(created, { link_source: 'email', lifecycle: null, dues_paid_year: null })
+  assert.deepEqual(created, {
+    link_source: 'email',
+    lifecycle: null,
+    dues_paid_year: null,
+    dues_history_checked: false,
+  })
   checks++
 
   // 2. 익명·회원(본인 포함)은 넣지도 읽지도 못한다
@@ -98,6 +103,7 @@ try {
     columns.rows.map(r => r.column_name),
     [
       'account_id',
+      'dues_history_checked',
       'dues_paid_year',
       'last_pay_date',
       'lifecycle',

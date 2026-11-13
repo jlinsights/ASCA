@@ -1026,6 +1026,7 @@ export type Database = {
       donus_member_links: {
         Row: {
           account_id: string
+          dues_history_checked: boolean
           dues_paid_year: number | null
           last_pay_date: string | null
           lifecycle: number | null
@@ -1037,6 +1038,7 @@ export type Database = {
         }
         Insert: {
           account_id: string
+          dues_history_checked?: boolean
           dues_paid_year?: number | null
           last_pay_date?: string | null
           lifecycle?: number | null
@@ -1048,6 +1050,7 @@ export type Database = {
         }
         Update: {
           account_id?: string
+          dues_history_checked?: boolean
           dues_paid_year?: number | null
           last_pay_date?: string | null
           lifecycle?: number | null

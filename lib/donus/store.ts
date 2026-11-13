@@ -43,7 +43,9 @@ export function createSupabaseLinkStore(admin: Admin = donusAdminClient()): Link
       for (let from = 0; ; from += LINK_PAGE) {
         const { data, error } = await admin
           .from('donus_member_links')
-          .select('account_id,member_idx,member_code,link_source,dues_paid_year,synced_at')
+          .select(
+            'account_id,member_idx,member_code,link_source,dues_paid_year,dues_history_checked,synced_at'
+          )
           .order('account_id')
           .range(from, from + LINK_PAGE - 1)
         if (error) throw new Error(`read links failed: ${error.message}`)

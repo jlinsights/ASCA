@@ -69,7 +69,14 @@ export interface DonusClientOptions {
   sleep?: (ms: number) => Promise<void>
   now?: () => number
   baseUrl?: string
+  /** 이 시각(epoch ms)이 지나면 새 요청을 보내지 않는다 — 저장할 시간을 남긴다 */
+  deadline?: number
+  /** 요청 하나의 최대 대기 시간 */
+  requestTimeoutMs?: number
 }
+
+/** 도너스 응답이 늦어도 함수 제한(300초) 안에서 저장할 수 있게 요청마다 끊는다 */
+export const REQUEST_TIMEOUT_MS = 20_000
 
 export type DonusClient = ReturnType<typeof createDonusClient>
 
@@ -82,12 +89,15 @@ export function createDonusClient({
   sleep = ms => new Promise(resolve => setTimeout(resolve, ms)),
   now = () => Date.now(),
   baseUrl = DONUS_BASE_URL,
+  deadline = Infinity,
+  requestTimeoutMs = REQUEST_TIMEOUT_MS,
 }: DonusClientOptions) {
   if (!apiKey.trim()) throw new Error('DONUS_API_KEY is empty')
   let lastCall = -Infinity
   let calls = 0
 
   async function get<T>(path: string, params: Record<string, string | number | undefined>) {
+    if (now() > deadline) throw new DonusApiError('Donus time budget used', 0)
     const wait = lastCall + MIN_INTERVAL_MS - now()
     if (wait > 0) await sleep(wait)
     lastCall = now()
@@ -98,10 +108,20 @@ export function createDonusClient({
     for (const [key, value] of Object.entries(params)) {
       if (value !== undefined) url.searchParams.set(key, String(value))
     }
-    const response = await fetchImpl(url, {
-      headers: { 'Content-Type': 'application/json' },
-      cache: 'no-store',
-    })
+    let response: Response
+    try {
+      response = await fetchImpl(url, {
+        headers: { 'Content-Type': 'application/json' },
+        cache: 'no-store',
+        signal: AbortSignal.timeout(requestTimeoutMs),
+      })
+    } catch (err) {
+      // 네트워크 오류 메시지에 요청 주소(=키)가 실릴 수 있어 이유만 남긴다
+      // 중단 사유는 DOMException 이라 instanceof Error 가 아닐 수 있다 — 이름으로 본다
+      const name = typeof err === 'object' && err !== null && 'name' in err ? String(err.name) : ''
+      const timedOut = name === 'TimeoutError' || name === 'AbortError'
+      throw new DonusApiError(timedOut ? `Donus ${path} timed out` : `Donus ${path} unreachable`, 0)
+    }
     if (!response.ok) {
       const body = (await response.json().catch(() => null)) as { message?: unknown } | null
       const reason = typeof body?.message === 'string' ? body.message.slice(0, 200) : ''
