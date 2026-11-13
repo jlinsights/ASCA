@@ -81,13 +81,23 @@ describe('createSupabaseSignupStore', () => {
   it('treats linked and already-submitted accounts as handled, paging past 1000 rows', async () => {
     const links = Array.from({ length: 1001 }, (_, i) => ({ account_id: `l${i}` }))
     const { admin } = fakeAdmin(
-      { donus_member_links: links, donus_signup_submissions: [{ account_id: 's1' }] },
+      {
+        donus_member_links: links,
+        donus_signup_submissions: [
+          { account_id: 's1', submitted_at: '2026-11-20T00:00:00Z', last_attempt_at: 'x' },
+          { account_id: 'f1', submitted_at: null, last_attempt_at: '2026-11-21T00:00:00Z' },
+        ],
+      },
       []
     )
-    const handled = await createSupabaseSignupStore(admin).listHandledAccountIds()
+    const store = createSupabaseSignupStore(admin)
+    const handled = await store.listHandledAccountIds()
     expect(handled.size).toBe(1002)
     expect(handled.has('l1000')).toBe(true)
     expect(handled.has('s1')).toBe(true)
+    // 실패한 계정은 처리된 것이 아니다 — 다시 보내되 줄 뒤에서
+    expect(handled.has('f1')).toBe(false)
+    expect(await store.listFailedAttempts()).toEqual(new Map([['f1', '2026-11-21T00:00:00Z']]))
   })
 
   it('upserts submission records on account_id without contact details', async () => {
@@ -99,6 +109,25 @@ describe('createSupabaseSignupStore', () => {
     expect(upsert?.table).toBe('donus_signup_submissions')
     expect(upsert?.args[1]).toEqual({ onConflict: 'account_id' })
     const row = (upsert?.args[0] as Record<string, unknown>[])[0]
-    expect(Object.keys(row).sort()).toEqual(['account_id', 'is_new', 'member_idx', 'submitted_at'])
+    expect(Object.keys(row).sort()).toEqual([
+      'account_id',
+      'is_new',
+      'last_attempt_at',
+      'member_idx',
+      'submitted_at',
+    ])
+  })
+
+  it('records a failure with the result columns empty and only the attempt time', async () => {
+    const { admin, calls } = fakeAdmin({}, [])
+    await createSupabaseSignupStore(admin).recordFailures(['u1'])
+    const upsert = calls.find(c => c.op === 'upsert')
+    expect(upsert?.args[1]).toEqual({ onConflict: 'account_id' })
+    expect((upsert?.args[0] as Record<string, unknown>[])[0]).toMatchObject({
+      account_id: 'u1',
+      member_idx: null,
+      is_new: null,
+      submitted_at: null,
+    })
   })
 })

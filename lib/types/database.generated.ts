@@ -1073,21 +1073,24 @@ export type Database = {
       donus_signup_submissions: {
         Row: {
           account_id: string
-          is_new: boolean
-          member_idx: number
-          submitted_at: string
+          is_new: boolean | null
+          last_attempt_at: string
+          member_idx: number | null
+          submitted_at: string | null
         }
         Insert: {
           account_id: string
-          is_new: boolean
-          member_idx: number
-          submitted_at?: string
+          is_new?: boolean | null
+          last_attempt_at?: string
+          member_idx?: number | null
+          submitted_at?: string | null
         }
         Update: {
           account_id?: string
-          is_new?: boolean
-          member_idx?: number
-          submitted_at?: string
+          is_new?: boolean | null
+          last_attempt_at?: string
+          member_idx?: number | null
+          submitted_at?: string | null
         }
         Relationships: [
           {

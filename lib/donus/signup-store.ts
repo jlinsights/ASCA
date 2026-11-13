@@ -9,20 +9,33 @@ type Admin = SupabaseClient<Database>
 const ACCOUNT_PAGE = 1000
 const ROW_PAGE = 1000
 
-async function pagedAccountIds(
-  admin: Admin,
-  table: 'donus_member_links' | 'donus_signup_submissions'
-) {
+async function linkedAccountIds(admin: Admin) {
   const ids: string[] = []
   for (let from = 0; ; from += ROW_PAGE) {
     const { data, error } = await admin
-      .from(table)
+      .from('donus_member_links')
       .select('account_id')
       .order('account_id')
       .range(from, from + ROW_PAGE - 1)
-    if (error) throw new Error(`read ${table} failed: ${error.message}`)
+    if (error) throw new Error(`read donus_member_links failed: ${error.message}`)
     for (const row of data ?? []) ids.push(row.account_id)
     if ((data ?? []).length < ROW_PAGE) return ids
+  }
+}
+
+type Attempt = { account_id: string; submitted_at: string | null; last_attempt_at: string }
+
+async function listAttempts(admin: Admin) {
+  const rows: Attempt[] = []
+  for (let from = 0; ; from += ROW_PAGE) {
+    const { data, error } = await admin
+      .from('donus_signup_submissions')
+      .select('account_id,submitted_at,last_attempt_at')
+      .order('account_id')
+      .range(from, from + ROW_PAGE - 1)
+    if (error) throw new Error(`read donus_signup_submissions failed: ${error.message}`)
+    rows.push(...(data ?? []))
+    if ((data ?? []).length < ROW_PAGE) return rows
   }
 }
 
@@ -63,20 +76,43 @@ export function createSupabaseSignupStore(admin: Admin = donusAdminClient()): Si
     },
 
     async listHandledAccountIds() {
-      const [linked, submitted] = await Promise.all([
-        pagedAccountIds(admin, 'donus_member_links'),
-        pagedAccountIds(admin, 'donus_signup_submissions'),
-      ])
+      const [linked, attempts] = await Promise.all([linkedAccountIds(admin), listAttempts(admin)])
+      const submitted = attempts.filter(row => row.submitted_at !== null).map(row => row.account_id)
       return new Set([...linked, ...submitted])
+    },
+
+    async listFailedAttempts() {
+      const attempts = await listAttempts(admin)
+      return new Map(
+        attempts
+          .filter(row => row.submitted_at === null)
+          .map(row => [row.account_id, row.last_attempt_at])
+      )
     },
 
     async recordSubmissions(rows: SignupSubmission[]) {
       const now = new Date().toISOString()
       const { error } = await admin.from('donus_signup_submissions').upsert(
-        rows.map(row => ({ ...row, submitted_at: now })),
+        rows.map(row => ({ ...row, submitted_at: now, last_attempt_at: now })),
         { onConflict: 'account_id' }
       )
       if (error) throw new Error(`record submissions failed: ${error.message}`)
+    },
+
+    async recordFailures(accountIds: string[]) {
+      const now = new Date().toISOString()
+      // 실패는 보내지 않은 계정에서만 생긴다 — 결과 칸은 비운 채 시도 시각만 남긴다
+      const { error } = await admin.from('donus_signup_submissions').upsert(
+        accountIds.map(account_id => ({
+          account_id,
+          member_idx: null,
+          is_new: null,
+          submitted_at: null,
+          last_attempt_at: now,
+        })),
+        { onConflict: 'account_id' }
+      )
+      if (error) throw new Error(`record failures failed: ${error.message}`)
     },
   }
 }

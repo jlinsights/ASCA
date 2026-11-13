@@ -128,7 +128,12 @@ try {
   )
 
   // 5. 신규 가입 보내기 기록(donus_signup_submissions) — 같은 잠금, 연락처 없음, 계정과 함께 지워진다
-  const sub = { account_id: a.id, member_idx: 501, is_new: true }
+  const sub = {
+    account_id: a.id,
+    member_idx: 501,
+    is_new: true,
+    submitted_at: new Date().toISOString(),
+  }
   const subInsert = await service.from('donus_signup_submissions').insert(sub)
   assert.equal(subInsert.error, null, subInsert.error?.message)
   assert.ok(
@@ -148,13 +153,30 @@ try {
   )
   assert.deepEqual(
     subColumns.rows.map(r => r.column_name),
-    ['account_id', 'is_new', 'member_idx', 'submitted_at']
+    ['account_id', 'is_new', 'last_attempt_at', 'member_idx', 'submitted_at']
   )
-  const badIdx = await service
-    .from('donus_signup_submissions')
-    .insert({ account_id: b.id, member_idx: 0, is_new: true })
+  const badIdx = await service.from('donus_signup_submissions').insert({
+    account_id: b.id,
+    member_idx: 0,
+    is_new: true,
+    submitted_at: new Date().toISOString(),
+  })
   assert.match(badIdx.error?.message ?? '', /donus_signup_submissions_member_idx_positive/)
-  checks += 6
+  // 보낸 결과는 세 칸이 함께 차거나 함께 빈다
+  const halfResult = await service
+    .from('donus_signup_submissions')
+    .insert({ account_id: b.id, member_idx: 7, is_new: true })
+  assert.match(halfResult.error?.message ?? '', /donus_signup_submissions_result/)
+  // 실패 기록은 결과 칸 없이 시도 시각만
+  const failure = await service
+    .from('donus_signup_submissions')
+    .insert({ account_id: b.id })
+    .select('submitted_at,member_idx,is_new,last_attempt_at')
+    .single()
+  assert.equal(failure.error, null, failure.error?.message)
+  assert.equal(failure.data.submitted_at, null)
+  assert.ok(failure.data.last_attempt_at)
+  checks += 8
 
   // 6. 계정이 지워지면 연결·기록도 지워진다
   await service.auth.admin.deleteUser(a.id)

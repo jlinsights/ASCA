@@ -26,7 +26,11 @@ export interface SignupStore {
   listSignupAccounts(): Promise<SignupAccount[]>
   /** 이미 도너스 연결이 있거나 이미 보낸 계정 */
   listHandledAccountIds(): Promise<Set<string>>
+  /** 보내다 실패한 계정 → 마지막 시도 시각(ISO) */
+  listFailedAttempts(): Promise<Map<string, string>>
   recordSubmissions(rows: SignupSubmission[]): Promise<void>
+  /** 실패한 계정의 마지막 시도 시각만 지금으로 — 다음 실행의 줄 뒤로 간다 */
+  recordFailures(accountIds: string[]): Promise<void>
 }
 
 export interface SignupOptions {
@@ -66,11 +70,12 @@ function kstStart(date: string): number {
   return at
 }
 
-/** 보낼 계정과 이름 — 오래된 가입부터 */
+/** 보낼 계정과 이름 — 처음 보내는 계정(오래된 가입부터), 그다음 실패했던 계정(오래전 시도부터) */
 export function planSignups(
   accounts: readonly SignupAccount[],
   handled: ReadonlySet<string>,
-  since: string
+  since: string,
+  failedAt: ReadonlyMap<string, string> = new Map()
 ): {
   send: { accountId: string; member: { name: string; email: string } }[]
   skippedNoName: number
@@ -81,7 +86,14 @@ export function planSignups(
   const eligible = accounts
     .filter(account => !account.disabled && !handled.has(account.id))
     .filter(account => Date.parse(account.createdAt) >= from)
-    .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+    .sort((a, b) => {
+      const fa = failedAt.get(a.id)
+      const fb = failedAt.get(b.id)
+      if (fa === undefined && fb === undefined) return a.createdAt.localeCompare(b.createdAt)
+      if (fa === undefined) return -1
+      if (fb === undefined) return 1
+      return fa.localeCompare(fb) || a.createdAt.localeCompare(b.createdAt)
+    })
   for (const account of eligible) {
     const email = normalizeEmail(account.email)
     if (!email) continue
@@ -104,22 +116,29 @@ export async function runDonusSignups({
   deadline = Infinity,
   now = () => Date.now(),
 }: SignupOptions): Promise<SignupReport> {
-  const [accounts, handled] = await Promise.all([
+  const [accounts, handled, failedAt] = await Promise.all([
     store.listSignupAccounts(),
     store.listHandledAccountIds(),
+    store.listFailedAttempts(),
   ])
-  const { send, skippedNoName } = planSignups(accounts, handled, since)
+  const { send, skippedNoName } = planSignups(accounts, handled, since, failedAt)
 
   let batch: SignupSubmission[] = []
   let submitted = 0
   let newMembers = 0
   let failures = 0
   let deferred = 0
+  let failed: string[] = []
   const flush = async () => {
-    if (!batch.length) return
-    await store.recordSubmissions(batch)
-    submitted += batch.length
-    batch = []
+    if (batch.length) {
+      await store.recordSubmissions(batch)
+      submitted += batch.length
+      batch = []
+    }
+    if (failed.length) {
+      await store.recordFailures(failed)
+      failed = []
+    }
   }
   for (const [i, { accountId, member }] of send.entries()) {
     if (i >= maxPerRun || now() > deadline) {
@@ -131,11 +150,16 @@ export async function runDonusSignups({
       if (result.isNew) newMembers++
       batch.push({ account_id: accountId, member_idx: result.memberIdx, is_new: result.isNew })
     } catch (err) {
-      // 보내는 도중 예산이 끝났으면 연기 — 실패한 건도 기록하지 않으니 다음 실행이 다시 보낸다
-      if (err instanceof DonusApiError && err.message === TIME_BUDGET_USED) deferred++
-      else failures++
+      // 보내는 도중 예산이 끝났으면 연기 — 자리를 지켜 다음 실행이 먼저 보낸다
+      if (err instanceof DonusApiError && err.message === TIME_BUDGET_USED) {
+        deferred++
+      } else {
+        // 실패는 시도 시각만 남겨 줄 뒤로 — 매번 거절되는 계정이 뒤의 가입을 막지 않게
+        failures++
+        failed.push(accountId)
+      }
     }
-    if (batch.length >= RECORD_BATCH) await flush()
+    if (batch.length + failed.length >= RECORD_BATCH) await flush()
   }
   await flush()
 

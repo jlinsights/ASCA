@@ -20,16 +20,26 @@ const account = (n: number, over: Partial<SignupAccount> = {}): SignupAccount =>
 
 function memoryStore(accounts: SignupAccount[], handled: string[] = []) {
   const recorded: SignupSubmission[] = []
+  const failedAt = new Map<string, string>()
   const calls: string[] = []
+  // 쓸 때마다 늦어지는 시각
+  let tick = 0
+  const stamp = () => `2099-01-01T00:00:${String(tick++).padStart(2, '0')}Z`
   const store: SignupStore = {
     listSignupAccounts: async () => accounts,
-    listHandledAccountIds: async () => new Set(handled),
+    listHandledAccountIds: async () => new Set([...handled, ...recorded.map(r => r.account_id)]),
+    listFailedAttempts: async () => new Map(failedAt),
     recordSubmissions: async rows => {
       calls.push('record')
       recorded.push(...rows)
+      for (const row of rows) failedAt.delete(row.account_id)
+    },
+    recordFailures: async ids => {
+      calls.push('fail')
+      for (const id of ids) failedAt.set(id, stamp())
     },
   }
-  return { store, recorded, calls }
+  return { store, recorded, calls, failedAt }
 }
 
 function fakeClient(fail: Record<string, Error> = {}) {
@@ -79,6 +89,19 @@ describe('planSignups', () => {
     expect(skippedNoName).toBe(1)
   })
 
+  it('puts accounts that failed before after first-time ones, oldest attempt first', () => {
+    const { send } = planSignups(
+      [account(1), account(2), account(3), account(4)],
+      new Set(),
+      since,
+      new Map([
+        ['acc-1', '2026-11-20T00:00:02Z'],
+        ['acc-2', '2026-11-20T00:00:01Z'],
+      ])
+    )
+    expect(send.map(s => s.accountId)).toEqual(['acc-3', 'acc-4', 'acc-2', 'acc-1'])
+  })
+
   it('rejects a malformed since date', () => {
     expect(() => planSignups([], new Set(), '2026/11/01')).toThrow('YYYY-MM-DD')
     expect(() => planSignups([], new Set(), '2026-13-45')).toThrow('YYYY-MM-DD')
@@ -97,6 +120,20 @@ describe('runDonusSignups', () => {
     expect(report).toMatchObject({ candidates: 3, submitted: 2, failures: 1, deferred: 0 })
   })
 
+  it('moves a sign-up Donus keeps rejecting to the back so it cannot block later ones', async () => {
+    const reject = { 'm1@x.org': new DonusApiError('Donus form submit failed (400)', 400) }
+    const { store, recorded, failedAt } = memoryStore([account(1), account(2), account(3)])
+    const first = fakeClient(reject)
+    await runDonusSignups({ client: first, store, since, maxPerRun: 1 })
+    expect(first.submitMember.mock.calls.map(c => c[0].email)).toEqual(['m1@x.org'])
+    expect(failedAt.has('acc-1')).toBe(true)
+    // 다음 실행은 거절된 acc-1 이 아니라 아직 안 보낸 가입부터
+    const second = fakeClient(reject)
+    await runDonusSignups({ client: second, store, since, maxPerRun: 1 })
+    expect(second.submitMember.mock.calls.map(c => c[0].email)).toEqual(['m2@x.org'])
+    expect(recorded.map(r => r.account_id)).toEqual(['acc-2'])
+  })
+
   it('counts an existing Donus member separately from a new one', async () => {
     const client = fakeClient()
     const { store } = memoryStore([account(1), account(2, { email: 'old@x.org' })])
@@ -106,10 +143,13 @@ describe('runDonusSignups', () => {
 
   it('defers, not fails, when the time budget stops a send', async () => {
     const client = fakeClient({ 'm1@x.org': new DonusApiError(TIME_BUDGET_USED, 0) })
-    const { store, recorded } = memoryStore([account(1)])
+    const { store, recorded, failedAt, calls } = memoryStore([account(1)])
     const report = await runDonusSignups({ client, store, since })
     expect(report).toMatchObject({ failures: 0, deferred: 1, submitted: 0 })
     expect(recorded).toEqual([])
+    // 연기는 실패로 남기지 않는다 — 자리를 지켜 다음 실행에 먼저 보낸다
+    expect(failedAt.size).toBe(0)
+    expect(calls).not.toContain('fail')
   })
 
   it('stops at the deadline and at the per-run cap', async () => {
@@ -125,7 +165,13 @@ describe('runDonusSignups', () => {
     })
     expect(atDeadline).toMatchObject({ submitted: 2, deferred: 2 })
 
-    const capped = await runDonusSignups({ client: fakeClient(), store, since, maxPerRun: 3 })
+    const fresh = memoryStore([1, 2, 3, 4].map(n => account(n))).store
+    const capped = await runDonusSignups({
+      client: fakeClient(),
+      store: fresh,
+      since,
+      maxPerRun: 3,
+    })
     expect(capped).toMatchObject({ submitted: 3, deferred: 1 })
   })
 
