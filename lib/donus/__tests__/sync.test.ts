@@ -296,7 +296,11 @@ describe('runDonusSync — review fixes', () => {
 
   it('does not carry the old dues year or status to a different member', async () => {
     const { client } = fakeClient({
-      members: [{ memberIdx: 2, memberCode: 'C2', email: 'a@x.org' }],
+      // 옛 구성원 1 도 읽혔고 이메일이 바뀌었다 — 그래서 바꿔 잇는다
+      members: [
+        { memberIdx: 1, memberCode: 'C1', email: 'moved@x.org' },
+        { memberIdx: 2, memberCode: 'C2', email: 'a@x.org' },
+      ],
       details: { 2: new Error('detail down') },
     })
     const { store, table } = memoryStore(

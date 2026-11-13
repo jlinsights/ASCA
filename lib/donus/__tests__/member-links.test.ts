@@ -176,6 +176,19 @@ describe('planLinks — members not read this run', () => {
     expect(plan.stats.keptUnseen).toBe(1)
   })
 
+  it('does not swap an unread member for another member that now shares the email', () => {
+    const plan = planLinks(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      new Map([['a@x.org', member(30, 'a@x.org')]]),
+      [link('acc-a', 10)],
+      new Set([30])
+    )
+    expect(plan.removals).toEqual([])
+    expect(plan.upserts).toEqual([])
+    expect(plan.stats.keptUnseen).toBe(1)
+    expect(plan.stats.matched).toBe(0)
+  })
+
   it('still removes it when the member was read and its email changed', () => {
     const plan = planLinks(
       [{ id: 'acc-a', email: 'a@x.org' }],

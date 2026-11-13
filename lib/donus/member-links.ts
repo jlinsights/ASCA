@@ -140,6 +140,12 @@ export function planLinks(
       if (before) removals.push(account.id)
       continue
     }
+    // 이어져 있던 구성원을 이번에 읽지 못했으면, 다른 구성원과 이메일이 맞아도 바꾸지 않는다 —
+    // 읽지 못한 구성원의 상태·납부 이력을 버리고 남의 상태를 붙이지 않게
+    if (before && before.member_idx !== member.memberIdx && !seen.has(before.member_idx)) {
+      stats.keptUnseen++
+      continue
+    }
     if (manualMembers.has(member.memberIdx)) {
       stats.skippedClaimed++
       if (before) removals.push(account.id)
