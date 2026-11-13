@@ -308,7 +308,8 @@ describe('runDonusSync — review fixes', () => {
       since,
       today,
       duesCodes: noDues,
-      deadline: 2,
+      // 구성원 조회 3구간이 시계를 1~3 으로 돌린 뒤, 상태는 4·5 에서 두 명만 한다
+      deadline: 5,
       now,
     })
     expect(report.statusesUpdated).toBe(2)
@@ -326,6 +327,48 @@ describe('runDonusSync — review fixes', () => {
     const report = await runDonusSync({ client, store, since, today, duesCodes: noDues })
     expect(report.statusesUpdated).toBe(n)
     expect(calls.filter(c => c === 'status')).toHaveLength(2)
+  })
+})
+
+describe('runDonusSync — second review fixes', () => {
+  it('keeps a stored dues year older than last year for the same member', async () => {
+    const { client } = fakeClient({
+      members: [{ memberIdx: 1, memberCode: 'C1', email: 'a@x.org' }],
+    })
+    const { store, table } = memoryStore(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      [
+        {
+          account_id: 'acc-a',
+          member_idx: 1,
+          member_code: 'C1',
+          link_source: 'email',
+          dues_paid_year: 2023,
+        },
+      ]
+    )
+    await runDonusSync({ client, store, since, today, duesCodes: new Set(['DUES']) })
+    expect(table.get('acc-a')?.dues_paid_year).toBe(2023)
+  })
+
+  it('fails without writing when the member read runs past its budget', async () => {
+    const { client } = fakeClient({
+      members: [{ memberIdx: 1, memberCode: 'C1', email: 'a@x.org' }],
+    })
+    const { store, calls } = memoryStore([{ id: 'acc-a', email: 'a@x.org' }])
+    let t = 0
+    await expect(
+      runDonusSync({
+        client,
+        store,
+        since,
+        today,
+        duesCodes: noDues,
+        readDeadline: 1,
+        now: () => ++t,
+      })
+    ).rejects.toThrow('DONUS_SYNC_SINCE')
+    expect(calls).toEqual([])
   })
 })
 

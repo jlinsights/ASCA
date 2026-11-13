@@ -94,8 +94,8 @@ describe('createDonusClient', () => {
     const c = clock()
     const client = createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c })
     await client.member(1)
-    await client.member(2)
-    await client.member(3)
+    await client.member(1)
+    await client.member(1)
     expect(c.waits).toEqual([MIN_INTERVAL_MS, MIN_INTERVAL_MS])
     expect(client.callCount()).toBe(3)
   })
@@ -129,6 +129,35 @@ describe('createDonusClient', () => {
     expect((error as Error).message).toContain('invalid apikey')
     expect((error as Error).message).not.toContain(KEY)
     expect((error as Error).message).not.toContain('cloud.donus.org')
+  })
+
+  it('stops on a 200 response with an unexpected shape instead of treating it as empty', async () => {
+    const c = clock()
+    for (const body of [
+      { status: 'error', message: 'maintenance' },
+      { members: [], hasMore: 'no' },
+      { members: [{ name: 'no index' }], hasMore: false },
+    ]) {
+      const { impl } = fakeFetch([body])
+      await expect(
+        createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
+          '2026-01-01',
+          '2026-01-30'
+        )
+      ).rejects.toThrow('unexpected shape')
+    }
+    const pays = fakeFetch([{ hasMore: false }])
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: pays.impl, ...c }).payments(
+        1,
+        '2026-01-01',
+        '2026-01-30'
+      )
+    ).rejects.toThrow('unexpected shape')
+    const detail = fakeFetch([{ memberIdx: 99, memberCode: 'X' }])
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: detail.impl, ...c }).member(1)
+    ).rejects.toThrow('unexpected shape')
   })
 
   it('refuses an empty key', () => {

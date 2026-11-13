@@ -124,7 +124,13 @@ export function createDonusClient({
         count: PAGE_SIZE,
         memberIdxOffset: offset,
       })
-      members.push(...(body.members ?? []))
+      // 200 이라도 모양이 다르면(오류 본문·형식 변경) 빈 구간으로 치지 않고 멈춘다
+      if (!Array.isArray(body?.members) || typeof body.hasMore !== 'boolean')
+        throw new DonusApiError('Donus member page has an unexpected shape', 0)
+      for (const m of body.members)
+        if (typeof m?.memberIdx !== 'number' || m.memberCode === undefined || m.memberCode === null)
+          throw new DonusApiError('Donus member row has an unexpected shape', 0)
+      members.push(...body.members)
       if (!body.hasMore) return members
       // 더 있다는데 커서가 없거나 그대로면 끝까지 못 읽은 것 — 일부 목록으로 연결을 지우지 않게 실패시킨다
       if (body.memberIdxOffset === undefined || body.memberIdxOffset === offset)
@@ -134,8 +140,14 @@ export function createDonusClient({
     throw new DonusApiError('Donus member paging did not finish', 0)
   }
 
-  function member(memberIdx: number) {
-    return get<DonusMemberDetail>(`/members/v0/member/idx/${encodeURIComponent(memberIdx)}`, {})
+  async function member(memberIdx: number) {
+    const body = await get<DonusMemberDetail>(
+      `/members/v0/member/idx/${encodeURIComponent(memberIdx)}`,
+      {}
+    )
+    if (body?.memberIdx !== memberIdx)
+      throw new DonusApiError('Donus member detail has an unexpected shape', 0)
+    return body
   }
 
   /** 한 구성원의 납입 목록(납입일 기준, 최장 1년) */
@@ -151,7 +163,9 @@ export function createDonusClient({
         count: PAGE_SIZE,
         paymentIdxOffset: offset,
       })
-      result.push(...(body.payments ?? []))
+      if (!Array.isArray(body?.payments) || typeof body.hasMore !== 'boolean')
+        throw new DonusApiError('Donus payment page has an unexpected shape', 0)
+      result.push(...body.payments)
       if (!body.hasMore) return result
       if (body.paymentIdxOffset === undefined || body.paymentIdxOffset === offset)
         throw new DonusApiError('Donus payment paging stalled', 0)

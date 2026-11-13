@@ -47,6 +47,8 @@ export interface SyncOptions {
   duesCodes: ReadonlySet<string>
   /** 이 시각(epoch ms)이 지나면 상태 갱신을 멈추고 남은 회원은 다음 실행으로 넘긴다 */
   deadline?: number
+  /** 도너스 구성원 전체 조회가 이 시각을 넘기면 아무것도 쓰지 않고 실패한다 */
+  readDeadline?: number
   now?: () => number
 }
 
@@ -78,15 +80,27 @@ export function kstToday(now: Date = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(now)
 }
 
+const latestYear = (a: number | null, b: number | null) =>
+  a === null ? b : b === null ? a : Math.max(a, b)
+
 const LIFECYCLES = new Set([0, 1, 2, 3, 4, 5])
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
 
 const dateOrNull = (value: string | null | undefined) =>
   value && ISO_DATE.test(value.slice(0, 10)) ? value.slice(0, 10) : null
 
-async function readAllMembers(client: SyncOptions['client'], since: string, today: string) {
+async function readAllMembers(
+  client: SyncOptions['client'],
+  since: string,
+  today: string,
+  readDeadline: number,
+  now: () => number
+) {
   const members: DonusMemberSummary[] = []
   for (const { start, end } of createdWindows(since, today)) {
+    // 플랫폼이 함수를 끊기 전에 이유가 보이게 멈춘다(아무것도 쓰지 않은 상태)
+    if (now() > readDeadline)
+      throw new Error('Donus member read exceeded its time budget; set a later DONUS_SYNC_SINCE')
     members.push(...(await client.membersCreated(start, end)))
   }
   return members
@@ -115,10 +129,11 @@ export async function runDonusSync({
   today,
   duesCodes,
   deadline = Infinity,
+  readDeadline = Infinity,
   now = () => Date.now(),
 }: SyncOptions): Promise<SyncReport> {
   // 1. 도너스를 끝까지 읽은 뒤에만 쓴다
-  const members = await readAllMembers(client, since, today)
+  const members = await readAllMembers(client, since, today, readDeadline, now)
   const { index, ambiguous } = indexMembersByEmail(members)
   const [accounts, existing] = await Promise.all([store.listAccounts(), store.listLinks()])
 
@@ -165,7 +180,8 @@ export async function runDonusSync({
         lifecycle,
         last_pay_date: dateOrNull(detail.lastPayDate),
         // 연회비 코드를 아직 모르면 이전 값을 지우지 않는다
-        dues_paid_year: duesCodes.size === 0 ? (previousDues.get(accountId) ?? null) : dues,
+        // 올해·작년에 납부가 없으면 저장된 마지막 납부 연도를 지우지 않는다(같은 구성원일 때만 이어 쓴다)
+        dues_paid_year: latestYear(dues, previousDues.get(accountId) ?? null),
       })
     } catch {
       statusFailures++

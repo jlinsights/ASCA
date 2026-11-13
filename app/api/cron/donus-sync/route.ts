@@ -15,6 +15,8 @@ export const dynamic = 'force-dynamic'
 export const maxDuration = 300
 /** 상태 갱신은 이 시간까지만 — 나머지는 다음 날 이어서(maxDuration 안에서 저장할 여유) */
 const STATUS_BUDGET_MS = 240_000
+/** 구성원 전체 조회는 이 시간까지 — 넘으면 쓰지 않고 실패(DONUS_SYNC_SINCE 를 늦춘다) */
+const MEMBER_READ_BUDGET_MS = 180_000
 
 function authorized(request: NextRequest): boolean {
   const secret = process.env.CRON_SECRET
@@ -42,6 +44,7 @@ export async function GET(request: NextRequest) {
       today: kstToday(),
       duesCodes: parseCodeList(process.env.DONUS_DUES_CODES),
       deadline: started + STATUS_BUDGET_MS,
+      readDeadline: started + MEMBER_READ_BUDGET_MS,
     })
     logInfo('[donus-sync] done', { ...report })
     return NextResponse.json({ ok: true, report })
