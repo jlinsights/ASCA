@@ -77,6 +77,8 @@ export interface DonusClientOptions {
 
 /** 도너스 응답이 늦어도 함수 제한(300초) 안에서 저장할 수 있게 요청마다 끊는다 */
 export const REQUEST_TIMEOUT_MS = 20_000
+/** 구성원 조회 예산을 넘겨 페이지 요청을 멈췄을 때의 메시지 — sync 가 이것만 예산 초과로 바꾼다 */
+export const READ_BUDGET_USED = 'Donus member read time budget used'
 
 export type DonusClient = ReturnType<typeof createDonusClient>
 
@@ -105,7 +107,7 @@ export function createDonusClient({
     if (wait > 0) await sleep(wait)
     // 호출 간격을 기다린 뒤에 본다 — 기다리는 사이 예산이 끝났으면 새 요청을 보내지 않는다
     if (now() > deadline) throw new DonusApiError('Donus time budget used', 0)
-    if (now() > stopAt) throw new DonusApiError('Donus member read time budget used', 0)
+    if (now() > stopAt) throw new DonusApiError(READ_BUDGET_USED, 0)
     lastCall = now()
     calls++
 

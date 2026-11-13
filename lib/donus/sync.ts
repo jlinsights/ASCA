@@ -10,7 +10,13 @@
  *    한 사람의 조회가 실패해도 나머지는 계속하고, 그 사람의 기존 값은 그대로 둔다.
  * 결과에는 개수만 싣는다 — 이름·이메일을 로그나 응답에 남기지 않는다.
  */
-import type { DonusClient, DonusMemberSummary, DonusPayment } from './client'
+import {
+  DonusApiError,
+  READ_BUDGET_USED,
+  type DonusClient,
+  type DonusMemberSummary,
+  type DonusPayment,
+} from './client'
 import {
   createdWindows,
   duesPaidYear,
@@ -113,7 +119,8 @@ async function readAllMembers(
       // 한 구간의 페이지 사이에서도 예산을 본다
       members.push(...(await client.membersCreated(start, end, readDeadline)))
     } catch (err) {
-      if (now() > readDeadline) throw overBudget()
+      // 예산 때문에 멈춘 것만 예산 초과로 알린다 — 다른 도너스 오류(시간 초과·500·모양 이상)는 그대로
+      if (err instanceof DonusApiError && err.message === READ_BUDGET_USED) throw overBudget()
       throw err
     }
   }

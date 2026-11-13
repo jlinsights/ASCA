@@ -1,5 +1,11 @@
 /** @jest-environment node */
-import type { DonusMemberDetail, DonusMemberSummary, DonusPayment } from '../client'
+import {
+  DonusApiError,
+  READ_BUDGET_USED,
+  type DonusMemberDetail,
+  type DonusMemberSummary,
+  type DonusPayment,
+} from '../client'
 import type { AccountEmail, MemberLink } from '../member-links'
 import {
   DUES_LOOKBACK_YEARS,
@@ -558,6 +564,36 @@ describe('runDonusSync — member read budget', () => {
     ).rejects.toThrow('DONUS_SYNC_SINCE')
     expect(client.membersCreated).toHaveBeenCalledTimes(3)
     expect(calls).toEqual([])
+  })
+
+  it('keeps the real Donus error when a window fails after the budget', async () => {
+    let t = 0
+    const { client } = fakeClient()
+    client.membersCreated.mockImplementation(async () => {
+      t = 100
+      throw new DonusApiError('Donus /members failed (500) maintenance', 500)
+    })
+    const { store, calls } = memoryStore([])
+    const error = await runDonusSync({
+      client,
+      store,
+      since,
+      today,
+      duesCodes: noDues,
+      readDeadline: 50,
+      now: () => t,
+    }).catch((e: unknown) => e)
+    expect((error as Error).message).toBe('Donus /members failed (500) maintenance')
+    expect(calls).toEqual([])
+  })
+
+  it('turns the client budget stop into the budget message', async () => {
+    const { client } = fakeClient()
+    client.membersCreated.mockRejectedValue(new DonusApiError(READ_BUDGET_USED, 0))
+    const { store } = memoryStore([])
+    await expect(
+      runDonusSync({ client, store, since, today, duesCodes: noDues, now: () => 0 })
+    ).rejects.toThrow('DONUS_SYNC_SINCE')
   })
 
   it('passes the read deadline to each window so pages stop too', async () => {
