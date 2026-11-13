@@ -97,9 +97,10 @@ export function createDonusClient({
   let calls = 0
 
   async function get<T>(path: string, params: Record<string, string | number | undefined>) {
-    if (now() > deadline) throw new DonusApiError('Donus time budget used', 0)
     const wait = lastCall + MIN_INTERVAL_MS - now()
     if (wait > 0) await sleep(wait)
+    // 호출 간격을 기다린 뒤에 본다 — 기다리는 사이 예산이 끝났으면 새 요청을 보내지 않는다
+    if (now() > deadline) throw new DonusApiError('Donus time budget used', 0)
     lastCall = now()
     calls++
 

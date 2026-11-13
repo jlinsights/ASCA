@@ -170,6 +170,16 @@ describe('createDonusClient', () => {
     expect(impl).toHaveBeenCalledTimes(1)
   })
 
+  it('rechecks the deadline after the rate-limit wait', async () => {
+    const { impl } = fakeFetch([{ memberIdx: 1, memberCode: 'A' }])
+    const c = clock()
+    // 첫 요청은 t=0, 다음 요청은 250ms 기다려 t=250 — 마감 100 을 넘기므로 보내지 않는다
+    const client = createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c, deadline: 100 })
+    await client.member(1)
+    await expect(client.member(1)).rejects.toThrow('time budget')
+    expect(impl).toHaveBeenCalledTimes(1)
+  })
+
   it('aborts a slow request and reports it without the URL', async () => {
     const slow = jest.fn(
       (_url: URL | RequestInfo, init?: RequestInit) =>
