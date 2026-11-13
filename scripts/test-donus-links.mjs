@@ -176,26 +176,32 @@ try {
   assert.equal(failure.error, null, failure.error?.message)
   assert.equal(failure.data.submitted_at, null)
   assert.ok(failure.data.last_attempt_at)
-  // 실패 기록 순서(signup-store.recordFailures)는 보냄 행을 덮지 않는다
-  const now = new Date().toISOString()
-  await service
-    .from('donus_signup_submissions')
-    .upsert([{ account_id: a.id, last_attempt_at: now }], {
-      onConflict: 'account_id',
-      ignoreDuplicates: true,
-    })
-  await service
+  // 실패 기록 순서(signup-store.recordFailures)는 보냄 행(a)을 덮지 않고, 실패 행(b)의 시도 시각만 고친다
+  const now = new Date(Date.now() + 60_000).toISOString()
+  const failIds = [a.id, b.id]
+  const failInsert = await service.from('donus_signup_submissions').upsert(
+    failIds.map(account_id => ({ account_id, last_attempt_at: now })),
+    { onConflict: 'account_id', ignoreDuplicates: true }
+  )
+  assert.equal(failInsert.error, null, failInsert.error?.message)
+  const failTouch = await service
     .from('donus_signup_submissions')
     .update({ last_attempt_at: now })
-    .in('account_id', [a.id])
+    .in('account_id', failIds)
     .is('submitted_at', null)
-  const kept = await service
+  assert.equal(failTouch.error, null, failTouch.error?.message)
+  const after = await service
     .from('donus_signup_submissions')
-    .select('member_idx,submitted_at')
-    .eq('account_id', a.id)
-    .single()
-  assert.equal(kept.data.member_idx, 501)
-  assert.ok(kept.data.submitted_at)
+    .select('account_id,member_idx,submitted_at,last_attempt_at')
+    .in('account_id', failIds)
+  assert.equal(after.error, null, after.error?.message)
+  const rowA = after.data.find(r => r.account_id === a.id)
+  const rowB = after.data.find(r => r.account_id === b.id)
+  assert.equal(rowA.member_idx, 501)
+  assert.ok(rowA.submitted_at)
+  assert.notEqual(Date.parse(rowA.last_attempt_at), Date.parse(now))
+  assert.equal(rowB.submitted_at, null)
+  assert.equal(Date.parse(rowB.last_attempt_at), Date.parse(now))
   checks += 9
 
   // 6. 계정이 지워지면 연결·기록도 지워진다
