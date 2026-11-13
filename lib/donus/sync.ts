@@ -62,6 +62,7 @@ export interface SyncReport {
   matched: number
   unmatched: number
   skippedClaimed: number
+  keptUnseen: number
   linksUpserted: number
   linksRemoved: number
   manualLinks: number
@@ -106,20 +107,34 @@ async function readAllMembers(
   return members
 }
 
-/** 올해 납입을 보고, 연회비가 없으면 작년까지 본다(한 번 조회는 최장 1년) */
+/** 새 연결이 거슬러 올라가 보는 최대 연수 */
+export const DUES_LOOKBACK_YEARS = 10
+
+/**
+ * 올해부터 한 해씩 거슬러 연회비 납부를 찾는다(한 번 조회는 최장 1년).
+ * 평소에는 올해·작년 두 해만 보고, 새로 이은 연결은 years 만큼 본다 —
+ * 그래서 연결을 지운 뒤 다시 넣기 전에 실패해도 다음 실행에서 마지막 납부 연도가 되살아난다.
+ */
 async function readDuesYear(
   client: SyncOptions['client'],
   memberIdx: number,
   today: string,
-  duesCodes: ReadonlySet<string>
+  duesCodes: ReadonlySet<string>,
+  years: number
 ) {
   if (duesCodes.size === 0) return null
   const year = Number(today.slice(0, 4))
-  const thisYear: DonusPayment[] = await client.payments(memberIdx, `${year}-01-01`, today)
-  const paid = duesPaidYear(thisYear, duesCodes)
-  if (paid !== null) return paid
-  const lastYear = await client.payments(memberIdx, `${year - 1}-01-01`, `${year - 1}-12-31`)
-  return duesPaidYear(lastYear, duesCodes)
+  for (let back = 0; back < years; back++) {
+    const y = year - back
+    const rows: DonusPayment[] = await client.payments(
+      memberIdx,
+      `${y}-01-01`,
+      back === 0 ? today : `${y}-12-31`
+    )
+    const paid = duesPaidYear(rows, duesCodes)
+    if (paid !== null) return paid
+  }
+  return null
 }
 
 export async function runDonusSync({
@@ -138,7 +153,8 @@ export async function runDonusSync({
   const [accounts, existing] = await Promise.all([store.listAccounts(), store.listLinks()])
 
   // 2. 연결 — 지우고 넣는다
-  const plan = planLinks(accounts, index, existing)
+  const seen = new Set(members.map(member => member.memberIdx))
+  const plan = planLinks(accounts, index, existing, seen)
   if (plan.removals.length) await store.removeLinks(plan.removals)
   if (plan.upserts.length) await store.upsertLinks(plan.upserts)
 
@@ -150,6 +166,10 @@ export async function runDonusSync({
   for (const link of plan.upserts) linked.set(link.account_id, link.member_idx)
   for (const link of [...kept].sort((a, b) => a.synced_at.localeCompare(b.synced_at)))
     if (!fresh.has(link.account_id)) linked.set(link.account_id, link.member_idx)
+  const freshLookback = Math.max(
+    2,
+    Math.min(DUES_LOOKBACK_YEARS, Number(today.slice(0, 4)) - Number(since.slice(0, 4)) + 1)
+  )
   // 이전 연회비 값은 같은 구성원에 그대로 연결된 경우에만 이어 쓴다
   const previousDues = new Map(kept.map(link => [link.account_id, link.dues_paid_year]))
 
@@ -170,7 +190,8 @@ export async function runDonusSync({
     }
     try {
       const detail = await client.member(memberIdx)
-      const dues = await readDuesYear(client, memberIdx, today, duesCodes)
+      const lookback = fresh.has(accountId) ? freshLookback : 2
+      const dues = await readDuesYear(client, memberIdx, today, duesCodes, lookback)
       const lifecycle =
         typeof detail.lifecycle === 'number' && LIFECYCLES.has(detail.lifecycle)
           ? detail.lifecycle
@@ -197,6 +218,7 @@ export async function runDonusSync({
     matched: plan.stats.matched,
     unmatched: plan.stats.unmatched,
     skippedClaimed: plan.stats.skippedClaimed,
+    keptUnseen: plan.stats.keptUnseen,
     linksUpserted: plan.upserts.length,
     linksRemoved: plan.removals.length,
     manualLinks: plan.kept.length,

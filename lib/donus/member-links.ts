@@ -25,7 +25,7 @@ export interface LinkPlan {
   upserts: MemberLink[]
   removals: string[]
   kept: MemberLink[]
-  stats: { matched: number; unmatched: number; skippedClaimed: number }
+  stats: { matched: number; unmatched: number; skippedClaimed: number; keptUnseen: number }
 }
 
 /** 도너스 납입의 수입상태 3 = 수입완료 */
@@ -93,14 +93,16 @@ const sameLink = (a: MemberLink, b: MemberLink) =>
 export function planLinks(
   accounts: readonly AccountEmail[],
   index: ReadonlyMap<string, DonusMemberSummary>,
-  existing: readonly MemberLink[]
+  existing: readonly MemberLink[],
+  /** 이번에 실제로 읽은 구성원 인덱스. 여기 없는 구성원의 연결은 근거가 없으니 지우지 않는다 */
+  seen: ReadonlySet<number>
 ): LinkPlan {
   const current = new Map(existing.map(link => [link.account_id, link]))
   const manual = existing.filter(link => link.link_source === 'manual')
   const manualMembers = new Set(manual.map(link => link.member_idx))
   const upserts: MemberLink[] = []
   const removals: string[] = []
-  const stats = { matched: 0, unmatched: 0, skippedClaimed: 0 }
+  const stats = { matched: 0, unmatched: 0, skippedClaimed: 0, keptUnseen: 0 }
 
   for (const account of accounts) {
     const before = current.get(account.id)
@@ -108,6 +110,11 @@ export function planLinks(
     const email = normalizeEmail(account.email)
     const member = email ? index.get(email) : undefined
     if (!member) {
+      // 연결된 구성원을 이번에 읽지 못했으면(DONUS_SYNC_SINCE 이전 등록 등) 끊을 근거가 없다
+      if (before && !seen.has(before.member_idx)) {
+        stats.keptUnseen++
+        continue
+      }
       stats.unmatched++
       if (before) removals.push(account.id)
       continue

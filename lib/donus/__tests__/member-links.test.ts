@@ -26,6 +26,17 @@ const link = (
   link_source,
 })
 
+/** 별도 지정이 없으면 시험에 나오는 구성원(10·20)을 모두 이번에 읽은 것으로 본다 */
+const planSeen = (
+  ...args:
+    | [...Parameters<typeof planLinks>]
+    | [
+        Parameters<typeof planLinks>[0],
+        Parameters<typeof planLinks>[1],
+        Parameters<typeof planLinks>[2],
+      ]
+) => planLinks(args[0], args[1], args[2], args[3] ?? new Set([10, 20]))
+
 describe('normalizeEmail', () => {
   it('lowercases and trims, and drops blanks or non-emails', () => {
     expect(normalizeEmail('  Kim@Example.ORG ')).toBe('kim@example.org')
@@ -88,7 +99,7 @@ describe('planLinks', () => {
   const index = indexMembersByEmail([member(10, 'a@x.org'), member(20, 'b@x.org')]).index
 
   it('links accounts whose email matches and counts the rest as unmatched', () => {
-    const plan = planLinks(
+    const plan = planSeen(
       [
         { id: 'acc-a', email: 'A@x.org' },
         { id: 'acc-c', email: 'c@x.org' },
@@ -97,22 +108,22 @@ describe('planLinks', () => {
       []
     )
     expect(plan.upserts).toEqual([link('acc-a', 10)])
-    expect(plan.stats).toEqual({ matched: 1, unmatched: 1, skippedClaimed: 0 })
+    expect(plan.stats).toEqual({ matched: 1, unmatched: 1, skippedClaimed: 0, keptUnseen: 0 })
   })
 
   it('does not rewrite an unchanged link', () => {
-    const plan = planLinks([{ id: 'acc-a', email: 'a@x.org' }], index, [link('acc-a', 10)])
+    const plan = planSeen([{ id: 'acc-a', email: 'a@x.org' }], index, [link('acc-a', 10)])
     expect(plan.upserts).toEqual([])
     expect(plan.removals).toEqual([])
   })
 
   it('removes an email link when the email no longer matches', () => {
-    const plan = planLinks([{ id: 'acc-a', email: 'new@x.org' }], index, [link('acc-a', 10)])
+    const plan = planSeen([{ id: 'acc-a', email: 'new@x.org' }], index, [link('acc-a', 10)])
     expect(plan.removals).toEqual(['acc-a'])
   })
 
   it('never touches a manual link, and does not give its member to another account', () => {
-    const plan = planLinks(
+    const plan = planSeen(
       [
         { id: 'acc-m', email: 'other@x.org' },
         { id: 'acc-b', email: 'b@x.org' },
@@ -127,13 +138,13 @@ describe('planLinks', () => {
   })
 
   it('drops email links for accounts that are gone', () => {
-    const plan = planLinks([], index, [link('gone', 10)])
+    const plan = planSeen([], index, [link('gone', 10)])
     expect(plan.removals).toEqual(['gone'])
   })
 
   it('moves a member to the account that now has its email', () => {
     const moved = indexMembersByEmail([member(10, 'b@x.org')]).index
-    const plan = planLinks(
+    const plan = planSeen(
       [
         { id: 'acc-a', email: 'a@x.org' },
         { id: 'acc-b', email: 'b@x.org' },
@@ -146,10 +157,33 @@ describe('planLinks', () => {
   })
 })
 
+describe('planLinks — members not read this run', () => {
+  it('keeps an email link whose member was not read (e.g. registered before DONUS_SYNC_SINCE)', () => {
+    const plan = planLinks(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      new Map(),
+      [link('acc-a', 10)],
+      new Set()
+    )
+    expect(plan.removals).toEqual([])
+    expect(plan.stats.keptUnseen).toBe(1)
+  })
+
+  it('still removes it when the member was read and its email changed', () => {
+    const plan = planLinks(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      new Map(),
+      [link('acc-a', 10)],
+      new Set([10])
+    )
+    expect(plan.removals).toEqual(['acc-a'])
+  })
+})
+
 describe('planLinks — member switch', () => {
   it('releases the old link before linking an account to a different member', () => {
     const swapped = indexMembersByEmail([member(10, 'b@x.org'), member(20, 'a@x.org')]).index
-    const plan = planLinks(
+    const plan = planSeen(
       [
         { id: 'acc-a', email: 'a@x.org' },
         { id: 'acc-b', email: 'b@x.org' },

@@ -1,7 +1,14 @@
 /** @jest-environment node */
 import type { DonusMemberDetail, DonusMemberSummary, DonusPayment } from '../client'
 import type { AccountEmail, MemberLink } from '../member-links'
-import { kstToday, runDonusSync, STATUS_BATCH, type LinkStore, type MemberStatus } from '../sync'
+import {
+  DUES_LOOKBACK_YEARS,
+  kstToday,
+  runDonusSync,
+  STATUS_BATCH,
+  type LinkStore,
+  type MemberStatus,
+} from '../sync'
 
 type Row = MemberLink & Partial<Omit<MemberStatus, 'account_id'>> & { synced_at?: string }
 
@@ -369,6 +376,80 @@ describe('runDonusSync — second review fixes', () => {
       })
     ).rejects.toThrow('DONUS_SYNC_SINCE')
     expect(calls).toEqual([])
+  })
+})
+
+describe('runDonusSync — third review fixes', () => {
+  it('keeps the link of a member registered before the since date', async () => {
+    const { client } = fakeClient({ members: [] })
+    const { store, table } = memoryStore(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      [
+        {
+          account_id: 'acc-a',
+          member_idx: 7,
+          member_code: 'C7',
+          link_source: 'email',
+          dues_paid_year: 2025,
+        },
+      ]
+    )
+    const report = await runDonusSync({ client, store, since, today, duesCodes: noDues })
+    expect(table.get('acc-a')?.member_idx).toBe(7)
+    expect(report).toMatchObject({ keptUnseen: 1, linksRemoved: 0, statusesUpdated: 1 })
+  })
+
+  it('looks back further for a new link, but only two years for an existing one', async () => {
+    const paid = (payDate: string) => ({
+      paymentIdx: 1,
+      memberIdx: 1,
+      payDate,
+      productCode: 'DUES',
+      incomeStatus: 3,
+    })
+    const { client } = fakeClient({
+      members: [
+        { memberIdx: 1, memberCode: 'C1', email: 'new@x.org' },
+        { memberIdx: 2, memberCode: 'C2', email: 'old@x.org' },
+      ],
+      payments: { 1: [paid('2021-01-20')], 2: [paid('2021-01-20')] },
+    })
+    const { store, table } = memoryStore(
+      [
+        { id: 'acc-new', email: 'new@x.org' },
+        { id: 'acc-old', email: 'old@x.org' },
+      ],
+      [{ account_id: 'acc-old', member_idx: 2, member_code: 'C2', link_source: 'email' }]
+    )
+    await runDonusSync({ client, store, since: '2015-01-01', today, duesCodes: new Set(['DUES']) })
+    expect(table.get('acc-new')?.dues_paid_year).toBe(2021)
+    expect(table.get('acc-old')?.dues_paid_year).toBeNull()
+    const years = (idx: number) =>
+      client.payments.mock.calls
+        .filter(c => c[0] === idx)
+        .map(c => Number(String(c[1]).slice(0, 4)))
+    expect(years(1)).toEqual([2026, 2025, 2024, 2023, 2022, 2021])
+    expect(years(2)).toEqual([2026, 2025])
+  })
+
+  it('never looks back more than DUES_LOOKBACK_YEARS or before the since year', async () => {
+    const { client } = fakeClient({
+      members: [{ memberIdx: 1, memberCode: 'C1', email: 'a@x.org' }],
+    })
+    const { store } = memoryStore([{ id: 'acc-a', email: 'a@x.org' }])
+    await runDonusSync({ client, store, since: '2000-01-01', today, duesCodes: new Set(['DUES']) })
+    expect(client.payments).toHaveBeenCalledTimes(DUES_LOOKBACK_YEARS)
+    // 가짜 클라이언트는 첫 구간에만 구성원을 주므로 두 번째 실행은 새로 만든다
+    const again = fakeClient({ members: [{ memberIdx: 1, memberCode: 'C1', email: 'a@x.org' }] })
+    const second = memoryStore([{ id: 'acc-a', email: 'a@x.org' }])
+    await runDonusSync({
+      client: again.client,
+      store: second.store,
+      since: '2025-06-01',
+      today,
+      duesCodes: new Set(['DUES']),
+    })
+    expect(again.client.payments).toHaveBeenCalledTimes(2)
   })
 })
 
