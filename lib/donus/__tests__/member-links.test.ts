@@ -146,6 +146,22 @@ describe('planLinks', () => {
   })
 })
 
+describe('planLinks — member switch', () => {
+  it('releases the old link before linking an account to a different member', () => {
+    const swapped = indexMembersByEmail([member(10, 'b@x.org'), member(20, 'a@x.org')]).index
+    const plan = planLinks(
+      [
+        { id: 'acc-a', email: 'a@x.org' },
+        { id: 'acc-b', email: 'b@x.org' },
+      ],
+      swapped,
+      [link('acc-a', 10), link('acc-b', 20)]
+    )
+    expect(plan.removals.sort()).toEqual(['acc-a', 'acc-b'])
+    expect(plan.upserts).toEqual([link('acc-a', 20), link('acc-b', 10)])
+  })
+})
+
 describe('duesPaidYear', () => {
   const pay = (payDate: string, productCode = 'DUES', incomeStatus = INCOME_COMPLETED) => ({
     paymentIdx: Math.random(),

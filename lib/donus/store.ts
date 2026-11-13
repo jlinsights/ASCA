@@ -2,12 +2,14 @@ import 'server-only'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/types/database.generated'
 import type { AccountEmail, MemberLink } from './member-links'
-import type { LinkStore, MemberStatus } from './sync'
+import type { LinkStore, MemberStatus, StoredLink } from './sync'
 
 type Admin = SupabaseClient<Database>
 
 /** 계정 목록 한 페이지 크기(auth admin API) */
 const ACCOUNT_PAGE = 1000
+/** 연결 목록 한 페이지 크기(PostgREST 기본 응답 한도 이하) */
+const LINK_PAGE = 1000
 
 export function donusAdminClient(): Admin {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -36,14 +38,22 @@ export function createSupabaseLinkStore(admin: Admin = donusAdminClient()): Link
     },
 
     async listLinks() {
-      const { data, error } = await admin
-        .from('donus_member_links')
-        .select('account_id,member_idx,member_code,link_source,dues_paid_year')
-      if (error) throw new Error(`read links failed: ${error.message}`)
-      return (data ?? []).map(row => ({
-        ...row,
-        link_source: row.link_source === 'manual' ? ('manual' as const) : ('email' as const),
-      }))
+      // PostgREST 응답 한도에 잘리지 않게 정렬해서 끝까지 넘긴다 — 빠진 manual 연결이 덮이지 않게
+      const links: StoredLink[] = []
+      for (let from = 0; ; from += LINK_PAGE) {
+        const { data, error } = await admin
+          .from('donus_member_links')
+          .select('account_id,member_idx,member_code,link_source,dues_paid_year,synced_at')
+          .order('account_id')
+          .range(from, from + LINK_PAGE - 1)
+        if (error) throw new Error(`read links failed: ${error.message}`)
+        for (const row of data ?? [])
+          links.push({
+            ...row,
+            link_source: row.link_source === 'manual' ? 'manual' : 'email',
+          })
+        if ((data ?? []).length < LINK_PAGE) return links
+      }
     },
 
     async removeLinks(accountIds: string[]) {

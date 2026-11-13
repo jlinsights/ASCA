@@ -1,9 +1,9 @@
 /** @jest-environment node */
 import type { DonusMemberDetail, DonusMemberSummary, DonusPayment } from '../client'
 import type { AccountEmail, MemberLink } from '../member-links'
-import { kstToday, runDonusSync, type LinkStore, type MemberStatus } from '../sync'
+import { kstToday, runDonusSync, STATUS_BATCH, type LinkStore, type MemberStatus } from '../sync'
 
-type Row = MemberLink & Partial<Omit<MemberStatus, 'account_id'>>
+type Row = MemberLink & Partial<Omit<MemberStatus, 'account_id'>> & { synced_at?: string }
 
 function memoryStore(accounts: AccountEmail[], rows: Row[] = []) {
   const table = new Map(rows.map(r => [r.account_id, { ...r }]))
@@ -12,12 +12,13 @@ function memoryStore(accounts: AccountEmail[], rows: Row[] = []) {
     listAccounts: async () => accounts,
     listLinks: async () =>
       [...table.values()].map(
-        ({ account_id, member_idx, member_code, link_source, dues_paid_year }) => ({
+        ({ account_id, member_idx, member_code, link_source, dues_paid_year, synced_at }) => ({
           account_id,
           member_idx,
           member_code,
           link_source,
           dues_paid_year: dues_paid_year ?? null,
+          synced_at: synced_at ?? '2026-01-01T00:00:00Z',
         })
       ),
     removeLinks: async ids => {
@@ -232,6 +233,99 @@ describe('runDonusSync', () => {
     const { store, table } = memoryStore([{ id: 'acc-a', email: 'a@x.org' }])
     await runDonusSync({ client, store, since, today, duesCodes: noDues })
     expect(table.get('acc-a')).toMatchObject({ lifecycle: null, last_pay_date: null })
+  })
+})
+
+describe('runDonusSync — review fixes', () => {
+  const email = (n: number) => ({ memberIdx: n, memberCode: `C${n}`, email: `m${n}@x.org` })
+
+  it('lets two accounts swap members without a unique-key failure', async () => {
+    const { client } = fakeClient({
+      members: [
+        { memberIdx: 1, memberCode: 'C1', email: 'b@x.org' },
+        { memberIdx: 2, memberCode: 'C2', email: 'a@x.org' },
+      ],
+    })
+    const { store, table } = memoryStore(
+      [
+        { id: 'acc-a', email: 'a@x.org' },
+        { id: 'acc-b', email: 'b@x.org' },
+      ],
+      [
+        { account_id: 'acc-a', member_idx: 1, member_code: 'C1', link_source: 'email' },
+        { account_id: 'acc-b', member_idx: 2, member_code: 'C2', link_source: 'email' },
+      ]
+    )
+    await runDonusSync({ client, store, since, today, duesCodes: noDues })
+    expect(table.get('acc-a')?.member_idx).toBe(2)
+    expect(table.get('acc-b')?.member_idx).toBe(1)
+  })
+
+  it('does not carry the old dues year or status to a different member', async () => {
+    const { client } = fakeClient({
+      members: [{ memberIdx: 2, memberCode: 'C2', email: 'a@x.org' }],
+      details: { 2: new Error('detail down') },
+    })
+    const { store, table } = memoryStore(
+      [{ id: 'acc-a', email: 'a@x.org' }],
+      [
+        {
+          account_id: 'acc-a',
+          member_idx: 1,
+          member_code: 'C1',
+          link_source: 'email',
+          dues_paid_year: 2025,
+          lifecycle: 3,
+        },
+      ]
+    )
+    await runDonusSync({ client, store, since, today, duesCodes: noDues })
+    const row = table.get('acc-a')
+    expect(row?.member_idx).toBe(2)
+    expect(row?.dues_paid_year).toBeUndefined()
+    expect(row?.lifecycle).toBeUndefined()
+  })
+
+  it('stops at the deadline, saves what it read, and starts with the stalest next time', async () => {
+    const accounts = [1, 2, 3, 4].map(n => ({ id: `acc-${n}`, email: `m${n}@x.org` }))
+    const rows = [1, 2, 3, 4].map(n => ({
+      account_id: `acc-${n}`,
+      member_idx: n,
+      member_code: `C${n}`,
+      link_source: 'email' as const,
+      synced_at: `2026-03-0${5 - n}T00:00:00Z`, // acc-4 is the stalest
+    }))
+    const { client } = fakeClient({ members: [1, 2, 3, 4].map(email) })
+    const { store, table } = memoryStore(accounts, rows)
+    let t = 0
+    const now = () => {
+      t += 1
+      return t
+    }
+    const report = await runDonusSync({
+      client,
+      store,
+      since,
+      today,
+      duesCodes: noDues,
+      deadline: 2,
+      now,
+    })
+    expect(report.statusesUpdated).toBe(2)
+    expect(report.statusesDeferred).toBe(2)
+    expect(client.member.mock.calls.map(c => c[0])).toEqual([4, 3])
+    expect(table.get('acc-4')).toHaveProperty('lifecycle')
+    expect(table.get('acc-1')).not.toHaveProperty('lifecycle')
+  })
+
+  it('saves statuses in batches while it goes', async () => {
+    const n = STATUS_BATCH + 5
+    const ids = Array.from({ length: n }, (_, i) => i + 1)
+    const { client } = fakeClient({ members: ids.map(email) })
+    const { store, calls } = memoryStore(ids.map(i => ({ id: `acc-${i}`, email: `m${i}@x.org` })))
+    const report = await runDonusSync({ client, store, since, today, duesCodes: noDues })
+    expect(report.statusesUpdated).toBe(n)
+    expect(calls.filter(c => c === 'status')).toHaveLength(2)
   })
 })
 

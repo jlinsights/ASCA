@@ -13,6 +13,8 @@ import { error as logError, info as logInfo } from '@/lib/logging'
  */
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300
+/** 상태 갱신은 이 시간까지만 — 나머지는 다음 날 이어서(maxDuration 안에서 저장할 여유) */
+const STATUS_BUDGET_MS = 240_000
 
 function authorized(request: NextRequest): boolean {
   const secret = process.env.CRON_SECRET
@@ -30,6 +32,7 @@ export async function GET(request: NextRequest) {
   // 키를 받기 전에는 아무것도 하지 않는다(배포돼 있어도 안전)
   if (!apiKey) return NextResponse.json({ skipped: 'donus_not_configured' })
 
+  const started = Date.now()
   const since = process.env.DONUS_SYNC_SINCE?.trim() || DEFAULT_SINCE
   try {
     const report = await runDonusSync({
@@ -38,6 +41,7 @@ export async function GET(request: NextRequest) {
       since,
       today: kstToday(),
       duesCodes: parseCodeList(process.env.DONUS_DUES_CODES),
+      deadline: started + STATUS_BUDGET_MS,
     })
     logInfo('[donus-sync] done', { ...report })
     return NextResponse.json({ ok: true, report })

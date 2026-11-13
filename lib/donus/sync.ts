@@ -27,9 +27,11 @@ export interface MemberStatus {
   dues_paid_year: number | null
 }
 
+export type StoredLink = MemberLink & { dues_paid_year: number | null; synced_at: string }
+
 export interface LinkStore {
   listAccounts(): Promise<AccountEmail[]>
-  listLinks(): Promise<(MemberLink & { dues_paid_year: number | null })[]>
+  listLinks(): Promise<StoredLink[]>
   removeLinks(accountIds: string[]): Promise<void>
   upsertLinks(links: MemberLink[]): Promise<void>
   updateStatuses(statuses: MemberStatus[]): Promise<void>
@@ -43,7 +45,13 @@ export interface SyncOptions {
   /** 오늘(KST, YYYY-MM-DD) */
   today: string
   duesCodes: ReadonlySet<string>
+  /** 이 시각(epoch ms)이 지나면 상태 갱신을 멈추고 남은 회원은 다음 실행으로 넘긴다 */
+  deadline?: number
+  now?: () => number
 }
+
+/** 상태를 이만큼 모을 때마다 저장한다 — 시간이 다 돼도 그때까지 읽은 회원은 남는다 */
+export const STATUS_BATCH = 20
 
 export interface SyncReport {
   donusMembers: number
@@ -57,6 +65,7 @@ export interface SyncReport {
   manualLinks: number
   statusesUpdated: number
   statusFailures: number
+  statusesDeferred: number
   duesConfigured: boolean
   apiCalls: number
 }
@@ -105,6 +114,8 @@ export async function runDonusSync({
   since,
   today,
   duesCodes,
+  deadline = Infinity,
+  now = () => Date.now(),
 }: SyncOptions): Promise<SyncReport> {
   // 1. 도너스를 끝까지 읽은 뒤에만 쓴다
   const members = await readAllMembers(client, since, today)
@@ -116,17 +127,32 @@ export async function runDonusSync({
   if (plan.removals.length) await store.removeLinks(plan.removals)
   if (plan.upserts.length) await store.upsertLinks(plan.upserts)
 
-  // 3. 연결된 구성원의 상태
+  // 3. 연결된 구성원의 상태 — 새 연결부터, 그다음 오래전에 갱신한 순서로(시간이 모자라면 다음 날 이어서)
   const removed = new Set(plan.removals)
+  const kept = existing.filter(link => !removed.has(link.account_id))
+  const fresh = new Set(plan.upserts.map(link => link.account_id))
   const linked = new Map<string, number>()
-  for (const link of existing)
-    if (!removed.has(link.account_id)) linked.set(link.account_id, link.member_idx)
   for (const link of plan.upserts) linked.set(link.account_id, link.member_idx)
-  const previousDues = new Map(existing.map(link => [link.account_id, link.dues_paid_year]))
+  for (const link of [...kept].sort((a, b) => a.synced_at.localeCompare(b.synced_at)))
+    if (!fresh.has(link.account_id)) linked.set(link.account_id, link.member_idx)
+  // 이전 연회비 값은 같은 구성원에 그대로 연결된 경우에만 이어 쓴다
+  const previousDues = new Map(kept.map(link => [link.account_id, link.dues_paid_year]))
 
-  const statuses: MemberStatus[] = []
+  let batch: MemberStatus[] = []
+  let statusesUpdated = 0
   let statusFailures = 0
+  let statusesDeferred = 0
+  const flush = async () => {
+    if (!batch.length) return
+    await store.updateStatuses(batch)
+    statusesUpdated += batch.length
+    batch = []
+  }
   for (const [accountId, memberIdx] of linked) {
+    if (now() > deadline) {
+      statusesDeferred++
+      continue
+    }
     try {
       const detail = await client.member(memberIdx)
       const dues = await readDuesYear(client, memberIdx, today, duesCodes)
@@ -134,7 +160,7 @@ export async function runDonusSync({
         typeof detail.lifecycle === 'number' && LIFECYCLES.has(detail.lifecycle)
           ? detail.lifecycle
           : null
-      statuses.push({
+      batch.push({
         account_id: accountId,
         lifecycle,
         last_pay_date: dateOrNull(detail.lastPayDate),
@@ -144,8 +170,9 @@ export async function runDonusSync({
     } catch {
       statusFailures++
     }
+    if (batch.length >= STATUS_BATCH) await flush()
   }
-  if (statuses.length) await store.updateStatuses(statuses)
+  await flush()
 
   return {
     donusMembers: members.length,
@@ -157,8 +184,9 @@ export async function runDonusSync({
     linksUpserted: plan.upserts.length,
     linksRemoved: plan.removals.length,
     manualLinks: plan.kept.length,
-    statusesUpdated: statuses.length,
+    statusesUpdated,
     statusFailures,
+    statusesDeferred,
     duesConfigured: duesCodes.size > 0,
     apiCalls: client.callCount(),
   }

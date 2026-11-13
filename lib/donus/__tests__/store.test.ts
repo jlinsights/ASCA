@@ -16,7 +16,7 @@ function fakeAdmin(
   const calls: Call[] = []
   const query = (result: unknown = { data: [], error: null }) => {
     const chain: Record<string, unknown> = {}
-    for (const op of ['select', 'delete', 'upsert', 'update', 'in', 'eq']) {
+    for (const op of ['select', 'delete', 'upsert', 'update', 'in', 'eq', 'order']) {
       chain[op] = (...args: unknown[]) => {
         calls.push({ op, args })
         return chain
@@ -59,6 +59,45 @@ describe('createSupabaseLinkStore', () => {
     expect(accounts).toHaveLength(1001)
     expect(accounts.at(-1)).toEqual({ id: 'ok', email: 'ok@x.org' })
     expect(accounts.find(a => a.id === 'unconfirmed' || a.id === 'anon')).toBeUndefined()
+  })
+
+  it('reads every link page by page in a stable order', async () => {
+    const calls: { op: string; args: unknown[] }[] = []
+    const page = (from: number, size: number) =>
+      Array.from({ length: size }, (_, i) => ({
+        account_id: `a${from + i}`,
+        member_idx: from + i + 1,
+        member_code: 'C',
+        link_source: i === 0 ? 'manual' : 'email',
+        dues_paid_year: null,
+        synced_at: '2026-01-01',
+      }))
+    const admin = {
+      from: () => {
+        const chain: Record<string, unknown> = {}
+        let result: unknown
+        chain.select = () => chain
+        chain.order = (...args: unknown[]) => {
+          calls.push({ op: 'order', args })
+          return chain
+        }
+        chain.range = (from: number, to: number) => {
+          calls.push({ op: 'range', args: [from, to] })
+          result = { data: page(from, from === 0 ? 1000 : 3), error: null }
+          return chain
+        }
+        chain.then = (resolve: (v: unknown) => unknown) => resolve(result)
+        return chain
+      },
+    }
+    const links = await createSupabaseLinkStore(admin as never).listLinks()
+    expect(links).toHaveLength(1003)
+    expect(calls.filter(c => c.op === 'range').map(c => c.args)).toEqual([
+      [0, 999],
+      [1000, 1999],
+    ])
+    expect(calls.find(c => c.op === 'order')?.args[0]).toBe('account_id')
+    expect(links[1000].link_source).toBe('manual')
   })
 
   it('only ever deletes email links', async () => {

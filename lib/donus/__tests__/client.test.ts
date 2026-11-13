@@ -58,14 +58,35 @@ describe('createDonusClient', () => {
     expect(urls[1].searchParams.get('memberIdxOffset')).toBe('1')
   })
 
-  it('stops when the offset does not advance', async () => {
+  it('fails instead of returning a partial list when the cursor stalls', async () => {
     const { impl, urls } = fakeFetch([{ members: [], hasMore: true, memberIdxOffset: 5 }])
     const c = clock()
-    await createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
-      '2026-01-01',
-      '2026-01-30'
-    )
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
+        '2026-01-01',
+        '2026-01-30'
+      )
+    ).rejects.toThrow('paging stalled')
     expect(urls).toHaveLength(2)
+  })
+
+  it('fails when hasMore is true but no cursor comes back', async () => {
+    const members = fakeFetch([{ members: [{ memberIdx: 1, memberCode: 'A' }], hasMore: true }])
+    const pays = fakeFetch([{ payments: [], hasMore: true }])
+    const c = clock()
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: members.impl, ...c }).membersCreated(
+        '2026-01-01',
+        '2026-01-30'
+      )
+    ).rejects.toThrow('member paging stalled')
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: pays.impl, ...c }).payments(
+        1,
+        '2026-01-01',
+        '2026-01-30'
+      )
+    ).rejects.toThrow('payment paging stalled')
   })
 
   it('spaces calls at least MIN_INTERVAL_MS apart (Donus allows 5 per second)', async () => {

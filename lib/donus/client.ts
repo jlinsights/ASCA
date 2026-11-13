@@ -125,8 +125,10 @@ export function createDonusClient({
         memberIdxOffset: offset,
       })
       members.push(...(body.members ?? []))
-      if (!body.hasMore || body.memberIdxOffset === undefined || body.memberIdxOffset === offset)
-        return members
+      if (!body.hasMore) return members
+      // 더 있다는데 커서가 없거나 그대로면 끝까지 못 읽은 것 — 일부 목록으로 연결을 지우지 않게 실패시킨다
+      if (body.memberIdxOffset === undefined || body.memberIdxOffset === offset)
+        throw new DonusApiError('Donus member paging stalled', 0)
       offset = body.memberIdxOffset
     }
     throw new DonusApiError('Donus member paging did not finish', 0)
@@ -150,8 +152,9 @@ export function createDonusClient({
         paymentIdxOffset: offset,
       })
       result.push(...(body.payments ?? []))
-      if (!body.hasMore || body.paymentIdxOffset === undefined || body.paymentIdxOffset === offset)
-        return result
+      if (!body.hasMore) return result
+      if (body.paymentIdxOffset === undefined || body.paymentIdxOffset === offset)
+        throw new DonusApiError('Donus payment paging stalled', 0)
       offset = body.paymentIdxOffset
     }
     throw new DonusApiError('Donus payment paging did not finish', 0)

@@ -124,6 +124,9 @@ export function planLinks(
       member_code: String(member.memberCode),
       link_source: 'email',
     }
+    // 다른 구성원으로 바뀌면 옛 연결을 먼저 지운다 — 두 계정이 구성원을 맞바꿔도 유일 제약에 안 걸리고,
+    // 새 행으로 들어가 옛 구성원의 상태 칸이 남지 않는다
+    if (before && before.member_idx !== next.member_idx) removals.push(account.id)
     if (!before || !sameLink(before, next)) upserts.push(next)
   }
 
