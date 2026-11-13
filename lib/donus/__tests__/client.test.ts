@@ -1,0 +1,234 @@
+/** @jest-environment node */
+import { createDonusClient, DonusApiError, MIN_INTERVAL_MS, PAGE_SIZE } from '../client'
+
+const KEY = 'test-donus-key-123'
+
+function fakeFetch(pages: unknown[], status = 200) {
+  const urls: URL[] = []
+  const impl = jest.fn(async (input: URL | RequestInfo) => {
+    urls.push(new URL(String(input)))
+    const body = pages[Math.min(urls.length - 1, pages.length - 1)]
+    return new Response(JSON.stringify(body), { status })
+  }) as unknown as typeof fetch
+  return { impl, urls }
+}
+
+function clock() {
+  let t = 0
+  const waits: number[] = []
+  return {
+    now: () => t,
+    sleep: async (ms: number) => {
+      waits.push(ms)
+      t += ms
+    },
+    waits,
+  }
+}
+
+describe('createDonusClient', () => {
+  it('sends the key as the apikey query parameter to the members endpoint', async () => {
+    const { impl, urls } = fakeFetch([{ members: [], hasMore: false }])
+    const c = clock()
+    await createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
+      '2026-01-01',
+      '2026-01-30'
+    )
+    expect(urls[0].origin + urls[0].pathname).toBe(
+      'https://cloud.donus.org/api/members/v0/members/recent/created'
+    )
+    expect(urls[0].searchParams.get('apikey')).toBe(KEY)
+    expect(urls[0].searchParams.get('startDate')).toBe('2026-01-01')
+    expect(urls[0].searchParams.get('endDate')).toBe('2026-01-30')
+    expect(urls[0].searchParams.get('count')).toBe(String(PAGE_SIZE))
+    expect(urls[0].searchParams.has('memberIdxOffset')).toBe(false)
+  })
+
+  it('follows memberIdxOffset until hasMore is false', async () => {
+    const { impl, urls } = fakeFetch([
+      { members: [{ memberIdx: 1, memberCode: 'A' }], hasMore: true, memberIdxOffset: 1 },
+      { members: [{ memberIdx: 2, memberCode: 'B' }], hasMore: false, memberIdxOffset: 2 },
+    ])
+    const c = clock()
+    const members = await createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
+      '2026-01-01',
+      '2026-01-30'
+    )
+    expect(members.map(m => m.memberIdx)).toEqual([1, 2])
+    expect(urls[1].searchParams.get('memberIdxOffset')).toBe('1')
+  })
+
+  it('fails instead of returning a partial list when the cursor stalls', async () => {
+    const { impl, urls } = fakeFetch([{ members: [], hasMore: true, memberIdxOffset: 5 }])
+    const c = clock()
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
+        '2026-01-01',
+        '2026-01-30'
+      )
+    ).rejects.toThrow('paging stalled')
+    expect(urls).toHaveLength(2)
+  })
+
+  it('fails when hasMore is true but no cursor comes back', async () => {
+    const members = fakeFetch([{ members: [{ memberIdx: 1, memberCode: 'A' }], hasMore: true }])
+    const pays = fakeFetch([{ payments: [], hasMore: true }])
+    const c = clock()
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: members.impl, ...c }).membersCreated(
+        '2026-01-01',
+        '2026-01-30'
+      )
+    ).rejects.toThrow('member paging stalled')
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: pays.impl, ...c }).payments(
+        1,
+        '2026-01-01',
+        '2026-01-30'
+      )
+    ).rejects.toThrow('payment paging stalled')
+  })
+
+  it('spaces calls at least MIN_INTERVAL_MS apart (Donus allows 5 per second)', async () => {
+    const { impl } = fakeFetch([{ memberIdx: 1, memberCode: 'A' }])
+    const c = clock()
+    const client = createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c })
+    await client.member(1)
+    await client.member(1)
+    await client.member(1)
+    expect(c.waits).toEqual([MIN_INTERVAL_MS, MIN_INTERVAL_MS])
+    expect(client.callCount()).toBe(3)
+  })
+
+  it('reads payments for one member with payDate and the offset cursor', async () => {
+    const { impl, urls } = fakeFetch([
+      { payments: [{ paymentIdx: 10, memberIdx: 7 }], hasMore: true, paymentIdxOffset: 10 },
+      { payments: [{ paymentIdx: 11, memberIdx: 7 }], hasMore: false },
+    ])
+    const c = clock()
+    const rows = await createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).payments(
+      7,
+      '2026-01-01',
+      '2026-11-13'
+    )
+    expect(rows.map(r => r.paymentIdx)).toEqual([10, 11])
+    expect(urls[0].pathname).toBe('/api/payments/v0/payments')
+    expect(urls[0].searchParams.get('memberIdx')).toBe('7')
+    expect(urls[0].searchParams.get('dateType')).toBe('payDate')
+    expect(urls[1].searchParams.get('paymentIdxOffset')).toBe('10')
+  })
+
+  it('throws DonusApiError without leaking the key or the URL', async () => {
+    const { impl } = fakeFetch([{ status: 'error', message: 'invalid apikey' }], 401)
+    const c = clock()
+    const error = await createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c })
+      .member(1)
+      .catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(DonusApiError)
+    expect((error as DonusApiError).status).toBe(401)
+    expect((error as Error).message).toContain('invalid apikey')
+    expect((error as Error).message).not.toContain(KEY)
+    expect((error as Error).message).not.toContain('cloud.donus.org')
+  })
+
+  it('stops on a 200 response with an unexpected shape instead of treating it as empty', async () => {
+    const c = clock()
+    for (const body of [
+      { status: 'error', message: 'maintenance' },
+      { members: [], hasMore: 'no' },
+      { members: [{ name: 'no index' }], hasMore: false },
+    ]) {
+      const { impl } = fakeFetch([body])
+      await expect(
+        createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
+          '2026-01-01',
+          '2026-01-30'
+        )
+      ).rejects.toThrow('unexpected shape')
+    }
+    const pays = fakeFetch([{ hasMore: false }])
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: pays.impl, ...c }).payments(
+        1,
+        '2026-01-01',
+        '2026-01-30'
+      )
+    ).rejects.toThrow('unexpected shape')
+    const detail = fakeFetch([{ memberIdx: 99, memberCode: 'X' }])
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: detail.impl, ...c }).member(1)
+    ).rejects.toThrow('unexpected shape')
+  })
+
+  it('sends no request after the deadline', async () => {
+    const { impl } = fakeFetch([{ memberIdx: 1, memberCode: 'A' }])
+    const c = clock()
+    const client = createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c, deadline: 100 })
+    await client.member(1)
+    await c.sleep(200)
+    await expect(client.member(1)).rejects.toThrow('time budget')
+    expect(impl).toHaveBeenCalledTimes(1)
+  })
+
+  it('rechecks the deadline after the rate-limit wait', async () => {
+    const { impl } = fakeFetch([{ memberIdx: 1, memberCode: 'A' }])
+    const c = clock()
+    // 첫 요청은 t=0, 다음 요청은 250ms 기다려 t=250 — 마감 100 을 넘기므로 보내지 않는다
+    const client = createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c, deadline: 100 })
+    await client.member(1)
+    await expect(client.member(1)).rejects.toThrow('time budget')
+    expect(impl).toHaveBeenCalledTimes(1)
+  })
+
+  it('stops paging a window once the read deadline passes', async () => {
+    const { impl } = fakeFetch([
+      { members: [{ memberIdx: 1, memberCode: 'A' }], hasMore: true, memberIdxOffset: 1 },
+    ])
+    const c = clock()
+    await expect(
+      createDonusClient({ apiKey: KEY, fetchImpl: impl, ...c }).membersCreated(
+        '2026-01-01',
+        '2026-01-30',
+        100
+      )
+    ).rejects.toThrow('read time budget')
+    expect(impl).toHaveBeenCalledTimes(1)
+  })
+
+  it('aborts a slow request and reports it without the URL', async () => {
+    const slow = jest.fn(
+      (_url: URL | RequestInfo, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => reject(init.signal?.reason))
+        })
+    ) as unknown as typeof fetch
+    const c = clock()
+    const error = await createDonusClient({
+      apiKey: KEY,
+      fetchImpl: slow,
+      ...c,
+      requestTimeoutMs: 20,
+    })
+      .member(1)
+      .catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(DonusApiError)
+    expect((error as Error).message).toMatch(/timed out/)
+    expect((error as Error).message).not.toContain(KEY)
+  })
+
+  it('wraps a network error without leaking the key', async () => {
+    const broken = jest.fn(async () => {
+      throw new TypeError(`fetch failed for https://cloud.donus.org/?apikey=${KEY}`)
+    }) as unknown as typeof fetch
+    const c = clock()
+    const error = await createDonusClient({ apiKey: KEY, fetchImpl: broken, ...c })
+      .member(1)
+      .catch((e: unknown) => e)
+    expect((error as Error).message).toMatch(/unreachable/)
+    expect((error as Error).message).not.toContain(KEY)
+  })
+
+  it('refuses an empty key', () => {
+    expect(() => createDonusClient({ apiKey: '  ' })).toThrow('DONUS_API_KEY is empty')
+  })
+})
