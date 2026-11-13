@@ -4,7 +4,7 @@
  * - API 키는 쿼리 문자열(apikey)로 보낸다. 키는 서버 환경 변수 DONUS_API_KEY 에만 둔다.
  *   오류 메시지에 요청 주소를 싣지 않는다(키가 새어 나간다).
  * - 도너스 한도: 모든 API 합산 초당 5회·하루 5,000회. 호출 사이를 MIN_INTERVAL_MS 로 띄운다.
- * - 단방향 동기화라 쓰기 API(PUT member·Forms)는 일부러 두지 않았다.
+ * - 읽기 전용 클라이언트다. 구성원 수정(PUT member)은 쓰지 않는다 — 신규 가입 등록은 forms-client.ts.
  */
 
 export const DONUS_BASE_URL = 'https://cloud.donus.org/api'
