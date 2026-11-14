@@ -185,6 +185,27 @@ describe('loadRelatedArtists', () => {
     expect(rail?.items.slice(0, 3).map(item => item.artist.id)).toEqual(['a', 'b', 'c'])
   })
 
+  it('탈퇴 작가를 뺀 뒤에 자른다 — 순위 상위에 탈퇴 작가가 몰려도 뒤 순위 적격 작가가 남는다', async () => {
+    // 상위 30명은 탈퇴(작품 많음), 그 뒤 12명이 적격
+    const gone = Array.from({ length: 30 }, (_, i) => `gone${i}`)
+    const ok = Array.from({ length: RAIL_SIZE }, (_, i) => `ok${i}`)
+    const works: StyleRow[] = [
+      ...gone.flatMap(id => [
+        { artist_id: id, style: '행서' },
+        { artist_id: id, style: '행서' },
+      ]),
+      ...ok.map(id => ({ artist_id: id, style: '행서' })),
+    ]
+    const { client } = fakeClient(works, [
+      ...gone.map(id => artistRow(id, '탈퇴')),
+      ...ok.map(id => artistRow(id)),
+    ])
+    mockClient.mockReturnValue(client as never)
+    const rail = await loadRelatedArtists(SELF, ['행서'])
+    expect(rail?.items.map(item => item.artist.id)).toEqual(ok)
+    expect(mockGetArtists).not.toHaveBeenCalled()
+  })
+
   it('일반작가는 DB 에 저장된 값(회원작가)으로 채운다', async () => {
     mockGetArtists.mockResolvedValue({
       artists: Array.from({ length: RAIL_SIZE }, (_, i) => publicArtist(`m${i}`)),

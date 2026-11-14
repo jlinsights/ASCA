@@ -17,6 +17,8 @@ const WITHDRAWN = '탈퇴'
 const STYLE_PAGE = 1000
 /** 비정상적으로 커져도 작가 페이지 한 번에 이만큼만 읽는다(넘으면 기록) */
 const STYLE_MAX_PAGES = 20
+/** 작가 행을 읽어 볼 순위 상위 후보 — 탈퇴 작가를 뺀 뒤에 자른다(먼저 자르면 뒤 순위 적격 작가가 사라진다) */
+const CANDIDATE_MAX = 100
 
 interface StyleRow {
   artist_id: string | null
@@ -71,7 +73,7 @@ async function loadStyleMatches(styles: string[], selfId: string): Promise<Publi
   const supabase = getSupabaseClient()
   if (!supabase) return []
   const styleRows = await loadStyleRows(supabase, styles)
-  const ids = rankByStyles(styleRows, styles, selfId).slice(0, RAIL_SIZE * 2)
+  const ids = rankByStyles(styleRows, styles, selfId).slice(0, CANDIDATE_MAX)
   if (ids.length === 0) return []
 
   // 공개 여부는 RLS(anon)가 거른다 — 비공개 작가는 행이 오지 않는다
