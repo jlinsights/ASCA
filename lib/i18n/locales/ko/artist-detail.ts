@@ -26,6 +26,9 @@ const artistDetail: Record<string, string> = {
   adFilterLabel: '서체·분야로 거르기',
   adFilterAll: '전체',
   adWallHint: '옆으로 넘겨 보세요',
+  arRecentWorks: '새로 걸린 작품',
+  arSeeAll: '모두 보기',
+  arAllArtists: '모든 작가',
 }
 
 export default artistDetail
