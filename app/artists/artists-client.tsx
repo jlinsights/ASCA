@@ -9,6 +9,9 @@ import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import type { PublicArtist as Artist } from '@/lib/api/artist-mapper'
 import { ArtistFilters } from './_components/artist-filters'
 import { ArtistCard } from './_components/artist-card'
+import { ArtistRails } from './_components/artist-rails'
+import '@/components/layout/gallery-night.css'
+import type { ArtistRail } from './_components/load-artist-rails'
 import { formatPrice } from './_components/artists-meta'
 import { useLanguage } from '@/contexts/language-context'
 import { formatDiscoveryCount, useDiscoveryCopy } from '@/components/gallery/discovery-copy'
@@ -38,10 +41,12 @@ function buildArtistsUrl(query: ArtistQuery, page: number): string {
 
 interface ArtistsPageProps {
   initialFilters?: ArtistInitialFilters
+  /** 조건 없이 들어왔을 때 위에 거는 줄들(서버에서 만든다). 검색·필터를 쓰면 숨긴다 */
+  rails?: ArtistRail[]
 }
 
 // 홈페이지 작가·書境 안내 칸은 2026-11-01 에 /artists/homepages 로 옮겼다(작가·작품 메뉴의 "작가의 홈페이지")
-export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
+export function ArtistsPage({ initialFilters = {}, rails = [] }: ArtistsPageProps) {
   const { language, t } = useLanguage()
   const copy = useDiscoveryCopy()
   const [filteredArtists, setFilteredArtists] = useState<Artist[]>([])
@@ -149,6 +154,7 @@ export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
     ? copy.errorTitle
     : formatDiscoveryCount(copy.artistResults, total, language)
   const isUpdating = loading || searchQuery.trim() !== debouncedSearch
+  const showRails = !hasConditions && rails.length > 0
 
   // 히어로 — 불러온 작가 중 프로필 사진이 있는 사람만 건다. 숫자는 현재 조건에 맞는 작가 수
   const heroImages = filteredArtists
@@ -166,7 +172,8 @@ export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
       ]
 
   return (
-    <div className='min-h-screen bg-background'>
+    // 작가 탐색은 어두운 전시실 — 이 페이지 안에서만 다크 토큰을 쓴다(헤더는 globals 의 .gallery-night 규칙)
+    <div className='dark gallery-night min-h-screen bg-background text-foreground'>
       <PageHero
         {...PAGE_HERO_MARKS.artists}
         title={t('artists')}
@@ -196,6 +203,12 @@ export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
           onReset={handleResetFilters}
         />
       </div>
+
+      {showRails && (
+        <div className='gallery-container'>
+          <ArtistRails rails={rails} t={t} language={language} />
+        </div>
+      )}
 
       <section className='gallery-container py-8' aria-busy={isUpdating}>
         {loading ? (
@@ -235,7 +248,13 @@ export function ArtistsPage({ initialFilters = {} }: ArtistsPageProps) {
         ) : (
           <>
             {/* 제목으로 훑는 사용자에게 h1 과 카드의 h3 사이 구획을 알린다 */}
-            <h2 className='sr-only'>{copy.artistListHeading}</h2>
+            {showRails ? (
+              <h2 className='mb-6 font-serif text-2xl font-bold md:text-3xl'>
+                {t('arAllArtists')}
+              </h2>
+            ) : (
+              <h2 className='sr-only'>{copy.artistListHeading}</h2>
+            )}
             <div className='hidden lg:grid grid-cols-3 xl:grid-cols-4 gap-8'>
               {filteredArtists.map(artist => (
                 <ArtistCard key={artist.id} artist={artist} variant='pc' />

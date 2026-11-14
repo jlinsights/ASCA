@@ -25,6 +25,9 @@ const artistDetail: Record<string, string> = {
   adFilterLabel: '依書體・類別篩選',
   adFilterAll: '全部',
   adWallHint: '左右滑動瀏覽',
+  arRecentWorks: '新掛上的作品',
+  arSeeAll: '查看全部',
+  arAllArtists: '所有作家',
 }
 
 export default artistDetail

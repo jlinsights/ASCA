@@ -624,9 +624,3 @@
 .ap-wall .ap-work__caption {
   max-width: 260px;
 }
-
-/* 머릿줄 — 반투명 흰 헤더가 남색 전시실 위에서 탁해지지 않게 이 페이지에서만 宣紙로 채운다 */
-:root:not(.dark):has(.ap) header.z-50 {
-  background-color: var(--paper);
-  border-color: hsl(222 40% 20% / 0.08);
-}

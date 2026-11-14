@@ -25,6 +25,9 @@ const artistDetail: Record<string, string> = {
   adFilterLabel: '書体・分野で絞り込む',
   adFilterAll: 'すべて',
   adWallHint: '横にスクロールしてご覧ください',
+  arRecentWorks: '新しく掛けられた作品',
+  arSeeAll: 'すべて見る',
+  arAllArtists: 'すべての作家',
 }
 
 export default artistDetail

@@ -25,6 +25,9 @@ const artistDetail: Record<string, string> = {
   adFilterLabel: 'Filter by style',
   adFilterAll: 'All',
   adWallHint: 'Scroll sideways',
+  arRecentWorks: 'Newly hung works',
+  arSeeAll: 'See all',
+  arAllArtists: 'All artists',
 }
 
 export default artistDetail
