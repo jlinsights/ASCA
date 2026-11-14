@@ -7,6 +7,11 @@ jest.mock('@/components/translated-content', () => ({ TranslatedContent: () => <
 jest.mock('../_components/artist-card', () => ({
   ArtistCard: ({ artist }: { artist: { name: string } }) => <article>{artist.name}</article>,
 }))
+jest.mock('../_components/artist-rails', () => ({
+  ArtistRails: ({ rails }: { rails: { key: string }[] }) => (
+    <div data-testid='rails'>{rails.map(rail => rail.key).join(',')}</div>
+  ),
+}))
 jest.mock('@/contexts/language-context', () => {
   // 실제 번역 표로 찾는다 — 둘러보기 문구는 언어별 표(discovery*)에 있다
   const { translations } = jest.requireActual('@/lib/i18n/translations')
@@ -118,5 +123,42 @@ describe('Artists heading outline', () => {
     render(<ArtistsPage />)
     await screen.findAllByText('김작가')
     expect(screen.getByRole('heading', { level: 2, name: '작가 목록' })).toBeInTheDocument()
+  })
+
+  describe('탐색 레일', () => {
+    const rails = [{ key: 'recent-works', labelKey: 'arRecentWorks', href: '/artworks', items: [] }]
+
+    it('조건 없이 들어오면 레일과 "모든 작가" 제목을 보인다', async () => {
+      fetchMock.mockResolvedValue(response([{ id: '1', name: '김작가' }]))
+      render(<ArtistsPage rails={rails} />)
+      expect(screen.getByTestId('rails')).toHaveTextContent('recent-works')
+      expect(await screen.findByRole('heading', { name: '모든 작가' })).toBeInTheDocument()
+    })
+
+    it('주소로 조건을 받고 들어오면 레일을 숨긴다', async () => {
+      fetchMock.mockResolvedValue(response([{ id: '1', name: '김작가' }]))
+      render(<ArtistsPage rails={rails} initialFilters={{ membershipType: '초대작가' }} />)
+      await screen.findAllByText('김작가')
+      expect(screen.queryByTestId('rails')).not.toBeInTheDocument()
+    })
+
+    // 회귀(Codex P2): 메뉴의 등급 링크로 들어와 초기화하면 서버가 레일을 안 줘서 다시 안 보였다
+    it('조건을 갖고 들어와도 초기화하면 레일이 다시 보인다', async () => {
+      fetchMock.mockResolvedValue(response([{ id: '1', name: '김작가' }]))
+      const user = userEvent.setup()
+      render(<ArtistsPage rails={rails} initialFilters={{ membershipType: '초대작가' }} />)
+      await screen.findAllByText('김작가')
+      expect(screen.queryByTestId('rails')).not.toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: '전체 초기화' }))
+      expect(await screen.findByTestId('rails')).toBeInTheDocument()
+    })
+
+    it('검색어를 넣으면 레일을 숨긴다', async () => {
+      fetchMock.mockResolvedValue(response([{ id: '1', name: '김작가' }]))
+      const user = userEvent.setup()
+      render(<ArtistsPage rails={rails} />)
+      await user.type(screen.getByRole('searchbox'), '김')
+      expect(screen.queryByTestId('rails')).not.toBeInTheDocument()
+    })
   })
 })

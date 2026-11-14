@@ -18,6 +18,16 @@ const artistDetail: Record<string, string> = {
   adEmptyNoWorks: 'No works have been published yet.',
   adEmptyPreparing: "The artist's profile and works are being prepared.",
   adOtherArtists: 'See other artists',
+  adViewWorks: 'View works',
+  adShare: 'Share',
+  adShareCopied: 'Link copied',
+  adShareFailed: 'Could not copy the link. Please copy it from the address bar.',
+  adFilterLabel: 'Filter by style',
+  adFilterAll: 'All',
+  adWallHint: 'Scroll sideways',
+  arRecentWorks: 'Newly hung works',
+  arSeeAll: 'See all',
+  arAllArtists: 'All artists',
 }
 
 export default artistDetail

@@ -1023,6 +1023,85 @@ export type Database = {
           },
         ]
       }
+      donus_member_links: {
+        Row: {
+          account_id: string
+          dues_history_checked: boolean
+          dues_paid_year: number | null
+          last_pay_date: string | null
+          lifecycle: number | null
+          link_source: string
+          linked_at: string
+          member_code: string
+          member_idx: number
+          synced_at: string
+        }
+        Insert: {
+          account_id: string
+          dues_history_checked?: boolean
+          dues_paid_year?: number | null
+          last_pay_date?: string | null
+          lifecycle?: number | null
+          link_source?: string
+          linked_at?: string
+          member_code: string
+          member_idx: number
+          synced_at?: string
+        }
+        Update: {
+          account_id?: string
+          dues_history_checked?: boolean
+          dues_paid_year?: number | null
+          last_pay_date?: string | null
+          lifecycle?: number | null
+          link_source?: string
+          linked_at?: string
+          member_code?: string
+          member_idx?: number
+          synced_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'donus_member_links_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: true
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      donus_signup_submissions: {
+        Row: {
+          account_id: string
+          is_new: boolean | null
+          last_attempt_at: string
+          member_idx: number | null
+          submitted_at: string | null
+        }
+        Insert: {
+          account_id: string
+          is_new?: boolean | null
+          last_attempt_at?: string
+          member_idx?: number | null
+          submitted_at?: string | null
+        }
+        Update: {
+          account_id?: string
+          is_new?: boolean | null
+          last_attempt_at?: string
+          member_idx?: number | null
+          submitted_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'donus_signup_submissions_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: true
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       events: {
         Row: {
           contact_email: string | null
