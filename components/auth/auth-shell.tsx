@@ -102,7 +102,7 @@ export function AuthShell({ variant, children, titleKey, ledeKey }: AuthShellPro
           alt={t(art.altKey)}
           fill
           priority
-          sizes='(max-width: 1024px) 0px, 50vw'
+          sizes='(max-width: 1023px) 100vw, 50vw'
           className='asca-auth__art-img'
         />
         <span className='asca-auth__seal' lang='zh-Hant' aria-hidden='true'>

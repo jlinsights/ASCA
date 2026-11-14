@@ -80,6 +80,10 @@ const nativeAuth: Record<string, string> = {
   authNativeRetry: '再確認',
   authNativeAccount: '作家スペース',
   authNativeArchive: '作品を記録',
+  authAcProfileTitle: 'マイ情報',
+  authAcArtistTitle: '作家情報',
+  authAcSecurityTitle: 'アカウント管理',
+  authAcChangePassword: 'パスワードを変更',
 }
 
 export default nativeAuth
