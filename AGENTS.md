@@ -83,16 +83,35 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   `app/page.tsx`에서 이 데이터를 읽고 `components/home/home-data.ts`로 집계해
   `components/home/`에 전달한다. 홈 통계나 전시 기록을 CMS 데이터로 간주하지
   않는다.
-- 전시 하위 페이지(`/exhibitions/current·upcoming·past·online`)도 연혁 데이터로
-  만든다 — `app/exhibitions/_data/exhibition-records.ts` 가 월 단위로 이번 달·
-  예정·지난 전시를 가르고, 온라인은 `online: true` 기록이다. **새 전시는
-  `history-events.ts` 에 추가한다.** 예시·가짜 전시를 넣지 말 것.
+- 전시 하위 페이지(`/exhibitions/current·upcoming·past·online`)는
+  `app/exhibitions/_data/exhibition-listings.ts`에서 협회 전시와 승인된 외부
+  홍보를 합친다. 협회 전시는 연혁 `app/history/_data/history-events.ts`와 예정
+  전시 `app/exhibitions/_data/planned-exhibitions.ts`를 사용한다. 연혁은 종료된
+  기록이며 예정 전시를 임의로 넣지 않는다. 날짜 분류는 해당 데이터와
+  `getExhibitionListings()`의 기준을 확인한다.
+- 외부 홍보는 `exhibitionPromotions`에 사무국이 자료·공개 권한·계약을 확인한
+  실제 전시만 등록한다. 승인 상태와 게재 기간을 확인하고 주최자와 유료 홍보를
+  구분해 표시한다. 결제만으로 자동 게시하지 않는다. 전시 포스터와 유관업체
+  광고의 목업은 예시로 표시하고 실제 전시·연혁·건수에 포함하지 않는다. 소재
+  설명은 `public/images/exhibitions/PROMOTION-MOCKUPS.md`를 따른다.
+- 홍보 문의 링크는 언어별 경로를 유지하며 `/contact`의 문의 양식에 연결한다.
+  실제 광고주·신청·결제·자동 게재 기능의 존재를 목업만으로 단정하지 않는다.
 - `/exhibitions` 목록 자체는 CMS(빈 테이블)를 읽어 빈 상태가 정상이다.
 - RLS: 공개 테이블은 **읽기만 공개, 쓰기는 service_role 만.**
 - 🔴 **`execute_sql` 같은 임의 SQL RPC 를 만들지 말 것.** 구조 변경은
   마이그레이션으로만 한다.
 - 🔴 **DB 덤프를 커밋하지 말 것.** 이 저장소는 공개다. 2026-07 덤프(개인정보
   포함)가 커밋돼 있어 2026-10-11 에 이력에서 지웠다.
+
+### 규정과 개정안
+
+- `regulations/`의 현행 원문과 `regulations/proposals/2026-11-consolidated/`의
+  이사회 검토 초안을 구분한다. 통합안은 의결·공포·시행일이 미정이며, 제안 금액과
+  수량을 확정 요금이나 이미 운영 중인 서비스로 안내하지 않는다.
+- 초안은 유료 플립북과 선택 서비스, 비회원·외부 전시 홍보, 유관업체 광고를
+  포함한다. 홍보·광고 수입을 매년 열리는 협회 전시 운영비로 사용하는 원칙과
+  별개로 실제 사업의 법률·세무·증빙 여부를 확인한다. 현행 규정 변경은 적법한
+  의결과 공포·시행 사실을 확인한 후 원문·번역·안내·개정 이력을 함께 갱신한다.
 
 ### 데이터 계층이 둘이다
 

@@ -72,6 +72,28 @@ describe('작가의 홈페이지 — 참여하면 열리는 온라인 공간', (
     expect(screen.getByText(ko.hpProgWhoSpecial)).toBeInTheDocument()
   })
 
+  it.each(['ko', 'en', 'ja', 'zh'])('%s: 자격과 관계없이 상담 안내를 표시한다', lang => {
+    mockLanguage = lang
+    const table = homepageProgramsTranslations[lang as keyof typeof homepageProgramsTranslations]
+    render(<HomepagePrograms />)
+    expect(screen.getByText(table.hpProgWhoConsult)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: new RegExp(table.hpProgCta) })).toHaveAttribute(
+      'href',
+      '/contact'
+    )
+  })
+
+  it.each(['ko', 'en', 'ja', 'zh'])('%s: 선택 홍보 기능과 상담 조건을 표시한다', lang => {
+    mockLanguage = lang
+    const table = homepageProgramsTranslations[lang as keyof typeof homepageProgramsTranslations]
+    render(<HomepagePrograms />)
+    expect(screen.getByRole('heading', { name: table.hpProgMediaTitle })).toBeInTheDocument()
+    for (let index = 1; index <= 6; index++) {
+      expect(screen.getByText(table[`hpProgMedia${index}Title`])).toBeInTheDocument()
+    }
+    expect(screen.getByText(table.hpProgMediaNote)).toBeInTheDocument()
+  })
+
   it.each(['en', 'ja', 'zh'])('%s: 한글·키 이름이 새지 않는다', lang => {
     mockLanguage = lang
     const { container } = render(<HomepagePrograms />)
