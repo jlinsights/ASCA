@@ -48,10 +48,30 @@ const homepagePrograms: Record<string, string> = {
   hpProgDiff3Body:
     '協会の作家紹介から作家のホームページへ直接つながり、協会を訪れた観覧者が作家の住まいまで届きます。',
 
+  hpProgMediaTitle: '作品をより多くの人に届けるために',
+  hpProgMediaIntro:
+    'スマートフォンでも見て、聴いて、共有できるよう、作家の物語に合う機能を一緒に考えます。',
+  hpProgMedia1Title: 'YouTube動画',
+  hpProgMedia1Body: '制作過程や展覧会の動画を紹介',
+  hpProgMedia2Title: 'ブログ・Instagram',
+  hpProgMedia2Body: '文章やSNSをつなぎ、日々の活動を紹介',
+  hpProgMedia3Title: 'ニュース・記事',
+  hpProgMedia3Body: '作家や展覧会を取り上げた記事を紹介',
+  hpProgMedia4Title: '作品の購入相談',
+  hpProgMedia4Body: '作品ごとの購入問い合わせや販売へのリンクを相談',
+  hpProgMedia5Title: '作品解説の音声',
+  hpProgMedia5Body: '作品説明や作家ノートの音声読み上げを相談',
+  hpProgMedia6Title: '作家に合わせたデジタル表現',
+  hpProgMedia6Body: 'スマートフォン向けの表示や新しいデジタル・AI技術の活用を検討',
+  hpProgMediaNote:
+    'ご希望に応じた有料の選択機能です。資料の利用権限、実現可能性、提供範囲と費用は事務局との相談後に決めます。購入・決済機能は別途協議が必要です。',
+
   hpProgWhoTitle: '申し込みできる方',
   hpProgWhoMember: '正会員 — 協会が主催する展覧会・行事に参加すると、上の段階が続きます。',
   hpProgWhoSpecial:
     '非会員の作家 — 特別選任により推薦作家・招待作家と認められれば、個人または団体のホームページを申し込めます。',
+  hpProgWhoConsult:
+    '会員資格や推薦・招待作家への選任の有無にかかわらず、ホームページ制作をご相談いただけます。提供可能なサービスの範囲と費用は事務局との相談後にご案内します。',
   hpProgWhoCite: '推薦・招待作家規程 第11条（特別選任）',
   hpProgCta: 'ホームページについて相談する',
   hpProgCtaMembership: '入会のご案内',

@@ -45,10 +45,29 @@ const homepagePrograms: Record<string, string> = {
   hpProgDiff3Title: '與協會網站相連',
   hpProgDiff3Body: '從協會的作家介紹可直接前往作家的網站，讓造訪協會的觀眾也能走進作家的家。',
 
+  hpProgMediaTitle: '讓更多人遇見您的作品',
+  hpProgMediaIntro: '讓觀眾也能在手機上輕鬆觀看、聆聽與分享，一起構思適合作家故事的功能。',
+  hpProgMedia1Title: 'YouTube 影片',
+  hpProgMedia1Body: '介紹創作過程與展覽影片',
+  hpProgMedia2Title: '部落格・Instagram',
+  hpProgMedia2Body: '連結文章與社交媒體，持續分享創作活動',
+  hpProgMedia3Title: '新聞與報導',
+  hpProgMedia3Body: '連結介紹作家與展覽的報導',
+  hpProgMedia4Title: '作品購買洽詢',
+  hpProgMedia4Body: '商談個別作品的購買洽詢或銷售連結',
+  hpProgMedia5Title: '作品語音解說',
+  hpProgMedia5Body: '商談作品說明與作家筆記的語音朗讀',
+  hpProgMedia6Title: '量身打造的數位呈現',
+  hpProgMedia6Body: '共同探討手機介面及新興數位與 AI 技術的應用',
+  hpProgMediaNote:
+    '這些是依作家需求洽詢的付費選用功能。素材使用權、實作可行性、服務範圍及費用由事務局商談後確定。購買與付款功能需另行協議。',
+
   hpProgWhoTitle: '誰可以申請',
   hpProgWhoMember: '正會員 — 參與協會主辦的展覽與活動，即可依上述階段延續。',
   hpProgWhoSpecial:
     '非會員作家 — 經特別選任獲認可為推薦作家或特邀作家後，可申請個人網站或團體網站。',
+  hpProgWhoConsult:
+    '無論是否為會員，或是否獲選為推薦、特邀作家，都歡迎洽詢網站製作。事務局將在諮詢後說明可提供的服務範圍與費用。',
   hpProgWhoCite: '推薦·特邀作家選任規定 第11條（特別選任）',
   hpProgCta: '洽詢網站建置',
   hpProgCtaMembership: '入會說明',
