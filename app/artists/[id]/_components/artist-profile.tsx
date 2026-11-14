@@ -13,6 +13,7 @@ import { parseArtistCareer } from './artist-career'
 import { ArtistHero, type ArtistHeroFact } from './artist-hero'
 import { workYearSpan, type ArtistWork } from './artist-works'
 import { FounderBand } from './founder-band'
+import { ArtistWorksWall, ShareButton } from './artist-works-wall'
 import { FOUNDER, isFounder } from '@/lib/content/founder'
 import './artist-profile.css'
 
@@ -182,6 +183,15 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
 
       {founder && <FounderBand language={language} />}
 
+      <div className='ap-actions'>
+        {works.length > 0 && (
+          <a href='#ap-works-title' className='ap-btn ap-btn--gold'>
+            {t('adViewWorks')}
+          </a>
+        )}
+        <ShareButton title={name} t={t} />
+      </div>
+
       {works.length > 0 && (
         <section className='ap-section ap-works' aria-labelledby='ap-works-title'>
           <header className='ap-head'>
@@ -197,13 +207,7 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
               {t('adWorksNote').replace('{count}', String(works.length))}
             </p>
           </header>
-          <ul className='ap-works__grid'>
-            {works.map(work => (
-              <li key={work.id} className='ap-works__item'>
-                <WorkCard work={work} title={workTitle(work, language)} />
-              </li>
-            ))}
-          </ul>
+          <ArtistWorksWall works={works} titleOf={work => workTitle(work, language)} t={t} />
         </section>
       )}
 
@@ -253,47 +257,5 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
 
       <LayoutFooter />
     </div>
-  )
-}
-
-function WorkCard({ work, title }: { work: ArtistWork; title: string }) {
-  const ratio = work.width && work.height ? `${work.width} / ${work.height}` : '3 / 4'
-  const meta = [work.year ? `${work.year}` : null, work.style].filter(Boolean).join(' · ')
-
-  return (
-    <Link href={`/artworks/${work.id}`} className='ap-work'>
-      <figure className='ap-work__figure'>
-        <span className='ap-work__mat'>
-          <span className='ap-work__frame' style={{ aspectRatio: ratio }}>
-            {work.imageUrl ? (
-              <Image
-                src={work.imageUrl}
-                alt={title}
-                fill
-                sizes='(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw'
-                className='ap-work__img'
-              />
-            ) : (
-              <span className='ap-work__blank' aria-hidden='true'>
-                {work.title}
-              </span>
-            )}
-          </span>
-        </span>
-        <figcaption className='ap-work__caption'>
-          <span className='ap-work__title'>{title}</span>
-          {(meta || work.award) && (
-            <span className='ap-work__meta'>
-              {meta && <span>{meta}</span>}
-              {work.award && (
-                <span className='ap-work__award' lang='zh-Hant'>
-                  {work.award}
-                </span>
-              )}
-            </span>
-          )}
-        </figcaption>
-      </figure>
-    </Link>
   )
 }

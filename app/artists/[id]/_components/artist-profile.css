@@ -8,15 +8,18 @@
 .ap {
   --ap-gutter: var(--shell-gutter);
   --ap-max: var(--shell-frame);
-  --ap-bg: var(--paper);
-  --ap-fg: var(--navy-900);
-  --ap-muted: var(--stone-700); /* paper 위 8.9:1 */
-  --ap-rule: var(--border);
+  /* 갤러리 밤 — 작가 상세는 늘 어두운 전시실이다. 작품만 宣紙 대지 위에서 밝다 */
+  --ap-bg: var(--navy-950);
+  --ap-fg: var(--paper);
+  --ap-muted: var(--navy-300);
+  --ap-rule: hsl(45 40% 94% / 0.12);
   --ap-mat: var(--paper-2);
-  --ap-accent-text: var(--gold-800); /* paper 위 4.9:1 */
-  --ap-award-line: var(--gold-600);
-  --ap-ring: var(--gold-600);
-  --ap-shadow: 0 16px 32px -12px hsl(222 54% 8% / 0.18), 0 6px 12px -6px hsl(222 54% 8% / 0.1);
+  --ap-accent-text: var(--gold-400);
+  --ap-award-line: var(--gold-500);
+  --ap-ring: var(--gold-400);
+  --ap-shadow: 0 24px 48px -16px hsl(222 60% 3% / 0.75), 0 8px 16px -8px hsl(222 60% 3% / 0.5);
+  --ap-chip: hsl(45 40% 94% / 0.08);
+  --ap-chip-hover: hsl(45 40% 94% / 0.14);
   --ap-font-display:
     var(--font-display), var(--font-noto-serif-kr), var(--font-noto-serif-tc), Georgia, serif;
   --ap-font-tc: var(--font-noto-serif-tc), 'Noto Serif TC', var(--font-noto-serif-kr), serif;
@@ -25,19 +28,10 @@
   position: relative;
   z-index: 10;
   min-height: 100vh;
-  background: var(--ap-bg);
+  background:
+    radial-gradient(120% 60% at 80% 0%, hsl(222 54% 22% / 0.55), transparent 70%), var(--ap-bg);
   color: var(--ap-fg);
-}
-
-.dark .ap {
-  --ap-bg: var(--navy-950);
-  --ap-fg: var(--paper);
-  --ap-muted: var(--navy-300);
-  --ap-mat: var(--navy-900);
-  --ap-accent-text: var(--gold-400);
-  --ap-award-line: var(--gold-500);
-  --ap-ring: var(--gold-400);
-  --ap-shadow: 0 16px 32px -12px hsl(222 60% 3% / 0.6), 0 6px 12px -6px hsl(222 60% 3% / 0.4);
+  color-scheme: dark;
 }
 
 .ap :focus-visible {
@@ -139,17 +133,6 @@
 }
 
 /* ---------- 작품 — 원래 비율 그대로 단을 나눠 건다 ---------- */
-.ap-works__grid {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  columns: 4 240px;
-  column-gap: clamp(16px, 2.4vw, 36px);
-}
-.ap-works__item {
-  break-inside: avoid;
-  margin-bottom: clamp(28px, 3.6vw, 52px);
-}
 .ap-work {
   display: block;
   color: inherit;
@@ -530,4 +513,120 @@
   .ap-work:hover .ap-work__img {
     transform: none;
   }
+}
+
+/* ---------- 작품 보기·공유 ---------- */
+.ap-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  max-width: var(--ap-max);
+  margin: 0 auto;
+  padding: clamp(24px, 3vw, 36px) var(--ap-gutter) 0;
+}
+.ap-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 200ms var(--ap-ease),
+    background-color 200ms var(--ap-ease),
+    border-color 200ms var(--ap-ease);
+}
+.ap-btn--gold {
+  background: var(--gold-500);
+  color: var(--navy-900);
+  border: 0;
+}
+.ap-btn--gold:hover {
+  transform: scale(1.04);
+}
+.ap-btn--ghost {
+  background: transparent;
+  color: var(--ap-fg);
+  border: 1px solid hsl(45 40% 94% / 0.35);
+}
+.ap-btn--ghost:hover {
+  border-color: var(--ap-fg);
+}
+.ap-actions__status {
+  font-size: 13px;
+  color: var(--ap-muted);
+}
+
+/* ---------- 서체·분야 칩 — 작품에 적힌 값으로 만든다 ---------- */
+.ap-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: clamp(20px, 2.4vw, 28px);
+}
+.ap-chip {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ap-chip);
+  color: var(--ap-fg);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 200ms var(--ap-ease);
+}
+.ap-chip:hover {
+  background: var(--ap-chip-hover);
+}
+.ap-chip[aria-pressed='true'] {
+  background: var(--ap-fg);
+  color: var(--navy-950);
+}
+
+/* ---------- 작품 벽 — 같은 높이로 걸고 폭은 원래 비율대로, 옆으로 넘긴다 ---------- */
+/* 이미지 없는 작품 — 빈 宣紙 대신 남색 題簽에 제목을 세로로 */
+.ap-wall .ap-work__mat:has(.ap-work__blank) {
+  background: radial-gradient(120% 90% at 30% 20%, var(--navy-800), var(--navy-950));
+}
+.ap-wall .ap-work__blank {
+  color: var(--ap-fg);
+}
+
+.ap-wall {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(20px, 2.6vw, 40px);
+  margin: 0 calc(var(--ap-gutter) * -1);
+  padding: clamp(28px, 3vw, 40px) var(--ap-gutter) clamp(20px, 2vw, 28px);
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--ap-gutter);
+  border-top: 1px solid hsl(42 63% 56% / 0.28);
+  background: linear-gradient(180deg, hsl(222 54% 12% / 0.6), transparent 70%);
+  scrollbar-width: thin;
+  scrollbar-color: hsl(45 40% 94% / 0.25) transparent;
+}
+.ap-wall__item {
+  flex: none;
+  scroll-snap-align: start;
+}
+.ap-wall .ap-work__frame {
+  height: clamp(280px, 34vw, 440px);
+  width: auto;
+}
+.ap-wall .ap-work__caption {
+  max-width: 260px;
+}
+
+/* 머릿줄 — 반투명 흰 헤더가 남색 전시실 위에서 탁해지지 않게 이 페이지에서만 宣紙로 채운다 */
+:root:not(.dark):has(.ap) header.z-50 {
+  background-color: var(--paper);
+  border-color: hsl(222 40% 20% / 0.08);
 }

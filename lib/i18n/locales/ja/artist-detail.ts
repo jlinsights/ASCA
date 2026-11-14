@@ -18,6 +18,12 @@ const artistDetail: Record<string, string> = {
   adEmptyNoWorks: '公開されている作品はまだありません。',
   adEmptyPreparing: '作家紹介と作品を準備しています。',
   adOtherArtists: '他の作家を見る',
+  adViewWorks: '作品を見る',
+  adShare: '共有',
+  adShareCopied: 'リンクをコピーしました',
+  adFilterLabel: '書体・分野で絞り込む',
+  adFilterAll: 'すべて',
+  adWallHint: '横にスクロールしてご覧ください',
 }
 
 export default artistDetail
