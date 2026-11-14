@@ -48,6 +48,9 @@ const discovery: Record<string, string> = {
   discoveryMuseum: '博物館所蔵',
   discoveryGallery: 'ギャラリー所蔵',
   discoveryPublic: '公開',
+  arRecentWorks: '新しく掛けられた作品',
+  arSeeAll: 'すべて見る',
+  arAllArtists: 'すべての作家',
 }
 
 export default discovery

@@ -1,0 +1,194 @@
+/* 작가 탐색 레일 — 어두운 전시실 위에 줄마다 옆으로 넘긴다. 작가 상세(.ap)와 같은 남색·宣紙·금 */
+.ar {
+  --ar-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ar-font-tc: var(--font-noto-serif-tc), 'Noto Serif TC', var(--font-noto-serif-kr), serif;
+  display: grid;
+  /* 줄이 내용 폭만큼 늘어나 페이지가 옆으로 밀리지 않게 */
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  gap: clamp(40px, 5vw, 64px);
+  padding-block: clamp(24px, 3vw, 40px) clamp(48px, 6vw, 80px);
+}
+
+.ar-rail {
+  min-width: 0;
+}
+
+.ar-rail__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: clamp(14px, 1.6vw, 20px);
+}
+.ar-rail__title {
+  font-family: var(--ar-font-tc);
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+.ar-rail__all {
+  flex: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color 200ms var(--ar-ease);
+}
+.ar-rail__all:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* 줄 — 페이지 여백까지 끌어 넓히고, 첫 칸은 제목과 같은 선에서 시작 */
+.ar-rail__list {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 1.6vw, 24px);
+  margin: 0 calc(var(--shell-gutter) * -1);
+  padding: 4px var(--shell-gutter) 12px;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--shell-gutter);
+  scrollbar-width: thin;
+  scrollbar-color: hsl(45 40% 94% / 0.25) transparent;
+}
+.ar-rail__list:focus-visible {
+  outline: 2px solid var(--gold-400);
+  outline-offset: 2px;
+}
+.ar-rail__item {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+/* 초상 칸 — 둥근 얼굴, 아래 이름·직함 */
+.ar-tile,
+.ar-work {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 12px;
+  color: var(--foreground);
+  text-decoration: none;
+  transition: background-color 200ms var(--ar-ease);
+}
+.ar-tile {
+  width: 188px;
+}
+.ar-tile:hover,
+.ar-work:hover {
+  background: hsl(45 40% 94% / 0.06);
+}
+.ar-tile:focus-visible,
+.ar-work:focus-visible {
+  outline: 2px solid var(--gold-400);
+  outline-offset: 2px;
+}
+.ar-tile__face {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 168px;
+  aspect-ratio: 1;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(
+    120% 90% at 30% 20%,
+    var(--navy-700),
+    var(--navy-900) 60%,
+    var(--navy-950)
+  );
+  box-shadow: 0 16px 32px -14px hsl(222 60% 3% / 0.8);
+}
+.ar-tile__img {
+  object-fit: cover;
+  object-position: top;
+  transition: transform 400ms var(--ar-ease);
+}
+.ar-tile:hover .ar-tile__img {
+  transform: scale(1.04);
+}
+.ar-tile__initial {
+  font-family: var(--ar-font-tc);
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--paper);
+}
+.ar-tile__name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ar-tile__role {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 작품 칸 — 같은 높이, 폭은 작품 비율대로, 宣紙 대지 위에 */
+.ar-work {
+  max-width: 320px;
+}
+.ar-work__mat {
+  display: block;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  background: var(--paper-2);
+  box-shadow: 0 16px 32px -14px hsl(222 60% 3% / 0.8);
+  transition: transform 300ms var(--ar-ease);
+}
+.ar-work:hover .ar-work__mat {
+  transform: translateY(-3px);
+}
+.ar-work__frame {
+  position: relative;
+  display: block;
+  height: 280px;
+  max-width: 300px;
+  overflow: hidden;
+}
+.ar-work__img {
+  object-fit: contain;
+}
+
+@media (max-width: 767px) {
+  .ar-tile {
+    width: 148px;
+  }
+  .ar-tile__face {
+    width: 128px;
+  }
+  .ar-tile__initial {
+    font-size: 44px;
+  }
+  .ar-work__frame {
+    height: 220px;
+    max-width: 240px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ar-tile__img,
+  .ar-work__mat {
+    transition: none;
+  }
+  .ar-tile:hover .ar-tile__img,
+  .ar-work:hover .ar-work__mat {
+    transform: none;
+  }
+}

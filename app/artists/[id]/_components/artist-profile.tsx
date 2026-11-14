@@ -16,6 +16,7 @@ import { FounderBand } from './founder-band'
 import { ArtistWorksWall, ShareButton } from './artist-works-wall'
 import { FOUNDER, isFounder } from '@/lib/content/founder'
 import './artist-profile.css'
+import '@/components/layout/gallery-night.css'
 
 type Language = 'ko' | 'en' | 'ja' | 'zh'
 

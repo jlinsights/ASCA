@@ -48,6 +48,9 @@ const discovery: Record<string, string> = {
   discoveryMuseum: 'Museum collection',
   discoveryGallery: 'Gallery collection',
   discoveryPublic: 'Public',
+  arRecentWorks: 'Newly hung works',
+  arSeeAll: 'See all',
+  arAllArtists: 'All artists',
 }
 
 export default discovery

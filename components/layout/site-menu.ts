@@ -65,6 +65,13 @@ const artistGrades: MenuLink[] = [
 // 둘러보기 순서는 메뉴 머리(작가의 홈페이지)와 맞춘다 (2026-11-04)
 // 작가의 홈페이지는 /artists 맨 위에 있던 홈페이지 작가·書境 안내를 떼어 낸 페이지다
 // 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
+// 직함·등급 링크 — 작가 탐색 레일(/artists)도 이 목록으로 줄을 만든다. 메뉴와 레일의 '모두 보기'가 늘 같은 주소다
+export const artistRankLinks: MenuLink[] = [
+  { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
+  { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
+  ...artistGrades,
+]
+
 const artistColumns: MenuColumn[] = [
   {
     titleKey: 'siteNavColArtistsBrowse',
@@ -76,11 +83,7 @@ const artistColumns: MenuColumn[] = [
   },
   {
     titleKey: 'siteNavColArtistsRanks',
-    items: [
-      { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
-      { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
-      ...artistGrades,
-    ],
+    items: [...artistRankLinks],
   },
 ]
 

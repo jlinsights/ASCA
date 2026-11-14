@@ -1,0 +1,10 @@
+/* 어두운 전시실 페이지(작가 상세 .ap · 작가 탐색 .gallery-night)의 머릿줄 —
+   투명/반투명 흰 헤더가 남색 위에서 안 보이므로 라이트 모드에서만 宣紙로 채운다.
+   두 페이지가 이 파일 하나를 import 한다.
+   - globals.css 에 두면 빌드 결과에서 규칙이 빠진다(2026-11-14 확인) — 컴포넌트 CSS 로 둔다
+   - :has() 에 선택자 둘을 함께 넣지 말 것 — 따로 쓴다 */
+:root:not(.dark):has(.ap) header.z-50,
+:root:not(.dark):has(.gallery-night) header.z-50 {
+  background-color: var(--paper);
+  border-color: hsl(222 40% 20% / 0.08);
+}
