@@ -69,10 +69,11 @@ async function loadRecentWorksRail(): Promise<ArtistRail | null> {
   if (!supabase) return null
   const { data: works, error } = await supabase
     .from('artworks')
-    .select('id,title,title_en,year_created,style,tags,images,artist_id,created_at')
+    .select('id,title,title_en,year_created,style,tags,images,artist_id,published_at')
     .eq('status', 'published')
     .not('artist_id', 'is', null)
-    .order('created_at', { ascending: false })
+    // 게시한 시각 순 — 오래전 초안을 최근에 게시해도 '새로 걸린' 작품으로 앞에 온다
+    .order('published_at', { ascending: false, nullsFirst: false })
     .limit(RECENT_WORKS_SCAN)
   if (error) throw error
 

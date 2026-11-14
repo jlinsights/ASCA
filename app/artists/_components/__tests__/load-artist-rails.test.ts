@@ -118,9 +118,14 @@ describe('loadArtistRails', () => {
       ...artistRow(String(i)),
       membership_type: i === 7 ? '탈퇴' : '초대작가',
     }))
+    const orders: unknown[][] = []
     const chain = (data: unknown) => {
       const q: Record<string, unknown> = {}
-      for (const m of ['select', 'eq', 'not', 'order', 'in']) q[m] = () => q
+      for (const m of ['select', 'eq', 'not', 'in']) q[m] = () => q
+      q.order = (...args: unknown[]) => {
+        orders.push(args)
+        return q
+      }
       q.limit = async () => ({ data, error: null })
       q.then = (resolve: (v: unknown) => void) => resolve({ data, error: null })
       return q
@@ -133,6 +138,8 @@ describe('loadArtistRails', () => {
     const recent = rails.find(rail => rail.key === 'recent-works')
     expect(recent?.items.map(item => item.artist.id)).toEqual(['0', '1', '2', '3', '4', '5', '6'])
     expect(recent?.items[0].cover?.src).toBe('https://x/w0.jpg')
+    // 회귀(Codex P2): 만든 시각이 아니라 게시한 시각 순으로 고른다
+    expect(orders[0]?.[0]).toBe('published_at')
   })
 })
 
