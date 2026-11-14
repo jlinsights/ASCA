@@ -17,8 +17,8 @@ const WITHDRAWN = '탈퇴'
 const STYLE_PAGE = 1000
 /** 비정상적으로 커져도 작가 페이지 한 번에 이만큼만 읽는다(넘으면 기록) */
 const STYLE_MAX_PAGES = 20
-/** 작가 행을 읽어 볼 순위 상위 후보 — 탈퇴 작가를 뺀 뒤에 자른다(먼저 자르면 뒤 순위 적격 작가가 사라진다) */
-const CANDIDATE_MAX = 100
+/** 순위 순으로 작가 행을 이만큼씩 읽는다 — 탈퇴·비공개를 빼고 RAIL_SIZE 명이 차면 멈춘다 */
+const CANDIDATE_BATCH = 50
 
 interface StyleRow {
   artist_id: string | null
@@ -73,24 +73,29 @@ async function loadStyleMatches(styles: string[], selfId: string): Promise<Publi
   const supabase = getSupabaseClient()
   if (!supabase) return []
   const styleRows = await loadStyleRows(supabase, styles)
-  const ids = rankByStyles(styleRows, styles, selfId).slice(0, CANDIDATE_MAX)
-  if (ids.length === 0) return []
-
-  // 공개 여부는 RLS(anon)가 거른다 — 비공개 작가는 행이 오지 않는다
-  const { data: rows, error: artistsError } = await supabase
-    .from('artists')
-    .select(PUBLIC_ARTIST_COLUMNS)
-    .in('id', ids)
-  if (artistsError) throw artistsError
-  const byId = new Map(
-    ((rows ?? []) as unknown as ArtistDbRow[])
-      .filter(row => !row.membership_type?.includes(WITHDRAWN))
-      .map(row => [row.id, toPublicArtist(row)])
-  )
-  return ids.flatMap(id => {
-    const artist = byId.get(id)
-    return artist ? [artist] : []
-  })
+  const ranked = rankByStyles(styleRows, styles, selfId)
+  const matches: PublicArtist[] = []
+  // 순위대로 나눠 읽으며 적격 작가만 모은다 — 먼저 자르면 상위에 탈퇴 작가가 몰릴 때 뒤 순위 적격 작가가 사라진다
+  for (let from = 0; from < ranked.length && matches.length < RAIL_SIZE; from += CANDIDATE_BATCH) {
+    const ids = ranked.slice(from, from + CANDIDATE_BATCH)
+    // 공개 여부는 RLS(anon)가 거른다 — 비공개 작가는 행이 오지 않는다
+    const { data: rows, error } = await supabase
+      .from('artists')
+      .select(PUBLIC_ARTIST_COLUMNS)
+      .in('id', ids)
+    if (error) throw error
+    const byId = new Map(
+      ((rows ?? []) as unknown as ArtistDbRow[])
+        .filter(row => !row.membership_type?.includes(WITHDRAWN))
+        .map(row => [row.id, toPublicArtist(row)])
+    )
+    for (const id of ids) {
+      const artist = byId.get(id)
+      if (artist) matches.push(artist)
+    }
+  }
+  // 누가 걸릴지는 서체 순위가 정한다 — 사진은 그 12명 안에서 순서만 바꾼다(묶음이 넘쳐도 순위 밖은 버린다)
+  return matches.slice(0, RAIL_SIZE)
 }
 
 async function loadSameGrade(membershipType: string | null): Promise<PublicArtist[]> {

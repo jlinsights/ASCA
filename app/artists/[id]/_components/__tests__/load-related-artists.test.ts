@@ -87,7 +87,9 @@ function fakeClient(works: StyleRow[], rows: ReturnType<typeof artistRow>[]) {
         }
         q.in = (...args: unknown[]) => {
           calls.push({ table, inArgs: args })
-          return table === 'artworks' ? q : Promise.resolve({ data: rows, error: null })
+          if (table === 'artworks') return q
+          const ids = new Set(args[1] as string[])
+          return Promise.resolve({ data: rows.filter(row => ids.has(row.id)), error: null })
         }
         return q
       },
@@ -186,8 +188,8 @@ describe('loadRelatedArtists', () => {
   })
 
   it('탈퇴 작가를 뺀 뒤에 자른다 — 순위 상위에 탈퇴 작가가 몰려도 뒤 순위 적격 작가가 남는다', async () => {
-    // 상위 30명은 탈퇴(작품 많음), 그 뒤 12명이 적격
-    const gone = Array.from({ length: 30 }, (_, i) => `gone${i}`)
+    // 상위 120명은 탈퇴(작품 많음), 그 뒤 12명이 적격 — 한 번에 읽는 묶음보다 많아도 끝까지 찾는다
+    const gone = Array.from({ length: 120 }, (_, i) => `gone${i}`)
     const ok = Array.from({ length: RAIL_SIZE }, (_, i) => `ok${i}`)
     const works: StyleRow[] = [
       ...gone.flatMap(id => [
@@ -196,7 +198,7 @@ describe('loadRelatedArtists', () => {
       ]),
       ...ok.map(id => ({ artist_id: id, style: '행서' })),
     ]
-    const { client } = fakeClient(works, [
+    const { client, calls } = fakeClient(works, [
       ...gone.map(id => artistRow(id, '탈퇴')),
       ...ok.map(id => artistRow(id)),
     ])
@@ -204,6 +206,29 @@ describe('loadRelatedArtists', () => {
     const rail = await loadRelatedArtists(SELF, ['행서'])
     expect(rail?.items.map(item => item.artist.id)).toEqual(ok)
     expect(mockGetArtists).not.toHaveBeenCalled()
+    // 묶음 단위로 읽고, 다 차면 멈춘다
+    const batches = calls.filter(call => call.table === 'artists')
+    expect(batches).toHaveLength(3)
+    expect((batches[0].inArgs[1] as string[]).length).toBe(50)
+  })
+
+  it('누가 걸릴지는 서체 순위가 정하고, 사진은 그 안에서 순서만 바꾼다', async () => {
+    // 1~12위는 사진 없음, 13위만 사진 있음 — 13위가 사진 때문에 끼어들면 안 된다
+    const top = Array.from({ length: RAIL_SIZE }, (_, i) => `t${i}`)
+    const works: StyleRow[] = [
+      ...top.flatMap(id => [
+        { artist_id: id, style: '행서' },
+        { artist_id: id, style: '행서' },
+      ]),
+      { artist_id: 'photo13', style: '행서' },
+    ]
+    const { client } = fakeClient(works, [
+      ...top.map(id => artistRow(id)),
+      { ...artistRow('photo13'), profile_image: 'p.jpg' },
+    ])
+    mockClient.mockReturnValue(client as never)
+    const rail = await loadRelatedArtists(SELF, ['행서'])
+    expect(rail?.items.map(item => item.artist.id)).toEqual(top)
   })
 
   it('일반작가는 DB 에 저장된 값(회원작가)으로 채운다', async () => {
