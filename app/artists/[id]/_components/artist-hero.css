@@ -90,14 +90,48 @@
   color: var(--ap-muted);
 }
 
-.ah__hanja {
-  margin: clamp(8px, 1vw, 14px) 0 0;
+/* 한자 이름은 이름 왼쪽에 세로로 — 題簽처럼 쓰고 낙관을 찍는다 */
+.ah__copy:has(> .ah__hanja) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: clamp(20px, 3vw, 48px);
+  align-items: start;
+}
+.ah__copy:has(> .ah__hanja) > * {
+  grid-column: 2;
+}
+.ah__copy:has(> .ah__hanja) > nav {
+  grid-column: 1 / -1;
+}
+.ah__copy:has(> .ah__hanja) > .ah__hanja {
+  grid-column: 1;
+  grid-row: 2 / span 3;
+  position: relative;
+  margin: 0 0 44px;
+  writing-mode: vertical-rl;
   font-family: var(--ap-font-tc);
-  font-size: clamp(26px, 3.2vw, 48px);
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: 0.12em;
-  color: var(--ap-muted);
+  font-size: clamp(40px, 5vw, 76px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  color: var(--ap-fg);
+}
+.ah__hanja::after {
+  content: '印';
+  position: absolute;
+  left: 50%;
+  bottom: -40px;
+  transform: translateX(-50%);
+  writing-mode: horizontal-tb;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
+  background: var(--seal-red);
+  color: var(--paper);
+  font-size: 14px;
+  letter-spacing: 0;
 }
 
 .ah__lede {
@@ -109,26 +143,33 @@
   color: var(--ap-muted);
 }
 
+/* 숫자 칸 — 테두리 안에 나란히 */
 .ah__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 32px;
-  margin: clamp(28px, 3.5vw, 48px) 0 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--ap-rule);
-  font-size: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  margin: clamp(28px, 3.5vw, 44px) 0 0;
+  border: 1px solid var(--ap-rule);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 13px;
   color: var(--ap-muted);
 }
 .ah__fact {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 14px 18px;
+  border-right: 1px solid var(--ap-rule);
+}
+.ah__fact:last-child {
+  border-right: 0;
 }
 .ah__fact dd {
   margin: 0;
   font-family: var(--ap-font-display);
-  font-size: 18px;
-  font-weight: 600;
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 700;
   color: var(--ap-fg);
   font-variant-numeric: tabular-nums;
 }
