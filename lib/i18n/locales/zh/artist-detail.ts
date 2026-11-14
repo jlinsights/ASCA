@@ -18,6 +18,7 @@ const artistDetail: Record<string, string> = {
   adEmptyNoWorks: '尚無公開作品。',
   adEmptyPreparing: '作家簡介與作品正在準備中。',
   adOtherArtists: '查看其他作家',
+  adRelatedTitle: '相關作家',
   adViewWorks: '觀看作品',
   adShare: '分享',
   adShareCopied: '已複製連結',

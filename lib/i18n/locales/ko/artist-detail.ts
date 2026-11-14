@@ -19,6 +19,7 @@ const artistDetail: Record<string, string> = {
   adEmptyNoWorks: '공개된 작품이 아직 없습니다.',
   adEmptyPreparing: '작가 소개와 작품을 준비하고 있습니다.',
   adOtherArtists: '다른 작가 보기',
+  adRelatedTitle: '함께 보는 작가',
   adViewWorks: '작품 보기',
   adShare: '공유',
   adShareCopied: '주소를 복사했습니다',
