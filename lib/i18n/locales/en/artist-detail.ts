@@ -21,6 +21,7 @@ const artistDetail: Record<string, string> = {
   adViewWorks: 'View works',
   adShare: 'Share',
   adShareCopied: 'Link copied',
+  adShareFailed: 'Could not copy the link. Please copy it from the address bar.',
   adFilterLabel: 'Filter by style',
   adFilterAll: 'All',
   adWallHint: 'Scroll sideways',

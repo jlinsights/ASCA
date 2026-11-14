@@ -58,6 +58,23 @@ export function ArtistWorksWall({ works, titleOf, t }: ArtistWorksWallProps) {
   )
 }
 
+// 벽의 액자 높이 clamp(280px, 34vw, 440px) — artist-profile.css 의 .ap-wall .ap-work__frame 과 같이 바꿀 것
+const FRAME_MIN = 280
+const FRAME_MAX = 440
+const FRAME_VW = 0.34
+
+/** 액자는 높이가 고정이고 폭은 작품 비율을 따른다 — 가로로 긴 작품은 320px 보다 훨씬 넓게 그려진다 */
+export function wallImageSizes(width: number | null, height: number | null): string {
+  const ratio = width && height ? width / height : 3 / 4
+  const lowBreak = Math.round(FRAME_MIN / FRAME_VW)
+  const highBreak = Math.round(FRAME_MAX / FRAME_VW)
+  return [
+    `(max-width: ${lowBreak}px) ${Math.ceil(FRAME_MIN * ratio)}px`,
+    `(max-width: ${highBreak}px) ${+(FRAME_VW * 100 * ratio).toFixed(2)}vw`,
+    `${Math.ceil(FRAME_MAX * ratio)}px`,
+  ].join(', ')
+}
+
 function WallWork({ work, title }: { work: ArtistWork; title: string }) {
   const ratio = work.width && work.height ? `${work.width} / ${work.height}` : '3 / 4'
   const meta = [work.year ? `${work.year}` : null, work.style].filter(Boolean).join(' · ')
@@ -72,7 +89,7 @@ function WallWork({ work, title }: { work: ArtistWork; title: string }) {
                 src={work.imageUrl}
                 alt={title}
                 fill
-                sizes='(max-width: 767px) 40vw, 320px'
+                sizes={wallImageSizes(work.width, work.height)}
                 className='ap-work__img'
               />
             ) : (
@@ -102,20 +119,29 @@ function WallWork({ work, title }: { work: ArtistWork; title: string }) {
 
 /** 공유 — 휴대폰은 시스템 공유 창, 아니면 주소 복사 */
 export function ShareButton({ title, t }: { title: string; t: Translate }) {
-  const [copied, setCopied] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'copied' | 'failed'>('idle')
+
+  function announce(next: 'copied' | 'failed') {
+    setStatus(next)
+    window.setTimeout(() => setStatus('idle'), next === 'failed' ? 6000 : 2400)
+  }
 
   async function share() {
     const url = window.location.href
-    try {
-      if (navigator.share) {
+    if (navigator.share) {
+      try {
         await navigator.share({ title, url })
         return
+      } catch (error) {
+        // 사용자가 공유 창을 닫은 경우 — 알릴 것이 없다. 그 밖의 실패는 주소 복사로 넘어간다
+        if (error instanceof DOMException && error.name === 'AbortError') return
       }
+    }
+    try {
       await navigator.clipboard.writeText(url)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 2400)
+      announce('copied')
     } catch {
-      // 사용자가 공유 창을 닫은 경우 — 알릴 것이 없다
+      announce('failed')
     }
   }
 
@@ -125,7 +151,7 @@ export function ShareButton({ title, t }: { title: string; t: Translate }) {
         {t('adShare')}
       </button>
       <span className='ap-actions__status' role='status' aria-live='polite'>
-        {copied ? t('adShareCopied') : ''}
+        {status === 'copied' ? t('adShareCopied') : status === 'failed' ? t('adShareFailed') : ''}
       </span>
     </>
   )

@@ -21,6 +21,7 @@ const artistDetail: Record<string, string> = {
   adViewWorks: '作品を見る',
   adShare: '共有',
   adShareCopied: 'リンクをコピーしました',
+  adShareFailed: 'リンクをコピーできませんでした。アドレスバーからコピーしてください。',
   adFilterLabel: '書体・分野で絞り込む',
   adFilterAll: 'すべて',
   adWallHint: '横にスクロールしてご覧ください',

@@ -22,6 +22,7 @@ const artistDetail: Record<string, string> = {
   adViewWorks: '작품 보기',
   adShare: '공유',
   adShareCopied: '주소를 복사했습니다',
+  adShareFailed: '주소를 복사하지 못했습니다. 주소창의 링크를 복사해 주세요',
   adFilterLabel: '서체·분야로 거르기',
   adFilterAll: '전체',
   adWallHint: '옆으로 넘겨 보세요',
