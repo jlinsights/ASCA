@@ -71,6 +71,10 @@ const nativeAuth: Record<string, string> = {
   authNativeRetry: '重新確認',
   authNativeAccount: '我的藝術家空間',
   authNativeArchive: '記錄作品',
+  authAcProfileTitle: '我的資料',
+  authAcArtistTitle: '我的作家資料',
+  authAcSecurityTitle: '帳戶管理',
+  authAcChangePassword: '變更密碼',
 }
 
 export default nativeAuth

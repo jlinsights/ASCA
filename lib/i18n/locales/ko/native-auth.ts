@@ -85,6 +85,10 @@ const nativeAuth: Record<string, string> = {
   authNativeRetry: '다시 확인',
   authNativeAccount: '내 작가 공간',
   authNativeArchive: '작품 기록하기',
+  authAcProfileTitle: '내 정보',
+  authAcArtistTitle: '내 작가 정보',
+  authAcSecurityTitle: '계정 관리',
+  authAcChangePassword: '비밀번호 바꾸기',
 }
 
 export default nativeAuth

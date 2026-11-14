@@ -164,12 +164,50 @@
   min-width: 0;
   height: auto;
   padding-block: 0.65rem;
+  padding-inline: 1rem;
+  border-radius: 0.625rem;
+  border-color: color-mix(in srgb, var(--fg) 18%, transparent);
+  background: color-mix(in srgb, var(--bg) 70%, white);
+  transition:
+    border-color 150ms var(--ease-out),
+    box-shadow 150ms var(--ease-out);
 }
 
+.asca-auth input:not([type='checkbox']):hover {
+  border-color: color-mix(in srgb, var(--fg) 40%, transparent);
+}
+
+.asca-auth input:not([type='checkbox']):focus-visible {
+  outline: none;
+  border-color: var(--fg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 45%, transparent);
+}
+
+/* 체크박스는 48px 높이를 따르지 않는다 — 글자 첫 줄에 맞춘다 */
+.asca-auth input[type='checkbox'] {
+  min-height: 0;
+}
+
+/* 버튼은 둥근 알약 — 작품 탐색(#268·#269)과 같은 손맛 */
 .asca-auth button {
   height: auto;
   padding-block: 0.65rem;
+  padding-inline: 1.25rem;
+  border-radius: 999px;
   white-space: normal;
+  transition:
+    transform 150ms var(--ease-out),
+    background-color 150ms var(--ease-out),
+    border-color 150ms var(--ease-out);
+}
+
+.asca-auth button[type='submit'] {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.asca-auth button[type='submit']:not(:disabled):hover {
+  transform: translateY(-1px);
 }
 
 .asca-auth label {
@@ -180,6 +218,7 @@
 
 .asca-auth a {
   display: inline-flex;
+  width: fit-content;
   align-items: center;
   min-height: 3rem;
   max-width: 100%;
@@ -202,13 +241,24 @@
 }
 
 .asca-auth__returning {
-  padding: 1rem;
-  border: 2px solid var(--gold-600);
-  border-radius: 0.25rem;
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.125rem 1.25rem;
+  border-left: 3px solid var(--gold-600);
+  border-radius: 0 0.625rem 0.625rem 0;
+  background: color-mix(in srgb, var(--gold-400) 9%, var(--bg));
+  font-size: 1rem;
 }
 
-.asca-auth__returning p + p {
-  margin-top: 0.75rem;
+/* 안내 속 링크는 한 줄에 하나 — 두 링크가 붙어 읽히지 않게 */
+.asca-auth__returning a {
+  display: flex;
+  min-height: 2.75rem;
+  padding-block: 0.25rem;
+}
+
+.asca-auth__returning a + a {
+  margin-top: -0.5rem;
 }
 
 .asca-auth__returning--emphasis {
@@ -237,8 +287,53 @@
 
 /* ── 작품 패널 ─────────────────────────────────────────────────────── */
 
+/* 좁은 화면 — 작품을 폼 위 띠로. 넓은 화면에선 아래에서 옆 패널로 바뀐다 */
 .asca-auth__art {
-  display: none;
+  position: relative;
+  order: -1;
+  height: 9.5rem;
+  margin: 0.75rem 0.75rem 0;
+  overflow: hidden;
+  border-radius: 0.625rem;
+  background: var(--navy-950);
+  isolation: isolate;
+}
+
+.asca-auth__art-img {
+  object-fit: cover;
+}
+
+.asca-auth__art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, hsl(222 64% 6% / 0.88), hsl(222 64% 6% / 0.35));
+  pointer-events: none;
+}
+
+@media (max-width: 1023px) {
+  .asca-auth__seal {
+    top: 0.875rem;
+    right: 0.875rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1rem;
+  }
+
+  .asca-auth__caption {
+    padding: 1.125rem 1.25rem;
+  }
+
+  /* 아래 기본 규칙보다 앞에 있어 한 단계 더 좁혀 쓴다 */
+  .asca-auth .asca-auth__caption-label,
+  .asca-auth .asca-auth__caption-gloss {
+    display: none;
+  }
+
+  .asca-auth__caption-phrase {
+    font-size: 1.5rem;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -251,6 +346,7 @@
   }
 
   .asca-auth__art {
+    order: 0;
     position: sticky;
     top: calc(var(--header-h) + 0.75rem);
     display: block;
@@ -369,4 +465,218 @@
   .asca-auth__art-img {
     animation: none;
   }
+}
+
+/* ── 내 작가 공간(/profile) ───────────────────────────────────────── */
+/* 宣紙 바탕에 머리(낙관 자리 + 이름) 하나, 아래로 카드. 로그아웃은 맨 끝 계정 카드에 조용히 */
+
+.asca-account {
+  --bg: var(--paper);
+  --fg: var(--navy-900);
+  --fg-muted: var(--stone-700, #424a5e);
+  --rule: #e5e0ce;
+  --card: color-mix(in srgb, var(--paper) 55%, white);
+  --ring: var(--gold-600);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  width: 100%;
+  max-width: 64rem;
+  margin-inline: auto;
+  padding: clamp(6rem, 10vw, 8rem) var(--shell-gutter, 1.25rem) clamp(3rem, 6vw, 5rem);
+  color: var(--fg);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.dark .asca-account {
+  --bg: var(--navy-950);
+  --fg: var(--paper);
+  --fg-muted: var(--navy-300);
+  --rule: #1f2b4c;
+  --card: var(--navy-900);
+  --ring: var(--gold-400);
+}
+
+.asca-account__head {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  padding-bottom: clamp(1.75rem, 3vw, 2.5rem);
+  border-bottom: 1px solid var(--rule);
+}
+
+.asca-account__avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: clamp(4.5rem, 9vw, 6rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    120% 90% at 30% 20%,
+    var(--navy-700),
+    var(--navy-900) 60%,
+    var(--navy-950)
+  );
+  color: var(--paper);
+  font-family: var(--font-display), var(--font-noto-serif-kr), serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  box-shadow: 0 16px 32px -16px hsl(222 54% 8% / 0.5);
+}
+
+/* 낙관 — 둥근 자리 오른쪽 아래 */
+.asca-account__avatar::after {
+  content: '印';
+  position: absolute;
+  right: -0.25rem;
+  bottom: -0.25rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 2px;
+  background: var(--seal-red);
+  color: var(--paper);
+  font-family: var(--font-noto-serif-tc), serif;
+  font-size: 0.875rem;
+  transform: rotate(-4deg);
+}
+
+.asca-account__who {
+  min-width: 0;
+}
+
+.asca-account__eyebrow {
+  margin: 0;
+  color: var(--gold-800);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.dark .asca-account__eyebrow {
+  color: var(--gold-400);
+}
+
+.asca-account__name {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display), var(--font-noto-serif-kr), serif;
+  font-size: clamp(1.875rem, 1.3rem + 2vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  overflow-wrap: anywhere;
+}
+
+.asca-account__email {
+  margin: 0.375rem 0 0;
+  color: var(--fg-muted);
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.asca-account__notice {
+  margin-top: 1.5rem;
+  padding: 0.875rem 1.125rem;
+  border-left: 3px solid var(--gold-600);
+  border-radius: 0 0.625rem 0.625rem 0;
+  background: color-mix(in srgb, var(--gold-400) 9%, var(--bg));
+}
+
+.asca-account__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+@media (min-width: 768px) {
+  .asca-account__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .asca-account__card--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+.asca-account__card {
+  min-width: 0;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  border: 1px solid var(--rule);
+  border-radius: 1rem;
+  background: var(--card);
+}
+
+/* 응모 내역·작가 연결은 자기 제목·윗줄을 갖고 온다 — 카드 안에서는 윗줄을 지운다 */
+.asca-account__card > section {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.asca-account__card-title,
+.asca-account__card > section > h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display), var(--font-noto-serif-kr), serif;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.asca-account__form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.asca-account__row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.asca-account__row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.asca-account input:not([type='checkbox']) {
+  min-height: 3rem;
+  padding-inline: 1rem;
+  border-radius: 0.625rem;
+}
+
+.asca-account input:not([type='checkbox']):focus-visible {
+  outline: none;
+  border-color: var(--fg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 45%, transparent);
+}
+
+.asca-account button,
+.asca-account .asca-account__actions a {
+  min-height: 3rem;
+  padding-inline: 1.25rem;
+  border-radius: 999px;
+}
+
+.asca-account__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* 로그아웃은 맨 끝, 눈에 덜 띄게 — 실수로 누르지 않도록 다른 버튼과 거리를 둔다 */
+.asca-account__signout {
+  margin-left: auto;
+  color: var(--fg-muted);
+}
+
+.asca-account__signout:hover {
+  color: var(--fg);
+}
+
+.asca-account .asca-member-help {
+  margin-top: clamp(2rem, 4vw, 3rem);
 }

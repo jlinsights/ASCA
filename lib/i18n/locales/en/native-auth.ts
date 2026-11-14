@@ -84,6 +84,10 @@ const nativeAuth: Record<string, string> = {
   authNativeRetry: 'Try again',
   authNativeAccount: 'My artist space',
   authNativeArchive: 'Record artwork',
+  authAcProfileTitle: 'My details',
+  authAcArtistTitle: 'My artist profile',
+  authAcSecurityTitle: 'Account',
+  authAcChangePassword: 'Change password',
 }
 
 export default nativeAuth
