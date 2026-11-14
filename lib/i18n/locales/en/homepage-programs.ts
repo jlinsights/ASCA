@@ -50,11 +50,31 @@ const homepagePrograms: Record<string, string> = {
   hpProgDiff3Body:
     'Your Society profile links straight to your website, so visitors who find the Society can reach your home.',
 
+  hpProgMediaTitle: 'More ways to share your work',
+  hpProgMediaIntro:
+    'Together we can explore features that help people see, hear and share your story on their phones.',
+  hpProgMedia1Title: 'YouTube videos',
+  hpProgMedia1Body: 'Present videos of your practice and exhibitions',
+  hpProgMedia2Title: 'Blog and Instagram',
+  hpProgMedia2Body: 'Connect your writing and social media activity',
+  hpProgMedia3Title: 'News and press',
+  hpProgMedia3Body: 'Link to coverage of your work and exhibitions',
+  hpProgMedia4Title: 'Artwork purchase enquiries',
+  hpProgMedia4Body: 'Discuss enquiries or links for individual artworks',
+  hpProgMedia5Title: 'Audio descriptions',
+  hpProgMedia5Body: 'Explore audio readings of artwork descriptions and artist statements',
+  hpProgMedia6Title: 'Personalised digital experiences',
+  hpProgMedia6Body: 'Explore mobile-friendly presentation and emerging digital and AI tools',
+  hpProgMediaNote:
+    'These are optional paid features, discussed on request. Rights, feasibility, scope and costs are agreed with the secretariat. Purchase and payment functions require separate discussion.',
+
   hpProgWhoTitle: 'Who can apply',
   hpProgWhoMember:
     'Full members — the steps above follow from taking part in Society exhibitions and events.',
   hpProgWhoSpecial:
     'Non-member artists — once recognised as a recommended or invited artist through special appointment, you can apply for a personal or group website.',
+  hpProgWhoConsult:
+    'Artists may ask about website creation regardless of membership or appointment as a recommended or invited artist. The secretariat will discuss the available services and costs with you.',
   hpProgWhoCite: 'Recommended and Invited Artists, Art. 11 (Special appointment)',
   hpProgCta: 'Ask about a website',
   hpProgCtaMembership: 'Membership guide',

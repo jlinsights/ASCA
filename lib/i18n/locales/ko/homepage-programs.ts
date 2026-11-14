@@ -51,10 +51,30 @@ const homepagePrograms: Record<string, string> = {
   hpProgDiff3Body:
     '협회의 작가 소개에서 작가의 홈페이지로 바로 이어져, 협회를 찾은 관람객이 작가의 집까지 닿습니다.',
 
+  hpProgMediaTitle: '작품이 더 많은 사람을 만나는 방법',
+  hpProgMediaIntro:
+    '스마트폰에서도 편하게 보고 듣고 나눌 수 있도록, 작가의 이야기에 맞는 기능을 함께 구상합니다.',
+  hpProgMedia1Title: '유튜브 영상',
+  hpProgMedia1Body: '작업 과정과 전시 영상을 홈페이지에서 소개',
+  hpProgMedia2Title: '블로그·인스타그램',
+  hpProgMedia2Body: '작가의 소셜미디어와 글을 연결해 활동을 이어 소개',
+  hpProgMedia3Title: '뉴스·언론 기사',
+  hpProgMedia3Body: '작가와 전시를 다룬 기사를 연결해 이력을 전달',
+  hpProgMedia4Title: '작품 구매 문의',
+  hpProgMedia4Body: '작품별 구매 문의나 판매 연결 방식을 상담',
+  hpProgMedia5Title: '작품 해설 음성',
+  hpProgMedia5Body: '작품 설명과 작가노트를 음성으로 들을 수 있도록 구성 상담',
+  hpProgMedia6Title: '맞춤형 디지털 표현',
+  hpProgMedia6Body: '모바일 화면과 새로운 디지털·AI 기술을 활용한 표현을 함께 검토',
+  hpProgMediaNote:
+    '작가의 요청에 따라 선택하는 유료 기능입니다. 자료 사용 권한, 구현 가능성, 제공 범위와 비용은 사무국 상담 후 정합니다. 구매·결제 기능은 별도 협의가 필요합니다.',
+
   hpProgWhoTitle: '누가 신청할 수 있나요',
   hpProgWhoMember: '정회원 — 협회가 주관하는 전시·행사에 참여하면 위 단계가 이어집니다.',
   hpProgWhoSpecial:
     '비회원 작가 — 특별선임으로 추천작가·초대작가로 인정받으면 개인 홈페이지나 단체 홈페이지를 신청할 수 있습니다.',
+  hpProgWhoConsult:
+    '회원 여부나 추천·초대작가 선임 여부와 관계없이 홈페이지 제작을 상담할 수 있습니다. 가능한 서비스 범위와 비용은 사무국과 상담 후 안내받으실 수 있습니다.',
   hpProgWhoCite: '추천·초대작가 규정 제11조 (특별선임)',
   hpProgCta: '홈페이지 상담하기',
   hpProgCtaMembership: '회원 가입 안내',

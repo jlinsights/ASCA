@@ -198,6 +198,36 @@ export function HomepagePrograms() {
         </dl>
       </div>
 
+      <section
+        aria-labelledby='homepage-media-title'
+        className='mt-16 border-t border-border pt-12'
+      >
+        <div className='grid gap-4 lg:grid-cols-[1fr_2fr] lg:gap-16'>
+          <h2
+            id='homepage-media-title'
+            className='font-serif text-2xl leading-snug text-foreground md:text-3xl'
+          >
+            {t('hpProgMediaTitle')}
+          </h2>
+          <p className='max-w-2xl text-sm leading-relaxed text-muted-foreground'>
+            {t('hpProgMediaIntro')}
+          </p>
+        </div>
+        <dl className='mt-8 grid gap-x-8 md:grid-cols-2 lg:grid-cols-3'>
+          {[1, 2, 3, 4, 5, 6].map(index => (
+            <div key={index} className='border-t border-border py-5'>
+              <dt className='font-serif text-lg text-foreground'>
+                {t(`hpProgMedia${index}Title`)}
+              </dt>
+              <dd className='mt-2 text-sm leading-relaxed text-muted-foreground'>
+                {t(`hpProgMedia${index}Body`)}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p className='mt-4 text-sm leading-relaxed text-muted-foreground'>{t('hpProgMediaNote')}</p>
+      </section>
+
       <div className='mt-12 grid gap-8 rounded-sm bg-muted/60 px-6 py-8 md:px-10 lg:grid-cols-[1fr_auto] lg:items-center'>
         <div>
           <h2 className='font-serif text-xl text-foreground md:text-2xl'>{t('hpProgWhoTitle')}</h2>
@@ -209,6 +239,7 @@ export function HomepagePrograms() {
             cites={[{ key: 'hpProgWhoCite', href: `${regulationHref('artist-selection')}#a11` }]}
             light={false}
           />
+          <p className='mt-4 text-sm leading-relaxed text-foreground'>{t('hpProgWhoConsult')}</p>
         </div>
         <div className='flex flex-wrap gap-3'>
           <Link
