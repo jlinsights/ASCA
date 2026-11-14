@@ -7,6 +7,7 @@ const BASE = 'https://caxjyimsuvjnbmjoxfad.supabase.co'
 
 const getArtist = jest.fn()
 const worksQuery = jest.fn()
+const loadRelated = jest.fn()
 
 jest.mock('next/navigation', () => ({
   notFound: () => {
@@ -27,6 +28,9 @@ jest.mock('@/contexts/language-context', () => {
 })
 jest.mock('@/lib/utils/logger', () => ({ log: { error: jest.fn() } }))
 jest.mock('@/lib/api/artists', () => ({ getArtist: (key: string) => getArtist(key) }))
+jest.mock('../_components/load-related-artists', () => ({
+  loadRelatedArtists: (...args: unknown[]) => loadRelated(...args),
+}))
 jest.mock('@/lib/supabase', () => ({
   getSupabaseClient: () => ({
     from: (table: string) => {
@@ -100,6 +104,7 @@ beforeEach(() => {
   mockLanguage = 'ko'
   getArtist.mockReset().mockResolvedValue(artistRow)
   worksQuery.mockReset().mockResolvedValue({ data: works, error: null })
+  loadRelated.mockReset().mockResolvedValue(null)
 })
 
 async function renderPage(id = ARTIST) {
@@ -366,5 +371,50 @@ describe('작가 상세 화면 글자 번역', () => {
     for (const table of Object.values(artistDetailTranslations) as Record<string, string>[]) {
       for (const value of Object.values(table)) expect(value.trim()).not.toBe('')
     }
+  })
+
+  it('함께 보는 작가: 이 작가의 서체로 찾고, 있으면 작품 아래 줄로 건다', async () => {
+    loadRelated.mockResolvedValue({
+      key: 'related',
+      labelKey: 'adRelatedTitle',
+      href: null,
+      items: [
+        {
+          artist: {
+            id: 'other',
+            name: '이웃작가',
+            nameEn: null,
+            nameJa: null,
+            nameZh: null,
+            bio: null,
+            birthYear: null,
+            deathYear: null,
+            nationality: null,
+            specialties: [],
+            awards: [],
+            profileImage: null,
+            membershipType: '초대작가',
+            artistType: null,
+            title: null,
+            slug: 'neighbor',
+            artNameKo: null,
+            artNameHanja: null,
+          },
+          cover: null,
+        },
+      ],
+    })
+    await renderPage()
+    expect(loadRelated).toHaveBeenCalledWith(expect.objectContaining({ id: ARTIST }), ['행서'])
+    const rail = screen.getByRole('region', { name: '함께 보는 작가' })
+    expect(within(rail).getByRole('link', { name: /이웃작가/ })).toHaveAttribute(
+      'href',
+      '/artists/neighbor'
+    )
+  })
+
+  it('함께 보는 작가가 없으면 줄을 걸지 않는다', async () => {
+    await renderPage()
+    expect(screen.queryByRole('region', { name: '함께 보는 작가' })).toBeNull()
   })
 })

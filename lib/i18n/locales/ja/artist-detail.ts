@@ -18,6 +18,7 @@ const artistDetail: Record<string, string> = {
   adEmptyNoWorks: '公開されている作品はまだありません。',
   adEmptyPreparing: '作家紹介と作品を準備しています。',
   adOtherArtists: '他の作家を見る',
+  adRelatedTitle: '関連する作家',
   adViewWorks: '作品を見る',
   adShare: '共有',
   adShareCopied: 'リンクをコピーしました',

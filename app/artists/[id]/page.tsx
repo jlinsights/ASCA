@@ -7,6 +7,7 @@ import { log } from '@/lib/utils/logger'
 import { artNameLabel, type ArtistDbRow } from '@/lib/api/artist-mapper'
 import { artistNativeName } from '@/lib/api/artist-name'
 import { ArtistProfile } from './_components/artist-profile'
+import { loadRelatedArtists } from './_components/load-related-artists'
 import {
   orderWorks,
   toArtistWork,
@@ -66,5 +67,8 @@ export default async function ArtistPage({ params }: PageProps) {
   const artist = await loadArtist(decodeURIComponent((await params).id))
   if (!artist) notFound()
   const works = await loadWorks(artist.id)
-  return <ArtistProfile artist={artist} works={works} />
+  // 이 작가가 쓴 서체 — 같은 서체를 쓰는 작가를 함께 보는 작가로 건다
+  const styles = [...new Set(works.flatMap(work => (work.style ? [work.style] : [])))]
+  const related = await loadRelatedArtists(artist, styles)
+  return <ArtistProfile artist={artist} works={works} related={related} />
 }

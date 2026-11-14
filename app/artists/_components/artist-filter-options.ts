@@ -52,6 +52,11 @@ const STORED_AS: Partial<Record<keyof typeof options, Record<string, string>>> =
   membership: { 일반작가: '회원작가' },
 }
 
+/** 규정 등급 → DB 에 저장된 membership_type 값(일반작가 → 회원작가). 조회 조건에 쓴다 */
+export function storedGradeValue(grade: string): string {
+  return STORED_AS.membership?.[grade] ?? grade
+}
+
 /**
  * 저장된 membership_type('초대작가, 운영위원' 처럼 쉼표로 이어짐)에서 규정 작가 등급을 뽑는다.
  * 준회원·공모작가·원로작가 등 규정 등급이 아닌 값이면 null.

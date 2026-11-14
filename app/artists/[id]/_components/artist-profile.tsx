@@ -14,6 +14,8 @@ import { ArtistHero, type ArtistHeroFact } from './artist-hero'
 import { workYearSpan, type ArtistWork } from './artist-works'
 import { FounderBand } from './founder-band'
 import { ArtistWorksWall, ShareButton } from './artist-works-wall'
+import { ArtistRails } from '../../_components/artist-rails'
+import type { ArtistRail } from '../../_components/load-artist-rails'
 import { FOUNDER, isFounder } from '@/lib/content/founder'
 import './artist-profile.css'
 import '@/components/layout/gallery-night.css'
@@ -23,6 +25,8 @@ type Language = 'ko' | 'en' | 'ja' | 'zh'
 interface ArtistProfileProps {
   artist: ArtistDbRow
   works: ArtistWork[]
+  /** 함께 보는 작가 — 모자라거나 못 읽으면 null 이고 줄을 걸지 않는다 */
+  related?: ArtistRail | null
 }
 
 const HAN = /[㐀-鿿豈-﫿]/
@@ -75,7 +79,7 @@ function showsHanjaMark(language: Language): boolean {
   return language === 'ko' || language === 'en'
 }
 
-export function ArtistProfile({ artist, works }: ArtistProfileProps) {
+export function ArtistProfile({ artist, works, related = null }: ArtistProfileProps) {
   const { language, t } = useLanguage() as { language: Language; t: Translate }
 
   const baseName = localized(language, {
@@ -254,6 +258,14 @@ export function ArtistProfile({ artist, works }: ArtistProfileProps) {
             {t('adOtherArtists')}
           </Link>
         </section>
+      )}
+
+      {related && (
+        // 레일은 어두운 토큰(--foreground 등)으로 그린다 — 전시실 위에서 .dark 로 맞춘다
+        // 제목과 구역 이름은 레일이 스스로 단다(h2 + aria-labelledby) — 겉은 구역을 겹치지 않는 div
+        <div className='ap-section ap-related dark'>
+          <ArtistRails rails={[related]} t={t} language={language} />
+        </div>
       )}
 
       <LayoutFooter />
