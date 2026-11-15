@@ -26,10 +26,10 @@ export const internalCostInputSchema = z.object({
   /** 승인된 별도 예비부수 (해당 시) */
   spareCopies: z.number().int().nonnegative().default(0),
   vendorQuote: vendorQuoteSchema.nullable().default(null),
-  /** 견적에 포함되지 않은 추가 비용만 넣는다 */
-  extraDelivery: won.default(0),
+  /** 견적에 포함되지 않은 추가 비용만 넣는다. 배송·부가세는 견적에 없으면 0 이라도 직접 입력해야 한다(공란 = 미확인) */
+  extraDelivery: won.nullable().default(null),
   extraEditing: won.default(0),
-  extraVat: won.default(0),
+  extraVat: won.nullable().default(null),
   /** 과거 주문 참고치 — 같은 사양·권당 원가 유지 가정으로 단순 환산한다. 확정 원가가 아니다 */
   reference: z
     .object({ pastTotal: won, pastPrintRun: z.number().int().positive() })
@@ -42,6 +42,7 @@ export type InternalCostStatus =
   | 'SPEC_MISMATCH'
   | 'PRINT_RUN_MISMATCH'
   | 'DOUBLE_COUNTED'
+  | 'EXTRA_COSTS_UNCONFIRMED'
   | 'BELOW_TARGET'
   | 'OK'
 
@@ -108,20 +109,28 @@ export function computeInternalCost(
   else if (vendor.specId !== specId) status = 'SPEC_MISMATCH'
   else if (vendor.printRun !== orderPrintRun) status = 'PRINT_RUN_MISMATCH'
   else if (
-    (vendor.deliveryIncluded && value.extraDelivery > 0) ||
-    (vendor.taxIncluded && value.extraVat > 0)
+    (vendor.deliveryIncluded && (value.extraDelivery ?? 0) > 0) ||
+    (vendor.taxIncluded && (value.extraVat ?? 0) > 0)
   )
     status = 'DOUBLE_COUNTED'
+  else if (
+    (!vendor.deliveryIncluded && value.extraDelivery === null) ||
+    (!vendor.taxIncluded && value.extraVat === null)
+  )
+    // 견적에 없는 배송비·부가세를 입력하지 않았으면 0 으로 보고 손익을 내지 않는다
+    status = 'EXTRA_COSTS_UNCONFIRMED'
   else {
+    const extraDelivery = value.extraDelivery ?? 0
+    const extraVat = value.extraVat ?? 0
     const totalCost =
-      vendor.productionCost + value.extraDelivery + value.extraEditing + value.extraVat + paymentFee
+      vendor.productionCost + extraDelivery + value.extraEditing + extraVat + paymentFee
     const profit = revenue - totalCost
     const margin = marginBp(profit, revenue)
     confirmed = {
       productionCost: vendor.productionCost,
-      extraDelivery: value.extraDelivery,
+      extraDelivery,
       extraEditing: value.extraEditing,
-      extraVat: value.extraVat,
+      extraVat,
       totalCost,
       profit,
       marginBp: margin,

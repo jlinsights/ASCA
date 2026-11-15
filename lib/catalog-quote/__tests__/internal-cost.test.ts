@@ -94,4 +94,28 @@ describe('협회 내부 원가', () => {
     })
     expect(computeInternalCost({ quote: { ...quote, paidCopies: 120 } }).ok).toBe(false)
   })
+
+  it('견적에 없는 부가세·배송비를 입력하지 않으면 확정 손익을 내지 않는다', () => {
+    const exclusive = { ...vendor, taxIncluded: false, deliveryIncluded: false }
+    const missing = computeInternalCost({ quote, vendorQuote: exclusive })
+    if (!missing.ok) throw new Error('expected ok')
+    expect(missing.cost.status).toBe('EXTRA_COSTS_UNCONFIRMED')
+    expect(missing.cost.confirmed).toBeNull()
+    const onlyVat = computeInternalCost({ quote, vendorQuote: exclusive, extraVat: 300_000 })
+    if (!onlyVat.ok) throw new Error('expected ok')
+    expect(onlyVat.cost.status).toBe('EXTRA_COSTS_UNCONFIRMED')
+    // 0 을 직접 입력하면 확인한 값으로 본다
+    const confirmed = computeInternalCost({
+      quote,
+      vendorQuote: exclusive,
+      extraVat: 300_000,
+      extraDelivery: 0,
+    })
+    if (!confirmed.ok) throw new Error('expected ok')
+    expect(confirmed.cost.confirmed).toMatchObject({
+      extraVat: 300_000,
+      extraDelivery: 0,
+      totalCost: 3_000_000 + 300_000 + 137_425,
+    })
+  })
 })
