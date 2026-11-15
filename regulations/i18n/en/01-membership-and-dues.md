@@ -181,12 +181,37 @@ competition.
 
 ### Article 7 (Entry Fee Regulations for Solo Exhibitions and Calligraphy Group Booth Exhibitions)
 
+① (Scope) The entry fees in this Article apply when an artist actually enters 10
+or more works in a solo exhibition or calligraphy group booth exhibition held by
+the Society. If fewer than 10 works are entered, paying the fee under this
+Article does not substitute for the entry requirement.
+
+② (Calculation) The entry fee is the per-work rate of the bracket into which the
+number of approved works falls, multiplied by the total number of approved
+works.
+
 | Number of Works Entered | Standard Rate (applies to non-members) | Member Rate (applies to Full Members) |
 | ----------------------- | -------------------------------------- | ------------------------------------- |
 | 10 to 19 works          | KRW 180,000 per work                   | KRW 160,000 per work                  |
 | 20 to 29 works          | KRW 160,000 per work                   | KRW 140,000 per work                  |
 | 30 to 39 works          | KRW 140,000 per work                   | KRW 120,000 per work                  |
 | 40 or more works        | KRW 120,000 per work                   | KRW 100,000 per work                  |
+
+③ (Member Rate) The member rate applies to persons who are Full Members under
+Article 2(3) on the date of application. The standard rate applies to all
+others.
+
+④ (Combining Works in a Group Booth) For a calligraphy group booth exhibition,
+the approved works of the participating artists are combined to determine the
+bracket only when the booth is applied for on a single application and operated
+as a single booth. Where Full Members and non-members participate together, the
+Secretariat separately calculates the rate applied to each work, informs the
+applicant before application, and obtains the applicant's approval.
+
+⑤ (Separate Costs) The entry fee does not include the mounting fee under Article
+8 or the catalog fee under Article 9. Before application, the Secretariat
+informs the applicant of the entry fee, mounting fee, and catalog fee
+separately.
 
 ### Article 8 (Mounting Fee Regulations)
 
@@ -211,15 +236,86 @@ Full Members are offered a discount.
 
 ### Article 9 (Catalog Fee Regulations)
 
-1. Full Members who participate in an exhibition are provided with one catalog
-   free of charge.
-2. For additional purchases, or for non-Full Members who do not participate in
-   an exhibition, the following applies.
+① (Free Copy of the Joint Exhibition Catalog) One copy of the joint exhibition
+catalog published by the Society is provided free of charge to each Full Member
+who participates in the exhibition.
 
-| Category   | Additional Catalog Purchase (per copy) |
-| ---------- | -------------------------------------- |
-| Member     | KRW 20,000                             |
-| Non-member | KRW 30,000                             |
+② (Purchase Price of the Joint Exhibition Catalog) The following prices apply to
+additional copies of the catalog under Paragraph 1 and to purchases by persons
+not eligible for the free copy under Paragraph 1.
+
+| Category             | Additional Catalog Purchase (per copy) |
+| -------------------- | -------------------------------------- |
+| Member (Full Member) | KRW 20,000                             |
+| Non-member           | KRW 30,000                             |
+
+③ (Production Methods for Commissioned Catalogs) Where an artist or group
+participating in a solo exhibition or calligraphy group booth exhibition
+commissions the Society to produce a printed catalog (hereinafter a
+"commissioned catalog"), it is produced by one of the following methods. Before
+the order, the Secretariat informs the commissioning party, in writing or
+electronically, of the method that applies and its basis of calculation.
+
+1. Actual-cost method: the commissioning party bears the actual production cost
+   approved in advance
+2. Fixed-price method: the fixed-price production package under Paragraph 5
+
+④ (Actual-Cost Method) A commissioned catalog under the actual-cost method is
+ordered after the commissioning party approves a quotation stating the format,
+page count, paper, colors, binding, number of copies, delivery date, and whether
+tax and delivery are included. The Society adds no agency fee, settles the
+account against expense records after production, and refunds any amount by
+which the advance payment exceeds the actual cost.
+
+⑤ (Fixed-Price Production Package) The fixed-price package is offered only after
+the Board of Directors resolves the discount criteria in Paragraph 6 and the
+prices, and is subject to the following.
+
+1. The standard specification is A4 (210×297 mm). The edition, page count,
+   paper, colors, binding, and coating follow the specification approved for
+   each order.
+2. Where a Full Member commissions the catalog, one free copy is provided for
+   each approved work entered. These free copies are not provided in addition to
+   the one copy under Paragraph 1 and Article 12(1)(a). Non-members receive no
+   free copies.
+3. Paid copies beyond the free copies are ordered from 100 to 500 copies in
+   units of 50. Orders above 500 copies or of other quantities are subject to a
+   separate quotation.
+4. The base price per copy is KRW 20,000 for Full Members and KRW 30,000 for
+   non-members. For Full Members, the work-count discount rate and the
+   quantity-bracket discount rate in Paragraph 6 are added together, and the
+   combined rate does not exceed 25%. A quantity-bracket discount applies only
+   to the copies within that bracket and is not applied retroactively to copies
+   in earlier brackets. Free copies are not counted in determining the brackets.
+   No discount applies to non-members.
+5. For a calligraphy group booth exhibition, copies are combined only when
+   ordered on a single application, edition, print specification, and delivery
+   address. Where Full Members and non-members participate together, or where
+   delivery is split, several editions are ordered, or quantities are ordered
+   separately, a separate quotation applies.
+6. The price of the fixed-price package is billed separately from the entry fee
+   and mounting fee. Within the approved specification and quantity, no
+   difference from the actual production cost is refunded or additionally
+   charged.
+
+⑥ (Discount Criteria for the Fixed-Price Package) The discount rates for the
+fixed-price package are as follows. These rates are a draft for review before
+the resolution of the Board of Directors and are confirmed or changed by its
+resolution.
+
+| Approved Works Entered | Work-Count Discount Rate |
+| ---------------------- | ------------------------ |
+| 10 to 19 works         | 0%                       |
+| 20 to 29 works         | 3%                       |
+| 30 to 39 works         | 5%                       |
+| 40 or more works       | 7%                       |
+
+| Order of Paid Copies | Quantity-Bracket Discount Rate |
+| -------------------- | ------------------------------ |
+| 1st to 99th          | 0%                             |
+| 100th to 299th       | 8%                             |
+| 300th to 499th       | 15%                            |
+| 500th                | 22%                            |
 
 ### Article 10 (Individual Artist Homepage Initial Setup and Annual Maintenance Fee Regulations)
 
