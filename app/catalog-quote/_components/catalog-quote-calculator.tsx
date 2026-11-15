@@ -182,8 +182,8 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
               추가 유료 도록 주문 안 함
             </label>
             <p id='quote-paid-hint' className='mt-1 text-xs text-muted-foreground'>
-              정회원은 승인 작품 1점당 1부를 무료로 받습니다(공동 도록 1권과 중복 없음). 500부를
-              넘는 수량은 별도 견적입니다.
+              정회원은 승인 작품 1점당 1부를 무료로 받습니다(전시 공동 도록 1권은 별도 제공).
+              500부를 넘는 수량은 별도 견적입니다.
             </p>
           </div>
         </div>
