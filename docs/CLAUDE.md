@@ -546,6 +546,19 @@ import { getArtistById, createArtwork } from '@/lib/db/queries'
 - `copy.md` Part B~D의 내부 서비스 기획은 공개 제공 서비스나 검증된 성과가
   아니다. 구현된 서버 모듈만으로 자동화·AI 상품을 제공한다고 쓰지 않는다.
 
+### 작가 홈페이지 상담·선택 기능
+
+- `/artists/homepages`의 프로그램 안내는
+  `app/artists/homepages/_components/homepage-programs.tsx`와 네 언어의
+  `lib/i18n/locales/<언어>/homepage-programs.ts`에서 관리한다. 변경 시 네 언어와
+  `app/artists/homepages/__tests__/homepage-programs.test.tsx`를 함께 확인한다.
+- 회원·특별선임에 따른 현행 신청·혜택 조건과 누구나 가능한 제작 상담을 구분한다.
+  상담 가능을 회원 자격·특별선임이나 규정상 혜택의 자동 부여로 표현하지 않는다.
+- 영상·SNS·기사·구매 문의·음성 해설·AI 활용 표현은 작가의 요청에 따라 상담하는
+  유료 선택 기능으로 안내한다. 자료 권한·구현 가능성·범위·비용은 상담 후 정하며
+  구매·결제 기능은 별도 협의한다. 안내 문구를 실제 기능 구현, 확정 가격 또는
+  규정 시행의 증거로 취급하지 않는다.
+
 ### Large File Refactoring Process
 
 If a single code file exceeds **500 lines**, proactively trigger optimization
