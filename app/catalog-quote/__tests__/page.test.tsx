@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 import path from 'path'
 import { render, screen } from '@testing-library/react'
 import { archiveIdentity } from '@/lib/archive/writer'
-import CatalogQuotePage, { metadata } from '../page'
+import CatalogQuotePage, { generateMetadata } from '../page'
 
 jest.mock('server-only', () => ({}))
 jest.mock('@/lib/archive/writer', () => ({ archiveIdentity: jest.fn() }))
@@ -35,8 +35,22 @@ describe('/catalog-quote 미리보기', () => {
     await expect(CatalogQuotePage()).rejects.toThrow('NEXT_NOT_FOUND')
   })
 
-  it('검색에 노출하지 않는다', () => {
-    expect(metadata.robots).toEqual({ index: false, follow: false })
+  it('검색에 노출하지 않는다', async () => {
+    expect((await generateMetadata()).robots).toEqual({ index: false, follow: false })
+    process.env.CATALOG_QUOTE_PREVIEW = 'on'
+    expect((await generateMetadata()).robots).toEqual({ index: false, follow: false })
+  })
+
+  it('볼 수 없으면 제목을 내보내지 않아 일반 404와 같다', async () => {
+    expect((await generateMetadata()).title).toBeUndefined()
+    process.env.CATALOG_QUOTE_PREVIEW = 'on'
+    identity.mockResolvedValueOnce({ userId: 'u', admin: false } as never)
+    expect((await generateMetadata()).title).toBeUndefined()
+  })
+
+  it('켜고 관리자이면 미리보기 제목을 쓴다', async () => {
+    process.env.CATALOG_QUOTE_PREVIEW = 'on'
+    expect((await generateMetadata()).title).toBe('종이 도록 가견적 (미리보기) | 동양서예협회')
   })
 
   it('켜고 관리자이면 가견적 안내와 9개 부수 선택지만 보인다', async () => {
