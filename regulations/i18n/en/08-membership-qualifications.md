@@ -168,9 +168,7 @@ Regulation prevails, including the
 2. Members may receive the Society's materials and publications free of charge.
    However, exhibition catalogs are governed by Article 9 of the Regulations on
    Membership and Dues (one free copy for Full Members taking part in the
-   exhibition; additional copies are charged). Printed catalogs commissioned
-   separately for a solo or booth exhibition follow Paragraphs 3 to 6 of the
-   same Article.
+   exhibition; additional copies are charged).
 3. Members and Officers of the Society must pay the prescribed admission and
    registration fees and annual dues, and have the duty to comply with all
    matters resolved by the General Assembly.
