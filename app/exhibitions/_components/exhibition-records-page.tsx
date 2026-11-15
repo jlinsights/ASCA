@@ -14,6 +14,7 @@ import {
   getExhibitionListings,
   type ExhibitionSource,
 } from '../_data/exhibition-listings'
+import { SeokyeongCatalogFlipbook } from '@/components/exhibitions/seokyeong-catalog-flipbook'
 import { ExhibitionListingCard } from './exhibition-listing-card'
 import { ExhibitionServices } from './exhibition-services'
 import { ExhibitionPromotionPreview, IndustryAdvertisement } from './exhibition-promotion-preview'
@@ -258,6 +259,8 @@ export function ExhibitionRecordsPage({
             <IndustryAdvertisement compact />
           </aside>
         </div>
+        {/* 지난 전시 — 2026 서경(書境) 도록을 목록 바로 아래 전체 폭으로 싣는다 */}
+        {variant === 'past' && <SeokyeongCatalogFlipbook />}
         {records.length > 0 && (
           <ExhibitionPromotionPreview hasPaidListings={listings.some(item => item.paidPromotion)} />
         )}
