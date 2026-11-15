@@ -67,6 +67,13 @@ export const FEATURED_HOMEPAGES: readonly FeaturedHomepage[] = [
         name: { ko: '브러시웨이즈', en: 'Brushways', ja: 'ブラッシュウェイズ', zh: 'Brushways' },
       },
     ],
+    // 협회 상임이사(DB 직위와 같음), 희랑글씨 대표 (사용자 확인 2026-11-15). 상호는 로마자로 둔다
+    role: {
+      ko: '협회 상임이사 · 희랑글씨 대표',
+      en: 'Executive Director of the Society · Head of Heelang Geulssi',
+      ja: '協会常任理事・Heelang Geulssi 代表',
+      zh: '協會常任理事・Heelang Geulssi 代表',
+    },
   },
 ]
 

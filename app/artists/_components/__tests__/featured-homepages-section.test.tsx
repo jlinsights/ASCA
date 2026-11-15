@@ -103,6 +103,9 @@ describe('홈페이지 작가 목록', () => {
   it('아남은 심사위원장이고, 書境 개인전과 홈페이지가 이어진 사례를 보여 준다', () => {
     const anam = FEATURED_HOMEPAGES.find(entry => entry.slug === 'anam')
     expect(anam?.role?.ko).toBe('협회 심사위원장')
+    expect(FEATURED_HOMEPAGES.find(entry => entry.slug === 'heelang')?.role?.ko).toBe(
+      '협회 상임이사 · 희랑글씨 대표'
+    )
     expect(anam?.story?.ko).toContain('書境 새로운 지평')
     render(
       <FeaturedHomepagesSection
