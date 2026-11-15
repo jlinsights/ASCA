@@ -27,7 +27,7 @@ export async function loadFeaturedHomepages(): Promise<FeaturedArtist[]> {
             name: row.artist.name,
             nameEn: row.artist.name_en,
             artNameHanja: row.artist.art_name_hanja ?? null,
-            profileImage: row.artist.profile_image,
+            profileImage: row.artist.profile_image ?? row.entry.portrait ?? null,
             deathYear: row.artist.death_year,
             sites: row.entry.sites,
             role: row.entry.role ?? null,

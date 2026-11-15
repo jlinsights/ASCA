@@ -20,6 +20,11 @@ export interface FeaturedHomepage {
   sites: readonly FeaturedSite[]
   /** DB 직위(title)가 비어 있는 작가의 협회 내 자리 — 사용자 확인 사실만 */
   role?: Record<Language, string>
+  /**
+   * DB 사진(profile_image)이 비어 있을 때만 쓰는 저장소 안 사진. 사진은 Storage 에 올려 DB 에 적는 것이 원칙이고,
+   * 올리기 전까지 홈페이지 카드가 비지 않게 하는 자리다 — DB 사진이 생기면 그것이 이긴다
+   */
+  portrait?: string
   /** 홈페이지를 새로 단장했으면 'renewed' */
   note?: 'renewed'
   /** 홈페이지가 생긴 계기 — 전시와 홈페이지가 이어진 실제 사례 */
@@ -31,6 +36,8 @@ export const FEATURED_HOMEPAGES: readonly FeaturedHomepage[] = [
   {
     slug: 'lim-hyun-ki',
     sites: [{ url: 'https://seonggok.com', kind: 'personal' }],
+    // seonggok.com 약력 사진과 같은 원본(사용자 제공 2026-11-15). DB profile_image 는 아직 비어 있다
+    portrait: '/images/artists/lim-hyun-ki/portrait.jpg',
     role: {
       ko: '협회 창립자 · 명예이사장',
       en: 'Founder and Honorary Chairman of the Society',
@@ -67,6 +74,13 @@ export const FEATURED_HOMEPAGES: readonly FeaturedHomepage[] = [
         name: { ko: '브러시웨이즈', en: 'Brushways', ja: 'ブラッシュウェイズ', zh: 'Brushways' },
       },
     ],
+    // 협회 상임이사(DB 직위와 같음), 희랑글씨 대표 (사용자 확인 2026-11-15). 상호는 로마자로 둔다
+    role: {
+      ko: '협회 상임이사 · 희랑글씨 대표',
+      en: 'Executive Director of the Society · Head of Heelang Geulssi',
+      ja: '協会常任理事・Heelang Geulssi 代表',
+      zh: '協會常任理事・Heelang Geulssi 代表',
+    },
   },
 ]
 
