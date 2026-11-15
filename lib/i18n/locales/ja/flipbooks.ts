@@ -14,6 +14,11 @@ const flipbooks: Record<string, string> = {
   taiwanTripFlipbookTitle: '台湾 書芸・文化紀行',
   taiwanTripFlipbookLede: '2027年4月7日(水)–11日(日)・4泊5日・桃園・臺北・臺中',
   taiwanTripFlipbookFrameTitle: '台湾 書芸・文化紀行 案内書フリップブック',
+  seokyeongCatalogFlipbookEyebrow: '展覧会図録',
+  seokyeongCatalogFlipbookTitle: '書境 新たな地平 — 東洋書芸の現在と未来',
+  seokyeongCatalogFlipbookLede:
+    '2026年4月15日(水)–28日(火)・藝術の殿堂 ソウル書藝博物館 第1展示室・図録をページをめくるようにご覧ください。',
+  seokyeongCatalogFlipbookFrameTitle: '書境 新たな地平 展覧会図録フリップブック',
 }
 
 export default flipbooks

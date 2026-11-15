@@ -15,6 +15,13 @@ const flipbooks: Record<string, string> = {
   taiwanTripFlipbookTitle: 'A Calligraphic Journey through Taiwan',
   taiwanTripFlipbookLede: 'April 7 (Wed) – 11 (Sun), 2027 · 5 days · Taoyuan · Taipei · Taichung',
   taiwanTripFlipbookFrameTitle: 'Flipbook: A Calligraphic Journey through Taiwan trip guide',
+  seokyeongCatalogFlipbookEyebrow: 'Exhibition catalogue',
+  seokyeongCatalogFlipbookTitle:
+    'Seogyeong (書境): New Horizons — The Present and Future of East Asian Calligraphy',
+  seokyeongCatalogFlipbookLede:
+    'April 15 (Wed) – 28 (Tue), 2026 · Seoul Calligraphy Art Museum, Seoul Arts Center, Gallery 1 · Leaf through the catalogue page by page.',
+  seokyeongCatalogFlipbookFrameTitle:
+    'Flipbook: Seogyeong (書境) New Horizons exhibition catalogue',
 }
 
 export default flipbooks
