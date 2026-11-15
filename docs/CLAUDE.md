@@ -71,6 +71,25 @@ ASCA is a sophisticated Korean Calligraphy Association website featuring:
   않는다. service role 키와 서버 비밀키는 클라이언트 코드나 저장소에 넣지
   않는다. 필수 환경 변수와 검증 규칙은 `lib/config/env.ts`를 따른다.
 
+### 인증 메일과 소식지 — 2026-11-15 확인 기록
+
+- 회원가입 확인·비밀번호 재설정은 `components/auth/auth-form.tsx`에서 Supabase
+  Auth를 호출한다. SMTP 공급자는 애플리케이션 코드가 아닌 Supabase Auth 설정에서
+  정한다. ASCA-2026 운영 설정은 2026-11-15 Resend 공식 연동으로 전환했고, 확인
+  당시 호스트는 `smtp.resend.com`, 발신자는 `info@orientalcalligraphy.org`였다.
+  Resend의 협회 도메인 인증과 연결 상태도 확인했다. 변경 가능하므로 이후 작업 시
+  대상 프로젝트와 현재 설정을 다시 확인한다.
+- 같은 날 승인된 비밀번호 재설정 요청은 Resend에 `delivered`로 기록됐다. 이는
+  수신 서버 전달 상태이며 받은편지함 확인이나 인증 링크 사용 성공을 뜻하지
+  않는다. 이전 Brevo SMTP 기록은 과거 이력이다. 인증 설정을 수정할 때는 기존
+  보안·전송 제한·콜백을 보존하고 실제 발송과 수신을 각각 확인한다. 비밀키를
+  저장소·로그에 넣지 않는다.
+- 소식지는 Resend Broadcast 초안에서 관리한다. 2026-11-15 확인 당시 수신자는
+  없었고, 제23회 소식지에는 공식 포스터 자리 표시가 남아 있었다. 초안의 수신
+  거부 변수·모바일 화면 표시와 실제 발송 후 링크 동작·메일 앱 렌더링은 서로 다른
+  검증이다. 수신 동의와 대상·소재·발송 권한을 확인하고 명시적인 발송 지시 없이
+  발송하지 않는다. 실제 초안과 대상 상태는 작업 시 다시 확인한다.
+
 ### Supabase와 마이그레이션
 
 - 옛 프로젝트 `fiaoduraycyjselasmdn` 은 400일 넘게 정지돼 **복구 불가**다.
