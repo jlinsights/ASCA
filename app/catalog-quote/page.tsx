@@ -6,9 +6,12 @@ import { CatalogQuoteCalculator } from './_components/catalog-quote-calculator'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: '종이 도록 가견적 (미리보기) | 동양서예협회',
-  robots: { index: false, follow: false },
+const ROBOTS: Metadata['robots'] = { index: false, follow: false }
+
+// 볼 수 없는 사람에게는 제목을 내보내지 않는다 — 404 탭 제목으로 페이지가 있음을 드러내지 않도록
+export async function generateMetadata(): Promise<Metadata> {
+  if (!(await canViewCatalogQuotePreview())) return { robots: ROBOTS }
+  return { title: '종이 도록 가견적 (미리보기) | 동양서예협회', robots: ROBOTS }
 }
 
 // 비공개 미리보기 — CATALOG_QUOTE_PREVIEW=on 이고 MFA 관리자일 때만 열린다. 접수·결제·견적 문의는 하지 않는다.
