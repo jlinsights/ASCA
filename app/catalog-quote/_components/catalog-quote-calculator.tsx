@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import type {
   Quote,
@@ -43,11 +43,32 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
   const [result, setResult] = useState<QuoteResult | null>(null)
   const [failed, setFailed] = useState(false)
   const [pending, setPending] = useState(false)
+  // 입력이 바뀌면 이전 결과를 지우고, 늦게 도착한 이전 요청의 응답은 버린다
+  const requestId = useRef(0)
+  function clearResult() {
+    requestId.current += 1
+    setResult(null)
+    setFailed(false)
+    setPending(false)
+  }
+  function edit<T>(setter: (value: T) => void) {
+    return (value: T) => {
+      setter(value)
+      clearResult()
+    }
+  }
+  function changeType(value: 'solo' | 'groupBooth') {
+    setApplicationType(value)
+    // 혼합 회원은 단체 부스전에만 있다 — 화면에 없는 값을 몰래 보내지 않는다
+    if (value === 'solo' && membership === 'mixed') setMembership('member')
+    clearResult()
+  }
 
   const group = applicationType === 'groupBooth'
 
   async function submit(event: FormEvent) {
     event.preventDefault()
+    const id = ++requestId.current
     setPending(true)
     setFailed(false)
     try {
@@ -56,7 +77,7 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           applicationType,
-          membership: group ? membership : membership === 'mixed' ? 'member' : membership,
+          membership,
           // 공란은 그대로 보내 서버가 오류로 돌려준다
           approvedWorks: works.trim() === '' ? null : Number(works),
           paidCopies: noOrder ? 0 : Number(paid),
@@ -65,11 +86,14 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
         }),
       })
       if (response.status !== 200 && response.status !== 422) throw new Error('unavailable')
-      setResult((await response.json()) as QuoteResult)
+      const body = (await response.json()) as QuoteResult
+      if (id !== requestId.current) return
+      setResult(body)
+      setPending(false)
     } catch {
+      if (id !== requestId.current) return
       setFailed(true)
       setResult(null)
-    } finally {
       setPending(false)
     }
   }
@@ -92,7 +116,7 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
                   name='applicationType'
                   value={value}
                   checked={applicationType === value}
-                  onChange={() => setApplicationType(value)}
+                  onChange={() => changeType(value)}
                 />
                 {label}
               </label>
@@ -106,7 +130,7 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
             <select
               className='min-h-11 w-full rounded-md border border-input bg-background px-3'
               value={membership}
-              onChange={event => setMembership(event.target.value as typeof membership)}
+              onChange={event => edit(setMembership)(event.target.value as typeof membership)}
             >
               <option value='member'>정회원</option>
               <option value='nonMember'>비회원</option>
@@ -123,7 +147,7 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
               className='min-h-11 w-full rounded-md border border-input bg-background px-3'
               inputMode='numeric'
               value={works}
-              onChange={event => setWorks(event.target.value)}
+              onChange={event => edit(setWorks)(event.target.value)}
               aria-describedby='works-hint'
             />
             <p id='works-hint' className='mt-1 text-xs text-muted-foreground'>
@@ -141,7 +165,7 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
               disabled={noOrder}
               className='min-h-11 w-full rounded-md border border-input bg-background px-3'
               value={paid}
-              onChange={event => setPaid(event.target.value)}
+              onChange={event => edit(setPaid)(event.target.value)}
             >
               {paidOptions.map(option => (
                 <option key={option} value={option}>
@@ -153,7 +177,7 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
               <input
                 type='checkbox'
                 checked={noOrder}
-                onChange={event => setNoOrder(event.target.checked)}
+                onChange={event => edit(setNoOrder)(event.target.checked)}
               />
               추가 유료 도록 주문 안 함
             </label>
@@ -171,7 +195,7 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
               <input
                 type='checkbox'
                 checked={splitDelivery}
-                onChange={event => setSplitDelivery(event.target.checked)}
+                onChange={event => edit(setSplitDelivery)(event.target.checked)}
               />
               여러 곳으로 나누어 납품
             </label>
@@ -179,7 +203,7 @@ export function CatalogQuoteCalculator({ paidOptions, policyVersion, approved }:
               <input
                 type='checkbox'
                 checked={multipleEditions}
-                onChange={event => setMultipleEditions(event.target.checked)}
+                onChange={event => edit(setMultipleEditions)(event.target.checked)}
               />
               여러 판본
             </label>

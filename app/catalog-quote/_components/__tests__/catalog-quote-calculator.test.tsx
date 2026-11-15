@@ -69,4 +69,44 @@ describe('CatalogQuoteCalculator', () => {
     fireEvent.click(screen.getByRole('button', { name: '가견적 계산' }))
     expect(await screen.findByRole('heading', { name: '별도 견적 대상' })).toBeInTheDocument()
   })
+
+  it('계산 후 입력을 바꾸면 이전 견적을 지운다', async () => {
+    renderCalculator()
+    fireEvent.click(screen.getByRole('button', { name: '가견적 계산' }))
+    await screen.findByRole('heading', { name: '가견적' })
+    fireEvent.change(screen.getByLabelText('승인 출품 수 (점)'), { target: { value: '30' } })
+    expect(screen.queryByRole('heading', { name: '가견적' })).not.toBeInTheDocument()
+  })
+
+  it('혼합 회원을 고른 뒤 개인전으로 바꾸면 정회원으로 되돌려 화면과 같은 값을 보낸다', async () => {
+    renderCalculator()
+    fireEvent.click(screen.getByLabelText('서예단체 부스전'))
+    fireEvent.change(screen.getByLabelText('회원 구분'), { target: { value: 'mixed' } })
+    fireEvent.click(screen.getByLabelText('개인전'))
+    expect(screen.getByLabelText('회원 구분')).toHaveValue('member')
+    fireEvent.click(screen.getByRole('button', { name: '가견적 계산' }))
+    await screen.findByRole('heading', { name: '가견적' })
+    const sent = JSON.parse(String(fetchMock.mock.calls[0]![1].body))
+    expect(sent).toMatchObject({ applicationType: 'solo', membership: 'member' })
+  })
+
+  it('늦게 온 이전 응답은 바뀐 입력의 결과로 그리지 않는다', async () => {
+    let release: (value: Response) => void = () => undefined
+    fetchMock.mockImplementationOnce(() => new Promise<Response>(resolve => (release = resolve)))
+    renderCalculator()
+    fireEvent.click(screen.getByRole('button', { name: '가견적 계산' }))
+    fireEvent.change(screen.getByLabelText('승인 출품 수 (점)'), { target: { value: '30' } })
+    release({
+      status: 200,
+      json: async () =>
+        computeQuote({
+          applicationType: 'solo',
+          membership: 'member',
+          approvedWorks: 20,
+          paidCopies: 100,
+        }),
+    } as Response)
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(screen.queryByRole('heading', { name: '가견적' })).not.toBeInTheDocument()
+  })
 })

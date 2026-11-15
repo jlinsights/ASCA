@@ -1,6 +1,15 @@
 /** @jest-environment node */
+jest.mock('server-only', () => ({}))
+jest.mock('@/lib/archive/writer', () => ({ archiveIdentity: jest.fn() }))
 import { NextRequest } from 'next/server'
+import { archiveIdentity } from '@/lib/archive/writer'
 import { POST } from '../route'
+
+const identity = jest.mocked(archiveIdentity)
+beforeEach(() => {
+  identity.mockReset()
+  identity.mockResolvedValue({ userId: 'u', admin: true } as never)
+})
 
 const post = (body: unknown) =>
   POST(
@@ -17,6 +26,18 @@ afterEach(() => {
 
 describe('POST /api/catalog-quote', () => {
   it('기본 비활성: 404', async () => {
+    expect((await post(input)).status).toBe(404)
+  })
+
+  it('켜도 로그인하지 않았거나 관리자(MFA)가 아니면 404 — 미의결 가격을 내지 않는다', async () => {
+    process.env.CATALOG_QUOTE_PREVIEW = 'on'
+    identity.mockResolvedValueOnce(null as never)
+    const anon = await post(input)
+    expect(anon.status).toBe(404)
+    expect(await anon.text()).toBe('')
+    identity.mockResolvedValueOnce({ userId: 'u', admin: false } as never)
+    expect((await post(input)).status).toBe(404)
+    identity.mockRejectedValueOnce(new Error('auth down'))
     expect((await post(input)).status).toBe(404)
   })
 

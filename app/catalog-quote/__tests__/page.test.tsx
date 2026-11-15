@@ -1,7 +1,16 @@
 import { readFileSync } from 'fs'
 import path from 'path'
 import { render, screen } from '@testing-library/react'
+import { archiveIdentity } from '@/lib/archive/writer'
 import CatalogQuotePage, { metadata } from '../page'
+
+jest.mock('server-only', () => ({}))
+jest.mock('@/lib/archive/writer', () => ({ archiveIdentity: jest.fn() }))
+const identity = jest.mocked(archiveIdentity)
+beforeEach(() => {
+  identity.mockReset()
+  identity.mockResolvedValue({ userId: 'u', admin: true } as never)
+})
 
 jest.mock('next/navigation', () => ({
   notFound: () => {
@@ -14,17 +23,25 @@ afterEach(() => {
 })
 
 describe('/catalog-quote 미리보기', () => {
-  it('기본 비활성: notFound', () => {
-    expect(() => CatalogQuotePage()).toThrow('NEXT_NOT_FOUND')
+  it('기본 비활성: notFound', async () => {
+    await expect(CatalogQuotePage()).rejects.toThrow('NEXT_NOT_FOUND')
+  })
+
+  it('켜도 관리자(MFA)가 아니면 notFound', async () => {
+    process.env.CATALOG_QUOTE_PREVIEW = 'on'
+    identity.mockResolvedValueOnce(null as never)
+    await expect(CatalogQuotePage()).rejects.toThrow('NEXT_NOT_FOUND')
+    identity.mockResolvedValueOnce({ userId: 'u', admin: false } as never)
+    await expect(CatalogQuotePage()).rejects.toThrow('NEXT_NOT_FOUND')
   })
 
   it('검색에 노출하지 않는다', () => {
     expect(metadata.robots).toEqual({ index: false, follow: false })
   })
 
-  it('켜면 가견적 안내와 9개 부수 선택지만 보인다', () => {
+  it('켜고 관리자이면 가견적 안내와 9개 부수 선택지만 보인다', async () => {
     process.env.CATALOG_QUOTE_PREVIEW = 'on'
-    render(CatalogQuotePage())
+    render(await CatalogQuotePage())
     expect(screen.getByRole('heading', { level: 1, name: '종이 도록 가견적' })).toBeInTheDocument()
     expect(
       screen.getByText(/가견적이며, 신청·결제·견적 문의로 이어지지 않습니다/)

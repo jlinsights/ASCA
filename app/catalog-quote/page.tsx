@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { catalogQuoteEnabled } from '@/lib/catalog-quote/feature-flag'
+import { canViewCatalogQuotePreview } from '@/lib/catalog-quote/preview-access'
 import { CATALOG_QUOTE_POLICY } from '@/lib/catalog-quote/policy'
 import { CatalogQuoteCalculator } from './_components/catalog-quote-calculator'
 
@@ -11,9 +11,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-// 비공개 미리보기 — CATALOG_QUOTE_PREVIEW=on 일 때만 열린다. 접수·결제·견적 문의는 하지 않는다.
-export default function CatalogQuotePage() {
-  if (!catalogQuoteEnabled()) notFound()
+// 비공개 미리보기 — CATALOG_QUOTE_PREVIEW=on 이고 MFA 관리자일 때만 열린다. 접수·결제·견적 문의는 하지 않는다.
+export default async function CatalogQuotePage() {
+  if (!(await canViewCatalogQuotePreview())) notFound()
   return (
     <div className='container max-w-3xl py-12'>
       <p className='mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground'>
