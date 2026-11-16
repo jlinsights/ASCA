@@ -164,7 +164,7 @@ membership under Article 5 of the Articles of Incorporation.
 ④ In special circumstances, payment may be deferred or made in installments with
 the approval of the Board of Directors.
 
-### Article 6 (Entry Fee Regulations)
+### Article 6 (Entry Fees)
 
 | Category           | Entry Fee (per work, 1st work) | 2nd to 9th works |
 | ------------------ | ------------------------------ | ---------------- |
@@ -179,7 +179,7 @@ for non-members and for the 10th and subsequent works shall be determined by the
 Board of Directors in the call for entries (공모요강) for the relevant
 competition.
 
-### Article 7 (Entry Fee Regulations for Solo Exhibitions and Calligraphy Group Booth Exhibitions)
+### Article 7 (Entry Fees for Solo Exhibitions and Calligraphy Group Booth Exhibitions)
 
 | Number of Works Entered | Standard Rate (applies to non-members) | Member Rate (applies to Full Members) |
 | ----------------------- | -------------------------------------- | ------------------------------------- |
@@ -188,7 +188,7 @@ competition.
 | 30 to 39 works          | KRW 140,000 per work                   | KRW 120,000 per work                  |
 | 40 or more works        | KRW 120,000 per work                   | KRW 100,000 per work                  |
 
-### Article 8 (Mounting Fee Regulations)
+### Article 8 (Mounting Fees)
 
 ① A mounting fee is charged for works awarded Selected (입선) or above, and
 mounting shall be carried out in the **standard options and prices set by the
@@ -209,7 +209,7 @@ Full Members are offered a discount.
 | Full sheet (전지) (70x135cm)                  | KRW 100,000 per work                   | KRW 80,000 per work                   |
 | National-exhibition sheet (국전지) (70x200cm) | KRW 120,000 per work                   | KRW 100,000 per work                  |
 
-### Article 9 (Catalog Fee Regulations)
+### Article 9 (Catalog Fees)
 
 1. Full Members who participate in an exhibition are provided with one catalog
    free of charge.
@@ -221,7 +221,7 @@ Full Members are offered a discount.
 | Member     | KRW 20,000                             |
 | Non-member | KRW 30,000                             |
 
-### Article 10 (Individual Artist Homepage Initial Setup and Annual Maintenance Fee Regulations)
+### Article 10 (Individual Artist Homepage Initial Setup and Annual Maintenance Fees)
 
 ① A Full Member who has concluded a homepage production and maintenance contract
 and **has paid the annual maintenance fee** shall be exempted from the annual
@@ -249,7 +249,7 @@ discounted by 50%.
 | Member     | Initial setup fee KRW 600,000 / annual maintenance fee KRW 200,000 |
 | Non-member | Initial setup fee KRW 700,000 / annual maintenance fee KRW 300,000 |
 
-### Article 10-2 (Group Homepage Initial Setup and Annual Maintenance Fee Regulations)
+### Article 10-2 (Group Homepage Initial Setup and Annual Maintenance Fees)
 
 ① This Article governs the costs when two or more artists (joint exhibitions,
 combined exhibitions, or group exhibitions) jointly build and operate a
