@@ -6,7 +6,8 @@ on:
     branches: [main]
 jobs:
   archive-db:
-    runs-on: ubuntu-latest
+    # Playwright 가 ubuntu-26.04(ubuntu-latest) 의 chromium 을 지원하지 않아 24.04 로 고정
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
