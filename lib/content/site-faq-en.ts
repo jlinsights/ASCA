@@ -144,10 +144,11 @@ export const SITE_FAQ_EN: FaqTranslations = {
   },
   'personal-catalogue': {
     q: 'What should I prepare for a personal or online catalogue?',
-    a: 'Prepare the exhibition name, deadline, artwork images and details, biography, and the desired print size, page count and quantity. For an online catalogue, also specify where it will appear, the public-access scope and any website contract.\n\nA joint exhibition catalogue and a personal catalogue have different scopes. Confirm responsibilities and costs for editing, design, printing, delivery and online publication in the quotation and contract.',
+    a: 'Prepare the exhibition name, deadline, artwork images and details, biography, and the desired print size, page count and quantity. For an online catalogue, also specify where it will appear, the public-access scope and any website contract.\n\nIf you commission the association separately to print a catalogue for a solo or calligraphy group booth exhibition, it is made by the actual-cost or fixed-price method under Art. 9(3)–(6) of the Regulations on Membership and Dues, and the office tells you which method applies before you order.\n- Actual cost: the order is placed after you approve a quotation, and only the actual production cost is settled. There is no handling fee, and any unused advance payment is refunded.\n- Fixed price: A4 is standard, and the base price per copy is KRW 20,000 for full members and KRW 30,000 for non-members. Full members receive one free copy per approved work (separate from the one joint catalogue copy) and discounts of up to 25% in total, depending on the number of works and copies. Additional copies are ordered in units of 50, from 100 to 500.\n\nA joint exhibition catalogue and a personal catalogue have different scopes. Confirm responsibilities and costs for editing, design, printing, delivery and online publication in the quotation and contract.',
     sources: [
       'Exhibition Regulations, Art. 3',
       'Exhibition Regulations, Art. 4',
+      'Regulations on Membership and Dues, Art. 9',
       'Contact the office',
     ],
   },

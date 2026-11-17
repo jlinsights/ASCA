@@ -55,7 +55,7 @@ function visibleText(doc: RegulationDocument): string {
 // regulations/README.md 의 조문 수 — 저장소 문서가 정답지다
 const README_ARTICLE_COUNTS: Record<string, number> = {
   articles: 44,
-  'membership-dues': 18,
+  'membership-dues': 19,
   'operation-judging': 16,
   exhibition: 16,
   'artist-selection': 18,
@@ -92,10 +92,11 @@ describe('parseRegulation — 실제 규정 9종', () => {
   })
 
   // 2026-10-30: 회비 규정 제3조 ④ 특별선임 등록비 표 신설로 01 은 10개, 전체 15개
-  it('회비·심사 표 14개(이관 때 텍스트로 바꾼 것 13개 + 특별선임 등록비)와 자격 표 1개를 모두 표로 읽는다', () => {
+  // 2026-11-17: 회비 규정 제9조 ⑥ 정액형 할인율 표 2개 신설로 01 은 12개, 전체 17개
+  it('회비·심사 표 16개(이관 때 텍스트로 바꾼 것 13개 + 특별선임 등록비 + 정액형 할인율 2개)와 자격 표 1개를 모두 표로 읽는다', () => {
     const counts = REGULATIONS.map(entry => load(entry.file).doc.tableCount)
-    expect(counts.reduce((sum, count) => sum + count, 0)).toBe(15)
-    expect(load('01-membership-and-dues.md').doc.tableCount).toBe(10)
+    expect(counts.reduce((sum, count) => sum + count, 0)).toBe(17)
+    expect(load('01-membership-and-dues.md').doc.tableCount).toBe(12)
     expect(load('02-operation-and-review.md').doc.tableCount).toBe(4)
     for (const entry of REGULATIONS) {
       const { doc } = load(entry.file)
@@ -118,7 +119,7 @@ describe('parseRegulation — 실제 규정 9종', () => {
 
   it('머리 인용문의 시행일은 머리말과 중복되지 않게 한 번만 남는다', () => {
     const { doc } = load('01-membership-and-dues.md')
-    expect(doc.effectiveNote).toBe('[시행 2026. 1. 1.]')
+    expect(doc.effectiveNote).toBe('[시행 2026. 11. 1.] [2026. 11. 1., 제7조·제9조 일부 개정]')
     expect(allBlocks(doc).filter(block => block.kind === 'note')).toHaveLength(0)
   })
 
