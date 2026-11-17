@@ -1,7 +1,7 @@
 ---
 title: '회원 및 회비 규정'
 title_en: 'Regulations on Membership and Dues'
-effective_note: '[시행 2026. 1. 1.]'
+effective_note: '[시행 2026. 11. 1.] [2026. 11. 1., 제7조·제9조 일부 개정]'
 status: 시행 중
 source: https://orientalcalligraphy.org/articles-of-incorporation-and-bylaws
 migrated_at: 2026-10-19
@@ -9,7 +9,7 @@ migrated_at: 2026-10-19
 
 # 회원 및 회비 규정
 
-> [시행 2026. 1. 1.]
+> [시행 2026. 11. 1.] [2026. 11. 1., 제7조·제9조 일부 개정]
 
 ### 제1조 (목적)
 
@@ -413,3 +413,9 @@ migrated_at: 2026-10-19
 
 본 규정은 정관 제41조에 따라 이사회의 의결로 개정하며, 개정 내용은 다음 총회에
 보고한다.
+
+## 부칙 <2026. 11. 1.>
+
+### 제1조 (시행일)
+
+이 규정은 2026년 11월 1일부터 시행한다.

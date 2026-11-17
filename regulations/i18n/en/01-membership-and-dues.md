@@ -1,6 +1,8 @@
 ---
 title: 'Regulations on Membership and Dues'
-effective_note: '[Effective 2026. 1. 1.]'
+effective_note:
+  '[Effective 2026. 11. 1.] [2026. 11. 1., partial amendment of Articles 7 and
+  9]'
 status: In force
 source: https://orientalcalligraphy.org/articles-of-incorporation-and-bylaws
 migrated_at: 2026-10-19
@@ -8,7 +10,7 @@ migrated_at: 2026-10-19
 
 # Regulations on Membership and Dues
 
-> [Effective 2026. 1. 1.]
+> [Effective 2026. 11. 1.] [2026. 11. 1., partial amendment of Articles 7 and 9]
 
 ### Article 1 (Purpose)
 
@@ -490,3 +492,9 @@ Directors.
 These Regulations shall be amended by a resolution of the Board of Directors
 under Article 41 of the Articles of Incorporation, and the amendment shall be
 reported to the next General Assembly.
+
+## Addenda <2026. 11. 1.>
+
+### Article 1 (Effective Date)
+
+These Regulations shall take effect on November 1, 2026.
