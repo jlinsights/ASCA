@@ -168,7 +168,11 @@ Regulation prevails, including the
 2. Members may receive the Society's materials and publications free of charge.
    However, exhibition catalogs are governed by Article 9 of the Regulations on
    Membership and Dues (one free copy for Full Members taking part in the
-   exhibition; additional copies are charged).
+   exhibition; additional copies are charged). A printed catalog commissioned
+   from the Society separately for a solo exhibition or calligraphy group booth
+   exhibition is produced under the actual-cost or fixed-price method in
+   paragraphs 3 to 6 of the same Article, and the Secretariat explains the
+   method and how the price is calculated before the order.
 3. Members and Officers of the Society must pay the prescribed admission and
    registration fees and annual dues, and have the duty to comply with all
    matters resolved by the General Assembly.
