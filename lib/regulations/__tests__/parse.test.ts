@@ -119,7 +119,7 @@ describe('parseRegulation — 실제 규정 9종', () => {
 
   it('머리 인용문의 시행일은 머리말과 중복되지 않게 한 번만 남는다', () => {
     const { doc } = load('01-membership-and-dues.md')
-    expect(doc.effectiveNote).toBe('[시행 2026. 11. 1.] [2026. 11. 1., 제7조·제9조 일부 개정]')
+    expect(doc.effectiveNote).toBe('[시행 2026. 11. 16.] [2026. 11. 16., 제7조·제9조 일부 개정]')
     expect(allBlocks(doc).filter(block => block.kind === 'note')).toHaveLength(0)
   })
 
