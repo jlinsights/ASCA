@@ -386,9 +386,11 @@ security:
   언어로 되돌리고(60초짜리 표시 쿠키 `asca-lang-auto`), 직접 연 언어 주소는
   주소의 언어가 이긴다(쿠키도 그 언어로 두고 옛 값은 버린다). 언어 주소(/en
   등)로 들어오면 proxy 가 그 언어를 쿠키로 남긴다 — 본문의 한국어 주소 링크를
-  눌러도 언어를 잃지 않는다. 화면이 미리 받아 두는 요청(`next-router-prefetch`·
-  `next-router-segment-prefetch` 헤더)은 쿠키를 남기지 않는다 — 한국어로 바꾼
-  직후 도착한 /zh 미리 받기 응답이 선택을 zh 로 되돌렸다(2026-11-18).
+  눌러도 언어를 잃지 않는다. 쿠키는 페이지 로드(`sec-fetch-mode: navigate`,
+  헤더가 없는 클라이언트 포함)에만 남긴다 — 한국어로 바꾼 직후 도착한 /zh 미리
+  받기 응답이 선택을 zh 로 되돌렸다(2026-11-18). Next 는 proxy 앞에서
+  `rsc`·`next-router-prefetch` 헤더를 지우므로(FLIGHT_HEADERS) 그 헤더로는 가릴
+  수 없다.
 - 쿠키가 없는 첫 방문 `/` 는 브라우저 언어 > 접속 국가(`x-vercel-ip-country`)
   > 영어 순으로 정해 en·ja·zh 면 그 언어 홈으로 307 한다
   > (`lib/i18n/first-visit-language.ts`). 검색 로봇·링크 미리보기·헤드리스

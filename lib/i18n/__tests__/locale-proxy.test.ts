@@ -153,15 +153,22 @@ describe('rememberLocale', () => {
     expect(saved(response)).toBeUndefined()
   })
 
-  // 2026-11-18: /zh 화면이 미리 받아 두던 /zh/… 요청이 한국어로 바꾼 직후에 도착해 선택을 zh 로 되돌렸다
-  it.each([
-    ['next-router-prefetch', '1'],
-    ['next-router-segment-prefetch', '/_tree'],
-  ])('미리 받기 요청(%s)은 방문자가 고른 언어를 덮어쓰지 않는다', (header, value) => {
-    const request = req('/zh/exhibitions/online?_rsc=abc', {
+  // 2026-11-18: /zh 화면이 미리 받아 두던 /zh/… 요청이 한국어로 바꾼 직후에 도착해 선택을 zh 로 되돌렸다.
+  // Next 는 proxy 에 넘기기 전에 rsc·next-router-prefetch 헤더를 지운다(next/dist/server/web/adapter.js
+  // FLIGHT_HEADERS) — 그래서 proxy 가 실제로 보는 헤더(sec-fetch-*)로 시험한다
+  it('주소창 이동(페이지 로드)은 언어를 쿠키로 남긴다', () => {
+    const request = req('/zh/faq', {
       cookie: 'asca-lang=ko',
-      headers: { rsc: '1', [header]: value },
+      headers: { 'sec-fetch-mode': 'navigate', 'sec-fetch-dest': 'document' },
     })
+    expect(saved(rememberLocale(request, NextResponse.next(), 'zh'))).toBe('zh')
+  })
+
+  it.each([
+    ['미리 받기', { 'sec-fetch-mode': 'cors', 'sec-fetch-dest': 'empty' }],
+    ['화면 안 fetch', { 'sec-fetch-mode': 'same-origin', 'sec-fetch-dest': 'empty' }],
+  ])('페이지 로드가 아닌 요청(%s)은 방문자가 고른 언어를 덮어쓰지 않는다', (_label, headers) => {
+    const request = req('/zh/exhibitions/online', { cookie: 'asca-lang=ko', headers })
     expect(saved(rememberLocale(request, NextResponse.next(), 'zh'))).toBeUndefined()
   })
 })
