@@ -63,9 +63,7 @@ export default function DigitalTransformationGuidePage() {
             <h1 className='text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mb-6 leading-tight'>
               문화예술 단체의
               <br />
-              <span className='bg-clip-text text-transparent bg-gradient-to-r from-celadon-green to-scholar-red'>
-                디지털 전환 가이드
-              </span>
+              <span className='text-[color:var(--accent-text)]'>디지털 전환 가이드</span>
             </h1>
 
             <p className='text-lg md:text-xl text-muted-foreground leading-relaxed mb-8'>

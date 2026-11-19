@@ -13,6 +13,7 @@ export interface PageHeroMark {
 export const PAGE_HERO_MARKS = {
   // 둘러보기 — 실제 작품·사진·숫자를 단다
   artists: { tier: 'feature', tc: '作家' },
+  artistHomepages: { tier: 'band', tc: '網站' },
   artworks: { tier: 'feature', tc: '作品' },
   exhibitions: { tier: 'feature', tc: '展覽' },
   exhibitionsCurrent: { tier: 'feature', tc: '現展' },
@@ -30,13 +31,16 @@ export const PAGE_HERO_MARKS = {
   boardMembers: { tier: 'band', tc: '任員' },
   partners: { tier: 'band', tc: '協力' },
   businessPlan: { tier: 'band', tc: '事業' },
+  brand: { tier: 'band', tc: '標識' },
   fairness: { tier: 'band', tc: '公正' },
   bylaws: { tier: 'band', tc: '定款' },
+  regulations: { tier: 'band', tc: '規程' },
 
   // 참여·신청
   academy: { tier: 'band', tc: '講座' },
   contests: { tier: 'band', tc: '公募' },
   application: { tier: 'band', tc: '出品' },
+  myApplications: { tier: 'band', tc: '申請' },
   recommendedApplication: { tier: 'band', tc: '推薦' },
   commissioning: { tier: 'band', tc: '委囑' },
   membership: { tier: 'band', tc: '會員' },
@@ -53,6 +57,8 @@ export const PAGE_HERO_MARKS = {
   events: { tier: 'band', tc: '行事' },
   blog: { tier: 'band', tc: '消息' },
   contact: { tier: 'band', tc: '問議' },
+  faq: { tier: 'band', tc: '問答' },
+  board: { tier: 'band', tc: '揭示' },
   search: { tier: 'band', tc: '檢索' },
 
   // 약관

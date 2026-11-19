@@ -3,7 +3,7 @@
  *
  * 이전: home.brand-rollout.spec.ts (Philosophy·WhatWeDo·BrandMessage·ClosingCTA 섹션 —
  * 홈에서 제거됨). 4언어 × 구조·링크 회귀만 본다. 시각 회귀 baseline 은 별도 과제.
- * LanguageContext SSOT key: 'asca-language' (lib/i18n/index.ts).
+ * 언어는 주소로 고른다(/en 등 — lib/i18n/locale-routing.ts).
  */
 
 import { test, expect, Page } from '@playwright/test'
@@ -12,10 +12,8 @@ const LANGUAGES = ['ko', 'en', 'ja', 'zh'] as const
 type Language = (typeof LANGUAGES)[number]
 
 async function gotoHomeWithLanguage(page: Page, language: Language) {
-  await page.addInitScript(lang => {
-    window.localStorage.setItem('asca-language', lang)
-  }, language)
-  await page.goto('/')
+  // 언어는 주소가 정한다(lib/i18n/locale-routing.ts) — 한국어는 접두사 없이, 나머지는 /en·/ja·/zh
+  await page.goto(language === 'ko' ? '/' : `/${language}`)
 }
 
 test.describe('home / ink-system — 4언어 구조 회귀', () => {
@@ -31,11 +29,12 @@ test.describe('home / ink-system — 4언어 구조 회귀', () => {
         await expect(stats.first().locator('dd')).toHaveText('1997')
       })
 
-      test('Hero CTA 가 연혁·소개로 연결된다', async ({ page }) => {
+      // 첫 방문자의 핵심 행동 — 문의 시작·작품 보기 (#214, 이전: 연혁·소개)
+      test('Hero CTA 가 문의서·작품 목록으로 연결된다', async ({ page }) => {
         await gotoHomeWithLanguage(page, lang)
         const hero = page.locator('.asca-hero')
-        await expect(hero.locator('a[href="/history"]')).toBeVisible()
-        await expect(hero.locator('a[href="/introductions"]')).toBeVisible()
+        await expect(hero.locator('a[href="/contact#inquiry"]')).toBeVisible()
+        await expect(hero.locator('a[href="/artworks"]')).toBeVisible()
       })
 
       test('전시·학술·입회 섹션이 모두 보인다', async ({ page }) => {

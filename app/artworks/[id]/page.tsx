@@ -7,6 +7,7 @@ import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { getSupabaseClient } from '@/lib/supabase'
 import { artworkImageUrl } from '@/lib/api/artwork-image'
+import { inquiryHref } from '@/app/contact/_components/inquiry-data'
 
 /**
  * 작품 상세 — artworks 테이블(ASCA-2026)에서 읽는다.
@@ -131,6 +132,15 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
           {artwork.description && (
             <p className='whitespace-pre-line leading-relaxed'>{artwork.description}</p>
           )}
+          <Link
+            href={inquiryHref(
+              'artwork',
+              artwork.artist ? `${artwork.title} — ${artwork.artist.name}` : artwork.title
+            )}
+            className='inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:w-auto'
+          >
+            이 작품 문의하기
+          </Link>
           <div className='flex flex-wrap gap-x-6 gap-y-2 text-sm'>
             {artwork.artist && (
               <Link href={`/artists/${artwork.artist.id}`} className='underline underline-offset-4'>

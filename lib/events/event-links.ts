@@ -5,6 +5,8 @@
 export interface EventLink {
   href: string
   label: string
+  /** 화면 글자 번역 키(lib/i18n/locales/<언어>/events.ts) — label 은 한국어 원문 */
+  labelKey: string
 }
 
 export const EVENT_LINKS: Readonly<Record<string, EventLink>> = {
@@ -12,5 +14,6 @@ export const EVENT_LINKS: Readonly<Record<string, EventLink>> = {
   '272782c1-fc3a-4440-ae73-f1a113b8cd55': {
     href: '/programs/cultural-exchange#taiwan-trip-flipbook',
     label: '기행 일정과 참가 안내 보기',
+    labelKey: 'evLinkTaiwanTrip',
   },
 }

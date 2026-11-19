@@ -1,4 +1,4 @@
-import { History, Link2, Users, type LucideIcon } from 'lucide-react'
+import { EyeOff, FileCheck2, History, Inbox, Link2, Users, type LucideIcon } from 'lucide-react'
 
 export interface AdminNavItem {
   key: string
@@ -13,6 +13,12 @@ export interface AdminNavItem {
 // 회원(/admin/membership)은 예시 데이터라 고칠 때까지 싣지 않는다.
 export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
   {
+    key: 'inquiries',
+    href: '/admin/inquiries',
+    icon: Inbox,
+    label: { ko: '문의 접수함', en: 'Inquiries' },
+  },
+  {
     key: 'artists',
     href: '/admin/artists',
     icon: Users,
@@ -25,10 +31,22 @@ export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
     label: { ko: '작가 페이지 연결', en: 'Artist page links' },
   },
   {
+    key: 'contest-entries',
+    href: '/admin/contest-entries',
+    icon: FileCheck2,
+    label: { ko: '출품 작가 연결', en: 'Entry links' },
+  },
+  {
     key: 'profile-changes',
     href: '/admin/profile-changes',
     icon: History,
     label: { ko: '프로필 수정 기록', en: 'Profile changes' },
+  },
+  {
+    key: 'board-hidden',
+    href: '/admin/board-hidden',
+    icon: EyeOff,
+    label: { ko: '게시판 숨긴 글', en: 'Hidden board posts' },
   },
 ]
 

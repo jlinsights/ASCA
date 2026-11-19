@@ -21,5 +21,15 @@
         }
       ]
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/donus-signups",
+      "schedule": "30 17 * * *"
+    },
+    {
+      "path": "/api/cron/donus-sync",
+      "schedule": "0 18 * * *"
+    }
   ]
 }

@@ -4,7 +4,7 @@
  * Members API Route Tests
  *
  * Tests for /api/members GET and POST endpoints
- * Route uses Drizzle ORM (no Supabase, no authentication)
+ * Route uses Drizzle ORM. GET/POST are admin-only (aal2); POST is not implemented (501).
  */
 
 // Mock database module BEFORE any imports to prevent PostgresError at module load
@@ -27,16 +27,43 @@ jest.mock('@/lib/security/rate-limit', () => ({
   },
 }))
 
+jest.mock('@/lib/auth/middleware', () => ({
+  requireAdminAuth: jest.fn(),
+}))
+
 import { describe, test, expect, beforeEach } from '@jest/globals'
 import { NextRequest } from 'next/server'
-import { withPerformanceLog } from '@/lib/db'
+import { db, withPerformanceLog } from '@/lib/db'
+import { requireAdminAuth } from '@/lib/auth/middleware'
 import { GET, POST } from '../route'
 
 const mockWithPerformanceLog = withPerformanceLog as jest.MockedFunction<typeof withPerformanceLog>
+const mockRequireAdminAuth = requireAdminAuth as jest.MockedFunction<typeof requireAdminAuth>
+const mockSelect = db.select as unknown as jest.Mock
+
+const ADMIN = { id: 'admin-1', role: 'admin', assuranceLevel: 'aal2' as const }
+
+/** db.select() 체인을 흉내 낸다. 마지막 단계(offset / where)에서 결과를 돌려준다. */
+function mockSelectChain(rows: unknown[], total: number) {
+  const listChain = {
+    from: jest.fn().mockReturnThis(),
+    where: jest.fn().mockReturnThis(),
+    orderBy: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    offset: jest.fn().mockResolvedValue(rows),
+  }
+  const countChain = {
+    from: jest.fn().mockReturnThis(),
+    where: jest.fn().mockResolvedValue([{ count: total }]),
+  }
+  mockSelect.mockReturnValueOnce(listChain).mockReturnValueOnce(countChain)
+  return { listChain, countChain }
+}
 
 describe('GET /api/members', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockRequireAdminAuth.mockResolvedValue(ADMIN)
   })
 
   test('should return paginated members list', async () => {
@@ -161,6 +188,55 @@ describe('GET /api/members', () => {
     // Assert
     expect(mockWithPerformanceLog).toHaveBeenCalledWith('members.list', expect.any(Function))
   })
+
+  test('returns 401 and reads nothing when the caller is not an admin', async () => {
+    mockRequireAdminAuth.mockResolvedValueOnce(null)
+
+    const response = await GET(new NextRequest('http://localhost:3000/api/members'))
+
+    expect(response.status).toBe(401)
+    expect(mockWithPerformanceLog).not.toHaveBeenCalled()
+    expect(mockSelect).not.toHaveBeenCalled()
+  })
+
+  test('selects only list columns, never personal details', async () => {
+    mockWithPerformanceLog.mockImplementationOnce(async (_name, fn) => fn())
+    mockSelectChain([], 0)
+
+    await GET(new NextRequest('http://localhost:3000/api/members'))
+
+    const columns = Object.keys(mockSelect.mock.calls[0][0] as object)
+    expect(columns).toEqual(expect.arrayContaining(['id', 'fullName', 'status']))
+    for (const secret of [
+      'dateOfBirth',
+      'phoneNumber',
+      'alternateEmail',
+      'address',
+      'addressKo',
+      'emergencyContactName',
+      'emergencyContactPhone',
+      'userId',
+    ]) {
+      expect(columns).not.toContain(secret)
+    }
+  })
+
+  test('list and count use the same combined filter', async () => {
+    mockWithPerformanceLog.mockImplementationOnce(async (_name, fn) => fn())
+    const { listChain, countChain } = mockSelectChain([{ id: 'member-1' }], 7)
+
+    const response = await GET(
+      new NextRequest('http://localhost:3000/api/members?query=김&status=active&level=tier-1')
+    )
+    const data = await response.json()
+
+    expect(response.status).toBe(200)
+    expect(data.meta.pagination.total).toBe(7)
+    expect(listChain.where).toHaveBeenCalledTimes(1)
+    const where = listChain.where.mock.calls[0][0]
+    expect(where).toBeDefined()
+    expect(countChain.where).toHaveBeenCalledWith(where)
+  })
 })
 
 describe('POST /api/members', () => {
@@ -173,50 +249,37 @@ describe('POST /api/members', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    mockRequireAdminAuth.mockResolvedValue(ADMIN)
   })
 
-  test('should create member and return 201 with valid data', async () => {
-    // Arrange - checkEmail returns [] (no duplicate)
-    mockWithPerformanceLog.mockResolvedValueOnce([])
+  test('returns 401 when the caller is not an admin', async () => {
+    mockRequireAdminAuth.mockResolvedValueOnce(null)
 
-    const request = new NextRequest('http://localhost:3000/api/members', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(validBody),
-    })
+    const response = await POST(
+      new NextRequest('http://localhost:3000/api/members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validBody),
+      })
+    )
 
-    // Act
-    const response = await POST(request)
-    const data = await response.json()
-
-    // Assert
-    expect(response.status).toBe(201)
-    expect(data.success).toBe(true)
-    expect(data.data).toBeDefined()
-    expect(data.data.email).toBe(validBody.email)
-    expect(data.data.firstNameKo).toBe(validBody.firstNameKo)
-    expect(data.data.lastNameKo).toBe(validBody.lastNameKo)
+    expect(response.status).toBe(401)
   })
 
-  test('should return 409 when email already exists', async () => {
-    // Arrange - checkEmail returns existing member
-    mockWithPerformanceLog.mockResolvedValueOnce([{ id: 'existing-id' }])
-
-    const request = new NextRequest('http://localhost:3000/api/members', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(validBody),
-    })
-
-    // Act
-    const response = await POST(request)
+  test('returns 501 instead of pretending to create a member', async () => {
+    const response = await POST(
+      new NextRequest('http://localhost:3000/api/members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validBody),
+      })
+    )
     const data = await response.json()
 
-    // Assert
-    expect(response.status).toBe(409)
+    expect(response.status).toBe(501)
     expect(data.success).toBe(false)
-    expect(data.error.code).toBe('CONFLICT')
-    expect(data.error.message).toBe('Email already exists')
+    expect(data.error.code).toBe('NOT_IMPLEMENTED')
+    expect(mockWithPerformanceLog).not.toHaveBeenCalled()
   })
 
   test('should return 422 when email is missing', async () => {
@@ -315,43 +378,5 @@ describe('POST /api/members', () => {
     expect(response.status).toBe(422)
     expect(data.success).toBe(false)
     expect(data.error.code).toBe('VALIDATION_ERROR')
-  })
-
-  test('should call withPerformanceLog with checkEmail operation', async () => {
-    // Arrange
-    mockWithPerformanceLog.mockResolvedValueOnce([])
-
-    const request = new NextRequest('http://localhost:3000/api/members', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(validBody),
-    })
-
-    // Act
-    await POST(request)
-
-    // Assert
-    expect(mockWithPerformanceLog).toHaveBeenCalledWith('members.checkEmail', expect.any(Function))
-  })
-
-  test('should include createdAt and updatedAt in created member', async () => {
-    // Arrange
-    mockWithPerformanceLog.mockResolvedValueOnce([])
-
-    const request = new NextRequest('http://localhost:3000/api/members', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(validBody),
-    })
-
-    // Act
-    const response = await POST(request)
-    const data = await response.json()
-
-    // Assert
-    expect(response.status).toBe(201)
-    expect(data.data.createdAt).toBeDefined()
-    expect(data.data.updatedAt).toBeDefined()
-    expect(data.data.id).toBeDefined()
   })
 })

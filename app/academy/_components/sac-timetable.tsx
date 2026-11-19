@@ -5,10 +5,10 @@ import {
   SAC_CATEGORIES,
   SAC_CLASSES,
   SAC_DAYS,
-  SAC_SLOTS,
   type SacCategory,
   type SacClass,
 } from './academy-data'
+import { useAcademyText } from './use-academy-copy'
 
 type Filter = SacCategory | '전체'
 
@@ -24,12 +24,16 @@ const countOf = (filter: Filter): number =>
  * 좁은 화면에선 요일별로 쌓는다. 분야 버튼은 해당 분야만 먹색으로 남기고 나머지를 옅게 한다(칸 모양은 유지).
  */
 export function SacTimetable() {
+  const { copy, ui, language } = useAcademyText()
   const [filter, setFilter] = useState<Filter>('전체')
+  // 분야·요일 값은 CSS(data-cat)와 필터가 쓰는 id 라 그대로 두고, 보이는 이름만 바꾼다
+  const filterLabel = (option: Filter) =>
+    option === '전체' ? ui('filterAll') : copy.categoryLabel(option)
   const isMatch = (item: SacClass) => filter === '전체' || item.category === filter
 
   return (
     <div className='asca-ac__tt-wrap'>
-      <div className='asca-ac__filters' role='group' aria-label='분야별로 보기'>
+      <div className='asca-ac__filters' role='group' aria-label={ui('filterLabel')}>
         {FILTERS.map(option => (
           <button
             key={option}
@@ -39,18 +43,20 @@ export function SacTimetable() {
             aria-pressed={filter === option}
             onClick={() => setFilter(option)}
           >
-            {option}
+            {filterLabel(option)}
             <span className='asca-ac__filter-count'>{countOf(option)}</span>
           </button>
         ))}
       </div>
       <p className='sr-only' aria-live='polite'>
-        {filter === '전체' ? '전체' : filter} 강좌 {countOf(filter)}개를 표시합니다.
+        {ui('filterStatus')
+          .replace('{filter}', filterLabel(filter))
+          .replace('{n}', String(countOf(filter)))}
       </p>
 
       <div className='asca-ac__tt' data-filtered={filter !== '전체'}>
         <div className='asca-ac__tt-corner' aria-hidden='true' />
-        {SAC_SLOTS.map((slot, index) => (
+        {copy.slots.map((slot, index) => (
           <div
             key={slot.id}
             className='asca-ac__tt-slot'
@@ -70,25 +76,28 @@ export function SacTimetable() {
             aria-labelledby={`ac-tt-${dayIndex}`}
           >
             <h4 id={`ac-tt-${dayIndex}`} className='asca-ac__tt-day-name'>
-              {day}
-              <span className='asca-ac__tt-day-suffix'>요일</span>
+              {copy.dayLabel(day)}
+              {/* 한국어만 '화요일'처럼 접미사를 따로 작게 단다 — 다른 언어는 요일 이름에 이미 들어 있다 */}
+              {language === 'ko' && <span className='asca-ac__tt-day-suffix'>요일</span>}
             </h4>
-            {SAC_SLOTS.map(slot => {
-              const items = SAC_CLASSES.filter(item => item.day === day && item.slot === slot.id)
+            {copy.slots.map(slot => {
+              const items = SAC_CLASSES.map((item, index) => ({ item, index })).filter(
+                ({ item }) => item.day === day && item.slot === slot.id
+              )
               return (
                 <div key={slot.id} className='asca-ac__tt-cell'>
                   <p className='asca-ac__tt-cell-label'>
                     {slot.label} <span>{slot.time}</span>
                   </p>
                   <ul className='asca-ac__tt-list'>
-                    {items.map(item => (
+                    {items.map(({ item, index }) => (
                       <li
                         key={`${item.title}-${item.instructor}-${item.time ?? ''}`}
                         className='asca-ac__class'
                         data-cat={item.category}
                         data-dim={!isMatch(item)}
                       >
-                        <span className='asca-ac__class-title'>{item.title}</span>
+                        <span className='asca-ac__class-title'>{copy.classTitle(index)}</span>
                         <span className='asca-ac__class-meta'>
                           {item.instructor}
                           {item.time && <span className='asca-ac__class-time'>{item.time}</span>}

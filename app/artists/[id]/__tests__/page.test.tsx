@@ -7,6 +7,7 @@ const BASE = 'https://caxjyimsuvjnbmjoxfad.supabase.co'
 
 const getArtist = jest.fn()
 const worksQuery = jest.fn()
+const loadRelated = jest.fn()
 
 jest.mock('next/navigation', () => ({
   notFound: () => {
@@ -14,11 +15,22 @@ jest.mock('next/navigation', () => ({
   },
 }))
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
-jest.mock('@/contexts/language-context', () => ({
-  useLanguage: () => ({ language: 'ko', t: (key: string) => key }),
-}))
+let mockLanguage: 'ko' | 'en' | 'ja' | 'zh' = 'ko'
+jest.mock('@/contexts/language-context', () => {
+  // 실제 언어별 표로 찾는다 — 키가 빠지면 키 이름이 그대로 나와 테스트가 잡는다
+  const { translations } = jest.requireActual('@/lib/i18n/translations')
+  return {
+    useLanguage: () => ({
+      language: mockLanguage,
+      t: (key: string) => translations[mockLanguage][key] || key,
+    }),
+  }
+})
 jest.mock('@/lib/utils/logger', () => ({ log: { error: jest.fn() } }))
 jest.mock('@/lib/api/artists', () => ({ getArtist: (key: string) => getArtist(key) }))
+jest.mock('../_components/load-related-artists', () => ({
+  loadRelatedArtists: (...args: unknown[]) => loadRelated(...args),
+}))
 jest.mock('@/lib/supabase', () => ({
   getSupabaseClient: () => ({
     from: (table: string) => {
@@ -89,8 +101,10 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
+  mockLanguage = 'ko'
   getArtist.mockReset().mockResolvedValue(artistRow)
   worksQuery.mockReset().mockResolvedValue({ data: works, error: null })
+  loadRelated.mockReset().mockResolvedValue(null)
 })
 
 async function renderPage(id = ARTIST) {
@@ -98,6 +112,22 @@ async function renderPage(id = ARTIST) {
 }
 
 describe('작가 상세', () => {
+  it.each([
+    ['日本', '書家一', '書家二', '書家一'],
+    ['中國', '書家一', '書家二', '書家二'],
+  ])('%s: 한국어 화면과 문서 제목에 원어 한자 이름', async (nationality, ja, zh, expected) => {
+    getArtist.mockResolvedValue({
+      ...artistRow,
+      name: '가상 외국 작가',
+      nationality,
+      name_ja: ja,
+      name_zh: zh,
+    })
+    await renderPage()
+    expect(screen.getByRole('heading', { level: 1, name: expected })).toBeVisible()
+    expect(document.querySelector('.ah__hanja')?.textContent).not.toBe(expected)
+    expect((await generateMetadata(params(ARTIST))).title).toBe(`${expected} | 동양서예협회`)
+  })
   // 회귀: snake_case 응답을 artist.profileImage 로 읽어 모든 작가가 빈 아이콘이었다
   it('profile_image 의 사진을 보여 준다', async () => {
     await renderPage()
@@ -197,5 +227,194 @@ describe('작가 상세', () => {
     const meta = await generateMetadata(params(ARTIST))
     expect(meta.alternates?.canonical).toBe('/artists/jeongam')
     expect(String(meta.title)).toContain('김형석')
+  })
+})
+
+describe('창립자 성곡 임현기', () => {
+  const founderRow = {
+    ...artistRow,
+    name: '임현기',
+    name_zh: '林炫圻',
+    slug: 'lim-hyun-ki',
+    art_name_hanja: '惺谷',
+    death_year: 2026,
+    membership_type: '초대작가',
+    title: null,
+  }
+
+  it('창립자 띠(작업실 사진·협회에서의 자리·홈페이지)와 직위를 보여 준다', async () => {
+    getArtist.mockResolvedValue(founderRow)
+    await renderPage()
+    const band = screen.getByRole('region', { name: '협회를 세운 분' })
+    expect(within(band).getByRole('img', { name: /성곡 임현기/ })).toHaveAttribute(
+      'src',
+      '/images/artists/lim-hyun-ki/studio.jpg'
+    )
+    expect(within(band).getByRole('link', { name: /성곡 홈페이지 보기/ })).toHaveAttribute(
+      'href',
+      'https://seonggok.com'
+    )
+    // DB 직위가 비어 있어도 히어로에 협회에서의 자리를 등급보다 앞에 둔다
+    expect(document.querySelector('.ap-roles')?.textContent).toBe(
+      '동양서예협회 창립자 · 명예이사장 · 초대작가'
+    )
+  })
+
+  it('다른 작가에게는 창립자 띠가 없다 — slug 로만 가른다', async () => {
+    getArtist.mockResolvedValue({ ...founderRow, slug: 'lim-hyun-ki-2' })
+    await renderPage()
+    expect(screen.queryByRole('region', { name: '협회를 세운 분' })).not.toBeInTheDocument()
+    expect(document.querySelector('.ap-roles')?.textContent).toBe('초대작가')
+  })
+})
+
+// 회귀: 고른 언어와 상관없이 '작가 목록'·'국적'·'작품' 같은 화면 글자가 한국어로 찍혔다
+describe('작가 상세 화면 글자 번역', () => {
+  const HANGUL = /[가-힣]/
+
+  it.each([
+    [
+      'en',
+      'Artists',
+      'Nationality',
+      'Korea',
+      'Works',
+      'About the artist',
+      '2 works · newest first',
+    ],
+    ['ja', '作家一覧', '国籍', '韓国', '作品', '作家紹介', '2点 · 新しい順'],
+    ['zh', '作家列表', '國籍', '韓國', '作品', '作家簡介', '2件 · 由新到舊'],
+  ])('%s: 빵부스러기·사실 줄·구역 제목', async (lang, crumb, natLabel, nat, works, about, note) => {
+    mockLanguage = lang as typeof mockLanguage
+    await renderPage()
+    expect(screen.getByRole('link', { name: crumb })).toHaveAttribute('href', '/artists')
+    expect(screen.getByText(natLabel)).toBeInTheDocument()
+    expect(screen.getByText(nat)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: works })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: about })).toBeInTheDocument()
+    expect(screen.getByText(note)).toBeInTheDocument()
+  })
+
+  it.each(['en', 'ja', 'zh'] as const)(
+    '%s: 작가가 쓴 소개·작품 제목 말고는 한글이 남지 않는다',
+    async lang => {
+      mockLanguage = lang
+      getArtist.mockResolvedValue({ ...artistRow, bio: null, birth_year: 1950 })
+      worksQuery.mockResolvedValue({ data: [works[0]], error: null })
+      await renderPage()
+      // 히어로·구역 글자 전체 — 이름(name_en 이 비어 한국어 이름)·행서(서체 값)는 DB 데이터라 뺀다
+      const text = (document.querySelector('.ap')?.textContent ?? '')
+        .replaceAll('김형석', '')
+        .replace('행서', '')
+      expect(text).not.toMatch(/ad[A-Z]/)
+      expect(text).not.toMatch(HANGUL)
+    }
+  )
+
+  it.each([
+    ['en', 'Born 1950', 'Died 2026'],
+    ['ja', '1950年生まれ', '2026年没'],
+    ['zh', '1950年生', '2026年逝世'],
+    ['ko', '1950년생', '2026년 별세'],
+  ])('%s: 생몰 한 칸', async (lang, born, died) => {
+    mockLanguage = lang as typeof mockLanguage
+    getArtist.mockResolvedValue({ ...artistRow, birth_year: 1950 })
+    const { unmount } = render(await ArtistPage(params(ARTIST)))
+    expect(screen.getByText(born)).toBeInTheDocument()
+    unmount()
+    getArtist.mockResolvedValue({ ...artistRow, death_year: 2026 })
+    await renderPage()
+    expect(screen.getByText(died)).toBeInTheDocument()
+  })
+
+  // 회귀: 단위 앞 여백이 CSS 2px 뿐이라 영어가 '6works' 로 읽혔다(화면 읽기 프로그램도 한 낱말로)
+  it.each([
+    ['en', 'Published', '2 works'],
+    ['ko', '공개 작품', '2점'],
+    ['ja', '公開作品', '2点'],
+  ])('%s: 숫자와 단위 띄어쓰기', async (lang, label, value) => {
+    mockLanguage = lang as typeof mockLanguage
+    await renderPage()
+    const fact = [...document.querySelectorAll('.ah__fact')].find(
+      el => el.querySelector('dt')?.textContent === label
+    )
+    expect(fact?.querySelector('dd')?.textContent).toBe(value)
+  })
+
+  it('en: 비어 있을 때 안내와 다른 작가 링크도 번역한다', async () => {
+    mockLanguage = 'en'
+    getArtist.mockResolvedValue({ ...artistRow, bio: null, profile_image: null })
+    worksQuery.mockResolvedValue({ data: [], error: null })
+    await renderPage()
+    expect(
+      screen.getByText("The artist's profile and works are being prepared.")
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'See other artists' })).toHaveAttribute(
+      'href',
+      '/artists'
+    )
+  })
+
+  it('ja·zh: 제목이 이미 한자라 곁 漢字를 겹쳐 달지 않는다', async () => {
+    mockLanguage = 'ja'
+    await renderPage()
+    expect(document.querySelector('.ap-head__tc')).toBeNull()
+  })
+
+  it('네 언어 표가 같은 키를 갖는다', () => {
+    const { artistDetailTranslations } = jest.requireActual('@/lib/i18n/translations/artist-detail')
+    const keys = Object.keys(artistDetailTranslations.ko).sort()
+    for (const lang of ['en', 'ja', 'zh']) {
+      expect(Object.keys(artistDetailTranslations[lang]).sort()).toEqual(keys)
+    }
+    // 빈 값은 t() 가 키 이름으로 바꿔 화면에 새어 나온다
+    for (const table of Object.values(artistDetailTranslations) as Record<string, string>[]) {
+      for (const value of Object.values(table)) expect(value.trim()).not.toBe('')
+    }
+  })
+
+  it('함께 보는 작가: 이 작가의 서체로 찾고, 있으면 작품 아래 줄로 건다', async () => {
+    loadRelated.mockResolvedValue({
+      key: 'related',
+      labelKey: 'adRelatedTitle',
+      href: null,
+      items: [
+        {
+          artist: {
+            id: 'other',
+            name: '이웃작가',
+            nameEn: null,
+            nameJa: null,
+            nameZh: null,
+            bio: null,
+            birthYear: null,
+            deathYear: null,
+            nationality: null,
+            specialties: [],
+            awards: [],
+            profileImage: null,
+            membershipType: '초대작가',
+            artistType: null,
+            title: null,
+            slug: 'neighbor',
+            artNameKo: null,
+            artNameHanja: null,
+          },
+          cover: null,
+        },
+      ],
+    })
+    await renderPage()
+    expect(loadRelated).toHaveBeenCalledWith(expect.objectContaining({ id: ARTIST }), ['행서'])
+    const rail = screen.getByRole('region', { name: '함께 보는 작가' })
+    expect(within(rail).getByRole('link', { name: /이웃작가/ })).toHaveAttribute(
+      'href',
+      '/artists/neighbor'
+    )
+  })
+
+  it('함께 보는 작가가 없으면 줄을 걸지 않는다', async () => {
+    await renderPage()
+    expect(screen.queryByRole('region', { name: '함께 보는 작가' })).toBeNull()
   })
 })

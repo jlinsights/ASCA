@@ -127,4 +127,9 @@ export const AWARDS: readonly Award[] = [
 export const AWARD_SOURCES = [reg('operation-judging', '7', '운영 및 심사 규정 제7조')]
 
 /** 이 페이지에 보여 줄 공용 FAQ(lib/content/site-faq.ts) */
-export const ENTRY_FAQ_IDS = ['entry-fees', 'awards', 'artist-selection'] as const
+export const ENTRY_FAQ_IDS = [
+  'entry-fees',
+  'awards',
+  'artist-selection',
+  'special-appointment',
+] as const

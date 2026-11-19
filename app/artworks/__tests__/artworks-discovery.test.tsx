@@ -13,9 +13,13 @@ jest.mock('next/image', () => ({
 
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
 jest.mock('@/components/ui/toaster', () => ({ Toaster: () => null }))
-jest.mock('@/contexts/language-context', () => ({
-  useLanguage: () => ({ language: 'ko', t: (key: string) => key }),
-}))
+jest.mock('@/contexts/language-context', () => {
+  // 실제 번역 표로 찾는다 — 둘러보기 문구는 언어별 표(discovery*)에 있다
+  const { translations } = jest.requireActual('@/lib/i18n/translations')
+  return {
+    useLanguage: () => ({ language: 'ko', t: (key: string) => translations.ko[key] || key }),
+  }
+})
 
 const fetchMock = jest.fn()
 const originalFetch = global.fetch
@@ -31,7 +35,7 @@ const artworks = [
     availability: 'available',
     orientation: 'landscape',
     year: 2025,
-    image_url: '/images/artworks/calligraphy-scene-1.jpg',
+    image_url: '/images/programs/calligraphy-scene-1.jpg',
   },
   {
     id: '2',
@@ -44,7 +48,7 @@ const artworks = [
     availability: 'sold',
     orientation: 'portrait',
     year: 2024,
-    image_url: '/images/artworks/calligraphy-scene-2.jpg',
+    image_url: '/images/programs/calligraphy-scene-2.jpg',
   },
 ]
 
@@ -91,5 +95,46 @@ describe('Artworks discovery states', () => {
     await user.click(screen.getAllByRole('button', { name: '전체 초기화' }).at(-1)!)
     expect(screen.getByRole('link', { name: '작품 보기: 산수' })).toBeInTheDocument()
     expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('500점이어도 24점씩 그리고, 더 보기·조건 변경에 맞춰 보이는 수가 바뀐다', async () => {
+    const many = Array.from({ length: 500 }, (_, index) => ({
+      ...artworks[index % 2],
+      id: String(index + 1),
+      title: `작품${index + 1}`,
+    }))
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ artworks: many }) })
+    const user = userEvent.setup()
+    render(<ArtworksClient />)
+    await screen.findByRole('link', { name: '작품 보기: 작품1' })
+
+    const cards = () => screen.getAllByRole('link', { name: /^작품 보기: / })
+    expect(cards()).toHaveLength(24)
+    expect(screen.getByText('500점 중 24점을 보고 있습니다')).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('작품 500점')
+
+    await user.click(screen.getByRole('button', { name: '작품 더 보기' }))
+    expect(cards()).toHaveLength(48)
+    expect(screen.getByText('500점 중 48점을 보고 있습니다')).toBeInTheDocument()
+    // 키보드 초점은 새로 나온 첫 작품으로
+    expect(screen.getByRole('link', { name: '작품 보기: 작품25' })).toHaveFocus()
+
+    // 조건이 바뀌면 처음 24점으로 — 구매 가능 250점 중 24점
+    await user.click(screen.getByRole('checkbox', { name: '구매 가능한 작품만' }))
+    expect(cards()).toHaveLength(24)
+    expect(screen.getByText('250점 중 24점을 보고 있습니다')).toBeInTheDocument()
+
+    // 조건을 되돌려도 예전 48점이 되살아나지 않는다 (Codex #214)
+    await user.click(screen.getByRole('checkbox', { name: '구매 가능한 작품만' }))
+    expect(cards()).toHaveLength(24)
+    expect(screen.getByText('500점 중 24점을 보고 있습니다')).toBeInTheDocument()
+  })
+
+  it('남은 작품이 없으면 더 보기를 감춘다', async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ artworks }) })
+    render(<ArtworksClient />)
+    await screen.findByRole('link', { name: '작품 보기: 산수' })
+    expect(screen.getByText('2점 중 2점을 보고 있습니다')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '작품 더 보기' })).toBeNull()
   })
 })

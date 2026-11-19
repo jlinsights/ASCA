@@ -55,11 +55,11 @@ export default function AdminContestEditPage() {
   if (loading) {
     return (
       <div className='min-h-screen bg-background'>
-        <main className='container py-8'>
+        <div className='container py-8'>
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
-        </main>
+        </div>
       </div>
     )
   }
@@ -67,21 +67,21 @@ export default function AdminContestEditPage() {
   if (error || !contest) {
     return (
       <div className='min-h-screen bg-background'>
-        <main className='container py-8 [--shell-max:56rem]'>
+        <div className='container py-8 [--shell-max:56rem]'>
           <div className='text-center py-12'>
             <p className='text-scholar-red mb-4'>{error || '공모전을 찾을 수 없습니다'}</p>
             <Link href='/admin/contests'>
               <Button>공모전 목록으로</Button>
             </Link>
           </div>
-        </main>
+        </div>
       </div>
     )
   }
 
   return (
     <div className='min-h-screen bg-background'>
-      <main className='container py-8 [--shell-max:56rem]'>
+      <div className='container py-8 [--shell-max:56rem]'>
         <div className='mb-8'>
           <Link href='/admin/contests'>
             <Button variant='ghost' className='mb-4'>
@@ -94,7 +94,7 @@ export default function AdminContestEditPage() {
         </div>
 
         <ContestForm contest={contest} />
-      </main>
+      </div>
     </div>
   )
 }

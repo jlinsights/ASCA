@@ -1,16 +1,21 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
 import { IntroductionsHero } from './_components/introductions-hero'
 import { IntroductionsTabs } from './_components/introductions-tabs'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
+  alternates: { canonical: '/introductions' },
   title: '소개 | 동양서예협회',
   description:
-    '사단법인 동양서예협회(ASCA)는 한국, 중국, 일본을 잇는 동양 서예의 전통을 계승하고 현대적 가치를 창출하는 전문 예술문화기관입니다.',
+    '사단법인 동양서예협회(ASCA)는 한국·중국·일본을 잇는 동양 서예의 전통을 이어 오늘의 예술로 펼쳐 가는 전문 예술문화단체입니다. 1997년 한·중·일 교류전에서 시작해 대한민국 동양서예대전을 열고 있습니다.',
   openGraph: {
     title: '소개 | 동양서예협회',
     description:
-      '正法의 계승 발전과 創新의 조화로운 구현. 동양서예협회의 비전과 사명을 소개합니다.',
+      '法古創新 · 人書俱老 — 옛 법을 익혀 새로움을 열고, 글씨와 사람이 함께 깊어지는 동양서예협회를 소개합니다.',
     images: [
       {
         url: 'https://imagedelivery.net/iELritu8tmGaSR8tZ-NWcg/561446ce-48df-41cf-c8d8-ac7427ed2600/Contain',
@@ -21,16 +26,17 @@ export const metadata: Metadata = {
 
 export default function IntroductionsPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
-      <IntroductionsHero />
-
-      <section className='container py-8 md:py-12'>
-        <div className='max-w-3xl mx-auto'>
-          <IntroductionsTabs />
-        </div>
-      </section>
-
+    <>
+      <AboutPage>
+        <IntroductionsHero />
+        <AboutNav />
+        <IntroductionsTabs />
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/introductions', metadata)

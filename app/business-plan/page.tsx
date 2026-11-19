@@ -1,21 +1,32 @@
 import { Metadata } from 'next'
-import { Button } from '@/components/ui/button'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { HeroFacts, PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { BusinessPlanSidebar } from './_components/business-plan-sidebar'
-import { Plan2025 } from './_components/plan-2025'
+import { AboutChapter, AboutHero, AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
+import {
+  PlanDirections,
+  PlanIndicators,
+  PlanKeynote,
+  PlanManagement,
+  PlanPrograms,
+  PlanSchedule,
+} from './_components/plan-2027'
+import { PLAN_YEAR } from './_components/plan-2027-data'
 import { YearSection } from './_components/year-section'
-import { EXHIBITION_YEARS } from './_components/business-plan-data'
-import { BOOKING_URL, CHAT_URL } from '@/lib/content/contact-info'
+import Link from 'next/link'
+import { EXHIBITION_YEARS, QUICK_LINKS } from './_components/business-plan-data'
+import { BOOKING_URL, KAKAO_CHAT_URL } from '@/lib/content/contact-info'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/business-plan' },
   title: '사업계획 | 동양서예협회',
   description:
-    '동양서예협회 연도별 사업계획 및 전시 아카이브. 2025년 사업계획서, 대한민국 동양서예대전 역대 전시 기록을 확인하세요.',
+    '동양서예협회 2027년도 사업계획. 제23회 대한민국 동양서예대전과 書境 초대작가전, 한·중·일 교류, 교육과 차세대, 작가의 온라인 활동, 예술경영 원칙과 역대 전시 아카이브를 안내합니다.',
   openGraph: {
-    title: '사업계획 | Business Plans - 동양서예협회',
-    description: '전통과 현대를 잇는 동양미학 예술 플랫폼. 연도별 사업계획 및 전시 아카이브.',
+    title: '사업계획 | Business Plan - 동양서예협회',
+    description:
+      '느리게 쓰고, 깊게 보고, 오래 남긴다 — 法古創新 · 人書俱老 의 정신으로 서예와 전시 문화를 이끄는 동양서예협회의 2027년도 사업계획.',
     images: [
       {
         url: 'https://imagedelivery.net/iELritu8tmGaSR8tZ-NWcg/561446ce-48df-41cf-c8d8-ac7427ed2600/Contain',
@@ -25,64 +36,114 @@ export const metadata: Metadata = {
 }
 
 export default function BusinessPlanPage() {
-  const pastYears = EXHIBITION_YEARS.filter(e => e.year < 2025)
   const years = EXHIBITION_YEARS.map(e => e.year)
   const firstYear = Math.min(...years)
   const lastYear = Math.max(...years)
 
   return (
-    <div className='min-h-screen bg-transparent'>
-      <PageHero
-        {...PAGE_HERO_MARKS.businessPlan}
-        title='사업계획'
-        lede='동양서예협회의 연도별 사업계획과 대한민국 동양서예대전 전시 아카이브를 확인하실 수 있습니다.'
-        actions={
-          <>
-            <Button asChild className='bg-scholar-red text-white hover:bg-scholar-red/90'>
-              <a href={CHAT_URL} target='_blank' rel='noopener noreferrer'>
+    <>
+      <AboutPage>
+        <AboutHero
+          tc={PAGE_HERO_MARKS.businessPlan.tc}
+          title='사업계획'
+          lede={`${PLAN_YEAR}년, 느리지만 깊은 예술로 서예와 전시 문화의 품격을 이끌겠습니다.`}
+          facts={[
+            { label: '계획 연도', value: String(PLAN_YEAR) },
+            { label: '중심 사업', value: '제23회 대전' },
+            { label: '전시 기록', value: `${firstYear}–${lastYear}` },
+          ]}
+          actions={
+            <>
+              <a
+                href={KAKAO_CHAT_URL}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ab-button ab-button--solid'
+              >
                 상담 문의
               </a>
-            </Button>
-            <Button asChild variant='outline'>
-              <a href={BOOKING_URL} target='_blank' rel='noopener noreferrer'>
+              <a href={BOOKING_URL} target='_blank' rel='noopener noreferrer' className='ab-button'>
                 상담 예약
               </a>
-            </Button>
-          </>
-        }
-      >
-        <HeroFacts
-          facts={[
-            { label: '수록 기간', value: `${firstYear}–${lastYear}` },
-            { label: '전시 기록', value: `${EXHIBITION_YEARS.length}개년` },
-          ]}
+            </>
+          }
         />
-      </PageHero>
-
-      <section className='container py-10 md:py-16'>
-        <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
-          <BusinessPlanSidebar />
-          <main className='flex-1 min-w-0 space-y-16'>
-            <div id='2025'>
-              <Plan2025 />
-            </div>
-
-            {EXHIBITION_YEARS[0] && (
-              <div id='2025-exhibition'>
-                <YearSection exhibition={EXHIBITION_YEARS[0]} />
-              </div>
-            )}
-
-            {pastYears.map(exhibition => (
-              <div key={exhibition.year} id={String(exhibition.year)}>
-                <YearSection exhibition={exhibition} />
-              </div>
-            ))}
-          </main>
-        </div>
-      </section>
-
+        <AboutNav />
+        <AboutChapter
+          id='keynote'
+          tone='navy'
+          tc='基調'
+          eyebrow={`${PLAN_YEAR} · 法古創新 · 人書俱老`}
+          title={`${PLAN_YEAR}년도 사업계획`}
+          aside={
+            <ul className='ab-index' aria-label='바로 가기'>
+              {QUICK_LINKS.map(link => (
+                <li key={link.href}>
+                  <Link href={link.href}>
+                    {link.label} <span aria-hidden='true'>→</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          }
+        >
+          <PlanKeynote />
+        </AboutChapter>
+        <AboutChapter id='directions' tc='方向' eyebrow='Direction' title='운영 방향'>
+          <PlanDirections />
+        </AboutChapter>
+        <AboutChapter
+          id='schedule'
+          tone='gold'
+          tc='日程'
+          eyebrow='Calendar'
+          title={`${PLAN_YEAR} 주요 일정`}
+          note='확정된 일정만 싣고, 정해지는 대로 더합니다.'
+        >
+          <PlanSchedule />
+        </AboutChapter>
+        <AboutChapter id='programs' tc='事業' eyebrow='Programs' title='핵심 사업'>
+          <PlanPrograms />
+        </AboutChapter>
+        <AboutChapter
+          id='management'
+          tone='navy'
+          tc='經營'
+          eyebrow='Management'
+          title='예술경영 원칙'
+        >
+          <PlanManagement />
+        </AboutChapter>
+        <AboutChapter id='review' tc='省察' eyebrow='Review' title='한 해를 돌아볼 때'>
+          <PlanIndicators />
+        </AboutChapter>
+        <AboutChapter
+          id='archive'
+          tone='navy'
+          tc='展覽'
+          eyebrow='Archive'
+          title='대한민국 동양서예대전'
+          aside={
+            <ul className='ab-index' aria-label='연도 바로 가기'>
+              {EXHIBITION_YEARS.map(e => (
+                <li key={e.year}>
+                  <a href={`#${e.year}`}>{e.year}</a>
+                </li>
+              ))}
+            </ul>
+          }
+        >
+          {EXHIBITION_YEARS.map(exhibition => (
+            <YearSection
+              key={exhibition.year}
+              id={String(exhibition.year)}
+              exhibition={exhibition}
+            />
+          ))}
+        </AboutChapter>
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }

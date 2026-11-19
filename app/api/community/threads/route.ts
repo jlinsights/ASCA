@@ -11,10 +11,13 @@ import { log } from '@/lib/utils/logger'
 export const dynamic = 'force-dynamic'
 const headers = { 'Cache-Control': 'private, no-store', Vary: 'Cookie' }
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers })
+/** community_create_thread 가 사진을 붙이지 못할 때 내는 예외 */
+const IMAGE_ERRORS = new Set(['COMMUNITY_IMAGES_UNAVAILABLE', 'COMMUNITY_IMAGES_INVALID'])
 
 /**
  * 글쓰기 — 작성자는 로그인 계정으로만 정한다(본문에 실려 온 작성자 값은 버린다).
  * 게시판은 누구나 읽으므로 표시 이름이 비어 있으면 먼저 정하게 한다.
+ * 사진은 미리 올려 둔 대기 사진 ID 로 받는다(POST /api/community/images).
  */
 export async function POST(request: NextRequest) {
   if (!checkOrigin(request).ok)
@@ -34,12 +37,19 @@ export async function POST(request: NextRequest) {
     }).check(request)
     if (limited) return limited
 
-    const { data, error } = await archiveWriter()
-      .from('community_threads')
-      .insert({ author_id: account.id, title: body.data.title, body: body.data.body })
-      .select('id')
-      .single()
-    if (error) throw error
+    // 글 저장과 사진 붙이기를 한 트랜잭션으로 — 사진이 하나라도 내 대기 사진이 아니면 글도 남지 않는다
+    const { data: threadId, error } = await archiveWriter().rpc('community_create_thread', {
+      p_author: account.id,
+      p_title: body.data.title,
+      p_body: body.data.body,
+      p_image_ids: body.data.imageIds,
+    })
+    if (error) {
+      if (IMAGE_ERRORS.has(error.message))
+        return json({ error: 'Images unavailable', code: 'IMAGES_UNAVAILABLE' }, 409)
+      throw error
+    }
+    const data = { id: threadId as string }
     // 제목·본문은 로그에 남기지 않는다
     await auditTrail.trackDataChange(
       account.id,

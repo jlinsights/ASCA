@@ -128,7 +128,7 @@ export function ArtworkUploadClient() {
 
   return (
     <div className='min-h-screen bg-transparent flex flex-col'>
-      <main className='flex-1 container py-8'>
+      <div className='flex-1 container py-8'>
         <div className='max-w-4xl mx-auto'>
           {/* Header */}
           <div className='mb-8'>
@@ -177,7 +177,7 @@ export function ArtworkUploadClient() {
             </div>
           </form>
         </div>
-      </main>
+      </div>
 
       <LayoutFooter />
 

@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { getAccount } from '@/lib/auth/server'
 import { archiveIdentity } from '@/lib/archive/writer'
-import { getThread } from '@/lib/community/feed'
+import { getReactions, getThread, listComments } from '@/lib/community/feed'
 import { excerpt } from '@/lib/community/threads'
 import { ThreadDetail } from './thread-detail'
 
@@ -15,10 +16,13 @@ type Props = { params: Promise<{ id: string }> }
  * 메타데이터와 본문이 같은 요청에서 한 번만 읽도록 cache 로 묶는다.
  */
 const load = cache(async (id: string) => {
-  const identity = await archiveIdentity().catch(() => null)
+  const [identity, account] = await Promise.all([
+    archiveIdentity().catch(() => null),
+    getAccount().catch(() => null),
+  ])
   const admin = Boolean(identity?.admin)
-  const found = await getThread(id, { includeHidden: admin })
-  return found ? { ...found, admin } : null
+  const found = await getThread(id, { includeHidden: admin, viewerId: account?.id ?? null })
+  return found ? { ...found, admin, account } : null
 })
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -34,11 +38,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CommunityThreadPage({ params }: Props) {
   const found = await load((await params).id)
   if (!found) notFound()
+  const { account } = found
+  const viewerId = account?.id ?? null
+  const [comments, reactions] = await Promise.all([
+    listComments(found.thread.id, viewerId),
+    getReactions(found.thread.id, viewerId),
+  ])
   return (
     <>
-      <main>
-        <ThreadDetail thread={found.thread} moderation={found.admin ? found.moderation : null} />
-      </main>
+      <div>
+        <ThreadDetail
+          thread={found.thread}
+          moderation={found.admin ? found.moderation : null}
+          comments={comments}
+          reactions={reactions}
+          viewer={{
+            signedIn: Boolean(account),
+            hasDisplayName: Boolean(account?.displayName.trim()),
+          }}
+        />
+      </div>
       <LayoutFooter />
     </>
   )

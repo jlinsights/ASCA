@@ -146,3 +146,11 @@ if (typeof window !== 'undefined') {
     console.warn = originalConsoleWarn
   })
 }
+
+// 화면 언어는 주소가 정한다(lib/i18n/testing.ts setTestLanguage). 테스트마다 한국어 주소·언어 쿠키를 되돌린다
+if (typeof window !== 'undefined') {
+  afterEach(() => {
+    window.history.replaceState(null, '', '/')
+    document.cookie = 'asca-lang=; path=/; max-age=0'
+  })
+}

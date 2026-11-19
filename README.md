@@ -2,14 +2,15 @@
 
 > 전통 동양 서예의 아름다움을 현대적인 웹 기술로 구현한 종합 문화 플랫폼
 
-[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat&logo=vercel)](https://asca-main.vercel.app)
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat&logo=vercel)](https://orientalcalligraphy.org)
 [![Next.js](https://img.shields.io/badge/Built%20with-Next.js%2016-black?style=flat&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Styled%20with-Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss)](https://tailwindcss.com)
 
 > 에이전트·개발자용 상세 지침은 [`AGENTS.md`](AGENTS.md)(Codex)와
 > [`docs/CLAUDE.md`](docs/CLAUDE.md)(Claude Code)에 있다. 두 파일은 같은 내용을
-> 유지한다.
+> 유지한다. 루트 [`CLAUDE.md`](CLAUDE.md)는 `docs/CLAUDE.md` 를 불러오는 진입
+> 문서다.
 
 ## 🌟 주요 기능
 
@@ -17,7 +18,8 @@
 
 - 👨‍🎨 **작가** — 초대작가·추천작가 등 공개 등급 작가 목록과 상세(이름 검색,
   직함·등급 필터)
-- 🏛️ **전시** — 현재·예정·지난·온라인 전시 (연혁 데이터 기반)
+- 🏛️ **전시** — 협회 전시 기록과 예정 전시, 승인된 외부 전시 홍보; 홍보·
+  유관업체 광고 문의와 예시 화면
 - 📜 **연혁** — 1997년 한·중·일 교류전부터의 협회 기록
 - 📸 **갤러리** — 심사위원회·휘호대회·시상식 등 카테고리별 행사 사진
 - 🏆 **공모전** — 대한민국 동양서예대전 공모 요강
@@ -27,7 +29,8 @@
 ### 🌍 다국어
 
 - 한국어(기본)·영어·일본어·중국어(번체 `zh-TW`) — 헤더의 언어 선택으로 바꾼다
-- 언어는 브라우저(`localStorage`)에 저장되고 URL 에는 없다
+- 한국어는 기본 경로, 영어·일본어·중국어는 `/en`, `/ja`, `/zh` 접두사를
+  사용한다. 번역된 경로와 언어 선택은 `lib/i18n/locale-routing.ts`를 따른다.
 
 ### 🔐 회원·관리
 
@@ -52,7 +55,7 @@
 
 ### 환경 요구사항
 
-- Node.js 18+
+- Node.js 20.9 이상 (설치된 Next.js의 `engines` 기준)
 - npm 8+
 
 ### 설치
@@ -60,7 +63,7 @@
 ```bash
 git clone https://github.com/jlinsights/ASCA
 cd ASCA
-npm install
+npm ci
 npm run dev        # Webpack 개발 서버 (권장)
 ```
 
@@ -72,7 +75,7 @@ npm run dev        # Webpack 개발 서버 (권장)
 # Supabase (필수)
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=        # 서버 전용 — 관리자 API
+SUPABASE_SERVICE_ROLE_KEY=        # 서버 전용 — 필요한 관리자 작업에 사용
 
 # PostgreSQL (필수 — 배포 빌드 build:full 은 없으면 실패한다)
 DATABASE_URL=                     # Supabase 트랜잭션 풀러(6543)
@@ -94,7 +97,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 │   ├── admin/                 # 관리자 — artists(회비 관리)
 │   ├── api/                   # API 라우트 (artists, admin, archive …)
 │   ├── artists/               # 작가 목록·상세
-│   ├── exhibitions/           # 전시 (_data/exhibition-records.ts)
+│   ├── exhibitions/           # 전시 (_data/exhibition-listings.ts, planned-exhibitions.ts)
 │   ├── history/               # 연혁 (_data/history-events.ts)
 │   ├── gallery/               # 갤러리
 │   ├── brand/                 # 브랜드·스타일 가이드
@@ -106,11 +109,12 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 │   ├── admin/                 # 관리자 도메인 (artist-dues.ts …)
 │   ├── archive/writer.ts      # 관리자 판정 archiveIdentity()
 │   ├── security/              # CSRF 출처 검사, 입력 정리, 요청 제한
-│   ├── i18n/translations/     # 화면별 번역표
+│   ├── i18n/                  # 언어별 번역, URL 경로와 메타데이터
 │   ├── data/gallery-data.json # 갤러리 메타데이터
 │   └── db/                    # Drizzle 스키마·쿼리
 ├── supabase/migrations/       # DB 마이그레이션 (구조 변경은 여기로만)
 ├── scripts/                   # 갤러리 데이터 생성, DB 검사 스크립트
+├── regulations/               # 현행 규정과 이사회 검토용 개정안
 ├── docs/02-design/DESIGN.md   # 디자인 토큰 단일 출처
 └── proxy.ts                   # Next 미들웨어 — CSRF 검사 + Supabase 세션
 ```
@@ -118,8 +122,13 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ## 🗄️ 데이터
 
 - Supabase 프로젝트 **`ASCA-2026`**. 옛 프로젝트는 복구할 수 없다.
-- **데이터가 있는 테이블은 `artists` 뿐이다.** 공지·전시·행사·작품 테이블은 빈
-  상태이고, 홈·연혁·전시 하위 페이지는 저장소 안의 데이터 파일을 읽는다.
+- 홈·연혁·전시 하위 페이지는 저장소의 데이터 파일을 읽는다. 전시 목록은 협회
+  연혁과 예정 전시, 승인된 외부 홍보 자료를 합친다. 외부 홍보는
+  `app/exhibitions/_data/exhibition-listings.ts`에서 관리하며, 예시 포스터와
+  광고 목업은 실제 전시 기록이나 건수에 포함하지 않는다.
+- 현행 규정은 `regulations/`에 있고,
+  `regulations/proposals/2026-11-consolidated/`는 이사회 검토용 초안이다.
+  의결·공포·시행과 제안 금액은 확정되지 않았다.
 - 작가 공개 여부는 `artists.visibility` + RLS 가 정한다. **준회원·공모작가**와
   회비 상태 **'자격 정지'** 인 작가는 트리거가 자동으로 숨긴다.
 - 회비 상태(`정상`·`권한 제한`·`자격 정지`)는 등급과 별개로 관리한다.
@@ -131,7 +140,8 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ## 🔐 관리자
 
-- 관리자 계정: `info@orientalcalligraphy.org` (비밀번호 로그인)
+- 운영 관리자 준비 대상: `info@orientalcalligraphy.org` (계정·권한 준비 및 실제
+  운영 전환 여부는 별도로 확인)
 - 관리자 여부: `public.account_profiles.role = 'admin'`과 검증된 MFA `aal2`를
   모두 요구한다
 - 가입·이메일 확인 → 서버에서 역할 부여 → `/auth/mfa` TOTP 등록·검증 순서다.
@@ -170,12 +180,12 @@ CI(`.github/workflows/`)는 `ci.yml`(품질·테스트·빌드), `e2e-tests.yml`
 
 ## 📦 배포
 
-- `main` 에 push 하면 Vercel 프로젝트 **`asca-main`** 이 배포한다 →
-  **https://asca-main.vercel.app**
-- ⚠️ `orientalcalligraphy.org` 는 아직 옛 **Webflow** 사이트를 가리킨다. 이
-  저장소를 배포해도 그 도메인은 바뀌지 않는다.
-- 배포 빌드는 `npm run build:full` 이다. 로컬 `npm run build` 는 compile-only 라
-  환경 변수 누락을 못 잡는다.
+- 운영 도메인은 [orientalcalligraphy.org](https://orientalcalligraphy.org)이며
+  Vercel 프로젝트는 `asca-main`이다. 배포 및 도메인 연결 상태는 변경될 수
+  있으므로 실제 배포를 확인한다.
+- 배포 검증은 `NODE_ENV=production npm run build:full`을 사용한다.
+  `DATABASE_URL`이 필요하며 `npm run build`는 compile-only이므로 이를 대체하지
+  못한다.
 - UI·미들웨어 변경은 배포된 사이트에서 직접 확인한다.
 - **Auth 마이그레이션 적용 → Preview 검증·초기 관리자 준비 → 운영 배포** 순서를
   지킨다. `get_my_artist_ids()`가 없는 DB에 새 코드를 배포하지 않는다.
@@ -217,6 +227,13 @@ CI(`.github/workflows/`)는 `ci.yml`(품질·테스트·빌드), `e2e-tests.yml`
 라이선스에 포함되지 않으며 각 저작권자에게 권리가 있다.
 
 ## 🚀 최근 업데이트
+
+**2026.11**
+
+- 언어별 URL과 메타데이터·사이트맵 적용
+- 협회 및 외부 전시 홍보 영역, 예시 포스터와 유관업체 광고 문의 화면 추가
+- 규정 통합 개정안에 선택 서비스·홍보 및 광고 수입 사용 원칙 추가 (이사회
+  검토용, 시행 전)
 
 **2026.10**
 

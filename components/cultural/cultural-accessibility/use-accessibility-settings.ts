@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
+import { useTheme } from 'next-themes'
 import type {
   AccessibilitySettings,
   ActivePanel,
@@ -32,10 +33,16 @@ export function useAccessibilitySettings({
   onLanguageChange,
   onCulturalChange,
 }: UseAccessibilitySettingsParams) {
-  const [accessibilitySettings, setAccessibilitySettings] = useState<AccessibilitySettings>({
+  const { theme, setTheme } = useTheme()
+  const [settings, setAccessibilitySettings] = useState<AccessibilitySettings>({
     ...DEFAULT_ACCESSIBILITY_SETTINGS,
     ...initialSettings,
   })
+  // Page-local accessibility options must not overwrite the global, explicit theme choice.
+  const accessibilitySettings = useMemo<AccessibilitySettings>(
+    () => ({ ...settings, colorScheme: theme === 'dark' ? 'dark' : 'light' }),
+    [settings, theme]
+  )
 
   const [languageSettings, setLanguageSettings] = useState<LanguageSettings>({
     ...DEFAULT_LANGUAGE_SETTINGS,
@@ -51,16 +58,10 @@ export function useAccessibilitySettings({
   const [isMinimized, setIsMinimized] = useState(false)
 
   const panelRef = useRef<HTMLDivElement>(null)
-  // 마운트 시점의 dark 클래스 상태 — 언마운트 시 사이트 전역 테마로 복원하기 위해 캡처
-  const initialDarkRef = useRef<boolean | null>(null)
 
   // Apply settings to document
   useEffect(() => {
     const root = document.documentElement
-
-    if (initialDarkRef.current === null) {
-      initialDarkRef.current = root.classList.contains('dark')
-    }
 
     // Apply font settings
     root.style.fontSize = `${accessibilitySettings.fontSize}px`
@@ -77,20 +78,6 @@ export function useAccessibilitySettings({
         break
       default:
         root.style.filter = 'none'
-    }
-
-    // Apply color scheme — 'auto'는 시스템 prefers-color-scheme를 따르고 변경도 추적한다
-    let colorSchemeCleanup: (() => void) | undefined
-    if (accessibilitySettings.colorScheme === 'auto') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      root.classList.toggle('dark', mediaQuery.matches)
-      const handleSchemeChange = (e: MediaQueryListEvent) => {
-        root.classList.toggle('dark', e.matches)
-      }
-      mediaQuery.addEventListener('change', handleSchemeChange)
-      colorSchemeCleanup = () => mediaQuery.removeEventListener('change', handleSchemeChange)
-    } else {
-      root.classList.toggle('dark', accessibilitySettings.colorScheme === 'dark')
     }
 
     // Apply motion reduction
@@ -112,14 +99,12 @@ export function useAccessibilitySettings({
 
     // 설정 변경·언마운트 시 전역 상태 복원 (재실행 시엔 본문이 즉시 재적용)
     return () => {
-      colorSchemeCleanup?.()
       root.style.removeProperty('font-size')
       root.style.removeProperty('line-height')
       root.style.removeProperty('letter-spacing')
       root.style.removeProperty('filter')
       root.style.removeProperty('--transition-duration')
       root.classList.remove('focus-visible')
-      root.classList.toggle('dark', initialDarkRef.current === true)
     }
   }, [accessibilitySettings, onSettingsChange])
 
@@ -140,6 +125,11 @@ export function useAccessibilitySettings({
   }, [culturalSettings, onCulturalChange])
 
   const updateAccessibilitySetting = (key: keyof AccessibilitySettings, value: any) => {
+    if (key === 'colorScheme') {
+      // Old 'auto' values mean the new light default; OS changes never switch the site.
+      setTheme(value === 'dark' ? 'dark' : 'light')
+      return
+    }
     setAccessibilitySettings(prev => ({ ...prev, [key]: value }))
   }
 
@@ -152,6 +142,7 @@ export function useAccessibilitySettings({
   }
 
   const resetAllSettings = () => {
+    setTheme('light')
     setAccessibilitySettings({ ...DEFAULT_ACCESSIBILITY_SETTINGS })
     setLanguageSettings({ ...DEFAULT_LANGUAGE_SETTINGS })
     setCulturalSettings({ ...DEFAULT_CULTURAL_SETTINGS })

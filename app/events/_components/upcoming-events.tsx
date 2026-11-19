@@ -1,6 +1,8 @@
+'use client'
+
 import Link from 'next/link'
-import { PHASE_LABELS } from '@/lib/events/event-view'
-import type { EventRow } from './event-rows'
+import { useLanguage } from '@/contexts/language-context'
+import { eventTypeText, type EventRow } from './event-rows'
 
 /**
  * 다가오는 행사 — 날짜를 크게(달·일), 그 옆에 제목·기간·장소. 가까운 행사부터.
@@ -8,11 +10,13 @@ import type { EventRow } from './event-rows'
  */
 
 export function UpcomingEvents({ rows }: { rows: readonly EventRow[] }) {
+  const { t } = useLanguage()
   if (rows.length === 0) {
     return (
       <p className='asca-apply__note'>
-        지금 예정된 행사가 없습니다. 새 행사는 <Link href='/notice'>공지사항</Link>과 뉴스레터로
-        먼저 알려 드립니다.
+        {t('evNoneBefore')}
+        <Link href='/notice'>{t('evNoneLink')}</Link>
+        {t('evNoneAfter')}
       </p>
     )
   }
@@ -31,9 +35,9 @@ export function UpcomingEvents({ rows }: { rows: readonly EventRow[] }) {
           <div className='asca-events__feature-body'>
             <p className='asca-events__feature-kicker'>
               <span className='asca-events__phase' data-phase={row.phase}>
-                {PHASE_LABELS[row.phase]}
+                {t(`evPhase_${row.phase}`)}
               </span>
-              {row.typeLabel}
+              {eventTypeText(row, t)}
             </p>
             <h3 className='asca-events__feature-title'>
               <Link href={row.href ?? `/events/${row.id}`}>{row.title}</Link>
@@ -41,23 +45,23 @@ export function UpcomingEvents({ rows }: { rows: readonly EventRow[] }) {
             {row.summary && <p className='asca-events__feature-summary'>{row.summary}</p>}
             <dl className='asca-events__feature-facts'>
               <div>
-                <dt>일정</dt>
+                <dt>{t('evFieldPeriod')}</dt>
                 <dd>{row.period}</dd>
               </div>
               {row.place && (
                 <div>
-                  <dt>장소</dt>
+                  <dt>{t('evFieldPlace')}</dt>
                   <dd>{row.place}</dd>
                 </div>
               )}
             </dl>
             <p className='asca-events__feature-actions'>
               <Link href={row.href ?? `/events/${row.id}`} className='asca-events__more'>
-                행사 자세히 보기 →
+                {t('evMore')}
               </Link>
               {row.link && (
                 <Link href={row.link.href} className='asca-events__more is-primary'>
-                  {row.link.label} →
+                  {t(row.link.labelKey)} →
                 </Link>
               )}
             </p>

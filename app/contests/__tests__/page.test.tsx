@@ -3,6 +3,9 @@ import ContestsPage from '../page'
 import { CONTEST_23, SCHEDULE, koDate } from '../_components/contest-23-data'
 
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
+jest.mock('@/contexts/language-context', () => ({
+  useLanguage: () => ({ t: (key: string) => key, language: 'ko' }),
+}))
 jest.mock('@/components/contests/contest-flipbook', () => ({ ContestFlipbook: () => null }))
 
 describe('koDate', () => {
@@ -48,6 +51,14 @@ describe('공모전 페이지 — 제23회 공모요강', () => {
       screen.getByText(`${CONTEST_23.account.bank} ${CONTEST_23.account.number}`)
     ).toBeInTheDocument()
     expect(screen.getByText(CONTEST_23.mailTo)).toBeInTheDocument()
+  })
+
+  // 공모요강 2쪽 "특별규정 신설" — 정회원이 아니어도 초대작가전에 참여할 수 있다
+  it('특별규정으로 비회원 작가도 초대작가전에 참여할 수 있음을 알린다', () => {
+    expect(screen.getByText('특별규정')).toBeInTheDocument()
+    expect(
+      screen.getByText(/정회원이 아니어도.*초대작가전에 참여할 수 있습니다/)
+    ).toBeInTheDocument()
   })
 
   it('출품료·시상 표가 있고 출품원서로 이어진다', () => {

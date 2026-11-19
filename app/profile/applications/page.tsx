@@ -6,6 +6,8 @@ import { useAccount } from '@/components/auth/session-provider'
 import Link from 'next/link'
 import { Calendar, FileText, Award, Eye, Trash2 } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { PageHero } from '@/components/layout/page-hero'
+import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -98,11 +100,11 @@ export default function MyApplicationsPage() {
   if (loading) {
     return (
       <div className='min-h-screen bg-transparent'>
-        <main className='container py-8'>
+        <div className='container py-8'>
           <div className='flex items-center justify-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-2 border-celadon-green border-t-transparent'></div>
           </div>
-        </main>
+        </div>
         <LayoutFooter />
       </div>
     )
@@ -110,13 +112,12 @@ export default function MyApplicationsPage() {
 
   return (
     <div className='min-h-screen bg-transparent'>
-      <main className='container py-8 [--shell-max:72rem]'>
-        {/* Header */}
-        <div className='mb-8'>
-          <h1 className='text-3xl font-serif font-bold text-foreground mb-2'>내 공모전 신청</h1>
-          <p className='text-muted-foreground'>공모전 신청 내역을 확인하고 관리하세요</p>
-        </div>
-
+      <PageHero
+        {...PAGE_HERO_MARKS.myApplications}
+        title='내 공모전 신청'
+        lede='공모전 신청 내역을 확인하고 관리하세요'
+      />
+      <div className='container py-8 [--shell-max:72rem]'>
         {error && (
           <Alert variant='destructive' className='mb-6'>
             <AlertDescription>{error}</AlertDescription>
@@ -276,7 +277,7 @@ export default function MyApplicationsPage() {
             ))}
           </div>
         )}
-      </main>
+      </div>
 
       <LayoutFooter />
 

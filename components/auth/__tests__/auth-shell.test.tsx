@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { AuthShell } from '../auth-shell'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -11,7 +12,7 @@ jest.mock('next/image', () => ({
 }))
 
 function renderShell(variant: 'sign-in' | 'sign-up', lang = 'ko') {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <AuthShell variant={variant}>

@@ -137,6 +137,8 @@
 /* 두 덩어리를 나란히 — 좁은 화면에선 쌓인다 */
 .asca-apply__split {
   display: grid;
+  /* 한 열일 때도 minmax(0) — 암묵 열은 auto 라 넓은 표의 최소 폭만큼 페이지를 밀어낸다 */
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(40px, 5vw, 56px);
 }
 @media (min-width: 900px) {
@@ -152,6 +154,13 @@
   line-height: 1.65;
   color: var(--ap-muted);
   max-width: 64ch;
+}
+/* 안내 문장 끝 링크 — 글자는 작아도 누르는 영역은 44px 을 채운다 (감사 2차 P3) */
+.asca-apply__note-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  vertical-align: middle;
 }
 
 /* ---------- 근거 조문 ---------- */
@@ -237,6 +246,22 @@
 }
 .asca-apply__numbered span {
   color: var(--ap-muted);
+  font-size: 0.875rem;
+}
+/* 경로별 바로가기 — 본문 끝에 붙이면 줄 높이(약 17px)만큼만 눌려 손가락으로 누르기 어렵다.
+   따로 줄을 세우고 링크마다 44px 높이를 준다 (WCAG 2.5.8 은 24px 이상) */
+.asca-apply__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.asca-apply__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 0.875rem;
 }
 
@@ -609,4 +634,32 @@
   .asca-apply__form-frame {
     display: none;
   }
+}
+
+/* 정의 목록 — 왼쪽 굵은 라벨, 오른쪽 설명(특별선임의 회원 상태별 처리) */
+.asca-apply__defs {
+  margin: 0;
+  border-top: 1px solid var(--ap-rule);
+}
+.asca-apply__defs > div {
+  display: grid;
+  gap: 4px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--ap-rule);
+}
+@media (min-width: 600px) {
+  .asca-apply__defs > div {
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 16px;
+  }
+}
+.asca-apply__defs dt {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.asca-apply__defs dd {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--ap-muted);
 }

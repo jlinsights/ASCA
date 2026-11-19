@@ -16,9 +16,9 @@ export default async function NewThreadPage() {
   if (!account) redirect(`/sign-in?next=${encodeURIComponent('/community/board/new')}`)
   return (
     <>
-      <main>
+      <div>
         <ComposeForm hasDisplayName={Boolean(account.displayName.trim())} />
-      </main>
+      </div>
       <LayoutFooter />
     </>
   )

@@ -3,9 +3,10 @@ import { LanguageProvider } from '@/contexts/language-context'
 import { historyEvents } from '@/app/history/_data/history-events'
 import { getRecentExhibitions } from '../home-data'
 import { HomeExhibitions } from '../home-exhibitions'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 function renderSection(lang: string) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <HomeExhibitions exhibitions={getRecentExhibitions(historyEvents, 4)} />

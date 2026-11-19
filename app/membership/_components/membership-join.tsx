@@ -1,20 +1,25 @@
+'use client'
+
 import Link from 'next/link'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
-import { JOIN_CHANNELS, JOIN_STEPS } from './membership-data'
 import { RegCite } from './reg-cite'
+import { useMembershipText } from './use-membership-copy'
 
 /** 가입 방법 — 왼쪽에 세 단계(Step 01–03), 오른쪽에 바로 갈 수 있는 창구를 먹선 행으로 */
 export function MembershipJoin() {
+  const { copy, ui } = useMembershipText()
   return (
     <section className='asca-mb__section asca-mb__join' aria-labelledby='mb-join'>
       <div className='asca-mb__join-head'>
         <h2 id='mb-join' className='asca-mb__title'>
-          가입 방법
+          {ui('joinTitle')}
         </h2>
         <ol className='asca-mb__steps'>
-          {JOIN_STEPS.map((step, index) => (
+          {copy.joinSteps.map((step, index) => (
             <li key={step.title} className='asca-mb__step'>
-              <span className='asca-mb__step-no'>Step {String(index + 1).padStart(2, '0')}</span>
+              <span className='asca-mb__step-no'>
+                {ui('step')} {String(index + 1).padStart(2, '0')}
+              </span>
               <h3 className='asca-mb__step-title'>{step.title}</h3>
               <p className='asca-mb__step-body'>{step.body}</p>
               {step.source && <RegCite sources={[step.source]} />}
@@ -24,7 +29,7 @@ export function MembershipJoin() {
       </div>
 
       <ul className='asca-mb__channels'>
-        {JOIN_CHANNELS.map(channel => {
+        {copy.channels.map(channel => {
           const Icon = channel.external ? ArrowUpRight : ArrowRight
           return (
             <li key={channel.title}>

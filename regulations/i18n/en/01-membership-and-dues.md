@@ -1,6 +1,7 @@
 ---
 title: 'Regulations on Membership and Dues'
-effective_note: '[Effective 2026. 1. 1.]'
+effective_note:
+  '[Effective 2026. 11. 16.] [2026. 11. 16., Arts. 7 and 9 partly amended]'
 status: In force
 source: https://orientalcalligraphy.org/articles-of-incorporation-and-bylaws
 migrated_at: 2026-10-19
@@ -8,7 +9,7 @@ migrated_at: 2026-10-19
 
 # Regulations on Membership and Dues
 
-> [Effective 2026. 1. 1.]
+> [Effective 2026. 11. 16.] [2026. 11. 16., Arts. 7 and 9 partly amended]
 
 ### Article 1 (Purpose)
 
@@ -104,6 +105,23 @@ to pay annual dues (Paragraph ①) thereafter.
 **e. (Obligation upon Assuming Office)** The development fund for a Lifetime
 Member who assumes office shall be as provided in Article 4, Paragraph 4.
 
+**④ Special Appointment Registration Fee (Regulations on the Appointment of
+Recommended and Invited Artists, Article 11)**
+
+| Category           | Review Fee (upon application) | Registration Fee (after resolution) | First-Year Annual Dues (after resolution) | Total       |
+| ------------------ | ----------------------------- | ----------------------------------- | ----------------------------------------- | ----------- |
+| Recommended Artist | KRW 50,000                    | KRW 50,000                          | KRW 80,000                                | KRW 180,000 |
+| Invited Artist     | KRW 50,000                    | KRW 100,000                         | KRW 100,000                               | KRW 250,000 |
+
+※ This applies where a person who is not a Full Member of the Society is
+specially appointed. The registration fee is the sum of the admission and
+promotion registration fees (Paragraph 2) that a Full Member pays to reach the
+same status, and the first-year annual dues are the annual dues for that grade
+under Paragraph 1. The registration fee and first-year annual dues are based on
+the status resolved by the Board of Directors, and reductions follow Article 11,
+Paragraph 7 of the Regulations on the Appointment of Recommended and Invited
+Artists.
+
 ### Article 4 (Officer Development Fund and Benefits)
 
 ① A member who assumes office as an officer shall pay a **development fund of
@@ -147,7 +165,7 @@ membership under Article 5 of the Articles of Incorporation.
 ④ In special circumstances, payment may be deferred or made in installments with
 the approval of the Board of Directors.
 
-### Article 6 (Entry Fee Regulations)
+### Article 6 (Entry Fees)
 
 | Category           | Entry Fee (per work, 1st work) | 2nd to 9th works |
 | ------------------ | ------------------------------ | ---------------- |
@@ -162,7 +180,16 @@ for non-members and for the 10th and subsequent works shall be determined by the
 Board of Directors in the call for entries (공모요강) for the relevant
 competition.
 
-### Article 7 (Entry Fee Regulations for Solo Exhibitions and Calligraphy Group Booth Exhibitions)
+### Article 7 (Entry Fees for Solo Exhibitions and Calligraphy Group Booth Exhibitions)
+
+① (Scope) The entry fees in this Article apply when 10 or more works are
+actually entered in a solo exhibition or calligraphy group booth exhibition held
+by the Society. Where fewer than 10 works are entered, paying the fees in this
+Article does not take the place of the entry requirement.
+
+② (Calculation) The entry fee is the per-work amount for the band into which the
+number of approved works falls, multiplied by the total number of approved
+works.
 
 | Number of Works Entered | Standard Rate (applies to non-members) | Member Rate (applies to Full Members) |
 | ----------------------- | -------------------------------------- | ------------------------------------- |
@@ -171,7 +198,21 @@ competition.
 | 30 to 39 works          | KRW 140,000 per work                   | KRW 120,000 per work                  |
 | 40 or more works        | KRW 120,000 per work                   | KRW 100,000 per work                  |
 
-### Article 8 (Mounting Fee Regulations)
+③ (Member rate) The member rate applies to Full Members under Article 2(3) as of
+the date of the entry application. The standard rate applies to everyone else.
+
+④ (Group booth totals) For a calligraphy group booth exhibition, the approved
+works of the participating artists are added together to determine the band only
+when the group applies on one application form and runs one booth. Where Full
+Members and non-members take part together, the Secretariat calculates the fee
+for each work separately, informs the applicant before the application and
+obtains the applicant's approval.
+
+⑤ (Separate costs) The entry fee does not include the mounting fee under Article
+8 or the catalog fee under Article 9. Before the application, the Secretariat
+informs the applicant of the entry fee, mounting fee and catalog fee separately.
+
+### Article 8 (Mounting Fees)
 
 ① A mounting fee is charged for works awarded Selected (입선) or above, and
 mounting shall be carried out in the **standard options and prices set by the
@@ -192,19 +233,87 @@ Full Members are offered a discount.
 | Full sheet (전지) (70x135cm)                  | KRW 100,000 per work                   | KRW 80,000 per work                   |
 | National-exhibition sheet (국전지) (70x200cm) | KRW 120,000 per work                   | KRW 100,000 per work                  |
 
-### Article 9 (Catalog Fee Regulations)
+### Article 9 (Catalog Fees)
 
-1. Full Members who participate in an exhibition are provided with one catalog
-   free of charge.
-2. For additional purchases, or for non-Full Members who do not participate in
-   an exhibition, the following applies.
+① (Free copy of the joint exhibition catalog) The joint exhibition catalog
+published by the Society is provided free of charge, one copy each, to Full
+Members who take part in the exhibition.
 
-| Category   | Additional Catalog Purchase (per copy) |
-| ---------- | -------------------------------------- |
-| Member     | KRW 20,000                             |
-| Non-member | KRW 30,000                             |
+② (Purchase price of the joint exhibition catalog) For additional copies of the
+catalog under paragraph 1, or for purchases by anyone not eligible for the free
+copy under paragraph 1, the following prices apply.
 
-### Article 10 (Individual Artist Homepage Initial Setup and Annual Maintenance Fee Regulations)
+| Category             | Additional Catalog Purchase (per copy) |
+| -------------------- | -------------------------------------- |
+| Member (Full Member) | KRW 20,000                             |
+| Non-member           | KRW 30,000                             |
+
+③ (Production methods for commissioned catalogs) Where an artist or group taking
+part in a solo exhibition or calligraphy group booth exhibition commissions the
+Society to produce a printed catalog (a "commissioned catalog"), it is produced
+by one of the following methods. Before the order, the Secretariat informs the
+client in writing or electronically of the method that applies and how the price
+is calculated.
+
+1. Actual-cost method: the client bears the actual production cost approved in
+   advance
+2. Fixed-price method: the fixed-price production package under paragraph 5
+
+④ (Actual-cost method) A commissioned catalog under the actual-cost method is
+ordered after the client approves a quotation stating the format, page count,
+paper, colors, binding, number of copies, delivery date, and whether tax and
+shipping are included. The Society adds no handling fee. After production, the
+Society settles the account against the expense records and refunds any amount
+by which the advance payment exceeds the actual cost.
+
+⑤ (Fixed-price production package) The fixed-price package is provided only
+after the Board of Directors has resolved the discount criteria under paragraph
+6 and the prices, and is governed by the following.
+
+1. The basic format is A4 (210×297mm). The edition, page count, paper, colors,
+   binding and coating follow the specifications approved for each order.
+2. Where a Full Member places the order, one copy is provided free of charge for
+   each approved work entered. These free copies are provided separately from
+   the one copy of the joint exhibition catalog under paragraph 1 and Article
+   12(1)(a). No free copies are provided to non-members.
+3. Paid copies beyond the free copies are ordered in units of 50, from 100 to
+   500 copies. More than 500 copies, or any other quantity, is priced by
+   separate quotation.
+4. The base price per copy is KRW 20,000 for Full Members and KRW 30,000 for
+   non-members. For Full Members, the discount rate for the number of works
+   entered and the discount rate for the quantity band under paragraph 6 are
+   added together, and the combined rate does not exceed 25%. A quantity-band
+   discount applies only to the copies in that band and is not applied
+   retroactively to copies in earlier bands. Free copies are not counted when
+   determining the quantity band. No discount applies to non-members.
+5. For a calligraphy group booth exhibition, copies are added together only when
+   ordered on one application form, with one edition, one set of print
+   specifications and one delivery address. Where Full Members and non-members
+   take part together, or the order involves split delivery, multiple editions
+   or separate quantities, the price is set by separate quotation.
+6. The price of the fixed-price package is billed separately from the entry fee
+   and mounting fee. Within the approved specifications and quantity, no
+   difference from the actual production cost is refunded or additionally
+   charged.
+
+⑥ (Discount criteria for the fixed-price package) The discount rates for the
+fixed-price package are as follows.
+
+| Approved Works Entered | Discount for Number of Works |
+| ---------------------- | ---------------------------- |
+| 10 to 19 works         | 0%                           |
+| 20 to 29 works         | 3%                           |
+| 30 to 39 works         | 5%                           |
+| 40 or more works       | 7%                           |
+
+| Position of the Paid Copy | Quantity-Band Discount |
+| ------------------------- | ---------------------- |
+| 1st to 99th               | 0%                     |
+| 100th to 299th            | 8%                     |
+| 300th to 499th            | 15%                    |
+| 500th                     | 22%                    |
+
+### Article 10 (Individual Artist Homepage Initial Setup and Annual Maintenance Fees)
 
 ① A Full Member who has concluded a homepage production and maintenance contract
 and **has paid the annual maintenance fee** shall be exempted from the annual
@@ -232,7 +341,7 @@ discounted by 50%.
 | Member     | Initial setup fee KRW 600,000 / annual maintenance fee KRW 200,000 |
 | Non-member | Initial setup fee KRW 700,000 / annual maintenance fee KRW 300,000 |
 
-### Article 10-2 (Group Homepage Initial Setup and Annual Maintenance Fee Regulations)
+### Article 10-2 (Group Homepage Initial Setup and Annual Maintenance Fees)
 
 ① This Article governs the costs when two or more artists (joint exhibitions,
 combined exhibitions, or group exhibitions) jointly build and operate a
@@ -382,3 +491,9 @@ Directors.
 These Regulations shall be amended by a resolution of the Board of Directors
 under Article 41 of the Articles of Incorporation, and the amendment shall be
 reported to the next General Assembly.
+
+## Addenda <2026. 11. 16.>
+
+### Article 1 (Effective Date)
+
+These Regulations shall take effect on November 16, 2026.

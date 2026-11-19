@@ -41,10 +41,12 @@ const NOTO_SERIF_TC_CSS =
 // woff2 로컬 파일 — public/fonts/noto-serif-kr/ (OFL)
 // Noto Sans KR 과 같은 이유로 globals.css @font-face + :root 변수 선언
 
+import { headers } from 'next/headers'
 import { constructMetadata } from '@/lib/seo'
+import { HTML_LANG, languageFromHeader, LOCALE_HEADER } from '@/lib/i18n/locale-routing'
+import { loadLocale } from '@/lib/i18n/locales'
 import { JsonLd } from '@/components/json-ld'
 import { KakaoScript } from '@/components/seo/kakao-script'
-import { VideoBackground } from '@/components/layout/video-background'
 import { Header } from '@/components/header/header'
 import { SkipLink } from '@/components/layout/skip-link'
 import { SiteWidgets } from '@/components/third-party/site-widgets'
@@ -54,14 +56,28 @@ import { SiteWidgets } from '@/components/third-party/site-widgets'
 // google-adsense-account 는 Google 이 <head> 에서만 읽는다 — metadata.other 로 <head> 에 넣는다.
 const ADSENSE_ACCOUNT = 'ca-pub-3536211002609340'
 
+// Google Search Console·네이버 서치어드바이저 소유 확인(HTML 태그 방식) 코드. Vercel 환경 변수에 넣고
+// 다시 배포하면 <head> 에 붙는다. 값이 없으면 태그를 달지 않는다
+const GOOGLE_SITE_VERIFICATION = process.env.GOOGLE_SITE_VERIFICATION
+const NAVER_SITE_VERIFICATION = process.env.NAVER_SITE_VERIFICATION
+
 export const metadata: Metadata = {
   ...constructMetadata(),
-  other: { 'google-adsense-account': ADSENSE_ACCOUNT },
+  ...(GOOGLE_SITE_VERIFICATION ? { verification: { google: GOOGLE_SITE_VERIFICATION } } : {}),
+  other: {
+    'google-adsense-account': ADSENSE_ACCOUNT,
+    ...(NAVER_SITE_VERIFICATION ? { 'naver-site-verification': NAVER_SITE_VERIFICATION } : {}),
+  },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // 언어는 proxy 가 주소(/en·/ja·/zh)를 보고 단 요청 헤더로 받는다(lib/i18n/locale-routing.ts).
+  // 헤더를 읽으므로 모든 페이지가 요청 시점 렌더다 — 2026-11-09 기준 이미 전부 그랬다
+  const language = languageFromHeader((await headers()).get(LOCALE_HEADER))
+  // 한국어 표는 번들에 있다. 다른 언어는 서버에서 표를 읽어 넘겨 첫 HTML 부터 그 언어로 그린다
+  const localeTable = language === 'ko' ? undefined : await loadLocale(language)
   return (
-    <html lang='ko' suppressHydrationWarning>
+    <html lang={HTML_LANG[language]} suppressHydrationWarning>
       <head>
         <link rel='preconnect' href='https://cdn.jsdelivr.net' crossOrigin='anonymous' />
         <link rel='stylesheet' href={PRETENDARD_CSS} crossOrigin='anonymous' />
@@ -75,9 +91,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${playfair.variable} font-sans bg-background transition-colors duration-300`}
         suppressHydrationWarning={true}
       >
-        <ClientProviders>
+        <ClientProviders language={language} localeTable={localeTable}>
           <SkipLink />
-          <VideoBackground />
           <div className='min-h-screen flex flex-col relative'>
             <Header transparentOnTop={true} />
 
@@ -85,8 +100,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </main>
           </div>
+          {/* 언어 컨텍스트가 필요하다(카카오톡 버튼의 접근 이름) — ClientProviders 안에 둔다 */}
+          <SiteWidgets />
         </ClientProviders>
-        <SiteWidgets />
       </body>
     </html>
   )

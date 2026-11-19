@@ -94,8 +94,8 @@ export function RegulationReader({
         <span className='asca-regs-doc-head__hanja tc' aria-hidden='true'>
           {hanja}
         </span>
-        <nav aria-label={t('regsMenu')} className='asca-regs-crumbs'>
-          <Link href={REGULATIONS_BASE_PATH}>{t('regsMenu')}</Link>
+        <nav aria-label={t('siteNavRegulations')} className='asca-regs-crumbs'>
+          <Link href={REGULATIONS_BASE_PATH}>{t('siteNavRegulations')}</Link>
           <span aria-hidden='true'>/</span>
           <span aria-current='page'>{t(nameKey)}</span>
         </nav>
@@ -274,7 +274,7 @@ export function RegulationReader({
             <span className='asca-regs-pager__dir'>
               {t('regsBackToAll')} <ArrowRight aria-hidden='true' />
             </span>
-            <span className='asca-regs-pager__name'>{t('regsMenu')}</span>
+            <span className='asca-regs-pager__name'>{t('siteNavRegulations')}</span>
           </Link>
         )}
       </nav>

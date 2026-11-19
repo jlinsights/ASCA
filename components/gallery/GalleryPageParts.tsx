@@ -59,6 +59,10 @@ export function FilterBar({
   return (
     <div className='space-y-5'>
       <div className='relative max-w-lg mx-auto'>
+        {/* 자리표시자는 입력하면 사라지므로 이름이 될 수 없다 — 화면 낭독기용 이름표 */}
+        <label htmlFor='gallery-search' className='sr-only'>
+          사진 검색
+        </label>
         <span className='absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none'>
           <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
             <path

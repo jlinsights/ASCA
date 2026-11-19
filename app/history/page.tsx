@@ -1,9 +1,14 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
+import { AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
 import { HistoryHero } from './_components/history-hero'
 import { HistoryTimeline } from './_components/history-timeline'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
+  alternates: { canonical: '/history' },
   title: '연혁 | 동양서예협회',
   description:
     '사단법인 동양서예협회의 연혁을 소개합니다. 1997년 한·중·일 서예문화교류연합회전을 시작으로 현재까지의 주요 활동과 전시 이력을 확인하실 수 있습니다.',
@@ -15,12 +20,17 @@ export const metadata: Metadata = {
 
 export default function HistoryPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
-      <HistoryHero />
-
-      <HistoryTimeline />
-
+    <>
+      <AboutPage>
+        <HistoryHero />
+        <AboutNav />
+        <HistoryTimeline />
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/history', metadata)

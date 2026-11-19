@@ -3,25 +3,35 @@ import { defaultSEO } from '@/lib/seo-constants'
 import { REGULATIONS, REGULATIONS_BASE_PATH, regulationHref } from '@/lib/regulations/catalog'
 import { localPosts } from '@/lib/blog/local-posts'
 import { getSupabaseClient } from '@/lib/supabase'
+import { listPublishedNotices } from '@/lib/notices/notices-data'
+import { listPublishedEvents } from '@/lib/events/events-data'
+import { isLocalizedPath, localizePath, PREFIXED_LANGUAGES } from '@/lib/i18n/locale-routing'
+import { languageAlternates } from '@/lib/seo/localized-metadata'
 
 // 하루 한 번 다시 만든다 — 작가 공개 여부(등급·회비)가 바뀌면 다음 날 반영된다
 export const revalidate = 86400
 
 const PAGE_SIZE = 1000
 
+interface SitemapArtist {
+  id: string
+  slug: string | null
+  updated_at: string | null
+}
+
 /**
- * 공개 작가 id. 🔴 anon 클라이언트만 쓴다 — RLS(artists_public_read)가 visibility='public' 만 돌려준다.
+ * 공개 작가 id·slug. 🔴 anon 클라이언트만 쓴다 — RLS(artists_public_read)가 visibility='public' 만 돌려준다.
  * service role 은 RLS 를 건너뛰어 숨긴 작가(준회원·공모작가·자격 정지) 주소를 사이트맵에 싣게 된다.
  * 오류가 나면 빈 목록 — 사이트맵 때문에 배포 빌드가 죽지 않게 한다.
  */
-async function publicArtists(): Promise<Array<{ id: string; updated_at: string | null }>> {
+async function publicArtists(): Promise<SitemapArtist[]> {
   const client = getSupabaseClient()
   if (!client) return []
-  const rows: Array<{ id: string; updated_at: string | null }> = []
+  const rows: SitemapArtist[] = []
   for (let from = 0; ; from += PAGE_SIZE) {
     const { data, error } = await client
       .from('artists')
-      .select('id,updated_at')
+      .select('id,slug,updated_at')
       .order('id')
       .range(from, from + PAGE_SIZE - 1)
     if (error || !data) return []
@@ -30,11 +40,24 @@ async function publicArtists(): Promise<Array<{ id: string; updated_at: string |
   }
 }
 
+/** 공개 공지·행사 상세. 읽기에 실패하면 빈 목록 — 작가와 같은 이유로 사이트맵이 빌드를 죽이지 않게 한다 */
+async function safeList<T>(load: () => Promise<T[]>): Promise<T[]> {
+  try {
+    return await load()
+  } catch {
+    return []
+  }
+}
+
+const toDate = (value: string | null | undefined): { lastModified?: Date } =>
+  value ? { lastModified: new Date(value) } : {}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = defaultSEO.url
 
   // Static routes
-  // 공개 페이지. /search·/events 는 옛 CMS 테이블이 비어 있어(ASCA-2026 이관 전) 빈 화면이라 뺀다
+  // 공개 페이지. /search 는 검색 결과 화면이라 색인하지 않는다(noindex).
+  // /artworks 는 작품 테이블이 비어 있는 동안 뺀다 — 빈 화면을 색인시키면 얇은 페이지로 잡힌다
   const routes = [
     '',
     '/introductions',
@@ -51,17 +74,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/academy',
     '/contact',
     '/contests',
+    '/contests/23',
     '/awards',
     '/application',
     '/application-for-recommended-invited-calligrapher',
     '/commissioning-application',
     '/forms',
+    '/notice',
+    '/events',
+    '/faq',
     '/exhibitions/current',
     '/exhibitions/upcoming',
     '/exhibitions/past',
     '/exhibitions/online',
     '/artists',
-    '/artworks',
+    '/artists/homepages',
     '/gallery',
     '/blog',
     '/terms-of-service',
@@ -73,12 +100,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...REGULATIONS.map(entry => regulationHref(entry.slug)),
   ]
 
-  const staticEntries: MetadataRoute.Sitemap = routes.map(route => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: route === '' ? 'daily' : 'weekly',
-    priority: route === '' ? 1 : 0.8,
-  }))
+  // 번역된 페이지는 언어 주소(/en·/ja·/zh)도 싣고, 네 주소가 서로를 hreflang 으로 가리킨다
+  const staticEntries: MetadataRoute.Sitemap = routes.flatMap(route => {
+    const path = route === '' ? '/' : route
+    const base = {
+      lastModified: new Date(),
+      changeFrequency: route === '' ? ('daily' as const) : ('weekly' as const),
+      priority: route === '' ? 1 : 0.8,
+    }
+    if (!isLocalizedPath(path)) return [{ url: `${baseUrl}${route}`, ...base }]
+    const languages = Object.fromEntries(
+      Object.entries(languageAlternates(path) ?? {}).map(([lang, href]) => [
+        lang,
+        `${baseUrl}${href === '/' ? '' : href}`,
+      ])
+    )
+    const urls = [route, ...PREFIXED_LANGUAGES.map(lang => localizePath(path, lang))]
+    return urls.map(url => ({ url: `${baseUrl}${url}`, ...base, alternates: { languages } }))
+  })
 
   // 옛 Webflow /post/<slug> 글 — 같은 slug 로 /blog/<slug> 에 있다
   const postEntries: MetadataRoute.Sitemap = localPosts.map(post => ({
@@ -88,12 +127,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
+  // 상세 페이지 canonical 이 /artists/<slug> 다. uuid 주소를 실으면 사이트맵과 canonical 이 서로 다른 주소를 가리킨다
   const artistEntries: MetadataRoute.Sitemap = (await publicArtists()).map(artist => ({
-    url: `${baseUrl}/artists/${artist.id}`,
+    url: `${baseUrl}/artists/${artist.slug ?? artist.id}`,
     ...(artist.updated_at ? { lastModified: new Date(artist.updated_at) } : {}),
     changeFrequency: 'monthly',
     priority: 0.6,
   }))
 
-  return [...staticEntries, ...postEntries, ...artistEntries]
+  const [notices, events] = await Promise.all([
+    safeList(listPublishedNotices),
+    safeList(listPublishedEvents),
+  ])
+  // 상세 페이지 canonical(/notice/<id>, /events/<id>)과 같은 주소
+  const noticeEntries: MetadataRoute.Sitemap = notices.map(notice => ({
+    url: `${baseUrl}/notice/${notice.id}`,
+    ...toDate(notice.updated_at ?? notice.published_at),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  }))
+  const eventEntries: MetadataRoute.Sitemap = events.map(event => ({
+    url: `${baseUrl}/events/${event.id}`,
+    ...toDate(event.updated_at),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  }))
+
+  return [...staticEntries, ...postEntries, ...artistEntries, ...noticeEntries, ...eventEntries]
 }

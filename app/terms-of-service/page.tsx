@@ -17,6 +17,7 @@ const DESCRIPTION =
   '사단법인 동양서예협회(동양서협) 웹사이트 이용약관. 회원 가입·탈퇴, 서비스 제공과 중단, 이용자의 의무, 개인정보 보호, 저작권, 약관 개정 절차를 안내합니다.'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/terms-of-service' },
   title: '이용약관 | 동양서예협회',
   description: DESCRIPTION,
   openGraph: { title: '이용약관 | 동양서예협회', description: DESCRIPTION },

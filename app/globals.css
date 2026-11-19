@@ -192,12 +192,9 @@
     @apply bg-silk-cream dark:bg-secondary text-ink-black dark:text-secondary-foreground border border-celadon-green/20 dark:border-border hover:bg-silk-cream/80 dark:hover:bg-secondary/80 hover:border-celadon-green/30 dark:hover:border-border/50;
   }
 
-  /* Gallery Container Responsive */
-  @media (max-width: 768px) {
-    .gallery-container {
-      @apply px-4;
-    }
-  }
+  /* 모바일에서도 .gallery-container 는 페이지 틀(--shell-gutter)을 그대로 쓴다.
+     예전 px-4(16px) 덮어쓰기는 --shell-gutter(최소 20px)만큼 좌우로 내미는
+     작가 탐색 레일을 4px 넘치게 해 /artists 에 가로 스크롤을 만들었다 */
 
   /* Enhanced Card Hover Effects */
   .gallery-card:hover {
@@ -2281,13 +2278,17 @@
 }
 
 /* Accessibility Enhancements */
+/* 움직임(이동·확대·회전)은 멈추되, 상태가 바뀌었다는 신호는 짧은 색·투명도 변화로 남긴다.
+   transition 을 0 으로 지우면 메뉴 열림·포커스·선택 같은 피드백까지 사라진다. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property:
+      color, background-color, border-color, outline-color, opacity, box-shadow !important;
+    transition-duration: 120ms !important;
     scroll-behavior: auto !important;
   }
 

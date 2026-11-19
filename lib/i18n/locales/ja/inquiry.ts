@@ -1,0 +1,67 @@
+// inquiry 화면 번역 (ja). 네 언어를 모으는 곳은 lib/i18n/translations/inquiry.ts 다.
+const inquiry: Record<string, string> = {
+  inqHow:
+    'ご用件と連絡先をご記入のうえお送りいただければ、事務局よりご記入の連絡先へご返信します。メールやカカオトークでもお送りいただけます。',
+  inqSendSite: 'お問い合わせを送信',
+  inqSending: '送信中…',
+  inqSent: 'お問い合わせを受け付けました。',
+  inqSentBody: '事務局で確認のうえ、ご記入の連絡先へご返信します。',
+  inqSendFailed:
+    'ただいまサイトから送信できませんでした。ご記入の内容はそのまま残っていますので、下のメールまたはカカオトークでお送りください。',
+  inqOtherWays: 'ほかの方法で送る',
+  inqConsentLabel: '個人情報の収集・利用に同意します',
+  inqConsentDetail:
+    '収集項目:お名前、メールアドレスまたは電話番号、お問い合わせ内容 · 目的:お問い合わせへの回答 · 保有期間:対応完了後1年。同意されない場合も、メールやカカオトークでお問い合わせいただけます。',
+  inqPrivacyLink: '個人情報処理方針',
+  inqErr_consentMissing: 'サイトから送信するには、個人情報の収集・利用に同意してください。',
+  inqSectionEyebrow: 'お問い合わせ',
+  inqSectionTitle: '作品・ご依頼・展覧会のお問い合わせ',
+  inqSectionLede:
+    '作品のご購入、揮毫のご依頼、展覧会での協業など、お見積もりが必要なご用件はこちらからどうぞ。',
+  inqTopic: 'ご用件',
+  inqRequired: '(必須)',
+  inqOptional: '(任意)',
+  inqTopic_artwork: '作品の購入・収蔵',
+  inqTopicHint_artwork: 'ご覧になった作品の収蔵可否と価格',
+  inqTopic_commission: '揮毫・作品のご依頼',
+  inqTopicHint_commission: '扁額・書・贈答用作品の制作見積もり',
+  inqTopic_exhibition: '展覧会・貸館・協業',
+  inqTopicHint_exhibition: '企画展、ブランド・機関との協業のご提案',
+  inqTopic_academy: '講座・教育',
+  inqTopicHint_academy: '受講、団体講義、出張講義のご依頼',
+  inqTopic_membership: '会員・公募展',
+  inqTopicHint_membership: '入会、出品、昇級',
+  inqTopic_other: 'その他のお問い合わせ',
+  inqTopicHint_other: '上記以外のご用件',
+  inqGuideNote: 'よくあるご質問は案内ページにまとめています。',
+  inqGuide_academy: 'まず講座案内を見る',
+  inqGuide_membership: 'まず会員案内を見る',
+  inqName: 'お名前',
+  inqEmail: 'メールアドレス',
+  inqPhone: '電話番号',
+  inqSubject: '関連する作品・作家',
+  inqContactHint: 'メールアドレスか電話番号のどちらかを必ずご記入ください。',
+  inqPlan: 'ご予算・ご希望の時期',
+  inqPlanPlaceholder: '例:2027年3月まで、100万ウォン程度',
+  inqMessage: 'お問い合わせ内容',
+  inqErr_topicMissing: 'ご用件をお選びください。',
+  inqErr_nameMissing: 'お名前をご記入ください。',
+  inqErr_contactMissing: 'ご返信先のメールアドレスか電話番号をご記入ください。',
+  inqErr_emailInvalid: 'メールアドレスの形式をご確認ください。',
+  inqErr_messageMissing: 'お問い合わせ内容をご記入ください。',
+  inqSendMail: 'メールで送る',
+  inqSendKakao: 'カカオトークで送る',
+  inqSendKakaoSr: '(内容をコピーします)',
+  inqNewWindow: '(新しいウィンドウ)',
+  inqMailSent:
+    'メールアプリで文面をご確認のうえ送信してください。メールアプリが開かない場合は {email} へ直接お送りください。',
+  inqKakaoCopied:
+    'お問い合わせ内容をコピーしました。カカオトークのチャンネルを開き、チャットに貼り付けて送信してください。',
+  inqKakaoOpen: 'カカオトークのチャンネルを開く',
+  inqKakaoManual:
+    'このブラウザでは自動コピーができませんでした。下の文面をコピーし、{link}に貼り付けてください。',
+  inqKakaoChannel: 'カカオトークのチャンネル',
+  inqCopyLabel: '送信するお問い合わせ内容',
+}
+
+export default inquiry

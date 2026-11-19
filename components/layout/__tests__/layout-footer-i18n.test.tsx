@@ -7,6 +7,7 @@ import { footerLinks, footerSections } from '../footer-data'
 import { footerCopy } from '../footer-copy'
 import { translations } from '@/lib/i18n/translations'
 import { findRegulation } from '@/lib/regulations/catalog'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -15,7 +16,7 @@ jest.mock('next/image', () => ({
 }))
 
 function renderFooter(lang: string) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <LayoutFooter />
@@ -52,7 +53,7 @@ describe('LayoutFooter — 번역', () => {
   })
 
   it('간략형에서도 동일한 공식 연락처와 QR을 사용한다', async () => {
-    window.localStorage.setItem('asca-language', 'ko')
+    setTestLanguage('ko')
     render(
       <LanguageProvider>
         <LayoutFooter variant='simple' />
@@ -65,7 +66,7 @@ describe('LayoutFooter — 번역', () => {
   it('ko: 기존 한국어 문구가 그대로다', async () => {
     renderFooter('ko')
     expect(await screen.findByRole('link', { name: '이용약관' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '협회 소개' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '소개' })).toBeInTheDocument()
   })
 
   // 회귀: 번역 키 'subscribeNewsletter' 가 어느 표에도 없어 키 이름이 그대로 노출됐다.
@@ -81,7 +82,7 @@ describe('LayoutFooter — 번역', () => {
   it('ja: 섹션 제목·법적 고지·후원 기관이 일본어로 바뀐다', async () => {
     renderFooter('ja')
     expect(await screen.findByRole('link', { name: '利用規約' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '協会紹介' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '紹介' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'ソウル芸術の殿堂' })).toBeInTheDocument()
   })
 

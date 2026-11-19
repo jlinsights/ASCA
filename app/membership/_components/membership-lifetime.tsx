@@ -1,19 +1,23 @@
-import { DUES_EXEMPTIONS, LIFETIME_FACTS, SRC } from './membership-data'
+'use client'
+
 import { MembershipSectionHead } from './membership-section-head'
 import { RegCite } from './reg-cite'
+import { useMembershipText } from './use-membership-copy'
 
 /** 평생회원과 연회비 면제 — 세 숫자를 크게 세우고, 그 밖의 면제 경우는 아래 장부 행으로 */
 export function MembershipLifetime() {
+  const { copy, ui } = useMembershipText()
+  const { src } = copy
   return (
     <section className='asca-mb__section' aria-labelledby='mb-lifetime'>
       <MembershipSectionHead
         id='mb-lifetime'
-        title='평생회원과 연회비 면제'
-        lede='평생회비나 임원 발전기금을 완납하면 연회비 납부 의무를 영구히 면제받습니다.'
+        title={ui('lifetimeTitle')}
+        lede={ui('lifetimeLede')}
       />
 
       <dl className='asca-mb__lifetime'>
-        {LIFETIME_FACTS.map(fact => (
+        {copy.lifetime.map(fact => (
           <div key={fact.label} className='asca-mb__life'>
             <dt className='asca-mb__life-label'>{fact.label}</dt>
             <dd className='asca-mb__life-figure'>{fact.figure}</dd>
@@ -23,9 +27,9 @@ export function MembershipLifetime() {
       </dl>
 
       <div className='asca-mb__exempt'>
-        <h3 className='asca-mb__subhead'>그 밖에 연회비가 면제되는 경우</h3>
+        <h3 className='asca-mb__subhead'>{ui('exempt')}</h3>
         <dl className='asca-mb__facts'>
-          {DUES_EXEMPTIONS.map(item => (
+          {copy.exemptions.map(item => (
             <div key={item.title} className='asca-mb__fact'>
               <dt>{item.title}</dt>
               <dd>
@@ -37,7 +41,7 @@ export function MembershipLifetime() {
         </dl>
       </div>
 
-      <RegCite sources={[SRC.dues3, SRC.dues4]} className='asca-mb__cite--section' />
+      <RegCite sources={[src.dues3, src.dues4]} className='asca-mb__cite--section' />
     </section>
   )
 }

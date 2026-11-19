@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
       <section className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 목적 */}
-          <Card className='border-l-4 border-l-info'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <FileText className='h-5 w-5 text-info dark:text-navy-300' />
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 개인정보 처리의 원칙 */}
-          <Card className='border-l-4 border-l-success'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <Lock className='h-5 w-5 text-success dark:text-foreground' />
@@ -57,7 +57,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 본 방침의 공개 */}
-          <Card className='border-l-4 border-l-warning'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <Eye className='h-5 w-5 text-warning dark:text-gold-400' />
@@ -95,6 +95,9 @@ export default function PrivacyPolicyPage() {
                   <p>1. 홈페이지 회원 가입 및 관리</p>
                   <p>2. 재화 또는 서비스 제공</p>
                   <p>3. 마케팅 및 광고에의 활용</p>
+                  <p>
+                    4. 문의 답변 (문의서로 받은 문의에 답하기 위한 이름·이메일·전화번호·문의 내용)
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -153,6 +156,10 @@ export default function PrivacyPolicyPage() {
                     <strong>재화 또는 서비스 제공:</strong> 재화·서비스 공급완료 및 요금결제·정산
                     완료시까지
                   </p>
+                  <p>
+                    <strong>문의 답변:</strong> 문의 처리 완료 후 1년 (기간이 지나거나 본인이 삭제를
+                    요청하면 지체 없이 파기)
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -170,8 +177,38 @@ export default function PrivacyPolicyPage() {
             </CardContent>
           </Card>
 
+          {/* 개인정보 처리업무의 위탁 */}
+          <Card>
+            <CardContent className='p-6 md:p-8'>
+              <h2 className='text-xl md:text-2xl font-bold mb-4'>제9조 개인정보 처리업무의 위탁</h2>
+              <div className='space-y-3 text-sm md:text-base text-muted-foreground'>
+                <p>
+                  ① 회사는 원활한 회원 관리를 위하여 다음과 같이 개인정보 처리업무를 위탁하고
+                  있습니다.
+                </p>
+                <ul className='list-disc list-inside space-y-1'>
+                  <li>수탁자: 도너스(Donus, cloud.donus.org)</li>
+                  <li>위탁업무: 회원 명부 관리 및 회비 납부 관리</li>
+                  <li>
+                    위탁하는 항목: 회원 가입 시 수집한 이름·이메일 및 회사가 관리하는 회원 정보
+                  </li>
+                </ul>
+                <p>
+                  ② 회사는 위탁계약 체결 시 개인정보보호법 제26조에 따라 위탁업무 수행 목적 외
+                  개인정보 처리 금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독,
+                  손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를
+                  안전하게 처리하는지를 감독합니다.
+                </p>
+                <p>
+                  ③ 위탁업무의 내용이나 수탁자가 변경될 경우에는 지체 없이 본 개인정보처리방침을
+                  통하여 공개합니다.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* 정보주체의 권리·의무 및 행사방법 */}
-          <Card className='border-l-4 border-l-success'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <User className='h-5 w-5 text-success dark:text-foreground' />
@@ -229,7 +266,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 개인정보의 안전성 확보조치 */}
-          <Card className='border-l-4 border-l-destructive'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <Shield className='h-5 w-5 text-destructive' />
@@ -306,7 +343,7 @@ export default function PrivacyPolicyPage() {
           <Separator />
 
           {/* 개인정보 보호 책임자 */}
-          <Card className='border-l-4 border-l-scholar-red'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <User className='h-5 w-5 text-scholar-red' />
@@ -363,7 +400,7 @@ export default function PrivacyPolicyPage() {
           </Card>
 
           {/* 권익침해에 대한 구제방법 */}
-          <Card className='border-l-4 border-l-highlight'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-4'>
                 <AlertTriangle className='h-5 w-5 text-gold-700 dark:text-gold-400' />

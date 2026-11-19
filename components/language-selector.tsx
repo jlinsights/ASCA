@@ -37,7 +37,13 @@ export function LanguageSelector({
   // 언어 변경 핸들러 (최적화됨)
   const handleLanguageChange = useCallback(
     async (langCode: Language) => {
-      if (langCode === language || isChanging) return
+      if (isChanging) return
+      // 지금 언어를 다시 골라도 provider 가 선택으로 저장한다(이동은 없다)
+      if (langCode === language) {
+        setIsOpen(false)
+        await setLanguage(langCode)
+        return
+      }
 
       setIsChanging(true)
       setIsOpen(false)

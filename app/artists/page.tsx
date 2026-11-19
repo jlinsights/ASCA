@@ -1,4 +1,17 @@
+import type { Metadata } from 'next'
+import { defaultSEO } from '@/lib/seo-constants'
 import { ArtistsPage, type ArtistInitialFilters } from './artists-client'
+import { loadArtistRails } from './_components/load-artist-rails'
+
+const DESCRIPTION =
+  '동양서예협회의 한국·중국·일본 서예가를 만나 보세요. 이름과 회원 구분, 국적으로 작가를 찾고 작가별 소개와 작품을 볼 수 있습니다.'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/artists' },
+  title: '작가 | 동양서예협회',
+  description: DESCRIPTION,
+  openGraph: { title: '작가 | 동양서예협회', description: DESCRIPTION, images: [defaultSEO.image] },
+}
 
 const FILTER_KEYS = ['q', 'membershipType', 'specialty', 'title', 'nationality'] as const
 
@@ -19,6 +32,15 @@ function readFilters(params: SearchParams): ArtistInitialFilters {
 
 export default async function Page({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const initialFilters = readFilters(await searchParams)
+  // 레일은 늘 만들어 둔다 — 메뉴로 등급을 골라 들어와도 화면은 조건이 있는 동안 숨기고,
+  // 필터를 초기화하면 다시 보여야 한다(조건 유무는 클라이언트가 판단)
+  const rails = await loadArtistRails()
   // 같은 /artists 안에서 메뉴로 조건만 바꿔 이동해도 필터가 따라가도록 조건별로 다시 그린다
-  return <ArtistsPage key={JSON.stringify(initialFilters)} initialFilters={initialFilters} />
+  return (
+    <ArtistsPage
+      key={JSON.stringify(initialFilters)}
+      initialFilters={initialFilters}
+      rails={rails}
+    />
+  )
 }

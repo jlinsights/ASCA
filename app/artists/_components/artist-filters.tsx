@@ -1,7 +1,7 @@
 'use client'
 
 import { DiscoveryToolbar } from '@/components/gallery/discovery-toolbar'
-import { discoveryCopy } from '@/components/gallery/discovery-copy'
+import { useDiscoveryCopy } from '@/components/gallery/discovery-copy'
 import { useLanguage } from '@/contexts/language-context'
 import { getArtistFilterOptions } from './artist-filter-options'
 
@@ -23,7 +23,7 @@ interface ArtistFiltersProps {
 
 export function ArtistFilters(props: ArtistFiltersProps) {
   const { language } = useLanguage()
-  const copy = discoveryCopy[language]
+  const copy = useDiscoveryCopy()
   const withAll = (group: Parameters<typeof getArtistFilterOptions>[0]) => [
     { value: 'all', label: copy.all },
     ...getArtistFilterOptions(group, language),

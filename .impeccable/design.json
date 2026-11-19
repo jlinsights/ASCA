@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-31T13:00:00+09:00",
+  "title": "Design System: ASCA Ink System",
+  "source": "Extensions only. Token primitives live in docs/02-design/DESIGN.md frontmatter (v2.0.0-alpha); this file was generated from app/globals.css, components/ui/button.tsx, components/layout/page-hero.css and components/apply/apply.css without editing DESIGN.md.",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Navy Ink 深藍",
+        "canonical": "#0b1733",
+        "tonalRamp": [
+          "#070d1a",
+          "#0b1733",
+          "#142244",
+          "#1d2e5c",
+          "#2a3f7a",
+          "#3a54a0",
+          "#6a82c0",
+          "#9eb0d6"
+        ]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "True Gold 正金",
+        "canonical": "#d4a84a",
+        "tonalRamp": [
+          "#6b4e14",
+          "#8a661c",
+          "#a77d24",
+          "#c89729",
+          "#d4a84a",
+          "#e2c074",
+          "#ecd6a1",
+          "#fbf5e4"
+        ]
+      },
+      "destructive": {
+        "role": "tertiary",
+        "displayName": "Seal Red 朱印",
+        "canonical": "#a8201a",
+        "tonalRamp": [
+          "#5a110e",
+          "#7c1813",
+          "#a8201a",
+          "#c94a3f",
+          "#d9736a",
+          "#e69d96",
+          "#f2c8c4",
+          "#fbeeec"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Rice Paper 宣紙",
+        "canonical": "#fbf8ef",
+        "tonalRamp": [
+          "#1a1d2a",
+          "#424a5e",
+          "#6b7385",
+          "#b8bccb",
+          "#d7dae3",
+          "#e5e0ce",
+          "#f4efdd",
+          "#fbf8ef"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Stone 700",
+        "canonical": "#424a5e",
+        "tonalRamp": [
+          "#1a1d2a",
+          "#424a5e",
+          "#6b7385",
+          "#b8bccb",
+          "#d7dae3",
+          "#edeff3",
+          "#f4efdd",
+          "#fbf8ef"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display-lg": {
+        "displayName": "Display",
+        "purpose": "Page hero titles (PageHero .asca-ph__title, weight 600, line-height 1.05, -0.02em, keep-all, balanced)."
+      },
+      "headline-lg": {
+        "displayName": "Headline",
+        "purpose": "Section heads (ApplySectionHead) on serif display face."
+      },
+      "title-lg": { "displayName": "Title", "purpose": "Card and list titles on Pretendard." },
+      "body-md": {
+        "displayName": "Body",
+        "purpose": "Korean body copy; reading pages narrow to --shell-narrow (50rem) and --measure (40rem)."
+      },
+      "label-sm": { "displayName": "Label", "purpose": "Eyebrows, crumbs (13px), table captions." }
+    },
+    "shadows": [
+      {
+        "name": "xs",
+        "value": "0 1px 3px 0 hsl(222 54% 8% / 0.08)",
+        "purpose": "Resting cards and inputs. Navy-tinted, never neutral black."
+      },
+      {
+        "name": "md",
+        "value": "0 8px 16px -4px hsl(222 54% 8% / 0.12), 0 4px 8px -2px hsl(222 54% 8% / 0.08)",
+        "purpose": "Hover lift on interactive cards."
+      },
+      {
+        "name": "xl",
+        "value": "0 24px 48px -12px hsl(222 54% 8% / 0.18), 0 12px 24px -6px hsl(222 54% 8% / 0.1)",
+        "purpose": "Dialogs and overlays."
+      }
+    ],
+    "motion": [
+      { "name": "duration-fast", "value": "150ms", "purpose": "Color and opacity state changes." },
+      {
+        "name": "duration-normal",
+        "value": "250ms",
+        "purpose": "Default transitions (globals.css; DESIGN.md says 260ms, see drift report)."
+      },
+      {
+        "name": "duration-slow",
+        "value": "400ms",
+        "purpose": "Larger reveals (globals.css; DESIGN.md says 420ms)."
+      },
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Lifting the brush: entrances and hovers."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.45, 0, 0.55, 1)",
+        "purpose": "Brush pressure: continuous movement."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1400px" }
+    ],
+    "layout": {
+      "shell-max": "75rem",
+      "shell-gutter": "clamp(1.25rem, 10vw - 3.5rem, 8rem)",
+      "shell-frame": "calc(var(--shell-max) + 2 * var(--shell-gutter))",
+      "shell-narrow": "50rem",
+      "measure": "40rem"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "One main call to action per area. Navy ink on paper text, 6px corners.",
+      "html": "<button class=\"ds-btn-primary\">출품원서 작성하기</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 8px 16px; border: 0; border-radius: 4px; background: #0b1733; color: #fbf8ef; font: 500 14px/1 Pretendard, 'Noto Sans KR', sans-serif; cursor: pointer; transition: background 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: rgb(11 23 51 / 0.9); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px #fbf8ef, 0 0 0 4px #c89729; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action beside a primary. Warm input border, gold wash on hover.",
+      "html": "<button class=\"ds-btn-outline\">공모요강 전문</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; height: 40px; padding: 8px 16px; border: 1px solid #d9d3bf; border-radius: 4px; background: #fbf8ef; color: #0b1733; font: 500 14px/1 Pretendard, 'Noto Sans KR', sans-serif; cursor: pointer; transition: background 150ms, color 150ms; } .ds-btn-outline:hover { background: #d4a84a; color: #0b1733; } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 2px #fbf8ef, 0 0 0 4px #c89729; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Dense rows and icon buttons. Never on heroes.",
+      "html": "<button class=\"ds-btn-ghost\">더 보기</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; height: 36px; padding: 0 12px; border: 0; border-radius: 4px; background: transparent; color: #0b1733; font: 500 14px/1 Pretendard, 'Noto Sans KR', sans-serif; cursor: pointer; transition: background 150ms; } .ds-btn-ghost:hover { background: #d4a84a; } .ds-btn-ghost:focus-visible { outline: none; box-shadow: 0 0 0 2px #c89729; }"
+    },
+    {
+      "name": "Page Hero",
+      "kind": "custom",
+      "refersTo": "PageHero (components/layout/page-hero.tsx)",
+      "description": "Signature page opener: vertical Traditional-Chinese mark with a seal-red square, crumbs, serif title on the shell frame.",
+      "html": "<header class=\"ds-ph\"><div class=\"ds-ph__mark\"><p class=\"ds-ph__tc\" lang=\"zh-Hant\">公募</p><span class=\"ds-ph__seal\">印</span></div><div><ol class=\"ds-ph__crumbs\"><li>홈</li><li>공모전</li></ol><h1 class=\"ds-ph__title\">제23회 대한민국 동양서예대전</h1><p class=\"ds-ph__lede\">서울서예박물관 두 전시실에서, 공모전과 書境 초대작가전을 한 흐름으로 엽니다.</p></div></header>",
+      "css": ".ds-ph { display: grid; grid-template-columns: auto 1fr; gap: clamp(24px, 4vw, 64px); align-items: end; padding: 64px clamp(1.25rem, 10vw - 3.5rem, 8rem); background: #fbf8ef; color: #0b1733; } .ds-ph__mark { display: flex; flex-direction: column; align-items: center; gap: 16px; } .ds-ph__tc { margin: 0; writing-mode: vertical-rl; font: 600 28px/1 'Noto Serif TC', serif; letter-spacing: 0.18em; color: #a77d24; } .ds-ph__seal { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 2px; background: #a8201a; color: #fbf8ef; font: 600 14px/1 'Noto Serif TC', serif; } .ds-ph__crumbs { display: flex; gap: 8px; margin: 0 0 20px; padding: 0; list-style: none; font-size: 13px; color: #424a5e; } .ds-ph__title { margin: 0; font: 600 clamp(2rem, 5vw, 3.75rem)/1.05 'Playfair Display', 'Noto Serif KR', serif; letter-spacing: -0.02em; word-break: keep-all; text-wrap: balance; } .ds-ph__lede { margin: 16px 0 0; max-width: 40rem; color: #424a5e; font: 400 18px/1.6 Pretendard, 'Noto Sans KR', sans-serif; }"
+    },
+    {
+      "name": "Ledger Table",
+      "kind": "custom",
+      "refersTo": "LedgerTable (components/apply/apply-parts.tsx)",
+      "description": "Schedules, fees and edition records as a ruled ledger; the lead row is emphasized.",
+      "html": "<table class=\"ds-ledger\"><caption>제23회 대전 일정</caption><thead><tr><th>구분</th><th>내용</th></tr></thead><tbody><tr class=\"is-lead\"><td>접수 마감</td><td>2027년 1월 31일 18:00</td></tr><tr><td>전시</td><td>예술의전당 서울서예박물관</td></tr></tbody></table>",
+      "css": ".ds-ledger { width: 100%; border-collapse: collapse; color: #0b1733; font: 400 15px/1.5 Pretendard, 'Noto Sans KR', sans-serif; } .ds-ledger caption { text-align: left; padding-bottom: 8px; font-size: 13px; color: #424a5e; } .ds-ledger th { text-align: left; padding: 10px 12px; border-bottom: 1px solid #0b1733; font-weight: 600; font-size: 13px; color: #424a5e; } .ds-ledger td { padding: 12px; border-bottom: 1px solid #e5e0ce; } .ds-ledger tr.is-lead td { font-weight: 600; background: #f4efdd; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "Card (components/ui/card.tsx)",
+      "description": "White card on paper, warm border, 6px corners, navy-tinted resting shadow.",
+      "html": "<article class=\"ds-card\"><h3 class=\"ds-card__title\">書境 초대작가전</h3><p class=\"ds-card__body\">협회 초대작가는 공모 부문이 아니라 초대작가전으로 출품합니다.</p></article>",
+      "css": ".ds-card { padding: 24px; border: 1px solid #e5e0ce; border-radius: 6px; background: #ffffff; color: #0b1733; box-shadow: 0 1px 3px 0 hsl(222 54% 8% / 0.08); transition: box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-card:hover { box-shadow: 0 8px 16px -4px hsl(222 54% 8% / 0.12), 0 4px 8px -2px hsl(222 54% 8% / 0.08); } .ds-card__title { margin: 0 0 8px; font: 600 20px/1.3 'Playfair Display', 'Noto Serif KR', serif; } .ds-card__body { margin: 0; color: #424a5e; font: 400 15px/1.6 Pretendard, 'Noto Sans KR', sans-serif; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "Input (components/ui/input.tsx)",
+      "description": "Warm input border on paper; gold focus ring.",
+      "html": "<input class=\"ds-input\" placeholder=\"작가명 또는 전문분야로 검색\" />",
+      "css": ".ds-input { height: 40px; width: 280px; padding: 8px 12px; border: 1px solid #d9d3bf; border-radius: 4px; background: #fbf8ef; color: #0b1733; font: 400 14px/1.4 Pretendard, 'Noto Sans KR', sans-serif; } .ds-input::placeholder { color: #6b7385; } .ds-input:focus-visible { outline: none; box-shadow: 0 0 0 2px #fbf8ef, 0 0 0 4px #c89729; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "ASCA Ink System (Navy & Gold)",
+    "overview": "See docs/02-design/DESIGN.md §1 Overview. Navy ink and true gold on rice paper; seal red only for seals and errors.",
+    "keyCharacteristics": [
+      "Navy-900 ink on rice paper; gold is surface and ring, never text",
+      "Seal red 朱印 reserved for seal marks and errors",
+      "Serif display (Playfair Display + Noto Serif KR) over Pretendard body",
+      "Shell frame: 1200px body, proportional gutters shared by header, hero, body and footer",
+      "Navy-tinted shadows, restrained 6px corners"
+    ],
+    "rules": [
+      {
+        "name": "The Gold Is Not Text Rule",
+        "body": "Gold (#d4a84a) is a surface, accent and ring color; do not set text in it (DESIGN.md §2.1.2).",
+        "section": "colors"
+      },
+      {
+        "name": "The Seal Only Rule",
+        "body": "Seal red appears only on seal marks and error/destructive states.",
+        "section": "colors"
+      },
+      {
+        "name": "The Semantic Slot Rule",
+        "body": "New code uses semantic slots (bg-primary, bg-accent, text-muted-foreground). Legacy names like celadon-green and scholar-red are kept only so old classes render, and their values are now gold and navy.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do use one primary button per area",
+      "Do put pages on the shell frame (--shell-max, --shell-gutter) and narrow reading pages to --shell-narrow",
+      "Do keep Traditional Chinese marks in Noto Serif TC with lang=zh-Hant"
+    ],
+    "donts": [
+      "Don't set text in gold",
+      "Don't use the legacy button variants celadon, sage, terra, traditional or rice",
+      "Don't use neutral black shadows"
+    ]
+  }
+}

@@ -21,8 +21,7 @@ beforeEach(() => {
   jest.clearAllMocks()
   jest.mocked(checkOrigin).mockReturnValue({ ok: true })
   query = {}
-  for (const method of ['from', 'insert', 'select']) query[method] = jest.fn(() => query)
-  query.single = jest.fn().mockResolvedValue({ data: { id: threadId }, error: null })
+  query.rpc = jest.fn().mockResolvedValue({ data: threadId, error: null })
   jest.mocked(archiveWriter).mockReturnValue(query as any)
 })
 
@@ -90,8 +89,12 @@ describe('POST /api/community/threads', () => {
     expect(response.status).toBe(201)
     expect(response.headers.get('cache-control')).toBe('private, no-store')
     expect((await response.json()).data).toEqual({ id: threadId })
-    expect(query.from).toHaveBeenCalledWith('community_threads')
-    expect(query.insert).toHaveBeenCalledWith({ author_id: accountId, title: '제목', body: '본문' })
+    expect(query.rpc).toHaveBeenCalledWith('community_create_thread', {
+      p_author: accountId,
+      p_title: '제목',
+      p_body: '본문',
+      p_image_ids: [],
+    })
     expect(auditTrail.trackDataChange).toHaveBeenCalledWith(
       accountId,
       'create',
@@ -102,9 +105,43 @@ describe('POST /api/community/threads', () => {
     )
   })
 
+  it('attaches uploaded photos in the order given', async () => {
+    signIn()
+    const photos = ['aaaaaaaa-0000-4000-8000-000000000002', 'aaaaaaaa-0000-4000-8000-000000000001']
+    expect((await create({ title: '제목', body: '본문', imageIds: photos })).status).toBe(201)
+    expect(query.rpc).toHaveBeenCalledWith(
+      'community_create_thread',
+      expect.objectContaining({ p_image_ids: photos })
+    )
+  })
+
+  it('rejects more than four photos or non-IDs before touching the database', async () => {
+    signIn()
+    const five = Array.from({ length: 5 }, (_, i) => `aaaaaaaa-0000-4000-8000-00000000000${i}`)
+    expect((await create({ title: '제목', body: '본문', imageIds: five })).status).toBe(400)
+    expect((await create({ title: '제목', body: '본문', imageIds: ['x'] })).status).toBe(400)
+    expect(query.rpc).not.toHaveBeenCalled()
+  })
+
+  it('explains photos that are not mine or already used, keeping nothing', async () => {
+    signIn()
+    query.rpc.mockResolvedValue({
+      data: null,
+      error: { message: 'COMMUNITY_IMAGES_UNAVAILABLE', code: 'P0002' },
+    })
+    const response = await create({
+      title: '제목',
+      body: '본문',
+      imageIds: ['aaaaaaaa-0000-4000-8000-000000000003'],
+    })
+    expect(response.status).toBe(409)
+    expect((await response.json()).code).toBe('IMAGES_UNAVAILABLE')
+    expect(auditTrail.trackDataChange).not.toHaveBeenCalled()
+  })
+
   it('fails closed on a database error', async () => {
     signIn()
-    query.single.mockResolvedValue({ data: null, error: { message: 'boom' } })
+    query.rpc.mockResolvedValue({ data: null, error: { message: 'boom' } })
     const response = await create({ title: '제목', body: '본문' })
     expect(response.status).toBe(500)
     expect((await response.json()).code).toBe('COMMUNITY_UNAVAILABLE')

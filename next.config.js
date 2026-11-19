@@ -84,15 +84,6 @@ const THIRD_PARTY = {
     frame: ['https://app.cal.com', 'https://cal.com'],
     connect: ['https://app.cal.com'],
   },
-  // 채널톡 상담 위젯 — components/third-party/site-widgets.tsx (전 페이지)
-  channelTalk: {
-    script: ['https://cdn.channel.io'],
-    connect: ['https://api.channel.io', 'wss://*.channel.io'],
-    // 알림음(mp3) — media-src 가 없으면 default-src 'self' 로 떨어져 막힌다
-    media: ['https://cdn.channel.io'],
-    frame: ['https://*.channel.io'],
-    img: ['https://*.channel.io'],
-  },
   // 뉴스레터 구독 — components/layout/layout-footer.tsx
   // form: 유일하게 실제로 폼을 외부로 POST하는 벤더다.
   stibee: {
@@ -120,9 +111,34 @@ const THIRD_PARTY = {
   },
   // Cloudflare Images — 정적 이미지 호스팅
   cloudflareImages: { img: ['https://imagedelivery.net'] },
-  // 옛 Webflow CDN — 블로그 글 본문·썸네일(lib/data/blog-posts.json). Webflow 해지 전에 옮겨야 한다
-  webflowCdn: { img: ['https://cdn.prod.website-files.com'] },
 }
+
+/** next/image 가 최적화해 줄 로컬 경로 — public/ 의 이미지 폴더와 루트 파일, Next 정적 파일 */
+const IMAGE_LOCAL_PATHS = [
+  '/images/**',
+  '/logo/**',
+  '/sponsor/**',
+  '/favicon/**',
+  '/webflow/**',
+  '/og/**',
+  '/_next/static/media/**',
+  // public/ 바로 아래 파일(placeholder.jpg 등) — 한 단계만, /api/... 는 걸리지 않는다
+  '/*',
+]
+
+/** next/image 가 대신 받아 올 원격 호스트 — 실제로 쓰는 곳만 (2026-10-27 코드·DB 조사) */
+const IMAGE_REMOTE_HOSTS = [
+  ...new Set(
+    [
+      // 작가 사진·작품 이미지(Supabase Storage). 환경별 프로젝트 + 운영 프로젝트
+      supabaseOrigin && new URL(supabaseOrigin).hostname,
+      'caxjyimsuvjnbmjoxfad.supabase.co',
+      'imagedelivery.net', // Cloudflare Images — 소개 페이지 등
+      'pub-918cc20d48bd44a29913d2bf8f72a874.r2.dev', // 지원 서식·위원 위촉 페이지
+      'img.clerk.com', // 회원 아바타
+    ].filter(Boolean)
+  ),
+]
 
 /** THIRD_PARTY에서 특정 디렉티브에 해당하는 오리진을 모아 중복 제거한다. */
 function vendorOrigins(directive) {
@@ -131,7 +147,7 @@ function vendorOrigins(directive) {
 
 /** null을 걸러내고 공백으로 잇는다. */
 function sources(...parts) {
-  return parts.flat().filter(Boolean).join(' ')
+  return [...new Set(parts.flat().filter(Boolean))].join(' ')
 }
 
 const productionCsp = [
@@ -140,7 +156,8 @@ const productionCsp = [
   // 제거하려면 nonce 도입이 선행돼야 한다(별도 과제).
   `script-src ${sources(`'self'`, `'unsafe-inline'`, `'unsafe-eval'`, clerkOrigin, 'https://*.clerk.accounts.dev', vendorOrigins('script'))}`,
   `style-src ${sources(`'self'`, `'unsafe-inline'`, vendorOrigins('style'))}`,
-  `img-src ${sources(`'self'`, 'data:', 'blob:', clerkOrigin, 'https://img.clerk.com', supabaseOrigin, vendorOrigins('img'))}`,
+  // 이미지 최적화를 끈 뒤로 브라우저가 원격 이미지를 직접 받는다 — next/image 허용 호스트도 그대로 연다
+  `img-src ${sources(`'self'`, 'data:', 'blob:', clerkOrigin, 'https://img.clerk.com', supabaseOrigin, ...IMAGE_REMOTE_HOSTS.map(host => `https://${host}`), vendorOrigins('img'))}`,
   `font-src ${sources(`'self'`, 'data:', vendorOrigins('font'))}`,
   `connect-src ${sources(`'self'`, clerkOrigin, clerkAccountPortalOrigin, 'https://*.clerk.accounts.dev', 'https://clerk-telemetry.com', supabaseOrigin, supabaseSocketOrigin, vendorOrigins('connect'))}`,
   // Clerk은 봇 차단에 Cloudflare Turnstile을 프레임으로 띄운다.
@@ -186,17 +203,21 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    // 이미지 최적화(/_next/image)는 받아 온 결과를 공개 캐시에 하루(minimumCacheTTL) 둔다.
+    // 그래서 아무 주소나 받아 주면 안 된다 — 특히 /api/community/images 처럼 볼 때마다 권한을
+    // 확인하는 라우트를 거치면, 글을 숨기거나 지운 뒤에도 캐시로 사진이 보인다.
+    // 로컬은 public/ 폴더·Next 정적 파일만, 원격은 실제로 쓰는 이미지 호스트만 연다.
+    localPatterns: IMAGE_LOCAL_PATHS.map(pathname => ({ pathname })),
+    remotePatterns: IMAGE_REMOTE_HOSTS.map(hostname => ({ protocol: 'https', hostname })),
     // 고화질 갤러리 이미지 최적화
     loader: 'default',
     path: '/_next/image',
     domains: [],
-    unoptimized: false,
+    // 최적화 끔 (2026-11-01) — Vercel 이미지 최적화 한도가 다 차서 /_next/image 가 402
+    // (OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED)를 냈다. 캐시에 없는 크기·새 사진(창립자 사진 등)이
+    // 모두 깨졌다. 올리는 사진은 이미 줄여 둔 webp 라(작품 ≤2400px·작가 ≤1200px) 원본을 그대로 쓴다.
+    // 다시 켜려면 한도(요금제)를 먼저 확인할 것. 위 localPatterns·remotePatterns 는 켤 때를 위해 둔다.
+    unoptimized: true,
   },
 
   // Webpack configuration to fix RSC issues
@@ -219,9 +240,14 @@ const nextConfig = {
     return config
   },
 
+  // Next 16.3 의 새 스크롤 처리기(appNewScrollHandler, 기본 켜짐)는 Fragment 에 ref 를 단다.
+  // 이건 Next 내장 canary React 에서만 되는데, 위 webpack alias 가 클라이언트를 안정판 react-dom 으로
+  // 묶어서 'Invalid prop `ref` supplied to React.Fragment' 경고가 모든 페이지에 뜬다.
+  // alias 는 Clerk 단일 React 때문에 필요하므로, 스크롤 처리기를 예전 것으로 둔다 (2026-11-01).
   // 실험적 기능으로 성능 향상
   experimental: lowMemoryBuild
     ? {
+        appNewScrollHandler: false,
         cpus: 1,
         memoryBasedWorkersCount: false,
         webpackBuildWorker: false,
@@ -231,6 +257,7 @@ const nextConfig = {
         gzipSize: false,
       }
     : {
+        appNewScrollHandler: false,
         optimizePackageImports: [
           'lucide-react',
           '@radix-ui/react-icons',
@@ -296,6 +323,9 @@ const nextConfig = {
       },
       // 분류 체계 페이지는 위 분류별 페이지로 가는 카드에 지어낸 작품 수를 단 목록이었다
       { source: '/taxonomy', destination: '/artworks', permanent: false },
+      // 유관단체 상세 /partners/<id> 는 어디서도 링크하지 않는 페이지였고, 확인하지 않은 주소·전화·설립 연도를
+      // 손으로 적어 두고 있어 내렸다(2026-11-08 사용자 결정). 공유된 주소는 유관단체 목록으로 보낸다
+      { source: '/partners/:id', destination: '/partners', permanent: true },
       // 옛 Webflow 회차별 전시 주소(/exhibition/21-oriental-calligraphy-exhibition-2024 등)
       {
         source: '/exhibition/:slug*',

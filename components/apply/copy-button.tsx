@@ -6,10 +6,18 @@ import { Check, Copy } from 'lucide-react'
 interface CopyButtonProps {
   value: string
   label: string
+  /** 번역 화면에서만 넘긴다 — 기본은 한국어 */
+  copiedText?: string
+  failedText?: string
 }
 
 /** 계좌번호처럼 손으로 옮겨 적기 쉬운 값을 복사한다. 클립보드가 막힌 환경에서는 값이 그대로 보이므로 실패만 알린다 */
-export function CopyButton({ value, label }: CopyButtonProps) {
+export function CopyButton({
+  value,
+  label,
+  copiedText = '복사했습니다',
+  failedText = '복사하지 못했습니다',
+}: CopyButtonProps) {
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
 
   const copy = async () => {
@@ -31,7 +39,7 @@ export function CopyButton({ value, label }: CopyButtonProps) {
       )}
       <span>{label}</span>
       <span className='sr-only' aria-live='polite'>
-        {state === 'copied' ? '복사했습니다' : state === 'failed' ? '복사하지 못했습니다' : ''}
+        {state === 'copied' ? copiedText : state === 'failed' ? failedText : ''}
       </span>
     </button>
   )

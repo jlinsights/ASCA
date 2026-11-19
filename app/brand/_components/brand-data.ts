@@ -267,4 +267,4 @@ export const PHOTO_TREATMENTS: readonly PhotoTreatment[] = [
 ]
 
 /** 사진 처리 견본 — 저장소에 이미 있는 서예 사진 */
-export const PHOTO_SAMPLE = '/images/artworks/calligraphy-scene-2.jpg'
+export const PHOTO_SAMPLE = '/images/programs/calligraphy-scene-2.jpg'

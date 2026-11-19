@@ -1,67 +1,60 @@
-import {
-  BONUS_POINTS,
-  REQUIRED_CONDITIONS,
-  REVIEW_STEPS,
-  SCORE_BANDS,
-  SCORE_NOTE,
-  SCORING_RULES,
-  SCORING_TABLE,
-  SRC,
-} from './membership-data'
+'use client'
+
 import { MembershipSectionHead } from './membership-section-head'
 import { RegCite } from './reg-cite'
+import { useMembershipText } from './use-membership-copy'
 
 /**
  * 승급 기준 — 배점 장부와 점수 눈금이 위에, 점수 밖의 필수 요건·심사 절차·가산점이 아래에.
  * "점수만 채우면 승급" 으로 읽히지 않게 눈금 바로 밑에 그 사실을 적는다.
  */
 export function MembershipPromotion() {
+  const { copy, ui, language } = useMembershipText()
+  const { src } = copy
   return (
     <section className='asca-mb__section' aria-labelledby='mb-promotion'>
-      <MembershipSectionHead
-        id='mb-promotion'
-        title='작가 승급 기준'
-        lede='대한민국 동양서예대전 입상 점수와 자격심사로 추천·초대작가를 선임합니다.'
-      />
+      <MembershipSectionHead id='mb-promotion' title={ui('promoTitle')} lede={ui('promoLede')} />
 
       <div className='asca-mb__promo'>
         <div>
           <table className='asca-mb__scores'>
-            <caption className='sr-only'>대한민국 동양서예대전 수상 등급별 배점</caption>
+            <caption className='sr-only'>{ui('scoresCaption')}</caption>
             <thead>
               <tr>
-                <th scope='col'>수상 등급</th>
-                <th scope='col'>배점</th>
+                <th scope='col'>{ui('colAward')}</th>
+                <th scope='col'>{ui('colPoints')}</th>
               </tr>
             </thead>
             <tbody>
-              {SCORING_TABLE.map(row => (
+              {copy.scoring.map(row => (
                 <tr key={row.award}>
                   <th scope='row'>{row.award}</th>
                   <td>
-                    <span className='asca-mb__points'>{row.points}</span>점
+                    <span className='asca-mb__points'>{row.points}</span>
+                    {/* 영어는 머리 칸(Points)만 두고 숫자 뒤 단위를 붙이지 않는다 — 1 points 를 피한다 */}
+                    {language !== 'en' && ui('pointsUnit')}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
           <ul className='asca-mb__rules'>
-            {SCORING_RULES.map(rule => (
+            {copy.scoringRules.map(rule => (
               <li key={rule}>{rule}</li>
             ))}
           </ul>
         </div>
 
         <div className='asca-mb__scale-wrap'>
-          <h3 className='asca-mb__subhead'>합산 점수</h3>
+          <h3 className='asca-mb__subhead'>{ui('total')}</h3>
           <ol
             className='asca-mb__scale'
             style={{
-              gridTemplateColumns: SCORE_BANDS.map(band => `${band.span}fr`).join(' '),
+              gridTemplateColumns: copy.bands.map(band => `${band.span}fr`).join(' '),
             }}
-            aria-label='합산 점수별 선정 대상'
+            aria-label={ui('scaleLabel')}
           >
-            {SCORE_BANDS.map(band => (
+            {copy.bands.map(band => (
               <li
                 key={band.range}
                 className={`asca-mb__band${band.emphasis ? ' asca-mb__band--strong' : ''}`}
@@ -72,21 +65,21 @@ export function MembershipPromotion() {
               </li>
             ))}
           </ol>
-          <p className='asca-mb__note'>{SCORE_NOTE}</p>
+          <p className='asca-mb__note'>{copy.scoreNote}</p>
 
           <div className='asca-mb__checks'>
             <div>
-              <h3 className='asca-mb__subhead'>필수 요건</h3>
+              <h3 className='asca-mb__subhead'>{ui('required')}</h3>
               <ol className='asca-mb__numbered'>
-                {REQUIRED_CONDITIONS.map(item => (
+                {copy.required.map(item => (
                   <li key={item}>{item}</li>
                 ))}
               </ol>
             </div>
             <div>
-              <h3 className='asca-mb__subhead'>심사</h3>
+              <h3 className='asca-mb__subhead'>{ui('review')}</h3>
               <ol className='asca-mb__numbered'>
-                {REVIEW_STEPS.map(item => (
+                {copy.review.map(item => (
                   <li key={item}>{item}</li>
                 ))}
               </ol>
@@ -96,9 +89,9 @@ export function MembershipPromotion() {
       </div>
 
       <div className='asca-mb__bonus'>
-        <h3 className='asca-mb__subhead'>가산점</h3>
+        <h3 className='asca-mb__subhead'>{ui('bonus')}</h3>
         <div className='asca-mb__bonus-grid'>
-          {BONUS_POINTS.map(group => (
+          {copy.bonus.map(group => (
             <div key={group.title} className='asca-mb__bonus-group'>
               <h4 className='asca-mb__bonus-title'>{group.title}</h4>
               <ul className='asca-mb__rules'>
@@ -112,7 +105,7 @@ export function MembershipPromotion() {
       </div>
 
       <RegCite
-        sources={[SRC.select2, SRC.select3, SRC.select4, SRC.select5, SRC.select6, SRC.select8]}
+        sources={[src.select2, src.select3, src.select4, src.select5, src.select6, src.select8]}
         className='asca-mb__cite--section'
       />
     </section>

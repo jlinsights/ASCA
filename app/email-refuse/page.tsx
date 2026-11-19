@@ -34,7 +34,7 @@ export default function EmailRefusePage() {
       <section className='container py-10 md:py-16'>
         <div className='max-w-4xl mx-auto space-y-8'>
           {/* 기본 원칙 */}
-          <Card className='border-l-4 border-l-destructive'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-6'>
                 <Mail className='h-6 w-6 text-destructive' />
@@ -97,7 +97,7 @@ export default function EmailRefusePage() {
           </Card>
 
           {/* 법령 조항 */}
-          <Card className='border-l-4 border-l-muted-foreground'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-6'>
                 <FileText className='h-6 w-6 text-muted-foreground' />
@@ -110,8 +110,8 @@ export default function EmailRefusePage() {
                   정보통신망법 제50조의2 (전자우편주소의 무단 수집행위 등 금지)
                 </h3>
 
-                <div className='space-y-6'>
-                  <div className='border-l-4 border-l-info pl-4'>
+                <div className='divide-y divide-border'>
+                  <div className='py-6 first:pt-0 last:pb-0'>
                     <h4 className='font-semibold text-lg mb-2 text-foreground'>제1항</h4>
                     <p className='text-sm md:text-base text-muted-foreground'>
                       누구든지 전자우편주소의 수집을 거부하는 의사가 명시된 인터넷 홈페이지에서
@@ -120,7 +120,7 @@ export default function EmailRefusePage() {
                     </p>
                   </div>
 
-                  <div className='border-l-4 border-l-success pl-4'>
+                  <div className='py-6 first:pt-0 last:pb-0'>
                     <h4 className='font-semibold text-lg mb-2 text-foreground'>제2항</h4>
                     <p className='text-sm md:text-base text-muted-foreground'>
                       누구든지 제1항의 규정을 위반하여 수집된 전자우편주소를 판매·유통 하여서는
@@ -128,7 +128,7 @@ export default function EmailRefusePage() {
                     </p>
                   </div>
 
-                  <div className='border-l-4 border-l-highlight pl-4'>
+                  <div className='py-6 first:pt-0 last:pb-0'>
                     <h4 className='font-semibold text-lg mb-2 text-foreground'>제3항</h4>
                     <p className='text-sm md:text-base text-muted-foreground'>
                       누구든지 제1항 및 제2항의 규정에 의하여 수집·판매 및 유통이 금지된
@@ -152,7 +152,7 @@ export default function EmailRefusePage() {
           </Card>
 
           {/* 신고 방법 */}
-          <Card className='border-l-4 border-l-success'>
+          <Card>
             <CardContent className='p-6 md:p-8'>
               <div className='flex items-center gap-3 mb-6'>
                 <Shield className='h-6 w-6 text-success dark:text-foreground' />

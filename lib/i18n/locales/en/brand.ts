@@ -1,0 +1,150 @@
+// brand 화면 번역 (en). 네 언어를 모으는 곳은 lib/i18n/translations/brand.ts 다.
+const brand: Record<string, string> = {
+  brandEyebrow: 'Brand & Style Guide',
+  brandTitle: 'Brand & Style Guide',
+  brandLede:
+    'The ASCA Ink System is the Society’s visual language — ink-soaked navy and restrained gold, rice-paper grounds, and a red seal kept for mark-making. Every page and printed piece follows these rules.',
+  brandSloganGloss:
+    'Creating anew through tradition, where calligraphy and character mature together.',
+  brandOnThisPage: 'On this page',
+  brandNavEssence: 'Brand essence',
+  brandNavNames: 'Official names',
+  brandNavLogo: 'Logo',
+  brandNavColor: 'Colour',
+  brandNavType: 'Typography',
+  brandNavVoice: 'Voice',
+  brandNavElements: 'Form elements',
+  brandNavComponents: 'Components',
+  brandNavImagery: 'Imagery',
+  brandContact: 'Brand inquiries',
+
+  brandEssenceTitle: 'Brand essence',
+  brandEssenceLede:
+    'The name, the slogan and four classical compounds carry the brand. They carry meaning rather than decoration, so pair each with a short gloss on first appearance.',
+  brandCompound1: 'Learn from the ancients, create the new',
+  brandCompound2: 'Brush and person mature together',
+  brandCompound3: 'The calligraphic arts of East Asia',
+  brandCompound4: 'Brushwork as natural as drifting clouds and flowing water',
+
+  brandNamesTitle: 'Official names',
+  brandNamesLede:
+    'Use only these forms in every language. Write 東洋, never 東方 — the standard matches the legal entity and the English “Oriental Calligraphy”.',
+  brandNameKoFull: 'Korean (legal)',
+  brandNameKoShort: 'Korean (short)',
+  brandNameHanja: 'Hanja (standard)',
+  brandNameHanjaFull: 'Hanja (legal)',
+  brandNameEnFull: 'English (full)',
+  brandNameEnShort: 'English (short)',
+  brandNameForm: 'Form',
+  brandNameValue: 'Name',
+  brandNameUse: 'Use',
+  brandNameUseLegal: 'Legal documents and contracts',
+  brandNameUseGeneral: 'General communication',
+  brandNameUseCatalog: 'Catalogues and exhibitions',
+  brandNameUseOfficial: 'Hanja in official documents',
+  brandNameUseEnglish: 'Official English',
+  brandNameUseShort: 'Logo, social media, domain',
+
+  brandLogoTitle: 'Logo',
+  brandLogoLede:
+    'A brush-script “Oriental Calligraphy” logotype with an English tagline. Choose one of three colourways by ground.',
+  brandLogoNavy: 'Navy — on paper',
+  brandLogoWhite: 'White — on ink',
+  brandLogoGold: 'Gold — ceremonial, on ink',
+  brandLogoRule1: 'Keep clear space of at least one third of the logo height on every side.',
+  brandLogoRule2: 'On screen, never smaller than 120px wide.',
+  brandLogoRule3: 'Never stretch, rotate, or add shadows or outlines.',
+  brandLogoRule4:
+    'Never place it directly on photos or patterns. On ink grounds use the white or gold mark.',
+
+  brandColorTitle: 'Colour',
+  brandColorLede:
+    'Ink-soaked navy is the ground and gold a restrained accent. Rice-paper warmth forms the light surface; seal red appears only on seals and errors.',
+  brandColorCore: 'Core colours',
+  brandColorNavy: 'Navy ladder',
+  brandColorGold: 'Gold ladder',
+  brandColorStone: 'Neutral ladder',
+  brandColorSemantic: 'Semantic roles',
+  brandColorRole: 'Role',
+  brandColorLight: 'Light',
+  brandColorDark: 'Dark',
+  brandSwatchNavy: 'Body text and ink grounds',
+  brandSwatchGold: 'Hairlines, ornament, large type — never small text',
+  brandSwatchPaper: 'Light ground',
+  brandSwatchSeal: 'Seals and errors only',
+  brandColorRule: 'For small gold text use Gold 800 (#8a661c). Gold 500 lacks contrast on paper.',
+  brandCopied: 'Copied',
+  brandCopyHex: 'Copy colour value',
+
+  brandTypeTitle: 'Typography',
+  brandTypeLede:
+    'Playfair Display for English, Pretendard for Korean body and UI, Noto Serif TC (Source Han Serif TC) for Hanja, and Noto Serif KR for Korean headings.',
+  brandTypeLatin: 'English display',
+  brandTypeHanja: 'Hanja',
+  brandTypeKrSerif: 'Korean headings',
+  brandTypeSans: 'Body & UI',
+  brandTypeSample: 'A living tradition of East Asian brush and ink',
+  brandTypeScale: 'Type scale',
+  brandTypeRule1: 'Hanja headlines: weight 700, tracking 0.06–0.08em.',
+  brandTypeRule2: 'CJK body: line-height 1.8, tracking 0.04em.',
+  brandTypeRule3: 'Never italicise or underline CJK for emphasis — use weight and spacing.',
+
+  brandVoiceTitle: 'Voice',
+  brandVoiceLede:
+    'Write as a scholarly institution — precise and measured, like an exhibition catalogue, never like advertising.',
+  brandVoiceDo: 'Do',
+  brandVoiceDont: 'Don’t',
+  brandVoiceDo1: 'Refer to the Society in the third person (“the Society”, 本會).',
+  brandVoiceDo2: 'Write cities and years bilingually — 臺北 · Taipei, 1997–2026.',
+  brandVoiceDo3: 'Set English eyebrows in capitals with wide tracking.',
+  brandVoiceDont1: 'No emoji or pictographs.',
+  brandVoiceDont2: 'No exclamation marks or inflated adjectives.',
+  brandVoiceDont3: 'Never write 東方 for 東洋.',
+
+  brandElementsTitle: 'Form elements',
+  brandElementsLede:
+    'Gold hairlines divide, corners stay small, shadows are faint and navy-tinted, and motion settles like ink — no bounce.',
+  brandHairline: 'Hairline',
+  brandRadius: 'Corner radius',
+  brandShadow: 'Elevation',
+  brandMotion: 'Motion',
+  brandMotionHover: 'Hover to preview',
+  brandSeal: 'Seal',
+  brandSealNote:
+    'The red 印 seal appears only at the foot of heroes and on artwork cards — never as a button or over text.',
+  brandIcons: 'Icons',
+  brandIconsNote: 'Lucide icons, stroke 1.5, 16–22px. Use arrow-up-right for direction.',
+
+  brandComponentsTitle: 'Components',
+  brandComponentsLede:
+    'These are the live site components; their colour and type come from the tokens above. Switch the theme to check dark mode.',
+  brandButtons: 'Buttons',
+  brandBadges: 'Badges',
+  brandInputs: 'Inputs',
+  brandCards: 'Cards',
+  brandBtnPrimary: 'Book a visit',
+  brandBtnSecondary: 'Membership',
+  brandBtnOutline: 'Journal',
+  brandBtnGhost: 'View more',
+  brandBadgeExhibition: 'Exhibition',
+  brandBadgeEvent: 'Event',
+  brandBadgeNotice: 'Notice',
+  brandInputLabel: 'Email',
+  brandCardPaperTitle: 'Annual open call',
+  brandCardPaperBody:
+    'Calling for works in calligraphy, literati painting and contemporary practice.',
+  brandCardInkTitle: 'International exchange',
+  brandCardInkBody: 'An exchange exhibition linking Seoul, Taipei, Tokyo and Beijing.',
+  brandCardArtwork: 'Artwork card (sample)',
+
+  brandImageryTitle: 'Imagery',
+  brandImageryLede:
+    'Use calligraphy subjects only — brushes, ink stones, ink on paper, seals, scrolls. Every photo takes one of three treatments and is never cropped mid-stroke.',
+  brandPhotoInk: 'Ink — heroes, text on image',
+  brandPhotoPaper: 'Paper — light sections, print',
+  brandPhotoWarm: 'Warm — editorial, no text',
+
+  brandSource: 'Token source',
+}
+
+export default brand

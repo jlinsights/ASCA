@@ -1,7 +1,6 @@
 import { reg, type LedgerRow, type RegSource } from '@/components/apply/apply-parts'
 import {
   BOOKING_URL,
-  CHAT_URL,
   EMAIL,
   FAX,
   KAKAO_CHAT_URL,
@@ -85,20 +84,14 @@ export interface Channel {
 
 /** 연락 창구 — 창구마다 "이럴 때"를 붙여 한 곳으로 몰리지 않게 한다 */
 export const CHANNELS: readonly Channel[] = [
+  // 실시간 상담은 카카오톡 채널 하나로 받는다 — 채널톡은 2026-11-01 에 뺐다.
   {
-    title: '실시간 온라인 상담',
-    value: '1년 365일',
+    title: '카카오톡 실시간 상담',
+    value: '동양서예 카카오채널 · 1년 365일',
     bestFor: '가장 빠릅니다. 대부분의 질문은 여기서 바로 답을 받습니다.',
-    href: CHAT_URL,
-    external: true,
-    recommended: true,
-  },
-  {
-    title: '카카오톡 채팅',
-    value: '동양서예 카카오채널',
-    bestFor: '카카오톡이 익숙하신 분',
     href: KAKAO_CHAT_URL,
     external: true,
+    recommended: true,
   },
   {
     title: '상담 예약',

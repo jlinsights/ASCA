@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef, useTransition } from 'react'
-import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useLocalizedHref, useRoutePath } from '@/lib/i18n/use-locale-path'
 import { AnimatePresence } from 'framer-motion'
 import { GalleryItem, GalleryCategory } from '@/lib/types/gallery/gallery-legacy'
 import {
@@ -38,7 +39,9 @@ export function nextGalleryQuery(current: string, updates: Record<string, string
 
 function useGalleryParams() {
   const router = useRouter()
-  const pathname = usePathname()
+  // 언어 접두사를 지킨 채 쿼리만 바꾼다(/en/notice?… → /en/notice?…)
+  const routePath = useRoutePath()
+  const localized = useLocalizedHref()
   const searchParams = useSearchParams()
 
   const year = searchParams.get('year') ?? 'all'
@@ -49,11 +52,11 @@ function useGalleryParams() {
 
   const setParams = useCallback(
     (updates: Record<string, string>) => {
-      router.push(`${pathname}?${nextGalleryQuery(searchParams.toString(), updates)}`, {
+      router.push(`${localized(routePath)}?${nextGalleryQuery(searchParams.toString(), updates)}`, {
         scroll: false,
       })
     },
-    [router, pathname, searchParams]
+    [router, routePath, localized, searchParams]
   )
 
   return { year, category, search, page, similar, setParams }

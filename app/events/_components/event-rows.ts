@@ -19,6 +19,8 @@ export interface EventRow {
   summary: string
   type: string
   typeLabel: string
+  /** 유형 칸 번역 키 — 없으면 evType_<type> */
+  typeLabelKey?: string
   phase: EventPhase
   year: number
   /** 'MM.DD' — 지난 행사 줄의 날짜 칸 */
@@ -32,6 +34,18 @@ export interface EventRow {
   link: EventLink | null
   /** 상세 주소 — 없으면 /events/{id} (정적 안내 페이지용) */
   href?: string
+}
+
+type Translate = (key: string) => string
+
+/** 유형 칸 글자 — 표에 없는 유형(키 그대로 돌아옴)은 한국어 원문 */
+export function eventTypeText(
+  row: Pick<EventRow, 'type' | 'typeLabel' | 'typeLabelKey'>,
+  t: Translate
+): string {
+  const key = row.typeLabelKey ?? `evType_${row.type}`
+  const text = t(key)
+  return text === key ? row.typeLabel : text
 }
 
 export function toEventRow(event: Event, today: string): EventRow {

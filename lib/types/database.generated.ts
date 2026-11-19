@@ -33,6 +33,124 @@ export type Database = {
         }
         Relationships: []
       }
+      artist_applications: {
+        Row: {
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_name_en: string | null
+          applicant_name_hanja: string | null
+          artist_id: string | null
+          awards_text: string | null
+          created_at: string
+          genres: string[]
+          id: string
+          match_method: string | null
+          matched_at: string | null
+          matched_by: string | null
+          membership_raw: string | null
+          pen_name: string | null
+          received_at: string
+          requested_grade: string
+          requested_grade_raw: string | null
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          route: string
+          route_raw: string | null
+          special_basis_raw: string | null
+          status: string
+          submitted_at: string
+          tally_form_id: string
+          tally_response_id: string
+          track: string
+          track_raw: string | null
+        }
+        Insert: {
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_name_en?: string | null
+          applicant_name_hanja?: string | null
+          artist_id?: string | null
+          awards_text?: string | null
+          created_at?: string
+          genres?: string[]
+          id?: string
+          match_method?: string | null
+          matched_at?: string | null
+          matched_by?: string | null
+          membership_raw?: string | null
+          pen_name?: string | null
+          received_at?: string
+          requested_grade?: string
+          requested_grade_raw?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          route?: string
+          route_raw?: string | null
+          special_basis_raw?: string | null
+          status?: string
+          submitted_at: string
+          tally_form_id: string
+          tally_response_id: string
+          track?: string
+          track_raw?: string | null
+        }
+        Update: {
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_name_en?: string | null
+          applicant_name_hanja?: string | null
+          artist_id?: string | null
+          awards_text?: string | null
+          created_at?: string
+          genres?: string[]
+          id?: string
+          match_method?: string | null
+          matched_at?: string | null
+          matched_by?: string | null
+          membership_raw?: string | null
+          pen_name?: string | null
+          received_at?: string
+          requested_grade?: string
+          requested_grade_raw?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          route?: string
+          route_raw?: string | null
+          special_basis_raw?: string | null
+          status?: string
+          submitted_at?: string
+          tally_form_id?: string
+          tally_response_id?: string
+          track?: string
+          track_raw?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'artist_applications_artist_id_fkey'
+            columns: ['artist_id']
+            isOneToOne: false
+            referencedRelation: 'artists'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_applications_matched_by_fkey'
+            columns: ['matched_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'artist_applications_reviewed_by_fkey'
+            columns: ['reviewed_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       artist_claim_requests: {
         Row: {
           account_id: string
@@ -710,6 +828,57 @@ export type Database = {
           },
         ]
       }
+      community_thread_images: {
+        Row: {
+          byte_size: number
+          created_at: string
+          height: number
+          id: string
+          position: number | null
+          storage_path: string
+          thread_id: string | null
+          uploader_id: string | null
+          width: number
+        }
+        Insert: {
+          byte_size: number
+          created_at?: string
+          height: number
+          id?: string
+          position?: number | null
+          storage_path: string
+          thread_id?: string | null
+          uploader_id?: string | null
+          width: number
+        }
+        Update: {
+          byte_size?: number
+          created_at?: string
+          height?: number
+          id?: string
+          position?: number | null
+          storage_path?: string
+          thread_id?: string | null
+          uploader_id?: string | null
+          width?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'community_thread_images_thread_id_fkey'
+            columns: ['thread_id']
+            isOneToOne: false
+            referencedRelation: 'community_threads'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'community_thread_images_uploader_id_fkey'
+            columns: ['uploader_id']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       community_threads: {
         Row: {
           author_id: string | null
@@ -849,6 +1018,85 @@ export type Database = {
             foreignKeyName: 'contest_entries_matched_by_fkey'
             columns: ['matched_by']
             isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      donus_member_links: {
+        Row: {
+          account_id: string
+          dues_history_checked: boolean
+          dues_paid_year: number | null
+          last_pay_date: string | null
+          lifecycle: number | null
+          link_source: string
+          linked_at: string
+          member_code: string
+          member_idx: number
+          synced_at: string
+        }
+        Insert: {
+          account_id: string
+          dues_history_checked?: boolean
+          dues_paid_year?: number | null
+          last_pay_date?: string | null
+          lifecycle?: number | null
+          link_source?: string
+          linked_at?: string
+          member_code: string
+          member_idx: number
+          synced_at?: string
+        }
+        Update: {
+          account_id?: string
+          dues_history_checked?: boolean
+          dues_paid_year?: number | null
+          last_pay_date?: string | null
+          lifecycle?: number | null
+          link_source?: string
+          linked_at?: string
+          member_code?: string
+          member_idx?: number
+          synced_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'donus_member_links_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: true
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      donus_signup_submissions: {
+        Row: {
+          account_id: string
+          is_new: boolean | null
+          last_attempt_at: string
+          member_idx: number | null
+          submitted_at: string | null
+        }
+        Insert: {
+          account_id: string
+          is_new?: boolean | null
+          last_attempt_at?: string
+          member_idx?: number | null
+          submitted_at?: string | null
+        }
+        Update: {
+          account_id?: string
+          is_new?: boolean | null
+          last_attempt_at?: string
+          member_idx?: number | null
+          submitted_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'donus_signup_submissions_account_id_fkey'
+            columns: ['account_id']
+            isOneToOne: true
             referencedRelation: 'account_profiles'
             referencedColumns: ['id']
           },
@@ -1159,6 +1407,65 @@ export type Database = {
           views?: number | null
         }
         Relationships: []
+      }
+      inquiries: {
+        Row: {
+          created_at: string
+          email: string | null
+          handled_at: string | null
+          handled_by: string | null
+          id: string
+          language: string
+          message: string
+          name: string
+          phone: string | null
+          plan: string | null
+          staff_note: string | null
+          status: string
+          subject: string | null
+          topic: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          language?: string
+          message: string
+          name: string
+          phone?: string | null
+          plan?: string | null
+          staff_note?: string | null
+          status?: string
+          subject?: string | null
+          topic: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          language?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          plan?: string | null
+          staff_note?: string | null
+          status?: string
+          subject?: string | null
+          topic?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'inquiries_handled_by_fkey'
+            columns: ['handled_by']
+            isOneToOne: false
+            referencedRelation: 'account_profiles'
+            referencedColumns: ['id']
+          },
+        ]
       }
       notice_comments: {
         Row: {
@@ -1536,6 +1843,15 @@ export type Database = {
         Returns: string
       }
       assert_claim_reviewer: { Args: { p_admin: string }; Returns: undefined }
+      community_create_thread: {
+        Args: {
+          p_author: string
+          p_body: string
+          p_image_ids?: string[]
+          p_title: string
+        }
+        Returns: string
+      }
       get_my_artist_ids: {
         Args: never
         Returns: {

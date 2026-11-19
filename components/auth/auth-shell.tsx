@@ -19,14 +19,14 @@ interface AuthArt {
 // 패널 글귀는 이미지에 실제로 쓰인 것(입춘첩) 또는 협회 표어만 쓴다.
 const ART: Record<AuthVariant, AuthArt> = {
   'sign-in': {
-    src: '/images/artworks/calligraphy-scene-3.jpg',
+    src: '/images/programs/calligraphy-scene-3.jpg',
     phrase: '立春大吉 建陽多慶',
     labelKey: 'authArtSignInLabel',
     glossKey: 'authArtSignInGloss',
     altKey: 'authArtSignInAlt',
   },
   'sign-up': {
-    src: '/images/artworks/calligraphy-scene-5.jpg',
+    src: '/images/programs/calligraphy-scene-5.jpg',
     phrase: '法古創新 · 人書俱老',
     labelKey: 'authArtSignUpLabel',
     glossKey: 'homeHeroGloss',
@@ -102,7 +102,7 @@ export function AuthShell({ variant, children, titleKey, ledeKey }: AuthShellPro
           alt={t(art.altKey)}
           fill
           priority
-          sizes='(max-width: 1024px) 0px, 50vw'
+          sizes='(max-width: 1023px) 100vw, 50vw'
           className='asca-auth__art-img'
         />
         <span className='asca-auth__seal' lang='zh-Hant' aria-hidden='true'>

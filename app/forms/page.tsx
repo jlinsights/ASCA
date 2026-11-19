@@ -6,9 +6,10 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { HeroFacts, PageHero } from '@/components/layout/page-hero'
 import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
-import { BOOKING_URL, CHAT_URL, OFFICE, formatAddress } from '@/lib/content/contact-info'
+import { BOOKING_URL, KAKAO_CHAT_URL, OFFICE, formatAddress } from '@/lib/content/contact-info'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/forms' },
   title: '문서·서식 | 동양서예협회',
   description:
     '동양서예협회의 공식 서식 자료를 다운로드할 수 있습니다. 회원가입 신청서, 작품출품 양식, 심사위원 지원서 등 필요한 모든 양식을 한곳에서 편리하게 이용하세요.',
@@ -107,7 +108,7 @@ const FORM_ITEMS: FormItem[] = [
     id: 'request-for-invited',
     title: '추천ㆍ초대작가 신청서',
     description:
-      '추천・초대작가 선임 규칙 제2조에 의거 추천작가증 및 초대작가증 발급 요청하실 때 필요한 신청서입니다.',
+      '추천·초대작가 선임 규정에 따른 자격심사(제2조·제3조)와 특별선임(제11조)을 신청할 때 쓰는 서식입니다. 정회원이 아닌 분의 특별선임 신청서는 입회원서를 겸합니다.',
     downloads: [
       {
         label: '온라인 신청서 입력',
@@ -273,7 +274,7 @@ export default function FormsPage() {
         actions={
           <>
             <Link
-              href={CHAT_URL}
+              href={KAKAO_CHAT_URL}
               target='_blank'
               className='inline-flex items-center gap-2 rounded-lg bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity'
             >

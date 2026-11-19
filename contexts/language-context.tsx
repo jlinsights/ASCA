@@ -3,21 +3,32 @@ import { log } from '@/lib/utils/logger'
 
 import type React from 'react'
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
+import { usePathname } from 'next/navigation'
 import {
   LANGUAGE_METADATA,
   SUPPORTED_LANGUAGES,
   DEFAULT_LANGUAGE,
   LANGUAGE_STORAGE_KEY,
-  detectBrowserLanguage,
   isValidLanguage,
   getLanguageMetadata,
-  translationLoader,
-  getTranslationSync,
 } from '@/lib/i18n'
+import {
+  AUTO_LOCALE_COOKIE,
+  clientLanguageFor,
+  HTML_LANG,
+  isLocalizedPath,
+  languageFromCookie,
+  localizePath,
+  LOCALE_COOKIE,
+  PREFIXED_LANGUAGES,
+  splitLocale,
+} from '@/lib/i18n/locale-routing'
 import type { Language, LanguageConfig, TranslationNamespaces } from '@/lib/i18n/types'
-// 동기 폴백용 정적 번역표. 비동기 캐시(translationLoader)는 기본 언어(ko)에서
-// 로드가 끝나도 다시 그리지 않아, 이 표 없이는 첫 렌더·SSR 에 키 이름이 새어 나간다.
-import { translations as staticTranslations } from '@/lib/i18n/translations'
+// 기본 언어(ko) 표만 번들에 싣는다 — SSR·첫 렌더가 한국어라 키 이름이 새지 않는다.
+// 다른 언어 표는 setLanguage 에서 받아 둔 뒤에 언어를 바꾼다(lib/i18n/locales).
+import { defaultLocaleTable, getLoadedLocale, loadLocale, registerLocale } from '@/lib/i18n/locales'
+import type { LocaleTable } from '@/lib/i18n/locales'
+import { navigateTo } from '@/lib/i18n/navigate'
 
 // 기존 호환성을 위한 타입
 type LanguageContextType = {
@@ -46,477 +57,95 @@ const defaultValue: LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType>(defaultValue)
 
-// 통합된 번역 데이터 (기존 호환성)
-const legacyTranslations: Record<Language, Record<string, string>> = {
-  ko: {
-    // Navigation
-    exhibition: '전시',
-    artworks: '작품',
-    artists: '작가',
-    events: '행사',
-    catalog: '도록',
-    about: '소개',
-    organization: '조직',
-    support: '지원',
-    brand: '브랜드',
-    language: '언어',
-    news: '소식',
-    search: '검색',
-    signIn: '로그인',
-    signUp: '회원가입',
-    menu: '메뉴',
-
-    // Exhibition submenu
-    currentExhibitions: '현재 전시',
-    upcomingExhibitions: '예정 전시',
-    pastExhibitions: '지난 전시',
-    onlineExhibitions: '온라인 전시',
-
-    // Artworks submenu
-    hangeulCalligraphy: '한글서예',
-    hanjaCalligraphy: '한자서예',
-    literatiPainting: '문인화',
-    inkPainting: '수묵화',
-    orientalPainting: '동양화',
-    folkPainting: '민화',
-    modernCalligraphy: '현대서예',
-    calligraphyArt: '캘리그라피',
-    sealEngraving: '전각',
-    woodEngraving: '서각',
-    photography: '사진',
-    video: '영상',
-
-    // Artists submenu
-    openCallArtists: '공모작가',
-    youngArtists: '청년작가',
-    recommendedArtists: '추천작가',
-    invitedArtists: '초대작가',
-
-    // Common
-    all: '전체',
-    category: '카테고리',
-    style: '스타일',
-    sort: '정렬',
-    featured: '추천순',
-    traditional: '전통',
-    contemporary: '현대',
-    modern: '모던',
-    available: '구매가능',
-    sold: '판매완료',
-    views: '조회',
-    likes: '좋아요',
-    signOut: '로그아웃',
-
-    // Home page
-    artGalleryExhibition: '동양서예협회',
-    journeyThroughArts: '正法의 계승, 創新의 조화',
-    aboutTitle: '소개',
-    aboutText:
-      '사단법인 동양서예협회는 正法의 계승 발전과 創新의 조화로운 구현을 통해 동양 서예 문화의 발전과 보급에 앞장서고 있습니다.',
-    gallerySpace: '갤러리 공간',
-    whereArtsBecome: '예술이 현실이 되는 곳',
-    ourSpace: '우리의 공간',
-    ourSpaceText:
-      '서울 성북구에 위치한 동양서예협회는 서예 문화를 체험하고 학습할 수 있는 최적의 환경을 제공합니다.',
-
-    // Artworks page
-    artCollection: '작품 컬렉션',
-    discoverMasterpieces: '명작을 발견하세요',
-    artworksDescription: '正法의 계승과 創新의 조화로 탄생한 동양 예술의 아름다움을 경험하세요',
-    searchPlaceholder: '작품명, 작가명, 태그로 검색...',
-
-    // Common UI
-    loading: '로딩 중...',
-    error: '오류가 발생했습니다',
-    retry: '다시 시도',
-    close: '닫기',
-    save: '저장',
-    cancel: '취소',
-    confirm: '확인',
-    delete: '삭제',
-    edit: '편집',
-    add: '추가',
-    remove: '제거',
-    submit: '제출',
-    reset: '초기화',
-
-    // 공지사항 (app/notice)
-    notice: '공지사항',
-    importantNotice: '중요 공지',
-    generalNotice: '일반 공지',
-    noticeInquiry: '공지사항 문의',
-    noticeInquiryText: '공지사항에 대해 궁금한 점은 협회 사무국으로 연락해 주세요.',
-    previous: '이전',
-    next: '다음',
-  },
-
-  en: {
-    // Navigation
-    exhibition: 'Exhibition',
-    artworks: 'Artworks',
-    artists: 'Artists',
-    events: 'Events',
-    catalog: 'Catalog',
-    about: 'About',
-    organization: 'Organization',
-    support: 'Support',
-    brand: 'Brand',
-    language: 'Language',
-    news: 'News',
-    search: 'Search',
-    signIn: 'Sign In',
-    signUp: 'Sign Up',
-    menu: 'Menu',
-
-    // Exhibition submenu
-    currentExhibitions: 'Current Exhibitions',
-    upcomingExhibitions: 'Upcoming Exhibitions',
-    pastExhibitions: 'Past Exhibitions',
-    onlineExhibitions: 'Online Exhibitions',
-
-    // Artworks submenu
-    hangeulCalligraphy: 'Hangeul Calligraphy',
-    hanjaCalligraphy: 'Hanja Calligraphy',
-    literatiPainting: 'Literati Painting',
-    inkPainting: 'Ink Painting',
-    orientalPainting: 'Oriental Painting',
-    folkPainting: 'Folk Painting',
-    modernCalligraphy: 'Modern Calligraphy',
-    calligraphyArt: 'Calligraphy Art',
-    sealEngraving: 'Seal Engraving',
-    woodEngraving: 'Wood Engraving',
-    photography: 'Photography',
-    video: 'Video',
-
-    // Artists submenu
-    openCallArtists: 'Open Call Artists',
-    youngArtists: 'Young Artists',
-    recommendedArtists: 'Recommended Artists',
-    invitedArtists: 'Invited Artists',
-
-    // Common
-    all: 'All',
-    category: 'Category',
-    style: 'Style',
-    sort: 'Sort',
-    featured: 'Featured',
-    traditional: 'Traditional',
-    contemporary: 'Contemporary',
-    modern: 'Modern',
-    available: 'Available',
-    sold: 'Sold',
-    views: 'Views',
-    likes: 'Likes',
-    signOut: 'Sign Out',
-
-    // Home page
-    artGalleryExhibition: 'Oriental Calligraphy Association',
-    journeyThroughArts: 'TRADITION AND MODERNITY, INCLUSION AND COMMUNICATION',
-    aboutTitle: 'About',
-    aboutText:
-      'The Asian Society of Calligraphic Arts (ASCA) leads the development and promotion of Oriental calligraphy culture through the harmonious implementation of tradition preservation and creative innovation.',
-    gallerySpace: 'Gallery Space',
-    whereArtsBecome: 'WHERE ARTS BECOME REALITY',
-    ourSpace: 'Our Space',
-    ourSpaceText:
-      'Located in Seongbuk-gu, Seoul, the Oriental Calligraphy Association provides the optimal environment for experiencing and learning calligraphy culture.',
-
-    // Artworks page
-    artCollection: 'Art Collection',
-    discoverMasterpieces: 'Discover Masterpieces',
-    artworksDescription:
-      'Experience the beauty of Oriental art born from the harmonious implementation of tradition preservation and creative innovation',
-    searchPlaceholder: 'Search by artwork title, artist name, tags...',
-
-    // Common UI
-    loading: 'Loading...',
-    error: 'An error occurred',
-    retry: 'Retry',
-    close: 'Close',
-    save: 'Save',
-    cancel: 'Cancel',
-    confirm: 'Confirm',
-    delete: 'Delete',
-    edit: 'Edit',
-    add: 'Add',
-    remove: 'Remove',
-    submit: 'Submit',
-    reset: 'Reset',
-
-    // Notices (app/notice)
-    notice: 'Notices',
-    importantNotice: 'Important',
-    generalNotice: 'General Notices',
-    noticeInquiry: 'Questions about notices',
-    noticeInquiryText: 'For questions about a notice, please contact the association office.',
-    previous: 'Previous',
-    next: 'Next',
-  },
-
-  ja: {
-    // Navigation
-    exhibition: '展示',
-    artworks: '作品',
-    artists: '作家',
-    events: '行事',
-    catalog: '図録',
-    about: '紹介',
-    organization: '組織',
-    support: '支援',
-    brand: 'ブランド',
-    language: '言語',
-    news: 'ニュース',
-    search: '検索',
-    signIn: 'ログイン',
-    signUp: '会員登録',
-    menu: 'メニュー',
-
-    // Exhibition submenu
-    currentExhibitions: '現在の展示',
-    upcomingExhibitions: '予定展示',
-    pastExhibitions: '過去の展示',
-    onlineExhibitions: 'オンライン展示',
-
-    // Artworks submenu
-    hangeulCalligraphy: 'ハングル書道',
-    hanjaCalligraphy: '漢字書道',
-    literatiPainting: '文人画',
-    inkPainting: '水墨画',
-    orientalPainting: '東洋画',
-    folkPainting: '民画',
-    modernCalligraphy: '現代書道',
-    calligraphyArt: 'カリグラフィー',
-    sealEngraving: '篆刻',
-    woodEngraving: '書刻',
-    photography: '写真',
-    video: '映像',
-
-    // Artists submenu
-    openCallArtists: '公募作家',
-    youngArtists: '青年作家',
-    recommendedArtists: '推薦作家',
-    invitedArtists: '招待作家',
-
-    // Common
-    all: '全体',
-    category: 'カテゴリー',
-    style: 'スタイル',
-    sort: '並び替え',
-    featured: 'おすすめ順',
-    traditional: '伝統',
-    contemporary: '現代',
-    modern: 'モダン',
-    available: '購入可能',
-    sold: '販売完了',
-    views: '閲覧',
-    likes: 'いいね',
-    signOut: 'ログアウト',
-
-    // Home page
-    artGalleryExhibition: '東洋書道協会',
-    journeyThroughArts: '正法の継承、創新の調和',
-    aboutTitle: '紹介',
-    aboutText:
-      '社団法人東洋書道協会は正法の継承発展と創新の調和ある実現を通じて東洋書道文化の発展と普及に先頭に立っています。',
-    gallerySpace: 'ギャラリー空間',
-    whereArtsBecome: '芸術が現実になる場所',
-    ourSpace: '私たちの空間',
-    ourSpaceText:
-      'ソウル城北区に位置する東洋書道協会は書道文化を体験し学習できる最適な環境を提供します。',
-
-    // Artworks page
-    artCollection: '作品コレクション',
-    discoverMasterpieces: '名作を発見しましょう',
-    artworksDescription: '正法の継承と創新の調和で誕生した東洋芸術の美しさを体験してください',
-    searchPlaceholder: '作品名、作家名、タグで検索...',
-
-    // Common UI
-    loading: '読み込み中...',
-    error: 'エラーが発生しました',
-    retry: '再試行',
-    close: '閉じる',
-    save: '保存',
-    cancel: 'キャンセル',
-    confirm: '確認',
-    delete: '削除',
-    edit: '編集',
-    add: '追加',
-    remove: '削除',
-    submit: '送信',
-    reset: 'リセット',
-
-    // お知らせ (app/notice)
-    notice: 'お知らせ',
-    importantNotice: '重要なお知らせ',
-    generalNotice: '一般のお知らせ',
-    noticeInquiry: 'お知らせに関するお問い合わせ',
-    noticeInquiryText: 'お知らせについてのご質問は、協会事務局までご連絡ください。',
-    previous: '前へ',
-    next: '次へ',
-  },
-
-  zh: {
-    // Navigation
-    exhibition: '展覽',
-    artworks: '藝術品',
-    artists: '藝術家',
-    events: '活動',
-    catalog: '目錄',
-    about: '關於',
-    organization: '組織',
-    support: '支持',
-    brand: '品牌',
-    language: '語言',
-    news: '新聞',
-    search: '搜索',
-    signIn: '登錄',
-    signUp: '註冊',
-    menu: '菜單',
-
-    // Exhibition submenu
-    currentExhibitions: '當前展覽',
-    upcomingExhibitions: '即將舉辦的展覽',
-    pastExhibitions: '過去的展覽',
-    onlineExhibitions: '在線展覽',
-
-    // Artworks submenu
-    hangeulCalligraphy: '韓文書法',
-    hanjaCalligraphy: '漢字書法',
-    literatiPainting: '文人畫',
-    inkPainting: '水墨畫',
-    orientalPainting: '東方畫',
-    folkPainting: '民畫',
-    modernCalligraphy: '現代書法',
-    calligraphyArt: '書法藝術',
-    sealEngraving: '篆刻',
-    woodEngraving: '書刻',
-    photography: '攝影',
-    video: '視頻',
-
-    // Artists submenu
-    openCallArtists: '公開徵集藝術家',
-    youngArtists: '青年藝術家',
-    recommendedArtists: '推薦藝術家',
-    invitedArtists: '邀請藝術家',
-
-    // Common
-    all: '全部',
-    category: '分類',
-    style: '風格',
-    sort: '排序',
-    featured: '推薦',
-    traditional: '傳統',
-    contemporary: '當代',
-    modern: '現代',
-    available: '可購買',
-    sold: '已售出',
-    views: '瀏覽',
-    likes: '點贊',
-    signOut: '退出登錄',
-
-    // Home page
-    artGalleryExhibition: '東方書法協會',
-    journeyThroughArts: '正法的傳承，創新的和諧',
-    aboutTitle: '關於',
-    aboutText:
-      '社團法人東方書法協會通過正法的傳承發展與創新的和諧實現，引領東方書法文化的發展與普及。',
-    gallerySpace: '畫廊空間',
-    whereArtsBecome: '藝術成爲現實的地方',
-    ourSpace: '我們的空間',
-    ourSpaceText: '位於首爾城北區的東方書法協會爲體驗和學習書法文化提供最佳環境。',
-
-    // Artworks page
-    artCollection: '藝術收藏',
-    discoverMasterpieces: '發現傑作',
-    artworksDescription: '體驗由正法傳承與創新和諧而誕生的東方藝術之美',
-    searchPlaceholder: '按作品標題、藝術家姓名、標籤搜索...',
-
-    // Common UI
-    loading: '加載中...',
-    error: '發生錯誤',
-    retry: '重試',
-    close: '關閉',
-    save: '保存',
-    cancel: '取消',
-    confirm: '確認',
-    delete: '刪除',
-    edit: '編輯',
-    add: '添加',
-    remove: '移除',
-    submit: '提交',
-    reset: '重置',
-
-    // 公告 (app/notice)
-    notice: '公告',
-    importantNotice: '重要公告',
-    generalNotice: '一般公告',
-    noticeInquiry: '公告諮詢',
-    noticeInquiryText: '如對公告有疑問，請聯繫協會祕書處。',
-    previous: '上一頁',
-    next: '下一頁',
-  },
+/** 방문자가 고른 언어(쿠키). proxy 도 이 값을 읽어 번역된 한국어 주소에서 그 언어 주소로 보낸다 */
+function readSavedLanguage(): Language | null {
+  const match = /(?:^|;\s*)asca-lang=([^;]*)/.exec(document.cookie)
+  return languageFromCookie(match ? decodeURIComponent(match[1]!) : null)
 }
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(DEFAULT_LANGUAGE)
+function saveLanguage(language: Language) {
+  const secure = window.location.protocol === 'https:' ? '; secure' : ''
+  document.cookie = `${LOCALE_COOKIE}=${language}; path=/; max-age=31536000; samesite=lax${secure}`
+}
+
+interface LanguageProviderProps {
+  children: React.ReactNode
+  /** 서버가 주소(/en·/ja·/zh)로 정한 언어. 첫 렌더가 서버 HTML 과 같아야 한다 */
+  initialLanguage?: Language
+  /** 한국어가 아니면 그 언어 표 — 첫 렌더 전에 받아 둔다 */
+  initialTable?: LocaleTable
+}
+
+/**
+ * 언어는 주소가 정한다(lib/i18n/locale-routing.ts). 예전엔 마운트 뒤 localStorage·브라우저 언어로 바꿔
+ * 서버 HTML 이 늘 한국어였다 — 검색엔진은 한국어만 봤다(2026-11-08 SEO 점검).
+ */
+export function LanguageProvider({
+  children,
+  initialLanguage = DEFAULT_LANGUAGE,
+  initialTable,
+}: LanguageProviderProps) {
+  // 렌더 중에(이펙트 전에) 표를 등록해야 첫 렌더의 t() 가 서버와 같은 문구를 낸다
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (initialTable) registerLocale(initialLanguage, initialTable)
+    return initialLanguage
+  })
   const [isLoading, setIsLoading] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const pathname = usePathname()
 
   // 언어 메타데이터 메모화
   const metadata = useMemo(() => getLanguageMetadata(language), [language])
 
-  // 언어 설정 함수 (최적화됨)
+  /** 표를 받은 뒤 화면 언어를 바꾼다(주소는 그대로) — 받기 전에 바꾸면 키 이름이 보인다 */
+  const applyLanguage = useCallback(async (next: Language) => {
+    setIsLoading(true)
+    try {
+      await loadLocale(next)
+      setLanguageState(next)
+      document.documentElement.lang = HTML_LANG[next]
+      document.documentElement.dir = getLanguageMetadata(next).dir
+    } catch (error) {
+      log.error('Failed to change language:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  /**
+   * 언어 선택 — 쿠키에 저장하고 그 언어의 주소로 간다. 서버가 그 언어로 다시 그리도록 전체 이동한다
+   * (루트 레이아웃의 <html lang> 과 첫 렌더 언어는 클라이언트 이동으로는 바뀌지 않는다).
+   * 번역 안 된 페이지는 주소가 한국어뿐이라, 이동 없이 머리말·꼬리말만 바꾼다.
+   */
   const setLanguage = useCallback(
     async (newLanguage: Language) => {
-      if (!isValidLanguage(newLanguage) || newLanguage === language) {
+      if (!isValidLanguage(newLanguage)) return
+      // 지금 보는 언어를 다시 골라도 선택으로 저장한다 — 안 그러면 첫 방문 홈 자동 판단이 그 선택을 무시한다
+      // (영어 브라우저로 /history 에서 한국어를 눌러도 홈이 /en 으로 갔다, Codex 리뷰 #265 P2)
+      saveLanguage(newLanguage)
+      if (newLanguage === language) return
+      const { pathname: current, search, hash } = window.location
+      const target = localizePath(current + search + hash, newLanguage)
+      if (target !== current + search + hash) {
+        navigateTo(target)
         return
       }
-
-      setIsLoading(true)
-
-      try {
-        // 번역 데이터 미리 로드
-        await translationLoader.preload(newLanguage)
-
-        // 언어 상태 업데이트
-        setLanguageState(newLanguage)
-
-        // 로컬 스토리지에 저장
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(LANGUAGE_STORAGE_KEY, newLanguage)
-          document.documentElement.lang = newLanguage
-          document.documentElement.dir = metadata.dir
-        }
-      } catch (error) {
-        log.error('Failed to change language:', error)
-      } finally {
-        setIsLoading(false)
-      }
+      await applyLanguage(newLanguage)
     },
-    [language, metadata.dir]
+    [language, applyLanguage]
   )
 
-  // 동기 번역 함수 (기존 호환성)
+  // 동기 번역 함수. 언어는 표를 받은 뒤에만 바뀌므로 현재 언어의 표는 늘 있다.
   const t = useCallback(
-    (key: string): string => {
-      // 새로운 시스템에서 먼저 시도
-      const cached = getTranslationSync(language, key)
-      if (cached !== key) {
-        return cached
-      }
-
-      // 기존 번역 데이터에서 폴백
-      return legacyTranslations[language]?.[key] || staticTranslations[language]?.[key] || key
-    },
+    (key: string): string => (getLoadedLocale(language) ?? defaultLocaleTable)[key] || key,
     [language]
   )
 
-  // 비동기 번역 함수 (새로운 기능)
+  // 비동기 번역 함수 (호환용). 표가 언어 단위로 하나라 namespace 는 쓰지 않는다.
   const tAsync = useCallback(
-    async (key: string, namespace: keyof TranslationNamespaces = 'common'): Promise<string> => {
+    async (key: string, _namespace?: keyof TranslationNamespaces): Promise<string> => {
       try {
-        const translations = await translationLoader.load(language, namespace)
-        return translations[key] || t(key)
+        return (await loadLocale(language))[key] || key
       } catch (error) {
         log.warn('Async translation failed:', error)
         return t(key)
@@ -525,33 +154,48 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [language, t]
   )
 
-  // 초기화
   useEffect(() => {
     setIsClient(true)
+  }, [])
 
-    // 클라이언트에서만 localStorage 접근
-    if (typeof window !== 'undefined') {
-      const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) as Language
-      const detectedLanguage = savedLanguage || detectBrowserLanguage()
-
-      if (isValidLanguage(detectedLanguage) && detectedLanguage !== language) {
-        setLanguage(detectedLanguage)
-      }
-
-      // HTML 속성 설정
-      document.documentElement.lang = language
-      document.documentElement.dir = metadata.dir
-    }
-  }, [language, metadata.dir, setLanguage])
-
-  // 언어 변경 시 번역 데이터 프리로드
+  // 예전 저장값(localStorage) → 쿠키로 한 번 옮긴다. 영어를 골라 두었던 방문자가 한국어로 떨어지지 않게.
+  // 옛 값은 첫 로드에 지워지므로, 옛 값이 남아 있는데 쿠키가 있다면 그 쿠키는 이번 요청에서 서버가 단 것이다
+  // (첫 방문 자동 판단이나 언어 주소 진입). 방문자가 직접 고른 옛 값이 그보다 앞선다(Codex 리뷰 #265 P2)
   useEffect(() => {
-    if (isClient) {
-      translationLoader
-        .preload(language)
-        .catch(error => log.warn('Translation preload failed:', error))
+    // 자동 판단 표시는 한 번만 본다 — 읽고 바로 지운다
+    const autoRedirected = /(?:^|;\s*)asca-lang-auto=1/.test(document.cookie)
+    if (autoRedirected) document.cookie = `${AUTO_LOCALE_COOKIE}=; path=/; max-age=0`
+    try {
+      const legacy = localStorage.getItem(LANGUAGE_STORAGE_KEY)
+      if (!legacy) return
+      localStorage.removeItem(LANGUAGE_STORAGE_KEY)
+      // 한국어 선택(ko)도 옮긴다 — 영어 브라우저로 /en 에 자동으로 온 한국어 선택자를 한국어 홈으로 돌린다
+      const saved = languageFromCookie(legacy)
+      if (!saved) return
+      const { pathname: current, search, hash } = window.location
+      const split = splitLocale(current)
+      // 직접 연 언어 주소(/en/… — 공유 링크·검색 결과)는 주소의 언어가 이긴다. 쿠키도 그 언어로 둬야
+      // 본문의 한국어 주소 링크를 눌러도 진입 언어가 유지된다(Codex 리뷰 #265 P2). 옛 값은 버린다
+      if (split.prefixed && !autoRedirected) return
+      if (readSavedLanguage() !== saved) saveLanguage(saved)
+      // 한국어 번역 주소, 또는 첫 방문 자동 판단이 보낸 다른 언어의 홈이면 옛 선택 언어로 옮긴다
+      const autoHome = split.prefixed && split.path === '/' && split.language !== saved
+      const koreanPage = !split.prefixed && isLocalizedPath(current) && saved !== 'ko'
+      if (koreanPage || autoHome) {
+        navigateTo(localizePath(split.path + search + hash, saved), { replace: true })
+      }
+    } catch {
+      // 저장소를 못 쓰는 브라우저(사생활 보호 모드 등)는 넘어간다
     }
-  }, [language, isClient])
+  }, [])
+
+  // 클라이언트 이동으로 주소가 바뀌면 화면 언어를 주소에 맞춘다. usePathname 은 rewrite 때 내부 주소를
+  // 줄 수 있어(Next 문서 use-pathname "rewrites"), 브라우저의 실제 주소(window.location)로 판단한다
+  useEffect(() => {
+    const next = clientLanguageFor(window.location.pathname, readSavedLanguage())
+    if (next !== language) void applyLanguage(next)
+    // language 가 바뀌어도 다시 돈다 — 그때는 주소·쿠키가 이미 같은 언어라 아무것도 하지 않는다
+  }, [pathname, language, applyLanguage])
 
   const contextValue = useMemo(
     (): LanguageContextType => ({

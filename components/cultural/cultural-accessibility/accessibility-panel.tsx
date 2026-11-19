@@ -9,7 +9,6 @@ import {
   Plus,
   Moon,
   Sun,
-  Contrast,
   Focus,
   Volume2,
   Keyboard,
@@ -160,7 +159,6 @@ export function AccessibilityPanel({ settings, updateSetting }: AccessibilityPan
               {[
                 { value: 'light', icon: Sun, label: 'Light' },
                 { value: 'dark', icon: Moon, label: 'Dark' },
-                { value: 'auto', icon: Contrast, label: 'Auto' },
               ].map(({ value, icon: Icon, label }) => (
                 <Button
                   key={value}

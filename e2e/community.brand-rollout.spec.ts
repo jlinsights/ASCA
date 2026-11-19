@@ -3,7 +3,7 @@
  *
  * Plan: docs/01-plan/features/asca-community-page-rollout.plan.md
  * Design: docs/02-design/features/asca-community-page-rollout.design.md §7
- * Parent: e2e/home.brand-rollout.spec.ts (LanguageContext 'asca-language' 패턴)
+ * 언어는 주소로 고른다(/en/community 등 — lib/i18n/locale-routing.ts)
  *
  * 4언어 × 5영역 visible + SealMark 인주색 + OQ#2 placeholder 안전동작 + 정회원 분기 면적 < 15%.
  * 시각 회귀 baseline은 분리 사이클 `asca-homepage-brand-visual-regression-baseline`.
@@ -26,10 +26,8 @@ const SECTION_HEADINGS: ReadonlyArray<{
 ]
 
 async function gotoCommunityWithLanguage(page: Page, language: Language) {
-  await page.addInitScript(lang => {
-    window.localStorage.setItem('asca-language', lang)
-  }, language)
-  await page.goto('/community')
+  // 언어는 주소가 정한다(lib/i18n/locale-routing.ts) — 한국어는 접두사 없이, 나머지는 /en·/ja·/zh
+  await page.goto(language === 'ko' ? '/community' : `/${language}/community`)
 }
 
 test.describe('community / brand-rollout — 4언어 × 5영역 회귀', () => {

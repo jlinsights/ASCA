@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { SkipLink } from '../skip-link'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 afterEach(() => {
   window.localStorage.clear()
@@ -14,7 +15,7 @@ describe('SkipLink', () => {
     ['ja', '本文へスキップ'],
     ['zh', '跳至主要內容'],
   ])('%s', async (lang, label) => {
-    window.localStorage.setItem('asca-language', lang)
+    setTestLanguage(lang)
     render(
       <LanguageProvider>
         <SkipLink />

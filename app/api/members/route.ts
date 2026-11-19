@@ -1,20 +1,14 @@
 /**
- * Enhanced Members API Route
+ * Members API Route
  *
- * This file demonstrates the new backend architecture patterns:
- * - Input validation with Zod
- * - Standardized API responses
- * - Redis-based rate limiting
- * - Database connection pooling
- * - Proper error handling
- *
- * To use this: rename to route.ts (backup the old one first)
+ * 회원 명단은 개인정보(생년월일·연락처·주소·비상연락처)를 담고 있으므로
+ * 조회는 관리자(aal2)만 가능하고, 응답에는 MEMBER_LIST_COLUMNS 에 적힌 열만 담는다.
+ * 회원 생성은 아직 구현되지 않았다(501). E2E(PLAYWRIGHT_BASE_URL) 분기는 고정 가짜 데이터만 다룬다.
  */
-
 import { NextRequest } from 'next/server'
 import { db } from '@/lib/db'
 import { members } from '@/lib/db/schema'
-import { eq, or, like, desc, asc, count } from 'drizzle-orm'
+import { and, eq, or, like, desc, asc, count, type SQL } from 'drizzle-orm'
 import {
   memberSearchSchema,
   memberStatusSchema,
@@ -22,11 +16,11 @@ import {
   validateSearchParams,
   validateRequestBody,
   type MemberSearchParams,
-  type CreateMemberDTO,
 } from '@/lib/api/validators'
 import { ApiResponse, handleApiError } from '@/lib/api/response'
 import { rateLimit, RateLimitPresets } from '@/lib/security/rate-limit'
 import { withPerformanceLog } from '@/lib/db'
+import { requireAdminAuth } from '@/lib/auth/middleware'
 import { z } from 'zod'
 
 const isE2ETest = Boolean(process.env.PLAYWRIGHT_BASE_URL)
@@ -142,6 +136,46 @@ const writeLimiter = rateLimit({
 })
 
 /**
+ * 관리자 명단에 내보내는 열. 생년월일·연락처·주소·비상연락처는 일부러 뺐다.
+ */
+const MEMBER_LIST_COLUMNS = {
+  id: members.id,
+  membershipNumber: members.membershipNumber,
+  fullName: members.fullName,
+  fullNameKo: members.fullNameKo,
+  fullNameEn: members.fullNameEn,
+  status: members.status,
+  tierId: members.tierId,
+  tierLevel: members.tierLevel,
+  joinDate: members.joinDate,
+  lastActivityDate: members.lastActivityDate,
+  createdAt: members.createdAt,
+  updatedAt: members.updatedAt,
+}
+
+const SORT_COLUMNS = {
+  createdAt: members.createdAt,
+  updatedAt: members.updatedAt,
+  joinedDate: members.joinDate,
+  lastActive: members.lastActivityDate,
+  // members 테이블에는 email 열이 없다(users 테이블에 있다). 가입일로 정렬한다.
+  email: members.joinDate,
+} satisfies Record<MemberSearchParams['sortBy'], unknown>
+
+/** 검색·상태·등급 조건을 하나의 WHERE 로 묶는다. 목록과 개수가 같은 조건을 쓴다. */
+function buildMemberFilter(params: MemberSearchParams): SQL | undefined {
+  const conditions: SQL[] = []
+  if (params.query) {
+    const pattern = `%${params.query}%`
+    const nameMatch = or(like(members.fullName, pattern), like(members.fullNameKo, pattern))
+    if (nameMatch) conditions.push(nameMatch)
+  }
+  if (params.status) conditions.push(eq(members.status, params.status))
+  if (params.level) conditions.push(eq(members.tierId, params.level))
+  return conditions.length > 0 ? and(...conditions) : undefined
+}
+
+/**
  * GET /api/members - List members with search and pagination
  */
 export async function GET(request: NextRequest) {
@@ -190,89 +224,50 @@ export async function GET(request: NextRequest) {
     return e2eMembersResponse(membersList, parsed.page, parsed.limit)
   }
 
+  const admin = await requireAdminAuth(request)
+  if (!admin) return ApiResponse.unauthorized('관리자 인증이 필요합니다')
+
   // Apply rate limiting
   const rateLimitResponse = await readLimiter.check(request)
   if (rateLimitResponse) return rateLimitResponse
 
   try {
-    // Validate and parse query parameters
     const { searchParams } = new URL(request.url)
     const params = validateSearchParams(searchParams, memberSearchSchema)
 
-    // Build query with Drizzle ORM
     const result = await withPerformanceLog('members.list', async () => {
-      let query = db.select().from(members)
-
-      // Apply search filter
-      // Apply search filter
-      if (params.query) {
-        query = query.where(
-          or(
-            like(members.fullName, `%${params.query}%`),
-            like(members.fullNameKo, `%${params.query}%`)
-            // like(members.email, `%${params.query}%`) // Email is in users table, requires join
-          )
-        ) as typeof query
-      }
-
-      // Apply status filter
-      if (params.status) {
-        query = query.where(eq(members.status, params.status)) as typeof query
-      }
-
-      // Apply level filter
-      if (params.level) {
-        query = query.where(eq(members.tierId, params.level)) as typeof query
-      }
-
-      // Get total count
-      const countQuery = db
-        .select({ count: count() })
-        .from(members)
-        .where(
-          params.query
-            ? or(
-                like(members.fullName, `%${params.query}%`),
-                like(members.fullNameKo, `%${params.query}%`)
-                // like(members.email, `%${params.query}%`)
-              )
-            : undefined
-        )
-
-      const [totalResult] = await countQuery
-      const total = totalResult?.count || 0
-
-      // Apply sorting
-      const sortColumn = members[params.sortBy as keyof typeof members] || members.joinDate
-      query = query.orderBy(
-        params.sortOrder === 'asc' ? asc(sortColumn as any) : desc(sortColumn as any)
-      ) as typeof query
-
-      // Apply pagination
+      const where = buildMemberFilter(params)
+      const sortColumn = SORT_COLUMNS[params.sortBy]
       const offset = (params.page - 1) * params.limit
-      query = query.limit(params.limit).offset(offset) as typeof query
 
-      // Execute query
-      const data = await query
+      const [data, [totalResult]] = await Promise.all([
+        db
+          .select(MEMBER_LIST_COLUMNS)
+          .from(members)
+          .where(where)
+          .orderBy(params.sortOrder === 'asc' ? asc(sortColumn) : desc(sortColumn))
+          .limit(params.limit)
+          .offset(offset),
+        db.select({ count: count() }).from(members).where(where),
+      ])
 
-      return { data, total }
+      return { data, total: totalResult?.count || 0 }
     })
 
-    // Return paginated response
     return ApiResponse.paginated(result.data, params.page, params.limit, result.total)
   } catch (error) {
-    // Handle validation errors
     if (error instanceof z.ZodError) {
       return ApiResponse.validationError('Invalid query parameters', error.format())
     }
-
-    // Handle all other errors
     return handleApiError(error)
   }
 }
 
 /**
- * POST /api/members - Create a new member
+ * POST /api/members - 회원 생성 (미구현)
+ *
+ * 이전 구현은 아무것도 저장하지 않고 "mock-id" 로 성공(201)을 돌려줬다.
+ * 실제 저장이 생길 때까지 관리자 인증과 입력 검증 뒤 501 을 돌려준다.
  */
 export async function POST(request: NextRequest) {
   if (isE2ETest) {
@@ -313,114 +308,20 @@ export async function POST(request: NextRequest) {
     })
   }
 
+  const admin = await requireAdminAuth(request)
+  if (!admin) return ApiResponse.unauthorized('관리자 인증이 필요합니다')
+
   // Apply rate limiting (stricter for write operations)
   const rateLimitResponse = await writeLimiter.check(request)
   if (rateLimitResponse) return rateLimitResponse
 
   try {
-    // Validate request body
-    const body = await validateRequestBody(request, createMemberSchema)
-
-    // Check if email already exists
-    const existing = await withPerformanceLog('members.checkEmail', async () => {
-      /*
-      return await db
-        .select()
-        .from(members)
-        .where(eq(members.email, body.email))
-        .limit(1);
-      */
-      return []
-    })
-
-    if (existing.length > 0) {
-      return ApiResponse.conflict('Email already exists', {
-        field: 'email',
-        value: body.email,
-      })
-    }
-
-    // Mock implementation for build success
-    /*
-    const [newMember] = await withPerformanceLog('members.create', async () => {
-      return await db
-        .insert(members)
-        .values([{
-          ...body,
-        }])
-        .returning();
-    });
-    */
-    const newMember = {
-      id: 'mock-id',
-      ...body,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
-
-    // Return created member
-    return ApiResponse.created(newMember, {
-      message: 'Member created successfully',
-    })
+    await validateRequestBody(request, createMemberSchema)
+    return ApiResponse.error('회원 생성은 아직 지원하지 않습니다', 'NOT_IMPLEMENTED', 501)
   } catch (error) {
-    // Handle validation errors
     if (error instanceof z.ZodError) {
       return ApiResponse.validationError('Invalid request body', error.format())
     }
-
-    // Handle all other errors
     return handleApiError(error)
   }
-}
-
-/**
- * Example: Enhanced member search with multiple filters
- * This could be a separate endpoint like /api/members/search
- */
-async function searchMembers(params: MemberSearchParams) {
-  const result = await withPerformanceLog('members.advancedSearch', async () => {
-    let query = db.select().from(members)
-
-    // Multiple search conditions
-    const conditions = []
-
-    if (params.query) {
-      conditions.push(
-        or(
-          like(members.fullName, `%${params.query}%`),
-          like(members.fullNameKo, `%${params.query}%`)
-        )
-      )
-    }
-
-    if (params.status) {
-      conditions.push(eq(members.status, params.status))
-    }
-
-    if (params.level) {
-      conditions.push(eq(members.tierId, params.level))
-    }
-
-    // Apply all conditions
-    if (conditions.length > 0) {
-      query = query.where(
-        conditions.length === 1 ? conditions[0] : or(...conditions)
-      ) as typeof query
-    }
-
-    // Get total count
-    const [totalResult] = await db.select({ count: count() }).from(query.as('filtered_members'))
-    const total = totalResult?.count || 0
-
-    // Apply sorting and pagination
-    const sortColumn = members[params.sortBy as keyof typeof members]
-    const data = await query
-      .orderBy(params.sortOrder === 'asc' ? asc(sortColumn as any) : desc(sortColumn as any))
-      .limit(params.limit)
-      .offset((params.page - 1) * params.limit)
-
-    return { data, total }
-  })
-
-  return result
 }

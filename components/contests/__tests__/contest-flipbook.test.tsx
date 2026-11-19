@@ -1,9 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { CONTEST_FLIPBOOK_URL, ContestFlipbook } from '../contest-flipbook'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 function renderFlipbook(lang = 'ko') {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <ContestFlipbook />

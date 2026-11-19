@@ -98,3 +98,59 @@ it.each(['asca-main.vercel.app', 'asca-main-git-auth-jlinsights-projects.vercel.
     }
   }
 )
+
+describe('언어 주소', () => {
+  it('/en/history 는 접두사를 뗀 주소와 언어를 세션 갱신에 넘긴다', async () => {
+    jest.mocked(refreshSupabaseSession).mockClear()
+    await proxy(new NextRequest('https://asca.example/en/history'))
+    const [, options] = jest.mocked(refreshSupabaseSession).mock.calls[0]!
+    expect(options?.language).toBe('en')
+    expect(options?.rewrite?.pathname).toBe('/history')
+  })
+
+  it('언어 주소로 들어오면 그 언어를 쿠키로 기억한다 — 본문의 한국어 주소 링크를 눌러도 언어를 잃지 않게', async () => {
+    const response = await proxy(new NextRequest('https://asca.example/en'))
+    expect(response.cookies.get('asca-lang')?.value).toBe('en')
+    const other = await proxy(
+      new NextRequest('https://asca.example/ja/history', { headers: { cookie: 'asca-lang=en' } })
+    )
+    expect(other.cookies.get('asca-lang')?.value).toBe('ja')
+  })
+
+  it('이미 같은 언어 쿠키면 다시 쓰지 않고, 한국어 주소는 쿠키를 건드리지 않는다', async () => {
+    const same = await proxy(
+      new NextRequest('https://asca.example/en/history', { headers: { cookie: 'asca-lang=en' } })
+    )
+    expect(same.cookies.get('asca-lang')).toBeUndefined()
+    const korean = await proxy(new NextRequest('https://asca.example/history'))
+    expect(korean.cookies.get('asca-lang')).toBeUndefined()
+  })
+
+  it('한국어 주소는 rewrite·언어 없이 넘긴다', async () => {
+    jest.mocked(refreshSupabaseSession).mockClear()
+    await proxy(new NextRequest('https://asca.example/history'))
+    expect(jest.mocked(refreshSupabaseSession).mock.calls[0]![1]).toEqual({})
+  })
+
+  it('/en/profile 은 한국어 주소로 먼저 보낸다 — 접두사로 로그인 검사를 우회하지 못한다', async () => {
+    const response = await proxy(new NextRequest('https://asca.example/en/profile'))
+    expect(response.status).toBe(307)
+    expect(new URL(response.headers.get('location')!).pathname).toBe('/profile')
+  })
+
+  it('첫 방문 홈 자동 이동에만 표시 쿠키를 단다 — 다른 리다이렉트에는 없다', async () => {
+    const first = await proxy(
+      new NextRequest('https://asca.example/', {
+        headers: {
+          'user-agent': 'Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36',
+          'accept-language': 'ja-JP',
+        },
+      })
+    )
+    expect(first.status).toBe(307)
+    expect(new URL(first.headers.get('location')!).pathname).toBe('/ja')
+    expect(first.cookies.get('asca-lang-auto')?.value).toBe('1')
+    const other = await proxy(new NextRequest('https://asca.example/en/profile'))
+    expect(other.cookies.get('asca-lang-auto')).toBeUndefined()
+  })
+})

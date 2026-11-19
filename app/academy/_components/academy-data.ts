@@ -1,4 +1,4 @@
-import { CHAT_URL, PHONE } from '@/lib/content/contact-info'
+import { KAKAO_CHAT_URL, PHONE } from '@/lib/content/contact-info'
 
 /**
  * 강좌 페이지의 사실 데이터.
@@ -403,6 +403,6 @@ export const SAC_INSTRUCTOR_COUNT = new Set(SAC_CLASSES.map(item => item.instruc
 
 export const ACADEMY_LINKS = {
   booking: 'https://cal.com/orientalcalligraphy/academy',
-  chat: CHAT_URL,
+  chat: KAKAO_CHAT_URL,
   phone: PHONE.display,
 } as const

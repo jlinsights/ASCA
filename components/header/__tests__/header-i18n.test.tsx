@@ -3,11 +3,11 @@ import userEvent from '@testing-library/user-event'
 import { LanguageProvider } from '@/contexts/language-context'
 import { Header } from '../header'
 import { HeaderAuthSection } from '../header-auth-section'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 jest.mock('next/navigation', () => ({ usePathname: () => '/' }))
 jest.mock('../header-mobile-auth', () => ({ HeaderMobileAuth: () => null }))
 jest.mock('../../theme-toggle', () => ({ ThemeToggle: () => null }))
-jest.mock('../../theme-transition', () => ({ ThemeTransition: () => null }))
 jest.mock('../../brand/logo', () => ({ Logo: () => null }))
 jest.mock('@/components/auth/session-provider', () => ({
   useAccount: () => ({
@@ -21,7 +21,7 @@ jest.mock('@/components/auth/session-provider', () => ({
 }))
 
 function renderWithLanguage(lang: string, ui: React.ReactElement) {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(<LanguageProvider>{ui}</LanguageProvider>)
 }
 
@@ -44,9 +44,13 @@ describe('Header — 메뉴 번역', () => {
   it('en: 메뉴·하위 메뉴·검색이 영어로 바뀐다', async () => {
     renderWithLanguage('en', <Header transparentOnTop />)
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
-    for (const name of ['About', 'Artists', 'Artworks', 'Exhibitions', 'Competitions', 'News']) {
+    for (const name of ['About', 'Exhibitions & Contests', 'Artists & Artworks', 'News']) {
       expect(within(nav).getByRole('link', { name: new RegExp(`^${name}`) })).toBeInTheDocument()
     }
+    expect(within(nav).getByRole('menuitem', { name: 'Artworks' })).toHaveAttribute(
+      'href',
+      '/artworks'
+    )
     expect(within(nav).getByRole('menuitem', { name: 'Current' })).toBeInTheDocument()
     expect(within(nav).getByRole('link', { name: 'Search' })).toBeInTheDocument()
     // 링크 주소(쿼리값)는 언어와 무관하게 그대로다 — /artists 필터 파라미터 이름을 쓴다
@@ -54,6 +58,23 @@ describe('Header — 메뉴 번역', () => {
       'href',
       `/artists?membershipType=${encodeURIComponent('초대작가')}`
     )
+  })
+
+  it('전시·공모 드롭다운은 전시·공모 두 칸에 하위 메뉴를 나눠 담는다', async () => {
+    renderWithLanguage('ko', <Header transparentOnTop />)
+    const nav = await screen.findByRole('navigation', { name: '주 메뉴' })
+    const menu = within(nav).getByRole('menu', { name: '전시·공모 하위 메뉴' })
+    const exhibitions = within(menu).getByRole('group', { name: '전시' })
+    const contests = within(menu).getByRole('group', { name: '공모' })
+    expect(within(exhibitions).getByRole('menuitem', { name: '현재 전시' })).toHaveAttribute(
+      'href',
+      '/exhibitions/current'
+    )
+    expect(within(contests).getByRole('menuitem', { name: '출품원서' })).toHaveAttribute(
+      'href',
+      '/application'
+    )
+    expect(within(exhibitions).queryByRole('menuitem', { name: '출품원서' })).toBeNull()
   })
 
   it('ja: 로그인·회원가입 버튼이 일본어로 바뀐다', async () => {

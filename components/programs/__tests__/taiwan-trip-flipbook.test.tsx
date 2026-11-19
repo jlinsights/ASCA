@@ -1,9 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { LanguageProvider } from '@/contexts/language-context'
 import { TAIWAN_TRIP_FLIPBOOK_URL, TaiwanTripFlipbook } from '../taiwan-trip-flipbook'
+import { setTestLanguage } from '@/lib/i18n/testing'
 
 function renderFlipbook(lang = 'ko') {
-  window.localStorage.setItem('asca-language', lang)
+  setTestLanguage(lang)
   return render(
     <LanguageProvider>
       <TaiwanTripFlipbook />

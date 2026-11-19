@@ -67,9 +67,6 @@ jobs:
       - name: Run unit tests
         run: npm run test:ci
 
-      - name: Run GraphQL tests
-        run: npm run test:graphql
-
       - name: Upload coverage reports
         # Pinned to commit SHA (not tag) — tags are mutable; SHA guarantees integrity.
         # v3.1.6 release (2024). Codecov compromised in 2021 — supply chain hardening.

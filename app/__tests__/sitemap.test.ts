@@ -26,6 +26,11 @@ jest.mock('@/lib/supabase', () => ({
   ensureSupabaseAdmin: (...args: unknown[]) => adminFactory(...args),
 }))
 
+let notices: () => Promise<unknown[]> = async () => []
+let events: () => Promise<unknown[]> = async () => []
+jest.mock('@/lib/notices/notices-data', () => ({ listPublishedNotices: () => notices() }))
+jest.mock('@/lib/events/events-data', () => ({ listPublishedEvents: () => events() }))
+
 import sitemap from '../sitemap'
 
 const BASE = 'https://orientalcalligraphy.org'
@@ -36,6 +41,8 @@ beforeEach(() => {
   pages = []
   anonClient.from.mockClear()
   adminFactory.mockClear()
+  notices = async () => []
+  events = async () => []
 })
 
 describe('sitemap', () => {
@@ -47,11 +54,15 @@ describe('sitemap', () => {
   test('공개 작가 상세를 anon 클라이언트로 읽어 싣고, 1,000행씩 끝까지 넘긴다', async () => {
     const first = Array.from({ length: 1000 }, (_, i) => ({
       id: `00000000-0000-4000-8000-${String(i).padStart(12, '0')}`,
+      slug: null,
       updated_at: '2026-10-01T00:00:00Z',
     }))
     pages = [
       { data: first, error: null },
-      { data: [{ id: 'aaaaaaaa-0000-4000-8000-000000000001', updated_at: null }], error: null },
+      {
+        data: [{ id: 'aaaaaaaa-0000-4000-8000-000000000001', slug: null, updated_at: null }],
+        error: null,
+      },
     ]
     const entries = await sitemap()
     expect(anonClient.from).toHaveBeenCalledWith('artists')
@@ -66,11 +77,65 @@ describe('sitemap', () => {
     expect(artist?.lastModified).toEqual(new Date('2026-10-01T00:00:00Z'))
   })
 
+  test('작가 주소는 상세 페이지 canonical 과 같은 slug 로 싣는다 (slug 가 없으면 uuid)', async () => {
+    pages = [
+      {
+        data: [
+          {
+            id: 'bbbbbbbb-0000-4000-8000-000000000001',
+            slug: 'liu-zhen-jiang',
+            updated_at: null,
+          },
+        ],
+        error: null,
+      },
+    ]
+    const entries = await sitemap()
+    expect(urls(entries)).toContain(`${BASE}/artists/liu-zhen-jiang`)
+    expect(urls(entries)).not.toContain(`${BASE}/artists/bbbbbbbb-0000-4000-8000-000000000001`)
+  })
+
   test('DB 오류면 작가 없이 고정 페이지·블로그만 낸다 (빌드를 죽이지 않는다)', async () => {
     pages = [{ data: null, error: { message: 'boom' } }]
     const entries = await sitemap()
     expect(urls(entries)).toContain(BASE)
-    expect(urls(entries).some(u => u.startsWith(`${BASE}/artists/`))).toBe(false)
+    // 작가 상세(/artists/<slug>)만 빠져야 한다. /artists/homepages 는 DB 와 무관한 고정 페이지다
+    const artistDetails = urls(entries).filter(
+      u => u.startsWith(`${BASE}/artists/`) && u !== `${BASE}/artists/homepages`
+    )
+    expect(artistDetails).toEqual([])
+    expect(urls(entries)).toContain(`${BASE}/artists/homepages`)
     expect(urls(entries)).toContain(`${BASE}/blog/${localPosts[0]!.id}`)
+  })
+
+  test('공지·행사·FAQ 목록과 공개 공지·행사 상세를 싣는다', async () => {
+    notices = async () => [
+      { id: 'n1', updated_at: '2026-11-01T00:00:00Z', published_at: '2026-10-01T00:00:00Z' },
+    ]
+    events = async () => [{ id: 'e1', updated_at: '2026-09-01T00:00:00Z' }]
+    const entries = await sitemap()
+    for (const path of ['/notice', '/events', '/faq', '/notice/n1', '/events/e1'])
+      expect(urls(entries)).toContain(`${BASE}${path}`)
+    expect(entries.find(e => e.url === `${BASE}/notice/n1`)?.lastModified).toEqual(
+      new Date('2026-11-01T00:00:00Z')
+    )
+  })
+
+  test('공지·행사 읽기가 실패해도 나머지 사이트맵은 낸다', async () => {
+    notices = async () => {
+      throw new Error('boom')
+    }
+    events = async () => {
+      throw new Error('boom')
+    }
+    const entries = await sitemap()
+    expect(urls(entries)).toContain(`${BASE}/notice`)
+    expect(urls(entries).some(u => u.startsWith(`${BASE}/notice/`))).toBe(false)
+  })
+
+  test('빈 작품 목록(/artworks)과 검색 화면(/search)은 싣지 않는다', async () => {
+    const entries = await sitemap()
+    expect(urls(entries)).not.toContain(`${BASE}/artworks`)
+    expect(urls(entries)).not.toContain(`${BASE}/search`)
   })
 })

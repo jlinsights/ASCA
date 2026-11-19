@@ -2,7 +2,7 @@ import { existsSync } from 'fs'
 import path from 'path'
 import { headerMenu, footerMenu } from '../site-menu'
 import { translations } from '@/lib/i18n/translations'
-import { findRegulation } from '@/lib/regulations/catalog'
+import { REGULATIONS, findRegulation, regulationHref } from '@/lib/regulations/catalog'
 
 const groups = headerMenu.map(group => ({ labelKey: group.labelKey, href: group.href }))
 const links = [
@@ -24,18 +24,156 @@ function pageExists(href: string) {
 }
 
 describe('site-menu — 헤더·푸터 메뉴', () => {
-  // 2026-10-25 요청 순서: 협회 소개 · 공모전 · 전시회 · 작가 · 작품 · 소식 · 정관 및 규정 · 회원·후원
+  // 2026-10-25 요청 순서, 2026-10-26 전시·공모와 작가·작품을 각각 한 메뉴로 묶음, 2026-10-31 소식을 문의 바로 앞으로
   it('헤더 메뉴는 정해진 순서로 놓인다', () => {
     expect(headerMenu.map(group => translations.ko?.[group.labelKey])).toStrictEqual([
-      '협회 소개',
-      '공모전',
-      '전시회',
-      '작가',
-      '작품',
-      '소식',
-      '정관 및 규정',
+      '소개',
+      '전시·공모',
+      '작가·작품',
+      '정관·규정',
       '회원·후원',
+      '소식',
+      '문의',
     ])
+  })
+
+  it('작품은 작가·작품 메뉴 아래 하위 메뉴로 들어간다', () => {
+    const artists = headerMenu.find(group => group.key === 'artists')?.items ?? []
+    expect(artists.map(link => link.href)).toContain('/artworks')
+    expect(headerMenu.some(group => group.href === '/artworks')).toBe(false)
+  })
+
+  // 2026-11-01 요청: 소개 8개를 네 개씩 두 칸으로
+  it('소개 메뉴는 왼쪽 협회, 오른쪽 조직·활동 네 개씩 두 칸이고 푸터는 같은 순서다', () => {
+    const about = headerMenu.find(group => group.key === 'about')
+    const ko = (key: string) => translations.ko?.[key]
+    expect(
+      about?.columns?.map(column => [ko(column.titleKey), column.items.map(i => ko(i.labelKey))])
+    ).toStrictEqual([
+      ['협회', ['소개', '인사말씀', '사명', '연혁']],
+      ['조직·활동', ['임원', '사업계획', '유관단체', '브랜드']],
+    ])
+    expect(about?.items).toEqual(about?.columns?.flatMap(column => column.items))
+    const footerAbout = footerMenu.find(section => section.titleKey === 'siteNavAboutShort')
+    expect(footerAbout?.items).toEqual(about?.items)
+  })
+
+  // 2026-11-01 요청: 왼쪽 작가 소개·작가의 홈페이지·작품, 오른쪽 고문·자문위원·초대·추천·일반작가
+  it('작가·작품 메뉴는 왼쪽 둘러보기, 오른쪽 직함·등급 두 칸으로 하위 메뉴를 나눈다', () => {
+    const artists = headerMenu.find(group => group.key === 'artists')
+    const ko = (key: string) => translations.ko?.[key]
+    expect(
+      artists?.columns?.map(column => [ko(column.titleKey), column.items.map(i => ko(i.labelKey))])
+    ).toStrictEqual([
+      ['둘러보기', ['작가의 홈페이지', '작품', '작가 소개']],
+      ['직함·등급', ['고문', '자문위원', '초대작가', '추천작가', '일반작가']],
+    ])
+    expect(artists?.columns?.[0]?.items.map(link => link.href)).toEqual([
+      '/artists/homepages',
+      '/artworks',
+      '/artists',
+    ])
+    // 모바일 목록은 두 칸을 순서대로 이은 것
+    expect(artists?.items).toEqual(artists?.columns?.flatMap(column => column.items))
+  })
+
+  it('전시·공모 메뉴는 왼쪽 전시, 오른쪽 공모 두 칸으로 하위 메뉴를 나눈다', () => {
+    const group = headerMenu.find(g => g.key === 'exhibitions')
+    expect(group?.columns?.map(c => translations.ko?.[c.titleKey])).toStrictEqual(['전시', '공모'])
+    const [exhibitions, contests] = group?.columns ?? []
+    expect(exhibitions?.items.map(link => link.href)).toStrictEqual([
+      '/exhibitions/current',
+      '/exhibitions/upcoming',
+      '/exhibitions/past',
+      '/exhibitions/online',
+    ])
+    expect(contests?.items.map(link => link.href)).toStrictEqual([
+      '/contests',
+      '/application',
+      '/application-for-recommended-invited-calligrapher',
+      '/commissioning-application',
+      '/forms',
+      '/profile/applications',
+    ])
+    // 평평한 목록(items)은 두 칸을 순서대로 이은 것 — 모바일·검사가 이걸 쓴다
+    expect(group?.items).toStrictEqual([...(exhibitions?.items ?? []), ...(contests?.items ?? [])])
+    expect(headerMenu.some(g => g.key === 'contests')).toBe(false)
+  })
+
+  // 2026-11-03 요청: 작가·작품 메뉴를 누르면 작가의 홈페이지가 먼저 보인다 (하위 메뉴 순서는 그대로)
+  it('작가·작품 메뉴 머리를 누르면 작가의 홈페이지로 간다', () => {
+    const artists = headerMenu.find(g => g.key === 'artists')
+    expect(artists?.href).toBe('/artists/homepages')
+    // 머리 링크는 하위 메뉴에 있는 페이지여야 한다 — 그래야 그 페이지에서 목차·눈썹이 이 메뉴로 잡힌다
+    expect(artists?.items?.some(link => link.href === artists?.href)).toBe(true)
+  })
+
+  it('전시·공모 메뉴 머리를 누르면 공모전 페이지로 간다', () => {
+    expect(headerMenu.find(g => g.key === 'exhibitions')?.href).toBe('/contests')
+  })
+
+  it('정관·규정 메뉴는 왼쪽 전체·정관·자격 요건, 오른쪽 나머지 규정 두 칸으로 나눈다', () => {
+    const group = headerMenu.find(g => g.key === 'regulations')
+    expect(group?.columns?.map(c => translations.ko?.[c.titleKey])).toStrictEqual([
+      '정관·자격',
+      '운영 규정',
+    ])
+    const [core, rules] = group?.columns ?? []
+    expect(core?.items.map(link => translations.ko?.[link.labelKey])).toStrictEqual([
+      '전체 규정 보기',
+      '정관',
+      '작가·회원·임원 자격 및 요건',
+    ])
+    // 나머지 규정은 빠짐없이, 겹치지 않게 오른쪽에
+    const all = REGULATIONS.map(entry => regulationHref(entry.slug))
+    const right = rules?.items.map(link => link.href) ?? []
+    expect([...right].sort()).toStrictEqual(
+      all.filter(href => !core?.items.some(link => link.href === href)).sort()
+    )
+    expect(right).not.toContain(regulationHref('articles'))
+    expect(group?.items).toStrictEqual([...(core?.items ?? []), ...(rules?.items ?? [])])
+  })
+
+  it('칸 제목은 네 언어 모두 번역이 있다', () => {
+    for (const lang of ['ko', 'en', 'ja', 'zh'] as const) {
+      for (const key of ['siteNavColRegsCore', 'siteNavColRegsRules']) {
+        expect(translations[lang]?.[key]).toBeTruthy()
+      }
+    }
+  })
+
+  // 푸터는 헤더와 같은 묶음·순서·링크를 쓴다 — 따로 엮은 '작가 · 전시'·'참여 · 소식' 묶음은 헤더와 어긋났다 (2026-11-05)
+  it('푸터 섹션은 헤더 메뉴 묶음과 제목·순서·링크가 같다', () => {
+    expect(footerMenu.map(s => s.titleKey)).toStrictEqual(headerMenu.map(g => g.labelKey))
+    expect(footerMenu.map(s => s.items)).toStrictEqual(headerMenu.map(g => g.items ?? []))
+  })
+
+  it('푸터 제목도 헤더와 같은 소개·정관·규정 라벨을 쓴다', () => {
+    expect(footerMenu.map(s => translations.ko?.[s.titleKey])).toEqual(
+      expect.arrayContaining(['소개', '정관·규정'])
+    )
+  })
+
+  it('소식 메뉴에서 회원 게시판으로 갈 수 있다', () => {
+    const news = headerMenu.find(group => group.key === 'news')?.items ?? []
+    expect(news.map(link => link.href)).toContain('/community/board')
+    expect(footerMenu.flatMap(s => s.items).map(link => link.href)).toContain('/community/board')
+  })
+
+  it('소식 메뉴는 머리와 첫 하위 메뉴가 회원 게시판이다', () => {
+    const news = headerMenu.find(group => group.key === 'news')
+    expect(news?.href).toBe('/community/board')
+    expect(news?.items?.[0]?.href).toBe('/community/board')
+  })
+
+  it('문의는 따로 된 메뉴이고, 자주 묻는 질문이 그 아래에 있다', () => {
+    const contact = headerMenu.find(group => group.key === 'contact')
+    expect(contact?.href).toBe('/contact')
+    expect(contact?.items?.map(link => link.href)).toStrictEqual(['/contact', '/faq'])
+    const membership = headerMenu.find(group => group.key === 'membership')?.items ?? []
+    expect(membership.map(link => link.href)).not.toContain('/faq')
+    expect(membership.map(link => link.href)).not.toContain('/contact')
+    expect(footerMenu.flatMap(s => s.items).map(link => link.href)).toContain('/faq')
   })
 
   it.each(links.filter(link => !('external' in link && link.external)).map(link => link.href))(

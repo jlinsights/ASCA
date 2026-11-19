@@ -54,6 +54,23 @@ export function Inlines({ inlines }: InlinesProps) {
   )
 }
 
+/** 이 글자 수 이하인 표 칸(구분 이름·금액, "KRW 100,000" 포함)은 줄바꿈하지 않는다 */
+const SHORT_CELL_MAX = 11
+
+function cellLength(inlines: Inline[]): number {
+  return inlines.reduce((sum, inline) => {
+    if (inline.kind === 'text') return sum + inline.text.trim().length
+    if (inline.kind === 'break') return sum + 1
+    return sum + cellLength(inline.children)
+  }, 0)
+}
+
+// 일본어·중국어는 아무 글자 사이에서나 줄을 바꿀 수 있어, 긴 설명 칸이 표 너비를 가져가면
+// 짧은 칸이 한두 글자 폭으로 줄어 "青年 / 作家"처럼 쪼개진다
+function shortCellClass(inlines: Inline[]): string | undefined {
+  return cellLength(inlines) <= SHORT_CELL_MAX ? 'asca-regs-table__short' : undefined
+}
+
 type HeadingLevel = 2 | 3 | 4
 
 interface BlocksProps {
@@ -129,7 +146,7 @@ function BlockView({
               {block.rows.map((row, rowIndex) => (
                 <tr key={rowIndex}>
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex}>
+                    <td key={cellIndex} className={shortCellClass(cell)}>
                       <Inlines inlines={cell} />
                     </td>
                   ))}

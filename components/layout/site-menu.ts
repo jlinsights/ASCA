@@ -9,26 +9,49 @@ export interface MenuLink {
   external?: boolean
 }
 
+/** 드롭다운을 여러 칸으로 나눌 때 한 칸 — 제목과 그 아래 링크 */
+export interface MenuColumn {
+  titleKey: string
+  items: MenuLink[]
+}
+
 export interface MenuGroup {
   key: string
   labelKey: string
   href: string
+  /** 평평한 하위 메뉴 목록. columns 가 있으면 칸들을 순서대로 이은 것 */
   items?: MenuLink[]
+  /** 데스크톱 드롭다운을 칸으로 나눠 보일 때 */
+  columns?: MenuColumn[]
 }
 
 const artistsBy = (params: Record<string, string>) =>
   `/artists?${new URLSearchParams(params).toString()}`
 
-const about: MenuLink[] = [
-  { labelKey: 'siteNavIntro', href: '/introductions' },
-  { labelKey: 'siteNavGreetings', href: '/greetings' },
-  { labelKey: 'siteNavMission', href: '/mission' },
-  { labelKey: 'siteAboutHistory', href: '/history' },
-  { labelKey: 'siteNavBoard', href: '/board-members' },
-  { labelKey: 'siteNavBusinessPlan', href: '/business-plan' },
-  { labelKey: 'siteNavPartners', href: '/partners' },
-  { labelKey: 'siteAboutBrand', href: '/brand' },
+// 소개 — 왼쪽 협회(누구이고 어떤 길을 걸어왔나), 오른쪽 조직·활동(어떻게 꾸리고 무엇을 하나), 네 개씩 두 칸 (2026-11-01)
+// 푸터는 두 칸을 순서대로 이은 같은 목록을 쓴다
+const aboutColumns: MenuColumn[] = [
+  {
+    titleKey: 'siteNavColAboutSociety',
+    items: [
+      { labelKey: 'siteNavIntro', href: '/introductions' },
+      { labelKey: 'siteNavGreetings', href: '/greetings' },
+      { labelKey: 'siteNavMission', href: '/mission' },
+      { labelKey: 'siteAboutHistory', href: '/history' },
+    ],
+  },
+  {
+    titleKey: 'siteNavColAboutOrganization',
+    items: [
+      { labelKey: 'siteNavBoard', href: '/board-members' },
+      { labelKey: 'siteNavBusinessPlan', href: '/business-plan' },
+      { labelKey: 'siteNavPartners', href: '/partners' },
+      { labelKey: 'siteAboutBrand', href: '/brand' },
+    ],
+  },
 ]
+
+const about: MenuLink[] = aboutColumns.flatMap(column => column.items)
 
 // 규정 등급만 싣는다 — 공모작가는 등급이 아니다(2026-10-24). 일반작가는 DB 에 '회원작가' 로 들어 있다.
 // 청년작가는 등록자가 없어 싣지 않는다 (2026-10-22). 등록이 시작되면 membershipType=청년작가 로 되살린다
@@ -36,6 +59,32 @@ const artistGrades: MenuLink[] = [
   { labelKey: 'siteArtistInvited', href: artistsBy({ membershipType: '초대작가' }) },
   { labelKey: 'siteArtistRecommended', href: artistsBy({ membershipType: '추천작가' }) },
   { labelKey: 'siteArtistMember', href: artistsBy({ membershipType: '회원작가' }) },
+]
+
+// 작가·작품 — 왼쪽 둘러보기(작가의 홈페이지·작품·작가 소개), 오른쪽 직함·등급 (2026-11-01, 전시·공모처럼 두 칸)
+// 둘러보기 순서는 메뉴 머리(작가의 홈페이지)와 맞춘다 (2026-11-04)
+// 작가의 홈페이지는 /artists 맨 위에 있던 홈페이지 작가·書境 안내를 떼어 낸 페이지다
+// 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
+// 직함·등급 링크 — 작가 탐색 레일(/artists)도 이 목록으로 줄을 만든다. 메뉴와 레일의 '모두 보기'가 늘 같은 주소다
+export const artistRankLinks: MenuLink[] = [
+  { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
+  { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
+  ...artistGrades,
+]
+
+const artistColumns: MenuColumn[] = [
+  {
+    titleKey: 'siteNavColArtistsBrowse',
+    items: [
+      { labelKey: 'siteNavArtistHomepages', href: '/artists/homepages' },
+      { labelKey: 'siteNavArtworks', href: '/artworks' },
+      { labelKey: 'siteNavArtistsIntro', href: '/artists' },
+    ],
+  },
+  {
+    titleKey: 'siteNavColArtistsRanks',
+    items: [...artistRankLinks],
+  },
 ]
 
 const exhibitions: MenuLink[] = [
@@ -50,7 +99,30 @@ const regulations: MenuLink[] = REGULATIONS.map(entry => ({
   href: regulationHref(entry.slug),
 }))
 
+// 왼쪽 전체 보기·정관·자격 요건, 오른쪽 나머지 운영 규정 — 전시·공모처럼 두 칸 (2026-10-31)
+const REGULATION_CORE_SLUGS = ['articles', 'qualifications']
+const regulationColumns: MenuColumn[] = [
+  {
+    titleKey: 'siteNavColRegsCore',
+    items: [
+      { labelKey: 'regsAll', href: REGULATIONS_BASE_PATH },
+      ...REGULATION_CORE_SLUGS.map(slug => ({
+        labelKey: REGULATIONS.find(entry => entry.slug === slug)?.nameKey ?? slug,
+        href: regulationHref(slug),
+      })),
+    ],
+  },
+  {
+    titleKey: 'siteNavColRegsRules',
+    items: regulations.filter(
+      link => !REGULATION_CORE_SLUGS.some(slug => link.href === regulationHref(slug))
+    ),
+  },
+]
+
+// 회원 게시판을 맨 앞에 — 소식 메뉴 머리도 게시판으로 간다 (2026-10-31)
 const news: MenuLink[] = [
+  { labelKey: 'siteNavCommunityBoard', href: '/community/board' },
   { labelKey: 'siteNewsNotices', href: '/notice' },
   { labelKey: 'siteNewsEvents', href: '/events' },
   { labelKey: 'siteNavGallery', href: '/gallery' },
@@ -61,7 +133,12 @@ const membership: MenuLink[] = [
   { labelKey: 'siteNavMembershipGuide', href: '/membership' },
   { labelKey: 'siteNavAcademy', href: '/academy' },
   { labelKey: 'siteNavFundraising', href: '/fundraising' },
+]
+
+// 문의는 회원·후원에서 꺼내 따로 둔 메뉴 — 자주 묻는 질문을 그 아래에 (2026-10-31)
+const contact: MenuLink[] = [
   { labelKey: 'siteNavContact', href: '/contact' },
+  { labelKey: 'siteNavFaq', href: '/faq' },
 ]
 
 // 동양서예대전 신청서 — 지원하는 사람과 시점 순서(출품자 → 수상 작가 → 위원)
@@ -71,81 +148,61 @@ const contestApplications: MenuLink[] = [
   { labelKey: 'siteNavCommissioning', href: '/commissioning-application' },
 ]
 
+const contests: MenuLink[] = [
+  { labelKey: 'siteNavContestsGuide', href: '/contests' },
+  ...contestApplications,
+  { labelKey: 'siteNavForms', href: '/forms' },
+  { labelKey: 'siteContestMine', href: '/profile/applications' },
+]
+
+// 왼쪽 전시, 오른쪽 공모 — 데스크톱 드롭다운은 두 칸, 모바일은 칸 제목 아래로 이어 붙인다
+const exhibitionsAndContests: MenuColumn[] = [
+  { titleKey: 'siteNavColExhibitions', items: exhibitions },
+  { titleKey: 'siteNavColContests', items: contests },
+]
+
 export const headerMenu: MenuGroup[] = [
-  // 순서: 협회 소개 · 공모전 · 전시회 · 작가 · 작품 · 소식 · 정관 및 규정 · 회원·후원 (2026-10-25)
-  { key: 'about', labelKey: 'siteNavAbout', href: '/introductions', items: about },
+  // 순서: 소개 · 전시·공모 · 작가·작품 · 정관·규정 · 회원·후원 · 소식 · 문의 (2026-10-31, 소식을 문의 바로 앞으로)
+  // 소개·정관·규정 라벨은 헤더·푸터 제목·규정 페이지 경로 표시가 같은 키를 쓴다 (2026-10-26)
   {
-    key: 'contests',
-    labelKey: 'siteNavContests',
-    href: '/contests',
-    items: [
-      { labelKey: 'siteNavContestsGuide', href: '/contests' },
-      ...contestApplications,
-      { labelKey: 'siteNavForms', href: '/forms' },
-      { labelKey: 'siteContestMine', href: '/profile/applications' },
-    ],
+    key: 'about',
+    labelKey: 'siteNavAboutShort',
+    href: '/introductions',
+    columns: aboutColumns,
+    items: about,
   },
-  { key: 'exhibitions', labelKey: 'siteNavExhibitions', href: '/exhibitions', items: exhibitions },
+  {
+    key: 'exhibitions',
+    labelKey: 'siteNavExhibitionsContests',
+    // 메뉴 머리는 공모전으로 — 대전 출품 안내를 먼저 보인다 (2026-10-31)
+    href: '/contests',
+    columns: exhibitionsAndContests,
+    items: exhibitionsAndContests.flatMap(column => column.items),
+  },
   {
     key: 'artists',
     labelKey: 'siteNavArtists',
-    href: '/artists',
-    items: [
-      { labelKey: 'siteNavArtistsIntro', href: '/artists' },
-      { labelKey: 'siteArtistAdvisor', href: artistsBy({ title: '고문' }) },
-      { labelKey: 'siteArtistAdvisory', href: artistsBy({ title: '자문위원' }) },
-      ...artistGrades,
-    ],
+    // 메뉴 머리는 작가의 홈페이지로 — 작가들의 홈페이지·書境 안내를 먼저 보인다 (2026-11-03)
+    href: '/artists/homepages',
+    columns: artistColumns,
+    items: artistColumns.flatMap(column => column.items),
   },
-  // 작품 분류 링크(?category=)는 작품 페이지가 쿼리를 읽지 않아 뺐다 — 분류는 페이지 안 필터로 고른다
-  { key: 'artworks', labelKey: 'siteNavArtworks', href: '/artworks' },
-  // 공지사항·행사는 옛 CMS 데이터가 없어 비어 있다 — 메뉴 머리는 사진이 있는 갤러리로 보낸다
-  { key: 'news', labelKey: 'siteFtNews', href: '/gallery', items: news },
   {
     key: 'regulations',
-    labelKey: 'regsMenu',
+    labelKey: 'siteNavRegulations',
     href: REGULATIONS_BASE_PATH,
-    items: [{ labelKey: 'regsAll', href: REGULATIONS_BASE_PATH }, ...regulations],
+    columns: regulationColumns,
+    items: regulationColumns.flatMap(column => column.items),
   },
   { key: 'membership', labelKey: 'siteNavMembership', href: '/membership', items: membership },
+  // 메뉴 머리는 회원 게시판으로 — 공지사항·행사는 옛 CMS 데이터가 없어 비어 있다 (2026-10-31)
+  { key: 'news', labelKey: 'siteFtNews', href: '/community/board', items: news },
+  { key: 'contact', labelKey: 'siteNavContact', href: '/contact', items: contact },
 ]
 
-export const footerMenu: { titleKey: string; items: MenuLink[] }[] = [
-  { titleKey: 'siteNavAbout', items: about },
-  {
-    titleKey: 'siteFtSecArtists',
-    items: [
-      {
-        labelKey: 'siteArtistInvitedKorea',
-        href: artistsBy({ membershipType: '초대작가', nationality: '韓國' }),
-      },
-      {
-        labelKey: 'siteArtistInvitedChina',
-        href: artistsBy({ membershipType: '초대작가', nationality: '中國' }),
-      },
-      {
-        labelKey: 'siteArtistInvitedJapan',
-        href: artistsBy({ membershipType: '초대작가', nationality: '日本' }),
-      },
-      ...artistGrades.slice(1),
-      { labelKey: 'siteExPast', href: '/exhibitions/past' },
-      { labelKey: 'siteNavArtworks', href: '/artworks' },
-    ],
-  },
-  { titleKey: 'regsMenu', items: regulations },
-  {
-    titleKey: 'siteFtSecJoin',
-    items: [
-      ...membership.slice(0, 3),
-      ...contestApplications,
-      { labelKey: 'siteNavForms', href: '/forms' },
-      ...news,
-      {
-        labelKey: 'siteNavNewsletters',
-        href: 'https://orientalcalligraphy.stibee.com/',
-        external: true,
-      },
-      { labelKey: 'siteNavContact', href: '/contact' },
-    ],
-  },
-]
+// 푸터는 헤더와 같은 묶음·순서·링크를 그대로 펼친다 — 한 곳만 고치면 둘 다 바뀐다 (2026-11-05)
+// 예전 푸터의 '작가 · 전시'·'참여 · 소식' 묶음은 헤더와 어긋났고, 국적별 초대작가 링크는 헤더에 없어 함께 정리했다
+export const footerMenu: { titleKey: string; items: MenuLink[] }[] = headerMenu.map(group => ({
+  titleKey: group.labelKey,
+  items: group.items ?? [],
+}))

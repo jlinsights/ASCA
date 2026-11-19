@@ -5,6 +5,10 @@ export const TITLE_MAX = 120
 export const BODY_MAX = 10000
 export const HIDE_REASON_MAX = 500
 export const FEED_LIMIT = 60
+/** 글 하나에 붙일 수 있는 사진 */
+export const IMAGES_MAX = 4
+/** 브라우저가 줄여 보낸 파일 한도 — Vercel 요청 한도(4.5MB) 아래 */
+export const IMAGE_UPLOAD_MAX_BYTES = 4 * 1024 * 1024
 
 /** 읽는 칸 — 숨김·삭제 정보와 처리자는 공개 읽기에 싣지 않는다 */
 export const THREAD_COLUMNS = 'id,author_id,title,body,created_at,updated_at'
@@ -14,6 +18,8 @@ const text = (max: number) => z.string().trim().min(1).max(max)
 export const threadCreateSchema = z.object({
   title: text(TITLE_MAX),
   body: text(BODY_MAX),
+  /** 미리 올려 둔 사진(대기) — 이 순서대로 붙는다. 고치기(PATCH)에서는 쓰지 않는다 */
+  imageIds: z.array(z.string().uuid()).max(IMAGES_MAX).default([]),
 })
 export type ThreadCreate = z.infer<typeof threadCreateSchema>
 
@@ -35,6 +41,15 @@ export interface ThreadRow {
   updated_at: string
 }
 
+/** 글 사진 — 파일은 비공개라 항상 imageSrc 경로(서버가 글이 보이는지 확인)로만 연다 */
+export interface ThreadImage {
+  id: string
+  width: number
+  height: number
+}
+
+export const imageSrc = (id: string) => `/api/community/images/${id}`
+
 /** 작성자 표시. 공개 작가 페이지와 이어진 계정이면 작가 이름·사진·회원 구분, 아니면 표시 이름만 */
 export interface ThreadAuthor {
   kind: 'artist' | 'member' | 'deleted'
@@ -44,9 +59,16 @@ export interface ThreadAuthor {
   href: string | null
 }
 
-export interface ThreadView extends ThreadRow {
+/**
+ * 화면으로 보내는 글 — 작성자 계정 ID 는 싣지 않는다(페이지 데이터로 누구에게나 보이므로).
+ * 보는 사람이 쓴 글인지만 `mine` 으로 알린다.
+ */
+export interface ThreadView extends Omit<ThreadRow, 'author_id'> {
   author: ThreadAuthor
   edited: boolean
+  mine: boolean
+  /** 글 화면에서만 채운다(목록에는 없음) */
+  images?: ThreadImage[]
 }
 
 /** 관리자 화면에만 넘기는 숨김 상태 */
@@ -100,11 +122,14 @@ export function resolveAuthor(
 export function toThreadView(
   row: ThreadRow,
   displayNames: ReadonlyMap<string, string>,
-  publicArtists: ReadonlyMap<string, PublicArtistLink>
+  publicArtists: ReadonlyMap<string, PublicArtistLink>,
+  viewerId: string | null = null
 ): ThreadView {
+  const { author_id: authorId, ...rest } = row
   return {
-    ...row,
-    author: resolveAuthor(row.author_id, displayNames, publicArtists),
+    ...rest,
+    author: resolveAuthor(authorId, displayNames, publicArtists),
+    mine: Boolean(viewerId) && authorId === viewerId,
     // 저장 직후 트리거가 updated_at 을 조금 늦게 찍을 수 있어 1분 넘게 차이 날 때만 "수정됨"
     edited: Date.parse(row.updated_at) - Date.parse(row.created_at) > 60_000,
   }

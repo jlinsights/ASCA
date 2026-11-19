@@ -93,3 +93,38 @@ it('fails closed on auth transport failure', async () => {
     refreshSupabaseSession(new NextRequest('https://asca.example/profile'))
   ).rejects.toMatchObject({ status: 503 })
 })
+
+describe('언어 헤더 전달', () => {
+  const okClient = () =>
+    jest.mocked(createServerClient).mockReturnValue({
+      auth: { getUser: async () => ({ data: { user: null }, error: null }) },
+    } as any)
+  // NextResponse.next/rewrite({ request: { headers } }) 는 넘길 요청 헤더를 x-middleware-request-* 로 싣는다
+  const forwarded = (response: NextResponse, name: string) =>
+    response.headers.get(`x-middleware-request-${name}`)
+
+  it('방문자가 보낸 x-asca-lang 은 지운다 — 한국어 주소가 다른 언어로 그려지지 않게', async () => {
+    okClient()
+    const request = new NextRequest('https://asca.example/history', {
+      headers: { 'x-asca-lang': 'en' },
+    })
+    const { applySession } = await refreshSupabaseSession(request)
+    const response = applySession()
+    expect(forwarded(response, 'x-asca-lang')).toBeNull()
+    expect(response.headers.get('x-middleware-override-headers')).not.toContain('x-asca-lang')
+  })
+
+  it('rewrite 하면 언어를 헤더로 싣고 내부 주소로 보낸다', async () => {
+    okClient()
+    const request = new NextRequest('https://asca.example/ja/history', {
+      headers: { 'x-asca-lang': 'en' },
+    })
+    const { applySession } = await refreshSupabaseSession(request, {
+      rewrite: new URL('https://asca.example/history'),
+      language: 'ja',
+    })
+    const response = applySession()
+    expect(forwarded(response, 'x-asca-lang')).toBe('ja')
+    expect(response.headers.get('x-middleware-rewrite')).toBe('https://asca.example/history')
+  })
+})

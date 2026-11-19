@@ -1,17 +1,21 @@
 import { Metadata } from 'next'
 import { LayoutFooter } from '@/components/layout/layout-footer'
-import { PageHero } from '@/components/layout/page-hero'
-import { PAGE_HERO_MARKS } from '@/components/layout/page-hero-marks'
+import { AboutPage } from '@/components/about/about-layout'
+import { AboutMotion } from '@/components/about/about-motion'
+import { AboutNav } from '@/components/about/about-nav'
+import { GreetingsHero } from './_components/greetings-hero'
 import { GreetingsTabs } from './_components/greetings-tabs'
+import { localizedPageMetadata } from '@/lib/seo/localized-metadata'
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
+  alternates: { canonical: '/greetings' },
   title: '인사말씀 | 동양서예협회',
   description:
-    '사단법인 동양서예협회 이사장 임재홍의 인사말씀입니다. 2026년 병오년 새해를 맞아 협회의 비전과 주요 계획을 안내합니다.',
+    '사단법인 동양서예협회 이사장 임재홍의 인사말씀입니다. 서울서예박물관 제1·2전시실 전관에서 열리는 제23회 대한민국 동양서예대전과 書境(서경) 초대작가전을 안내합니다.',
   openGraph: {
     title: '인사말씀 | 동양서예협회',
     description:
-      '사단법인 동양서예협회 이사장 임재홍의 인사말씀. 전통과 혁신의 조화로운 구현을 향한 협회의 비전을 소개합니다.',
+      '사단법인 동양서예협회 이사장 임재홍의 인사말씀. 청년작가와 외부 작가에게 문을 넓힌 제23회 대한민국 동양서예대전을 소개합니다.',
     images: [
       {
         url: 'https://imagedelivery.net/iELritu8tmGaSR8tZ-NWcg/561446ce-48df-41cf-c8d8-ac7427ed2600/Contain',
@@ -22,20 +26,17 @@ export const metadata: Metadata = {
 
 export default function GreetingsPage() {
   return (
-    <div className='min-h-screen bg-transparent'>
-      <PageHero
-        {...PAGE_HERO_MARKS.greetings}
-        title='인사말씀'
-        lede='사단법인 동양서예협회 이사장의 새해 인사말씀을 전합니다'
-      />
-
-      <section className='container py-8 md:py-12'>
-        <div className='max-w-3xl mx-auto'>
-          <GreetingsTabs />
-        </div>
-      </section>
-
+    <>
+      <AboutPage>
+        <GreetingsHero />
+        <AboutNav />
+        <GreetingsTabs />
+        <AboutMotion />
+      </AboutPage>
       <LayoutFooter />
-    </div>
+    </>
   )
 }
+
+// 언어 주소(/en·/ja·/zh)는 제목·설명·canonical·hreflang 을 그 언어로 바꾼다
+export const generateMetadata = localizedPageMetadata('/greetings', metadata)

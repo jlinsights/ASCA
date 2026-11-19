@@ -87,4 +87,8 @@ coverage/
 junit.xml
 
 # Marketing/agent context (markdown tables would break under prettier)
-.agents/ 
+.agents/
+
+# Local browser reports and generated repository analysis
+.gstack/
+graphify-out/

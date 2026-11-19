@@ -9,8 +9,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ArtistShareButton } from '@/components/kakao/kakao-share-button'
 import { artNameLabel, type PublicArtist as Artist } from '@/lib/api/artist-mapper'
 import { artistDisplayName, lifeYearsLabel } from '@/lib/api/artist-life'
+import { artistNativeHanName, artistNativeName } from '@/lib/api/artist-name'
 import { getSpecialtyBadgeStyle, sortSpecialties } from './artists-meta'
-import { regulationGrade } from './artist-filter-options'
+import { artistGradeLabel, artistTitleLabel, regulationGrade } from './artist-filter-options'
+import { useLanguage } from '@/contexts/language-context'
+import { formatDiscoveryCount, useDiscoveryCopy } from '@/components/gallery/discovery-copy'
 
 interface ArtistCardProps {
   artist: Artist
@@ -20,7 +23,11 @@ interface ArtistCardProps {
 const HAN = /[㐀-鿿豈-﫿]/
 
 /** 사진이 없을 때 사진 칸에 쓸 이름 — 한자 이름이 있으면 한자, 없으면 한글 */
-export function photoPlaceholderName(artist: Pick<Artist, 'name' | 'nameZh'>): string {
+export function photoPlaceholderName(
+  artist: Pick<Artist, 'name' | 'nameZh'> & Partial<Pick<Artist, 'nationality' | 'nameJa'>>
+): string {
+  const nativeName = artistNativeHanName(artist)
+  if (nativeName) return nativeName
   const zh = artist.nameZh?.trim()
   return zh && HAN.test(zh) ? zh : artist.name
 }
@@ -29,9 +36,18 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
   const isPc = variant === 'pc'
   const placeholderName = photoPlaceholderName(artist)
   const grade = regulationGrade(artist.membershipType)
-  const displayName = artistDisplayName(artist.name, artist.deathYear)
+  const nativeName = artistNativeName(artist)
+  const displayName = artistDisplayName(nativeName, artist.deathYear)
   const lifeYears = lifeYearsLabel(artist.birthYear, artist.deathYear)
   const artName = artNameLabel(artist.artNameKo, artist.artNameHanja)
+  const { language, t } = useLanguage()
+  // 등급·직위 값은 DB 의 한국어 — 화면에는 고른 언어의 라벨로 보인다
+  const gradeLabel = grade ? artistGradeLabel(grade, language) : null
+  const titleLabel = artist.title ? artistTitleLabel(artist.title, language) : null
+  const copy = useDiscoveryCopy()
+  const awardCount = formatDiscoveryCount(copy.awardCount, artist.awards?.length ?? 0, language)
+  const shareTitle = t('kakaoShareArtistTitle').replace('{name}', displayName)
+  const shareDescription = `${artist.specialties?.join(', ') || t('kakaoShareArtistFallbackSpecialty')} - ${artist.bio || t('kakaoShareArtistFallbackBio')}`
 
   const nameClass = isPc
     ? 'font-bold text-xl text-foreground group-hover:text-scholar-red dark:group-hover:text-scholar-red transition-colors duration-200 flex-1 min-w-0'
@@ -51,33 +67,69 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
     ? 'p-6 space-y-4 bg-gradient-to-b from-background to-muted/10 dark:from-background dark:to-muted/5'
     : 'p-4 space-y-3 bg-gradient-to-b from-background to-muted/5 dark:from-background dark:to-muted/3'
 
+  // 모바일 — 두 칸 격자에 맞춘 간결한 카드(2026-11-01). 카드 전체가 상세로 가는 링크이고,
+  // 공유 단추만 사진 귀퉁이에 따로 둔다. 소개글·상세보기 단추는 상세 페이지가 보여 준다
+  if (!isPc) {
+    return (
+      // 초점 링은 카드 자신에 그린다 — 링크에 그리면 카드의 overflow-hidden 에 잘린다 (Codex #214)
+      <Card
+        key={artist.id}
+        className='group relative overflow-hidden border-0 shadow-sm has-[a[data-card-link]:focus-visible]:ring-2 has-[a[data-card-link]:focus-visible]:ring-ring has-[a[data-card-link]:focus-visible]:ring-offset-2'
+      >
+        <Link
+          href={`/artists/${artist.id}`}
+          data-card-link=''
+          className='block rounded-[inherit] focus-visible:outline-none'
+        >
+          <ArtistPhoto
+            artist={artist}
+            nativeName={nativeName}
+            placeholderName={placeholderName}
+            sizes='50vw'
+          />
+          <div className='space-y-1 p-3'>
+            <h3 className={nameClass}>{displayName}</h3>
+            {artName && (
+              <p className='text-xs text-muted-foreground'>
+                <span className='sr-only'>{copy.penName} </span>
+                {artName}
+              </p>
+            )}
+            {(grade || artist.title) && (
+              <p className='text-xs text-foreground'>
+                {[gradeLabel, titleLabel].filter(Boolean).join(' · ')}
+              </p>
+            )}
+            {lifeYears && <p className='font-mono text-xs text-muted-foreground'>{lifeYears}</p>}
+            {artist.specialties && artist.specialties.length > 0 && (
+              <p className='line-clamp-1 text-xs text-muted-foreground'>
+                {sortSpecialties(artist.specialties).slice(0, 2).join(' · ')}
+              </p>
+            )}
+          </div>
+        </Link>
+        <ArtistShareButton
+          title={shareTitle}
+          description={shareDescription}
+          imageUrl={artist.profileImage ?? undefined}
+          webUrl={`/artists/${artist.id}`}
+          variant='outline'
+          isIconOnly={true}
+          size='md'
+          className='absolute right-2 top-2 bg-background/90'
+        />
+      </Card>
+    )
+  }
+
   return (
     <Card key={artist.id} className={cardShadowClass}>
-      {/* 사진 칸 — 사진 한 장만. 이름·등급은 아래 본문이 한 번만 보여 준다 */}
-      <div className='relative aspect-square overflow-hidden bg-paper-2 dark:bg-navy-900'>
-        {artist.profileImage ? (
-          <Image
-            src={artist.profileImage}
-            alt={artist.name}
-            fill
-            sizes={isPc ? '(max-width: 1279px) 33vw, 25vw' : '50vw'}
-            className='object-cover transition-transform duration-300 group-hover:scale-[1.02]'
-          />
-        ) : (
-          // 사진이 없으면 다른 사람 사진을 빌리지 않고, 이 작가의 이름을 세로로 쓴다
-          <div
-            aria-hidden='true'
-            className='absolute inset-0 flex items-center justify-center'
-            lang={placeholderName === artist.name ? 'ko' : 'zh-Hant'}
-          >
-            <span
-              className={`font-serif font-semibold tracking-[0.18em] text-navy-900/70 dark:text-paper/70 [writing-mode:vertical-rl] text-5xl`}
-            >
-              {placeholderName}
-            </span>
-          </div>
-        )}
-      </div>
+      <ArtistPhoto
+        artist={artist}
+        nativeName={nativeName}
+        placeholderName={placeholderName}
+        sizes='(max-width: 1279px) 33vw, 25vw'
+      />
 
       <CardContent className={cardContentClass}>
         <div className={isPc ? 'space-y-2' : 'space-y-1'}>
@@ -92,7 +144,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           </div>
           {artName && (
             <p className={isPc ? 'text-sm text-muted-foreground' : 'text-xs text-muted-foreground'}>
-              <span className='sr-only'>아호 </span>
+              <span className='sr-only'>{copy.penName} </span>
               {artName}
             </p>
           )}
@@ -103,14 +155,14 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           <div className='flex flex-col gap-2 pt-2 border-t border-border/30 dark:border-border/20'>
             {grade && (
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-muted-foreground'>작가 등급</span>
-                <span className='font-medium text-foreground'>{grade}</span>
+                <span className='text-muted-foreground'>{copy.membership}</span>
+                <span className='font-medium text-foreground'>{gradeLabel}</span>
               </div>
             )}
             {artist.title && (
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-muted-foreground'>직위</span>
-                <span className='font-medium text-foreground'>{artist.title}</span>
+                <span className='text-muted-foreground'>{copy.title}</span>
+                <span className='font-medium text-foreground'>{titleLabel}</span>
               </div>
             )}
           </div>
@@ -118,12 +170,12 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           <div className='text-xs text-muted-foreground space-y-1 pt-2 border-t border-border/30 dark:border-border/20'>
             {grade && (
               <div className='text-center'>
-                <span className='text-foreground font-medium'>{grade}</span>
+                <span className='text-foreground font-medium'>{gradeLabel}</span>
               </div>
             )}
             {artist.title && (
               <div className='text-center'>
-                <span className='text-foreground font-medium'>{artist.title}</span>
+                <span className='text-foreground font-medium'>{titleLabel}</span>
               </div>
             )}
           </div>
@@ -150,11 +202,9 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center gap-1'>
                     <Award className='h-3 w-3' />
-                    <span className='text-xs'>수상 경력</span>
+                    <span className='text-xs'>{copy.awards}</span>
                   </div>
-                  <span className='text-xs font-medium text-foreground'>
-                    {artist.awards.length}개
-                  </span>
+                  <span className='text-xs font-medium text-foreground'>{awardCount}</span>
                 </div>
               </div>
             )
@@ -164,8 +214,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
                 <div className='flex items-center gap-1'>
                   <Award className='h-3 w-3' />
                   <span>
-                    수상 <span className='font-medium text-foreground'>{artist.awards.length}</span>
-                    개
+                    {copy.awards} <span className='font-medium text-foreground'>{awardCount}</span>
                   </span>
                 </div>
               </div>
@@ -191,12 +240,12 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
                     : 'w-full text-xs h-8 hover:bg-scholar-red hover:text-white hover:border-scholar-red dark:hover:bg-scholar-red dark:hover:text-white dark:hover:border-scholar-red transition-all duration-200'
                 }
               >
-                {isPc ? '작가 상세보기' : '상세보기'}
+                {isPc ? copy.viewArtist : copy.viewArtistShort}
               </Button>
             </Link>
             <ArtistShareButton
-              title={`${artist.name} 작가`}
-              description={`${artist.specialties?.join(', ') || '서예 작가'} - ${artist.bio || '동양서예협회 소속 작가입니다.'}`}
+              title={shareTitle}
+              description={shareDescription}
               imageUrl={artist.profileImage ?? undefined}
               webUrl={`/artists/${artist.id}`}
               variant='outline'
@@ -211,5 +260,45 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+interface ArtistPhotoProps {
+  artist: Artist
+  nativeName: string
+  placeholderName: string
+  sizes: string
+}
+
+/** 사진 칸 — 사진 한 장만. 사진이 없으면 다른 사람 사진을 빌리지 않고 이 작가의 이름을 세로로 쓴다 */
+function ArtistPhoto({ artist, nativeName, placeholderName, sizes }: ArtistPhotoProps) {
+  return (
+    <div className='relative aspect-square overflow-hidden bg-paper-2 dark:bg-navy-900'>
+      {artist.profileImage ? (
+        <Image
+          src={artist.profileImage}
+          alt={nativeName}
+          fill
+          sizes={sizes}
+          className='object-cover transition-transform duration-300 group-hover:scale-[1.02]'
+        />
+      ) : (
+        <div
+          aria-hidden='true'
+          className='absolute inset-0 flex items-center justify-center'
+          lang={
+            placeholderName === artist.nameJa?.trim()
+              ? 'ja'
+              : placeholderName === artist.nameZh?.trim()
+                ? 'zh'
+                : undefined
+          }
+        >
+          <span className='font-serif font-semibold tracking-[0.18em] text-navy-900/70 dark:text-paper/70 [writing-mode:vertical-rl] text-4xl md:text-5xl'>
+            {placeholderName}
+          </span>
+        </div>
+      )}
+    </div>
   )
 }
