@@ -349,6 +349,27 @@
   display: grid;
   gap: 24px;
 }
+.atmosphere {
+  margin: 0;
+}
+.atmosphere img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+.atmosphere figcaption {
+  padding-top: 8px;
+  color: var(--ex-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+@media (max-width: 800px) {
+  .atmosphere img {
+    aspect-ratio: 16 / 9;
+  }
+}
 .invitation {
   padding: 28px 24px;
   border-top: 3px solid var(--ex-ink);
@@ -714,6 +735,27 @@
   }
   .sidebar {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .atmosphere {
+    margin: 0;
+  }
+  .atmosphere img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+  .atmosphere figcaption {
+    padding-top: 8px;
+    color: var(--ex-muted);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  @media (max-width: 800px) {
+    .atmosphere img {
+      aspect-ratio: 16 / 9;
+    }
   }
   .invitation {
     padding: 24px;

@@ -398,6 +398,47 @@
   word-break: keep-all;
 }
 
+/* Photography is atmospheric; the adjacent rows remain the actual records. */
+.asca-editorial-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: start;
+  gap: clamp(32px, 5vw, 80px);
+}
+.asca-editorial-photo {
+  margin: 0;
+}
+.asca-editorial-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+.asca-editorial-photo figcaption {
+  padding-top: 10px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+.asca-editorial-grid--journal {
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+}
+.asca-editorial-photo--journal img {
+  aspect-ratio: 5 / 4;
+}
+@media (max-width: 768px) {
+  .asca-editorial-grid,
+  .asca-editorial-grid--journal {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .asca-editorial-photo img,
+  .asca-editorial-photo--journal img {
+    aspect-ratio: 16 / 9;
+  }
+}
+
 /* ---------- Exhibition ledger (site.css .s-event) ---------- */
 .asca-exlist {
   margin: 0;
