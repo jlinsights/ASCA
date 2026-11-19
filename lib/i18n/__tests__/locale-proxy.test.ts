@@ -1,6 +1,6 @@
 /** @jest-environment node */
-import { NextRequest } from 'next/server'
-import { decideLocale } from '../locale-proxy'
+import { NextRequest, NextResponse } from 'next/server'
+import { decideLocale, rememberLocale } from '../locale-proxy'
 
 const BASE = 'https://orientalcalligraphy.org'
 const CHROME =
@@ -129,5 +129,39 @@ describe('decideLocale', () => {
       )
       expect(d.kind).toBe('pass')
     })
+  })
+})
+
+describe('rememberLocale', () => {
+  const saved = (response: NextResponse) => response.cookies.get('asca-lang')?.value
+
+  it('언어 주소를 직접 연 방문자의 언어를 쿠키로 남긴다', () => {
+    const response = rememberLocale(
+      req('/zh/faq', { cookie: 'asca-lang=ko' }),
+      NextResponse.next(),
+      'zh'
+    )
+    expect(saved(response)).toBe('zh')
+  })
+
+  it('이미 같은 언어면 쿠키를 다시 쓰지 않는다', () => {
+    const response = rememberLocale(
+      req('/zh/faq', { cookie: 'asca-lang=zh' }),
+      NextResponse.next(),
+      'zh'
+    )
+    expect(saved(response)).toBeUndefined()
+  })
+
+  // 2026-11-18: /zh 화면이 미리 받아 두던 /zh/… 요청이 한국어로 바꾼 직후에 도착해 선택을 zh 로 되돌렸다
+  it.each([
+    ['next-router-prefetch', '1'],
+    ['next-router-segment-prefetch', '/_tree'],
+  ])('미리 받기 요청(%s)은 방문자가 고른 언어를 덮어쓰지 않는다', (header, value) => {
+    const request = req('/zh/exhibitions/online?_rsc=abc', {
+      cookie: 'asca-lang=ko',
+      headers: { rsc: '1', [header]: value },
+    })
+    expect(saved(rememberLocale(request, NextResponse.next(), 'zh'))).toBeUndefined()
   })
 })

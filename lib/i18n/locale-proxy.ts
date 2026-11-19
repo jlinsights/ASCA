@@ -98,6 +98,14 @@ export function rememberLocale(
   language: Language
 ): NextResponse {
   if (request.cookies.get(LOCALE_COOKIE)?.value === language) return response
+  // 화면이 미리 받아 두는 링크(Next 라우터 prefetch)는 방문이 아니다. 한국어로 바꾼 직후 도착한 /zh/… 미리 받기
+  // 응답이 쿠키를 zh 로 되돌려, 다음 한국어 주소가 다시 /zh 로 가던 문제를 막는다
+  if (
+    request.headers.has('next-router-prefetch') ||
+    request.headers.has('next-router-segment-prefetch')
+  ) {
+    return response
+  }
   response.cookies.set(LOCALE_COOKIE, language, {
     path: '/',
     maxAge: 60 * 60 * 24 * 365,
