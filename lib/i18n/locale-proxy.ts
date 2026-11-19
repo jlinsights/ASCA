@@ -98,6 +98,12 @@ export function rememberLocale(
   language: Language
 ): NextResponse {
   if (request.cookies.get(LOCALE_COOKIE)?.value === language) return response
+  // 페이지 로드(주소창 이동·새로고침·외부 링크)만 방문으로 본다. 화면이 미리 받아 두는 /zh/… 요청이
+  // 한국어로 바꾼 직후 도착해 쿠키를 zh 로 되돌리던 문제를 막는다. Next 는 proxy 앞에서 rsc·prefetch 헤더를
+  // 지우므로(FLIGHT_HEADERS) 브라우저의 sec-fetch-mode 로 가린다. 이 헤더가 없는 오래된 클라이언트는 예전처럼 남긴다.
+  // 화면 안 이동으로 언어를 바꾸는 경우는 언어 메뉴가 브라우저에서 쿠키를 직접 쓴다(contexts/language-context.tsx)
+  const fetchMode = request.headers.get('sec-fetch-mode')
+  if (fetchMode !== null && fetchMode !== 'navigate') return response
   response.cookies.set(LOCALE_COOKIE, language, {
     path: '/',
     maxAge: 60 * 60 * 24 * 365,

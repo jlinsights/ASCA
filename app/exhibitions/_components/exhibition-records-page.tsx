@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, ArrowUpRight, Search } from 'lucide-react'
 import { LayoutFooter } from '@/components/layout/layout-footer'
 import { PageHero, type PageHeroStat } from '@/components/layout/page-hero'
@@ -244,6 +245,16 @@ export function ExhibitionRecordsPage({
             </p>
           </section>
           <aside className={styles.sidebar} aria-label={t('exSupportLabel')}>
+            <figure className={styles.atmosphere}>
+              <Image
+                src='/images/atmosphere/gallery-geraltyichen.webp'
+                alt=''
+                width={1600}
+                height={2559}
+                sizes='(max-width: 800px) 100vw, 260px'
+              />
+              <figcaption>Photo: geraltyichen / Unsplash</figcaption>
+            </figure>
             <div className={styles.invitation}>
               <span className={styles.invitationMark} aria-hidden='true'>
                 傳
