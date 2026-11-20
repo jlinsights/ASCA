@@ -3,7 +3,7 @@ import type { PrefixedLanguage } from '@/lib/i18n/locale-routing'
 /**
  * 언어 주소(/en·/ja·/zh)의 <title>·description. 한국어 값은 각 page.tsx 의 metadata 가 원본이고,
  * 여기는 그 번역이다 — 사실(연도·마감일·장소)을 더하지 않는다. 서버에서만 읽는다(클라이언트 번들에 싣지 않는다).
- * 용어는 화면 번역표(lib/i18n/locales)와 같게: 대전 = Korea Oriental Calligraphy Exhibition / 大韓民国 東洋書芸大展 /
+ * 용어는 화면 번역표(lib/i18n/locales)와 같게: 대전 = Korea Oriental Calligraphy Exhibition / 大韓民國 東洋書藝大展 /
  * 大韓民國東洋書藝大展, 심사위원 = juror / 審査委員 / 評審委員. 중국어는 번체.
  * lib/seo/__tests__/localized-metadata.test.ts 가 번역된 페이지(LOCALIZED_PATHS)마다 세 언어가 다 있는지 본다.
  */
@@ -23,9 +23,9 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
         'The Asian Society of Calligraphic Arts (ASCA) is an arts organization carrying on the calligraphy tradition that links Korea, China and Japan. Entries and exhibitions of the Korea Oriental Calligraphy Exhibition, recommended and invited artists, and calligraphy courses.',
     },
     ja: {
-      title: '社団法人 東洋書道協会 | 大韓民国 東洋書芸大展',
+      title: '社団法人 東洋書道協会 | 大韓民國 東洋書藝大展',
       description:
-        '社団法人 東洋書道協会(ASCA)は、韓国・中国・日本を結ぶ東洋書道の伝統を受け継ぐ芸術文化団体です。大韓民国 東洋書芸大展の公募と展示、推薦・招待作家の選定、書道講座をご案内します。',
+        '社団法人 東洋書道協会(ASCA)は、韓国・中国・日本を結ぶ東洋書道の伝統を受け継ぐ芸術文化団体です。大韓民國 東洋書藝大展の公募と展示、推薦・招待作家の選定、書道講座をご案内します。',
     },
     zh: {
       title: '社團法人 東洋書藝協會 | 大韓民國東洋書藝大展',
@@ -42,7 +42,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '協会紹介',
       description:
-        '社団法人 東洋書道協会(ASCA)は、韓国・中国・日本を結ぶ東洋書道の伝統を今日の芸術へと広げる専門芸術文化団体です。1997年の日中韓交流展に始まり、大韓民国 東洋書芸大展を開催しています。',
+        '社団法人 東洋書道協会(ASCA)は、韓国・中国・日本を結ぶ東洋書道の伝統を今日の芸術へと広げる専門芸術文化団体です。1997年の日中韓交流展に始まり、大韓民國 東洋書藝大展を開催しています。',
     },
     zh: {
       title: '協會簡介',
@@ -93,7 +93,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '理事長ご挨拶',
       description:
-        '社団法人 東洋書道協会 理事長のご挨拶。芸術の殿堂 書芸博物館 第1・第2展示室の全館で開かれる第23回 大韓民国 東洋書芸大展と書境 招待作家展をご案内します。',
+        '社団法人 東洋書道協会 理事長のご挨拶。芸術の殿堂 書芸博物館 第1・第2展示室の全館で開かれる第23回 大韓民國 東洋書藝大展と書境 招待作家展をご案内します。',
     },
     zh: {
       title: '理事長致辭',
@@ -178,7 +178,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '公募展',
       description:
-        '第23回 大韓民国 東洋書芸大展 公募要項 — 受付締切 2027年1月31日。出品部門・資格・規格・出品料・表彰と歴代大展の記録をご案内します。',
+        '第23回 大韓民國 東洋書藝大展 公募要項 — 受付締切 2027年1月31日。出品部門・資格・規格・出品料・表彰と歴代大展の記録をご案内します。',
     },
     zh: {
       title: '徵件',
@@ -193,9 +193,9 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
         'The 23rd Korea Oriental Calligraphy Exhibition, held by the Asian Society of Calligraphic Arts — the open call, schedule and how to enter.',
     },
     ja: {
-      title: '第23回 大韓民国 東洋書芸大展',
+      title: '第23回 大韓民國 東洋書藝大展',
       description:
-        '東洋書道協会が主催する第23回 大韓民国 東洋書芸大展 — 公募、日程、出品方法をご案内します。',
+        '東洋書道協会が主催する第23回 大韓民國 東洋書藝大展 — 公募、日程、出品方法をご案内します。',
     },
     zh: {
       title: '第23屆大韓民國東洋書藝大展',
@@ -211,7 +211,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '表彰',
       description:
-        '大韓民国 東洋書芸大展の賞の等級と賞金、そして第1回から続く歴代大展の開催期間と会場を、規定の原文・協会の沿革とともにご案内します。',
+        '大韓民國 東洋書藝大展の賞の等級と賞金、そして第1回から続く歴代大展の開催期間と会場を、規定の原文・協会の沿革とともにご案内します。',
     },
     zh: {
       title: '獎項',
@@ -228,7 +228,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '出品申込書',
       description:
-        '大韓民国 東洋書芸大展の出品申込書をオンラインで作成するか、Word・PDF様式で提出してください。公募部門と作品規格、出品料、審査方式、表彰内容を規定の原文とともにご案内します。',
+        '大韓民國 東洋書藝大展の出品申込書をオンラインで作成するか、Word・PDF様式で提出してください。公募部門と作品規格、出品料、審査方式、表彰内容を規定の原文とともにご案内します。',
     },
     zh: {
       title: '參展申請表',
@@ -245,7 +245,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '推薦・招待作家 申請',
       description:
-        '推薦作家・招待作家への昇格と特別選任をオンラインで申請してください。大韓民国 東洋書芸大展の入賞配点、点数とは別に必要な要件、資格審査委員会の審査手続き、非会員の特別選任費用を規定の原文とともにご案内します。',
+        '推薦作家・招待作家への昇格と特別選任をオンラインで申請してください。大韓民國 東洋書藝大展の入賞配点、点数とは別に必要な要件、資格審査委員会の審査手続き、非会員の特別選任費用を規定の原文とともにご案内します。',
     },
     zh: {
       title: '推薦・招待作家申請',
@@ -262,7 +262,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '委員委嘱 申請',
       description:
-        '大韓民国 東洋書芸大展の審査委員・運営委員・募集委員の委嘱申請書をオンラインで作成するか、HWP・PDF様式で提出してください。委員ごとの資格、委嘱手続き、手当、公正性の原則を規定の原文とともにご案内します。',
+        '大韓民國 東洋書藝大展の審査委員・運営委員・募集委員の委嘱申請書をオンラインで作成するか、HWP・PDF様式で提出してください。委員ごとの資格、委嘱手続き、手当、公正性の原則を規定の原文とともにご案内します。',
     },
     zh: {
       title: '委員委任申請',
@@ -279,7 +279,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '展示',
       description:
-        '大韓民国 東洋書芸大展や招待作家展など、東洋書道協会が開いてきた展示を、開催中・予定・過去の展示とオンライン展示に分けてご案内します。',
+        '大韓民國 東洋書藝大展や招待作家展など、東洋書道協会が開いてきた展示を、開催中・予定・過去の展示とオンライン展示に分けてご案内します。',
     },
     zh: {
       title: '展覽',
@@ -328,7 +328,7 @@ export const LOCALIZED_PAGE_COPY: Readonly<Record<string, LocalizedPageCopy>> = 
     ja: {
       title: '過去の展示',
       description:
-        '1997年から東洋書道協会が開いてきた展示の記録です。大韓民国 東洋書芸大展をはじめとする協会展示の会期と会場を沿革からまとめてお見せします。',
+        '1997年から東洋書道協会が開いてきた展示の記録です。大韓民國 東洋書藝大展をはじめとする協会展示の会期と会場を沿革からまとめてお見せします。',
     },
     zh: {
       title: '過往展覽',

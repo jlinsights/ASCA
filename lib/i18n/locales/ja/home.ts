@@ -9,7 +9,7 @@ const home: Record<string, string> = {
   homeHeroBrowse: '作品を見る',
   homeHeroImgAlt: '水墨山水',
   homeStatSince: '日韓中交流展の始まり',
-  homeStatEdition: '大韓民国 東洋書芸大展',
+  homeStatEdition: '大韓民國 東洋書藝大展',
   homeStatEditionUnit: '回',
   homeStatExhibitions: '記録された展示',
   homeStatCountries: '交流国',

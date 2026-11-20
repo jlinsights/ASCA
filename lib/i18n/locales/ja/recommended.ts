@@ -3,7 +3,7 @@
 const recommended: Record<string, string> = {
   'rc.ui.heroTitle': '推薦・招待作家の申請',
   'rc.ui.heroLede':
-    '大韓民国 東洋書芸大展の入賞点数と必須要件を満たした正会員は、推薦作家・招待作家の資格審査を申請できます。貢献・経歴のある方は、正会員でなくても特別選任を申請できます。',
+    '大韓民國 東洋書藝大展の入賞点数と必須要件を満たした正会員は、推薦作家・招待作家の資格審査を申請できます。貢献・経歴のある方は、正会員でなくても特別選任を申請できます。',
   'rc.ui.heroOnline': 'オンライン申請書の作成',
   'rc.ui.heroCriteria': '選定基準を見る',
   'rc.ui.factRecommended': '推薦作家',
@@ -33,7 +33,7 @@ const recommended: Record<string, string> = {
   'rc.ui.formOpenNew': '新しいウィンドウで開く',
   'rc.ui.criteriaEyebrow': '選定基準',
   'rc.ui.criteriaTitle': '点数と必須要件',
-  'rc.ui.scoringCaption': '大韓民国 東洋書芸大展 入賞配点',
+  'rc.ui.scoringCaption': '大韓民國 東洋書藝大展 入賞配点',
   'rc.ui.colAward': '入賞等級',
   'rc.ui.colPoints': '配点',
   'rc.ui.pointsValue': '{n}点',

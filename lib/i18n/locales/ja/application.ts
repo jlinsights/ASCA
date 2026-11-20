@@ -4,7 +4,7 @@
 const application: Record<string, string> = {
   'ap.ui.heroTitle': '出品申込書',
   'ap.ui.heroLede':
-    '大韓民国 東洋書芸大展の出品申込書を、オンラインで直接作成するか、Word・PDF様式をダウンロードして提出することができます。',
+    '大韓民國 東洋書藝大展の出品申込書を、オンラインで直接作成するか、Word・PDF様式をダウンロードして提出することができます。',
   'ap.ui.heroOnline': 'オンライン出品申込書の作成',
   'ap.ui.heroGuide': '公募要項を見る',
   'ap.ui.factDivisions': '公募部門',
