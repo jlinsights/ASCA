@@ -46,7 +46,7 @@
 | 연회비 / 등록비        | annual dues / registration fee                      | 年会費 / 登録費            | 年費 / 註冊費                |
 | 평생회비 / 발전기금    | lifetime dues / development fund                    | 終身会費 / 発展基金        | 終身會費 / 發展基金          |
 | 출품비 / 표구비 / 도록 | entry fee / mounting fee / catalog                  | 出品料 / 表具代 / 図録     | 參展費 / 裝裱費 / 圖錄       |
-| 대한민국 동양서예대전  | Korea Oriental Calligraphy Exhibition               | 大韓民国 東洋書芸大展      | 大韓民國 東洋書藝大展        |
+| 대한민국 동양서예대전  | Korea Oriental Calligraphy Exhibition               | 大韓民國 東洋書藝大展      | 大韓民國 東洋書藝大展        |
 | 공모전 / 공모요강      | open competition / call for entries                 | 公募展 / 募集要項          | 公募展 / 徵件簡章            |
 | 운영위원 / 심사위원    | Steering Committee Member / Juror                   | 運営委員 / 審査委員        | 運營委員 / 評審委員          |
 | 모집위원               | Recruitment Committee Member                        | 募集委員                   | 招募委員                     |

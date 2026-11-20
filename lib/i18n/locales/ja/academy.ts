@@ -157,7 +157,7 @@ const academy: Record<string, string> = {
   'ac.munwonFeature.2': '修了証を授与（下位課程から受講可）',
   'ac.munwonFeature.3': '書体別の実技指導',
   'ac.munwonFeature.4': '作品企画法の指導',
-  'ac.anam.title': '大韓民国東洋書芸大展 審査委員長',
+  'ac.anam.title': '大韓民國東洋書藝大展 審査委員長',
   'ac.anam.role': '大韓檢定會 Hanja Hanmun Gyosa Jungang Yeonsuwon 専任教授',
   'ac.anam.career.1': '東洋哲学博士',
   'ac.anam.career.2': 'Wonkwang University 書芸文化学科・東洋学大学院の講師及び招聘教授を歴任',

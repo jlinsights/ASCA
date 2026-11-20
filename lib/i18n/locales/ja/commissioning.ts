@@ -2,9 +2,9 @@
 // 手当・旅費・食費・成果インセンティブの金額は ko 値と同じでなければならない。
 
 const commissioning: Record<string, string> = {
-  'cm.ui.heroTitle': '東洋書芸大展 委員委嘱の応募',
+  'cm.ui.heroTitle': '東洋書藝大展 委員委嘱の応募',
   'cm.ui.heroLede':
-    '大韓民国 東洋書芸大展を共に運営する審査委員・運営委員・募集委員を募集します。資格をご確認のうえ、オンラインで申請書をお送りください。',
+    '大韓民國 東洋書藝大展を共に運営する審査委員・運営委員・募集委員を募集します。資格をご確認のうえ、オンラインで申請書をお送りください。',
   'cm.ui.heroOnline': 'オンライン申請書の作成',
   'cm.ui.heroRoles': '委員の資格を見る',
   'cm.ui.factRoles': '委員区分',
@@ -59,7 +59,7 @@ const commissioning: Record<string, string> = {
     'オンラインの申請書は、段階ごとの質問に答えたあと、最後に送信ボタンを押すと受け付けられます。書類で提出される場合は、Hancom Docs・PDF様式をダウンロードしてください。',
   'cm.ui.formTitle': 'オンライン委員委嘱申請書',
   'cm.ui.formRecommended': '推奨',
-  'cm.ui.formFrameTitle': '大韓民国 東洋書芸大展 委員委嘱申請書',
+  'cm.ui.formFrameTitle': '大韓民國 東洋書藝大展 委員委嘱申請書',
   'cm.ui.formFallback': '様式が表示されない場合',
   'cm.ui.formOpenNew': '新しいウィンドウで開く',
   'cm.ui.contactEyebrow': 'お問い合わせ・相談',
@@ -80,7 +80,7 @@ const commissioning: Record<string, string> = {
   'cm.role.1.src.1': '第3条',
   'cm.role.1.src.2': '第6条',
   'cm.role.2.title': '運営委員',
-  'cm.role.2.duty': '大韓民国 東洋書芸大展の運営会議に出席します。会議1回は2時間を基準とします。',
+  'cm.role.2.duty': '大韓民國 東洋書藝大展の運営会議に出席します。会議1回は2時間を基準とします。',
   'cm.role.2.qual.1': '協会の招待作家（諮問委員・顧問を含む）',
   'cm.role.2.qual.2': '他の書道団体の招待作家',
   'cm.role.2.qual.3': '協会の顧問または諮問委員が推薦した方',
@@ -106,7 +106,7 @@ const commissioning: Record<string, string> = {
   'cm.step.3.body': '理事会の議決により委嘱を決定し、委嘱状を授与します。',
   'cm.step.4.title': '任期',
   'cm.step.4.body':
-    '委嘱日から当年の大韓民国 東洋書芸大展の終了日までです。異議申立ての再審査は処理が終わるまで担当します。',
+    '委嘱日から当年の大韓民國 東洋書藝大展の終了日までです。異議申立ての再審査は処理が終わるまで担当します。',
   'cm.src.step.1': '運営及び審査規程 第4条',
   'cm.src.step.2': '第8条',
   'cm.jurorPay.1.1': '審査手当（審査料）',

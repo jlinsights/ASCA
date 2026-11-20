@@ -3,7 +3,7 @@
 const awards: Record<string, string> = {
   'aw.ui.heroTitle': '受賞',
   'aw.ui.heroLede':
-    '大韓民国 東洋書芸大展は本賞と特別賞を授与します。本賞は作品の芸術性を、特別賞は複数の書体にわたる均衡のとれた研究を基準に選びます。',
+    '大韓民國 東洋書藝大展は本賞と特別賞を授与します。本賞は作品の芸術性を、特別賞は複数の書体にわたる均衡のとれた研究を基準に選びます。',
   'aw.ui.heroApply': '出品申込書を作成',
   'aw.ui.factEditions': 'これまでの大展',
   'aw.ui.factEditionsValue': '{n}回',
@@ -31,7 +31,7 @@ const awards: Record<string, string> = {
   'aw.ui.editionsTitle': '第1回から第{n}回まで',
   'aw.ui.editionsLede':
     '開催期間と会場は協会沿革の記録です。回ごとの受賞者名簿は事務局にお問い合わせください。',
-  'aw.ui.editionsCaption': '歴代の大韓民国 東洋書芸大展',
+  'aw.ui.editionsCaption': '歴代の大韓民國 東洋書藝大展',
   'aw.ui.colEdition': '回',
   'aw.ui.colYear': '年',
   'aw.ui.colDates': '期間',

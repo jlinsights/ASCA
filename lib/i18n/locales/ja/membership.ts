@@ -16,8 +16,8 @@ const membership: Record<string, string> = {
   'mb.ui.perYear': '/ 年',
   'mb.ui.promoTitle': '作家の昇格基準',
   'mb.ui.promoLede':
-    '大韓民国 東洋書芸大展の入賞点数と資格審査により、推薦作家・招待作家を選任します。',
-  'mb.ui.scoresCaption': '大韓民国 東洋書芸大展 受賞等級別の配点',
+    '大韓民國 東洋書藝大展の入賞点数と資格審査により、推薦作家・招待作家を選任します。',
+  'mb.ui.scoresCaption': '大韓民國 東洋書藝大展 受賞等級別の配点',
   'mb.ui.colAward': '受賞等級',
   'mb.ui.colPoints': '配点',
   'mb.ui.pointsUnit': '点',
