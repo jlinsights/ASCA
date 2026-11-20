@@ -68,6 +68,7 @@ export const PARTNER_CATEGORIES: readonly PartnerCategory[] = [
     id: 'galleries',
     title: '화랑 및 갤러리',
     partners: [
+      { name: '갤러리은', url: 'https://galleryeun.com/' },
       { name: 'Artsy', url: 'https://www.artsy.net/' },
       { name: 'Lehmann Maupin', url: 'https://www.lehmannmaupin.com/' },
     ],
