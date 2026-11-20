@@ -4,7 +4,7 @@
 const application: Record<string, string> = {
   'ap.ui.heroTitle': 'Entry Form',
   'ap.ui.heroLede':
-    'You can fill in the entry form for the Korea Oriental Calligraphy Grand Exhibition online, or download the Word or PDF form and submit it.',
+    'You can fill in the entry form for the Korea Oriental Calligraphy Exhibition online, or download the Word or PDF form and submit it.',
   'ap.ui.heroOnline': 'Fill in the online entry form',
   'ap.ui.heroGuide': 'View the call for entries',
   'ap.ui.factDivisions': 'Divisions',

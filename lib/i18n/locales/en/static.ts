@@ -102,7 +102,7 @@ const staticTable: Record<string, string> = {
     'Curating exhibitions across classical Chinese-character calligraphy, Korean Hangeul calligraphy, literati painting, and contemporary expression.',
   homeWhatWeDoContestLabel: 'Competitions',
   homeWhatWeDoContestBody:
-    'The Korea Oriental Calligraphy Grand Exhibition and other open calls — discovering artists and presenting new work.',
+    'The Korea Oriental Calligraphy Exhibition and other open calls — discovering artists and presenting new work.',
   homeWhatWeDoEducationLabel: 'Education',
   homeWhatWeDoEducationBody:
     'Structured programs from foundational practice to creative work, appreciation, seal carving, and literati painting.',

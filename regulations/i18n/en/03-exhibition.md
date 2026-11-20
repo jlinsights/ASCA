@@ -25,8 +25,8 @@ the rights and interests of members, and supporting creative activities.
 These Regulations apply to all exhibition-related profit-generating businesses
 and agency services that the Society hosts, organizes, or sponsors, or performs
 upon entrustment from members (or outside artists). However, matters concerning
-the judging and operation of the Korea Oriental Calligraphy Grand Exhibition
-shall follow separate regulations.
+the judging and operation of the Korea Oriental Calligraphy Exhibition shall
+follow separate regulations.
 
 ## Chapter 2 Exhibition Agency Services and Planning Support
 

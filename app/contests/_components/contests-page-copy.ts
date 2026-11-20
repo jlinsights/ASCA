@@ -66,7 +66,7 @@ export const CONTESTS_PAGE_COPY: Record<Language, ContestsPageCopy> = {
   en: {
     hero: {
       title: 'Open Call',
-      lede: 'Guidelines, entry and award information for the Korea Oriental Calligraphy Grand Exhibition, organized by the association, all in one place.',
+      lede: 'Guidelines, entry and award information for the Korea Oriental Calligraphy Exhibition, organized by the association, all in one place.',
       apply: 'Entry form',
       commission: 'Apply for committee appointment',
     },
@@ -94,7 +94,7 @@ export const CONTESTS_PAGE_COPY: Record<Language, ContestsPageCopy> = {
       eyebrow: 'Past editions',
       title: latest => `From the 1st to the ${ordinal(latest)}`,
       lede: 'Dates and venues are taken from the association’s history records.',
-      caption: 'Past Korea Oriental Calligraphy Grand Exhibitions',
+      caption: 'Past Korea Oriental Calligraphy Exhibitions',
       columns: ['Edition', 'Year', 'Dates', 'Venue'],
       online: '(online)',
     },

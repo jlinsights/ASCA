@@ -40,7 +40,7 @@ const en: FeaturedCopy = {
   inviteEyebrow: '書境 Invited Artists · Solo · Booth exhibitions',
   inviteTitle: 'So that one exhibition becomes a lasting record',
   inviteBody:
-    'During the 23rd Grand Exhibition, solo exhibitions of 10 or more works and booth exhibitions by calligraphy groups open alongside the 書境 Invited Artists Exhibition. The Membership and Dues Regulations set the cost of building and maintaining a personal website by the number of works in a solo exhibition. The works stay at the artist’s own address after the exhibition closes. The secretariat builds and runs both personal websites and websites for the groups artists lead.',
+    'During the 23rd Korea Oriental Calligraphy Exhibition, solo exhibitions of 10 or more works and booth exhibitions by calligraphy groups open alongside the 書境 Invited Artists Exhibition. The Membership and Dues Regulations set the cost of building and maintaining a personal website by the number of works in a solo exhibition. The works stay at the artist’s own address after the exhibition closes. The secretariat builds and runs both personal websites and websites for the groups artists lead.',
   linkShogyeong: 'How to enter 書境',
   linkEntryFees: 'Solo and booth entry fees',
   linkHomepageRule:
