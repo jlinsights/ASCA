@@ -3,7 +3,7 @@
 const recommended: Record<string, string> = {
   'rc.ui.heroTitle': 'Apply as a Recommended or Invited Artist',
   'rc.ui.heroLede':
-    'Full Members with the required award points from the Korea Oriental Calligraphy Grand Exhibition and the essential requirements may apply for the Recommended Artist or Invited Artist qualification review. Those with contributions or a relevant career may apply for special appointment even if they are not Full Members.',
+    'Full Members with the required award points from the Korea Oriental Calligraphy Exhibition and the essential requirements may apply for the Recommended Artist or Invited Artist qualification review. Those with contributions or a relevant career may apply for special appointment even if they are not Full Members.',
   'rc.ui.heroOnline': 'Fill in the online application',
   'rc.ui.heroCriteria': 'See the selection criteria',
   'rc.ui.factRecommended': 'Recommended Artist',
@@ -34,7 +34,7 @@ const recommended: Record<string, string> = {
   'rc.ui.formOpenNew': 'Open in a new window',
   'rc.ui.criteriaEyebrow': 'Selection criteria',
   'rc.ui.criteriaTitle': 'Points and essential requirements',
-  'rc.ui.scoringCaption': 'Points by award grade, Korea Oriental Calligraphy Grand Exhibition',
+  'rc.ui.scoringCaption': 'Points by award grade, Korea Oriental Calligraphy Exhibition',
   'rc.ui.colAward': 'Award grade',
   'rc.ui.colPoints': 'Points',
   'rc.ui.pointsValue': '{n}',

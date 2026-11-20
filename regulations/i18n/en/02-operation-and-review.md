@@ -23,11 +23,11 @@ Incorporation.
 
 ① The Steering Committee consists of the Chairperson of the Steering Committee
 and Steering Committee Members, and shall contribute to the smooth operation of
-the Korea Oriental Calligraphy Grand Exhibition.
+the Korea Oriental Calligraphy Exhibition.
 
 ② The judging panel consists of the Chairperson of Judges and Judges, and
 selects prize-winning works through fair judging of the Korea Oriental
-Calligraphy Grand Exhibition.
+Calligraphy Exhibition.
 
 ### Article 3 (Qualifications)
 
@@ -79,9 +79,9 @@ exhibitions and proactive participation in promotional activities.
 ### Article 4 (Method of Appointment)
 
 The Chairperson shall determine the number of persons based on the number of
-judgments, one month before the Korea Oriental Calligraphy Grand Exhibition is
-held. The Chairperson shall recommend twice the required number, the appointment
-shall be decided by a resolution of the Board of Directors, and an appointment
+judgments, one month before the Korea Oriental Calligraphy Exhibition is held.
+The Chairperson shall recommend twice the required number, the appointment shall
+be decided by a resolution of the Board of Directors, and an appointment
 certificate shall be granted.
 
 ### Article 4-2 (Allowances and Remuneration of Members)
@@ -135,7 +135,7 @@ recused from judging that work.**
 
 ### Article 5 (Judging Divisions and Sheet Sizes)
 
-The entry works for the Korea Oriental Calligraphy Grand Exhibition shall be
+The entry works for the Korea Oriental Calligraphy Exhibition shall be
 **national-exhibition sheet (70×200cm), full sheet (70×136cm), and half sheet
 (35×136cm)**. The competition divisions consist of the following five divisions,
 and divisions may be added upon a resolution of the Board of Directors where

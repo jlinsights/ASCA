@@ -65,7 +65,7 @@ export const SITE_FAQ_EN: FaqTranslations = {
     sources: ['Contest guide'],
   },
   'entry-fees': {
-    q: 'How many works can I enter in the Korea Oriental Calligraphy Grand Exhibition, and what are the fees?',
+    q: 'How many works can I enter in the Korea Oriental Calligraphy Exhibition, and what are the fees?',
     a: 'General contest entry fees are separate from mounting:\n- Young artist: KRW 50,000 for the first work; KRW 40,000 per additional work from the 2nd to 9th\n- General artist: KRW 60,000; KRW 50,000 for each additional work\n- Recommended artist: KRW 100,000; KRW 90,000 for each additional work\n- Invited artist: KRW 200,000; KRW 190,000 for each additional work\n\nNon-member fees and fees from the 10th work are set by the relevant call. Check that edition’s guidelines for the actual entry limit and eligibility. Solo and booth exhibitions use a separate fee schedule.',
     sources: ['Regulations on Membership and Dues, Art. 6', 'Contest guide'],
   },
@@ -75,13 +75,13 @@ export const SITE_FAQ_EN: FaqTranslations = {
     sources: ['Regulations on Operation and Judging, Art. 5', 'Contest guide'],
   },
   awards: {
-    q: 'What are the awards and prize money of the Korea Oriental Calligraphy Grand Exhibition?',
+    q: 'What are the awards and prize money of the Korea Oriental Calligraphy Exhibition?',
     a: "[Main prizes]\n- Grand Prize: 1 winner, certificate and KRW 2,000,000\n- Top Excellence Prize: 1 winner, certificate and KRW 1,000,000\n- Excellence Prize: 2 winners, certificate and KRW 300,000\n\n[Special prizes]\n- Five-Script Prize: 3 winners, certificate and KRW 200,000\n- Three-Script Prize: 4 winners, certificate and KRW 150,000\n\n[Other honors] Special Selection 30, Selected 50 (certificate)\n\nThe number of awards may be adjusted by resolution of the board according to the number and level of entries, and special prizes such as a sponsor's prize or chairman's prize may be created by resolution of the board depending on finances or special sponsorship. Taxes on prize money are borne by the winner.",
     sources: ['Regulations on Operation and Judging, Art. 7'],
   },
   'artist-selection': {
     q: 'What are the criteria for selecting recommended and invited artists?',
-    a: 'Points for awards at the Korea Oriental Calligraphy Grand Exhibition:\n- Selected 1 / Special Selection 3 / Three-Script Prize 5 / Five-Script Prize 7\n- Excellence Prize 7 / Top Excellence Prize 8 / Grand Prize 9\nOnly the single highest score in a given year counts.\n\nRecommended artists are chosen from those with 10 or more points in total, and invited artists from those with 15 or more. Recommended artists need at least 3 years as a full member, and invited artists at least 5 years as a recommended artist.\n\nPoints alone do not bring promotion. Candidates must also have entered consecutively within the last 3 years, passed a portfolio review of representative works, taken part in at least 3 association activities, and have no disciplinary action in the last 5 years. With the approval of at least two-thirds of the qualification review committee, the chairman makes the final appointment.\n\nThose without award points but with contributions or experience may apply for special appointment. Eligibility and costs are explained under "Can I become a recommended or invited artist without being a full member?"',
+    a: 'Points for awards at the Korea Oriental Calligraphy Exhibition:\n- Selected 1 / Special Selection 3 / Three-Script Prize 5 / Five-Script Prize 7\n- Excellence Prize 7 / Top Excellence Prize 8 / Grand Prize 9\nOnly the single highest score in a given year counts.\n\nRecommended artists are chosen from those with 10 or more points in total, and invited artists from those with 15 or more. Recommended artists need at least 3 years as a full member, and invited artists at least 5 years as a recommended artist.\n\nPoints alone do not bring promotion. Candidates must also have entered consecutively within the last 3 years, passed a portfolio review of representative works, taken part in at least 3 association activities, and have no disciplinary action in the last 5 years. With the approval of at least two-thirds of the qualification review committee, the chairman makes the final appointment.\n\nThose without award points but with contributions or experience may apply for special appointment. Eligibility and costs are explained under "Can I become a recommended or invited artist without being a full member?"',
     sources: [
       'Regulations on Appointing Recommended and Invited Artists, Art. 2',
       'Art. 3',

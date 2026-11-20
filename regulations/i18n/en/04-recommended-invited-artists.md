@@ -47,7 +47,7 @@ from appointment if they do not satisfy all of the following requirements.
 
 ### Article 4 (Point Standards for Award Records)
 
-① Points for winners of the Korea Oriental Calligraphy Grand Exhibition
+① Points for winners of the Korea Oriental Calligraphy Exhibition
 
 1. Selected (入選): 1 point
 2. Special Selection (特選): 3 points
@@ -72,9 +72,8 @@ shall be given differentiated points as follows.
 1. Metropolitan city or province level: 2 points
 2. City, county, or district level: 1 point ② An additional 1 point shall be
    added for award records held for three consecutive years. ③ Where points have
-   been earned from the Korea Oriental Calligraphy Grand Exhibition or an
-   exhibition of another chapter in the same year, only the highest score is
-   recognized.
+   been earned from the Korea Oriental Calligraphy Exhibition or an exhibition
+   of another chapter in the same year, only the highest score is recognized.
 
 ### Article 6 (Bonus Points for Education, Career, and Contribution)
 

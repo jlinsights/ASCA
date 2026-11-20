@@ -17,8 +17,8 @@ const membership: Record<string, string> = {
   'mb.ui.perYear': '/ year',
   'mb.ui.promoTitle': 'Promotion criteria for artists',
   'mb.ui.promoLede':
-    'Recommended and Invited Artists are appointed on the basis of award points at the Korea Oriental Calligraphy Grand Exhibition and a qualification review.',
-  'mb.ui.scoresCaption': 'Points by award grade, Korea Oriental Calligraphy Grand Exhibition',
+    'Recommended and Invited Artists are appointed on the basis of award points at the Korea Oriental Calligraphy Exhibition and a qualification review.',
+  'mb.ui.scoresCaption': 'Points by award grade, Korea Oriental Calligraphy Exhibition',
   'mb.ui.colAward': 'Award grade',
   'mb.ui.colPoints': 'Points',
   'mb.ui.pointsUnit': 'points',

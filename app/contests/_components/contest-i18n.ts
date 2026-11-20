@@ -79,7 +79,7 @@ export const editionLabel = (edition: number, lang: Language): string =>
 export const contestTitle = (lang: Language): string =>
   ({
     ko: `제${CONTEST_23.edition}회 대한민국 동양서예대전`,
-    en: `${ordinal(CONTEST_23.edition)} Korea Oriental Calligraphy Grand Exhibition`,
+    en: `${ordinal(CONTEST_23.edition)} Korea Oriental Calligraphy Exhibition`,
     // 공식 한자 전시명은 일본어·중국어에서도 그대로 쓴다(연혁 표기와 같음)
     ja: `第${CONTEST_23.edition}回 大韓民國 東洋書藝大展`,
     zh: `第${CONTEST_23.edition}回 大韓民國 東洋書藝大展`,

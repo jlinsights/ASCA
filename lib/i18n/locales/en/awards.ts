@@ -3,7 +3,7 @@
 const awards: Record<string, string> = {
   'aw.ui.heroTitle': 'Awards',
   'aw.ui.heroLede':
-    'The Korea Oriental Calligraphy Grand Exhibition awards Main Prizes and Special Prizes. Main Prizes are judged on the artistry of the work; Special Prizes on balanced study across several scripts.',
+    'The Korea Oriental Calligraphy Exhibition awards Main Prizes and Special Prizes. Main Prizes are judged on the artistry of the work; Special Prizes on balanced study across several scripts.',
   'aw.ui.heroApply': 'Fill in the entry form',
   'aw.ui.factEditions': 'Editions held',
   'aw.ui.factEditionsValue': '{n}',
@@ -31,7 +31,7 @@ const awards: Record<string, string> = {
   'aw.ui.editionsTitle': 'From the 1st to the {n}th edition',
   'aw.ui.editionsLede':
     "Dates and venues are taken from the Society's history records. For the list of winners of each edition, please contact the Secretariat.",
-  'aw.ui.editionsCaption': 'Past editions of the Korea Oriental Calligraphy Grand Exhibition',
+  'aw.ui.editionsCaption': 'Past editions of the Korea Oriental Calligraphy Exhibition',
   'aw.ui.colEdition': 'Edition',
   'aw.ui.colYear': 'Year',
   'aw.ui.colDates': 'Dates',

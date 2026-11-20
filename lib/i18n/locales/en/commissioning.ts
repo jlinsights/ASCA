@@ -4,7 +4,7 @@
 const commissioning: Record<string, string> = {
   'cm.ui.heroTitle': 'Application for Juror & Committee Appointment',
   'cm.ui.heroLede':
-    'We are seeking jurors, Steering Committee Members and Recruiting Committee Members to help run the Korea Oriental Calligraphy Grand Exhibition. Please check the qualifications, then send your application online.',
+    'We are seeking jurors, Steering Committee Members and Recruiting Committee Members to help run the Korea Oriental Calligraphy Exhibition. Please check the qualifications, then send your application online.',
   'cm.ui.heroOnline': 'Fill in the online application',
   'cm.ui.heroRoles': 'View juror & committee qualifications',
   'cm.ui.factRoles': 'Roles',
@@ -28,7 +28,7 @@ const commissioning: Record<string, string> = {
   'cm.ui.processEyebrow': 'Appointment steps and term',
   'cm.ui.processTitle': 'From application to appointment',
   'cm.ui.processLede':
-    'Committee members are appointed for each Grand Exhibition, and the term runs until the close of that Exhibition.',
+    'Committee members are appointed for each Exhibition, and the term runs until the close of that Exhibition.',
   'cm.ui.payEyebrow': 'Committee allowances and fees',
   'cm.ui.payTitle': 'Allowances',
   'cm.ui.payLede':
@@ -61,7 +61,7 @@ const commissioning: Record<string, string> = {
   'cm.ui.formTitle': 'Online juror & committee appointment application',
   'cm.ui.formRecommended': 'Recommended',
   'cm.ui.formFrameTitle':
-    'Korea Oriental Calligraphy Grand Exhibition juror & committee appointment application',
+    'Korea Oriental Calligraphy Exhibition juror & committee appointment application',
   'cm.ui.formFallback': 'If the form does not appear',
   'cm.ui.formOpenNew': 'Open in a new window',
   'cm.ui.contactEyebrow': 'Enquiries & consultation',
@@ -86,7 +86,7 @@ const commissioning: Record<string, string> = {
   'cm.role.1.src.2': 'Art. 6',
   'cm.role.2.title': 'Steering Committee Members',
   'cm.role.2.duty':
-    'Attend the operating meetings of the Korea Oriental Calligraphy Grand Exhibition. One meeting is based on two hours.',
+    'Attend the operating meetings of the Korea Oriental Calligraphy Exhibition. One meeting is based on two hours.',
   'cm.role.2.qual.1':
     'Invited Artists of the Society (including Advisory Committee members and Senior Advisors)',
   'cm.role.2.qual.2': 'Invited Artists of other calligraphy organisations',
@@ -111,13 +111,13 @@ const commissioning: Record<string, string> = {
     'Send the online application, or fill in the Hancom Docs or PDF form and submit it to the Secretariat.',
   'cm.step.2.title': 'Recommendation of twice the number needed',
   'cm.step.2.body':
-    'One month before the Grand Exhibition opens, the Chairperson sets the number based on the number of works to be judged and recommends twice that number.',
+    'One month before the Exhibition opens, the Chairperson sets the number based on the number of works to be judged and recommends twice that number.',
   'cm.step.3.title': 'Board of Directors resolution',
   'cm.step.3.body':
     'The Board of Directors resolves the appointment and presents a certificate of appointment.',
   'cm.step.4.title': 'Term',
   'cm.step.4.body':
-    'The term runs from the appointment date to the close of the Korea Oriental Calligraphy Grand Exhibition in the current year. Re-examination of objections is handled until processing is complete.',
+    'The term runs from the appointment date to the close of the Korea Oriental Calligraphy Exhibition in the current year. Re-examination of objections is handled until processing is complete.',
   'cm.src.step.1': 'Regulations on Operation and Review, Art. 4',
   'cm.src.step.2': 'Art. 8',
   'cm.jurorPay.1.1': 'Judging allowance (judging fee)',
