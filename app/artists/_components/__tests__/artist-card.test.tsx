@@ -274,3 +274,19 @@ describe('ArtistCard 등급·직위 값 번역', () => {
     expect(container).toHaveTextContent('명예회장')
   })
 })
+
+describe('ArtistCard 링크', () => {
+  it.each(['pc', 'mobile'] as const)('%s: slug 가 있으면 slug 주소로 건다', variant => {
+    const { container } = render(
+      <ArtistCard artist={artist({ id: 'eab29e3b', slug: 'jinho' })} variant={variant} />
+    )
+    const hrefs = [...container.querySelectorAll('a')].map(a => a.getAttribute('href'))
+    expect(hrefs).toContain('/artists/jinho')
+    expect(hrefs).not.toContain('/artists/eab29e3b')
+  })
+
+  it('slug 가 없으면 id 주소로 건다', () => {
+    const { container } = render(<ArtistCard artist={artist({ id: 'abc' })} variant='pc' />)
+    expect(container.querySelector('a')?.getAttribute('href')).toBe('/artists/abc')
+  })
+})
