@@ -64,6 +64,11 @@ export const SITE_FAQ_EN: FaqTranslations = {
     a: 'Being a first-time entrant or a non-member does not automatically exclude you from every contest. Check the edition’s actual nationality, residence, age and prior-publication requirements.\n\nOpen-call and invited-artist sections may have different eligibility and fees. Taking part does not itself grant recommended or invited artist status.',
     sources: ['Contest guide'],
   },
+  'contest-overseas': {
+    q: 'Can I enter the contest if I live outside Korea?',
+    a: 'Yes. From the 23rd Korea Oriental Calligraphy Exhibition, entry is open regardless of nationality or country of residence. For other editions, check that edition’s guidelines.\n\nIf you are entering from abroad, please contact the office first about how to pay the entry fee and how your work will be shipped and returned. Entry fees are set in Korean won.',
+    sources: ['Contest guide', 'Contact the office'],
+  },
   'entry-fees': {
     q: 'How many works can I enter in the Korea Oriental Calligraphy Exhibition, and what are the fees?',
     a: 'General contest entry fees are separate from mounting:\n- Young artist: KRW 50,000 for the first work; KRW 40,000 per additional work from the 2nd to 9th\n- General artist: KRW 60,000; KRW 50,000 for each additional work\n- Recommended artist: KRW 100,000; KRW 90,000 for each additional work\n- Invited artist: KRW 200,000; KRW 190,000 for each additional work\n\nNon-member fees and fees from the 10th work are set by the relevant call. Check that edition’s guidelines for the actual entry limit and eligibility. Solo and booth exhibitions use a separate fee schedule.',
