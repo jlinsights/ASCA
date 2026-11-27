@@ -4,7 +4,8 @@
 // 계산 코드(calculate.ts)는 이 객체만 읽으므로 다른 파일은 고치지 않는다.
 //
 // 금액은 원 단위 정수, 비율은 bp(1% = 100bp) 정수다.
-// 출처: 협회 내부 도록 가격 검토안(2026-11-15)과 회원 및 회비 규정 제7조·제9조. 이사회 의결 전이므로 approved=false.
+// 출처: 협회 내부 도록 가격 검토안(2026-11-15)과 회원 및 회비 규정 제7조·제9조(2026-11-27 개정: 1부 기준가 정회원 3만원·비회원 5만원).
+// 계산기 공개는 별도 승인 전이므로 approved=false.
 
 export interface Bracket {
   /** 이 구간의 하한(포함) */
@@ -55,8 +56,8 @@ export interface CatalogQuotePolicy {
 }
 
 export const CATALOG_QUOTE_POLICY: CatalogQuotePolicy = {
-  version: '2026-11-15-review',
-  source: '협회 내부 도록 가격 검토안 (2026-11-15) · 회비 규정 제7조·제9조',
+  version: '2026-11-27-review',
+  source: '협회 내부 도록 가격 검토안 (2026-11-15) · 회비 규정 제7조·제9조 (2026-11-27 개정)',
   approved: false,
   minWorks: 10,
   defaultSpec: {
@@ -77,7 +78,7 @@ export const CATALOG_QUOTE_POLICY: CatalogQuotePolicy = {
     ],
   },
   catalog: {
-    basePrice: { member: 20_000, nonMember: 30_000 },
+    basePrice: { member: 30_000, nonMember: 50_000 },
     paidOptions: [100, 150, 200, 250, 300, 350, 400, 450, 500],
     workBrackets: [
       { from: 10, rateBp: 0 },

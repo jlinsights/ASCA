@@ -18,9 +18,9 @@ describe('협회 내부 원가', () => {
     expect(r.cost.status).toBe('NO_VENDOR_QUOTE')
     expect(r.cost.needsReview).toBe(true)
     expect(r.cost.confirmed).toBeNull()
-    expect(r.cost.revenue).toBe(5_497_000)
-    expect(r.cost.paymentFee).toBe(137_425)
-    expect(r.quote.catalog.amount).toBe(5_497_000)
+    expect(r.cost.revenue).toBe(8_245_500)
+    expect(r.cost.paymentFee).toBe(206_138)
+    expect(r.quote.catalog.amount).toBe(8_245_500)
   })
 
   it('견적 부수가 총 인쇄부수(무료+유료+예비)와 다르면 손익을 내지 않는다', () => {
@@ -45,8 +45,8 @@ describe('협회 내부 원가', () => {
     const r = computeInternalCost({ quote, vendorQuote: vendor, extraEditing: 100_000 })
     if (!r.ok) throw new Error('expected ok')
     expect(r.cost.confirmed).toMatchObject({
-      totalCost: 3_000_000 + 100_000 + 137_425,
-      profit: 5_497_000 - 3_237_425,
+      totalCost: 3_000_000 + 100_000 + 206_138,
+      profit: 8_245_500 - 3_306_138,
       quotedAt: '2026-11-15',
     })
     expect(r.cost.status).toBe('OK')
@@ -54,10 +54,10 @@ describe('협회 내부 원가', () => {
   })
 
   it('목표 마진 미달은 운영 검토로 표시하고 가격·무료분을 바꾸지 않는다', () => {
-    const r = computeInternalCost({ quote, vendorQuote: { ...vendor, productionCost: 4_900_000 } })
+    const r = computeInternalCost({ quote, vendorQuote: { ...vendor, productionCost: 7_350_000 } })
     if (!r.ok) throw new Error('expected ok')
     expect(r.cost.status).toBe('BELOW_TARGET')
-    expect(r.quote.catalog.amount).toBe(5_497_000)
+    expect(r.quote.catalog.amount).toBe(8_245_500)
     expect(r.quote.catalog.freeCopies).toBe(20)
   })
 
@@ -68,7 +68,7 @@ describe('협회 내부 원가', () => {
     // 권당 9,123.45원 × 320부 = 2,919,504원 — 권당 단가를 반올림하지 않고 한 번만 반올림한다
     expect(r.cost.reference).toMatchObject({
       productionCost: 2_919_504,
-      totalCost: 2_919_504 + 137_425,
+      totalCost: 2_919_504 + 206_138,
     })
     expect(r.cost.reference!.assumption).toMatch(/같은 사양/)
   })
@@ -115,7 +115,7 @@ describe('협회 내부 원가', () => {
     expect(confirmed.cost.confirmed).toMatchObject({
       extraVat: 300_000,
       extraDelivery: 0,
-      totalCost: 3_000_000 + 300_000 + 137_425,
+      totalCost: 3_000_000 + 300_000 + 206_138,
     })
   })
 })

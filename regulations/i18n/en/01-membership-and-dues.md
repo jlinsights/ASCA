@@ -1,7 +1,7 @@
 ---
 title: 'Regulations on Membership and Dues'
 effective_note:
-  '[Effective 2026. 11. 16.] [2026. 11. 16., Arts. 7 and 9 partly amended]'
+  '[Effective 2026. 11. 27.] [2026. 11. 27., Art. 9 partly amended]'
 status: In force
 source: https://orientalcalligraphy.org/articles-of-incorporation-and-bylaws
 migrated_at: 2026-10-19
@@ -9,7 +9,7 @@ migrated_at: 2026-10-19
 
 # Regulations on Membership and Dues
 
-> [Effective 2026. 11. 16.] [2026. 11. 16., Arts. 7 and 9 partly amended]
+> [Effective 2026. 11. 27.] [2026. 11. 27., Art. 9 partly amended]
 
 ### Article 1 (Purpose)
 
@@ -236,8 +236,8 @@ Full Members are offered a discount.
 ### Article 9 (Catalog Fees)
 
 ① (Free copy of the joint exhibition catalog) The joint exhibition catalog
-published by the Society is provided free of charge, one copy each, to Full
-Members who take part in the exhibition.
+published by the Society is provided free of charge, one copy each, to every
+artist who takes part in the exhibition, whether or not a member.
 
 ② (Purchase price of the joint exhibition catalog) For additional copies of the
 catalog under paragraph 1, or for purchases by anyone not eligible for the free
@@ -245,8 +245,8 @@ copy under paragraph 1, the following prices apply.
 
 | Category             | Additional Catalog Purchase (per copy) |
 | -------------------- | -------------------------------------- |
-| Member (Full Member) | KRW 20,000                             |
-| Non-member           | KRW 30,000                             |
+| Member (Full Member) | KRW 30,000                             |
+| Non-member           | KRW 50,000                             |
 
 ③ (Production methods for commissioned catalogs) Where an artist or group taking
 part in a solo exhibition or calligraphy group booth exhibition commissions the
@@ -279,7 +279,7 @@ after the Board of Directors has resolved the discount criteria under paragraph
 3. Paid copies beyond the free copies are ordered in units of 50, from 100 to
    500 copies. More than 500 copies, or any other quantity, is priced by
    separate quotation.
-4. The base price per copy is KRW 20,000 for Full Members and KRW 30,000 for
+4. The base price per copy is KRW 30,000 for Full Members and KRW 50,000 for
    non-members. For Full Members, the discount rate for the number of works
    entered and the discount rate for the quantity band under paragraph 6 are
    added together, and the combined rate does not exceed 25%. A quantity-band
@@ -497,3 +497,9 @@ reported to the next General Assembly.
 ### Article 1 (Effective Date)
 
 These Regulations shall take effect on November 16, 2026.
+
+## Addenda <2026. 11. 27.>
+
+### Article 1 (Effective Date)
+
+These Regulations shall take effect on November 27, 2026.

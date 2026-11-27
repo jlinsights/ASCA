@@ -19,8 +19,8 @@ const homepagePrograms: Record<string, string> = {
   hpProgStep2Label: '記録',
   hpProgStep2Title: '紙の図録とオンライン図録',
   hpProgStep2Body:
-    '協会が主催する展覧会では、協会が図録を制作します。出品した正会員は印刷図録を1冊受け取り、同じ図録をオンラインでも閲覧できます。',
-  hpProgStep2Point1: '出品した正会員に印刷図録1冊、追加分は会員価格',
+    '協会が主催する展覧会では、協会が図録を制作します。出品した作家は会員か否かを問わず印刷図録を1冊無料で受け取り、同じ図録をオンラインでも閲覧できます。',
+  hpProgStep2Point1: '出品した作家に印刷図録1冊無料、追加分は会員・非会員それぞれの価格',
   hpProgStep2Point2: 'どこからでも見られるオンライン図録',
   hpProgStep2Point3:
     '協会の企画展では作家ごとに独立した展示空間と図録の紙面、芸術活動証明の手続き支援',

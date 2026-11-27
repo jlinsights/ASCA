@@ -21,8 +21,8 @@ const homepagePrograms: Record<string, string> = {
   hpProgStep2Label: '기록',
   hpProgStep2Title: '종이 도록과 온라인 도록',
   hpProgStep2Body:
-    '협회가 주관하는 전시는 협회가 도록을 만듭니다. 전시에 참여한 정회원은 인쇄 도록 한 권을 받고, 같은 도록을 온라인에서도 펼쳐 볼 수 있습니다.',
-  hpProgStep2Point1: '전시 참여 정회원에게 인쇄 도록 1권 제공, 추가분은 회원가',
+    '협회가 주관하는 전시는 협회가 도록을 만듭니다. 전시에 참여한 작가는 회원 여부와 관계없이 인쇄 도록 한 권을 무료로 받고, 같은 도록을 온라인에서도 펼쳐 볼 수 있습니다.',
+  hpProgStep2Point1: '전시 참여 작가에게 인쇄 도록 1권 무료, 추가분은 회원·비회원 가격으로 구매',
   hpProgStep2Point2: '온라인 도록으로 어디서나 열람',
   hpProgStep2Point3:
     '협회 기획 전시는 작가마다 독립된 전시 공간과 도록 지면, 예술활동증명 행정 지원',

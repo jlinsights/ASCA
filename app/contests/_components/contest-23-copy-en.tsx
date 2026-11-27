@@ -110,7 +110,7 @@ export function enGuidelines(): GuidelineCopy {
         {
           label: 'Mounting',
           value:
-            'Submit backed (baejeop, 褙接) but unframed · Finished mountings (frames, hanging scrolls, folding screens) and works under glass are not accepted',
+            'Submit backed (baejeop, 褙接) but unframed · Mountings finished by the artist (frames, hanging scrolls, folding screens) and works under glass are not accepted for the contest',
         },
         {
           label: 'Seal & signature',
@@ -126,7 +126,7 @@ export function enGuidelines(): GuidelineCopy {
     fees: {
       eyebrow: 'Entry fees',
       title: 'Entry fees and payment account',
-      lede: 'From the second work the fee per work goes down. Mounting fees apply only to works selected or higher.',
+      lede: 'From the second work the fee per work goes down. Mounting fees apply only to works selected or higher, and the association mounts by hand-backing.',
       caption: 'Entry fees (mounting fee separate)',
       columns: [
         { label: 'Category' },
@@ -183,7 +183,7 @@ export function enGuidelines(): GuidelineCopy {
       rows: foreignAwards('en'),
     },
     prizesNote:
-      'Special Selection and Selected works are exhibited and included in the catalogue. Award records count toward appointment as a recommended or invited artist.',
+      'Special Selection and Selected works are exhibited and included in the catalogue, and participating artists receive one joint catalogue free. Award records count toward appointment as a recommended or invited artist.',
     notice: {
       eyebrow: 'Notes',
       title: 'Please check before entering',
@@ -193,7 +193,9 @@ export function enGuidelines(): GuidelineCopy {
         'If a rule violation is confirmed, selections and awards may be cancelled and the result made public.',
         'Artists who wish to sell may do so under the association’s consignment contract (70% to the artist).',
         'Judging criteria (technique, composition, creativity, completeness) follow the association’s judging regulations, and objections to results are not accepted. Grades and numbers are adjusted if entries fall short of the standard.',
-        'A mounting fee is charged for works selected or higher (hand-backing as standard, at member rates). Prize money is paid after tax.',
+        'The association mounts works by hand-backing, not machine backing, as a rule. A mounting fee is charged for works selected or higher (at member rates). Prize money is paid after tax.',
+        'Works the artist has mounted themselves cannot be entered in the contest. Self-mounted works are accepted only for the Seokyeong (書境) Recommended and Invited Artists Exhibition.',
+        'Artists participating in the exhibition receive one joint exhibition catalogue free.',
         'Anything not covered here follows decisions of the association’s board of directors and steering committee.',
       ],
     },

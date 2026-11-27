@@ -19,8 +19,8 @@ const homepagePrograms: Record<string, string> = {
   hpProgStep2Label: '紀錄',
   hpProgStep2Title: '紙本圖錄與線上圖錄',
   hpProgStep2Body:
-    '協會主辦的展覽由協會製作圖錄。參展的正會員可獲得一本紙本圖錄，同一本圖錄也能在線上翻閱。',
-  hpProgStep2Point1: '參展正會員可獲紙本圖錄一本，加購享會員價',
+    '協會主辦的展覽由協會製作圖錄。參展作家不論是否為會員，皆可免費獲得一本紙本圖錄，同一本圖錄也能在線上翻閱。',
+  hpProgStep2Point1: '參展作家可免費獲紙本圖錄一本，加購依會員・非會員價格計',
   hpProgStep2Point2: '隨處可閱覽的線上圖錄',
   hpProgStep2Point3: '協會企劃展為每位作家安排獨立展區與圖錄版面，並協助藝術活動證明的行政手續',
   hpProgStep2Cite: '會員及會費規程 第9條（圖錄）',

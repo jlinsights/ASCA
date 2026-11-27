@@ -47,7 +47,7 @@ describe('POST /api/catalog-quote', () => {
     expect(response.status).toBe(200)
     expect(response.headers.get('cache-control')).toContain('no-store')
     const body = await response.json()
-    expect(body.quote.catalog.amount).toBe(1_938_400)
+    expect(body.quote.catalog.amount).toBe(2_907_600)
     expect(JSON.stringify(body)).not.toMatch(/cost|margin|profit/i)
   })
 
