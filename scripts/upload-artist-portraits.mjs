@@ -9,8 +9,11 @@
  * 사용법:
  *   node scripts/upload-artist-portraits.mjs --dir <폴더>            # 미리 보기 — 무엇이 누구에게 붙는지만 출력
  *   node scripts/upload-artist-portraits.mjs --dir <폴더> --apply    # 업로드 + artists.profile_image 설정 (백업 먼저)
+ *   node scripts/upload-artist-portraits.mjs --dir <폴더> --replace [--apply]  # 이미 사진이 있는 작가의 사진을 새 사진으로 바꾼다
  *
- * 이미 프로필 사진이 있는 작가는 건너뛴다 — 덮어쓰지 않는다 (갱신도 profile_image 가 비어 있을 때만).
+ * 기본은 이미 프로필 사진이 있는 작가를 건너뛴다 — 덮어쓰지 않는다 (갱신도 profile_image 가 비어 있을 때만).
+ * --replace 는 사진 교체 요청을 받았을 때만 쓴다. 옛 주소는 백업 JSON 에 남고, 옛 Storage 파일은 지우지 않는다.
+ * 갱신은 미리 본 옛 값이 그대로일 때만 한다 — 그 사이 다른 사람이 바꿨으면 건너뛴다.
  * 공개(visibility='public') 작가만 올린다 — 숨김·회원 공개 작가의 사진을 공개 버킷에 올리지 않는다.
  *
  * 키: ASCA_SUPABASE_SERVICE_ROLE_KEY (미리 보기·업로드 모두).
@@ -40,6 +43,7 @@ if (dirFlag === -1 || !process.argv[dirFlag + 1]) {
 }
 const sourceDir = path.resolve(process.argv[dirFlag + 1])
 const apply = process.argv.includes('--apply')
+const replace = process.argv.includes('--replace')
 
 // 미리 보기와 업로드가 같은 행을 보도록 둘 다 서비스 키로 읽는다 (공개 키는 RLS 로 일부만 보인다)
 const key = process.env.ASCA_SUPABASE_SERVICE_ROLE_KEY
@@ -88,8 +92,8 @@ function plan(files, artists) {
     else if (artist.visibility !== 'public')
       skipped.push({ file, reason: `공개 작가가 아님(${artist.visibility})` })
     // 갱신 조건(profile_image IS NULL)과 같은 기준 — 빈 문자열도 '있음'으로 보고 건너뛴다
-    else if (artist.profile_image !== null)
-      skipped.push({ file, reason: '이미 프로필 사진 값이 있음' })
+    else if (artist.profile_image !== null && !replace)
+      skipped.push({ file, reason: '이미 프로필 사진 값이 있음 (바꾸려면 --replace)' })
     else ready.push({ file, artist })
   }
   // 같은 작가에 파일이 둘이면 뒤 파일이 같은 자리를 덮어쓴다 — 쓰기 전에 막는다
@@ -115,13 +119,17 @@ async function uploadOne({ file, artist }) {
   })
   if (error) throw new Error(`${file}: 업로드 실패 — ${error.message}`)
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(objectPath)
-  const { data: updated, error: updateError } = await supabase
+  // 미리 본 옛 값이 그대로일 때만 바꾼다 — 기본 모드에서는 옛 값이 늘 null 이다
+  const query = supabase
     .from('artists')
     .update({ profile_image: data.publicUrl })
     .eq('id', artist.id)
     .eq('visibility', 'public')
-    .is('profile_image', null)
-    .select('id')
+  const { data: updated, error: updateError } = await (
+    artist.profile_image === null
+      ? query.is('profile_image', null)
+      : query.eq('profile_image', artist.profile_image)
+  ).select('id')
   if (updateError) {
     // 갱신이 저장됐는지 알 수 없다(응답만 잃었거나 아직 커밋 중일 수 있다) — 연결됐을지 모르는 파일은 지우지 않는다
     console.error(`  ⚠ ${file}: 결과를 알 수 없어 파일을 남김 — ${objectPath} (확인 후 직접 정리)`)
@@ -132,7 +140,7 @@ async function uploadOne({ file, artist }) {
     // 그 사이 비공개가 된 작가의 사진을 공개 버킷에 남기지 않는다
     const { error: removeError } = await supabase.storage.from(BUCKET).remove([objectPath])
     if (removeError) console.error(`  ⚠ ${file}: 올린 파일 회수 실패 — ${objectPath}`)
-    throw new Error(`${file}: 그 사이 프로필 사진이 생겼거나 비공개가 되어 건너뜀`)
+    throw new Error(`${file}: 그 사이 프로필 사진이 바뀌었거나 비공개가 되어 건너뜀`)
   }
   return linked(buffer, info)
 }
@@ -161,7 +169,10 @@ const artists = await loadArtists(slugs)
 const { ready, skipped, duplicates } = plan(files, artists)
 
 console.log(`원본 ${files.length}개 · 올릴 것 ${ready.length} · 건너뜀 ${skipped.length}`)
-for (const r of ready) console.log(`  ✓ ${r.file} → ${r.artist.name} (${r.artist.slug})`)
+for (const r of ready) {
+  const was = r.artist.profile_image ? ` — 지금 사진: ${r.artist.profile_image}` : ''
+  console.log(`  ✓ ${r.file} → ${r.artist.name} (${r.artist.slug})${was}`)
+}
 for (const s of skipped) console.log(`  – ${s.file} — ${s.reason}`)
 if (duplicates.length) {
   for (const list of duplicates)
