@@ -162,7 +162,7 @@ const EN: HubCopy = {
     items: withLinks([
       {
         title: 'General entry',
-        who: 'Korean citizens · overseas Koreans · foreign residents of Korea',
+        who: 'Any nationality · entries from abroad welcome',
         body: 'Choose from five sections: Hangeul, Chinese characters, contemporary calligraphy and calligraphy art, seal and wood engraving, and literati and East Asian painting. No limits on age, education or experience.',
         links: ['Eligibility & sections', 'Size & mounting', 'Entry fees'],
       },
@@ -249,7 +249,7 @@ const JA: HubCopy = {
     items: withLinks([
       {
         title: '一般出品',
-        who: '大韓民国国民 · 在外同胞 · 韓国在住の外国人',
+        who: '国籍・居住地を問わず · 海外からも出品可',
         body: 'ハングル、漢文、現代書芸・カリグラフィー、篆刻・書刻、文人画・東洋画の5部門から選んで出品します。年齢・学歴・経歴の制限はありません。',
         links: ['資格・部門', '規格・表装', '出品料'],
       },
@@ -336,7 +336,7 @@ const ZH: HubCopy = {
     items: withLinks([
       {
         title: '一般出品',
-        who: '大韓民國國民 · 海外僑胞 · 居住韓國的外國人',
+        who: '不限國籍與居住地 · 可自海外出品',
         body: '可於韓文、漢文、現代書藝・手寫字藝術、篆刻・書刻、文人畫・東洋畫五個部門中擇一出品。不限年齡、學歷與經歷。',
         links: ['資格・部門', '規格・裝裱', '出品費'],
       },

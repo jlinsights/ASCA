@@ -73,7 +73,7 @@ export function enGuidelines(): GuidelineCopy {
       rules: [
         {
           title: 'Open to all',
-          body: 'Korean citizens, overseas Koreans and foreign residents of Korea who practice calligraphy, literati painting or seal engraving. There are no limits on age, education or experience.',
+          body: 'Anyone who practices calligraphy, literati painting or seal engraving may enter, whatever their nationality or country of residence. There are no limits on age, education or experience. If you are entering from outside Korea, please contact the secretariat first about paying the entry fee and shipping your work.',
         },
         {
           title: 'Young artists',
