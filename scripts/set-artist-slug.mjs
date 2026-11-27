@@ -100,16 +100,23 @@ if (!apply) {
   process.exit(0)
 }
 
-console.log(`\n백업: ${writeBackup(artist)}`)
+/** PostgREST 배열 비교 값 — JSON 배열을 Postgres 배열 리터럴로 */
+const pgArray = list => JSON.stringify(list).replace(/^\[/, '{').replace(/\]$/, '}')
+
+const backupFile = writeBackup(artist)
+console.log(`\n백업: ${backupFile}`)
 const { data: updated, error } = await supabase
   .from('artists')
   .update({ slug: to, slug_aliases: nextAliases })
   .eq('id', artist.id)
   .eq('slug', from)
-  .eq('slug_aliases', JSON.stringify(oldAliases).replace(/^\[/, '{').replace(/\]$/, '}'))
+  .eq('slug_aliases', pgArray(oldAliases))
   .select('id,slug,slug_aliases')
 if (error) {
   console.error(`❌ 갱신 실패 — ${error.message}`)
+  console.error(
+    `  저장됐는지 알 수 없습니다. 작가 페이지를 확인하고, 바뀌었으면 백업으로 복구하세요: ${backupFile}`
+  )
   process.exit(1)
 }
 if (!updated.length) {
@@ -121,22 +128,40 @@ if (!updated.length) {
 
 // 충돌 검사와 갱신은 한 트랜잭션이 아니다(임의 SQL RPC 를 두지 않는다) — 갱신 직후 다시 보고,
 // 그 사이 다른 작가가 같은 값을 slug·옛 주소로 갖게 됐으면 이 작가를 원래 값으로 되돌린다
-const clashes = [...(await findOne('slug', to)), ...(await findOne('alias', to))].filter(
-  a => a.id !== artist.id
-)
+let clashes
+try {
+  clashes = [...(await findOne('slug', to)), ...(await findOne('alias', to))].filter(
+    a => a.id !== artist.id
+  )
+} catch (recheckError) {
+  console.error(
+    `⚠ slug 는 '${to}' 로 이미 바뀌었지만, 직후 충돌 재검사에 실패했습니다: ${recheckError.message}`
+  )
+  console.error(
+    `  '${to}' 를 다른 작가가 slug·옛 주소로 쓰는지 직접 확인하세요. 문제가 있으면 백업으로 복구: ${backupFile}`
+  )
+  process.exit(1)
+}
 if (clashes.length) {
-  const { error: revertError } = await supabase
+  // 갱신 직후 값이 그대로일 때만 되돌린다 — 그 사이 다른 수정이 있었으면 덮어쓰지 않는다
+  const { data: reverted, error: revertError } = await supabase
     .from('artists')
     .update({ slug: from, slug_aliases: oldAliases })
     .eq('id', artist.id)
     .eq('slug', to)
+    .eq('slug_aliases', pgArray(nextAliases))
+    .select('id')
   const who = clashes.map(a => `${a.name}(${a.slug})`).join(', ')
   console.error(`❌ 갱신 직후 '${to}' 를 다른 작가도 쓰고 있었습니다: ${who}`)
-  console.error(
-    revertError
-      ? `  ⚠ 되돌리기 실패 — 백업 파일로 직접 복구하세요: ${revertError.message}`
-      : '  원래 slug·옛 주소로 되돌렸습니다.'
-  )
+  if (revertError)
+    console.error(
+      `  ⚠ 되돌리기 실패 — 백업으로 직접 복구하세요(${backupFile}): ${revertError.message}`
+    )
+  else if (!reverted.length)
+    console.error(
+      `  ⚠ 그 사이 이 작가 값이 또 바뀌어 되돌리지 않았습니다 — 직접 확인 후 복구하세요: ${backupFile}`
+    )
+  else console.error('  원래 slug·옛 주소로 되돌렸습니다.')
   process.exit(1)
 }
 console.log(`✅ 완료: ${updated[0].slug} (옛 주소 ${updated[0].slug_aliases.join(', ')})`)
