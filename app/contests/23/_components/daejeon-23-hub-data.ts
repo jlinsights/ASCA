@@ -47,7 +47,7 @@ export interface EntryPath {
 export const ENTRY_PATHS: readonly EntryPath[] = [
   {
     title: '일반 출품',
-    who: '대한민국 국민 · 재외동포 · 국내 거주 외국인',
+    who: '국적·거주지 제한 없음 · 해외 출품 가능',
     body: '한글, 한문, 현대서예·캘리그라피, 전각·서각, 문인화·동양화의 다섯 부문 가운데 골라 출품합니다. 연령·학력·경력 제한은 없습니다.',
     links: [
       { label: '자격·부문', href: '/contests#entry' },
