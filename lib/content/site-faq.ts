@@ -64,6 +64,7 @@ export const FAQ_GROUPS: readonly FaqGroup[] = [
     ids: [
       'contest-apply',
       'contest-eligibility',
+      'contest-overseas',
       'entry-fees',
       'contest-sizes',
       'awards',
