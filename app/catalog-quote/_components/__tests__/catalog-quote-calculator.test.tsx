@@ -38,7 +38,7 @@ describe('CatalogQuoteCalculator', () => {
       'paidCopies',
       'splitDelivery',
     ])
-    expect(screen.getByText('1,938,400원')).toBeInTheDocument()
+    expect(screen.getByText('2,907,600원')).toBeInTheDocument()
     expect(screen.getByText(/검토안 · 확정 금액 아님/)).toBeInTheDocument()
     expect(screen.getByText(/회원 자격 미확인/)).toBeInTheDocument()
     expect(screen.getByText(/포함되지 않은 항목/)).toBeInTheDocument()

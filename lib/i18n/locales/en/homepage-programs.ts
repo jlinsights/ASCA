@@ -19,9 +19,9 @@ const homepagePrograms: Record<string, string> = {
   hpProgStep2Label: 'Record',
   hpProgStep2Title: 'A printed and an online catalogue',
   hpProgStep2Body:
-    'The Society produces the catalogue for every exhibition it organises. Full members who exhibit receive a printed copy, and the same catalogue can be opened online.',
+    'The Society produces the catalogue for every exhibition it organises. Every exhibiting artist, member or not, receives a printed copy free, and the same catalogue can be opened online.',
   hpProgStep2Point1:
-    'One printed catalogue for each exhibiting full member, more at the member price',
+    'One free printed catalogue for each exhibiting artist; extra copies at member or non-member prices',
   hpProgStep2Point2: 'An online catalogue you can open anywhere',
   hpProgStep2Point3:
     'In Society-curated exhibitions, each artist gets their own wall space and catalogue pages, plus help with the arts activity certificate',

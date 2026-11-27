@@ -167,7 +167,7 @@ Regulation prevails, including the
    opinions on the Society's activities and take part in resolutions.
 2. Members may receive the Society's materials and publications free of charge.
    However, exhibition catalogs are governed by Article 9 of the Regulations on
-   Membership and Dues (one free copy for Full Members taking part in the
+   Membership and Dues (one free copy for every artist taking part in the
    exhibition; additional copies are charged). A printed catalog commissioned
    from the Society separately for a solo exhibition or calligraphy group booth
    exhibition is produced under the actual-cost or fixed-price method in

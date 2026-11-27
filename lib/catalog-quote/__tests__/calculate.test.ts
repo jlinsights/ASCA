@@ -16,20 +16,20 @@ function estimate(result: QuoteResult) {
 }
 
 describe('기준 예시 (검토안 엑셀과 같은 값)', () => {
-  it('정회원 20점 + 100부: 무료 20, 총 120, 도록 1,938,400원, 출품료 2,800,000원', () => {
+  it('정회원 20점 + 100부: 무료 20, 총 120, 도록 2,907,600원, 출품료 2,800,000원', () => {
     const q = estimate(quote())
     expect(q.catalog.freeCopies).toBe(20)
     expect(q.catalog.totalPrintRun).toBe(120)
-    expect(q.catalog.amount).toBe(1_938_400)
+    expect(q.catalog.amount).toBe(2_907_600)
     expect(q.entryFee.amount).toBe(2_800_000)
     expect(q.provisional).toBe(true)
     expect(q.membershipVerified).toBe(false)
   })
 
-  it('정회원 20점 + 300부: 5,497,000원, 평균 18,323원', () => {
+  it('정회원 20점 + 300부: 8,245,500원, 평균 27,485원', () => {
     const q = estimate(quote({ paidCopies: 300 }))
-    expect(q.catalog.amount).toBe(5_497_000)
-    expect(q.catalog.averagePaidUnit).toBe(18_323)
+    expect(q.catalog.amount).toBe(8_245_500)
+    expect(q.catalog.averagePaidUnit).toBe(27_485)
     expect(q.catalog.totalPrintRun).toBe(320)
   })
 })
@@ -84,7 +84,7 @@ describe('입력 차단', () => {
     const tampered = estimate(
       computeQuote({ ...base, unitPrice: 1, amount: 1, basePrice: 1, catalog: { amount: 1 } })
     )
-    expect(tampered.catalog.amount).toBe(1_938_400)
+    expect(tampered.catalog.amount).toBe(2_907_600)
   })
 })
 
@@ -105,20 +105,20 @@ describe('순수 산식 — 블록 경계', () => {
   })
 
   it('정회원 20점의 경계 금액', () => {
-    expect(catalogAmount(99, 20, 'member').amount).toBe(99 * 19_400)
-    expect(catalogAmount(100, 20, 'member').amount).toBe(99 * 19_400 + 17_800)
-    expect(catalogAmount(299, 20, 'member').amount).toBe(99 * 19_400 + 200 * 17_800)
-    expect(catalogAmount(300, 20, 'member').amount).toBe(99 * 19_400 + 200 * 17_800 + 16_400)
-    expect(catalogAmount(499, 20, 'member').amount).toBe(99 * 19_400 + 200 * 17_800 + 200 * 16_400)
+    expect(catalogAmount(99, 20, 'member').amount).toBe(99 * 29_100)
+    expect(catalogAmount(100, 20, 'member').amount).toBe(99 * 29_100 + 26_700)
+    expect(catalogAmount(299, 20, 'member').amount).toBe(99 * 29_100 + 200 * 26_700)
+    expect(catalogAmount(300, 20, 'member').amount).toBe(99 * 29_100 + 200 * 26_700 + 24_600)
+    expect(catalogAmount(499, 20, 'member').amount).toBe(99 * 29_100 + 200 * 26_700 + 200 * 24_600)
     expect(catalogAmount(500, 20, 'member').amount).toBe(
-      99 * 19_400 + 200 * 17_800 + 200 * 16_400 + 15_000
+      99 * 29_100 + 200 * 26_700 + 200 * 24_600 + 22_500
     )
   })
 
   it('합산 할인율은 25% 를 넘지 않는다 (40점 7% + 500번째 22%)', () => {
     const last = catalogAmount(500, 40, 'member').blocks.at(-1)!
     expect(last.rateBp).toBe(2500)
-    expect(last.unitPrice).toBe(15_000)
+    expect(last.unitPrice).toBe(22_500)
   })
 
   it('원 단위 0.5 올림', () => {
@@ -164,11 +164,11 @@ describe('자격과 단체', () => {
     expect(estimate(quote({ approvedWorks: 35 })).catalog.freeCopies).toBe(35)
   })
 
-  it('비회원: 무료 없음, 할인 없음, 30,000원, 비회원 출품료', () => {
+  it('비회원: 무료 없음, 할인 없음, 50,000원, 비회원 출품료', () => {
     const q = estimate(quote({ membership: 'nonMember', paidCopies: 300 }))
     expect(q.catalog.freeCopies).toBe(0)
     expect(q.catalog.totalPrintRun).toBe(300)
-    expect(q.catalog.amount).toBe(300 * 30_000)
+    expect(q.catalog.amount).toBe(300 * 50_000)
     expect(q.entryFee.amount).toBe(20 * 160_000)
   })
 
