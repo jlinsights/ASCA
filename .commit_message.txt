@@ -1,1 +1,1 @@
-🌐 일본어 전시명을 공식 한자 大韓民國 東洋書藝大展 으로 통일
+♻️ Extract password input into PasswordField to resolve auth-form max-lines warning
