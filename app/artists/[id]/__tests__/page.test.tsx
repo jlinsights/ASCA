@@ -9,12 +9,12 @@ const getArtist = jest.fn()
 const worksQuery = jest.fn()
 const loadRelated = jest.fn()
 
-const permanentRedirect = jest.fn()
+const redirect = jest.fn()
 jest.mock('next/navigation', () => ({
   notFound: () => {
     throw new Error('NEXT_NOT_FOUND')
   },
-  permanentRedirect: (url: string) => permanentRedirect(url),
+  redirect: (url: string) => redirect(url),
 }))
 jest.mock('@/components/layout/layout-footer', () => ({ LayoutFooter: () => null }))
 let mockLanguage: 'ko' | 'en' | 'ja' | 'zh' = 'ko'
@@ -107,7 +107,7 @@ beforeEach(() => {
   getArtist.mockReset().mockResolvedValue(artistRow)
   worksQuery.mockReset().mockResolvedValue({ data: works, error: null })
   loadRelated.mockReset().mockResolvedValue(null)
-  permanentRedirect.mockReset()
+  redirect.mockReset()
 })
 
 async function renderPage(id = ARTIST) {
@@ -423,24 +423,24 @@ describe('작가 상세 화면 글자 번역', () => {
 })
 
 describe('대표 주소로 옮기기', () => {
-  it('uuid 로 오면 대표 slug 주소로 308 한다', async () => {
+  it('uuid 로 오면 대표 slug 주소로 307 한다', async () => {
     await renderPage(ARTIST)
-    expect(permanentRedirect).toHaveBeenCalledWith('/artists/jeongam')
+    expect(redirect).toHaveBeenCalledWith('/artists/jeongam')
   })
 
   it('옛 주소로 와도 대표 slug 주소로 옮긴다', async () => {
     await renderPage('old-slug')
-    expect(permanentRedirect).toHaveBeenCalledWith('/artists/jeongam')
+    expect(redirect).toHaveBeenCalledWith('/artists/jeongam')
   })
 
   it('이미 대표 주소면 옮기지 않는다 (대소문자 무시)', async () => {
     await renderPage('JeongAm')
-    expect(permanentRedirect).not.toHaveBeenCalled()
+    expect(redirect).not.toHaveBeenCalled()
   })
 
   it('slug 가 없는 작가는 uuid 주소 그대로 둔다', async () => {
     getArtist.mockResolvedValue({ ...artistRow, slug: null })
     await renderPage(ARTIST)
-    expect(permanentRedirect).not.toHaveBeenCalled()
+    expect(redirect).not.toHaveBeenCalled()
   })
 })
