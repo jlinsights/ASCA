@@ -15,6 +15,11 @@ import { artistGradeLabel, artistTitleLabel, regulationGrade } from './artist-fi
 import { useLanguage } from '@/contexts/language-context'
 import { formatDiscoveryCount, useDiscoveryCopy } from '@/components/gallery/discovery-copy'
 
+/** 대표 slug 가 있으면 slug 주소, 없으면 id 주소 — artist-rails 와 같은 규칙 */
+function artistHref(artist: Pick<Artist, 'id' | 'slug'>): string {
+  return `/artists/${encodeURIComponent(artist.slug ?? artist.id)}`
+}
+
 interface ArtistCardProps {
   artist: Artist
   variant: 'pc' | 'mobile'
@@ -77,7 +82,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
         className='group relative overflow-hidden border-0 shadow-sm has-[a[data-card-link]:focus-visible]:ring-2 has-[a[data-card-link]:focus-visible]:ring-ring has-[a[data-card-link]:focus-visible]:ring-offset-2'
       >
         <Link
-          href={`/artists/${artist.id}`}
+          href={artistHref(artist)}
           data-card-link=''
           className='block rounded-[inherit] focus-visible:outline-none'
         >
@@ -112,7 +117,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           title={shareTitle}
           description={shareDescription}
           imageUrl={artist.profileImage ?? undefined}
-          webUrl={`/artists/${artist.id}`}
+          webUrl={artistHref(artist)}
           variant='outline'
           isIconOnly={true}
           size='md'
@@ -230,7 +235,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
           }
         >
           <div className='flex gap-2'>
-            <Link href={`/artists/${artist.id}`} className='flex-1'>
+            <Link href={artistHref(artist)} className='flex-1'>
               <Button
                 variant='outline'
                 size={isPc ? 'default' : 'sm'}
@@ -247,7 +252,7 @@ export function ArtistCard({ artist, variant }: ArtistCardProps) {
               title={shareTitle}
               description={shareDescription}
               imageUrl={artist.profileImage ?? undefined}
-              webUrl={`/artists/${artist.id}`}
+              webUrl={artistHref(artist)}
               variant='outline'
               isIconOnly={true}
               size='md'

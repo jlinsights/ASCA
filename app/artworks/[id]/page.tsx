@@ -26,7 +26,7 @@ interface ArtworkDetail {
   dimensions: unknown
   year_created: number | null
   images: unknown
-  artist: { id: string; name: string; name_en: string | null } | null
+  artist: { id: string; name: string; name_en: string | null; slug: string | null } | null
 }
 
 async function loadArtwork(id: string): Promise<ArtworkDetail | null> {
@@ -41,7 +41,7 @@ async function loadArtwork(id: string): Promise<ArtworkDetail | null> {
   if (!data) return null
   const { data: artist } = await supabase
     .from('artists')
-    .select('id,name,name_en')
+    .select('id,name,name_en,slug')
     .eq('id', data.artist_id)
     .maybeSingle()
   return { ...data, artist: artist ?? null }
@@ -143,7 +143,10 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
           </Link>
           <div className='flex flex-wrap gap-x-6 gap-y-2 text-sm'>
             {artwork.artist && (
-              <Link href={`/artists/${artwork.artist.id}`} className='underline underline-offset-4'>
+              <Link
+                href={`/artists/${encodeURIComponent(artwork.artist.slug ?? artwork.artist.id)}`}
+                className='underline underline-offset-4'
+              >
                 {artwork.artist.name} 작가 소개
               </Link>
             )}
