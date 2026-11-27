@@ -2,7 +2,15 @@
 import { log } from '@/lib/utils/logger'
 
 import type React from 'react'
-import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useSyncExternalStore,
+} from 'react'
 import { usePathname } from 'next/navigation'
 import {
   LANGUAGE_METADATA,
@@ -56,6 +64,8 @@ const defaultValue: LanguageContextType = {
 }
 
 const LanguageContext = createContext<LanguageContextType>(defaultValue)
+// 서버가 그린 언어로 본 값. 수화(hydration) 중인 컴포넌트는 이것을 써야 서버 HTML 과 맞는다
+const ServerLanguageContext = createContext<LanguageContextType>(defaultValue)
 
 /** 방문자가 고른 언어(쿠키). proxy 도 이 값을 읽어 번역된 한국어 주소에서 그 언어 주소로 보낸다 */
 function readSavedLanguage(): Language | null {
@@ -197,6 +207,26 @@ export function LanguageProvider({
     // language 가 바뀌어도 다시 돈다 — 그때는 주소·쿠키가 이미 같은 언어라 아무것도 하지 않는다
   }, [pathname, language, applyLanguage])
 
+  // 서버 HTML 의 언어로 본 값 — Suspense 로 늦게 수화되는 영역은 언어가 이미 바뀐 뒤에 수화하므로
+  // 이 값으로 수화해야 한다(번역 주소 없는 /sign-in 에서 React #418, 2026-11-27)
+  const serverT = useCallback(
+    (key: string): string => (getLoadedLocale(initialLanguage) ?? defaultLocaleTable)[key] || key,
+    [initialLanguage]
+  )
+  const serverValue = useMemo(
+    (): LanguageContextType => ({
+      language: initialLanguage,
+      setLanguage,
+      t: serverT,
+      tAsync,
+      isLoading: false,
+      isClient: false,
+      metadata: getLanguageMetadata(initialLanguage),
+      supportedLanguages: SUPPORTED_LANGUAGES,
+    }),
+    [initialLanguage, setLanguage, serverT, tAsync]
+  )
+
   const contextValue = useMemo(
     (): LanguageContextType => ({
       language,
@@ -211,15 +241,33 @@ export function LanguageProvider({
     [language, setLanguage, t, tAsync, isLoading, isClient, metadata]
   )
 
-  return <LanguageContext.Provider value={contextValue}>{children}</LanguageContext.Provider>
+  return (
+    <ServerLanguageContext.Provider value={serverValue}>
+      <LanguageContext.Provider value={contextValue}>{children}</LanguageContext.Provider>
+    </ServerLanguageContext.Provider>
+  )
 }
 
-export function useLanguage() {
+const noopSubscribe = () => () => {}
+
+/** 서버 렌더·수화 중이면 false, 수화가 끝난 뒤(또는 클라이언트에서 새로 그릴 때)는 true */
+function useHydrated(): boolean {
+  return useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false
+  )
+}
+
+export function useLanguage(): LanguageContextType {
   const context = useContext(LanguageContext)
+  const serverContext = useContext(ServerLanguageContext)
+  // 수화 중에는 서버 언어로 그리고, 수화가 끝나면 React 가 다시 그려 지금 언어로 바꾼다
+  const hydrated = useHydrated()
   if (!context) {
     throw new Error('useLanguage must be used within a LanguageProvider')
   }
-  return context
+  return hydrated ? context : serverContext
 }
 
 // 성능을 위한 추가 훅들
