@@ -71,6 +71,7 @@ export function getLatestPosts(posts: readonly BlogPostSource[], limit: number):
       title: p.title,
       date: formatSeoulDate(p.publishedAt),
       isoDate: p.publishedAt,
-      href: p.link,
+      // 옛 Webflow 주소(p.link = /post/<slug>)가 아니라 이 사이트의 글 주소로 바로 보낸다
+      href: `/blog/${p.id}`,
     }))
 }
