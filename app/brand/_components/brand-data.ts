@@ -233,13 +233,14 @@ export interface RadiusStep {
   px: number
 }
 
+// DESIGN.md front matter `rounded` 단계. full(알약)과 지역 반경(panel·tile·seal)은 견본에 넣지 않는다.
 export const RADII: readonly RadiusStep[] = [
   { name: 'none', px: 0 },
-  { name: 'xs', px: 2 },
-  { name: 'sm', px: 4 },
-  { name: 'base', px: 6 },
-  { name: 'md', px: 10 },
-  { name: 'xl', px: 20 },
+  { name: 'sm', px: 2 },
+  { name: 'md', px: 4 },
+  { name: 'lg', px: 6 },
+  { name: 'xl', px: 16 },
+  { name: '2xl', px: 24 },
 ]
 
 export const SHADOWS = ['xs', 'sm', 'md', 'lg', 'xl'] as const
