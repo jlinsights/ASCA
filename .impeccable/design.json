@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-28T20:35:34+09:00",
+  "generatedAt": "2026-11-28T13:29:37.000Z",
   "title": "Design System: ASCA Ink System",
   "source": "Extensions only. Token primitives live in docs/02-design/DESIGN.md frontmatter (v2.0.0-alpha); this file was generated from app/globals.css, components/ui/button.tsx, components/layout/page-hero.css and components/apply/apply.css without editing DESIGN.md.",
   "extensions": {
