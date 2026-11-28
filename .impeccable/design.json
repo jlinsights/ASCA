@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-28T17:35:17+09:00",
+  "generatedAt": "2026-11-28T20:35:34+09:00",
   "title": "Design System: ASCA Ink System",
   "source": "Extensions only. Token primitives live in docs/02-design/DESIGN.md frontmatter (v2.0.0-alpha); this file was generated from app/globals.css, components/ui/button.tsx, components/layout/page-hero.css and components/apply/apply.css without editing DESIGN.md.",
   "extensions": {
@@ -113,6 +113,22 @@
       "display-sm": {
         "displayName": "Display Small",
         "purpose": "Page titles on narrow heroes (40px)."
+      },
+      "korean-serif": {
+        "displayName": "Korean Serif",
+        "purpose": "Korean headings and emphasis on Noto Serif KR (font-korean)."
+      },
+      "korean-sans": {
+        "displayName": "Korean Sans Fallback",
+        "purpose": "Noto Sans KR, used only when Pretendard fails to load."
+      },
+      "hanja-tc": {
+        "displayName": "Hanja (Traditional)",
+        "purpose": "Traditional Hanja and the association name on Noto Serif TC (font-tc)."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Colour values and token names on /brand (font-mono)."
       }
     },
     "shadows": [
