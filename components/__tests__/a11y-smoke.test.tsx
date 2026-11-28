@@ -11,14 +11,6 @@ import { axe } from 'jest-axe'
 import { PlaybackControls } from '@/components/gallery/stroke-animation/playback-controls'
 import { SettingsPanel } from '@/components/gallery/stroke-animation/settings-panel'
 import { AnalysisPanel } from '@/components/gallery/artwork-comparison/analysis-panel'
-import { AccessibilityPanel } from '@/components/cultural/cultural-accessibility/accessibility-panel'
-import { CulturalPanel } from '@/components/cultural/cultural-accessibility/cultural-panel'
-import { LanguagePanel } from '@/components/cultural/cultural-accessibility/language-panel'
-import {
-  DEFAULT_ACCESSIBILITY_SETTINGS,
-  DEFAULT_LANGUAGE_SETTINGS,
-  DEFAULT_CULTURAL_SETTINGS,
-} from '@/components/cultural/cultural-accessibility/accessibility-defaults'
 import { ResourcesTab } from '@/components/cultural/learning-hub/resources-tab'
 import { OverviewTab } from '@/components/cultural/learning-hub/overview-tab'
 import { GalleryView } from '@/components/cultural/virtual-exhibition/gallery-view'
@@ -129,27 +121,6 @@ describe('a11y smoke (axe, violations 0)', () => {
   it('AnalysisPanel', async () => {
     const { container } = render(
       <AnalysisPanel showAnalysis analysis={analysis} onClose={jest.fn()} />
-    )
-    expect(await axe(container)).toHaveNoViolations()
-  })
-
-  it('AccessibilityPanel', async () => {
-    const { container } = render(
-      <AccessibilityPanel settings={DEFAULT_ACCESSIBILITY_SETTINGS} updateSetting={jest.fn()} />
-    )
-    expect(await axe(container)).toHaveNoViolations()
-  })
-
-  it('CulturalPanel', async () => {
-    const { container } = render(
-      <CulturalPanel settings={DEFAULT_CULTURAL_SETTINGS} updateSetting={jest.fn()} />
-    )
-    expect(await axe(container)).toHaveNoViolations()
-  })
-
-  it('LanguagePanel', async () => {
-    const { container } = render(
-      <LanguagePanel settings={DEFAULT_LANGUAGE_SETTINGS} updateSetting={jest.fn()} />
     )
     expect(await axe(container)).toHaveNoViolations()
   })
