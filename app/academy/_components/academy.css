@@ -193,7 +193,7 @@
   grid-template-columns: 36px minmax(0, 1fr);
   padding: 14px 0;
   border-bottom: 1px solid var(--ac-rule);
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
 }
 .asca-ac__numbered li::before {
@@ -250,7 +250,7 @@
 }
 .asca-ac__prose p {
   margin: 0 0 14px;
-  font-size: 1.05rem;
+  font-size: 1.0625rem;
   line-height: 1.85;
   max-width: 44ch;
 }
@@ -286,7 +286,7 @@
 .asca-ac__institution-name {
   grid-area: name;
   font-family: var(--ac-font-display);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 .asca-ac__institution-role {
@@ -691,13 +691,13 @@
 }
 .asca-ac__term dd {
   margin: 4px 0 0;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 .asca-ac__term-strong {
   font-family: var(--ac-font-display);
-  font-size: 1.2rem !important;
+  font-size: 1.25rem !important;
   font-weight: 600 !important;
 }
 
@@ -734,7 +734,7 @@
 .asca-ac__benefit-title {
   margin: 0;
   font-family: var(--ac-font-display);
-  font-size: clamp(1.3rem, 1rem + 1vw, 1.75rem);
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
   font-weight: 600;
   line-height: 1.35;
 }
@@ -955,11 +955,11 @@
   }
   .asca-ac__tt-slot-label {
     font-family: var(--ac-font-display);
-    font-size: 1.05rem;
+    font-size: 1.0625rem;
     font-weight: 600;
   }
   .asca-ac__tt-slot-time {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     color: var(--ac-muted);
     font-variant-numeric: tabular-nums;
   }
@@ -1025,7 +1025,7 @@
   text-align: right;
   white-space: nowrap;
   font-family: var(--ac-font-display);
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
@@ -1062,7 +1062,7 @@
 .asca-ac__channel-title {
   grid-area: title;
   font-family: var(--ac-font-display);
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 .asca-ac__channel-detail {

@@ -47,7 +47,7 @@
 .asca-notice__pin-title {
   margin: 0;
   font-family: var(--ap-font-display);
-  font-size: clamp(1.3rem, 1rem + 1.1vw, 1.75rem);
+  font-size: clamp(1.25rem, 1rem + 1.1vw, 1.75rem);
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: -0.01em;
@@ -69,7 +69,7 @@
 .asca-notice__pin-summary {
   margin: 12px 0 0;
   max-width: 60ch;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   line-height: 1.7;
   color: var(--ap-muted);
   display: -webkit-box;

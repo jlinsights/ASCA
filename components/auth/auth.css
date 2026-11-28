@@ -244,8 +244,9 @@
   display: grid;
   gap: 0.5rem;
   padding: 1.125rem 1.25rem;
-  border-left: 3px solid var(--gold-600);
-  border-radius: 0 0.625rem 0.625rem 0;
+  /* 한쪽 띠 대신 사방 테두리 + 옅은 금색 면으로 안내 상자를 구분한다 */
+  border: 1px solid color-mix(in srgb, var(--gold-600) 45%, var(--bg));
+  border-radius: 0.625rem;
   background: color-mix(in srgb, var(--gold-400) 9%, var(--bg));
   font-size: 1rem;
 }
@@ -580,8 +581,9 @@
 .asca-account__notice {
   margin-top: 1.5rem;
   padding: 0.875rem 1.125rem;
-  border-left: 3px solid var(--gold-600);
-  border-radius: 0 0.625rem 0.625rem 0;
+  /* 한쪽 띠 대신 사방 테두리 + 옅은 금색 면으로 안내 상자를 구분한다 */
+  border: 1px solid color-mix(in srgb, var(--gold-600) 45%, var(--bg));
+  border-radius: 0.625rem;
   background: color-mix(in srgb, var(--gold-400) 9%, var(--bg));
 }
 

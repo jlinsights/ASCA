@@ -181,7 +181,7 @@
   align-items: center;
   gap: 12px;
   font-family: var(--font-h-sans);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -353,7 +353,7 @@
 }
 .asca-hero__stat dt {
   order: 2;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -417,7 +417,7 @@
 }
 .asca-editorial-photo figcaption {
   padding-top: 10px;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.5;
   color: var(--fg-muted);
 }
@@ -473,7 +473,7 @@
 .asca-ex__title {
   margin: 0 0 6px;
   font-family: var(--font-h-tc);
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 1.45;
   letter-spacing: 0.04em;
@@ -556,7 +556,8 @@
   width: 18px;
   height: 18px;
   stroke-width: 1.5;
-  color: var(--gold-600);
+  /* gold-700: paper 위 3.53:1 — 아이콘 대비 기준(3:1) 충족 */
+  color: var(--gold-700);
 }
 
 /* =====================================================================
@@ -757,10 +758,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .asca-home *,
-  .asca-home *::before,
-  .asca-home *::after {
-    transition-duration: 0.01ms !important;
-  }
-}
+/* 움직임 줄이기는 app/globals.css 의 전역 규칙이 맡는다: 이동·확대는 멈추고
+   색·투명도 변화(120ms)는 남겨 hover·focus 피드백을 지킨다. 여기서 0 으로
+   덮어쓰면 그 피드백까지 사라지므로 홈 전용 규칙을 두지 않는다. */

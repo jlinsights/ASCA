@@ -262,7 +262,7 @@
   }
   /* 다섯 열일 때 열 폭(1024px 에서 약 166px)에 '200,000원' 이 한 줄로 들어가게 */
   .asca-mb__fee-num {
-    font-size: clamp(1.4rem, 0.55rem + 1.35vw, 2.25rem);
+    font-size: clamp(1.375rem, 0.55rem + 1.35vw, 2.25rem);
   }
   .asca-mb__cost {
     margin: 0;
@@ -289,7 +289,7 @@
 .asca-mb__scores {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
 }
 .asca-mb__scores thead th {
   padding: 0 0 10px;
@@ -437,7 +437,7 @@
 .asca-mb__benefit-list li {
   position: relative;
   padding-left: 18px;
-  font-size: 0.925rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--mb-muted);
 }
@@ -538,7 +538,7 @@
 .asca-mb__channel-title {
   grid-area: title;
   font-family: var(--mb-font-display);
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 .asca-mb__channel-detail {
@@ -633,7 +633,7 @@
 }
 .asca-mb__who-body {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   line-height: 1.75;
   max-width: 60ch;
 }
@@ -713,7 +713,7 @@
 }
 .asca-mb__bonus-title {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   font-weight: 600;
 }
 .asca-mb__bonus-group .asca-mb__rules {
@@ -764,7 +764,7 @@
 }
 .asca-mb__arrear-when {
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
 }
 .asca-mb__arrear-what {
   font-size: 0.875rem;

@@ -218,7 +218,10 @@ export const TYPE_SPECIMENS: readonly TypeSpecimen[] = [
 ]
 
 /** 크기 단계(px) — colors_and_type.css --text-* */
-export const TYPE_SCALE: readonly number[] = [12, 14, 16, 18, 20, 24, 30, 36, 48, 64, 80, 112]
+// DESIGN.md §3.3 의 정식 단계(Tailwind + 컴포넌트 단계)와 히어로 크기
+export const TYPE_SCALE: readonly number[] = [
+  12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 28, 30, 32, 36, 40, 48, 64, 80, 112,
+]
 
 export const TYPE_RULE_KEYS = ['brandTypeRule1', 'brandTypeRule2', 'brandTypeRule3'] as const
 

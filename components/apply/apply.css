@@ -204,7 +204,7 @@
 .asca-apply__dash-list li {
   position: relative;
   padding-left: 16px;
-  font-size: 0.925rem;
+  font-size: 0.9375rem;
   line-height: 1.65;
 }
 .asca-apply__dash-list li::before {
@@ -229,7 +229,7 @@
   grid-template-columns: 40px minmax(0, 1fr);
   padding: 16px 0;
   border-bottom: 1px solid var(--ap-rule);
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   line-height: 1.65;
 }
 .asca-apply__numbered > li::before {
@@ -272,7 +272,7 @@
 .asca-apply__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.925rem;
+  font-size: 0.9375rem;
 }
 .asca-apply__table caption {
   caption-side: top;
@@ -377,7 +377,7 @@
 .asca-apply__size dd {
   margin: 2px 0 0;
   font-family: var(--ap-font-display);
-  font-size: 1.35rem;
+  font-size: 1.375rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
@@ -403,7 +403,7 @@
 .asca-apply__criterion-name {
   margin: 0;
   font-family: var(--ap-font-display);
-  font-size: 1.35rem;
+  font-size: 1.375rem;
   font-weight: 600;
 }
 .asca-apply__criterion-han {
@@ -450,7 +450,7 @@
 }
 .asca-apply__role-mark {
   font-family: var(--ap-font-display);
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   color: var(--ap-accent);
 }
 .asca-apply__role-title {
@@ -481,7 +481,7 @@
 }
 .asca-apply__form-title {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1.0625rem;
   font-weight: 600;
 }
 .asca-apply__form-title small {
@@ -548,7 +548,7 @@
 }
 .asca-apply__download-type {
   grid-area: type;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--ap-accent);
