@@ -132,7 +132,12 @@ export function MembershipList({
                     <div className='text-center'>
                       <div className='flex items-center gap-1 text-sm font-medium mb-1'>
                         <span>{tierInfo.icon}</span>
-                        <span style={{ color: tierInfo.color }}>{tierInfo.nameKo}</span>
+                        <span
+                          aria-hidden='true'
+                          className='inline-block size-2 rounded-full'
+                          style={{ backgroundColor: tierInfo.color }}
+                        />
+                        <span>{tierInfo.nameKo}</span>
                       </div>
                       <div className='text-xs text-muted-foreground'>
                         {member.calligraphyExperience || 0}년 경력

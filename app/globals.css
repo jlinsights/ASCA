@@ -936,7 +936,7 @@
 }
 
 .guidelines-header p {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   opacity: 0.95;
   margin-top: var(--spacing-md);
   color: var(--rice-paper); /* paper 고정 */
@@ -965,7 +965,7 @@
 }
 
 .section-title {
-  font-size: 1.8rem;
+  font-size: 1.75rem;
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-xs);
   border-bottom: 1px solid var(--border);
@@ -983,7 +983,7 @@
 }
 
 .section-subtitle {
-  font-size: 1.4rem;
+  font-size: 1.375rem;
   margin: var(--spacing-lg) 0 var(--spacing-md);
   color: var(--foreground);
   position: relative;
@@ -1004,7 +1004,7 @@
 
 .section-description {
   margin-bottom: var(--spacing-lg);
-  font-size: 1.05rem;
+  font-size: 1.0625rem;
   line-height: 1.7;
   color: var(--muted-foreground);
 }
@@ -1049,7 +1049,7 @@
 }
 
 .identity-item h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   margin-bottom: var(--spacing-sm);
   color: var(--accent);
 }
@@ -1076,7 +1076,7 @@
 }
 
 .logo-usage-item h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   margin-bottom: var(--spacing-sm);
   color: var(--accent);
 }
@@ -1096,7 +1096,7 @@
 }
 
 .guidelines-item h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   margin-bottom: var(--spacing-sm);
   color: var(--accent);
 }
@@ -1178,7 +1178,7 @@
 /* 색상 정보 설명 */
 .color-info {
   margin-top: var(--spacing-xs);
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   opacity: 0.9;
   max-height: 0;
   overflow: hidden;
@@ -1204,7 +1204,7 @@
 }
 
 .usage-title {
-  font-size: 1.4rem;
+  font-size: 1.375rem;
   text-align: center;
   margin-bottom: var(--spacing-lg);
   padding: var(--spacing-sm);
@@ -1232,7 +1232,7 @@
 }
 
 .usage-item h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   margin-bottom: var(--spacing-sm);
 }
 
@@ -1374,7 +1374,7 @@
   }
 
   .guidelines-header h1 {
-    font-size: 1.8rem;
+    font-size: 1.75rem;
     letter-spacing: 0.08em;
   }
 
@@ -1701,7 +1701,7 @@
   flex-direction: column;
   gap: 0.25rem;
   margin-bottom: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   font-family: 'Monaco', 'Menlo', monospace;
   opacity: 0.8;
 }

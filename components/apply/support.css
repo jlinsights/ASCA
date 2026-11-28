@@ -65,7 +65,7 @@
 .asca-apply__way-title {
   margin: 0;
   font-family: var(--ap-font-display);
-  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.7rem);
+  font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.7rem);
   font-weight: 600;
   line-height: 1.2;
 }
@@ -129,7 +129,7 @@
 }
 .asca-apply__account strong {
   font-family: var(--ap-font-display);
-  font-size: clamp(1.4rem, 1.15rem + 0.9vw, 1.75rem);
+  font-size: clamp(1.375rem, 1.15rem + 0.9vw, 1.75rem);
   font-weight: 600;
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
@@ -224,7 +224,7 @@
 .asca-apply__timeline-title {
   margin: 6px 0 0;
   font-family: var(--ap-font-display);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 .asca-apply__timeline-body {
@@ -274,7 +274,7 @@
 }
 .asca-apply__route-body {
   grid-area: body;
-  font-size: 0.825rem;
+  font-size: 0.8125rem;
   line-height: 1.5;
   color: var(--ap-muted);
 }
@@ -349,20 +349,20 @@ a.asca-apply__channel:hover {
 .asca-apply__channel-badge {
   padding: 1px 8px;
   border-radius: 999px;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--paper);
   background: var(--ap-seal);
 }
 .asca-apply__channel-value {
   font-family: var(--ap-font-display);
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 .asca-apply__channel-best {
-  font-size: 0.825rem;
+  font-size: 0.8125rem;
   line-height: 1.5;
   color: var(--ap-muted);
 }
@@ -445,7 +445,7 @@ a.asca-apply__channel:hover {
 }
 .asca-apply__address-line {
   margin: 4px 0 0;
-  font-size: 1.05rem;
+  font-size: 1.0625rem;
   line-height: 1.6;
 }
 .asca-apply__address-sub {
@@ -479,7 +479,7 @@ a.asca-apply__channel:hover {
   width: 100%;
   height: 640px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius);
   background: var(--ap-surface);
 }
 @media (max-width: 639.98px) {

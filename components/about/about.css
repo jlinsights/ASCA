@@ -229,7 +229,7 @@
   transition: color 200ms var(--ab-ease);
 }
 .ab-nav__num {
-  font-size: 11px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
   color: var(--ab-accent);
 }
@@ -414,7 +414,7 @@
 }
 .ab-letter > p:first-of-type {
   font-family: var(--ab-font-display);
-  font-size: clamp(21px, 1.8vw, 25px);
+  font-size: clamp(22px, 1.8vw, 25px);
   line-height: 1.7;
 }
 .ab-letter .ab-letter__sign {

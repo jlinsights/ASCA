@@ -29,6 +29,7 @@ export const mockStats: MembershipDashboardStats = {
   averageProfileCompleteness: 78,
 }
 
+// 등급 색은 Ink System 토큰이다. 글자색이 아니라 견본 점·막대에만 쓴다(밝은·어두운 화면 모두 구분되는 색상).
 export const membershipTiers: MembershipTierInfo[] = [
   {
     id: '1',
@@ -36,7 +37,7 @@ export const membershipTiers: MembershipTierInfo[] = [
     nameKo: '학생 회원',
     nameEn: 'Student Member',
     level: 1,
-    color: '#10B981',
+    color: 'var(--success)',
     icon: '📚',
     annualFee: 50000,
     currency: 'KRW',
@@ -53,7 +54,7 @@ export const membershipTiers: MembershipTierInfo[] = [
     nameKo: '고급 실습생',
     nameEn: 'Advanced Practitioner',
     level: 2,
-    color: '#3B82F6',
+    color: 'var(--navy-500)',
     icon: '🎨',
     annualFee: 100000,
     currency: 'KRW',
@@ -70,7 +71,7 @@ export const membershipTiers: MembershipTierInfo[] = [
     nameKo: '인증 서예가',
     nameEn: 'Certified Master',
     level: 3,
-    color: '#8B5CF6',
+    color: 'var(--gold-600)',
     icon: '🏆',
     annualFee: 200000,
     currency: 'KRW',
@@ -87,7 +88,7 @@ export const membershipTiers: MembershipTierInfo[] = [
     nameKo: '명예 서예가',
     nameEn: 'Honorary Master',
     level: 4,
-    color: '#F59E0B',
+    color: 'var(--seal-red-soft)',
     icon: '👑',
     annualFee: 0,
     currency: 'KRW',
@@ -104,7 +105,7 @@ export const membershipTiers: MembershipTierInfo[] = [
     nameKo: '기관 회원',
     nameEn: 'Institutional Member',
     level: 5,
-    color: '#EF4444',
+    color: 'var(--navy-300)',
     icon: '🏛️',
     annualFee: 500000,
     currency: 'KRW',
@@ -121,7 +122,7 @@ export const membershipTiers: MembershipTierInfo[] = [
     nameKo: '국제 회원',
     nameEn: 'International Associate',
     level: 6,
-    color: '#14B8A6',
+    color: 'var(--stone-500)',
     icon: '🌏',
     annualFee: 150000,
     currency: 'KRW',

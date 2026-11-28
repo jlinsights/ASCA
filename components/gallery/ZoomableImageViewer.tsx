@@ -73,14 +73,16 @@ function ZoomableImageViewer({
     if (!showRegions || !image.regions) return null
 
     return image.regions.map(region => {
+      const regionColor = region.type === 'character' ? 'var(--gold-600)' : 'var(--seal-red)'
       const style = {
         position: 'absolute' as const,
         left: `${region.coordinates.x}%`,
         top: `${region.coordinates.y}%`,
         width: `${region.coordinates.width}%`,
         height: `${region.coordinates.height}%`,
-        border: `2px solid ${region.type === 'character' ? '#f59e0b' : '#ef4444'}`,
-        backgroundColor: `${region.type === 'character' ? '#f59e0b' : '#ef4444'}20`,
+        // 글자 영역은 금색, 그 밖의 표시는 낙관 붉은색 (Ink System 토큰)
+        border: `2px solid ${regionColor}`,
+        backgroundColor: `color-mix(in srgb, ${regionColor} 12%, transparent)`,
         cursor: 'pointer',
         transition: 'all 0.2s ease',
       }

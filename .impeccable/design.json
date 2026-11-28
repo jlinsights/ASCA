@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-31T13:00:00+09:00",
+  "generatedAt": "2026-11-28T17:35:17+09:00",
   "title": "Design System: ASCA Ink System",
   "source": "Extensions only. Token primitives live in docs/02-design/DESIGN.md frontmatter (v2.0.0-alpha); this file was generated from app/globals.css, components/ui/button.tsx, components/layout/page-hero.css and components/apply/apply.css without editing DESIGN.md.",
   "extensions": {
@@ -95,7 +95,25 @@
         "displayName": "Body",
         "purpose": "Korean body copy; reading pages narrow to --shell-narrow (50rem) and --measure (40rem)."
       },
-      "label-sm": { "displayName": "Label", "purpose": "Eyebrows, crumbs (13px), table captions." }
+      "label-sm": { "displayName": "Label", "purpose": "Eyebrows, crumbs (13px), table captions." },
+      "label-xs": {
+        "displayName": "Label XS",
+        "purpose": "Eyebrows, badges, table metadata (12px). The smallest text size."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Captions, breadcrumbs, supporting notes (13px)."
+      },
+      "body-sm": { "displayName": "Body Small", "purpose": "Dense lists and table body (15px)." },
+      "body-lead": { "displayName": "Body Lead", "purpose": "Lead paragraphs (17px)." },
+      "title-sm": { "displayName": "Title Small", "purpose": "Sub-heads and card titles (20px)." },
+      "title-md": { "displayName": "Title Medium", "purpose": "Block titles (22px)." },
+      "headline-sm": { "displayName": "Headline Small", "purpose": "Small section titles (28px)." },
+      "headline-xs": { "displayName": "Headline XS", "purpose": "Section titles (32px)." },
+      "display-sm": {
+        "displayName": "Display Small",
+        "purpose": "Page titles on narrow heroes (40px)."
+      }
     },
     "shadows": [
       {
@@ -119,12 +137,12 @@
       {
         "name": "duration-normal",
         "value": "250ms",
-        "purpose": "Default transitions (globals.css; DESIGN.md says 260ms, see drift report)."
+        "purpose": "Default transitions (globals.css --duration-normal)."
       },
       {
         "name": "duration-slow",
         "value": "400ms",
-        "purpose": "Larger reveals (globals.css; DESIGN.md says 420ms)."
+        "purpose": "Larger reveals (globals.css --duration-slow)."
       },
       {
         "name": "ease-out",

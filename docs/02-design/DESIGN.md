@@ -119,6 +119,26 @@ typography:
   label-sm:
     fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
     fontSize: '0.875rem' # 14px
+  # 아래 단계는 여러 컴포넌트 CSS 에서 반복되는 크기다(2026-11-28 감사에서 문서화).
+  # 글꼴은 쓰는 자리(본문 sans / 제목 serif)를 따른다. 이 사이의 임의 값은 만들지 않는다.
+  label-xs:
+    fontSize: '0.75rem' # 12px — 눈썹·배지·표 메타. 최소 글자 크기
+  caption:
+    fontSize: '0.8125rem' # 13px — 캡션·빵부스러기·보조 설명
+  body-sm:
+    fontSize: '0.9375rem' # 15px — 촘촘한 목록·표 본문
+  body-lead:
+    fontSize: '1.0625rem' # 17px — 리드 문단·강조 본문
+  title-sm:
+    fontSize: '1.25rem' # 20px — 소제목·카드 제목
+  title-md:
+    fontSize: '1.375rem' # 22px — 블록 제목
+  headline-sm:
+    fontSize: '1.75rem' # 28px — 작은 섹션 제목
+  headline-xs:
+    fontSize: '2rem' # 32px — 섹션 제목
+  display-sm:
+    fontSize: '2.5rem' # 40px — 페이지 제목(좁은 화면 히어로)
 
 # ─────────────────────────────────────────────
 # LAYOUT — 8px 기반 스페이싱 + 컨테이너
@@ -388,13 +408,13 @@ PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 
 
 위 스택의 폰트 이름은 로딩 보장이 아니다. 현재 로딩 경로는 다음과 같다.
 
-| 폰트             | 로딩 방식                                           | 변수·적용                         |
-| ---------------- | --------------------------------------------------- | --------------------------------- |
-| Pretendard       | `app/layout.tsx`의 버전 고정 CDN CSS                | `font-sans`의 첫 폰트             |
-| Playfair Display | `next/font/local`, `public/fonts/playfair-display/` | `--font-display`                  |
-| Noto Sans KR     | `app/globals.css`의 로컬 `@font-face`               | `--font-noto-sans-kr`             |
-| Noto Serif KR    | `app/globals.css`의 로컬 `@font-face`               | `--font-noto-serif-kr`            |
-| Noto Serif TC    | `app/layout.tsx`의 Google Fonts CSS                 | `--font-noto-serif-tc`, `font-tc` |
+| 폰트             | 로딩 방식                                                  | 변수·적용                         |
+| ---------------- | ---------------------------------------------------------- | --------------------------------- |
+| Pretendard       | `app/layout.tsx`의 버전 고정 CDN CSS                       | `font-sans`의 첫 폰트             |
+| Playfair Display | next/font 의 `localFont`, `public/fonts/playfair-display/` | `--font-display`                  |
+| Noto Sans KR     | `app/globals.css`의 로컬 `@font-face`                      | `--font-noto-sans-kr`             |
+| Noto Serif KR    | `app/globals.css`의 로컬 `@font-face`                      | `--font-noto-serif-kr`            |
+| Noto Serif TC    | `app/layout.tsx`의 Google Fonts CSS                        | `--font-noto-serif-tc`, `font-tc` |
 
 폰트 경로나 CDN을 바꾸면 `next.config.js`의 CSP도 대조한다. `--font-playfair`,
 `--font-inter`, `--font-noto-sans`, `--font-noto-serif`를 새 코드의 폰트 변수로
@@ -414,9 +434,17 @@ UI 언어 코드는 `ko`, `en`, `ja`, `zh`이며 중국어 로케일은 `zh-TW`�
 
 ### 3.3 스케일
 
-1.25 ratio 기반 13단계 스케일. Display 크기(5xl 이상)는 랜딩 히어로·작품
-타이틀에만 쓴다. 본문은 `base`(16px) 고정, 가이드 문구는 `sm`(14px), 캡션은
-`xs`(12px).
+Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 더한다. Display
+크기(5xl 이상)는 랜딩 히어로·작품 타이틀에만 쓴다. 본문은 `base`(16px) 고정,
+가이드 문구는 `sm`(14px), 캡션은 `xs`(12px).
+
+컴포넌트 CSS 는 Tailwind 단계 사이에 12·13·15·17·20·22·28·32·40px 를 반복해
+쓴다. 이 값들은 front matter 의 `label-xs`~`display-sm` 로 문서화된 정식
+단계이며, 그 사이 값(예: 12.8px, 15.2px, 22.4px)은 가장 가까운 단계로 맞춘다.
+**12px 미만 글자는 쓰지 않는다** — 한글은 11px 이하에서 획이 뭉개진다. 44px 이상
+큰 정체자 漢字(소개·게시판·작가 히어로의 장식 글자)는 작품처럼 다루는 예외로,
+스케일 밖 크기를 허용한다. 화면 폭에 따라 커지는 제목의 `clamp()` 양 끝값도
+스케일 사이에 놓일 수 있다(최솟값은 12px 이상).
 
 ### 3.4 행간·자간
 
@@ -451,14 +479,21 @@ UI 언어 코드는 `ko`, `en`, `ja`, `zh`이며 중국어 로케일은 `zh-TW`�
 
 | Tailwind      | size / line-height          | canonical 토큰 | 용도               |
 | ------------- | --------------------------- | -------------- | ------------------ |
-| `xs`          | `0.75rem / 1rem` (12px)     | —              | metadata, footnote |
+| `xs`          | `0.75rem / 1rem` (12px)     | `label-xs`     | metadata, footnote |
+| —             | `0.8125rem` (13px)          | `caption`      | 캡션·빵부스러기    |
 | `sm`          | `0.875rem / 1.25rem` (14px) | `label-sm`     | 라벨               |
+| —             | `0.9375rem` (15px)          | `body-sm`      | 촘촘한 목록·표     |
 | `base`        | `1rem / 1.5rem` (16px)      | `body-md`      | 본문 기본          |
+| —             | `1.0625rem` (17px)          | `body-lead`    | 리드 문단          |
 | `lg`          | `1.125rem / 1.75rem` (18px) | `body-lg`      | 본문 강조          |
-| `xl`          | `1.25rem / 1.75rem` (20px)  | —              | sub-heading        |
+| `xl`          | `1.25rem / 1.75rem` (20px)  | `title-sm`     | sub-heading        |
+| —             | `1.375rem` (22px)           | `title-md`     | 블록 제목          |
 | `2xl`         | `1.5rem / 2rem` (24px)      | `title-lg`     | 카드 타이틀        |
+| —             | `1.75rem` (28px)            | `headline-sm`  | 작은 섹션 제목     |
 | `3xl`         | `1.875rem / 2.25rem` (30px) | `headline-md`  | 섹션 헤더          |
+| —             | `2rem` (32px)               | `headline-xs`  | 섹션 제목          |
 | `4xl`         | `2.25rem / 2.5rem` (36px)   | `headline-lg`  | 페이지 헤더        |
+| —             | `2.5rem` (40px)             | `display-sm`   | 좁은 화면 히어로   |
 | `5xl`         | `3rem / 1.1` (48px)         | `display-md`   | 영웅 보조          |
 | `6xl`         | `3.75rem / 1.1` (60px)      | `display-lg`   | 영웅               |
 | `7xl` ~ `9xl` | `4.5rem` ~ `8rem`           | —              | 메가 히어로 (예외) |
@@ -669,8 +704,8 @@ UI 언어 코드는 `ko`, `en`, `ja`, `zh`이며 중국어 로케일은 `zh-TW`�
   `components/about/about-layout.tsx`(`AboutPage`·`AboutHero`·`AboutChapter`·
   `AboutRows`), `about-nav.tsx`, `about-motion.tsx`. 스타일 정본은
   `components/about/about.css`(`.ab*`).
-- 페이지 모양:
-  `<AboutPage><AboutHero/><AboutNav/>{AboutChapter…}<AboutMotion/></AboutPage><LayoutFooter/>`.
+- 페이지 모양: `AboutPage` 안에 `AboutHero` → `AboutNav` → `AboutChapter`(여럿)
+  → `AboutMotion`, 그 뒤 `LayoutFooter`.
 - `AboutHero`: 왼쪽 눈썹(기본 `ASCA · 소개`. 번역되는 페이지는
   `` `ASCA · ${t('siteNavAboutShort')}` `` 를
   넘긴다)·제목(h1)·요약·숫자(`facts`), 오른쪽 큰 정체자 漢字(`tc`)와 東洋 낙관.
@@ -720,7 +755,7 @@ UI 언어 코드는 `ko`, `en`, `ja`, `zh`이며 중국어 로케일은 `zh-TW`�
 
 - **Data Charts**:
   - 선형 차트(`stroke`): `primary` (기본), `destructive` (임계치 초과)
-  - 영역 채우기(`fill`): `primary/10`
+  - 영역 채우기(`fill`): `primary` 10% 불투명도
   - 격자선(`grid`): `border` (var(--border))
 
 ### 8.8 미구현 컴포넌트 작성 시
@@ -745,21 +780,21 @@ UI 언어 코드는 `ko`, `en`, `ja`, `zh`이며 중국어 로케일은 `zh-TW`�
 
 #### gallery-card
 
-| 속성             | 값                                              |
-| ---------------- | ----------------------------------------------- |
-| backgroundColor  | `{colors.rice-paper}`                           |
-| border           | `border-celadon-green/20`, 다크 `border-border` |
-| rounded          | `{rounded.lg}` (0.375rem)                       |
-| hover.translateY | `-4px`                                          |
-| hover.shadow     | `{elevation.xl}`                                |
+| 속성             | 값                                               |
+| ---------------- | ------------------------------------------------ |
+| backgroundColor  | `{colors.rice-paper}`                            |
+| border           | `border-celadon-green` 20%, 다크 `border-border` |
+| rounded          | `{rounded.lg}` (0.375rem)                        |
+| hover.translateY | `-4px`                                           |
+| hover.shadow     | `{elevation.xl}`                                 |
 
 #### gallery-card-glass
 
-| 속성            | 값                                                 |
-| --------------- | -------------------------------------------------- |
-| backgroundColor | `bg-rice-paper/80`, 다크 `bg-card/80`              |
-| backdropBlur    | `12px`                                             |
-| border          | `border-celadon-green/10`, 다크 `border-border/30` |
+| 속성            | 값                                                   |
+| --------------- | ---------------------------------------------------- |
+| backgroundColor | `bg-rice-paper` 80%, 다크 `bg-card` 80%              |
+| backdropBlur    | `12px`                                               |
+| border          | `border-celadon-green` 10%, 다크 `border-border` 30% |
 
 #### gallery-btn (variants: default | outline | ghost | secondary)
 
@@ -843,7 +878,8 @@ UI 언어 코드는 `ko`, `en`, `ja`, `zh`이며 중국어 로케일은 `zh-TW`�
 - `scale(1.05)` 이상의 호버 스케일은 금지 (1.02 한계)
 - 색상을 HEX로 인라인 하드코딩하지 않는다 (`style={{color:'#af2626'}}` 금지)
 - `.dark:` 변형을 Semantic 토큰에 덮어쓰지 않는다 (토큰이 이미 처리)
-- `<br/>` 반복 + 임의 `mt-*` 로 간격을 만들지 않는다 (spacing 토큰 사용)
+- 줄바꿈 태그(`br`) 반복 + 임의 `mt-*` 로 간격을 만들지 않는다 (spacing 토큰
+  사용)
 - `var(--celadon)` 사용 금지 (deprecated, `var(--celadon-green)` 로 대체됨)
 
 ## 10. Agent Guidelines — AI 에이전트 작업 규칙
