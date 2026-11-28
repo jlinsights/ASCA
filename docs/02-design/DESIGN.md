@@ -17,11 +17,6 @@ references:
   home-styles: components/home/home.css
   home-copy: lib/i18n/translations/home.ts
 
-# ─────────────────────────────────────────────
-# COLORS — 브랜드 팔레트 + shadcn 시맨틱 슬롯 (구현 = app/globals.css :root)
-# YAML 키 primary/secondary 는 Tailwind bg-primary/bg-secondary 와 동일 의미.
-# 2026-10-10 ASCA Ink System(Navy & Gold) 채택 — 토큰 이름은 유지, 값만 교체. §2.0 참조.
-# ─────────────────────────────────────────────
 colors:
   # shadcn 시맨틱 슬롯 (WCAG 검증·design-lint 대상 — globals.css OKLCH의 HEX 근사)
   primary: '#0b1733' # navy-900 深藍 — bg-primary / --primary (주 CTA·강조 버튼)
@@ -90,10 +85,6 @@ colors:
   medium-orchid: '#3a54a0' # = navy-500
   royal-blue: '#3a54a0' # = navy-500
 
-# ─────────────────────────────────────────────
-# TYPOGRAPHY — Google DESIGN.md spec canonical tokens
-# 확장 정보(family, scale, weight/tracking/leading)는 본문 prose 참조
-# ─────────────────────────────────────────────
 typography:
   display-lg:
     fontFamily:
@@ -156,9 +147,6 @@ typography:
   display-sm:
     fontSize: '2.5rem' # 40px — 페이지 제목(좁은 화면 히어로)
 
-# ─────────────────────────────────────────────
-# LAYOUT — 8px 기반 스페이싱 + 컨테이너
-# ─────────────────────────────────────────────
 layout:
   container:
     center: true
@@ -179,9 +167,6 @@ layout:
   breakpoints:
     { sm: '640px', md: '768px', lg: '1024px', xl: '1280px', 2xl: '1400px' }
 
-# ─────────────────────────────────────────────
-# SHAPES — 기본 0.375rem / 6px (--radius)
-# ─────────────────────────────────────────────
 rounded:
   none: '0rem' # 0px
   sm: '0.125rem' # 2px  (실 계산: var(--radius) - 4px)
@@ -195,9 +180,6 @@ rounded:
   tile: '0.75rem' # 12px — 작가 페이지 타일·숫자 칸(app/artists)
   seal: '0.1875rem' # 3px — 브랜드 페이지 낙관(실물 도장 모서리)
 
-# ─────────────────────────────────────────────
-# SPACING — 8px 그리드 (canonical, layout.spacing 동일)
-# ─────────────────────────────────────────────
 spacing:
   xs: '0.5rem' # 8px
   sm: '1rem' # 16px
@@ -205,9 +187,6 @@ spacing:
   lg: '2rem' # 32px
   xl: '3rem' # 48px
 
-# ─────────────────────────────────────────────
-# ELEVATION — 남색 기반 섀도우 (hsl 222 54% 8%)
-# ─────────────────────────────────────────────
 elevation:
   # navy-tinted (hsl 222 54% 8%), never neutral black — Ink System
   2xs: '0 1px 2px 0 hsl(222 54% 8% / 0.06)'
@@ -225,9 +204,6 @@ elevation:
     0.1)'
   2xl: '0 32px 64px -16px hsl(222 54% 8% / 0.22)'
 
-# ─────────────────────────────────────────────
-# MOTION — 먹의 번짐에서 영감
-# ─────────────────────────────────────────────
 motion:
   duration: { fast: '150ms', normal: '250ms', slow: '400ms', brush: '720ms' } # = globals.css --duration-*; brush 는 artist-hero.css --ah-brush
   ease:
@@ -235,9 +211,7 @@ motion:
     in-out: 'cubic-bezier(0.45, 0, 0.55, 1)' # 필압의 자연스러운 흐름
   signature:
     ink-spread: 'ink-spread 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards'
-# Components 매핑은 본문 §8(Components prose)에 정의. 이전 components: front-matter
-# 블록은 비-canonical 구조(tokens/variants/sizes nested)로 Google CLI 파서를 실패시켜
-# 2026-04-25 prose 로 이전 (정보 손실 0, lint clean).
+# 컴포넌트 매핑은 본문 §8.
 ---
 
 # ASCA Design System
@@ -274,11 +248,9 @@ ASCA는 서예라는 **무형의 정신성**을 디지털 인터페이스로 옮
 
 ### 2.0 ASCA Ink System 채택 (2026-10-10)
 
-설계 출처는 Claude Design 프로젝트 **"ASCA Design System"**(ASCA Ink System —
-Navy & Gold)이며, 저장소의 토큰 계약은 이 문서와 구현을 대조해 관리한다. 깊은
-남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 강조, 따뜻한 宣紙(`#fbf8ef`)를
-밝은 면으로 쓰고, 朱印 홍색(`#a8201a`)은 낙관·오류에만 쓴다. 박물관 도록 같은
-절제가 원칙이다.
+깊은 남색(`#0b1733`)을 바탕, 절제된 금색(`#d4a84a`)을 강조, 따뜻한
+宣紙(`#fbf8ef`)를 밝은 면으로 쓰고, 朱印 홍색(`#a8201a`)은 낙관·오류에만 쓴다.
+박물관 도록 같은 절제가 원칙이다.
 
 **토큰 이름은 유지하고 값만 바꿨다.** 기존 클래스(`bg-scholar-red`,
 `text-celadon-green` …)가 수백 곳에 있어, 이름을 바꾸는 대신 값을 Ink System
@@ -370,48 +342,25 @@ Navy & Gold)이며, 저장소의 토큰 계약은 이 문서와 구현을 대조
 
 ### 2.5 옛 Brand Extended Palette — 이름만 남음 (2026-10-13)
 
-/brand 페이지가 ASCA Ink System 가이드로 바뀌면서 옛 확장 6색(구 `brand-data.ts`
-PRIMARY_COLORS)은 정본이 아니다. 기존 클래스가 깨지지 않도록 **이름만 남기고
-값을 Ink System 으로 옮겼다.** 새 코드는 쓰지 말 것.
-
-| 토큰            | 옛 값     | 이제의 값 | Ink System 이름 |
-| --------------- | --------- | --------- | --------------- |
-| `brand-gold`    | `#ffcc00` | `#d4a84a` | gold-500        |
-| `terra-red`     | `#9b4444` | `#c94a3f` | seal-red-soft   |
-| `sage-green`    | `#b7c4b7` | `#b8bccb` | stone-300       |
-| `spring-green`  | `#09f557` | `#3f7a4e` | success         |
-| `medium-orchid` | `#c14af2` | `#3a54a0` | navy-500        |
-| `royal-blue`    | `#275eea` | `#3a54a0` | navy-500        |
-
-같은 날 오방·계절·서예 재료 장식색(`east-wood`, `summer-jade`, `autumn-gold`,
-`bamboo-green`, `plum-purple` …)도 같은 방식으로 옮겼다 — 값은 front matter
-주석이 정본이다. 브랜드 가이드의 정본은 이제 `/brand` 페이지
+옛 확장색(`brand-gold`·`terra-red`·`sage-green`·`spring-green`·`medium-orchid`·
+`royal-blue`)과 오방·계절·서예 재료 장식색(`east-wood`·`summer-jade`·
+`autumn-gold`·`bamboo-green`·`plum-purple` …)은 기존 클래스가 깨지지 않도록
+**이름만 남기고 값을 Ink System 으로 옮겼다.** 값은 front matter 가 정본이다. 새
+코드는 쓰지 말 것. 브랜드 가이드의 정본은 `/brand`
 (`app/brand/_components/brand-data.ts`)와 이 문서다.
 
 ### 2.6 WCAG 검증 쌍
 
-아래 페어는 **front matter `colors` 의 리터럴 HEX** 에 대해 계산한 값이다. 정량
-값은 `npm run design:wcag` 출력이 정본이다.
+정량 값은 `npm run design:wcag` 출력이 정본이다(검사 쌍은 §3.6). 주의할 조합:
 
-- `{colors.foreground}` on `{colors.background}` (navy on paper) — 16.69:1 ✅
-- `{colors.primary-foreground}` on `{colors.primary}` — 16.69:1 ✅
-- `{colors.secondary-foreground}` on `{colors.secondary}` — 14.67:1 ✅
-- `{colors.accent-foreground}` on `{colors.accent}` (navy on gold-500) — 8.02:1
-  ✅
-- `{colors.destructive-foreground}` on `{colors.destructive}` — 7.28:1 ✅
-- `{colors.muted-foreground}` on `{colors.muted}` — 7.69:1 ✅
-- 다크: paper on navy-950 18.28:1 · navy-950 on gold-500 8.78:1 · navy-300 on
-  navy-800 7.18:1 ✅
-- ⚠️ gold-500 글자 on paper — 2.08:1 ❌ (§2.1.2)
-- ⚠️ 흰 글자 on `celadon-green`(gold-700) — 3.75:1 (큰 글자만)
-- ⚠️ `{colors.sage-green}` (`#b7c4b7`) 흰 배경 — 약 2.1:1 ❌ (텍스트 금지, 배경
-  틴트/보더만)
-- ⚠️ `{colors.spring-green}` (`#09f557`) 흰 배경 — 약 1.5:1 ❌ (텍스트 절대
-  금지)
+- gold-500 글자 on paper — 2.08:1 ❌ (§2.1.2)
+- 흰 글자 on `celadon-green`(gold-700) — 3.75:1, 큰 글자만
+- 다크 모드는 검사 밖이다. paper on navy-950 18.28:1 · navy-950 on gold-500
+  8.78:1 · navy-300 on navy-800 7.18:1 (직접 잰 값)
 
-> 새 조합 추가 시
-> [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) 로
-> 재측정 후 업데이트.
+새 조합은
+[WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) 로
+재측정한다.
 
 ## 3. Typography
 
@@ -475,10 +424,7 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 
 ### 3.5 Typography Reference (extended)
 
-> **Why prose**: Google DESIGN.md spec v1은 typography를 토큰별
-> `{fontFamily, fontSize}` 객체로 정의한다. ASCA 고유 확장(family 9종, scale
-> 13단계, weight/tracking/leading)은 본 prose 섹션에 보존하여
-> `npx design.md lint` 통과와 정보 보존을 동시 달성한다.
+front matter 밖의 확장 정보다.
 
 #### 3.5.1 Font Families (확장 — front matter 외부)
 
@@ -520,14 +466,8 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 
 #### 3.5.3 Weight / Tracking / Leading
 
-| 카테고리   | 토큰                                                                                                    |
-| ---------- | ------------------------------------------------------------------------------------------------------- |
-| `weight`   | `thin(100)`, `light(300)`, `normal(400)`, `medium(500)`, `semibold(600)`, `bold(700)`, `black(900)`     |
-| `tracking` | `tighter(-0.05em)`, `tight(-0.025em)`, `normal(0em)`, `wide(0.025em)`, `wider(0.05em)`, `widest(0.1em)` |
-| `leading`  | `none(1)`, `tight(1.1)`, `snug(1.25)`, `normal(1.5)`, `relaxed(1.75)`, `loose(2)`                       |
-
-위 값들은 Tailwind 기본값과 일치하므로 별도 config 불필요. CSS
-클래스(`font-bold`, `tracking-tight`, `leading-relaxed`)로 직접 접근.
+Tailwind 기본값(`font-*`·`tracking-*`·`leading-*`)을 그대로 쓴다. 별도 config 는
+없다.
 
 ### 3.6 Color Pair Policy (WCAG)
 
@@ -554,21 +494,8 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 위 P8·P9는 현재 검사 스크립트의 대용 조합이다. `card-foreground`,
 `popover-foreground`, `popover`의 실제 CSS 값은 화면에서 별도로 확인한다.
 
-**Decorative-only (excluded from contrast lint)**:
-
-- **Obang 5색** (`east-wood`, `south-fire`, `center-earth`, `west-metal`,
-  `north-water`): 일러스트레이션·아이콘 전용
-- **Seasonal 4색** (`spring-blossom`, `summer-jade`, `autumn-gold`,
-  `winter-snow`): 카테고리 라벨 장식
-- **Calligraphy 4색** (`bamboo-green`, `silk-cream`, `lacquer-black`,
-  `vermillion`): 작품 메타데이터 색상
-- **옛 Brand Extended 6색** (`terra-red`, `sage-green`, `spring-green`,
-  `brand-gold`, `medium-orchid`, `royal-blue`): 이름만 남은 별칭 — 값은 Ink
-  System(§2.5)
-
-> **Rationale**: 전통 동아시아 5방위·계절·서예 색상은 의미 전달·장식 목적의 시각
-> 표현이지 본문 텍스트 contrast 대상 아님. 텍스트 위에 사용 시 shadcn semantic
-> 슬롯의 foreground 색을 함께 적용해야 한다.
+오방·계절·서예 재료·옛 확장색(§2.5)은 장식 전용이라 대비 검사 밖이다. 텍스트
+위에 쓸 때는 시맨틱 슬롯의 foreground 색을 함께 쓴다.
 
 ## 4. Layout
 
@@ -586,8 +513,7 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 | `--measure`      | `40rem`                               | 본문 한 줄 길이            |
 
 좌우 여백은 화면 폭에 따라 390px → 20 · 1024px → 46 · 1280px → 72 · 1440px → 120
-· 1920px → 360 이 된다. 예전 틀(1400px + 2rem)은 1440px 화면에서 여백이 36~52px
-뿐이라 내용이 화면 끝까지 퍼져 보였다.
+· 1920px → 360 이 된다. 공통 `gallery-container` 도 같은 틀이다.
 
 - Tailwind `container` 는 끄고(`corePlugins.container: false`) `.container` 를
   위 토큰으로 다시 정의했다. **`container` 에 `mx-auto`·`px-*` 를 붙이지
@@ -653,9 +579,8 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 
 ### 7.2 접근성
 
-`prefers-reduced-motion` 사용자에게는 모든 signature 애니메이션(`ink-spread`,
-`meteor`, `aurora`, `gradient`)을 비활성화한다. 기능 전달용 transition만 `100ms`
-이내로 유지.
+`prefers-reduced-motion` 에서는 `app/globals.css` 가 애니메이션을 멈추고, 색·
+투명도·테두리·그림자 전환만 `120ms` 로 남긴다(상태 변화 신호를 지우지 않게).
 
 ## 8. Components
 
@@ -670,6 +595,14 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 
 사이즈 선택: 폼 내부 `md`, 히어로 `lg`/`xl`, 리스트 인라인 `sm`, 카드 내 `xs`.
 
+| 사이즈 | height | padding-x | text   |
+| ------ | ------ | --------- | ------ |
+| xs     | 28px   | 8px       | `xs`   |
+| sm     | 32px   | 12px      | `sm`   |
+| md     | 40px   | 16px      | `sm`   |
+| lg     | 44px   | 24px      | `base` |
+| xl     | 48px   | 32px      | `base` |
+
 ### 8.2 Cards — `gallery-card*`
 
 - 기본 `gallery-card` — 작품 썸네일, 공지, 일반 리스트
@@ -677,34 +610,33 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 - `gallery-card-glass` — 히어로 위 플로팅 정보
 - `gallery-card-bordered` — 작가 카드(경계 강조)
 
+기본 카드는 `{colors.rice-paper}` 바탕, `border-celadon-green` 20%(다크
+`border-border`), `{rounded.lg}`, 호버 시 `-4px` 이동과 `{elevation.xl}`. 정의의
+정본은 `app/globals.css` 의 `@layer components` 다.
+
 인터랙티브 카드는 반드시 `interactive` 클래스와 함께 `role="link"` 또는 `<a>`
 래핑.
 
 ### 8.3 Glass Surfaces — `glass-panel`·`glass-card`·`glass-button`
 
-배경 위에 떠 있는 오버레이에만. **배경이 단색이면 사용하지 않는다** (블러 효과가
-무의미). 히어로 비디오, 그라디언트 배경 위에서만 가치가 있다.
-
-> 2026-10-31 기준 이 클래스를 쓰는 화면이 없다. 새 화면에 넣기 전에 정말
-> 필요한지 먼저 따진다.
+2026-11-28 에 쓰는 곳이 없어 CSS 를 지웠다. 다시 만들려면 배경
+영상·그라디언트처럼 블러가 보이는 바탕 위에서만 쓰고, 이 문서에 토큰을 먼저
+적는다.
 
 ### 8.4 Page Hero — `PageHero` (`components/layout/page-hero.tsx`)
 
-공개 페이지 대부분이 이 머리로 시작한다. 2026-11-01 부터 **소개 묶음과 같은
-틀**이다(§8.4.1) — 왼쪽 눈썹·세리프 제목(h1)·요약(`lede`)·숫자, 오른쪽 큰 정체자
-漢字(`tc`)와 東洋 낙관(`ASCA_SEAL`), 그 아래 같은 메뉴의 01–0N 목차.
+공개 페이지 대부분이 이 머리로 시작한다. **소개 묶음과 같은 틀**이다(§8.4.1) —
+왼쪽 눈썹·세리프 제목(h1)·요약(`lede`)·숫자, 오른쪽 큰 정체자 漢字(`tc`)와 東洋
+낙관(`ASCA_SEAL`), 그 아래 같은 메뉴의 01–0N 목차.
 
 - 화면별 漢字·단계는
   `PAGE_HERO_MARKS`(`components/layout/page-hero-marks.ts`)에서 가져온다 —
-  `{...PAGE_HERO_MARKS.contests}`. 漢字를 화면에서 새로 짓지 않는다. 3·4자
-  이름(`線上展`·`個人情報`)은 글자 수로 크기를 나눠 한 줄에 들어간다.
+  `{...PAGE_HERO_MARKS.contests}`. 漢字를 화면에서 새로 짓지 않는다.
 - 눈썹은 `PageHeroEyebrow` 가 정한다: `crumbs` 가 있으면 경로, 없으면
   `ASCA · {메뉴 이름}`(헤더 메뉴 묶음 — 상세 페이지는 가장 가까운 항목의 묶음),
   메뉴 밖(약관·검색)은 `ASCA`.
 - 목차는 `SectionNav`(`components/layout/section-nav.tsx`)가 그린다. 지금 경로가
-  헤더 메뉴 항목과 같을 때만 보이고, 상세·약관 페이지에는 없다. 작가 등급처럼
-  쿼리로 나뉜 항목은 `useSearchParams` 로 고르며, 그 묶음만 `Suspense` 로 감싼다
-  (정적 페이지 빌드가 깨지지 않게).
+  헤더 메뉴 항목과 같을 때만 보이고, 상세·약관 페이지에는 없다.
 - `tier`: `feature`(작가·작품·전시·갤러리 — 사진·숫자를 단다) ·
   `band`(안내·문서). 사진은 `media`(`HeroScrolls`)로 달면 머리 아래 족자 폭으로
   한 줄 걸린다.
@@ -713,16 +645,13 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 - 스타일 정본은 `components/about/about.css`(`.ab-hero*`·`.ab-nav*`)이고,
   `components/layout/page-hero.css`(`.ab-ph*`·`.asca-scrolls*`)는 PageHero 에만
   있는 것만 둔다.
-- 자체 머리를 쓰던 메뉴 첫 화면 — `/regulations`·`/faq`·`/community/board`·
-  `/profile/applications` — 도 PageHero 로 옮겼다. 문서 머리인
-  `/regulations/[slug]` 와 게시글·글쓰기 화면은 그대로다.
+- 문서 머리인 `/regulations/[slug]` 와 게시글·글쓰기 화면은 PageHero 를 쓰지
+  않는다.
 
 ### 8.4.1 소개 묶음 틀 — `AboutPage`·`AboutHero`·`AboutNav`·`AboutChapter` (2026-11-01)
 
-헤더 '소개' 메뉴의 8개 페이지 — 소개·인사말씀·사명·연혁·임원·사업계획·유관단체·
-브랜드 — 는 이 틀 하나로 그린다. 다른 메뉴의 `PageHero` 도 같은 머리·목차를
-쓴다(§8.4). 한 페이지만 다른 머리를 쓰면 묶음이 흩어져 보인다. 2026-11-01 에
-연혁(`/history`)과 브랜드(`/brand`)도 옮겨 여덟 개가 모두 같다.
+헤더 '소개' 메뉴의 페이지는 모두 이 틀 하나로 그린다. 다른 메뉴의 `PageHero` 도
+같은 머리·목차를 쓴다(§8.4). 한 페이지만 다른 머리를 쓰면 묶음이 흩어져 보인다.
 
 - 코드:
   `components/about/about-layout.tsx`(`AboutPage`·`AboutHero`·`AboutChapter`·
@@ -736,12 +665,12 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
   큰 글자는 `PAGE_HERO_MARKS` 에서 가져오고 화면에서 새로 짓지 않는다 (예: 연혁
   `沿革`, 브랜드 `標識`). 덧붙일 것(브랜드 슬로건 등)은 `children` 으로 넣는다 —
   별도 히어로를 만들지 않는다.
-- `AboutNav`: 01–08 번호 목차. 목록은 `site-menu.ts` 의 '소개' 항목을 그대로
-  읽으므로 순서·라벨은 메뉴에서만 고친다.
+- `AboutNav`: 번호 목차. 목록은 `site-menu.ts` 의 '소개' 항목을 그대로 읽으므로
+  순서·라벨은 메뉴에서만 고친다.
 - `AboutChapter`: 왼쪽에 세로 漢字 표제(`tc`)·영문 눈썹·제목(h2), 오른쪽 본문.
   톤은 `paper`·`gold`·`navy` 중 하나.
 - 페이지 고유 본문은 장 안에 그대로 둔다 — 연혁의 연도별 카드는 `年表` 장 안에,
-  브랜드 가이드(가이드 목차 + 9개 구획, `app/brand/brand.css`)는 목차 아래에.
+  브랜드 가이드(`app/brand/brand.css`)는 목차 아래에.
 - 나타남 효과 `data-reveal` 은 **작은 단위**(행·카드)에 단다. `AboutMotion` 은
   화면에 5% 이상 들어와야 보이게 하므로, 화면 높이의 20배가 넘는 묶음에 달면
   끝내 나타나지 않는다. 움직임 줄이기·스크립트 없음에서는 처음부터 보인다.
@@ -758,85 +687,16 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 - 값은 화면에서 새로 쓰지 않고 데이터 파일(예:
   `app/contests/_components/contest-23-data.ts`)에서 읽는다.
 
-### 8.6 Enterprise Administrative UI — `admin-*` (계획)
+### 8.6 관리 화면 — 계획만 있음
 
-> 2026-10-31 기준 아래 클래스는 코드에 없다. 관리 화면은 `/admin/artists`(회비
-> 관리)만 동작한다. 만들 때 이 명세를 따르되, 있다고 가정하지 않는다.
+관리 화면은 `/admin/artists`(회비 관리)만 동작한다. 감사 로그·시스템 상태 화면을
+만들 때 리스크 점수 색은 0.0~0.3 `success`, 0.4~0.6 `warning`, 0.7+
+`destructive` 로 한다. 그 밖의 `admin-*` 클래스가 있다고 가정하지 않는다.
 
-- **Audit Log Viewer**:
-  - `admin-log-row`: 타임스탬프, 주체, 행위, 리스크 점수(`risk-score`) 포함
-  - `risk-indicator`: 리스크 점수에 따른 색상 변화 (0.0~0.3: `success`, 0.4~0.6:
-    `warning`, 0.7+: `destructive`)
-- **System Health Dashboard**:
-  - `monitor-card`: CPU, 메모리, 레이턴시 지표를 담는 카드
-  - `agent-status-grid`: 에이전트(`ArtistAgent` 등)의 활성 상태를 나타내는 미니
-    그리드
-- **Security Interstitials**:
-  - `permission-denied-view`: 접근 권한 없음 안내 및 요청 버튼
-  - `risk-validation-overlay`: 고위험 작업 전 2단계 인증/확인 팝업
+### 8.7 차트
 
-### 8.7 Monitoring Visuals
-
-- **Data Charts**:
-  - 선형 차트(`stroke`): `primary` (기본), `destructive` (임계치 초과)
-  - 영역 채우기(`fill`): `primary` 10% 불투명도
-  - 격자선(`grid`): `border` (var(--border))
-
-### 8.8 미구현 컴포넌트 작성 시
-
-1. 기존 토큰만으로 우선 구현
-2. 토큰이 부족하면 이 문서를 먼저 수정 후 구현
-3. `@layer components`에 추가, `app/globals.css` 맨 아래
-   `/* ADDED: YYYY-MM-DD */` 주석
-
-### 8.9 Component Tokens (이전 front-matter `components:` 블록)
-
-> 비-canonical 구조(`tokens:` nested)로 Google CLI 파서가 실패해 2026-04-25
-> prose로 이전. Tailwind/CSS 클래스 정의의 정본은 `app/globals.css`의
-> `@layer components`이며, 본 표는 토큰 매핑 가이드.
-
-#### gallery-container
-
-| 속성           | 값                                              |
-| -------------- | ----------------------------------------------- |
-| max-width      | `var(--shell-frame)` (§4.1)                     |
-| padding-inline | `var(--shell-gutter)` (`.container` 와 같은 틀) |
-
-#### gallery-card
-
-| 속성             | 값                                               |
-| ---------------- | ------------------------------------------------ |
-| backgroundColor  | `{colors.rice-paper}`                            |
-| border           | `border-celadon-green` 20%, 다크 `border-border` |
-| rounded          | `{rounded.lg}` (0.375rem)                        |
-| hover.translateY | `-4px`                                           |
-| hover.shadow     | `{elevation.xl}`                                 |
-
-#### gallery-card-glass
-
-| 속성            | 값                                                   |
-| --------------- | ---------------------------------------------------- |
-| backgroundColor | `bg-rice-paper` 80%, 다크 `bg-card` 80%              |
-| backdropBlur    | `12px`                                               |
-| border          | `border-celadon-green` 10%, 다크 `border-border` 30% |
-
-#### gallery-btn (variants: default | outline | ghost | secondary)
-
-| 사이즈 | height | padding-x | text          |
-| ------ | ------ | --------- | ------------- |
-| xs     | 28px   | 8px       | xs (0.75rem)  |
-| sm     | 32px   | 12px      | sm (0.875rem) |
-| md     | 40px   | 16px      | sm (0.875rem) |
-| lg     | 44px   | 24px      | base (1rem)   |
-| xl     | 48px   | 32px      | base (1rem)   |
-
-#### glass-panel
-
-| 속성            | 값                                |
-| --------------- | --------------------------------- |
-| backgroundColor | `rgba(255,255,255,0.1)`           |
-| backdropBlur    | `12px`                            |
-| border          | `1px solid rgba(255,255,255,0.2)` |
+선은 `primary`(임계치 초과는 `destructive`), 채우기는 `primary` 10%, 격자선은
+`border`.
 
 ### 8.8 작가·작품 탐색 UI
 
@@ -904,7 +764,6 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 - `.dark:` 변형을 Semantic 토큰에 덮어쓰지 않는다 (토큰이 이미 처리)
 - 줄바꿈 태그(`br`) 반복 + 임의 `mt-*` 로 간격을 만들지 않는다 (spacing 토큰
   사용)
-- `var(--celadon)` 사용 금지 (deprecated, `var(--celadon-green)` 로 대체됨)
 
 ## 10. Agent Guidelines — AI 에이전트 작업 규칙
 
@@ -929,6 +788,8 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
    담은 정적 lookup 맵으로 표현한다 (예:
    `components/cultural/_constants/color-classes.ts`). ESLint
    `no-restricted-syntax` 규칙이 이를 강제한다.
+7. **새 컴포넌트 클래스**: `app/globals.css` 의 `@layer components` 맨 아래에
+   `/* ADDED: YYYY-MM-DD */` 주석과 함께 넣는다.
 
 ## 11. Maintenance
 
@@ -942,42 +803,16 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
   `NODE_ENV=production npm run build:full`도 확인한다. 검사 통과가 모든 화면의
   접근성을 증명하지는 않으므로 실제 화면을 별도로 검증한다.
 
-| 검사                  | 확인 범위                                          | 별도 확인할 항목                                        |
-| --------------------- | -------------------------------------------------- | ------------------------------------------------------- |
-| `npm run design:lint` | DESIGN.md의 구조·명세                              | 실제 CSS 적용·화면 품질                                 |
-| `npm run design:diff` | YAML 색상과 Tailwind 리터럴·지원하는 RGB 채널 변수 | 직접 `var(...)`로 참조하는 시맨틱 색상·다크 모드·홈 CSS |
-| `npm run design:wcag` | §3.6의 YAML 색상 쌍 대비                           | 렌더된 화면의 대비·키보드 조작·텍스트 확대              |
+`design:diff` 는 직접 `var(...)` 로 참조하는 색·다크 모드·홈 CSS 를,
+`design:wcag` 는 렌더된 화면의 대비·키보드·확대를 검사하지 않는다.
 
 카피 문서 변경은 참조 경로와 번역 키·실제 링크도 대조한다. 문서만 바꿨다면
 브라우저 확인·빌드·배포를 수행한 것으로 보고하지 않는다.
 
 ### Changelog
 
-- **2.0.0-alpha 문서 보완** (2026-11-03) — 폰트 로딩·번체 자형·홈 지역 스타일과
-  카피 원본의 관계를 명시하고, 디자인 검사의 실제 확인 범위를 표로 정리. 토큰
-  값은 바꾸지 않음.
-- **2.0.0-alpha 보강** (2026-11-01) — §8.4 `PageHero` 를 소개 묶음과 같은 틀(큰
-  漢字·東洋 낙관·01–0N 목차)로 바꿈. 규정·자주 묻는 질문·회원 게시판·내 신청
-  현황 첫 화면도 PageHero 로. §8.4.1 소개 묶음 틀 추가. 연혁·브랜드를
-  `AboutHero`·`AboutNav` 로 옮겨 소개 8개 페이지가 같은 머리를 쓴다. 브랜드의 먹
-  바탕 자체 히어로(`.brand-hero*`)는 지웠다. §11 현재 버전 표기 정정.
-- **1.3.0-alpha** (2026-05-10) — **Enterprise Phase 확장**: 관리자 대시보드,
-  감사 로그, 에이전트 모니터링 UI 패턴 추가 (§8.4, §8.5). 리스크 점수 기반 시각
-  지표 정의.
-- **1.2.1-alpha** (2026-04-12) — §2.1 재구성: **브랜드 의미론**과 **shadcn 슬롯
-  (`globals.css`)** 이중 층 명시. YAML `primary`/`secondary` 를 구현(SSOT)에
-  맞춤(Primary=Scholar Red, Secondary=무채 표면). §2.6·§3.6·에이전트 가이드
-  보강. `npm run design:wcag`·`design:diff` 통과 확인. shadcn `accent` 는
-  Celadon Green 기반 hover 배경이므로 Brand Gold 로 승격 불가. 새 `highlight`
-  Semantic 슬롯을 신설해 Brand Gold (`#ffcc00`, `bg-brand-gold`) 전용으로 분리.
-  globals.css 의 미사용 `--color-*` semantic mapping 변수 8개를 dead code 로
-  제거. WCAG 검증 쌍 재측정.
-- **1.1.0-alpha** (2026-04-24) — Brand Extended Palette 추가 (§2.5). globals.css
-  `--celadon` 을 `--celadon-green` 으로 rename.
-  `app/brand/_components/brand-data.ts` 와 정렬 완료. (accent 승격은 1.2.0 에서
-  철회됨)
-- **1.0.0-alpha** (2026-04-24) — 초판. 기존 `tailwind.config.ts` +
-  `app/globals.css` 토큰 정형화.
+이력은 `git log -- docs/02-design/DESIGN.md` 로 본다. 버전은 front matter
+`version` 이 정본이다.
 
 ---
 
