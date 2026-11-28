@@ -96,31 +96,47 @@ colors:
 # ─────────────────────────────────────────────
 typography:
   display-lg:
-    fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
+    fontFamily:
+      "var(--font-display), var(--font-noto-serif-kr), 'Noto Serif KR', serif"
     fontSize: '3.75rem' # 60px
   display-md:
-    fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
+    fontFamily:
+      "var(--font-display), var(--font-noto-serif-kr), 'Noto Serif KR', serif"
     fontSize: '3rem' # 48px
   headline-lg:
-    fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
+    fontFamily:
+      "var(--font-display), var(--font-noto-serif-kr), 'Noto Serif KR', serif"
     fontSize: '2.25rem' # 36px
   headline-md:
-    fontFamily: 'var(--font-display), var(--font-noto-serif-kr), serif'
+    fontFamily:
+      "var(--font-display), var(--font-noto-serif-kr), 'Noto Serif KR', serif"
     fontSize: '1.875rem' # 30px
   title-lg:
-    fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
+    fontFamily:
+      "'Pretendard', var(--font-noto-sans-kr), 'Noto Sans KR', sans-serif"
     fontSize: '1.5rem' # 24px
   body-lg:
-    fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
+    fontFamily:
+      "'Pretendard', var(--font-noto-sans-kr), 'Noto Sans KR', sans-serif"
     fontSize: '1.125rem' # 18px
   body-md:
-    fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
+    fontFamily:
+      "'Pretendard', var(--font-noto-sans-kr), 'Noto Sans KR', sans-serif"
     fontSize: '1rem' # 16px
   label-sm:
-    fontFamily: "'Pretendard', var(--font-noto-sans-kr), sans-serif"
+    fontFamily:
+      "'Pretendard', var(--font-noto-sans-kr), 'Noto Sans KR', sans-serif"
     fontSize: '0.875rem' # 14px
   # 아래 단계는 여러 컴포넌트 CSS 에서 반복되는 크기다(2026-11-28 감사에서 문서화).
   # 글꼴은 쓰는 자리(본문 sans / 제목 serif)를 따른다. 이 사이의 임의 값은 만들지 않는다.
+  korean-serif:
+    fontFamily: "var(--font-noto-serif-kr), 'Noto Serif KR', serif" # 한국어 제목·강조 (font-korean)
+  korean-sans:
+    fontFamily: "var(--font-noto-sans-kr), 'Noto Sans KR', sans-serif" # Pretendard 가 못 실렸을 때의 폴백
+  hanja-tc:
+    fontFamily: "var(--font-noto-serif-tc), 'Noto Serif TC', serif" # 번체 한자·협회명 (font-tc)
+  code:
+    fontFamily: "'JetBrains Mono', 'SF Mono', Monaco, monospace" # 색 값·토큰 이름 표기 (font-mono)
   label-xs:
     fontSize: '0.75rem' # 12px — 눈썹·배지·표 메타. 최소 글자 크기
   caption:
@@ -174,6 +190,10 @@ rounded:
   xl: '1rem' # 16px
   2xl: '1.5rem' # 24px
   full: '9999px'
+  # 지역 반경 — 아래 화면에서만 쓴다. 새 화면에는 위 단계를 쓴다.
+  panel: '0.625rem' # 10px — 로그인·계정 패널(components/auth/auth.css)
+  tile: '0.75rem' # 12px — 작가 페이지 타일·숫자 칸(app/artists)
+  seal: '0.1875rem' # 3px — 브랜드 페이지 낙관(실물 도장 모서리)
 
 # ─────────────────────────────────────────────
 # SPACING — 8px 그리드 (canonical, layout.spacing 동일)
@@ -605,6 +625,10 @@ Tailwind 13단계 스케일에 컴포넌트 단계(아래 문단·§3.5.2)를 �
 | 다이얼로그·시트 | `lg`          |
 | 히어로 미디어   | `xl` or `2xl` |
 | 아바타·칩       | `full`        |
+
+**지역 반경.** `panel`(10px, 로그인·계정 패널), `tile`(12px, 작가 페이지
+타일·숫자 칸), `seal`(3px, 브랜드 페이지 낙관)은 각 화면이 이미 쓰는 모양을
+기록한 것이다. 그 화면 밖으로 퍼뜨리지 않는다.
 
 ## 6. Elevation & Depth
 
